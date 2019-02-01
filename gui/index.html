@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+    <!--
+    This library is under the 3-Clause BSD License
+
+    Copyright (c) 2018, Orange S.A.
+
+    Redistribution and use in source and binary forms, with or without modification,
+    are permitted provided that the following conditions are met:
+
+    1. Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+
+    2. Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+    3. Neither the name of the copyright holder nor the names of its contributors
+    may be used to endorse or promote products derived from this software without
+    specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+    THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+    FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+    THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    
+    author Johannes Heinecke
+    version 1.8.0 as of 30th January 2019
+    -->
+
+    <head>
+        <meta http-equiv="Content-Type"  content="text/html; charset=utf-8">
+        <title>CoNLL-U Editor</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" -->
+        <link rel="stylesheet" type="text/css" href="lib/bootstrap-4.1.3/css/bootstrap.min.css" />
+
+        <!--script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"></script-->
+        <link rel="stylesheet" type="text/css" href="lib/jquery-ui-1.12.1/jquery-ui.min.css" />
+
+        <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" type="text/css" href="depgraph.css" />
+        <link rel="shortcut icon"  type="image/x-icon" href="img/orange.ico">
+
+
+        <script type="text/javascript" src="./lib/jquery-3.3.1.min.js" ></script>
+        <!--script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" -->
+
+        <script src="lib/popper.min.js"></script>
+         <!--script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script-->
+
+        <script src="lib/bootstrap-4.1.3/js/bootstrap.min.js"></script>
+        <!--script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script-->
+
+        <script type="text/javascript" src="./lib/jquery-ui-1.12.1/jquery-ui.min.js" ></script>
+        <!--script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script-->
+
+        <script src="./word.js" type="text/javascript"></script>
+        <script src="./dependency-tree.js" type="text/javascript"></script>
+        <script src="./dependency-flat.js" type="text/javascript"></script>
+        <script src="./edit.js" type="text/javascript"></script>
+    </head>
+
+    <body>
+        <div id="header">
+            <table border="0" cellpadding="0" cellspacing="10">
+                <tr>
+                    <td colspan="6">
+                        filename: <span onmousedown="ToggleSearch();" id="filename">(conllu-filename)</span>
+                        <span id="mode"></span>
+                        <span class="editmode" id="changespendingsave"></span>
+                    </td>
+                    <td rowspan="2" width="200"  >
+                        <!--img alt="Orange" src="img/logo_orange_75x75.jpg"-->
+                <svg viewBox="0 0 130 55" transform="scale(1 1) translate(0 0)">
+                    <use xlink:href="img/ce2.svg#svg2"></use>
+                </svg>
+                <!--img width="200" alt="CoNLL-U Editor" src="img/ce2.svg"-->
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <span class="contain"><button class="editbuttons mybutton" id="undo">&nbsp;</button> <!-- ↺ --></span>
+                        <span class="contain"><button class="editbuttons mybutton" id="redo">&nbsp;</button> <!-- ↻ --></span>
+                        <button class="editbuttons mybutton" id="lire">read sentence</button><input type="text" id="sentid" size="5" value="1">
+                        <span class="contain"><button class="editbuttons mybutton" id="first">&nbsp;</button> <!--  |&lt; --></span>
+                        <span class="contain"><button class="editbuttons mybutton" id="prec">&nbsp;</button> <!-- &lt;&lt; --></span>
+                        <span class="contain"><button class="editbuttons mybutton" id="next">&nbsp;</button> <!--  &gt;&gt; --></span>
+                        <span class="contain"><button class="editbuttons mybutton" id="last">&nbsp;</button> <!--  &gt;| --></span>
+
+                        <button class="mycheck mybutton" id="feat2">show features</button>
+                        <button class="mycheck mybutton" id="flat2">flat graph</button>
+                        <button class="mycheck mybutton" id="r2l">display right to left</button>
+
+                        <button class ="editbuttons mybutton editmode" id="save">save file on server</button>
+                        <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
+
+                        <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();">hide search</button>
+                    </td>
+                </tr>
+
+                <tr class="search">
+                    <td colspan="6">
+                        <input placeholder="find form" title="string (with or without &quot;)" type="text" id="word" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findword">&nbsp;</button></span>
+
+                        <input placeholder="find lemma" title="regex[/regex/...]" type="text" id="lemma" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findlemma">&nbsp;</button></span>
+
+                        <input placeholder="find upos" title="regex[/regex/...]" type="text" id="upos" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findupos">&nbsp;</button></span>
+
+                        <input placeholder="find xpos" title="regex[/regex/...]" type="text" id="xpos" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findxpos">&nbsp;</button></span>
+
+                        <input placeholder="find deprel" title="regex  of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="finddeprel">&nbsp;</button></span>
+
+                        <span class="contain"><button class="mybutton mycheck" title="search backwards" id="backwards">&nbsp;</button></span>
+                        <!--button class="mycheck mybutton" title="search backwards" id="backwards">&lt;&lt;-</button -->
+                    </td>
+                </tr>
+                <tr class="search">
+                    <td colspan="6">
+                        <input placeholder="find comment" title="regex" type="text" id="comment" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findcomment">&nbsp;</button></span>
+
+                        <input placeholder="find any" title="type:regex[/...]" type="text" id="multifield" size="20" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
+                    </td>
+                </tr>
+                <tr class="search">
+                    <td colspan="6">
+                        <span id="portinfo">Port  <input type="text" id="port" size="2" value="12345"></span>
+                        Width  <input type="text" id="bwidth" size="2" value="90">
+                        Height <input type="text" id="bheight" size="2" value="50">
+                        <span class="editmode"><button class="mybutton editbuttons onlyWithTree" id="modifier">modify</button>
+                            <input placeholder="modify commands (see help)"  class="onlyWithTree" type="text" id="mods" size="20" value="">
+                        </span>
+                    <!--/td>
+                </tr>
+                <tr class="search">
+                    <td colspan="6" -->
+                        <!--button class ="editbuttons" id="save">save file on server</button-->
+                        <a class="onlyWithTree" id="a2" download="arbre.svg" type="image/svg+xml"><button class="mybutton">download image</button></a>
+                        <button class ="onlyWithTree mybutton" id="latex"><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span></button>
+                        <button class ="onlyWithTree mybutton" id="conllu">CoNLL-U</button>
+                        <button class ="onlyWithTree mybutton" id="sdparse">SD-Parse</button>
+                    </td>
+                </tr>
+
+            </table>
+            <div id="sentencetext">
+                <span id="currentsent">1</span>/<span id="total"></span>: <span id="titre"></span>
+                <span id="cursentid"></span>
+                <span id="errors"></span>
+            </div>
+        </div>
+
+
+        <div id="arbre"></div>
+
+        <div id="comm" >
+            <pre id="commentfield"></pre>
+        </div>
+
+
+
+        <!-- the following are the dialoge/help popups -->
+
+        <div class="modal" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="helpModalLabel">Help</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h1>How to edit CoNLL-U files</h1>
+                        <h2>Navigating</h2>
+                        Click <span class="buttondoc">read sentence</span> to load the sentence with the number given in the entry field to the right of the button.
+                        The buttons <img class="helptextbutton" src="img/preceding.svg"> and
+                        <img class="helptextbutton" src="img/following.svg"> change to the preceding/next sentence,
+                        use <img class="helptextbutton" style="width: 30px;" src="img/Start.svg"> and
+                        <img class="helptextbutton" style="width: 30px;" src="img/End.svg"> to go to the first/last sentence.
+
+                        <h2>Editing</h2>
+                        <b>make a dependency</b>: click first on the dependent and then on its new head. Doubleclicking on a node makes it root
+                        <br><b>modify the dependency relation</b>: click on the relation label
+                        <br><b>modify form, lemma, upos, xpos</b>: control-click on the node to modify
+                        <br><br>or use a command and hit the <span class="buttondoc">modify</span> button:
+
+                        <!-- class="helpstyle" ici pour mettre les meme font-size (jquery-ui fait ça différemment -->
+                        <table border ="0" class="bhelpstyle">
+                            <tr><td>&bull; <span class="userinputdoc"><i>dep_id newheadid</i></span> [<span class="userinputdoc"><i/>deprel</i></span>]</td>
+                                <td>attach <i>dep_id</i> to <i>newheadid</i> with the relation <i>deprel</i></td>
+                            </tr>
+                            <tr><td>&bull; <span class="userinputdoc">xpos <i>dep_id XPOS</i></span></td>
+                                <td>set xpos of word <i>id</i> to XPOS</td>
+                            </tr>
+                            <tr><td>&bull; <span class="userinputdoc">upos <i>dep_id UPOS</i></span></td>
+                                <td>set upos of word <i>id</i> to UPOS</td>
+                            </tr>
+                            <tr><td>&bull; <span class="userinputdoc">lemma <i>dep_id LEMMA</i></span></td>
+                                <td>modify lemma of word <i>id</i></td>
+                            </tr>
+                            <tr><td>&bull; <span class="userinputdoc">feat <i>dep_id feature=value,...</i></span></td>
+                                <td>modify features of word <i>id</i></td>
+                            </tr>
+                             <tr><td>&bull; <span class="userinputdoc">enhdeps <i>dep_id head:deprel,...</i></span></td>
+                                <td>modify enhanced dependencies of word <i>id</i></td>
+
+                        </table>
+
+                        <br>other commands for <span class="buttondoc">modify</span> (no graphical equivalent) :
+
+                        <table border ="0" class="bhelpstyle">
+                            <tr><td width="42%">&bull; <span class="userinputdoc">split <i>id</i></span></td> <td>split a word in two (it will be copied to a new node and attached to the same head)</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">insert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new word after word with <i>id</i></td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">sentsplit <i>id</i></span></td> <td>split current sentence at word id (id will be in the second sentence)</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">sentjoin</span></td> <td>merge current sentence with following</td></tr>
+                        </table>
+
+                        <p><b>Modify comment</b> (shown underneath the sentence): click the comment.</p>
+                        <p>The <span class="buttondoc">download image</span> button downloads the current dependency tree as an <tt>.svg</tt> file. Use the following commands
+                            to transform it into <tt>.pdf</tt> or <tt>.png</tt>: <tt>inkscape -A arbre.pdf arbre.svg</tt>.</p>
+                        <p>In order to downlad the entire sentence in CoNLL-U, SD-Parser or
+                            <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> (for tikz-dependencies),
+                            click the corresponding buttons)</p>
+
+                        <p>Changes can be undone/redone using the buttons
+                            <img class="helptextbutton" style="width: 30px;" src="img/undo.svg"> and
+                            <img class="helptextbutton" style="width: 30px;" src="img/redo.svg">.
+                        The undo-memory is cleared when a new sentence is loaded</p>
+
+
+                        <h2>Searching</h2>
+                        Activate the search form by clicking on <span class="buttondoc">show search</span>
+                        <ul>
+                            <li>The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).
+                                <br>For example
+                                <ul>
+                                    <li><span class="userinputdoc">the</span> finds next occurrance of <i>the</i>, including <i>them</i> or <i>weather</i>.
+                                    <li><span class="userinputdoc">&quot; the &quot;</span> finds next occurrance of the definite article <i>the</i>.
+                                    <li><span class="userinputdoc">some of</span> finds next occurrance of <i>some of</i> (no quotes necessary, since the search string does not start with a blank).
+                                </ul>
+                            <li>The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
+                                <ul>
+                                    <li>Upos: <span class="userinputdoc">AUX/.*/VERB</span> looks for a sequence of words with upos tags AUX, any, VERB
+                                </ul>
+                            <li>The <i>any</i> search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria.
+                                searchfield can be aby of <i>f, l, u, x, d</i> (form, lemma, upos, xpos, deprel)
+                                <ul>
+                                    <li><span class="userinputdoc">l:the/u:ADJ/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
+                                        any adjective and the last is <i>mouse</i>
+                                </ul>
+                            <li>
+                                The deprel search field accepts a single or a list of regex,
+                                separated by <span class="userinputdoc">&lt;</span> or <span class="userinputdoc">&gt;</span> to search for branches in the dependency tree, for example
+                                <ul>
+                                    <li><span class="userinputdoc">cc&lt;nsubj</span> finds a <i>cc</i> deprel whose head has also a <i>nsubj</i> child.
+                                    <li><span class="userinputdoc">case&gt;mark</span> fins a <i>case</i> deprel whose head has a <i>mark</i> deprel.
+                                </ul>
+                        </ul>
+                        <p>hit enter or click on the <img  class="helptextbutton" style="width: 35px;" src="img/search.svg"> to start the search.
+                        <p>
+                        The search starts with the sentence following the displayed one. Activating the
+                        <img class="helptextbutton" style="width: 40px;" src="img/backwards.svg"> button
+                        searches towards the beginning of the file.
+
+                        <h2>UD Dependency Relations</h2>
+
+                        See also: <a target="_blank" href="http://universaldependencies.org/u/dep/all.html">http://universaldependencies.org/u/dep/all.html</a>
+                        for universal dependency relation and (e.g.)
+                        <a target="_blank" href="http://universaldependencies.org/treebanks/fr_gsd">http://universaldependencies.org/treebanks/fr_gsd</a>
+                        for the French ones.
+
+                        <br><br>
+                        <table border="1">
+                            <tr><th></th>
+                                <th>Nominals</th>
+                                <th>Clauses</th>
+                                <th>Modifier words</th>
+                                <th>Function words</th>
+                            </tr>
+                            <tr><th>Core arguments</th>
+                                <td><div class="nsubj">nsubj<br> obj<br> iobj</div></td>
+                                <td><div class="csubj">csubj<br> ccomp<br> xcomp</div></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr><th>Non-core arguments</th>
+                                <td><div class="obl">obl<br> vocative<br> expl<br> dislocated</div></td>
+                                <td><div class="advcl">advcl</div></td>
+                                <td><div class="advmod">advmod<br> discourse</div></td>
+                                <td><div class="aux">aux<br> cop<br> mark</div></td>
+                            </tr>
+                            <tr><th>Nominal depdendants</th>
+                                <td><div class="nmod">nmod<br> appos<br> nummod</div></td>
+                                <td><div class="acl">acl</div></td>
+                                <td><div class="amod">amod</div></td>
+                                <td><div class="det">det<br> clf<br> case</div></td>
+                            </tr>
+                            <tr><th>coordination</th>
+                                <th>MWE</th>
+                                <th>Loose</th>
+                                <th>Special</th>
+                                <th>Other</th>
+                            </tr>
+                            <tr><td><div class="conj">conj<br>cc</div></td>
+                                <td><div class="fixed">fixed<br> flat<br> compound</div></td>
+                                <td><div class="list">list<br>parataxis</div></td>
+                                <td><div class="orphan">orphan<br>goeswith<br>reparandum</div></td>
+                                <td><div class="punct">punct<br> root<br> dep</div></td>
+                            </tr>
+                        </table>
+
+                       <h2>About</h2>
+                       Author: Johannes Heinecke.
+                       Copyright © 2018 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
+                       <p>
+                           Powered by <a target="_blank" href="https://jquery.com/">jquery</a>,
+                           <a target="_blank" href="https://getbootstrap.com">bootstrap</a> and
+                           <a target="_blank" href="https://jqueryui.com/">jquery-ui</a>.
+                       </p>
+                       <p>
+                           The backend uses java 8, <a target="_blank" href="https://github.com/google/gson">com.google.code.gson</a>
+                           and <a target="_blank" href="https://www.eclipse.org/jgit/">org.eclipse.jgit</a>.
+                       </p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class=" mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal" id="commentEdit" tabindex="-1" role="dialog" aria-labelledby="commentEditLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="commentEditLabel">Edit comments</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <textarea class="comments" id="commenttext"  rows="6" cols="80" ></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="savecomment" class=" mybutton">Save changes</button>
+                        <button type="button" class="mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal" id="wordEdit" tabindex="-1" role="dialog" aria-labelledby="wordEditLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="wordEditLabel">Edit word</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <table>
+                            <tr><td>Id</td>       <td><span id="cid"/></td></tr>
+                            <tr><td>Form</td>     <td><div class="ui-widget"><input type="text" id="cform"  size="60" value=""></div></td></tr>
+                            <tr><td>Lemma</td>    <td><div class="ui-widget"><input type="text" id="clemma" size="60" value=""></div></td></tr>
+                            <tr><td>upos</td>     <td><div class="ui-widget"><input type="text" id="cupos"  size="60" value=""></div></td></tr>
+                            <tr><td>xpos</td>     <td><div class="ui-widget"><input type="text" id="cxpos"  size="60" value=""></div></td></tr>
+                            <tr><td>features</td> <td><div class="ui-widget">
+                                        <!--input type="text" id="cfeats" size="50" value="" -->
+                                        <textarea type="text" id="cfeats" rows="6" cols="60"></textarea>
+                                    </div></td></tr>
+                            <tr><td>enhanced deps</td><td><div class="ui-widget">
+                                        <!--input type="text" id="cenhdeps" size="60" value=""-->
+                                         <textarea type="text" id="cenhdeps" rows="4" cols="60"></textarea>
+                                        </div></td></tr>
+                            <tr><td>misc</td>     <td><div class="ui-widget">
+                                        <!--input type="text" id="cmisc" size="60" value=""-->
+                                        <textarea type="text" id="cmisc" rows="4" cols="60"></textarea>
+                                    </div></td></tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="saveword" class=" mybutton">Save changes</button>
+                        <button type="button" class=" mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal" id="deprelEdit" tabindex="-1" role="dialog" aria-labelledby="deprelEditLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deprelEditLabel">Edit Dependency relation name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <table>
+                            <tr>
+                                <td>Head:</td>       <td><span id="chead"/></td>
+                                <td>Dependent:</td>  <td><span id="cdep"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><div class="ui-widget"><input type="text" id="cdeprel"  size="25" value=""></div></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="savedeprel" class=" mybutton">Save changes</button>
+                        <button type="button" class="mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal" id="showRawModal" tabindex="-1" role="dialog" aria-labelledby="showRawModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="showRawModalLabel">How to edit</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <pre id="rawtext"></pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
+

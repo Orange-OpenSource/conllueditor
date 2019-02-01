@@ -1,0 +1,92 @@
+{
+  "sentenceid": 11,
+  "maxsentence": 17,
+  "sentence": "Sam bought and prepared dinner ",
+  "length": 5,
+  "changes": 0,
+  "tree": [
+    {
+      "position": 2,
+      "id": 2,
+      "form": "bought",
+      "lemma": "buy",
+      "xpos": "_",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 1,
+          "id": 1,
+          "form": "Sam",
+          "lemma": "Sam",
+          "xpos": "_",
+          "upos": "PROPN",
+          "enhancedheads": [
+            {
+              "id": "4",
+              "position": 4,
+              "deprel": "nsubj"
+            }
+          ],
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 4,
+          "archeight": 2,
+          "id": 4,
+          "form": "prepared",
+          "lemma": "prepare",
+          "xpos": "_",
+          "upos": "VERB",
+          "deprel": "conj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 3,
+              "archeight": 1,
+              "id": 3,
+              "form": "and",
+              "lemma": "and",
+              "xpos": "_",
+              "upos": "CCONJ",
+              "deprel": "cc",
+              "formhighlight": 1,
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 5,
+          "archeight": 3,
+          "id": 5,
+          "form": "dinner",
+          "lemma": "dinner",
+          "xpos": "_",
+          "upos": "NOUN",
+          "enhancedheads": [
+            {
+              "id": "4",
+              "position": 4,
+              "deprel": "obj"
+            }
+          ],
+          "deprel": "obj",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 11\ntext \u003d Sam bought and prepared dinner\n",
+  "canUndo": false,
+  "canRedo": false
+}

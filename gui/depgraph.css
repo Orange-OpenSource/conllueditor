@@ -1,0 +1,157 @@
+/** This library is under the 3-Clause BSD License
+
+Copyright (c) 2018, Orange S.A.
+
+Redistribution and use in source and binary forms, with or without modification, 
+are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution.
+
+  3. Neither the name of the copyright holder nor the names of its contributors 
+     may be used to endorse or promote products derived from this software without
+     specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ @author Johannes Heinecke
+ @version 1.0 as of 5th November 2018
+*/
+
+.dia {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  width: 100%;
+  border: 1px solid #CCC; /* style like textarea */
+}
+
+.comments {
+  width: 100%;
+  height: 100%;
+  margin: 0; /* don't want to add to container size */
+  border: 0; /* don't want to add to container size */
+}
+
+
+
+ul.ui-autocomplete {
+    z-index: 2100;
+}
+
+
+/** styles for dependency graphs */
+.deprel_precedinghead {
+    stroke: blue;
+    stroke-width: 1;
+}
+
+
+.deprel_followinghead {
+    stroke: #880088;
+    stroke-width: 1;
+}
+
+.deprel_root {
+    stroke: #cc0000;
+    stroke-width: 1;
+}
+
+/* box around word */
+.wordnode {
+     fill: #fffff4;
+}
+
+.emptynode {
+     fill: #fffff4;
+     stroke-dasharray: 10 5;
+}
+
+/* all litterals in the dependency graph inherit from this class */
+.words {
+  /*  font-family: "Liberation Sans Narrow", "Ubuntu Condensed";*/
+}
+
+.wordform {
+    /*font-family: Sans, Arial, Helvetica;*/
+    font-weight: bold;
+    font-size: 14px;
+}
+
+
+.wordlemma {
+    /*font-family: Sans, Arial, Helvetica;*/
+    font-size: 12px;
+}
+
+.wordid {
+    /*font-family: Sans, Arial, Helvetica;*/
+    font-size: 12px;
+}
+
+.wordupos {
+    /*font-family: Sans, Arial, Helvetica;*/
+    fill: blue;
+    font-size: 12px;
+}
+
+.wordxpos {
+   /* font-family: Serif, Sans, Arial, Helvetica;*/
+    fill: blue;
+    font-size: 12px;
+}
+
+.wordfeature {
+    /*font-family: Sans, Arial, Helvetica;*/
+    font-size: 10;
+}
+
+/* dependency relation */
+.enhdeprel,
+.deprel {
+    /*font-family: Sans, Arial, Helvetica;*/
+    fill: green;
+    font-size: 110%;
+}
+
+/* word at bottom (tree graph) */
+.word {
+    /*font-family: Sans, Arial, Helvetica;*/
+    /*font-weight: bold; */
+}
+
+/* word id at bottom */
+.wordid {
+     font-size: 10;
+}
+
+/* special colours for errors or search results */
+.highlight {
+    fill: orange;
+    font-weight: bold;
+}
+
+.boxhighlight {
+    fill: yellow;
+}
+
+.worderror {
+    fill: red;
+    font-weight: bold;
+}
+

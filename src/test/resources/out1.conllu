@@ -1,0 +1,33 @@
+# text = Sam fixed lunch and Kim dinner
+# sentence 13
+1	Sam	Sam	PROPN	_	_	2	nsubj	_	_
+2	fixed	fix	VERB	_	_	0	root	_	_
+3	lunch	lunch	NOUN	_	_	2	obj	_	_
+4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
+5	Kim	Kim	PROPN	_	_	2	conj	2:conj|5.1:nsubj	_
+5.1	fixed	fix	VERB	_	_	_	_	2:conj	_
+6	dinner	dinner	NOUN	_	_	5	orphan	5:orphan|5.1:obj	_
+
+# text = Mary organised bred and John beer
+# sentence 14
+1	Mary	Mary	PROPN	_	_	2	nsubj	_	_
+2	organised	organise	VERB	_	_	0	root	_	_
+3	bred	bred	NOUN	_	_	2	obj	_	_
+4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
+5	John	John	PROPN	_	_	2	conj	2:conj|5.1:nsubj	_
+5.1	organised	_	_	_	_	_	_	2:conj	_
+6	beer	beer	NOUN	_	_	5	orphan	5:orphan|5.1:obj	_
+
+# text = Une exposition au musée du Louvre
+# sentence 15
+1	Une	_	_	_	_	_	_	_	_
+2	exposition	_	_	_	_	_	_	_	_
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
+

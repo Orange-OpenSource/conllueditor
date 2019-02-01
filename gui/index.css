@@ -1,0 +1,432 @@
+/** This library is under the 3-Clause BSD License
+
+Copyright (c) 2018, Orange S.A.
+
+Redistribution and use in source and binary forms, with or without modification, 
+are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution.
+
+  3. Neither the name of the copyright holder nor the names of its contributors 
+     may be used to endorse or promote products derived from this software without
+     specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ @author Johannes Heinecke
+ @version 1.0 as of 5th November 2018
+*/
+
+body {
+    margin-top: 280px; /* header height + top offset */
+    height: 100%;
+   
+    text-align: justify;
+    font-family: /* Lato, */ Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
+}
+
+tt {
+    font-family: Courier, FreeMono, Mono;
+}
+
+h1  { 
+    color:#ff6600;
+}
+
+
+h2 {
+    margin-top: 20px;
+}
+#comm,
+#sentencetext,
+#arbre {
+    margin-left: 5px;
+}
+
+
+#header {
+    position:fixed;
+    width:100%;
+    top:0;
+    height: whatever;
+    /*background: white; */
+
+    /*background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgba(247,220,180, 1)),
+        color-stop(1, rgba(255,255,255, 0))
+        );
+    */
+    background-image: linear-gradient(rgba(247,220,180, 1), 
+        rgba(251,235,212, 1), 
+        rgba(254,246,233, 1),
+        rgba(255,255,255, 0));
+}
+
+
+textArea {
+    text-align:justify;
+    font-family: /*Pecita, */ Sans, Arial, Helvetica;
+    /*font-size: 125%;*/
+}
+
+
+td, th {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+table {
+    border-collapse: inherit;
+}
+
+.chunk0 {background-color:#ff780080; /*opacity: 0.5; */
+         fill:#ff780080 }
+.chunk1 {background-color:#4ab4e6; fill:#4ab4e6 }
+.chunk2 {background-color:#ffb4e680; fill:#ffb4e680 }
+.chunk3 {background-color:#ffd200; fill:#ffd200 }
+.chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
+.chunk5 {background-color:#a885d880; fill:#a885d880 }
+
+
+img.helptextbutton {
+    border-radius: 5px;
+    border: 1px solid #222;
+    padding: 5px;
+    width: 25px;
+}
+
+.buttondoc {
+    font-style: italic;
+    border-radius: 5px;
+    border: 1px solid #222;
+    padding: 5px;
+}
+
+.userinputdoc {
+    font-family: Courier, FreeMono, Mono;
+    background-color: #f8f8f8;
+    padding-left: .1em;
+    padding-right: .3em;
+}
+
+/* make normal buttons look like mycheckbuttons */
+.mybutton, .btn-primary {
+    font-family: inherit;
+    /* top right bottom left */
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+    height: 30px;  
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+}
+
+.mybutton:hover {
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(227,227,227)),
+        color-stop(1, rgb(255,255,255))
+        );
+}
+
+
+
+input {
+   font-family: inherit;
+}
+
+/* background for buttons with icons */
+.contain {
+    overflow: hidden;
+    display: inline-block;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+    position: relative;
+    top: 10px; /** why this is needed ?? */
+    padding: 0px 0px 0px 0px;
+}
+.contain:hover {
+    overflow: hidden;
+    display: inline-block;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(227,227,227)),
+        color-stop(1, rgb(255,255,255))
+        );
+    position: relative;
+    top: 10px; /** why this is needed ?? */
+    padding: 0px 0px 0px 0px;
+}
+
+
+.contain.active {
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(224, 116, 13)),
+        color-stop(1, rgb(252, 145, 14))
+        );
+}
+
+.undoredo {
+    font-weight: bold;
+    /* font: 25px "Ubuntu Mono", mono, Arial, Helvetica, sans-serif; */
+}
+
+
+#undo {
+    background: url('img/undo.svg');
+    background-size: 20px 20px !important;
+    background-repeat:no-repeat !important;
+    height: 30px;  
+    width: 30px;
+    background-position: 5px center !important;
+}
+
+#undo:disabled {
+    background: url( 'img/undo_disabled.svg' ) ;
+}
+
+
+#redo {
+    background: url('img/redo.svg');
+    background-size: 20px 20px !important;
+    background-repeat:no-repeat !important;
+    height: 30px;  
+    width: 30px;
+    background-position: 5px center !important;
+}
+
+#redo:disabled {
+    background: url('img/redo_disabled.svg');
+}
+
+
+#first {
+    background: url('img/Start.svg'); 
+    background-size: 16px 16px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 30px;
+    background-position: 7px center;
+}
+
+#last {
+    background: url('img/End.svg');
+    background-size: 16px 16px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 30px;
+    background-position: 7px center;
+}
+#prec {
+    background: url('img/preceding.svg');
+    background-size: auto 16px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 30px;
+    background-position: 8px center;
+}
+#next {
+    background: url('img/following.svg');
+    background-size: auto 16px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 30px;
+    background-position: 10px center;
+}
+
+#backwards {
+    background: url('img/backwards.svg');
+    background-size: auto 16px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 45px;
+    background-position: 5px center;
+}
+
+
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti {
+    background: url('img/search.svg');
+    background-size: 20px 20px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 30px;
+    background-position: 5px center;
+}
+
+/* inspired by https://designmodo.com/3d-css3-button/ */
+.mycheck {
+    display: inline-block;
+    text-decoration: none;
+    /* ddfont-family: "Ubuntu", Arial, Helvetica, Sans; */
+    /*
+    color: black;
+    font-weight: bold;
+    background-color: #538fbe;
+    font-size: 24px;
+    */
+    /* top right bottom left */
+    padding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    /*
+    background-image: linear-gradient(bottom, rgb(112,112,112) 0%, rgb(252,252,252) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(73,132,10) 0%, rgb(97,155,203) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(73,132,10) 0%, rgb(97,155,203) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
+    */
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+    /* text-shadow: 0px  -1px 0px rgba(0,0,0,.5); /*
+    /*
+       -webkit-box-shadow: 0px 6px 0px #2b638f;
+       -moz-box-shadow: 0px 6px 0px #2b638f;
+       box-shadow: 0px 6px 0px #2b638f;
+    */
+}
+
+.mycheck.active {
+    /*
+    background-image: linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
+    */
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(224, 116, 13)),
+        color-stop(1, rgb(252, 145, 14))
+        );
+
+    /*-webkit-box-shadow: 0px 2px 0px #2b638f;
+    -moz-box-shadow: 0px 2px 0px #2b638f;
+    box-shadow: 0px 2px 0px #2b638f;
+
+    -webkit-transform: translate(0, 4px);
+    -moz-transform: translate(0, 4px);
+    transform: translate(0, 4px);
+    */
+}
+
+.mycheck:hover {
+    /*
+    background-image: linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -o-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -moz-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -webkit-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    background-image: -ms-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
+    */
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgba(244, 146, 13)),
+        color-stop(1, rgba(245, 187, 15))
+        );
+    color: #222;
+}
+
+
+#errors {
+    color: red;
+}
+
+/** redefine font for thie <pre></pre> */
+#commentfield {
+    font-family: inherit;
+}
+
+/* (xe)latex logos */
+.revcap {
+    display: inline-block;
+    text-transform: uppercase;
+    transform: rotateY(180deg);
+}
+
+
+.latex sub,
+.latex sup {
+  text-transform: uppercase;
+}
+
+
+.latex sub {
+  vertical-align: -0.15ex;
+  margin-left: -0.13em;
+  margin-right: -0.1em;
+}
+
+
+.latex,
+.latex sub {
+  font-size: 1em;
+}
+
+.latex sup {
+  font-size: 0.75em;
+  ssvertical-align: 0.05em;
+  margin-left: -0.16em;
+  qqmargin-right: -0.15em;
+}
+
+.modal-header {
+    background-image: linear-gradient(rgba(255,153,51, 1), 
+      /*  rgba(251,235,212, 1), 
+        rgba(254,246,233, 1),*/
+        rgba(255,255,255, 0));
+}
+
+.modal-xl {
+   sswidth: 90%;
+   max-width:1000px;
+}

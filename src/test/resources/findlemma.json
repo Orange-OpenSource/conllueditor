@@ -1,0 +1,256 @@
+{
+  "sentenceid": 7,
+  "maxsentence": 17,
+  "sentence": "la souris a mangé le fromage qui pue . ",
+  "length": 9,
+  "changes": 0,
+  "tree": [
+    {
+      "position": 4,
+      "id": 4,
+      "form": "mangé",
+      "lemma": "manger",
+      "feats": [
+        {
+          "name": "Gender",
+          "val": "Masc"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Part"
+        }
+      ],
+      "xpos": "PARTP",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 2,
+          "archeight": 2,
+          "id": 2,
+          "form": "souris",
+          "lemma": "souris",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Fem"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NOUN",
+          "upos": "NOUN",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 1,
+              "archeight": 1,
+              "id": 1,
+              "form": "la",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "ART",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 3,
+          "archeight": 1,
+          "id": 3,
+          "form": "a",
+          "lemma": "avoir",
+          "feats": [
+            {
+              "name": "Mood",
+              "val": "Ind"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Person",
+              "val": "3"
+            },
+            {
+              "name": "Tense",
+              "val": "Pres"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Fin"
+            }
+          ],
+          "xpos": "AUXA",
+          "upos": "AUX",
+          "deprel": "aux",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 6,
+          "archeight": 2,
+          "id": 6,
+          "form": "fromage",
+          "lemma": "fromage",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NOUN",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "lemmahighlight": 1,
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 5,
+              "archeight": 1,
+              "id": 5,
+              "form": "le",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "ART",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 8,
+              "archeight": 2,
+              "id": 8,
+              "form": "pue",
+              "lemma": "puer",
+              "feats": [
+                {
+                  "name": "Mood",
+                  "val": "Ind"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "Person",
+                  "val": "1"
+                },
+                {
+                  "name": "Tense",
+                  "val": "Pres"
+                },
+                {
+                  "name": "VerbForm",
+                  "val": "Fin"
+                }
+              ],
+              "xpos": "VERB",
+              "upos": "VERB",
+              "deprel": "acl:relcl",
+              "lemmahighlight": 1,
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 7,
+                  "archeight": 1,
+                  "id": 7,
+                  "form": "qui",
+                  "lemma": "qui",
+                  "feats": [
+                    {
+                      "name": "PronType",
+                      "val": "Rel"
+                    }
+                  ],
+                  "xpos": "REL",
+                  "upos": "PRON",
+                  "deprel": "nsubj",
+                  "lemmahighlight": 1,
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 9,
+          "archeight": 3,
+          "id": 9,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "PUNCT",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "text \u003d la souris a mangé le fromage qui pue.\nsentence 7\n",
+  "canUndo": false,
+  "canRedo": false
+}

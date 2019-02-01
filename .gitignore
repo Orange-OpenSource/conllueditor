@@ -1,0 +1,12 @@
+*~
+#img
+lib
+target
+nbactions.xml
+*.log
+*.aux
+t.pdf
+t.tex
+gui/img/logo_orange_75x75.jpg
+gui/img/orange.ico
+testoutput
