@@ -128,8 +128,8 @@ Point your navigator  to `http://localhost:8888` .
 * `--UPOS <file>` comma separated list of files containing valid UPOS (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
-* `--debug <hex> hex number du activate debug information of the server (printed to stderr)
-* `--saveAfter <number> if given, the servers saves/commits the changed file only after /number/ edits. To force saving the current state, click on the `save` button. Default value: 0. 
+* `--debug <hex>` hex number du activate debug information of the server (printed to stderr)
+* `--saveAfter <number>` if given, the servers saves/commits the changed file only after /number/ edits. To force saving the current state, click on the `save` button. Default value: 0. 
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while, espacially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
