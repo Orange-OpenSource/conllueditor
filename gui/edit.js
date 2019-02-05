@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.0 as of 30th January 2019
+ @version 1.8.1 as of 5th February 2019
  */
 
 
@@ -154,6 +154,9 @@ function getServerInfo() {
             } else {
                 $('.editmode').show();
             }
+
+            // set version number to logo (shown if mouse hovers on the logo)
+            $('#logo').attr("title", data.version);
 
             $(function () {
                 $("#cupos").autocomplete({
@@ -542,7 +545,7 @@ function formatPhrase(item) {
 	    $('body').scrollLeft(highlightX-40);
         } else if (showr2l) {
             // scroll to right for languages like Hebrew or Arabic
-            $('body').scrollLeft($(document).outerWidth()); 
+            $('body').scrollLeft($(document).outerWidth());
         }
 
 

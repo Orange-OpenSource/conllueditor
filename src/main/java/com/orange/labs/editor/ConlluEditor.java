@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.0 as of 30th January 2019
+ @version 1.8.1 as of 5th February 2019
  */
 package com.orange.labs.editor;
 
@@ -89,6 +89,8 @@ public class ConlluEditor {
     int changesSinceSave = 0;
     int saveafter = 0; // save after n changes
 
+    private String programmeversion;
+
     public enum Raw {
         LATEX, CONLLU, SDPARSE
     };
@@ -97,7 +99,7 @@ public class ConlluEditor {
         // produit avec le mvn plugin "properties-maven-plugin" (voir pom.xml)
         java.util.Properties p = new Properties();
         p.load(ClassLoader.getSystemResourceAsStream("conllueditor.properties"));
-        String programmeversion = p.getProperty("version");
+        programmeversion = p.getProperty("version");
         System.err.format("ConlluEditor V %s\n", programmeversion);
         filename = new File(conllfile);
         filename = filename.getAbsoluteFile().toPath().normalize().toFile();
@@ -349,6 +351,7 @@ public class ConlluEditor {
         }
 
         solution.addProperty("filename", filename.getAbsolutePath());
+        solution.addProperty("version", programmeversion);
         solution.addProperty("reinit", mode);
         return solution.toString();
     }

@@ -195,7 +195,7 @@ After each modification the edited file is saved:
 
 # Server API (used by the GUI)
 * `curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentences is `read 0`, sendit is only used for edit commands)
-* `curl -s --noproxy '*' 'http://host:port/validlists'` get lists of valid upos/xpos/deprels, and filename
+* `curl -s --noproxy '*' 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
 * `curl -s --noproxy '*' 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
 * `curl -s --noproxy '*' 'http://host:port/edit/getlatexsentid=10'` get sentence 10 in LaTeX format (to use with the tikz-dependencies package)
 
