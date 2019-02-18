@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.8.1 as of 5th February 2019
+    version 1.8.2 as of 18th February 2019
     -->
 
     <head>
@@ -169,8 +169,9 @@
 
         <div id="arbre"></div>
 
-        <div id="comm" >
-            <pre id="commentfield"></pre>
+        <div id="comm" style="display: flex;">
+            <div style="padding: 5px"><button class ="onlyWithTree mybutton" id="editcommentbutton">edit comment</button></div>
+            <div><span style="white-space: pre-wrap"  id="commentfield"></span></div>
         </div>
 
 
@@ -196,9 +197,9 @@
                         <img class="helptextbutton" style="width: 30px;" src="img/End.svg"> to go to the first/last sentence.
 
                         <h2>Editing</h2>
-                        <b>make a dependency</b>: click first on the dependent and then on its new head. Doubleclicking on a node makes it root
+                        <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
                         <br><b>modify the dependency relation</b>: click on the relation label
-                        <br><b>modify form, lemma, upos, xpos</b>: control-click on the node to modify
+                        <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: control-click or double-click on the node to modify
                         <br><br>or use a command and hit the <span class="buttondoc">modify</span> button:
 
                         <!-- class="helpstyle" ici pour mettre les meme font-size (jquery-ui fait ça différemment -->

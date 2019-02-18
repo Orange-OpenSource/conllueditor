@@ -129,7 +129,7 @@ Point your navigator  to `http://localhost:8888` .
 * `--XPOS <file>` comma separated list of files containing valid XPOS
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
 * `--debug <hex>` hex number du activate debug information of the server (printed to stderr)
-* `--saveAfter <number>` if given, the servers saves/commits the changed file only after /number/ edits. To force saving the current state, click on the `save` button. Default value: 0. 
+* `--saveAfter <number>` if given, the servers saves/commits the changed file only after /number/ edits. To force saving the current state, click on the `save` button. Default value: 0.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while, espacially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
@@ -140,8 +140,8 @@ If the server has been (re)started reload the page.
 
 Load the first sentence by clicking on `read sentence`: clicking on a word and then clicking on the head-word creates a dependency relation.
 An edit window opens to give the relation a name. Existing relations can be renamed by clicking on their name.
-A double click on a word deletes its dependency relation and makes it root again. 
-o edit form, lemma etc. CTRL-click on the word. For more help use the `Help` button.
+Clicking twice on a word deletes its eventual dependency relation and makes it root.
+To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
 
 The sentence is shown as a tree or a flat graph, morphological features can be shown or hidden with the `show features` button.
 multiword expressions (having `n-m` ids) are marked by a grey line spanning the multiword expression.
@@ -164,7 +164,7 @@ For languages which are written from the right to the left like Arabic or Hebrew
 
 ![Edit screen (Arabic)](doc/tree_R2L.png)
 
-Empty nodes (having `n.1` ids) are shown in a dashed box. 
+Empty nodes (having `n.1` ids) are shown in a dashed box.
 
 ![Empty nodes](doc/tree_emptynode.png)
 
@@ -173,13 +173,13 @@ The flat graph mode also displays enhanced dependencies.
 ![empty nodes](doc/graph_emptynode.png)
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
-LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file. 
+LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
 
 In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new
 word to the right of <wordid>. This new word can then be edit, with a CTRL-click. The command `join <wordid>` merges the word with <wordid>
 with the following. This joined word gets the dependency relation of the word closer to root.
 
-Whole sentences can be split with the `sentsplit <wordid>` command. The current sentences can be concatenated with the following sentence 
+Whole sentences can be split with the `sentsplit <wordid>` command. The current sentences can be concatenated with the following sentence
 with `sentjoin` command.
 
 Currently enhanced dependencies cannot be editied in the GUI. Use the word endit window instead. They are only shown in flat graph mode
@@ -197,12 +197,12 @@ After each modification the edited file is saved:
 * `curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentences is `read 0`, sendit is only used for edit commands)
 * `curl -s --noproxy '*' 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
 * `curl -s --noproxy '*' 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
-* `curl -s --noproxy '*' 'http://host:port/edit/getlatexsentid=10'` get sentence 10 in LaTeX format (to use with the tikz-dependencies package)
+* `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use with the tikz-dependencies package)
 
 
 # Known bugs
-* not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server. 
-The feature, and misc column fields must contain one `name=value` pair per line (or `_`), 
+* not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server.
+The feature, and misc column fields must contain one `name=value` pair per line (or `_`),
 the enhanced dependency field must contain one `head:deprel` pair per line (or `_`).
 
 # Todo list

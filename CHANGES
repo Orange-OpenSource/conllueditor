@@ -1,3 +1,8 @@
+Version 1.8.2
+
+- double click to edit a word (form, lemma, UPOS, ...), useful for tablets which usually do not have a control key
+- button to edit comments (to edit empty comments)
+
 Version 1.8.1
 
 - return version with /edit/validlists

@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.1 as of 5th February 2019
+ @version 1.8.2 as of 18th February 2019
  */
 
 
@@ -221,7 +221,9 @@ var conllwords = {};
 var clickedNodes = [];
 var deprels = [];
 var uposs = [];
-
+var clickCount = 0;
+var wordedit = false;
+var editword_with_doubleclick = true; // in order to deactivate word-edit with double click, set to false
 
 // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
 // il faut clikcer sur un mot et sur sa future tete pour changer l'arbre
@@ -235,13 +237,29 @@ function ModifyTree(evt) {
     //alert("MTT " + target.id + " == " + target);
     //alert("IDDD " + id );
     //alert("rrSSr " + conllwords[id[1]].feats);
-    //alert("rrr " +JSON.stringify(id));
 
     if (target.id) {
         if (id[0] == "rect") {
             //alert("SHIFT: " + evt.shiftKey)
 
-            if (evt.ctrlKey) {
+            // deal with a doubleclick: a quick double click opens the edit window
+
+            if (editword_with_doubleclick) {
+                clickCount++;
+                if (clickCount === 1) {
+                    singleClickTimer = setTimeout(function () {
+                        clickCount = 0;
+                    }, 200);
+                } else if (clickCount === 2) {
+                    clearTimeout(singleClickTimer);
+                    clickCount = 0;
+                    //counter.textContent = count;
+                    wordedit = true;
+                }
+            }
+
+            if (evt.ctrlKey || wordedit) {
+                wordedit = false;
                 //if (evt.shiftKey) {
                 var conllword = conllwords[id[1]];
                 $("#cid").text(conllword.id);
@@ -294,7 +312,9 @@ function ModifyTree(evt) {
 
 
                 // open edit window
-                $("#wordEdit").modal()
+                $("#wordEdit").modal();
+                clickedNodes = [];
+                $(".wordnode").attr("class", "wordnode");
             } else {
                 clickedNodes.push(id[1]);
                 //target.setAttribute("class", "wordnode boxhighlight");
@@ -424,7 +444,7 @@ function formatPhrase(item) {
             $('#save').prop('disabled', false);
         else
             $('#save').prop('disabled', true);
-        $("#changespendingsave").html("("+item.changes+")")
+        $("#changespendingsave").html("(" + item.changes + ")")
         alert(item.message);
     } else {
         $('.onlyWithTree').show();
@@ -539,10 +559,10 @@ function formatPhrase(item) {
         }
 
 
-	if (highlightX > 40 || highlightY > 100) {
-	//alert("hlt " + highlightX + " " +highlightY);
-	    $('body').scrollTop(highlightY-100);
-	    $('body').scrollLeft(highlightX-40);
+        if (highlightX > 40 || highlightY > 100) {
+            //alert("hlt " + highlightX + " " +highlightY);
+            $('body').scrollTop(highlightY - 100);
+            $('body').scrollLeft(highlightX - 40);
         } else if (showr2l) {
             // scroll to right for languages like Hebrew or Arabic
             $('body').scrollLeft($(document).outerWidth());
@@ -572,7 +592,7 @@ function formatPhrase(item) {
             $('#save').prop('disabled', false);
         else
             $('#save').prop('disabled', true);
-        $("#changespendingsave").html("("+item.changes+")")
+        $("#changespendingsave").html("(" + item.changes + ")")
 
         // make a table wordid: word to access data easier for editing
         conllwords = {};
@@ -643,6 +663,16 @@ $(document).ready(function () {
 
         $("#commentEdit").modal()
     });
+
+
+    $("#editcommentbutton").click(function () {
+        //alert("rrr "+ $("#commentfield").text());
+        $("#commenttext").val($("#commentfield").text());
+        //$("#commentedit").dialog("open");
+
+        $("#commentEdit").modal()
+    });
+
 
     /* save edited comment */
     $('#savecomment').click(function () {
@@ -723,14 +753,14 @@ $(document).ready(function () {
         $('#wordEdit').modal('hide');
     });
 
-   $('#savedeprel').click(function () {
+    $('#savedeprel').click(function () {
         //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdep").text()];
         if (conllword.deprel != $("#cdeprel").val()) {
             sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
-          $('#deprelEdit').modal('hide');
-   });
+        $('#deprelEdit').modal('hide');
+    });
 
 
     // start show latex
