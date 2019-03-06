@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.1 as of 5th February 2019
+ @version 1.9.0 as of 6th March 2019
  */
 package com.orange.labs.editor;
 
@@ -826,8 +826,29 @@ public class ConlluEditor {
                 ConllWord modWord = null;
                 if (f[1].equals("split")) {
                     //System.err.println("SPLIT");
-                    modWord = new ConllWord(csent.getWords().get(id - 1));
-                    csent.addWord(modWord, id - 1);
+                    int splitpos = -1;
+                    if (f.length > 3) {
+                        try {
+                             splitpos = Integer.parseInt(f[3]);
+                         } catch (NumberFormatException e) {
+                             return formatErrMsg("INVALID splitpos (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                         }
+                    }
+
+                    ConllWord curWord = csent.getWords().get(id - 1);
+                    modWord = new ConllWord(curWord);
+
+                    if (splitpos > 0 && splitpos < curWord.getForm().length()-1) {
+                        curWord.setForm(curWord.getForm().substring(0, splitpos));
+                        modWord.setForm(modWord.getForm().substring(splitpos));
+                        if (splitpos < curWord.getLemma().length()-1) {
+                            curWord.setLemma(curWord.getLemma().substring(0, splitpos));
+                            modWord.setLemma(modWord.getLemma().substring(splitpos));
+                        }
+                    }
+
+                    csent.addWord(modWord, id );
+
                 } else if (f[1].equals("join")) {
                     // System.err.println("JOIN");
                     if (id >= csent.getWords().size()) {

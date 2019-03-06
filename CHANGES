@@ -1,3 +1,7 @@
+Version 1.9.0
+
+ - added split position parameter to word split function
+
 Version 1.8.2
 
 - double click to edit a word (form, lemma, UPOS, ...), useful for tablets which usually do not have a control key
