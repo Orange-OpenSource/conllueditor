@@ -494,7 +494,7 @@ public class ConllSentence {
                 contracted.remove(key);
             }
         }
-        
+
         // delete heads and words which are before id from newsent
         for (ConllWord cw : newsent.getWords()) {
             if (cw.getHead() <= id) {
@@ -509,14 +509,14 @@ public class ConllSentence {
         while (words.size() > id) {
             words.remove(id);
         }
-        
+
         // delete heads which are no longer in this
          for (ConllWord cw : words) {
             if (cw.getHead() > id) {
                 cw.setHead(0);
             }
         }
-        
+
         newsent.normalise();
         return newsent;
     }
@@ -524,7 +524,7 @@ public class ConllSentence {
     public void joinsentence(ConllSentence n) {
         n.normalise(words.size()+1);
         //System.out.println("nnnnnn " + n);
-        
+
         words.addAll(n.getWords());
         if (n.emptywords != null) {
             if (emptywords == null) emptywords = n.emptywords;
@@ -535,7 +535,7 @@ public class ConllSentence {
             else contracted.putAll(n.contracted);
         }
     }
-    
+
     /**
      * fusionner deux mots sur un (par ex. "-" et "ce"). Ne fonctionne que sur
      * les tags, pas sur les dépendances
@@ -910,6 +910,14 @@ public class ConllSentence {
      * @param id
      */
     public void addWord(ConllWord cw, int id) throws ConllException {
+        if (cw.getTokentype() == ConllWord.Tokentype.CONTRACTED) {
+            if (contracted == null) {
+                contracted = new HashMap<>();
+            }
+            contracted.put(cw.getId(), cw);
+            return;
+        }
+
         for (ConllWord w : words) {
             w.setId(w.getId() * 10);
             if (w.getHead() > 0) {
@@ -1161,9 +1169,9 @@ public class ConllSentence {
 
     /** get a substring of the sentence which includes the given deprels.
      * Words not linked with these deprels but between head/dep of a given deprel will be output in parentheses.
-     * 
+     *
      * @param deprels
-     * @return 
+     * @return
      */
     public String getSubTreeAsText(Set<String> deprels) {
         Set<Integer> ids = new HashSet<>();

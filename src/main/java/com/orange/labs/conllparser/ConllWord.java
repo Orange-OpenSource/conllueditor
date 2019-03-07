@@ -153,6 +153,21 @@ public class ConllWord {
         deps = new ArrayList<>();
     }
 
+    public ConllWord(String composedform, int from, int to) {
+        dependents = new ArrayList<>();
+        depmap = new TreeMap<>();
+        this.form = composedform;
+        id = from;
+        subid = to;
+        toktype = Tokentype.CONTRACTED;
+        head = 0;
+        lemma = EmptyColumn;
+        upostag = EmptyColumn;
+        xpostag = EmptyColumn;
+        deplabel = EmptyColumn;
+
+    }
+
     /*    @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé deux colonne au format CONLL "normal"   */
     public ConllWord(String conllline, Set<Annotation> lastannots, int shift) throws ConllException {
         dependents = new ArrayList<>();

@@ -799,6 +799,42 @@ public class ConlluEditor {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }
                 return returnTree(currentSentenceId, csent);
+
+            } else if (command.startsWith("mod compose")) {
+                // add composed form: mod compose <id> <composelength>
+                String[] f = command.trim().split(" +");
+                if (f.length < 4) {
+                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                }
+
+                int id;
+                int complen;
+                try {
+                    id = Integer.parseInt(f[2]);
+                    csent = cfile.getSentences().get(currentSentenceId);
+                    if (id < 1 || id > csent.getWords().size()) {
+                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                    }
+                    complen = Integer.parseInt(f[3]);
+                    if (id + complen > csent.getWords().size()) {
+                        return formatErrMsg("INVALID complen (to big) '" + command + "'", currentSentenceId);
+                    }
+                } catch (NumberFormatException e) {
+                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                }
+                //System.err.println("<" + f[1] + ">");
+
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
+
+                ConllWord composedWord = new ConllWord(csent.getWords().get(id - 1).getForm(), id, id+complen-1);
+                csent.addWord(composedWord, id);
+                return returnTree(currentSentenceId, csent);
+
+
+
             } else if (command.startsWith("mod split ")
                     || command.startsWith("mod join ")) {
                 String[] f = command.trim().split(" +");
@@ -847,7 +883,7 @@ public class ConlluEditor {
                         }
                     }
 
-                    csent.addWord(modWord, id );
+                    csent.addWord(modWord, id);
 
                 } else if (f[1].equals("join")) {
                     // System.err.println("JOIN");
