@@ -1,6 +1,7 @@
 Version 1.9.0
 
- - added split position parameter to word split function
+- added split position parameter to word split function
+- add support for creating deleting multiword tokens
 
 Version 1.8.2
 

@@ -144,7 +144,7 @@ Clicking twice on a word deletes its eventual dependency relation and makes it r
 To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
 
 The sentence is shown as a tree or a flat graph, morphological features can be shown or hidden with the `show features` button.
-multiword expressions (having `n-m` ids) are marked by a grey line spanning the multiword expression.
+multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
 
 ![Edit screen (tree graph)](doc/tree.png)
 
@@ -182,7 +182,12 @@ with the following. This joined word gets the dependency relation of the word cl
 Whole sentences can be split with the `sentsplit <wordid>` command. The current sentences can be concatenated with the following sentence
 with `sentjoin` command.
 
-Currently enhanced dependencies cannot be editied in the GUI. Use the word endit window instead. They are only shown in flat graph mode
+In order to create a multiword token, use the `compose <wordid> <length>`
+command. Click on the multiword token bar (at the bottom of the dependency
+tree/graph to open a dialogue which allows to delete the token (i.e. the n-m
+line).
+
+Currently enhanced dependencies cannot (yet) be editied in the GUI. Use the word edit window instead. They are only shown in flat graph mode
 Empty words are shown in a dashed outline. The edit support is still limited
 
 # Multiuser/save/git
