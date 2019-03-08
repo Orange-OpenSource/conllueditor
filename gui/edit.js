@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.2 as of 18th February 2019
+ @version 1.9.0 as of 8th March 2019
  */
 
 
@@ -395,9 +395,11 @@ function ModifyTree(evt) {
 //            }
         } else if (id[0] == "mwe") {
             //alert("MT MWE: " + id + " " + target);
-            $("#currentmwefrom").text(id[1]);
-            $("#currentmweto").text(id[2])
-            $("#confirmMWEdeletetion").modal();
+            $("#currentmwefrom").val(id[1]);
+            $("#currentmweto").val(id[2])
+            $("#currentmweform").val(id[3])
+
+            $("#editMWE").modal();
 
             $("#mods").val("");
             //$(".wordnode").attr('fill', 'white');
@@ -698,10 +700,10 @@ $(document).ready(function () {
     });
 
     /* delete clicked MWE form */
-    $('#deletecomposed').click(function () {
+    $('#editMWtoken').click(function () {
         // send comments to server directly (not via #mods)
-        sendmodifs({"cmd": "mod deletemwe " + $("#currentmwefrom").text() });
-        $('#deletecomposed').modal('hide');
+        sendmodifs({"cmd": "mod editmwe " + $("#currentmwefrom").val() + " " + $("#currentmweto").val() + " " + $("#currentmweform").val()});
+        $('#editMWE').modal('hide');
     });
 
 

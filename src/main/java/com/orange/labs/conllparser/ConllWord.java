@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.0 as of 5th November 2018
+ @version 1.9.0 as of 8th March 2019
  */
 package com.orange.labs.conllparser;
 
@@ -902,7 +902,7 @@ public class ConllWord {
         id = i;
     }
 
-    void setSubId(int i) {
+    public void setSubId(int i) {
         subid = i;
     }
 

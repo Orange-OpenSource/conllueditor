@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 6th March 2019
+ @version 1.9.0 as of 8th March 2019
  */
 package com.orange.labs.editor;
 
@@ -833,20 +833,28 @@ public class ConlluEditor {
                 csent.addWord(composedWord, id);
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod deletemwe")) {
+            } else if (command.startsWith("mod editmwe")) { // mod editmwe start end form
                 String[] f = command.trim().split(" +");
-                if (f.length < 3) {
+                if (f.length < 5) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
                 }
 
-                int id;
+                int start;
+                int end;
+                String form = f[4];
 
                 try {
-                    id = Integer.parseInt(f[2]);
+                    start = Integer.parseInt(f[2]);
                     csent = cfile.getSentences().get(currentSentenceId);
-                    if (id < 1 || id > csent.getWords().size()) {
+                    if (start < 1 || start > csent.getWords().size()) {
                         return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
                     }
+                    end = Integer.parseInt(f[3]);
+                    
+                    if ((end > 0 && end < start) || end > csent.getWords().size()) {
+                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                    }
+                  
                 } catch (NumberFormatException e) {
                     return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
                 }
@@ -857,8 +865,19 @@ public class ConlluEditor {
                 }
                 history.add(csent);
 
-
-                csent.deleteContracted(id);
+                // delete MW token
+              
+                if (end == 0) {
+                    csent.deleteContracted(start);
+                    return returnTree(currentSentenceId, csent);
+                }
+                // modify it
+                ConllWord cw = csent.getContracted(start);
+                if (cw != null) {               
+                    cw.setForm(form);
+                    cw.setSubId(end);
+                    cw.setId(start);
+                }
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod split ")

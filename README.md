@@ -184,8 +184,7 @@ with `sentjoin` command.
 
 In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
-tree/graph to open a dialogue which allows to delete the token (i.e. the n-m
-line).
+tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
 Currently enhanced dependencies cannot (yet) be editied in the GUI. Use the word edit window instead. They are only shown in flat graph mode
 Empty words are shown in a dashed outline. The edit support is still limited

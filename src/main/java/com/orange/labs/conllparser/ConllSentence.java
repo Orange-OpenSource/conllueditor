@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.0 as of 30th January 2019
+ @version 1.9.0 as of 8th March 2019
  */
 package com.orange.labs.conllparser;
 
@@ -133,6 +133,13 @@ public class ConllSentence {
                     ews.add(new ConllWord(cw));
                 }
                 emptywords.put(ei, ews);
+            }
+        }
+
+        if (orig.contracted != null) {
+            contracted = new HashMap<>();
+            for (Integer id : orig.contracted.keySet()) {
+                contracted.put(id, new ConllWord(orig.contracted.get(id)));
             }
         }
         newdoc = orig.newdoc;
@@ -877,6 +884,11 @@ public class ConllSentence {
 
     public List<ConllWord> getWords() {
         return words;
+    }
+
+    public ConllWord getContracted(int id) {
+        //System.err.println("aaaaa " + contracted.keySet());
+        return contracted.get(id);
     }
 
     public Map<Integer, List<ConllWord>> getEmptyWords() {

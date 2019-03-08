@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  
  @author Johannes Heinecke
- @version 1.0 as of 5th November 2018
+ @version 1.9.0 as of 8th March 2019
 */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -305,7 +305,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     svg.appendChild(path);
     if (item.mwe != undefined) {
         var mwe = document.createElementNS(svgNS, "path");
-        var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid;
+        var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;
         mwe.setAttribute("id", mwepathvar);
         mwe.setAttribute("stroke", "#888888");
         mwe.setAttribute("stroke-width", "4");
