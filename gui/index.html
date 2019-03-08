@@ -228,7 +228,7 @@
 
                         <table border ="0" class="bhelpstyle">
                             <tr><td width="42%">&bull; <span class="userinputdoc">split <i>id</i> [<i>splitpos</i>]/span></td> <td>split a word in two
-                                    (it will be copied to a new node and attached to the same head). If <i>splitpos</i> the characters of Form and Lemma left of <i>splitpos</i> will 
+                                    (it will be copied to a new node and attached to the same head). If <i>splitpos</i> the characters of Form and Lemma left of <i>splitpos</i> will
                                     remain in the original word, the rest will be the new word</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">insert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new word after word with <i>id</i></td></tr>
@@ -366,7 +366,7 @@
                         <textarea class="comments" id="commenttext"  rows="6" cols="80" ></textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" id="savecomment" class=" mybutton">Save changes</button>
+                        <button type="button" id="savecomment" class="mybutton">Save changes</button>
                         <button type="button" class="mybutton" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -460,6 +460,28 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal" id="confirmMWEdeletetion" tabindex="-1" role="dialog" aria-labelledby="deleteMWE" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="showDeleteMWE">Delete Composed Form</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <span id="currentmwefrom"></span>-<span id="currentmweto"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="deletecomposed" class="mybutton">Delete</button>
+                        <button type="button" class="mybutton" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
     </body>
 </html>

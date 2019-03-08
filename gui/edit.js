@@ -393,6 +393,18 @@ function ModifyTree(evt) {
 //                $("#mods").val(/*child*/ id[2] + " " + /* head */ id[1] + " " + deprel);
 //                $("#modifier").click();
 //            }
+        } else if (id[0] == "mwe") {
+            //alert("MT MWE: " + id + " " + target);
+            $("#currentmwefrom").text(id[1]);
+            $("#currentmweto").text(id[2])
+            $("#confirmMWEdeletetion").modal();
+
+            $("#mods").val("");
+            //$(".wordnode").attr('fill', 'white');
+            $(".wordnode").attr("class", "wordnode");
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
 
         } else {
             //alert("MT " + target.id + " == " + target);
@@ -684,6 +696,14 @@ $(document).ready(function () {
 
         $('#commentEdit').modal('hide');
     });
+
+    /* delete clicked MWE form */
+    $('#deletecomposed').click(function () {
+        // send comments to server directly (not via #mods)
+        sendmodifs({"cmd": "mod deletemwe " + $("#currentmwefrom").text() });
+        $('#deletecomposed').modal('hide');
+    });
+
 
 
     /* save edited word */

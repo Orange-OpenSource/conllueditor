@@ -833,7 +833,33 @@ public class ConlluEditor {
                 csent.addWord(composedWord, id);
                 return returnTree(currentSentenceId, csent);
 
+            } else if (command.startsWith("mod deletemwe")) {
+                String[] f = command.trim().split(" +");
+                if (f.length < 3) {
+                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                }
 
+                int id;
+
+                try {
+                    id = Integer.parseInt(f[2]);
+                    csent = cfile.getSentences().get(currentSentenceId);
+                    if (id < 1 || id > csent.getWords().size()) {
+                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                    }
+                } catch (NumberFormatException e) {
+                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                }
+                //System.err.println("<" + f[1] + ">");
+
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
+
+
+                csent.deleteContracted(id);
+                return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod split ")
                     || command.startsWith("mod join ")) {

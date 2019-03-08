@@ -940,6 +940,14 @@ public class ConllSentence {
         makeTrees(null);
     }
 
+    public void deleteContracted(int id) throws ConllException {
+        if (contracted != null) {
+            contracted.remove(id);
+            return;
+        }
+        throw new ConllException("No composed form with id " + id);
+    }
+
     /**
      * join word with following. Use the attachment of the one closer to the
      * head. if both are equally close, chose the left
