@@ -71,6 +71,8 @@ public class ConllWord {
     private boolean basicdeps_in_ed_column = false; // true if basic deps are copied to column 9
     Map<String, Object> misc; // 10 value can be string or integer
 
+    private String spacesAfter = null;
+
     private ConllWord headWord = null;
     private final List<ConllWord> dependents;// = null; // pour pouvoir afficher les arbres graphiquements (debugage). Cette variable est rempli par ConllSentence.makeTrees()
     private final Map<Integer, ConllWord> depmap; // pour pouvour accéder aux dépendants avec leur ID, rempli par makeTrees()
@@ -1110,6 +1112,7 @@ public class ConllWord {
     }
 
     public void setMisc(String unparsed_miscstring) {
+        spacesAfter = " ";
         if (!EmptyColumn.equals(unparsed_miscstring)) {
             String[] fields = unparsed_miscstring.trim().split("[\\|,\n]");
             for (String f : fields) {
@@ -1123,6 +1126,7 @@ public class ConllWord {
                             misc.put(kv[0], Integer.parseInt(kv[1]));
                         } else {
                             misc.put(kv[0], kv[1]);
+                            setSpacesAfter(kv[0], kv[1]);
                         }
                     }
                 } else {
@@ -1132,13 +1136,34 @@ public class ConllWord {
         }
     }
 
+    /** set the spaces afterthe token, return true, if the key was Soace(s)After */
+    private boolean setSpacesAfter(String misckey, String miscval) {
+        if (misckey.equals("SpaceAfter") && miscval.equals("No")) {
+            spacesAfter = "";
+            return true;
+        }
+        else if (misckey.equals("SpacesAfter")) {
+            spacesAfter = miscval.replace("\\s", " ").replace("\\t", "\t").replace("\\n", "\n");
+            return true;
+        }
+        return false;
+    }
+
     public void setMisc(Map<String, Object> misc) {
         this.misc = misc;
+        spacesAfter = " ";
+        for (Map.Entry<String, Object> pair : misc.entrySet()) {
+            if (pair.getValue() instanceof String) {
+                boolean rtc = setSpacesAfter(pair.getKey(), (String) pair.getValue());
+                if (rtc) break; // spaceafter found
+            }
+        }
     }
 
     public boolean addMisc(String key, String val) {
         boolean prexists = misc.containsKey(key);
         misc.put(key, val);
+        setSpacesAfter(key, val);
         return prexists;
     }
 
@@ -1146,6 +1171,10 @@ public class ConllWord {
         boolean prexists = misc.containsKey(key);
         misc.put(key, val);
         return prexists;
+    }
+
+    String getSpacesAfter() {
+        return spacesAfter;
     }
 
     public ConllWord getHeadWord() {

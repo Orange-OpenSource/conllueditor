@@ -1155,8 +1155,21 @@ public class ConllSentence {
 
     public String getSentence() {
         StringBuilder sb = new StringBuilder();
-        for (ConllWord word : words) {
-            sb.append(word.getForm()).append(" ");
+        //for (ConllWord word : words) {
+        //    sb.append(word.getForm()).append(" ");
+        //}
+
+        int contracted_until = 0;
+        for(ConllWord word : words) {
+            ConllWord mwe = null;
+            if (contracted != null) mwe = contracted.get(word.getId());
+            if (mwe != null) {
+                sb.append(mwe.getForm()).append(word.getSpacesAfter());
+                contracted_until = mwe.getSubid();
+            } else if (contracted_until == 0 || word.getId() > contracted_until) {
+                sb.append(word.getForm()).append(word.getSpacesAfter());
+
+            }
         }
         return sb.toString();
     }
