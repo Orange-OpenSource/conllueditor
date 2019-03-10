@@ -628,10 +628,10 @@ public class ConllSentence {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (newdoc != null) {
+        if (newdoc != null && !newdoc.isEmpty()) {
             sb.append("# newdoc ").append(newdoc).append('\n');
         }
-        if (newpar != null) {
+        if (newpar != null && !newpar.isEmpty()) {
             sb.append("# newpar ").append(newpar).append('\n');
         }
         if (sentid != null && !sentid.isEmpty()) {

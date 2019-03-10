@@ -219,12 +219,15 @@ public class ConllWord {
             throw new ConllException("empty form. Use '" + EmptyColumn + "': " + conllline);
         }
 
+        misc = new LinkedHashMap<>();
         if (toktype == Tokentype.CONTRACTED) {
             for (int x = 2 + shift; x < shift + 9; ++x) {
                 if (!elems[x].equals(EmptyColumn)) {
                     throw new ConllException("Contracted word must not have columns filled after position 2");
                 }
+                // processing Misc column
             }
+            setMisc(elems[shift + 9]);
             deps = new ArrayList<>(); // TODO either keep this or add checks to getDeps() calls
         } else {
             lemma = elems[shift + 2];
@@ -270,7 +273,7 @@ public class ConllWord {
 
             whquestion = false;
 
-            misc = new LinkedHashMap<>();
+
             deps = new ArrayList<>();
 
             if (elems.length > shift + 9) {
