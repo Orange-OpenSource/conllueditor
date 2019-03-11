@@ -870,8 +870,8 @@ public class ConllSentence {
                 for (ConllWord cc : contracted.values()) {
                     sb.append("\\wordgroup{1}{")
                             .append(position.get(Integer.toString(cc.getId()))).append("}{")
-                            .append(position.get(Integer.toString(cc.getSubid()))).append("}{id")
-                            .append(cc.getForm()).append("}\n");
+                            .append(position.get(Integer.toString(cc.getSubid()))).append("}{mw")
+                            .append(cc.getId()).append("}\n"); // id
                 }
             }
 
