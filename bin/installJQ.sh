@@ -3,7 +3,7 @@
 # helper script to download and install jquery, jquery-ui, boostrap and popper
 
 MYDIR=$(dirname $0)
-DEST=$MYDIR/../gui/libT
+DEST=$MYDIR/../gui/lib
 
 if [ -d $DEST ]; then
 	echo "destination directory $DEST exists already. aborted"
