@@ -34,14 +34,14 @@ In order two compile the server, you also need
 ### Compilation
 
 * `mvn install` (add `-DskipTests` to avoid running the JUnit tests)
-* copy/unpack bootstrap, popper, jquery and jquery-ui in the `gui/lib` directory or change the corresponding lines in
-[gui/index.html](gui/index.html) to load jquery and jquery-ui from a public server:
+* download javascript libraries (bootstrap, popper, jquery and jquery-ui), the script `bin\installJQ.sh` will do the job
+* or change the corresponding lines in [gui/index.html](gui/index.html) to load the libraries from a public server:
 
 ```
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
 ```
 
-* the `gui/lib` directory must look like this
+* after having run `bin/installJQ.sh` the `gui/lib` directory must look like this
 
 ```
 ./gui/lib/bootstrap-4.1.3/js/bootstrap.min.js
