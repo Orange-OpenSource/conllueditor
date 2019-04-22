@@ -36,6 +36,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -701,7 +703,7 @@ public class ConllSentence {
             makeTrees(null);
 
             Map<String, Integer> position = new HashMap<>(); // position of each word, needed for latex-deprel
-
+            sb.append("% for tikz-dependency\n");
             if (newdoc != null) {
                 sb.append("% newdoc ").append(newdoc).append('\n');
             }
@@ -821,8 +823,10 @@ public class ConllSentence {
             }
             sb.append("\\\\ % position\n\\end{deptext}\n\n%        tete dep fonc\n");
 
+            int maxdist = 0; // calculate here the most distant word in terms of deprels from root
             // System.err.println("ppp " + position);
             for (ConllWord word : words) {
+                maxdist = Math.max(getDistanceFromSentenceHead(word), maxdist);
                 int mypos = position.get(word.getFullId());
                 int headpos = 0;
                 if (word.getHead() == 0) {
@@ -876,6 +880,26 @@ public class ConllSentence {
             }
 
             sb.append("\\end{dependency}\n");
+
+            sb.append("\n\n% for deptrees.sty\n");
+            sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist+1));
+            sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
+            for(ConllWord head : getHeads()) {
+                sb.append(String.format("\\root{%d}{%s}{%s}\n", head.getId(), head.getForm(), head.getUpostag()));
+            }
+
+            sb.append("% headpos,xpos,ypos,form,pos,label\n");
+            List<ConllWord>words2 = new ArrayList<>();
+            words2.addAll(words);
+            Collections.sort(words2, new CWSortbyHead());
+            for (ConllWord cw : words2) {
+                if (cw.getHead() != 0) {
+                    sb.append(String.format("\\dep{%d}{%s}{%d}{%s}{%s}{%s}\n", cw.getHead(), cw.getId(),
+                                            getDistanceFromSentenceHead(cw)-1,
+                                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
+                }
+            }
+            sb.append("\\end{tikzpicture}\n");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1099,6 +1123,16 @@ public class ConllSentence {
     public int getMaxdist() {
         return maxdist;
     }
+
+    class CWSortbyHead implements Comparator<ConllWord>
+{
+    // Used for sorting in ascending order of
+    // roll number
+    public int compare(ConllWord a, ConllWord b)
+    {
+        return a.getHead() - b.getHead();
+    }
+}
 
     /**
      * class to store information of what parts of a ConllWord should be

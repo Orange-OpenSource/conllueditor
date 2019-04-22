@@ -1,0 +1,103 @@
+\ProvidesPackage{deptree}[2019/04/22, v1.00 simple dependency trees]
+\NeedsTeXFormat{LaTeX2e}[2016/02/01]
+
+
+\RequirePackage{tikz}
+\usetikzlibrary{arrows,positioning}
+
+\def\@deprelcolor{black} % line
+\def\@depreltextcolor{black} % text
+\def\@deprellabelcolor{gray} % frame
+\def\@deprelbgcolor{black!5}
+\def\@depreltextfont{\footnotesize} 
+\def\@wordfont{}
+\def\@bottomwordfont{\footnotesize} 
+% define styles for arrows, words and dep labels
+\tikzstyle{dottedline} = [draw, dashed, color=gray]
+\tikzstyle{line} = [draw, very thick, color=\@deprelcolor, -latex']
+\tikzstyle{wort} = [rectangle, %draw=blue, %fill=blue!60,
+                    inner sep=1pt,
+                    font=\@wordfont,
+		    align=center, %% needed to make \\ work
+                    %    text width=5em,
+                    text centered%, rounded corners%, minimum height=\minheight
+]
+
+\tikzstyle{bottomwort} = [rectangle, %draw=blue, %fill=blue!60,
+		    align=center, %% needed to make \\ work
+                    anchor=south,
+                    font=\@bottomwordfont,
+                    %text centered,% rounded corners,
+                    text depth=.25ex
+                    %minimum height=4ex
+]
+
+\tikzstyle{deplabel} = [rectangle,line width=0.2pt,
+                        draw=\@deprellabelcolor,
+                        text=\@depreltextcolor,
+                        fill=\@deprelbgcolor, %violet!10,
+                        %inner sep=0pt,
+		        align=center, %% needed to make \\ work
+                        font=\@depreltextfont,
+                        % text width=5em,
+                        text centered,
+                        rounded corners %, minimum  height=\minheight
+]
+
+\usepackage{ifthen}
+
+\def\setdeprelcolor#1{\def\@deprelcolor{#1}}
+\def\setdeprellabelcolor#1{\def\@deprellabelcolor{#1}}
+\def\setdepreltextcolor#1{\def\@depreltextcolor{#1}}
+\def\setdeprelbgcolor#1{\def\@deprelbgcolor{#1}}
+\def\setdepreltextfont#1{\def\@depreltextfont{#1}}
+\def\setwordfont#1{\def\@wordfont{#1}}
+\def\setbottomwordfont#1{\def\@bottomwordfont{#1}}
+
+\def\@bottom{0}
+\def\setbottom#1{\def\@bottom{#1}}
+
+%         xpos form,pos
+\def\root#1#2#3{
+ \node [wort] (#1) at(#1,0) {#2\\#3};
+  \ifthenelse{\NOT 0 =\@bottom}{
+    \node [bottomwort] (bottom-#1) at(#1,-\@bottom)  {#2};
+    \path [dottedline] (#1) -- (bottom-#1);
+  }{}
+}
+
+%        headpos,xpos,ypos,form,pos,label
+\def\dep#1#2#3#4#5#6{
+ \depX{#1}{#2}{#3}{#4}{#5}{#6}{0}
+%  \node [wort] (#2) at(#2,-#3)  {#4\\#5}; 
+%  \path [line] (#1) -> node [deplabel,sloped,midway] {#6} (#2);
+%  \ifthenelse{\NOT 0 =\@bottom}{
+%    \node [bottomwort] (bottom-#2) at(#2,-\@bottom)  {#4}; 
+%    \path [dottedline] (#2) -- (bottom-#2);
+%  }{}
+}
+
+% add some horizontal space to xpos
+%        headpos,xpos,ypos,form,pos,label, addtoxpos
+\def\depX#1#2#3#4#5#6#7{
+  \node [wort] (#2) at(#2.#7,-#3)  {#4\\#5}; 
+  \path [line] (#1) -> node [deplabel,sloped,midway] {#6} (#2);
+  \ifthenelse{\NOT 0 =\@bottom}{
+    \node [bottomwort] (bottom-#2) at(#2.#7,-\@bottom)  {#4}; 
+    \path [dottedline] (#2) -- (bottom-#2);
+  }{}
+}
+
+
+
+%         xposdelta,headid,id,text,label
+%\def\depl#1#2#3#4#5{
+%  \node [wort, below left=1 and #1 of #2] (#3)  {#4}; 
+%  \path [line] (#2) -> node [sloped,midway,above] {#5} (#3);
+%}
+%\def\depr#1#2#3#4#5{
+%  \node [wort, below right=1 and #1 of #2] (#3)  {#4}; 
+%  \path [line] (#2) -> node [sloped,midway,above] {#5} (#3);
+%}
+
+

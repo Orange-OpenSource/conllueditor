@@ -1,0 +1,287 @@
+\documentclass[12pt]{article}
+
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+\usepackage{deptree}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{metalogo}
+\usepackage[colorlinks=true,
+            urlcolor=urlcol]{hyperref}
+\urlstyle{same}
+\definecolor{urlcol}{rgb}{0,0,0.75}
+
+\title{Generating simple Dependency Trees with \XeLaTeX}
+\author{Johannes Heinecke\\johannes.heinecke@orange.fr}
+\begin{document}
+
+\maketitle
+
+
+This package generates simple dependency trees (in contrast to
+dependency graphs produced by {\tt tikz-dependency package}).
+It depends on {\tt tikz} and some of its libaries ({\tt arrows}, {\tt positioning})
+
+The package is loaded by \verb:\usepackage{deptree}:. Do not forget to
+load \verb:\usepackage{xcolor}: to be able to redefine colours
+
+
+Dependency tries are technically speaking a \verb:tikzpicture:, so
+all tree commands must be in an \verb:tikzpicture:-environment. The
+size of the horizontal and vertical steps can be given by the
+\verb:tikz:-options \verb:x=: and \verb:y=::
+
+
+\begin{verbatim}
+   \begin{tikzpicture}[x=20mm,y=20mm]
+   \end{tikzpicture}
+\end{verbatim}
+
+The root is declared by {\tt\char92root\{\emph{word position}\}\{\emph{form}\}\{\emph{POS}\}}. 
+The POS field can be split into several lines (e.g.to give UPOS and
+XPOS)) by {\verb:\\:}.
+Non root word forms are given by 
+
+{\tt\char92dep\{\emph{head pos}\}\{\emph{word pos}\}\{\emph{vertical pos}\}\{\emph{form}\}\{\emph{POS}\}\{\emph{dep rel}\}}.
+
+\begin{itemize}
+\item \verb:head pos: is the horizontal position of the head in the sentence
+\item \verb:word pos: is the horizontal position of the dependent in the sentence
+\item \verb:vertical pos: is the vertical position of the dependent
+  (counted from the root)
+\end{itemize}
+
+A bottom line which repeats the words of the sentence, can be added by
+specifying the vertical position of this line
+{\tt\char92setbottom\{\emph{vert pos}\}}. This value will be used for
+all following trees. So it either has to be set to an correct value
+for each sentence or to 0 to deactivate the bottom line.
+
+For instance, the code in figure \ref{def1} results in figure \ref{ex1}:
+
+\begin{figure}[H]
+\begin{verbatim}
+  \setbottom{4} % set to 0 to hide bottom line of forms
+  \begin{tikzpicture}[x=20mm,y=20mm]
+  \root{2}{gefais}{VERB}
+  \dep{2}{1}{2}{Mi}{PART}{advmod}
+  \dep{2}{3}{2}{i}{PRON}{nsubj}
+  \dep{2}{5}{2}{ngheni}{NOUN}{ccomp}
+  \dep{2}{7}{2}{Nghaerdydd}{PROPN}{obl}
+  \dep{2}{8}{2}{.}{PUNCT}{punct}
+  \dep{5}{4}{3}{fy}{PRON}{nmod:obj}
+  \dep{7}{6}{3}{yng}{ADP}{case}
+  \end{tikzpicture}
+\end{verbatim}
+\caption{dependency tree definition}\label{def1}
+\end{figure}
+
+The CoNLL-U editor
+(\url{https://github.com/Orange-OpenSource/conllueditor}) generates
+the tree definitions automatically from any CoNLL-U file.
+
+
+
+
+
+\def\beispiel{
+\setbottom{3} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=20mm,y=20mm]
+\root{2}{gefais}{VERB}
+% headpos,xpos,ypos,form,pos,label
+\dep{2}{1}{1}{Mi}{PART}{advmod}
+\dep{2}{3}{1}{i}{PRON}{nsubj}
+\dep{2}{5}{1}{ngheni}{NOUN}{ccomp}
+\dep{2}{7}{1}{Nghaerdydd}{PROPN}{obl}
+\dep{2}{8}{1}{.}{PUNCT}{punct}
+\dep{5}{4}{2}{fy}{PRON}{nmod:obj}
+\dep{7}{6}{2}{yng}{ADP}{case}
+\end{tikzpicture}
+}
+
+
+\begin{figure}[H]
+\beispiel
+\caption{Default dependency tree}\label{ex1}
+\end{figure}
+
+
+The package has limited configuration options:
+\begin{itemize}
+\item \verb:\setdeprelcolor{blue}: color of the lines linking head and
+  dependant
+\item \verb:\setdeprellabelcolor{red}: colour of the rectangle
+  containing the dependency relation name
+\item \verb:\setdeprelbgcolor{blue!15}: color of the background of the
+  dependency relation name
+  
+\item \verb:\setdepreltextcolor{violet}:colour of the dependency relation name
+\item \verb:\setdepreltextfont{\sf}: font for the dependency relation  name
+\item \verb:\setwordfont{\sf}: font for word nodes
+\item \verb:\setbottomwordfont{\sf}: font for words on the bottom line
+\end{itemize}
+
+The \verb:set*font: commands accept any font command, including new
+fonts declared with \XeLaTeX' \verb:fontspec:.
+
+For instance, adding the the customization shown in fugre \ref{def2}
+\emph{before} 
+the tree definition, results in figure~\ref{ex2}:
+
+\begin{figure}[H]
+\begin{verbatim}
+  \setdeprelcolor{blue}
+  \setdeprellabelcolor{black}
+  \setdepreltextcolor{blue!50!black}
+  \setdeprelbgcolor{blue!15}
+  \setdepreltextfont{\tt\scriptsize}
+  \setwordfont{\it}
+  \setbottomwordfont{\sf}
+\end{verbatim}
+\caption{customization}\label{def2}
+\end{figure}
+
+
+
+\setdeprelcolor{blue}
+\setdeprellabelcolor{black}
+\setdepreltextcolor{blue!50!black}
+\setdeprelbgcolor{blue!15}
+\setdepreltextfont{\tt\scriptsize}
+\setwordfont{\it}
+\setbottomwordfont{\sf}
+
+
+\begin{figure}[H]
+\beispiel
+\caption{Customized dependency tree}\label{ex2}
+\end{figure}
+
+
+
+The vertical position can be used to modify the layout of the
+trees. For instance if we change the line from figure \ref{def1}
+to \verb+\dep{5}{4}{2.3}{fy}{PRON}{nmod:obj}+
+ will lower the node of
+word \emph{fy} slightly (cf. figure \ref{ex3}).
+
+
+
+\begin{figure}[H]
+\setbottom{3} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=20mm,y=20mm]
+\root{2}{gefais}{VERB}
+% headpos,xpos,ypos,form,pos,label
+\dep{2}{1}{1}{Mi}{PART}{advmod}
+\dep{2}{3}{1}{i}{PRON}{nsubj}
+\dep{2}{5}{1}{ngheni}{NOUN}{ccomp}
+\dep{2}{7}{1}{Nghaerdydd}{PROPN}{obl}
+\dep{2}{8}{1}{.}{PUNCT}{punct}
+\dep{5}{4}{2.3}{fy}{PRON}{nmod:obj}
+\dep{7}{6}{2}{yng}{ADP}{case}
+\end{tikzpicture}
+\caption{Vertical position modified}\label{ex3}
+\end{figure}
+
+
+Small trees can be obtained by modifying the \verb:x=:/\verb:y=:
+options. Do not chose values to small (as I did here) without lowering
+font size accordingly, since the
+deprel labels will overlap with nodes.
+
+\begin{figure}[H]
+\begin{tikzpicture}[x=12mm,y=15mm]
+\root{2}{gefais}{VERB}
+% headpos,xpos,ypos,form,pos,label
+\dep{2}{1}{1}{Mi}{PART}{advmod}
+\dep{2}{3}{1}{i}{PRON}{nsubj}
+\dep{2}{5}{1}{ngheni}{NOUN}{ccomp}
+\dep{2}{7}{1}{Nghaerdydd}{PROPN}{obl}
+\dep{2}{8}{1}{.}{PUNCT}{punct}
+\dep{5}{4}{2.3}{fy}{PRON}{nmod:obj}
+\dep{7}{6}{2}{yng}{ADP}{case}
+\end{tikzpicture}
+\caption{Small tree}\label{ex4}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+\iffalse
+\setbottom{3}
+\begin{tikzpicture}[x=20mm,y=20mm]
+%  \node [wort] (root) at(5,0) {Mae\\VERB};
+ \root{5}{mae}{VERB}
+% \depl{1}{root}{y}{Y\\PART}{advmod}
+% \depr{1}{root}{s}{Si\^on\\PROPN}{nsubj}
+% \depr{1}{s}{b}{bach\\ADJ}{amod}
+% \depr{5}{root}{f}{fach\\ADJ}{amod}
+% \depl{1}{f}{y}{yn}{PART}{amod}
+ \dep{5}{4}{1}{Y}{PART}{advmod}
+ \dep{5}{6}{1}{Si\^on}{PROPN}{nsubj}
+ \dep{6}{7}{2}{bach}{ADJ}{amod}
+ \dep{5}{9}{1}{fach}{ADJ}{amod}
+ \dep{9}{8}{2}{yn}{PART}{amod}
+
+ \root{10}{gwelais}{VERB}
+ \dep{10}{11}{1}{i}{PRON}{nsubj}
+
+%  \node [wort, below left=1 and 0 of root] (mw)  {B\\ART}; 
+%  \path [line] (root) -> node [sloped,midway,above] {ss} (mw);
+%  \node [wort, below left=1 and 1 of root] (mw2)  {C\\DEF}; 
+%  \path [line] (root) -> node [sloped,midway,above] {mw2} (mw2);
+
+
+%  \node [wort] (mw2)  at (3,-1) {C\\DEF}; 
+%  \path [line] (root) -> node [sloped,midway,above] {eeee} (mw2);
+%  \node [wort] (mw3)  at (3,-2) {Q}; 
+%  \node [wort] (mw4)  at (2,-1) {DDDD}; 
+\end{tikzpicture}
+
+
+\setbottom{6}
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{5}{falch}{ADJ}
+% headpos,xpos,ypos,form,pos,label
+\dep{5}{1}{2}{Yr}{PART}{qadvmod}
+\dep{5}{2}{2}{ydyn}{AUX}{cop}
+\dep{5}{3}{2}{ni}{PRON}{nsubj}
+\dep{5}{4}{2}{'n}{AUX}{aux}
+\dep{5}{7}{2}{bod}{NOUN}{ccomp}
+\dep{7}{6}{3}{ein}{PRON}{nmod:nsubj}
+\dep{7}{9}{3}{bod}{NOUN}{xcomp}
+\dep{9}{8}{4}{wedi}{AUX}{aux}
+\dep{9}{11}{4}{trio}{NOUN}{xcomp}
+\dep{11}{10}{5}{yn}{AUX}{aux}
+\end{tikzpicture}
+
+
+
+
+
+
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{5}{falch}{ADJ}
+\dep{5}{1}{1}{yr}{PART}{advmod}
+\dep{5}{2}{1}{ydyn}{AUX}{cop}
+\dep{5}{3}{1}{ni}{PRON}{nsubj}
+\dep{5}{4}{1}{'n}{PART}{c:pred}
+%\dep{5}{4}{1}{. . .}{}{. . .}
+\dep{5}{7}{1}{bod}{NOUN}{ccomp}
+\dep{7}{6}{2.3}{ein}{PRON}{n:nsubj}
+\dep{7}{9}{2}{bod}{NOUN}{xcomp}
+\dep{9}{8}{3.3}{wedi}{AUX}{aux}
+\dep{9}{11}{3}{trio}{NOUN}{xcomp}
+\dep{11}{10}{4.1}{yn}{AUX}{aux}
+\end{tikzpicture}
+\fi
+
+\end{document}

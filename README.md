@@ -11,6 +11,8 @@ The editor provides the following functionalities:
 * join/split sentences  (to correct tokenization errors)
 * undo/redo (partially)
 * git support
+* export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or 
+  the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 
 ## Installation
 
@@ -201,8 +203,8 @@ After each modification the edited file is saved:
 * `curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentences is `read 0`, sendit is only used for edit commands)
 * `curl -s --noproxy '*' 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
 * `curl -s --noproxy '*' 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
-* `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use with the tikz-dependencies package)
-
+* `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use 
+  with the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) or   [doc/deptree.sty](doc/deptree.sty) packages)
 
 # Known bugs
 * not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server.
