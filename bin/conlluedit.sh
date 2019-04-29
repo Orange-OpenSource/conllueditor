@@ -13,7 +13,7 @@ if [[ "$1" =~  ^[4].[0-9]+$ ]]; then
     shift
 else
     #echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    NEWESTJAR=$(ls $TARGETDIR/ConlluEditor-* | grep with-dep | tail -1)
+    NEWESTJAR=$(ls -tr $TARGETDIR/ConlluEditor-* | grep with-dep | tail -1)
 fi
 
 
