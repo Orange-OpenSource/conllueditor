@@ -1,17 +1,19 @@
 \ProvidesPackage{deptree}[2019/04/22, v1.00 simple dependency trees]
 \NeedsTeXFormat{LaTeX2e}[2016/02/01]
 
-
+\RequirePackage{ifthen}
 \RequirePackage{tikz}
-\usetikzlibrary{arrows,positioning}
+\usetikzlibrary{arrows,positioning,calc}
 
 \def\@deprelcolor{black} % line
 \def\@depreltextcolor{black} % text
 \def\@deprellabelcolor{gray} % frame
+\def\@mtwlabelcolor{black!7} % frame
 \def\@deprelbgcolor{black!5}
 \def\@depreltextfont{\footnotesize} 
 \def\@wordfont{}
-\def\@bottomwordfont{\footnotesize} 
+\def\@bottomwordfont{\small} 
+\def\@mtwfont{\scriptsize} 
 % define styles for arrows, words and dep labels
 \tikzstyle{dottedline} = [draw, dashed, color=gray]
 \tikzstyle{line} = [draw, very thick, color=\@deprelcolor, -latex']
@@ -36,6 +38,7 @@
                         draw=\@deprellabelcolor,
                         text=\@depreltextcolor,
                         fill=\@deprelbgcolor, %violet!10,
+                        inner sep=3pt,
                         %inner sep=0pt,
 		        align=center, %% needed to make \\ work
                         font=\@depreltextfont,
@@ -44,7 +47,17 @@
                         rounded corners %, minimum  height=\minheight
 ]
 
-\usepackage{ifthen}
+\tikzstyle{wg} = [%fill=yellow,
+                  draw=black,
+                  rounded corners]
+
+\tikzstyle{wglabel} = [draw=black,
+                       font=\@mtwfont,
+                       fill=\@mtwlabelcolor,
+                       rounded corners]
+
+
+
 
 \def\setdeprelcolor#1{\def\@deprelcolor{#1}}
 \def\setdeprellabelcolor#1{\def\@deprellabelcolor{#1}}
@@ -53,6 +66,8 @@
 \def\setdepreltextfont#1{\def\@depreltextfont{#1}}
 \def\setwordfont#1{\def\@wordfont{#1}}
 \def\setbottomwordfont#1{\def\@bottomwordfont{#1}}
+\def\setmtwfont#1{\def\@mtwfont{#1}}
+\def\setmtwlabelcolor#1{\def\@mtwlabelcolor{#1}}
 
 \def\@bottom{0}
 \def\setbottom#1{\def\@bottom{#1}}
@@ -61,8 +76,8 @@
 \def\root#1#2#3{
  \node [wort] (#1) at(#1,0) {#2\\#3};
   \ifthenelse{\NOT 0 =\@bottom}{
-    \node [bottomwort] (bottom-#1) at(#1,-\@bottom)  {#2};
-    \path [dottedline] (#1) -- (bottom-#1);
+    \node [bottomwort] (bottom_#1) at(#1,-\@bottom)  {#2};
+    \path [dottedline] (#1) -- (bottom_#1);
   }{}
 }
 
@@ -83,11 +98,21 @@
   \node [wort] (#2) at(#2.#7,-#3)  {#4\\#5}; 
   \path [line] (#1) -> node [deplabel,sloped,midway] {#6} (#2);
   \ifthenelse{\NOT 0 =\@bottom}{
-    \node [bottomwort] (bottom-#2) at(#2.#7,-\@bottom)  {#4}; 
-    \path [dottedline] (#2) -- (bottom-#2);
+    \node [bottomwort] (bottom_#2) at(#2.#7,-\@bottom)  {#4}; 
+    \path [dottedline] (#2) -- (bottom_#2);
   }{}
 }
 
+% first,last,form
+\def\mwt#1#2#3{
+ \ifthenelse{\NOT 0 =\@bottom}{
+    %\draw[draw=black,rounded corners] (#1-.4, -\@bottom.1) rectangle ++(#2-#1+1, .5);
+    \draw[wg] ($(bottom_#1.north west) + (0, 0)$) rectangle ($(bottom_#2.south east) + (0, 0)$);
+    %\node[bottomwort] (b#1) at ($(bottom_#1.south)$)  {???}; % how to access label of existing node?
+
+    \node[wglabel]  (#1#2) at ($(bottom_#1.south) + (.5*#2-.5*#1, 0)$) {#3};
+ }{}
+}
 
 
 %         xposdelta,headid,id,text,label

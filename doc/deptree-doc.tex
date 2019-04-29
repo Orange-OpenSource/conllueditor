@@ -19,6 +19,7 @@
 \maketitle
 
 
+\section{Introduction}
 This package generates simple dependency trees (in contrast to
 dependency graphs produced by {\tt tikz-dependency package}).
 It depends on {\tt tikz} and some of its libaries ({\tt arrows}, {\tt positioning})
@@ -38,6 +39,8 @@ size of the horizontal and vertical steps can be given by the
    \end{tikzpicture}
 \end{verbatim}
 
+
+\section{Declaring dependency relations}
 The root is declared by {\tt\char92root\{\emph{word position}\}\{\emph{form}\}\{\emph{POS}\}}. 
 The POS field can be split into several lines (e.g.to give UPOS and
 XPOS)) by {\verb:\\:}.
@@ -106,7 +109,7 @@ the tree definitions automatically from any CoNLL-U file.
 \caption{Default dependency tree}\label{ex1}
 \end{figure}
 
-
+\section{Customisation}
 The package has limited configuration options:
 \begin{itemize}
 \item \verb:\setdeprelcolor{blue}: color of the lines linking head and
@@ -120,24 +123,28 @@ The package has limited configuration options:
 \item \verb:\setdepreltextfont{\sf}: font for the dependency relation  name
 \item \verb:\setwordfont{\sf}: font for word nodes
 \item \verb:\setbottomwordfont{\sf}: font for words on the bottom line
+\item \verb:\setmtwfont{\it\scriptsize}: font for multiword token (bottom line)
+\item \verb:\setmtwlabelcolor{blue!10}: background colour for multiword token
 \end{itemize}
 
 The \verb:set*font: commands accept any font command, including new
 fonts declared with \XeLaTeX' \verb:fontspec:.
 
-For instance, adding the the customization shown in fugre \ref{def2}
+For instance, adding the the customization shown in figure \ref{def2}
 \emph{before} 
 the tree definition, results in figure~\ref{ex2}:
 
 \begin{figure}[H]
 \begin{verbatim}
-  \setdeprelcolor{blue}
-  \setdeprellabelcolor{black}
-  \setdepreltextcolor{blue!50!black}
-  \setdeprelbgcolor{blue!15}
-  \setdepreltextfont{\tt\scriptsize}
-  \setwordfont{\it}
-  \setbottomwordfont{\sf}
+\setdeprelcolor{blue}
+\setdeprellabelcolor{black}
+\setdepreltextcolor{blue!50!black}
+\setdeprelbgcolor{blue!15}    
+\setdepreltextfont{\it\scriptsize}
+\setwordfont{\large\sf}
+\setbottomwordfont{\footnotesize\sf}
+\setmtwfont{\it\scriptsize}
+\setmtwlabelcolor{blue!10}
 \end{verbatim}
 \caption{customization}\label{def2}
 \end{figure}
@@ -148,9 +155,12 @@ the tree definition, results in figure~\ref{ex2}:
 \setdeprellabelcolor{black}
 \setdepreltextcolor{blue!50!black}
 \setdeprelbgcolor{blue!15}
-\setdepreltextfont{\tt\scriptsize}
-\setwordfont{\it}
-\setbottomwordfont{\sf}
+\setdepreltextfont{\it\scriptsize}
+\setwordfont{\large\sf}
+\setbottomwordfont{\footnotesize\sf}
+\setmtwfont{\it\scriptsize}
+\setmtwlabelcolor{blue!10}
+
 
 
 \begin{figure}[H]
@@ -180,9 +190,33 @@ word \emph{fy} slightly (cf. figure \ref{ex3}).
 \dep{2}{8}{1}{.}{PUNCT}{punct}
 \dep{5}{4}{2.3}{fy}{PRON}{nmod:obj}
 \dep{7}{6}{2}{yng}{ADP}{case}
+
 \end{tikzpicture}
 \caption{Vertical position modified}\label{ex3}
 \end{figure}
+
+
+\section{Multiword tokens}
+Multiword tokens (MWT) can be indicated by a \verb:\mwt: command
+(e.g. figure \ref{ex4}):
+
+ {\tt\char92mwt\{\emph{first word pos}\}\{\emph{last word
+     pos}\}\{\emph{MWT}\}} 
+
+
+
+\begin{figure}[H]
+\setbottom{3} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=20mm,y=20mm]
+\root{1}{mus\'ee}{NOUN}
+\dep{1}{4}{1}{Louvre}{PROPN}{nmod}
+\dep{4}{2}{2}{de}{ADP}{case}
+\dep{4}{3}{2}{le}{DET}{det}
+\mwt{2}{3}{du}
+\end{tikzpicture}
+\caption{Multiword tokens}\label{ex4}
+\end{figure}
+
 
 
 Small trees can be obtained by modifying the \verb:x=:/\verb:y=:
