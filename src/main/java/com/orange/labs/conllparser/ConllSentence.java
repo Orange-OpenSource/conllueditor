@@ -899,6 +899,16 @@ public class ConllSentence {
                                             cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
                 }
             }
+            
+            if (contracted != null) {
+                for (ConllWord cc : contracted.values()) {
+                    sb.append("\\mtw{")
+                            .append(position.get(Integer.toString(cc.getId()))).append("}{")
+                            .append(position.get(Integer.toString(cc.getSubid()))).append("}{")
+                            .append(cc.getForm()).append("}\n");
+                }
+            }
+            
             sb.append("\\end{tikzpicture}\n");
         } catch (Exception e) {
             e.printStackTrace();
