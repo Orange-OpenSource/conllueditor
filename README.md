@@ -5,8 +5,9 @@ This Software is a tool which facilitates the editing of syntactic relations and
 loads the CoNLL-U file and saves every change to disk (and performs a `git commit` if the file is under git version control).
 
 The editor provides the following functionalities:
-* editing words (forms, lemmas, upos, xpos, features, enhanced dependencies
+* editing words (forms, lemmas, upos, xpos, features, enhanced dependencies)
 * editing dependency relations
+* indicates invalid UPOS, XPOS or dependency relations
 * join/split words (to correct tokenization errors)
 * join/split sentences  (to correct tokenization errors)
 * undo/redo (partially)
@@ -19,8 +20,7 @@ The editor provides the following functionalities:
 ### Requirements
 
 * Java jre 8.0
-* Firefox (tested with version 52.7.3 and 63), Chromium or Chrome (both tested with version
-  70), Edge (tested with version 44.17763.1.0 on Windows 10))
+* Firefox (tested with version 52.7.3 and 63), Chromium or Chrome (both tested with version 70), Edge (tested with version 44.17763.1.0 on Windows 10))
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js), needed by bootstrap
@@ -97,16 +97,16 @@ In order two compile the server, you also need
 
 ### Using a locally installed Apache our Lighttpd Server
 
-* create a link from your HTTP-server root to the `gui` directory:
+* create a symbolic link from your HTTP-server root to the `gui` directory:
 ```bash
 ln -s /path/to/ConlluEditor/gui /var/www/conllueditor
 ```
 
-* start ConlluEditor server with CoNLL-U file:
+* start the ConlluEditor server with a CoNLL-U file and a port number as arguments:
 ```bash
 bin/conlluedit.sh treebank.conllu 8888
 ```
-Point your navigator (tested with Firefox ≥ 52 and Chrome 68) to `http://localhost/conllueditor?port=8888` .
+Point your navigator to `http://localhost/conllueditor?port=8888` .
 
 ### Stand-alone
 
@@ -130,22 +130,23 @@ Point your navigator  to `http://localhost:8888` .
 * `--UPOS <file>` comma separated list of files containing valid UPOS (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
-* `--debug <hex>` hex number du activate debug information of the server (printed to stderr)
-* `--saveAfter <number>` if given, the servers saves/commits the changed file only after /number/ edits. To force saving the current state, click on the `save` button. Default value: 0.
-This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while, espacially if the file is on a network drive.
+* `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
+* `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
+This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
+especially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
 # Editing
 
-If the server has been (re)started reload the page.
+If the server has been (re)started reload the page in your navigator.
 
 Load the first sentence by clicking on `read sentence`: clicking on a word and then clicking on the head-word creates a dependency relation.
-An edit window opens to give the relation a name. Existing relations can be renamed by clicking on their name.
+An edit window opens to enter the relation a name. Existing relations can be renamed by clicking on their name.
 Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
 
-The sentence is shown as a tree or a flat graph, morphological features can be shown or hidden with the `show features` button.
+The sentence is shown as a tree or as a flat graph, morphological features can be shown or hidden with the `show features` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
 
 ![Edit screen (tree graph)](doc/tree.png)
@@ -215,6 +216,5 @@ the enhanced dependency field must contain one `head:deprel` pair per line (or `
 * be able to read/write CoNLL-U plus (.conllp) files [http://universaldependencies.org/ext-format.html]
 * be able to edit enhanced dependencies [http://universaldependencies.org/format.html#syntactic-annotation] in graphic mode
 * better support for empty nodes
-* save the file less often (to speed up the editing of big files)
 * rewrite ConllWord/ConllSentence classes from scratch
 
