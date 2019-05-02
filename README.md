@@ -11,6 +11,7 @@ The editor provides the following functionalities:
 * join/split words (to correct tokenization errors)
 * join/split sentences  (to correct tokenization errors)
 * undo/redo (partially)
+* search: forms, lemmas, UPOS, XPOS, deprels and comments, sequences of any of these
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or 
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
@@ -217,4 +218,5 @@ the enhanced dependency field must contain one `head:deprel` pair per line (or `
 * be able to edit enhanced dependencies [http://universaldependencies.org/format.html#syntactic-annotation] in graphic mode
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch
+* use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
 
