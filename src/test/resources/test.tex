@@ -1,3 +1,4 @@
+% for tikz-dependency
 \begin{dependency}
 \begin{deptext}
 Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\ % forms
@@ -22,3 +23,17 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\ % forms
 
 \depedge[edge below]{6}{7}{obj}
 \end{dependency}
+
+
+% for deptrees.sty
+\setbottom{4} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{2}{fixed}{VERB}
+\root{5}{fixed}{VERB}
+% headpos,xpos,ypos,form,pos,label
+\dep{2}{1}{1}{Sam}{PROPN}{nsubj}
+\dep{2}{3}{1}{lunch}{NOUN}{obj}
+\dep{2}{5}{1}{Kim}{PROPN}{conj}
+\dep{5}{4}{2}{and}{CCONJ}{cc}
+\dep{5}{6}{2}{dinner}{NOUN}{orphan}
+\end{tikzpicture}
