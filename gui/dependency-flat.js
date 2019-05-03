@@ -104,11 +104,11 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type) {
 
 function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel_as_type) {
     var index = item.position// - indexshift;
-    var depx = index * hor;
+    var depx = (index * hor) - (hor/2);
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        depx = ((sentencelength + 1) * hor) - depx;
+        depx = ((sentencelength ) * hor) - depx;
     }
     //console.log(index + " " + depx + " " + sentencelength);
 
@@ -119,7 +119,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     level += 6;
 
     svgmaxy = Math.max(svgmaxy, level + 1);
-    svgmaxx = Math.max(svgmaxx, depx + hor);
+    svgmaxx = Math.max(svgmaxx, depx) + 10; // + hor);
 
     if (headpos == 0)
          mwey = svgmaxy + 20; // sgxmaxy may grow (with enhanded deps arcs, but mwe bars should be just under the words)
@@ -145,14 +145,16 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         path.setAttribute("d", "M " + depx + " " + -140 + " L " + depx + " " + (levelinit - 1));
         path.setAttribute("style", "marker-end: url(#markerArrow);");
         path.setAttribute("class", "deprel_root");
+	path.setAttribute("stroke", "red"); // only needed for svg download
         svg.appendChild(path);
         
 
-//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
+	//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
         
         var depreltext = document.createElementNS(svgNS, "text");
         depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
         depreltext.setAttribute("class", "words deprel");
+        depreltext.setAttribute("fill", "green");
         //depreltext.setAttribute("font-size", "14");
     
         depreltext.setAttribute('x', depx);
@@ -182,9 +184,11 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
         if (sentencelength > 0) {
             // mwe.setAttribute("d", "M " + (depx - 5 + hor/2) + " " + (svgmaxy+20) + " l " + (-hor*length + 10) + " " + 0);
-            mwe.setAttribute("d", "M " + (depx + 5 - hor * length + hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
+	    mwe.setAttribute("d", "M " + (depx + 5 - hor * length + hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
+
         } else {
-            mwe.setAttribute("d", "M " + (depx + 5 - hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
+	    mwe.setAttribute("d", "M " + (depx + 5 - hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
+
         }
 
         svg.appendChild(mwe);
@@ -229,12 +233,12 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
 
 function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type) {
-    var headx = headpos * hor;
+    var headx = headpos * hor - hor/2;
     var headbeforedep = (headpos < item.position);
 
     if (sentencelength != 0) {
         // we write the tree from right to left
-        headx = ((sentencelength + 1) * hor) - headx;
+        headx = ((sentencelength) * hor) - headx;
         headbeforedep = !headbeforedep;
     }
 
@@ -286,10 +290,12 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
         path.setAttribute("d", niceArc2(headx, basey /* levelinit */, depx, middley));
         path.setAttribute("style", "marker-end: url(#markerArrow);");
         path.setAttribute("class", "deprel_precedinghead");
+	path.setAttribute("stroke", "#880088"); // only needed for svg download
     } else {
         path.setAttribute("d", niceArc2(depx, basey /*levelinit*/, headx, middley));
         path.setAttribute("style", "marker-start: url(#markerArrowInv);");
         path.setAttribute("class", "deprel_followinghead");
+	path.setAttribute("stroke", "blue"); // only needed for svg download
     }
 
     svg.appendChild(path);

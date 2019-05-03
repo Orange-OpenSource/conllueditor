@@ -125,12 +125,12 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     //console.log("cc " + curid)
     //alert("insNode hor:" + hor + " v:" + vertspace);
     var index = item.position - indexshift;
-    var x = index * hor;
+    var x = index * hor - hor/2;
     //console.log("index " + index + " hor " + hor + " x " + x);
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        x = ((sentencelength + 1) * hor) - x;
+        x = ((sentencelength) * hor) - x;
     }
     //console.log("dep " + index + " " + x + " sl: " + sentencelength);
     //var vertdiff = 12;
@@ -139,7 +139,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     level = drawWord(item, x, hor, levelinit, curid, svg);
     level += 6;
     svgmaxy = Math.max(svgmaxy, level + 1);
-    svgmaxx = Math.max(svgmaxx, x + hor);
+    svgmaxx = Math.max(svgmaxx, x + 10);
     // on garde le bas du noeud pour y mettre lies lignes verticales à la fin
     item.yy = level;
     // faire la ligne entre tete est dépendant
@@ -168,10 +168,12 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
             path.setAttribute("d", "M " + x + " " + (levelinit - 1) + " L " + originx + " " + originy);
             path.setAttribute("style", "marker-start: url(#markerArrowInv);");
             path.setAttribute("class", "deprel_followinghead");
+	    path.setAttribute("stroke", "#880088"); // only needed for svg download
         } else {
             path.setAttribute("d", "M " + originx + " " + originy + " L " + x + " " + (levelinit - 1));
             path.setAttribute("style", "marker-end: url(#markerArrow);");
             path.setAttribute("class", "deprel_precedinghead");
+	    path.setAttribute("stroke", "blue"); // only needed for svg download
         }
 
         svg.appendChild(path);
@@ -261,10 +263,10 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     //console.log("cc " + curid)
 
     var index = item.position - indexshift;
-    var x = index * hor;
+    var x = index * hor - hor/2;
     if (sentencelength > 0) {
         // we write the tree from right to left
-        x = ((sentencelength + 1) * hor) - x;
+        x = ((sentencelength ) * hor) - x;
     }
     // en arrivant ici, on a déssiné tout l'arbre. Maintenant on connait la profondeur de l'arbre et on peut écrire les mots en bas avec des ligne
     // du noeud vers le mot
