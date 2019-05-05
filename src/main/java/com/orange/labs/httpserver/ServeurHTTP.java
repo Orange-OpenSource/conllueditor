@@ -2,17 +2,17 @@
 
 Copyright (c) 2018, Orange S.A.
 
-Redistribution and use in source and binary forms, with or without modification, 
+Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
   1. Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright notice, 
+  2. Redistributions in binary form must reproduce the above copyright notice,
      this list of conditions and the following disclaimer in the documentation
      and/or other materials provided with the distribution.
 
-  3. Neither the name of the copyright holder nor the names of its contributors 
+  3. Neither the name of the copyright holder nor the names of its contributors
      may be used to endorse or promote products derived from this software without
      specific prior written permission.
 
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.0 as of 30th January 2019
+ @version 1.11.0 as of 3rd May 2019
  */
 package com.orange.labs.httpserver;
 
@@ -245,7 +245,11 @@ public class ServeurHTTP {
                     if (s != null) {
                         sentid = Integer.parseInt(s);
 
-                        if (path.equals("/edit/getlatex")) {
+                        if (path.equals("/edit/getvalidation")) {
+                            response = ce.getraw(ConlluEditor.Raw.VALIDATION, sentid) + "\n";
+                            http_rtc = HttpURLConnection.HTTP_OK;
+                            json = true;
+                        } else if (path.equals("/edit/getlatex")) {
                             response = ce.getraw(ConlluEditor.Raw.LATEX, sentid) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;

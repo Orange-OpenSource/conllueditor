@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 8th March 2019
+ @version 1.11.0 as of 3rd May 2019
  */
 package com.orange.labs.editor;
 
@@ -84,6 +84,7 @@ public class ConlluEditor {
     Set<String> validUPOS = null;
     Set<String> validXPOS = null;
     Set<String> validDeprels = null;
+    Validator validator = null;
     History history;
     boolean callgitcommit = true;
     int changesSinceSave = 0;
@@ -92,7 +93,7 @@ public class ConlluEditor {
     private String programmeversion;
 
     public enum Raw {
-        LATEX, CONLLU, SDPARSE
+        LATEX, CONLLU, SDPARSE, VALIDATION
     };
 
     public ConlluEditor(String conllfile) throws ConllException, IOException {
@@ -166,6 +167,10 @@ public class ConlluEditor {
     public void setValidDeprels(List<String> filenames) throws IOException {
         validDeprels = readList(filenames);
         System.err.format("%d valid Deprel read from %s\n", validDeprels.size(), filenames.toString());
+    }
+
+    public void setValidator(String validatorconf) {
+        validator = new Validator(validatorconf);
     }
 
     public void setSaveafter(int saveafter) {
@@ -282,6 +287,7 @@ public class ConlluEditor {
         return filename.getAbsolutePath();
     }
 
+    /** get raw text; Latex, conllu, sdparse or the output of the validation */
     public String getraw(Raw raw, int currentSentenceId) {
         JsonObject solution = new JsonObject();
 
@@ -292,6 +298,19 @@ public class ConlluEditor {
 
         if (csent != null) {
             switch (raw) {
+                case VALIDATION:
+                    if (validator == null) {
+                        System.err.println("AAAA");
+                        solution.addProperty("raw", "ERROR: no validator configuration given");
+                    } else {
+                        try {
+                            solution.addProperty("raw", validator.validate(csent));
+                        } catch (IOException e) {
+                            solution.addProperty("raw", "Validator error: " + e.getMessage());
+                        }
+                    }
+
+                    break;
                 case LATEX:
                     solution.addProperty("raw", csent.getLaTeX());
                     break;
@@ -850,11 +869,11 @@ public class ConlluEditor {
                         return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
                     }
                     end = Integer.parseInt(f[3]);
-                    
+
                     if ((end > 0 && end < start) || end > csent.getWords().size()) {
                         return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
                     }
-                  
+
                 } catch (NumberFormatException e) {
                     return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
                 }
@@ -866,14 +885,14 @@ public class ConlluEditor {
                 history.add(csent);
 
                 // delete MW token
-              
+
                 if (end == 0) {
                     csent.deleteContracted(start);
                     return returnTree(currentSentenceId, csent);
                 }
                 // modify it
                 ConllWord cw = csent.getContracted(start);
-                if (cw != null) {               
+                if (cw != null) {
                     cw.setForm(form);
                     cw.setSubId(end);
                     cw.setId(start);
@@ -1377,6 +1396,7 @@ public class ConlluEditor {
         System.err.println("   --UPOS <files>       comma separated list of files with valid UPOS");
         System.err.println("   --XPOS <files>       comma separated list of files with valid UPOS");
         System.err.println("   --deprels <file>     comma separated list of files with valid deprels");
+        System.err.println("   --validator <file>   file with validator configuration");
         System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
         System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) after each modification");
         System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
@@ -1396,6 +1416,7 @@ public class ConlluEditor {
         List<String> xposfiles = null;
         List<String> deprelfiles = null;
         String rootdir = null;
+        String validator = null;
         int debug = 3;
         int saveafter = 0;
         int mode = 0; // noedit: 1, reinit: 2
@@ -1413,6 +1434,9 @@ public class ConlluEditor {
             } else if (args[a].equals("--deprels")) {
                 String[] fns = args[++a].split(",");
                 deprelfiles = Arrays.asList(fns);
+                argindex += 2;
+            } else if (args[a].equals("--validator")) {
+                validator = args[++a];
                 argindex += 2;
             } else if (args[a].equals("--rootdir")) {
                 rootdir = args[++a];
@@ -1448,6 +1472,9 @@ public class ConlluEditor {
             }
             if (deprelfiles != null) {
                 ce.setValidDeprels(deprelfiles);
+            }
+            if (validator != null) {
+                ce.setValidator(validator);
             }
             if (saveafter != 0) {
                 ce.setSaveafter(saveafter);

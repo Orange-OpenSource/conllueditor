@@ -12,6 +12,7 @@ The editor provides the following functionalities:
 * join/split sentences  (to correct tokenization errors)
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels and comments, sequences of any of these
+* runs validation script on sentence (CoNLL-U format)
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or 
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
@@ -131,6 +132,7 @@ Point your navigator  to `http://localhost:8888` .
 * `--UPOS <file>` comma separated list of files containing valid UPOS (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
+* `--validator <file>` validator configuration file
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
@@ -200,6 +202,15 @@ After each modification the edited file is saved:
 * under a different filename (adding `.2`) in the same directory
 * if the edited file is in a git versioned directory, each change is git-commited using the sentence number and the word id in the commit message.
 
+# Validation
+The ConlluEditor is able to load run a validation script on the current sentence. The programme and its arguments
+must be configurated in a text file
+```
+script: /path/to/UniversalDependencies/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}
+```
+`{FILE}` will be replaced with a file which contains the sentence to be validated in CoNLL-U format.
+This configuration file must be given to the server with the option `--validator <filename>`.
+The validation button will launch the validator on the current sentence.
 
 # Server API (used by the GUI)
 * `curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentences is `read 0`, sendit is only used for edit commands)

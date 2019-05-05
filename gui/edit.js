@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 8th March 2019
+ @version 1.11.0 as of 3rd May 2019
  */
 
 
@@ -615,6 +615,10 @@ function formatPhrase(item) {
             getConllWords(conllwords, head);
         }
     }
+    // make modals draggable
+    $('.modal-dialog').draggable({
+        handle: ".modal-header"
+    });
 }
 
 
@@ -810,6 +814,15 @@ $(document).ready(function () {
         $("#showRawModal").modal()
     });
 
+
+    // run validation
+    $("#valid").click(function () {
+        getRaw("validation");
+        //$("#showraw").dialog("open");
+        $("#showRawModal").modal()
+
+    });
+
     $(".mycheck").click(function () {
         if (this.id == "flat2") {
             if (!flatgraph) {
@@ -899,6 +912,8 @@ $(document).ready(function () {
             inputtext = "read " + ($("#sentid").val() - 1);
         } else if (this.id == "modifier") {
             var inputtext = "mod " + $("#mods").val();
+        } else if (this.id == "valid") {
+            inputtext = "valid";
         } else {
             alert("error in GUI" + this)
         }

@@ -175,7 +175,7 @@ input {
         color-stop(1, rgb(252,252,252))
         );
     position: relative;
-    top: 10px; /** why this is needed ?? */
+    top: 6px; /** position of the button from top */
     padding: 0px 0px 0px 0px;
 }
 .contain:hover {
@@ -189,7 +189,7 @@ input {
         color-stop(1, rgb(255,255,255))
         );
     position: relative;
-    top: 10px; /** why this is needed ?? */
+    top: 6px; 
     padding: 0px 0px 0px 0px;
 }
 

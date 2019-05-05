@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.9.0 as of 8th March 2019
+    version 1.11.0 as of 3rd May 2019
     -->
 
     <head>
@@ -136,6 +136,9 @@
 
                         <input placeholder="find any" title="type:regex[/...]" type="text" id="multifield" size="20" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
+
+
+                        <button class ="mybutton" id="valid">validation</button>
                     </td>
                 </tr>
                 <tr class="search">
@@ -252,6 +255,15 @@
                             <img class="helptextbutton" style="width: 30px;" src="img/redo.svg">.
                         The undo-memory is cleared when a new sentence is loaded</p>
 
+                        <h2>Run a validator</h2>
+                        Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
+                        needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
+                        <pre>
+                            script: /path/to/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}
+                        </pre>
+                        and give this file as option to the server.
+                        When hitting the <span class="buttondoc">validate</span> button, the validation programme
+                        is run on the current sentence.
 
                         <h2>Searching</h2>
                         Activate the search form by clicking on <span class="buttondoc">show search</span>
