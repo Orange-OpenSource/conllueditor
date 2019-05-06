@@ -16,6 +16,7 @@ The editor provides the following functionalities:
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or 
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
+* prohibits invalid (cyclic) trees
 
 ## Installation
 
