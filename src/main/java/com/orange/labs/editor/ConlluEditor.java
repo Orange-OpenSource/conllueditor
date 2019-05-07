@@ -60,6 +60,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -305,7 +307,7 @@ public class ConlluEditor {
                     } else {
                         try {
                             solution.addProperty("raw", validator.validate(csent));
-                        } catch (IOException e) {
+                        } catch (InterruptedException  | IOException e) {
                             solution.addProperty("raw", "Validator error: " + e.getMessage());
                         }
                     }
