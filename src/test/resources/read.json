@@ -10,6 +10,20 @@
       "id": 2,
       "form": "fixed",
       "lemma": "fix",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        }
+      ],
       "xpos": "_",
       "upos": "VERB",
       "deprel": "root",
@@ -22,6 +36,12 @@
           "id": 1,
           "form": "Sam",
           "lemma": "Sam",
+          "feats": [
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
           "xpos": "_",
           "upos": "PROPN",
           "deprel": "nsubj",
@@ -34,6 +54,12 @@
           "id": 3,
           "form": "lunch",
           "lemma": "lunch",
+          "feats": [
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
           "xpos": "_",
           "upos": "NOUN",
           "deprel": "obj",
@@ -46,6 +72,12 @@
           "id": 5,
           "form": "Kim",
           "lemma": "Kim",
+          "feats": [
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
           "xpos": "_",
           "upos": "PROPN",
           "enhancedheads": [
@@ -84,6 +116,12 @@
               "id": 6,
               "form": "dinner",
               "lemma": "dinner",
+              "feats": [
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
               "xpos": "_",
               "upos": "NOUN",
               "enhancedheads": [
@@ -108,6 +146,20 @@
       "token": "empty",
       "form": "fixed",
       "lemma": "fix",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        }
+      ],
       "xpos": "_",
       "upos": "VERB",
       "enhancedheads": [

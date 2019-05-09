@@ -2,17 +2,17 @@
 
 Copyright (c) 2018, Orange S.A.
 
-Redistribution and use in source and binary forms, with or without modification, 
+Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
   1. Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright notice, 
+  2. Redistributions in binary form must reproduce the above copyright notice,
      this list of conditions and the following disclaimer in the documentation
      and/or other materials provided with the distribution.
 
-  3. Neither the name of the copyright holder nor the names of its contributors 
+  3. Neither the name of the copyright holder nor the names of its contributors
      may be used to endorse or promote products derived from this software without
      specific prior written permission.
 
@@ -43,10 +43,20 @@ var svgNS = "http://www.w3.org/2000/svg";
 //        style.sheet.insertRule(name+"{"+rules+"}",0);
 //}
 var nodes = {}; // id: {item: svg, types [AGENT, PATIENT]}
-
+/**
+ *
+ * @param {type} item
+ * @param {type} x
+ * @param {type} hor
+ * @param {type} levelinit
+ * @param {type} curid
+ * @param {type} svg
+ * @return {drawWord.level} height without/with features
+ */
 function drawWord(item, x, hor, levelinit, curid, svg) {
     var vertdiff = 12;
     var level = levelinit;
+    var bottomlevels={}; // keep the height of the word with and without features (needed in dependency-flat)
 
     var formtext = document.createElementNS(svgNS, "text");
     formtext.setAttribute("id", "word" + curid + "_" + item.id);
@@ -190,6 +200,8 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     }
 
 
+   bottomlevels[0] = level;
+   bottomlevels[1] = level;
    if (showfeats && item.feats != undefined) { // display morph-syntactical features if active
         level += vertdiff * 2;
         for (var f in item.feats) {
@@ -198,7 +210,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 //                level -= vertdiff * 2;
 //                break;
 //            }
-     
+
             if (typeof item.feats[f] === 'string') {
                 // to be deleted when no old server is turning any more
                 var key_val = item.feats[f].split("=");
@@ -208,7 +220,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
                 var key = item.feats[f].name;
                 var val = item.feats[f].val;
             }
-            
+
             var ftext = document.createElementNS(svgNS, "text");
             ftext.setAttribute("id", "ftext" + curid + "_" + item.id);
             ftext.setAttribute("class", "wordfeature");
@@ -246,9 +258,11 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
             valtext.textContent = val; //item.feats[f];
             svg.appendChild(valtext);
         }
+        bottomlevels[1] = level;
     }
 
-    return level;
+    //return level;
+    return bottomlevels;
 }
 
 

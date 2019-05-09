@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 8th March 2019
+ @version 1.11.1 as of 9th Mai 2019
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -115,7 +115,16 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     var levelinit = level;
     level = levelinit + vertdiff;
 
-    level = drawWord(item, depx, hor, levelinit, curid, svg);
+    //level = drawWord(item, depx, hor, levelinit, curid, svg);
+    bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg);
+    level = bottomlevels[0]; // x-level at bottom of word (with features, if present)
+
+    if (showfeats) {
+        // if features are displayed we add some space. to avoid the enhanced dependencies cross
+        // the feature/values
+        level += 50;
+    }
+
     level += 6;
 
     svgmaxy = Math.max(svgmaxy, level + 1);
@@ -147,16 +156,16 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         path.setAttribute("class", "deprel_root");
 	path.setAttribute("stroke", "red"); // only needed for svg download
         svg.appendChild(path);
-        
+
 
 	//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
-        
+
         var depreltext = document.createElementNS(svgNS, "text");
         depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
         depreltext.setAttribute("class", "words deprel");
         depreltext.setAttribute("fill", "green");
         //depreltext.setAttribute("font-size", "14");
-    
+
         depreltext.setAttribute('x', depx);
         depreltext.setAttribute('y', -120);
         depreltext.setAttribute("text-anchor", "middle");
@@ -214,8 +223,8 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         mwetext.appendChild(mwepath);
         svg.appendChild(mwetext);
     }
-    
-    
+
+
     // enhanced deps
     if (item.enhancedheads) {
         //var boxheight = 66; // TODO calculate

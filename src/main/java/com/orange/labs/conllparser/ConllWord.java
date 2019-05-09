@@ -1117,7 +1117,7 @@ public class ConllWord {
     public void setMisc(String unparsed_miscstring) {
         spacesAfter = " ";
         if (!EmptyColumn.equals(unparsed_miscstring)) {
-            String[] fields = unparsed_miscstring.trim().split("[\\|,\n]");
+            String[] fields = unparsed_miscstring.trim().split("[\\|\n]");
             for (String f : fields) {
                 String[] kv = f.split("=", 2);
                 if (kv.length > 1) {

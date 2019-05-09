@@ -1,12 +1,12 @@
 # text = Sam fixed lunch and Kim dinner
 # sentence 13
-1	Sam	Sam	PROPN	_	_	2	nsubj	_	_
-2	fixed	fix	VERB	_	_	0	root	_	_
-3	lunch	lunch	NOUN	_	_	2	obj	_	_
+1	Sam	Sam	PROPN	_	Number=Sing	2	nsubj	_	_
+2	fixed	fix	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
+3	lunch	lunch	NOUN	_	Number=Sing	2	obj	_	_
 4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
-5	Kim	Kim	PROPN	_	_	2	conj	2:conj|5.1:nsubj	_
-5.1	fixed	fix	VERB	_	_	_	_	2:conj	_
-6	dinner	dinner	NOUN	_	_	5	orphan	5:orphan|5.1:obj	_
+5	Kim	Kim	PROPN	_	Number=Sing	2	conj	2:conj|5.1:nsubj	_
+5.1	fixed	fix	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
+6	dinner	dinner	NOUN	_	Number=Sing	5	orphan	5:orphan|5.1:obj	_
 
 # text = Mary organised bred and John beer
 # sentence 14
