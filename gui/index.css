@@ -57,6 +57,10 @@ h2 {
     margin-left: 5px;
 }
 
+#arbre {
+    /*white-space: nowrap; */
+    overflow-x: auto;
+}
 
 #header {
     position:fixed;

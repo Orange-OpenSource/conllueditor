@@ -575,11 +575,11 @@ function formatPhrase(item) {
 
         if (highlightX > 40 || highlightY > 100) {
             //alert("hlt " + highlightX + " " +highlightY);
-            $('body').scrollTop(highlightY - 100);
-            $('body').scrollLeft(highlightX - 40);
+            $('#arbre').scrollTop(highlightY - 100);
+            $('#arbre').scrollLeft(highlightX - 40);
         } else if (showr2l) {
             // scroll to right for languages like Hebrew or Arabic
-            $('body').scrollLeft($(document).outerWidth());
+            $('#arbre').scrollLeft($(document).outerWidth());
         }
 
 

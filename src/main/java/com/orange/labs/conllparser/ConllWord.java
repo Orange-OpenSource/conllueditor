@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 8th March 2019
+ @version 1.11.2 as of 10th May 2019
  */
 package com.orange.labs.conllparser;
 
@@ -124,6 +124,7 @@ public class ConllWord {
         deps = orig.getDeps();
         basicdeps_in_ed_column = orig.basicdeps_in_ed_column;
         misc = orig.getMisc();
+        spacesAfter = orig.spacesAfter;
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
 
@@ -1117,7 +1118,7 @@ public class ConllWord {
     public void setMisc(String unparsed_miscstring) {
         spacesAfter = " ";
         if (!EmptyColumn.equals(unparsed_miscstring)) {
-            String[] fields = unparsed_miscstring.trim().split("[\\|\n]");
+            String[] fields = unparsed_miscstring.trim().split("[\\|\n]"); // needs \n to split return from the GUI
             for (String f : fields) {
                 String[] kv = f.split("=", 2);
                 if (kv.length > 1) {

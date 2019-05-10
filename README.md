@@ -23,7 +23,7 @@ The editor provides the following functionalities:
 ### Requirements
 
 * Java jre 8.0
-* Firefox (tested with version 52.7.3 and 63), Chromium or Chrome (both tested with version 70), Edge (tested with version 44.17763.1.0 on Windows 10))
+* Firefox (tested with version 52.7.3 and >= 63), Chromium or Chrome (both tested with version 70), Edge (tested with version 44.17763.1.0 on Windows 10, Edge 41 does not work))
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js), needed by bootstrap
@@ -226,6 +226,7 @@ The feature, and misc column fields must contain one `name=value` pair per line 
 the enhanced dependency field must contain one `head:deprel` pair per line (or `_`).
 
 # Todo list
+* show contents of MISC column in main view (like morphological features)
 * be able to read/write CoNLL-U plus (.conllp) files [http://universaldependencies.org/ext-format.html]
 * be able to edit enhanced dependencies [http://universaldependencies.org/format.html#syntactic-annotation] in graphic mode
 * better support for empty nodes

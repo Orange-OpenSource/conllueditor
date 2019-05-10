@@ -110,19 +110,19 @@
 
                 <tr class="search">
                     <td colspan="6">
-                        <input placeholder="find form" title="string (with or without &quot;)" type="text" id="word" size="10" value="">
+                        <input placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findword">&nbsp;</button></span>
 
-                        <input placeholder="find lemma" title="regex[/regex/...]" type="text" id="lemma" size="10" value="">
+                        <input placeholder="find lemma (regex/...)" title="regex[/regex/...]" type="text" id="lemma" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findlemma">&nbsp;</button></span>
 
-                        <input placeholder="find upos" title="regex[/regex/...]" type="text" id="upos" size="10" value="">
+                        <input placeholder="find upos (regex/...)" title="regex[/regex/...]" type="text" id="upos" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findupos">&nbsp;</button></span>
 
-                        <input placeholder="find xpos" title="regex[/regex/...]" type="text" id="xpos" size="10" value="">
+                        <input placeholder="find xpos (regex/...)" title="regex[/regex/...]" type="text" id="xpos" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findxpos">&nbsp;</button></span>
 
-                        <input placeholder="find deprel" title="regex  of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" size="10" value="">
+                        <input placeholder="find deprel (regex/...)" title="regex  of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="finddeprel">&nbsp;</button></span>
 
                         <span class="contain"><button class="mybutton mycheck" title="search backwards" id="backwards">&nbsp;</button></span>
@@ -131,10 +131,10 @@
                 </tr>
                 <tr class="search">
                     <td colspan="6">
-                        <input placeholder="find comment" title="regex" type="text" id="comment" size="10" value="">
+                        <input placeholder="find comment (string)" title="regex" type="text" id="comment" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findcomment">&nbsp;</button></span>
 
-                        <input placeholder="find any" title="type:regex[/...]" type="text" id="multifield" size="20" value="">
+                        <input placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" size="20" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
 
 
@@ -207,7 +207,7 @@
 
                         <!-- class="helpstyle" ici pour mettre les meme font-size (jquery-ui fait ça différemment -->
                         <table border ="0" class="bhelpstyle">
-                            <tr><td>&bull; <span class="userinputdoc"><i>dep_id newheadid</i></span> [<span class="userinputdoc"><i/>deprel</i></span>]</td>
+                            <tr><td>&bull; <span class="userinputdoc"><i>dep_id newheadid</i></span> [<span class="userinputdoc"><i>deprel</i></span>]</td>
                                 <td>attach <i>dep_id</i> to <i>newheadid</i> with the relation <i>deprel</i></td>
                             </tr>
                             <tr><td>&bull; <span class="userinputdoc">xpos <i>dep_id XPOS</i></span></td>
@@ -279,8 +279,8 @@
                                 <ul>
                                     <li>Upos: <span class="userinputdoc">AUX/.*/VERB</span> looks for a sequence of words with upos tags AUX, any, VERB
                                 </ul>
-                            <li>The <i>any</i> search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria.
-                                searchfield can be aby of <i>f, l, u, x, d</i> (form, lemma, upos, xpos, deprel)
+                            <li>The <i>any</i> search fields accepts a /-separated list of <i>searchfield:regex</i> to find a sequence on different criteria.
+                                <i>searchfield</i> can be any of <i>f, l, u, x, d</i> (form, lemma, upos, xpos, deprel)
                                 <ul>
                                     <li><span class="userinputdoc">l:the/u:ADJ/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
                                         any adjective and the last is <i>mouse</i>
@@ -401,7 +401,7 @@
                     </div>
                     <div class="modal-body" >
                         <table>
-                            <tr><td>Id</td>       <td><span id="cid"/></td></tr>
+                            <tr><td>Id</td>       <td><span id="cid"></span></td></tr>
                             <tr><td>Form</td>     <td><div class="ui-widget"><input type="text" id="cform"  size="60" value=""></div></td></tr>
                             <tr><td>Lemma</td>    <td><div class="ui-widget"><input type="text" id="clemma" size="60" value=""></div></td></tr>
                             <tr><td>upos</td>     <td><div class="ui-widget"><input type="text" id="cupos"  size="60" value=""></div></td></tr>
@@ -441,8 +441,8 @@
                     <div class="modal-body" >
                         <table>
                             <tr>
-                                <td>Head:</td>       <td><span id="chead"/></td>
-                                <td>Dependent:</td>  <td><span id="cdep"/></td>
+                                <td>Head:</td>       <td><span id="chead"></span></td>
+                                <td>Dependent:</td>  <td><span id="cdep"></span></td>
                             </tr>
                             <tr>
                                 <td colspan="4"><div class="ui-widget"><input type="text" id="cdeprel"  size="25" value=""></div></td>

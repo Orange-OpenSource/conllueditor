@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 8th March 2019
+ @version 1.11.2 as of 10th May 2019
  */
 package com.orange.labs.conllparser;
 
@@ -899,7 +899,7 @@ public class ConllSentence {
                                             cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
                 }
             }
-            
+
             if (contracted != null) {
                 for (ConllWord cc : contracted.values()) {
                     sb.append("\\mtw{")
@@ -908,7 +908,7 @@ public class ConllSentence {
                             .append(cc.getForm()).append("}\n");
                 }
             }
-            
+
             sb.append("\\end{tikzpicture}\n");
         } catch (Exception e) {
             e.printStackTrace();
@@ -1198,6 +1198,15 @@ public class ConllSentence {
     }
 
     public String getSentence() {
+          return getSentence(null);
+    }
+
+    /** get the sentence with original spaces.
+
+    @param pos2id if not null a map where the position of each id is written
+    @return the original sentence
+    */
+    public String getSentence(Map<Integer, Integer>pos2id) {
         StringBuilder sb = new StringBuilder();
         //for (ConllWord word : words) {
         //    sb.append(word.getForm()).append(" ");
@@ -1211,8 +1220,11 @@ public class ConllSentence {
                 sb.append(mwe.getForm()).append(word.getSpacesAfter());
                 contracted_until = mwe.getSubid();
             } else if (contracted_until == 0 || word.getId() > contracted_until) {
-                sb.append(word.getForm()).append(word.getSpacesAfter());
 
+                if (pos2id != null) {
+                    pos2id.put(sb.length(), word.getId());
+                }
+                sb.append(word.getForm()).append(word.getSpacesAfter());
             }
         }
         return sb.toString();

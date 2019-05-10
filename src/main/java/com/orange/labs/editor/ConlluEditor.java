@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.0 as of 3rd May 2019
+ @version 1.11.2 as of 10th May 2019
  */
 package com.orange.labs.editor;
 
@@ -60,6 +60,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.jgit.api.Git;
@@ -493,41 +494,35 @@ public class ConlluEditor {
                         (backwards ? i >= 0 : i < numberOfSentences);
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
-                    String text = cs.getSentence();
+                    Map<Integer, Integer>pos2id = new TreeMap<>();
+                    String text = cs.getSentence(pos2id);
+                    //System.err.println("zzzzz " + pos2id);
                     int wordoffset = text.indexOf(motAtrouver);
 
                     if (wordoffset > -1) {
-                        List<Integer> startindex = new ArrayList<>(); // offset where the words start
-                        int offset = 0;
-                        for (ConllWord cw : cs.getWords()) {
-                            startindex.add(offset);
-                            offset += cw.getForm().length() + 1;
-                        }
-
-                        int firstid = -1;
-                        int lastid = -1;
-                        int id = 0;
-                        for (int ix : startindex) {
-                            //System.err.println("AAA " + wordoffset + " ix:" + ix + " " + id);
-                            if (ix > wordoffset && firstid == -1) {
-                                firstid = id;
-                                //System.err.println("First " + firstid);
-                            }
-                            id++;
-                            if (ix <= wordoffset + motAtrouver.length()) {
-                                lastid = id;
-                                //System.err.println("Last " + lastid);
-                            }
-                        }
-
-                        currentSentenceId = i;
-
-                        if (motAtrouver.charAt(0) == ' ') {
-                            firstid++;
+                        int wordendoffset = wordoffset + motAtrouver.length();
+                         if (motAtrouver.charAt(0) == ' ') {
+                            wordoffset++;
                         }
                         if (motAtrouver.endsWith(" ")) {
-                            lastid--;
+                            wordendoffset--;
                         }
+                        //System.err.println("eeee " + motAtrouver + " "+ wordoffset + " " + wordendoffset);
+                        int firstid = -1;
+                        int lastid = -1;
+
+
+                        for(Integer cwstartpos : pos2id.keySet()) {
+                            if (cwstartpos <= wordoffset) {
+                                firstid = pos2id.get(cwstartpos);
+                            }
+                            if (cwstartpos < wordendoffset) {
+                                lastid = pos2id.get(cwstartpos);
+                            }
+                        }
+
+                        //System.err.println("rrrrr " + firstid + " " + lastid);
+                        currentSentenceId = i;
 
                         ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, firstid, lastid);
                         return returnTree(currentSentenceId, cs, hl /*, motAtrouver*/);
@@ -541,7 +536,7 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
                 }
 
-                 // si le deuxième mot est "true" on cherche en arrière
+                // si le deuxième mot est "true" on cherche en arrière
                 boolean backwards = f[1].equalsIgnoreCase("true");
                 String[] elems = f[2].split("/");
 
