@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.0 as of 3rd May 2019
+ @version 1.11.2 as of 9th Mai 2019
  */
 
 
@@ -425,12 +425,13 @@ function ModifyTree(evt) {
         deprels = [];
         uposs = [];
     }
-    console.log("aaa " + JSON.stringify(clickedNodes));
+    //console.log("aaa " + JSON.stringify(clickedNodes));
 }
 
 
 var flatgraph = false;
 var showfeats = false;
+var showmisc = false;
 var showr2l = false;
 var backwards = false;
 
@@ -575,14 +576,12 @@ function formatPhrase(item) {
 
         if (highlightX > 40 || highlightY > 100) {
             //alert("hlt " + highlightX + " " +highlightY);
-            $('#arbre').scrollTop(highlightY - 100);
-            $('#arbre').scrollLeft(highlightX - 40);
+            $('body').scrollTop(highlightY); // - 100);
+            $('body').scrollLeft(highlightX); // - 40);
         } else if (showr2l) {
             // scroll to right for languages like Hebrew or Arabic
             $('#arbre').scrollLeft($(document).outerWidth());
         }
-
-
 
 
         // display comments
@@ -842,6 +841,16 @@ $(document).ready(function () {
                 //$("#flat2").text("show tree" + flatgraph);
             }
             showfeats = !showfeats;
+            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+            sendmodifs(datadico);
+        } else if (this.id == "misc2") {
+            if (!showmisc) {
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+                //$("#flat2").text("show tree" + flatgraph);
+            }
+            showmisc = !showmisc;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id == "r2l") {

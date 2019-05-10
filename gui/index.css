@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.0 as of 5th November 2018
+ @version 1.11.2 as of 9th Mai 2019
 */
 
 body {
@@ -37,6 +37,8 @@ body {
    
     text-align: justify;
     font-family: /* Lato, */ Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
+    overflow: scroll;
+    
 }
 
 tt {
@@ -57,13 +59,15 @@ h2 {
     margin-left: 5px;
 }
 
-#arbre {
+
+#oooarbre {
     /*white-space: nowrap; */
     overflow-x: auto;
 }
 
+
 #header {
-    position:fixed;
+    position:fixed; /* make the header (navigation and search buttons) stick to the top */
     width:100%;
     top:0;
     height: whatever;

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.0 as of 5th November 2018
+ @version 1.11.2 as of 9th Mai 2019
 */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -255,6 +255,60 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
             valtext.setAttribute('y', level);
             valtext.setAttribute("text-anchor", "start");
             valtext.setAttribute("fill", "#000044");
+            valtext.textContent = val; //item.feats[f];
+            svg.appendChild(valtext);
+        }
+        bottomlevels[1] = level;
+    }
+
+    if (showmisc && item.misc != undefined) { // display misc column info if active
+        level += vertdiff * 2;
+        for (var f in item.misc) {
+
+            if (typeof item.misc[f] === 'string') {
+                // to be deleted when no old server is turning any more
+                var key_val = item.misc[f].split("=");
+                var key = key_val[0];
+                var val = key_val[1];
+            } else {
+                var key = item.misc[f].name;
+                var val = item.misc[f].val;
+            }
+
+            var ftext = document.createElementNS(svgNS, "text");
+            ftext.setAttribute("id", "mtext" + curid + "_" + item.id);
+            ftext.setAttribute("class", "wordfeature");
+            ftext.setAttribute("font-size", "10");
+             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
+              if (!fs) fs = 10; // for chrome
+              if (f > 0)
+                level += fs*1.2;
+            ftext.setAttribute('x', x - 5);
+            ftext.setAttribute('y', level);
+            ftext.setAttribute("text-anchor", "end");
+            ftext.setAttribute("fill", "#440000");
+            ftext.textContent = key; 
+            svg.appendChild(ftext);
+
+            var septext = document.createElementNS(svgNS, "text");
+            septext.setAttribute("id", "mseptext" + curid + "_" + item.id);
+            septext.setAttribute("class", "wordfeature words");
+            septext.setAttribute("font-size", "10");
+            septext.setAttribute('x', x);
+            septext.setAttribute('y', level);
+            septext.setAttribute("text-anchor", "middle");
+            //septext.setAttribute("fill", "#004400");
+            septext.textContent = ":"; //item.feats[f];
+            svg.appendChild(septext);
+
+            var valtext = document.createElementNS(svgNS, "text");
+            valtext.setAttribute("id", "mvaltext" + curid + "_" + item.id);
+            valtext.setAttribute("class", "wordfeature words");
+            valtext.setAttribute("font-size", "10");
+            valtext.setAttribute('x', x + 5);
+            valtext.setAttribute('y', level);
+            valtext.setAttribute("text-anchor", "start");
+            valtext.setAttribute("fill", "#440044");
             valtext.textContent = val; //item.feats[f];
             svg.appendChild(valtext);
         }

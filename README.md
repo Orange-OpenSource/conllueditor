@@ -150,7 +150,8 @@ An edit window opens to enter the relation a name. Existing relations can be ren
 Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
 
-The sentence is shown as a tree or as a flat graph, morphological features can be shown or hidden with the `show features` button.
+The sentence is shown as a tree or as a flat graph, morphological features can be shown or hidden with the `features` button,
+information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
 
 ![Edit screen (tree graph)](doc/tree.png)
@@ -226,7 +227,6 @@ The feature, and misc column fields must contain one `name=value` pair per line 
 the enhanced dependency field must contain one `head:deprel` pair per line (or `_`).
 
 # Todo list
-* show contents of MISC column in main view (like morphological features)
 * be able to read/write CoNLL-U plus (.conllp) files [http://universaldependencies.org/ext-format.html]
 * be able to edit enhanced dependencies [http://universaldependencies.org/format.html#syntactic-annotation] in graphic mode
 * better support for empty nodes

@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.1 as of 9th Mai 2019
+ @version 1.11.2 as of 9th Mai 2019
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -119,10 +119,10 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg);
     level = bottomlevels[0]; // x-level at bottom of word (with features, if present)
 
-    if (showfeats) {
+    if (showfeats || showmisc) {
         // if features are displayed we add some space. to avoid the enhanced dependencies cross
         // the feature/values
-        level += 50;
+        level += 70;
     }
 
     level += 6;
