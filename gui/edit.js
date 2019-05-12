@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.2 as of 9th Mai 2019
+ @version 1.12.0 as of 12th Mai 2019
  */
 
 
@@ -322,6 +322,7 @@ function ModifyTree(evt) {
                 clickedNodes = [];
                 $(".wordnode").attr("class", "wordnode");
             } else {
+                // dependency editing
                 clickedNodes.push(id[1]);
                 //target.setAttribute("class", "wordnode boxhighlight");
                 target.setAttribute("class", target.getAttribute("class") + " boxhighlight");
@@ -337,13 +338,19 @@ function ModifyTree(evt) {
                         clickedNodes[1] = "0 root";
                         makeRoot = true;
                     }
-                    $("#mods").val(clickedNodes[0] + " " + clickedNodes[1] + " ");
+
+                    if (editing_enhanced) {
+                        //$("#mods").val("ed add " + clickedNodes[0] + " " + clickedNodes[1]);
+                    } else {
+                        $("#mods").val(clickedNodes[0] + " " + clickedNodes[1] + " ");
+                        $("#modifier").click();
+                    }
                     //alert("AAAAA: " + $("#mods").val());
-                    $("#modifier").click();
+
 
                     //alert("BBBB: " + makeRoot + " " + JSON.stringify(deprels));
                     if (!makeRoot
-                            && (deprels[0] == "" || deprels[0] == "root" || deprels[0] == "undefined" || deprels[0] == undefined)) {
+                            && (editing_enhanced || deprels[0] == "" || deprels[0] == "root" || deprels[0] == "undefined" || deprels[0] == undefined)) {
                         var potential = "";
                         if (uposs[0] == "DET")
                             potential = "det";
@@ -364,11 +371,19 @@ function ModifyTree(evt) {
                         else if (uposs[0] == "PART") // yn dda
                             potential = "case:pred";
 
-                        $("#chead").text(clickedNodes[1]);
-                        $("#cdep").text(clickedNodes[0]);
-                        $("#cdeprel").val(potential);
-                        //$("#depreledit").dialog("open");
-                        $("#deprelEdit").modal()
+                        // open deprel edit (for basic or enhanced deps)
+                        if (editing_enhanced) {
+                            $("#cheaden").text(clickedNodes[1]);
+                            $("#cdepen").text(clickedNodes[0]);
+                            $("#cdeprelen").val(potential);
+                            $("#enhdeprelEdit").modal()
+                        } else {
+                            $("#chead").text(clickedNodes[1]);
+                            $("#cdep").text(clickedNodes[0]);
+                            $("#cdeprel").val(potential);
+                            $("#deprelEdit").modal()
+                        }
+
 
 //                        var deprel = prompt("also enter deprel", potential);
 //                        if (deprel != "" && deprel != null) {
@@ -399,6 +414,12 @@ function ModifyTree(evt) {
 //                $("#mods").val(/*child*/ id[2] + " " + /* head */ id[1] + " " + deprel);
 //                $("#modifier").click();
 //            }
+        } else if (id[0] == "enhtextpath") { // TODO use classes ?
+            // update deprel
+            $("#cheaden").text(id[1]);
+            $("#cdepen").text(id[2]);
+            $("#cdeprelen").val(id[3]);
+            $("#enhdeprelEdit").modal()
         } else if (id[0] == "mwe") {
             //alert("MT MWE: " + id + " " + target);
             $("#currentmwefrom").val(id[1]);
@@ -786,13 +807,41 @@ $(document).ready(function () {
         $('#wordEdit').modal('hide');
     });
 
+    // add/modify basic dep relation
     $('#savedeprel').click(function () {
         //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdep").text()];
+       /* if (flatgraph && editing_enhanced) {
+            alert("not good " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val())
+            //sendmodifs({"cmd": "mod ed add " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
+        } else */
         if (conllword.deprel != $("#cdeprel").val()) {
             sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
         $('#deprelEdit').modal('hide');
+    });
+
+    // add/modify enhanced dep relation
+    $('#savedeprelen').click(function () {
+        //console.log("rrrr " + JSON.stringify(this));
+        conllword = conllwords[$("#cdepen").text()];
+        if (flatgraph && editing_enhanced) {
+            //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val())
+            sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val()});
+       // } else if (conllword.deprel != $("#cdeprel").val()) {
+        //    sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
+        }
+        $('#enhdeprelEdit').modal('hide');
+    });
+
+    // delete existing enhanced dep relation
+    $('#deletedeprelen').click(function () {
+        conllword = conllwords[$("#cdepen").text()];
+        //alert("AAA "+ flatgraph + " "+ editing_enhanced);
+        if (flatgraph /* && editing_enhanced */) {
+            sendmodifs({"cmd": "mod ed del " + $("#cdepen").text() + " " + $("#cheaden").text()});
+        }
+        $('#enhdeprelEdit').modal('hide');
     });
 
 
@@ -841,6 +890,8 @@ $(document).ready(function () {
                 //$("#flat2").text("show tree" + flatgraph);
                 $("#bie").hide();
                 $("#edit_ed").hide();
+                editing_enhanced = false;
+                $("#edit_ed").removeClass('active');
             }
             flatgraph = !flatgraph;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
@@ -863,7 +914,7 @@ $(document).ready(function () {
             showmisc = !showmisc;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-            
+
         } else if (this.id == "bie") {
             if (!show_basic_in_enhanced) {
                 $(this).addClass('active');

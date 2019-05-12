@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.2 as of 10th May 2019
+ @version 1.12.0 as of 12th May 2019
  */
 package com.orange.labs.editor;
 
@@ -1133,8 +1133,12 @@ public class ConlluEditor {
                 ConllWord head = csent.getWord(f[4]);
                 if (head == null) formatErrMsg("INVALID head id '" + command + "'", currentSentenceId);
              
-                if ("add".equals(f[2])) {                   
+                if ("add".equals(f[2])) {
+                    // before we add a new enhanced dep, we delete a potentially
+                    // existing enhn.deprel to the same head
+                    /*boolean rtc = */dep.delDeps(head.getFullId());
                     dep.addDeps(head.getFullId(), f[5]);
+                    csent.setHasEnhancedDeps(true);
                 }
                 else if ("del".equals(f[2])) {
                     boolean rtc = dep.delDeps(f[4]);

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.2 as of 10th May 2019
+ @version 1.12.0 as of 12th May 2019
  */
 package com.orange.labs.conllparser;
 
@@ -212,6 +212,10 @@ public class ConllSentence {
                 contracted.put(w.getId(), w);
             }
         }
+    }
+
+    public void setHasEnhancedDeps(boolean hasEnhancedDeps) {
+        this.hasEnhancedDeps = hasEnhancedDeps;
     }
 
     public List<String> getComments() {
@@ -943,15 +947,15 @@ public class ConllSentence {
         if (subid <= ews.size()) return ews.get(subid-1);
         return null;
     }
-    
+
     public ConllWord getEmptyWord(int id, int subid) {
         List<ConllWord> ews = emptywords.get(id);
-        if (ews.isEmpty()) return null;      
+        if (ews.isEmpty()) return null;
         if (subid <= ews.size()) return ews.get(subid-1);
         return null;
     }
-    
-    
+
+
     public int numOfEmptyWords() {
         if (emptywords == null) {
             return 0;
@@ -977,7 +981,7 @@ public class ConllSentence {
         }
         return null;
     }
-    
+
     /**
      * return word with ident i.
      * No empty or contracted word

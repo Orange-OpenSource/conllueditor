@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.11.2 as of 9th Mai 2019
+    version 1.12.0 as of 12th Mai 2019
     -->
 
     <head>
@@ -172,7 +172,7 @@
             </div>
         </div>
 
-        
+
         <div id="arbre"></div>
 
         <div id="comm" style="display: flex;">
@@ -263,10 +263,10 @@
                         <span class="buttondoc">edit enhanced dependencies</span> button. Like editing basic dependencies,
                         enhanced dependencies can be added by clicking on the dependant followed by clicking on the head.
                         Since a node can have multiple heads in enhanced dependencies, in order to delete an enhanced dep relations
-                        either use the word edit on the dependant, or use click on the dependency label and then click on 
+                        either use the word edit on the dependant, or use click on the dependency label and then click on
                         <span class="buttondoc">delete</span>.
                         <p>
-                        Basic dependencies, which are also enhanced dependencies are only deplaced if 
+                        Basic dependencies, which are also enhanced dependencies are only deplaced if
                         <span class="buttondoc">show basic in enhanced</span> is activated.
                         or use a command and hit the <span class="buttondoc">modify</span> button:
                         <table border ="0" class="bhelpstyle">
@@ -275,7 +275,7 @@
                             <tr><td>&bull; <span class="userinputdoc"><i>ed del dep_id newheadid</i></span> </td>
                                 <td>delete an enhanced dependency</td>
                         </table>
-                        
+
                         <h2>Run a validator</h2>
                         Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
                         needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
@@ -389,7 +389,7 @@
         </div>
 
 
-
+        <!-- edit comment -->
         <div class="modal" id="commentEdit" tabindex="-1" role="dialog" aria-labelledby="commentEditLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -411,6 +411,7 @@
         </div>
 
 
+        <!-- edit word -->
         <div class="modal" id="wordEdit" tabindex="-1" role="dialog" aria-labelledby="wordEditLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -450,11 +451,12 @@
         </div>
 
 
+        <!-- edit basic dependency label -->
         <div class="modal" id="deprelEdit" tabindex="-1" role="dialog" aria-labelledby="deprelEditLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deprelEditLabel">Edit Dependency relation name</h5>
+                        <h5 class="modal-title" id="deprelEditLabel">Edit basic dependency relation name</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -478,6 +480,38 @@
             </div>
         </div>
 
+
+        <!-- edit enhanced dependency label -->
+        <div class="modal" id="enhdeprelEdit" tabindex="-1" role="dialog" aria-labelledby="enhdeprelEditLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="enhdeprelEditLabel">Edit enhanced dependency relation name</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <table>
+                            <tr>
+                                <td>Head:</td>       <td><span id="cheaden"></span></td>
+                                <td>Dependent:</td>  <td><span id="cdepen"></span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4"><div class="ui-widget"><input type="text" id="cdeprelen"  size="25" value=""></div></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="deletedeprelen" class=" mybutton">Delete enhanced dependency</button>
+                        <button type="button" id="savedeprelen" class=" mybutton">Save changes</button>
+                        <button type="button" class="mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- edit multitoken -->
          <div class="modal" id="editMWE" tabindex="-1" role="dialog" aria-labelledby="deleteMWE" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -503,6 +537,7 @@
             </div>
         </div>
 
+        <!-- show Latex/Conllu/sd-parse/validation output -->
         <div class="modal" id="showRawModal" tabindex="-1" role="dialog" aria-labelledby="showRawModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">

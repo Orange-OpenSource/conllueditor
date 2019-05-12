@@ -153,6 +153,8 @@ To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help us
 The sentence is shown as a tree or as a flat graph, morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
+If any UPOS/XPOS/deprel is not in the validation lists (specified with hte `--UPOS` etc options)
+it is shown in red.
 
 ![Edit screen (tree graph)](doc/tree.png)
 
@@ -160,7 +162,8 @@ Clicking on `flat graph` changes the dependency graph layout to a more horizonta
 
 ![Edit screen (flat graph)](doc/graph.png)
 
-Word editing window (CTRL-click on the word)
+Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server, 
+autocompletion is proposed
 
 ![Edit screen (flat graph)](doc/edit.png)
 
@@ -176,7 +179,9 @@ Empty nodes (having `n.1` ids) are shown in a dashed box.
 
 ![Empty nodes](doc/tree_emptynode.png)
 
-The flat graph mode also displays enhanced dependencies.
+The flat graph mode also displays enhanced dependencies. In this mode enhanced 
+dependencies can be added/modified/deleted (activate `edit enhanced dependencies`).
+if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayet too.
 
 ![empty nodes](doc/graph_emptynode.png)
 
@@ -194,8 +199,12 @@ In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
 tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
-Currently enhanced dependencies cannot (yet) be editied in the GUI. Use the word edit window instead. They are only shown in flat graph mode
-Empty words are shown in a dashed outline. The edit support is still limited
+## Enhanced Dependencies
+Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-annotation])
+in graphic mode can only be edited in flat mode. If the button `edit enhanced dependencies` is activated
+clicking on words creates enhanced dependency relations. Click on the dependency label to modify it or to
+delete the enhanced dependency relation.
+Alternatively, enhanced dependenclies can be edited manually via the word edit menu.
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
@@ -228,7 +237,6 @@ the enhanced dependency field must contain one `head:deprel` pair per line (or `
 
 # Todo list
 * be able to read/write CoNLL-U plus (.conllp) files [http://universaldependencies.org/ext-format.html]
-* be able to edit enhanced dependencies [http://universaldependencies.org/format.html#syntactic-annotation] in graphic mode
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch
 * use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
