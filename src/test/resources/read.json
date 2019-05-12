@@ -82,6 +82,11 @@
           "upos": "PROPN",
           "enhancedheads": [
             {
+              "id": "2",
+              "position": 2,
+              "deprel": "conj"
+            },
+            {
               "id": "5.1",
               "position": 6,
               "deprel": "nsubj"
@@ -100,6 +105,11 @@
               "xpos": "_",
               "upos": "CCONJ",
               "enhancedheads": [
+                {
+                  "id": "5",
+                  "position": 5,
+                  "deprel": "cc"
+                },
                 {
                   "id": "5.1",
                   "position": 6,
@@ -125,6 +135,11 @@
               "xpos": "_",
               "upos": "NOUN",
               "enhancedheads": [
+                {
+                  "id": "5",
+                  "position": 5,
+                  "deprel": "orphan"
+                },
                 {
                   "id": "5.1",
                   "position": 6,

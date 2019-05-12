@@ -755,14 +755,16 @@ public class ConlluEditor {
                 try {
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (f[2].contains(".")) {
-                        String[] id = f[2].split("\\.");
+                        /*String[] id = f[2].split("\\.");
                         List<ConllWord> ews = csent.getEmptyWords().get(Integer.decode(id[0]));
                         int subid = Integer.parseInt(id[1]);
                         if (subid > ews.size()) {
                             return formatErrMsg("INVALID subid '" + command + "'", currentSentenceId);
                         }
-                        modWord = ews.get(subid - 1);
-
+                        modWord = ews.get(subid - 1);*/
+                        modWord = csent.getEmptyWord(f[2]);
+                        if (modWord == null)
+                             return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
                     } else {
                         int id = Integer.parseInt(f[2]);
 
@@ -1109,6 +1111,47 @@ public class ConlluEditor {
                 }
                 return formatErrMsg("No more redo possible", currentSentenceId);
 
+            } else if (command.startsWith("mod ed")) {
+                // enhanced deps
+                // we attend 
+                //        "mod ed add <dep> <head> nsubj"
+                //        "mod ed del <dep> <head>"
+                String[] f = command.trim().split(" +");
+
+                if (f.length < 5) {
+                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                }
+                
+                if (f[2].equals("add") && f.length < 6) {
+                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                }
+             
+                csent = cfile.getSentences().get(currentSentenceId);
+
+                ConllWord dep = csent.getWord(f[3]);
+                if (dep == null) formatErrMsg("INVALID dep id '" + command + "'", currentSentenceId);
+                ConllWord head = csent.getWord(f[4]);
+                if (head == null) formatErrMsg("INVALID head id '" + command + "'", currentSentenceId);
+             
+                if ("add".equals(f[2])) {                   
+                    dep.addDeps(head.getFullId(), f[5]);
+                }
+                else if ("del".equals(f[2])) {
+                    boolean rtc = dep.delDeps(f[4]);
+                    if (!rtc) return formatErrMsg("ED does not exist '" + command + "'", currentSentenceId);
+                }
+                else {
+                    return formatErrMsg("INVALID ed command '" + command + "'", currentSentenceId);
+                }
+                try {
+                    writeBackup(currentSentenceId, dep, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+
+                return returnTree(currentSentenceId, csent);
+                
+                
             } else if (command.startsWith("mod ")) {
                 // we expect
                 //    "mod id newheadid [newdeprel]", par ex "mod 3 6 nsubj"
@@ -1125,6 +1168,10 @@ public class ConlluEditor {
                 int dep_id;
                 int newhead_id;
 
+                if (f[1].contains(".") || f[2].contains(".")) {
+                    return formatErrMsg("empty nodes cannot be head/dependant in basic dependencies '" + command + "'", currentSentenceId);
+                }
+                
                 try {
                     dep_id = Integer.parseInt(f[1]);
                     csent = cfile.getSentences().get(currentSentenceId);

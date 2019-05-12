@@ -140,6 +140,8 @@
 
 
                         <button class ="mybutton" id="valid">validation</button>
+                        <button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button>
+                        <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced dependencies</button>
                     </td>
                 </tr>
                 <tr class="search">
@@ -256,6 +258,24 @@
                             <img class="helptextbutton" style="width: 30px;" src="img/redo.svg">.
                         The undo-memory is cleared when a new sentence is loaded</p>
 
+                        <h3>Editing enhanced dependencies</h3>
+                        Enhanced dependencies can be edited only in flat view mode. Activate the
+                        <span class="buttondoc">edit enhanced dependencies</span> button. Like editing basic dependencies,
+                        enhanced dependencies can be added by clicking on the dependant followed by clicking on the head.
+                        Since a node can have multiple heads in enhanced dependencies, in order to delete an enhanced dep relations
+                        either use the word edit on the dependant, or use click on the dependency label and then click on 
+                        <span class="buttondoc">delete</span>.
+                        <p>
+                        Basic dependencies, which are also enhanced dependencies are only deplaced if 
+                        <span class="buttondoc">show basic in enhanced</span> is activated.
+                        or use a command and hit the <span class="buttondoc">modify</span> button:
+                        <table border ="0" class="bhelpstyle">
+                            <tr><td>&bull; <span class="userinputdoc"><i>ed add dep_id newheadid</i></span> [<span class="userinputdoc"><i>deprel</i></span>]</td>
+                                <td>add an enhanced dependency</td>
+                            <tr><td>&bull; <span class="userinputdoc"><i>ed del dep_id newheadid</i></span> </td>
+                                <td>delete an enhanced dependency</td>
+                        </table>
+                        
                         <h2>Run a validator</h2>
                         Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
                         needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like

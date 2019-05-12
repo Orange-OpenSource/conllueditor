@@ -26,6 +26,11 @@
           "upos": "PROPN",
           "enhancedheads": [
             {
+              "id": "2",
+              "position": 2,
+              "deprel": "nsubj"
+            },
+            {
               "id": "4",
               "position": 4,
               "deprel": "nsubj"
@@ -71,6 +76,11 @@
           "xpos": "_",
           "upos": "NOUN",
           "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "obj"
+            },
             {
               "id": "4",
               "position": 4,

@@ -230,7 +230,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         //var boxheight = 66; // TODO calculate
         for (var i = 0; i < item.enhancedheads.length; i++) {
             ed = item.enhancedheads[i];
-            if (ed.position == headpos)
+            if (ed.position == headpos && !show_basic_in_enhanced)
                 continue;
 
             makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type);

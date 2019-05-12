@@ -67,8 +67,8 @@ public class ConllWord {
     private int head; //7
     private String deplabel; // 8
 
-    private List<EnhancedDeps> deps; // 9 // badly named, it's the heads of the enhanced dependencies
-    private boolean basicdeps_in_ed_column = false; // true if basic deps are copied to column 9
+    private List<EnhancedDeps> deps; // 9 // badly named, its the heads of the enhanced dependencies
+    //private boolean basicdeps_in_ed_column = false; // true if basic deps are copied to column 9
     Map<String, Object> misc; // 10 value can be string or integer
 
     private String spacesAfter = null;
@@ -122,7 +122,7 @@ public class ConllWord {
         head = orig.getHead();
         deplabel = orig.getDeplabel();
         deps = orig.getDeps();
-        basicdeps_in_ed_column = orig.basicdeps_in_ed_column;
+        //basicdeps_in_ed_column = orig.basicdeps_in_ed_column;
         misc = orig.getMisc();
         spacesAfter = orig.spacesAfter;
         dependents = new ArrayList<>();
@@ -279,17 +279,16 @@ public class ConllWord {
 
             if (elems.length > shift + 9) {
                 if (!elems[shift + 8].equals(EmptyColumn)) {
-                    basicdeps_in_ed_column = true;
+                    //basicdeps_in_ed_column = true;
                     String[] eds = elems[shift + 8].split("\\|");
                     for (String ed : eds) {
                         if (!ed.equals("0")) {
                             EnhancedDeps ehd = new EnhancedDeps(ed);
-                            if (ehd.headid == head && ehd.headsubid == 0) {
-                                // we do not read the copy of basic deps in the enhanced deps column
-                                // but we keep in mind that it is so
-
-                                continue;
-                            }
+//                            if (ehd.headid == head && ehd.headsubid == 0) {
+//                                // we do not read the copy of basic deps in the enhanced deps column
+//                                // but we keep in mind that it is so
+//                                continue;
+//                            }
                             deps.add(ehd);
                         }
                     }
@@ -335,9 +334,9 @@ public class ConllWord {
         this.whquestion = whquestion;
     }
 
-    public boolean isBasicdeps_in_ed_column() {
-        return basicdeps_in_ed_column;
-    }
+//    public boolean isBasicdeps_in_ed_column() {
+//        return basicdeps_in_ed_column;
+//    }
 
     public List<String> getPrefixed() {
         return prefixed;
@@ -1098,6 +1097,22 @@ public class ConllWord {
         }
     }
 
+    public void addDeps(String headId, String deprel) throws ConllException {
+        ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(headId, deprel);
+        deps.add(ehd);
+    }
+    
+    public boolean delDeps(String headId) {
+        for (EnhancedDeps ed : deps) {
+            if (ed.getFullHeadId().equals(headId)) {
+                deps.remove(ed);
+                return true;
+            }
+        }
+     
+        return false;
+    }
+    
     public Map<String, Object> getMisc() {
         return misc;
     }
@@ -1347,14 +1362,14 @@ public class ConllWord {
                 sb.append("\t").append(deplabel);
             }
             if (withEnhancedDeps) {
-                if (deps.isEmpty() && !basicdeps_in_ed_column) {
+                if (deps.isEmpty()/* && !basicdeps_in_ed_column*/) {
                     sb.append('\t').append(EmptyColumn);
                 } else {
                     List<String> els = new ArrayList<>();
-                    // we do not store basic dep in deps field. Just put it there for conllu output
-                    if (toktype == Tokentype.WORD) {
-                        els.add(head + ":" + deplabel);
-                    }
+//                    // we do not store basic dep in deps field. Just put it there for conllu output
+//                    if (toktype == Tokentype.WORD) {
+//                        els.add(head + ":" + deplabel);
+//                    }
 
                     for (int i = 0; i < deps.size(); ++i) {
                         els.add(deps.get(i).toString());
@@ -1400,9 +1415,7 @@ public class ConllWord {
         return true;
     }
 
-    /** enhanced deps are in the 9th column of a CoNLL-U file. The guidelines state that
-     the basic dep of the word has to be copied here two. We only read the non-basic deps into this class
-    and add the basic deps only at serialisation
+    /** enhanced deps are in the 9th column of a CoNLL-U file. 
      */
     public class EnhancedDeps {
         int headid;

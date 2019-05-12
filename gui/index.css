@@ -438,3 +438,11 @@ input {
    sswidth: 90%;
    max-width:1000px;
 }
+
+.ui-autocomplete.ui-widget {
+  /*font-family: sans; */
+  color: blue;
+  font-size: 90%;
+  font-weight: bold;
+  margin-left: 1em;
+}

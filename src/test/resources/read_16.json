@@ -142,6 +142,13 @@
           ],
           "xpos": "VB|PRS|AKT",
           "upos": "VERB",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "advcl:om"
+            }
+          ],
           "deprel": "advcl",
           "chunk": 0,
           "type": "",
@@ -154,6 +161,13 @@
               "lemma": "om",
               "xpos": "SN",
               "upos": "SCONJ",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "mark"
+                }
+              ],
               "deprel": "mark",
               "chunk": 0,
               "type": ""
@@ -189,6 +203,11 @@
               "xpos": "PN|UTR|SIN|DEF|SUB",
               "upos": "PRON",
               "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "nsubj"
+                },
                 {
                   "id": "10.1",
                   "position": 11,
@@ -230,6 +249,13 @@
               ],
               "xpos": "NN|UTR|SIN|IND|NOM",
               "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "obj"
+                }
+              ],
               "deprel": "obj",
               "chunk": 0,
               "type": "",
@@ -260,6 +286,13 @@
                   ],
                   "xpos": "NN|UTR|SIN|IND|NOM",
                   "upos": "NOUN",
+                  "enhancedheads": [
+                    {
+                      "id": "7",
+                      "position": 7,
+                      "deprel": "nmod"
+                    }
+                  ],
                   "deprel": "nmod",
                   "chunk": 0,
                   "type": "",
@@ -290,6 +323,13 @@
                       ],
                       "xpos": "DT|UTR|SIN|IND",
                       "upos": "DET",
+                      "enhancedheads": [
+                        {
+                          "id": "6",
+                          "position": 6,
+                          "deprel": "det"
+                        }
+                      ],
                       "deprel": "det",
                       "chunk": 0,
                       "type": "",
@@ -324,6 +364,13 @@
                           ],
                           "xpos": "JJ|POS|UTR|SIN|IND|NOM",
                           "upos": "ADJ",
+                          "enhancedheads": [
+                            {
+                              "id": "4",
+                              "position": 4,
+                              "deprel": "fixed"
+                            }
+                          ],
                           "deprel": "fixed",
                           "chunk": 0,
                           "type": ""
@@ -358,6 +405,13 @@
               ],
               "xpos": "RG|NOM",
               "upos": "NUM",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "obl:för"
+                }
+              ],
               "deprel": "obl",
               "chunk": 0,
               "type": "",
@@ -370,6 +424,13 @@
                   "lemma": "för",
                   "xpos": "PP",
                   "upos": "ADP",
+                  "enhancedheads": [
+                    {
+                      "id": "9",
+                      "position": 9,
+                      "deprel": "case"
+                    }
+                  ],
                   "deprel": "case",
                   "chunk": 0,
                   "type": ""
@@ -427,6 +488,13 @@
                   "lemma": ",",
                   "xpos": "MID",
                   "upos": "PUNCT",
+                  "enhancedheads": [
+                    {
+                      "id": "12",
+                      "position": 13,
+                      "deprel": "punct"
+                    }
+                  ],
                   "deprel": "punct",
                   "chunk": 0,
                   "type": ""
@@ -457,6 +525,13 @@
                   ],
                   "xpos": "DT|UTR|SIN|IND",
                   "upos": "DET",
+                  "enhancedheads": [
+                    {
+                      "id": "12",
+                      "position": 13,
+                      "deprel": "det"
+                    }
+                  ],
                   "deprel": "det",
                   "chunk": 0,
                   "type": ""
@@ -504,6 +579,13 @@
                       "lemma": "för",
                       "xpos": "PP",
                       "upos": "ADP",
+                      "enhancedheads": [
+                        {
+                          "id": "14",
+                          "position": 15,
+                          "deprel": "case"
+                        }
+                      ],
                       "deprel": "case",
                       "chunk": 0,
                       "type": ""
@@ -598,6 +680,13 @@
                       ],
                       "xpos": "NN|NEU|SIN|IND|NOM",
                       "upos": "NOUN",
+                      "enhancedheads": [
+                        {
+                          "id": "19",
+                          "position": 21,
+                          "deprel": "nmod"
+                        }
+                      ],
                       "deprel": "nmod",
                       "chunk": 0,
                       "type": "",
@@ -628,6 +717,13 @@
                           ],
                           "xpos": "DT|NEU|SIN|IND",
                           "upos": "DET",
+                          "enhancedheads": [
+                            {
+                              "id": "18",
+                              "position": 20,
+                              "deprel": "det"
+                            }
+                          ],
                           "deprel": "det",
                           "chunk": 0,
                           "type": "",
@@ -662,6 +758,13 @@
                               ],
                               "xpos": "JJ|POS|NEU|SIN|IND|NOM",
                               "upos": "ADJ",
+                              "enhancedheads": [
+                                {
+                                  "id": "16",
+                                  "position": 18,
+                                  "deprel": "fixed"
+                                }
+                              ],
                               "deprel": "fixed",
                               "chunk": 0,
                               "type": ""
@@ -713,6 +816,13 @@
                           "lemma": "för",
                           "xpos": "PP",
                           "upos": "ADP",
+                          "enhancedheads": [
+                            {
+                              "id": "21",
+                              "position": 23,
+                              "deprel": "case"
+                            }
+                          ],
                           "deprel": "case",
                           "chunk": 0,
                           "type": ""
@@ -751,6 +861,13 @@
           ],
           "xpos": "PN|NEU|SIN|DEF|SUB/OBJ",
           "upos": "PRON",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "nsubj"
+            }
+          ],
           "deprel": "nsubj",
           "chunk": 0,
           "type": ""
@@ -763,6 +880,13 @@
           "lemma": "sammanlagd",
           "xpos": "AB",
           "upos": "ADV",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "advmod"
+            }
+          ],
           "deprel": "advmod",
           "chunk": 0,
           "type": ""
@@ -791,6 +915,13 @@
           ],
           "xpos": "RG|NOM",
           "upos": "NUM",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "nummod"
+            }
+          ],
           "deprel": "nummod",
           "chunk": 0,
           "type": ""
@@ -803,6 +934,13 @@
           "lemma": ".",
           "xpos": "MAD",
           "upos": "PUNCT",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "punct"
+            }
+          ],
           "deprel": "punct",
           "chunk": 0,
           "type": ""

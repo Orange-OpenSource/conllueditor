@@ -160,19 +160,23 @@ function getServerInfo() {
 
             $(function () {
                 $("#cupos").autocomplete({
-                    source: uposlist
+                    source: uposlist,
+                    // https://www.plus2net.com/jquery/msg-demo/autocomplete-position.php
+                    position: { my: "left top", at: "left bottom"}
                 });
             });
 
             $(function () {
                 $("#cxpos").autocomplete({
-                    source: xposlist
+                    source: xposlist,
+                    position: { my: "left top", at: "left bottom"}
                 });
             });
 
             $(function () {
                 $("#cdeprel").autocomplete({
-                    source: deprellist
+                    source: deprellist,
+                    position: { my: "left top", at: "left bottom"}
                 });
             });
 
@@ -186,6 +190,8 @@ function getServerInfo() {
 
     // initial states
     $('.onlyWithTree').hide();
+    $('#bie').hide();
+    $('#edit_ed').hide();
     $('#undo').prop('disabled', true);
     $('#redo').prop('disabled', true);
     $('#save').prop('disabled', true);
@@ -434,6 +440,8 @@ var showfeats = false;
 var showmisc = false;
 var showr2l = false;
 var backwards = false;
+var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
+var editing_enhanced = false;
 
 // position of highlighted things (search result)
 var highlightX = 0;
@@ -826,9 +834,13 @@ $(document).ready(function () {
         if (this.id == "flat2") {
             if (!flatgraph) {
                 $(this).addClass('active');
+                $("#bie").show();
+                $("#edit_ed").show();
             } else {
                 $(this).removeClass('active');
                 //$("#flat2").text("show tree" + flatgraph);
+                $("#bie").hide();
+                $("#edit_ed").hide();
             }
             flatgraph = !flatgraph;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
@@ -838,7 +850,6 @@ $(document).ready(function () {
                 $(this).addClass('active');
             } else {
                 $(this).removeClass('active');
-                //$("#flat2").text("show tree" + flatgraph);
             }
             showfeats = !showfeats;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
@@ -848,9 +859,27 @@ $(document).ready(function () {
                 $(this).addClass('active');
             } else {
                 $(this).removeClass('active');
-                //$("#flat2").text("show tree" + flatgraph);
             }
             showmisc = !showmisc;
+            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+            sendmodifs(datadico);
+            
+        } else if (this.id == "bie") {
+            if (!show_basic_in_enhanced) {
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+            }
+            show_basic_in_enhanced = !show_basic_in_enhanced;
+            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+            sendmodifs(datadico);
+        } else if (this.id == "edit_ed") {
+            if (!editing_enhanced) {
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+            }
+            editing_enhanced = !editing_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id == "r2l") {
@@ -858,13 +887,11 @@ $(document).ready(function () {
                 $(this).addClass('active');
             } else {
                 $(this).removeClass('active');
-                //$("#flat2").text("show tree" + flatgraph);
             }
             showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id == "backwards") {
-
             backwards = !backwards;
             if (backwards) {
                 //$(this).addClass('active');

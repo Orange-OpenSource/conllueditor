@@ -102,7 +102,7 @@ public class ConllSentence {
         shift = 0;
         words = cw;
         frames = new HashMap<>();
-        hasEnhancedDeps = words.get(0).isBasicdeps_in_ed_column();
+        //hasEnhancedDeps = words.get(0).isBasicdeps_in_ed_column();
 
         comments = new ArrayList<>();
         for (ConllWord w : words) {
@@ -178,7 +178,7 @@ public class ConllSentence {
 
             ConllWord w = new ConllWord(line, lastAnnots, shift);
 
-            if (!w.getDeps().isEmpty() || w.isBasicdeps_in_ed_column()) {
+            if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                 hasEnhancedDeps = true;
             }
 
@@ -929,6 +929,29 @@ public class ConllSentence {
         return emptywords;
     }
 
+    /** get an empty word (n.m).
+     * If it does not exist return null
+     * @param id the n.m CoNLL-U id
+     * @return the word nor null
+     */
+    public ConllWord getEmptyWord(String id) {
+        String [] elems = id.split("\\.");
+        if (elems.length != 2) return null;
+        List<ConllWord> ews = emptywords.get(Integer.parseInt(elems[0]));
+        if (ews.isEmpty()) return null;
+        int subid = Integer.parseInt(elems[1]);
+        if (subid <= ews.size()) return ews.get(subid-1);
+        return null;
+    }
+    
+    public ConllWord getEmptyWord(int id, int subid) {
+        List<ConllWord> ews = emptywords.get(id);
+        if (ews.isEmpty()) return null;      
+        if (subid <= ews.size()) return ews.get(subid-1);
+        return null;
+    }
+    
+    
     public int numOfEmptyWords() {
         if (emptywords == null) {
             return 0;
@@ -941,8 +964,23 @@ public class ConllSentence {
         }
     }
 
+    /** return a word or null. This method returns normal word, a contracted word or an empty word */
+    public ConllWord getWord(String id) {
+        if (id.contains(".")) return getEmptyWord(id);
+        else if (id.contains("-")) {
+            String [] elems = id.split("-");
+            return getContracted(Integer.parseInt(elems[0]));
+        }
+        else {
+            int iid = Integer.parseInt(id);
+            if (iid > 0 && iid <= words.size()) return words.get(iid-1);
+        }
+        return null;
+    }
+    
     /**
-     * return word with ident i
+     * return word with ident i.
+     * No empty or contracted word
      */
     public ConllWord getWord(int i) {
         return words.get(i - 1);
