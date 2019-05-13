@@ -1256,16 +1256,15 @@ public class ConllSentence {
 
         int contracted_until = 0;
         for(ConllWord word : words) {
+            if (pos2id != null) {
+                pos2id.put(sb.length(), word.getId());
+            }
             ConllWord mwe = null;
             if (contracted != null) mwe = contracted.get(word.getId());
             if (mwe != null) {
                 sb.append(mwe.getForm()).append(word.getSpacesAfter());
                 contracted_until = mwe.getSubid();
             } else if (contracted_until == 0 || word.getId() > contracted_until) {
-
-                if (pos2id != null) {
-                    pos2id.put(sb.length(), word.getId());
-                }
                 sb.append(word.getForm()).append(word.getSpacesAfter());
             }
         }

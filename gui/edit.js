@@ -605,11 +605,11 @@ function formatPhrase(item) {
 
         if (highlightX > 40 || highlightY > 100) {
             //alert("hlt " + highlightX + " " +highlightY);
-            $('body').scrollTop(highlightY); // - 100);
-            $('body').scrollLeft(highlightX); // - 40);
+            $('body, html').scrollTop(highlightY - 100);
+            $('body, html').scrollLeft(highlightX - 40);
         } else if (showr2l) {
             // scroll to right for languages like Hebrew or Arabic
-            $('#arbre').scrollLeft($(document).outerWidth());
+            $('body, html').scrollLeft($(document).outerWidth());
         }
 
 
