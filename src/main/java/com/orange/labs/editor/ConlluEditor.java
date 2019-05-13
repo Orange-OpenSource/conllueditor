@@ -61,8 +61,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -303,7 +301,6 @@ public class ConlluEditor {
             switch (raw) {
                 case VALIDATION:
                     if (validator == null) {
-                        System.err.println("AAAA");
                         solution.addProperty("raw", "ERROR: no validator configuration given");
                     } else {
                         try {
@@ -1095,7 +1092,6 @@ public class ConlluEditor {
                         writeBackup(currentSentenceId, null, "undo");
                         return returnTree(currentSentenceId, csent);
                     }
-
                 }
                 return formatErrMsg("No more undo possible", currentSentenceId);
 
@@ -1127,6 +1123,10 @@ public class ConlluEditor {
                 }
              
                 csent = cfile.getSentences().get(currentSentenceId);
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
 
                 ConllWord dep = csent.getWord(f[3]);
                 if (dep == null) formatErrMsg("INVALID dep id '" + command + "'", currentSentenceId);

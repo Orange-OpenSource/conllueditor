@@ -121,7 +121,7 @@ public class ConllSentence {
         shift = 0;
         words = new ArrayList<>();
         frames = new HashMap<>();
-        comments = orig.comments;
+        comments = new ArrayList<>(orig.comments);
         hasEnhancedDeps = orig.hasEnhancedDeps;
         for (ConllWord word : orig.getWords()) {
             words.add(new ConllWord(word));

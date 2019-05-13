@@ -121,7 +121,12 @@ public class ConllWord {
         features = orig.getFeatures();
         head = orig.getHead();
         deplabel = orig.getDeplabel();
-        deps = orig.getDeps();
+        //deps = orig.getDeps();
+        deps = new ArrayList<>();
+        for (EnhancedDeps ed : orig.getDeps()) {
+            deps.add(ed);
+        }
+
         //basicdeps_in_ed_column = orig.basicdeps_in_ed_column;
         misc = orig.getMisc();
         spacesAfter = orig.spacesAfter;
@@ -1422,6 +1427,12 @@ public class ConllWord {
         int headsubid;
         String deprel;
         ConllWord headword;
+
+        public EnhancedDeps(EnhancedDeps orig) {
+            this.headid = orig.headid;
+            this.headsubid = orig.headsubid;
+            this.deprel = orig.deprel;
+        }
 
         public EnhancedDeps(String head, String deprel) {
             init(head, deprel);

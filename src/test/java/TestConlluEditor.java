@@ -246,8 +246,24 @@ public class TestConlluEditor {
         Assert.assertEquals("mod undo output incorrect",
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-
     }
+
+    @Test
+    public void testAddED() throws IOException {
+        name("adding/deleting enhanced dependency");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".4");
+        String rtc = ce.process("mod ed add 7 6 ref", 7, "editinfo");
+        rtc = ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
+        rtc = ce.process("mod ed del 1 4", 11, "editinfo");
+
+        URL ref = this.getClass().getResource("/test.add_ed.conllu");
+        URL res = this.getClass().getResource("/test.conllu.4");
+        Assert.assertEquals("mod undo output incorrect",
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
 
     private String prettyprintJSON(JsonElement j) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
