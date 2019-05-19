@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.0 as of 12th Mai 2019
+ @version 1.12.1 as of 19th Mai 2019
  */
 
 
@@ -92,6 +92,8 @@ function downloadSVG(ident) {
 function getRaw(what) {
     var urlbase = URL_BASE + "get" + what + "?sentid=" + ($("#currentsent").text() - 1);
     //console.log("UU " + urlbase);
+    $('#rawtext').empty(); // clean text
+    $('#showRawModalLabel').html(what); //update modal title
     $.ajax({
         url: urlbase,
         type: 'GET',
@@ -105,8 +107,8 @@ function getRaw(what) {
             }
         },
         success: function (data) {
-            $('#rawtext').empty();
-            $('#showRawModalLabel').html(what);
+            //$('#rawtext').empty();
+            //$('#showRawModalLabel').html(what);
             //console.log("DD " + JSON.stringify(data));
             $('#rawtext').append(data.raw);
         }

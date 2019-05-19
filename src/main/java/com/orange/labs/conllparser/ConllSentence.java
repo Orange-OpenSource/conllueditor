@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.0 as of 12th May 2019
+ @version 1.12.1 as of 19th May 2019
  */
 package com.orange.labs.conllparser;
 
@@ -423,7 +423,6 @@ public class ConllSentence {
             word.setId(ct);
             ct++;
         }
-
         // mettre à jours les IDs des tetes
         for (ConllWord word : words) {
             //System.err.println("AA " + word);
@@ -467,7 +466,10 @@ public class ConllSentence {
         }
     }
 
-    /** split the sentence in two, truncate this, and return the rest as a new sentence */
+    /**
+     * split the sentence in two, truncate this, and return the rest as a new
+     * sentence
+     */
     public ConllSentence splitSentence(int id) {
         id--;
         ConllSentence newsent = new ConllSentence(this);
@@ -524,7 +526,7 @@ public class ConllSentence {
         }
 
         // delete heads which are no longer in this
-         for (ConllWord cw : words) {
+        for (ConllWord cw : words) {
             if (cw.getHead() > id) {
                 cw.setHead(0);
             }
@@ -535,17 +537,23 @@ public class ConllSentence {
     }
 
     public void joinsentence(ConllSentence n) {
-        n.normalise(words.size()+1);
+        n.normalise(words.size() + 1);
         //System.out.println("nnnnnn " + n);
 
         words.addAll(n.getWords());
         if (n.emptywords != null) {
-            if (emptywords == null) emptywords = n.emptywords;
-            else emptywords.putAll(n.emptywords);
+            if (emptywords == null) {
+                emptywords = n.emptywords;
+            } else {
+                emptywords.putAll(n.emptywords);
+            }
         }
         if (n.contracted != null) {
-            if (contracted == null) contracted = n.contracted;
-            else contracted.putAll(n.contracted);
+            if (contracted == null) {
+                contracted = n.contracted;
+            } else {
+                contracted.putAll(n.contracted);
+            }
         }
     }
 
@@ -886,21 +894,21 @@ public class ConllSentence {
             sb.append("\\end{dependency}\n");
 
             sb.append("\n\n% for deptrees.sty\n");
-            sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist+1));
+            sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist + 1));
             sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
-            for(ConllWord head : getHeads()) {
+            for (ConllWord head : getHeads()) {
                 sb.append(String.format("\\root{%d}{%s}{%s}\n", head.getId(), head.getForm(), head.getUpostag()));
             }
 
             sb.append("% headpos,xpos,ypos,form,pos,label\n");
-            List<ConllWord>words2 = new ArrayList<>();
+            List<ConllWord> words2 = new ArrayList<>();
             words2.addAll(words);
             Collections.sort(words2, new CWSortbyHead());
             for (ConllWord cw : words2) {
                 if (cw.getHead() != 0) {
                     sb.append(String.format("\\dep{%d}{%s}{%d}{%s}{%s}{%s}\n", cw.getHead(), cw.getId(),
-                                            getDistanceFromSentenceHead(cw)-1,
-                                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
+                            getDistanceFromSentenceHead(cw) - 1,
+                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
                 }
             }
 
@@ -933,28 +941,38 @@ public class ConllSentence {
         return emptywords;
     }
 
-    /** get an empty word (n.m).
-     * If it does not exist return null
+    /**
+     * get an empty word (n.m). If it does not exist return null
+     *
      * @param id the n.m CoNLL-U id
      * @return the word nor null
      */
     public ConllWord getEmptyWord(String id) {
-        String [] elems = id.split("\\.");
-        if (elems.length != 2) return null;
+        String[] elems = id.split("\\.");
+        if (elems.length != 2) {
+            return null;
+        }
         List<ConllWord> ews = emptywords.get(Integer.parseInt(elems[0]));
-        if (ews.isEmpty()) return null;
+        if (ews.isEmpty()) {
+            return null;
+        }
         int subid = Integer.parseInt(elems[1]);
-        if (subid <= ews.size()) return ews.get(subid-1);
+        if (subid <= ews.size()) {
+            return ews.get(subid - 1);
+        }
         return null;
     }
 
     public ConllWord getEmptyWord(int id, int subid) {
         List<ConllWord> ews = emptywords.get(id);
-        if (ews.isEmpty()) return null;
-        if (subid <= ews.size()) return ews.get(subid-1);
+        if (ews.isEmpty()) {
+            return null;
+        }
+        if (subid <= ews.size()) {
+            return ews.get(subid - 1);
+        }
         return null;
     }
-
 
     public int numOfEmptyWords() {
         if (emptywords == null) {
@@ -968,28 +986,33 @@ public class ConllSentence {
         }
     }
 
-    /** return a word or null. This method returns normal word, a contracted word or an empty word */
+    /**
+     * return a word or null. This method returns normal word, a contracted word
+     * or an empty word
+     */
     public ConllWord getWord(String id) {
-        if (id.contains(".")) return getEmptyWord(id);
-        else if (id.contains("-")) {
-            String [] elems = id.split("-");
+        if (id.contains(".")) {
+            return getEmptyWord(id);
+        } else if (id.contains("-")) {
+            String[] elems = id.split("-");
             return getContracted(Integer.parseInt(elems[0]));
-        }
-        else {
+        } else {
             int iid = Integer.parseInt(id);
-            if (iid > 0 && iid <= words.size()) return words.get(iid-1);
+            if (iid > 0 && iid <= words.size()) {
+                return words.get(iid - 1);
+            }
         }
         return null;
     }
 
     /**
-     * return word with ident i.
-     * No empty or contracted word
+     * return word with ident i. No empty or contracted word
      */
     public ConllWord getWord(int i) {
         return words.get(i - 1);
     }
 
+    private static final int factor=10; // needed to create space for inserting a new word
     /**
      * add a new word after the word with id (0 inserts at the beginning).
      * invalidates word2chunks and chunk2words
@@ -1006,24 +1029,58 @@ public class ConllSentence {
             return;
         }
 
+        // updating ids of normal words (including ehnanced deps)
         for (ConllWord w : words) {
-            w.setId(w.getId() * 10);
+            w.setId(w.getId() * factor);
             if (w.getHead() > 0) {
-                w.setHead(w.getHead() * 10);
+                w.setHead(w.getHead() * factor);
             }
             if (w.getDeps() != null) {
                 for (ConllWord.EnhancedDeps ed : w.getDeps()) {
-                    ed.headid *= 10;
+                    ed.headid *= factor;
                 }
             }
         }
-
-        words.add(id, cw);
-        cw.setId(id * 10 + 1);
-        if (cw.getHead() > 0) {
-            cw.setHead(cw.getHead() * 10);
+        
+        // update ids of contracted words
+        if (contracted != null) {
+            Map<Integer, ConllWord> c2 = new HashMap<>();
+            for (Integer id2 : contracted.keySet()) {
+                ConllWord mwt = contracted.get(id2);
+                mwt.setId(id2 * factor);
+                mwt.setSubId(mwt.getSubid() * factor);
+                c2.put(id2*factor, mwt);
+            }
+            contracted = c2;
         }
 
+        // update ids of empty words
+          // updating ids of normal words (including ehnanced deps)
+        if (emptywords != null) {
+            Map<Integer, List<ConllWord>> ews2 = new HashMap<>();
+            for (Integer id2 : emptywords.keySet()) {
+                List<ConllWord> ewl = new ArrayList<>();
+                for (ConllWord ew : emptywords.get(id2)) {
+                    ew.setId(ew.getId() * factor);
+                    if (ew.getHead() > 0) {
+                        ew.setHead(ew.getHead() * factor);
+                    }
+                    if (ew.getDeps() != null) {
+                        for (ConllWord.EnhancedDeps ed : ew.getDeps()) {
+                            ed.headid *= factor;
+                        }
+                    }
+                    ewl.add(ew);
+                }
+                ews2.put(id2 * factor, ewl);
+            }
+        }
+        // insert new sord
+        words.add(id, cw);
+        cw.setId(id * factor + 1);
+        if (cw.getHead() > 0) {
+            cw.setHead(cw.getHead() * factor);
+        }
         normalise(1);
         makeTrees(null);
     }
@@ -1176,15 +1233,14 @@ public class ConllSentence {
         return maxdist;
     }
 
-    class CWSortbyHead implements Comparator<ConllWord>
-{
-    // Used for sorting in ascending order of
-    // roll number
-    public int compare(ConllWord a, ConllWord b)
-    {
-        return a.getHead() - b.getHead();
+    class CWSortbyHead implements Comparator<ConllWord> {
+        // Used for sorting in ascending order of
+        // roll number
+
+        public int compare(ConllWord a, ConllWord b) {
+            return a.getHead() - b.getHead();
+        }
     }
-}
 
     /**
      * class to store information of what parts of a ConllWord should be
@@ -1211,6 +1267,7 @@ public class ConllSentence {
     }
 
     public static class AnnotationErrors {
+
         public int xpos; // invalid xpos
         public int upos;
         public int deprel;
@@ -1219,10 +1276,11 @@ public class ConllSentence {
         }
     }
 
-    /** produire un arbre en Json. Nécessite l'appel a makeTrees()
+    /**
+     * produire un arbre en Json. Nécessite l'appel a makeTrees()
      */
     public JsonArray toJsonTree(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
-                                Highlight highlight, AnnotationErrors ae) {
+            Highlight highlight, AnnotationErrors ae) {
         JsonArray jheads = new JsonArray();
 
         for (ConllWord head : headss) {
@@ -1240,27 +1298,30 @@ public class ConllSentence {
     }
 
     public String getSentence() {
-          return getSentence(null);
+        return getSentence(null);
     }
 
-    /** get the sentence with original spaces.
-
-    @param pos2id if not null a map where the position of each id is written
-    @return the original sentence
-    */
-    public String getSentence(Map<Integer, Integer>pos2id) {
+    /**
+     * get the sentence with original spaces.
+     *
+     * @param pos2id if not null a map where the position of each id is written
+     * @return the original sentence
+     */
+    public String getSentence(Map<Integer, Integer> pos2id) {
         StringBuilder sb = new StringBuilder();
         //for (ConllWord word : words) {
         //    sb.append(word.getForm()).append(" ");
         //}
 
         int contracted_until = 0;
-        for(ConllWord word : words) {
+        for (ConllWord word : words) {
             if (pos2id != null) {
                 pos2id.put(sb.length(), word.getId());
             }
             ConllWord mwe = null;
-            if (contracted != null) mwe = contracted.get(word.getId());
+            if (contracted != null) {
+                mwe = contracted.get(word.getId());
+            }
             if (mwe != null) {
                 sb.append(mwe.getForm()).append(word.getSpacesAfter());
                 contracted_until = mwe.getSubid();
@@ -1297,8 +1358,10 @@ public class ConllSentence {
         return lhead;
     }
 
-    /** get a substring of the sentence which includes the given deprels.
-     * Words not linked with these deprels but between head/dep of a given deprel will be output in parentheses.
+    /**
+     * get a substring of the sentence which includes the given deprels. Words
+     * not linked with these deprels but between head/dep of a given deprel will
+     * be output in parentheses.
      *
      * @param deprels
      * @return

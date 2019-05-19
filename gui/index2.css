@@ -339,7 +339,7 @@ input {
     font-family: inherit;
 }
 
-/* ()xe)latex logos */
+/* (xe)latex logos */
 .revcap {
     display: inline-block;
     text-transform: uppercase;
@@ -347,12 +347,14 @@ input {
 }
 
 
+/* A and E of LATEX spellt in upper case */
 .latex sub,
 .latex sup {
   text-transform: uppercase;
 }
 
 
+/* position of the lowered E of LATEX */
 .latex sub {
   vertical-align: -0.15ex;
   margin-left: -0.13em;
@@ -360,6 +362,7 @@ input {
 }
 
 
+/* font size of the lowered E of LATEX */
 .latex,
 .latex sub {
   font-size: 1em;

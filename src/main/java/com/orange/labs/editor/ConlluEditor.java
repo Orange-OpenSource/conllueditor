@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.0 as of 12th May 2019
+ @version 1.12.1 as of 19th May 2019
  */
 package com.orange.labs.editor;
 
@@ -933,11 +933,13 @@ public class ConlluEditor {
 
                     ConllWord curWord = csent.getWords().get(id - 1);
                     modWord = new ConllWord(curWord);
+                    // delete enhanced deps from copy. Does not make sense keeping them
+                    modWord.setDeps("_");
 
-                    if (splitpos > 0 && splitpos < curWord.getForm().length()-1) {
+                    if (splitpos > 0 && splitpos < curWord.getForm().length()) {
                         curWord.setForm(curWord.getForm().substring(0, splitpos));
                         modWord.setForm(modWord.getForm().substring(splitpos));
-                        if (splitpos < curWord.getLemma().length()-1) {
+                        if (splitpos < curWord.getLemma().length()) {
                             curWord.setLemma(curWord.getLemma().substring(0, splitpos));
                             modWord.setLemma(modWord.getLemma().substring(splitpos));
                         }

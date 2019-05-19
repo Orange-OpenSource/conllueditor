@@ -128,9 +128,54 @@ public class TestConlluEditor {
         Assert.assertEquals("CoNLL-U output incorrect",
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-
     }
 
+    @Test
+    public void testEditJoinSplitBeforeMWT() throws IOException {
+        name("split/join before a MWT");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".5");
+        String rtc = ce.process("mod split 2 3 ", 4, "editinfo");
+        rtc = ce.process("mod join 5", 4, "editinfo");
+
+        URL ref = this.getClass().getResource("/test.split-mwt.conllu");
+        URL res = this.getClass().getResource("/test.conllu.5"); // modified file
+        Assert.assertEquals("CoNLL-U output incorrect",
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }    
+
+    @Test
+    public void testEditJoinSplitBeforeEmptyNode() throws IOException {
+        name("split/join before a empty word");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".6");
+        String rtc = ce.process("mod split 5 ", 16, "editinfo");
+        rtc = ce.process("mod join 13", 16, "editinfo");
+
+        URL ref = this.getClass().getResource("/test.split-ew.conllu");
+        URL res = this.getClass().getResource("/test.conllu.6"); // modified file
+        Assert.assertEquals("CoNLL-U output incorrect",
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    } 
+
+    @Test
+    public void testEditJoinSplitWithEnhDeps() throws IOException {
+        name("split/join before a enhanced deps");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".7");
+        String rtc = ce.process("mod split 4 ", 13, "editinfo");
+        rtc = ce.process("mod split 3", 13, "editinfo");
+        rtc = ce.process("mod join 4", 13, "editinfo");
+
+        URL ref = this.getClass().getResource("/test.split-ed.conllu");
+        URL res = this.getClass().getResource("/test.conllu.7"); // modified file
+        Assert.assertEquals("CoNLL-U output incorrect",
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    } 
+    
     @Test
     public void testRead() throws IOException {
         name("read sentence");

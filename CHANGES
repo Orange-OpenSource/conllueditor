@@ -1,11 +1,13 @@
-Version 1.12.0
+Version 1.12.1
+- bug corrected for split/join function (if a MWT or enhanced dependency followed)
+- minor layout modification
 
+Version 1.12.0
 - support for enhanced dependencies (graphical editing)
 - form search corrected
 - doc updated
 
 Version 1.11.1
-
 - Bug corrections:
   - in flat mode: shift enhanced down dependencies if features are shown
   - split misc field only at pipe and LF, not at comma
@@ -13,25 +15,20 @@ Version 1.11.1
   - tests updated: added features to sentence with enhanced dependencies
 
 Version 1.11.0
-
 - added support for an external validation script
 
 Version 1.10.0
-
 - LaTeX output also for deptree.sty (see doc/)
 
 Version 1.9.0
-
 - added split position parameter to word split function
 - add support for creating, editing and deleting multiword tokens
 
 Version 1.8.2
-
 - double click to edit a word (form, lemma, UPOS, ...), useful for tablets which usually do not have a control key
 - button to edit comments (to edit empty comments)
 
 Version 1.8.1
-
 - return version with /edit/validlists
 - display version
 

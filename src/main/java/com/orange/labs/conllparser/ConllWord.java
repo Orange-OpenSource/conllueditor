@@ -124,7 +124,7 @@ public class ConllWord {
         //deps = orig.getDeps();
         deps = new ArrayList<>();
         for (EnhancedDeps ed : orig.getDeps()) {
-            deps.add(ed);
+            deps.add(new EnhancedDeps(ed));
         }
 
         //basicdeps_in_ed_column = orig.basicdeps_in_ed_column;
