@@ -608,7 +608,7 @@ function formatPhrase(item) {
         if (highlightX > 40 || highlightY > 100) {
             //alert("hlt " + highlightX + " " +highlightY);
             $('body, html').scrollTop(highlightY - 100);
-            $('body, html').scrollLeft(highlightX - 40);
+            $('body, html').scrollLeft(highlightX - 120);
         } else if (showr2l) {
             // scroll to right for languages like Hebrew or Arabic
             $('body, html').scrollLeft($(document).outerWidth());

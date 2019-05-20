@@ -3,9 +3,8 @@
 
 #LANG=en_US.UTF-8
 
-BASENAME=$(dirname $0)
+BASENAME=$(dirname $(readlink -f $0))
 TARGETDIR=$BASENAME/../target
-
 
 
 if [[ "$1" =~  ^[4].[0-9]+$ ]]; then

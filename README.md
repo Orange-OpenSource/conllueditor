@@ -23,7 +23,7 @@ The editor provides the following functionalities:
 ### Requirements
 
 * Java jre 8.0
-* Firefox (tested with version 52.7.3 and >= 63), Chromium or Chrome (both tested with version 70), Edge (tested with version 44.17763.1.0 on Windows 10, Edge 41 does not work))
+* Firefox (tested with version 52.7.3 and >= 63), Chromium or Chrome (both tested with version 70), Edge (tested with version 44.17763.1.0 on Windows 10, however, Edge 41 **does not work**))
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js), needed by bootstrap
@@ -31,7 +31,7 @@ The editor provides the following functionalities:
 
 In order two compile the server, you also need
 * Java jdk 8.0
-* maven (≥ 3.3.9)
+* maven (tested with >= 3.3.9)
 
 ### License
 * This software is under the [3-Clause BSD License](LICENSE)
@@ -133,7 +133,7 @@ Point your navigator  to `http://localhost:8888` .
 * `--UPOS <file>` comma separated list of files containing valid UPOS (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
-* `--validator <file>` validator configuration file
+* `--validator <file>` validator configuration file (see section [validation](#Validation) below)
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
@@ -153,7 +153,7 @@ To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help us
 The sentence is shown as a tree or as a flat graph, morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
-If any UPOS/XPOS/deprel is not in the validation lists (specified with hte `--UPOS` etc options)
+If any UPOS/XPOS/deprel is not in the validation lists (specified with the `--UPOS` etc options)
 it is shown in red.
 
 ![Edit screen (tree graph)](doc/tree.png)
