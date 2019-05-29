@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.1 as of 19th Mai 2019
+ @version 1.12.2 as of 30th Mai 2019
 */
 
 body {
@@ -435,7 +435,7 @@ input {
 
 .modal-xl {
    sswidth: 90%;
-   max-width:1000px;
+   max-width:1300px;
 }
 
 .ui-autocomplete.ui-widget {

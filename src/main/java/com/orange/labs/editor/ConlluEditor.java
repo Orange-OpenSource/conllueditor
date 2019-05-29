@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.1 as of 19th May 2019
+ @version 1.12.2 as of 30th May 2019
  */
 package com.orange.labs.editor;
 
@@ -694,7 +694,7 @@ public class ConlluEditor {
                                     } else {
                                         // does word have dependent with deprel
                                         head = head.getHeadWord();
-                                        List<ConllWord> deps = head.getDWordsRE(rels[r]);
+                                        List<ConllWord> deps = head.getDWordsRE(rels[r], false);
                                         if (deps == null || deps.isEmpty()) {
                                             ok = false;
                                             break;
