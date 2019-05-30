@@ -118,7 +118,7 @@ public class ConllWord {
         lemma = orig.getLemma();
         xpostag = orig.getXpostag();
         upostag = orig.getUpostag();
-        features = orig.getFeatures();
+        features = new TreeMap<>(orig.getFeatures());
         head = orig.getHead();
         deplabel = orig.getDeplabel();
         //deps = orig.getDeps();
