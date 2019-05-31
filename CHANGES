@@ -1,3 +1,11 @@
+Version 1.12.3
+
+ - new bug from version 1.12.2 fxied
+
+Version 1.12.2
+
+- bug corrected in undo/redo
+
 Version 1.12.1
 - bug corrected for split/join function (if a MWT or enhanced dependency followed)
 - minor layout modification

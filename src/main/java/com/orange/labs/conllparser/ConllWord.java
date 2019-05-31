@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.2 as of 30th May 2019
+ @version 1.12.3 as of 31th May 2019
  */
 package com.orange.labs.conllparser;
 
@@ -118,7 +118,10 @@ public class ConllWord {
         lemma = orig.getLemma();
         xpostag = orig.getXpostag();
         upostag = orig.getUpostag();
-        features = new TreeMap<>(orig.getFeatures());
+        if (orig.getFeatures() != null)
+            features = new TreeMap<>(orig.getFeatures());
+        else
+            features = new TreeMap<>();
         head = orig.getHead();
         deplabel = orig.getDeplabel();
         //deps = orig.getDeps();
@@ -174,7 +177,6 @@ public class ConllWord {
         upostag = EmptyColumn;
         xpostag = EmptyColumn;
         deplabel = EmptyColumn;
-
     }
 
     /*    @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé deux colonne au format CONLL "normal"   */
