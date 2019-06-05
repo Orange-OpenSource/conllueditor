@@ -119,7 +119,7 @@ Point your navigator to `http://localhost/conllueditor?port=8888` .
 bin/conlluedit.sh --rootdir  /path/to/ConlluEditor/gui treebank.conllu 8888
 ```
 
-or (the option `-r` calculates the rootdir from the postion of `conlluedit.sh`)
+or (the option `-r` calculates the rootdir from the position of `conlluedit.sh`)
 
 ```bash
 bin/conlluedit.sh -r treebank.conllu 8888
