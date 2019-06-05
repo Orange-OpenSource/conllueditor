@@ -91,6 +91,8 @@ public class ConllWord {
     // column 11 otherwise
     private List<String> nonstandardInfo = null;
 
+    public static boolean orderfeatures = true; // order morphological features ore keep them as they are in the CoNLL-U data
+
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
     };
@@ -118,10 +120,20 @@ public class ConllWord {
         lemma = orig.getLemma();
         xpostag = orig.getXpostag();
         upostag = orig.getUpostag();
-        if (orig.getFeatures() != null)
-            features = new TreeMap<>(orig.getFeatures());
-        else
-            features = new TreeMap<>();
+        if (orig.getFeatures() != null) {
+            if (orderfeatures) {
+                features = new TreeMap<>(orig.getFeatures());
+            } else {
+                features = new LinkedHashMap<>(orig.getFeatures());
+            }
+        }
+        else {
+            if (orderfeatures) {
+                features = new TreeMap<>();
+            } else {
+                features = new LinkedHashMap<>();
+            }
+        }
         head = orig.getHead();
         deplabel = orig.getDeplabel();
         //deps = orig.getDeps();
@@ -160,7 +172,11 @@ public class ConllWord {
         upostag = EmptyColumn;
         xpostag = EmptyColumn;
         deplabel = EmptyColumn;
-        features = new TreeMap<>(); //Arrays.asList(elems[shift + 5].split("\\|")));
+        if (orderfeatures) {
+            features = new TreeMap<>(); //Arrays.asList(elems[shift + 5].split("\\|")));
+        } else {
+            features = new LinkedHashMap<>();
+        }
         misc = new LinkedHashMap<>();
         deps = new ArrayList<>();
     }
@@ -254,8 +270,11 @@ public class ConllWord {
                 throw new ConllException("empty xpostag. Use '" + EmptyColumn + "': " + conllline);
             }
 
-            //features = new ArrayList<>(Arrays.asList(elems[shift + 5].split("\\|")));
-            features = new TreeMap<>();
+            if (orderfeatures) {
+                features = new TreeMap<>();
+            } else {
+                features = new LinkedHashMap<>();
+            }
             this.setFeatures(elems[shift + 5]);
 
             if (elems[shift + 6].isEmpty()) {
@@ -1111,7 +1130,7 @@ public class ConllWord {
         ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(headId, deprel);
         deps.add(ehd);
     }
-    
+
     public boolean delDeps(String headId) {
         for (EnhancedDeps ed : deps) {
             if (ed.getFullHeadId().equals(headId)) {
@@ -1119,10 +1138,10 @@ public class ConllWord {
                 return true;
             }
         }
-     
+
         return false;
     }
-    
+
     public Map<String, Object> getMisc() {
         return misc;
     }
@@ -1426,7 +1445,7 @@ public class ConllWord {
         return true;
     }
 
-    /** enhanced deps are in the 9th column of a CoNLL-U file. 
+    /** enhanced deps are in the 9th column of a CoNLL-U file.
      */
     public class EnhancedDeps {
         int headid;
