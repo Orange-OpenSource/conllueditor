@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.2 as of 30th May 2019
+ @version 1.12.4 as of 29th July 2019
  */
 package com.orange.labs.editor;
 
@@ -682,15 +682,18 @@ public class ConlluEditor {
 
                                 boolean ok = true;
                                 ConllWord head = cw;
-
+                                Set<Integer>toHighlight = new HashSet<>();
+                                //System.err.println("CW: " + cw);
+                                toHighlight.add(cw.getId());
                                 for (int r = 1; r < rels.length; ++r) {
                                     if (updown[r].equals(">")) {
-                                        // does head has deprel
+                                        // does head has deprel ?
                                         head = head.getHeadWord();
                                         if (head == null || !head.matchesDeplabel(rels[r])) {
                                             ok = false;
                                             break;
                                         }
+                                        toHighlight.add(head.getId());
                                     } else {
                                         // does word have dependent with deprel
                                         head = head.getHeadWord();
@@ -699,11 +702,13 @@ public class ConlluEditor {
                                             ok = false;
                                             break;
                                         }
+                                        //System.err.println("deps" + deps);
                                     }
                                 }
                                 if (ok) {
                                     currentSentenceId = i;
-                                    return returnTree(currentSentenceId, cs);
+                                    ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.DEPREL, toHighlight);
+                                    return returnTree(currentSentenceId, cs, hl);
                                 }
                             }
                         }

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.1 as of 19th May 2019
+ @version 1.12.4 as of 29th July 2019
  */
 package com.orange.labs.conllparser;
 
@@ -1249,21 +1249,33 @@ public class ConllSentence {
     public static class Highlight {
 
         public ConllWord.Fields field;
-        public int wordid;
-        public int lastwordid;
+        public Set<Integer>ids;
+        //public int wordid;
+        //public int lastwordid;
 
         public Highlight(ConllWord.Fields field, int wordid) {
             this.field = field;
-            this.wordid = wordid;
-            this.lastwordid = wordid;
+            ids = new HashSet<>();
+            ids.add(wordid);
+            //this.wordid = wordid;
+            //this.lastwordid = wordid;
         }
 
         public Highlight(ConllWord.Fields field, int wordid, int lastwordid) {
             this.field = field;
-            this.wordid = wordid;
-            this.lastwordid = wordid;
-            this.lastwordid = lastwordid;
+            ids = new HashSet<>();
+            for(int id = wordid; id <= lastwordid; id++) {
+                 ids.add(id);
+            }
+            //this.wordid = wordid;
+            //this.lastwordid = lastwordid;
         }
+        
+        public Highlight(ConllWord.Fields field, Set<Integer>ids) {
+            this.field = field;
+            this.ids = ids;
+        }
+        
     }
 
     public static class AnnotationErrors {

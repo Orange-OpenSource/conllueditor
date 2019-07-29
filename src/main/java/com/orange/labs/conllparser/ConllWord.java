@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.3 as of 31th May 2019
+ @version 1.12.4 as of 29th July 2019
  */
 package com.orange.labs.conllparser;
 
@@ -811,7 +811,8 @@ public class ConllWord {
             }
        // }
 
-        if (highlight != null && highlight.wordid <= id && highlight.lastwordid >= id) {
+        if (highlight != null  && highlight.ids.contains(id) //&& highlight.wordid <= id && highlight.lastwordid >= id
+                ) {
             //System.err.println("tttt " + this + " " + highlight);
             switch (highlight.field) {
                 case FORM:
