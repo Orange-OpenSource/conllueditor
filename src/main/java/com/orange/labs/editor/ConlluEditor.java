@@ -657,8 +657,8 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
                 }
 
-                String[] rels = f[2].split("[<>]");
-                String[] updown = f[2].split("[^<>]+");
+                String[] rels = f[2].split("[<>=]");
+                String[] updown = f[2].split("[^<>=]+");
                 //System.err.println("RL " + String.join(",", rels));
                 //System.err.println("UD " + String.join(",", updown));
                 // si le deuxième mot est "true" on cherche en arrière
@@ -678,8 +678,17 @@ public class ConlluEditor {
                                 return returnTree(currentSentenceId, cs, hl); //cw.getDeplabel());
                             } else {
                                 // chaine de deprels
+                                Set<Integer>toHighlight = new HashSet<>();
                                 cs.makeTrees(null);
-
+                                boolean ok = cw.matchesTree(1, rels, updown, toHighlight);
+                                if (ok) {
+                                    //System.err.println("--------------- " + cw.getId());
+                                    toHighlight.add(cw.getId());
+                                    currentSentenceId = i;
+                                    ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.DEPREL, toHighlight);
+                                    return returnTree(currentSentenceId, cs, hl);
+                                }
+                                /*
                                 boolean ok = true;
                                 ConllWord head = cw;
                                 Set<Integer>toHighlight = new HashSet<>();
@@ -709,7 +718,7 @@ public class ConlluEditor {
                                     currentSentenceId = i;
                                     ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.DEPREL, toHighlight);
                                     return returnTree(currentSentenceId, cs, hl);
-                                }
+                                }*/
                             }
                         }
                     }
@@ -1116,7 +1125,7 @@ public class ConlluEditor {
 
             } else if (command.startsWith("mod ed")) {
                 // enhanced deps
-                // we attend 
+                // we expect
                 //        "mod ed add <dep> <head> nsubj"
                 //        "mod ed del <dep> <head>"
                 String[] f = command.trim().split(" +");
@@ -1124,11 +1133,11 @@ public class ConlluEditor {
                 if (f.length < 5) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
                 }
-                
+
                 if (f[2].equals("add") && f.length < 6) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
                 }
-             
+
                 csent = cfile.getSentences().get(currentSentenceId);
                 if (history == null) {
                     history = new History(200);
@@ -1139,7 +1148,7 @@ public class ConlluEditor {
                 if (dep == null) formatErrMsg("INVALID dep id '" + command + "'", currentSentenceId);
                 ConllWord head = csent.getWord(f[4]);
                 if (head == null) formatErrMsg("INVALID head id '" + command + "'", currentSentenceId);
-             
+
                 if ("add".equals(f[2])) {
                     // before we add a new enhanced dep, we delete a potentially
                     // existing enhn.deprel to the same head
@@ -1161,8 +1170,8 @@ public class ConlluEditor {
                 }
 
                 return returnTree(currentSentenceId, csent);
-                
-                
+
+
             } else if (command.startsWith("mod ")) {
                 // we expect
                 //    "mod id newheadid [newdeprel]", par ex "mod 3 6 nsubj"
@@ -1182,7 +1191,7 @@ public class ConlluEditor {
                 if (f[1].contains(".") || f[2].contains(".")) {
                     return formatErrMsg("empty nodes cannot be head/dependant in basic dependencies '" + command + "'", currentSentenceId);
                 }
-                
+
                 try {
                     dep_id = Integer.parseInt(f[1]);
                     csent = cfile.getSentences().get(currentSentenceId);

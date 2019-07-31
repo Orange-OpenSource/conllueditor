@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.4 as of 29th July 2019
+ @version 1.12.5 as of 30th July 2019
  */
 package com.orange.labs.conllparser;
 
@@ -126,8 +126,7 @@ public class ConllWord {
             } else {
                 features = new LinkedHashMap<>(orig.getFeatures());
             }
-        }
-        else {
+        } else {
             if (orderfeatures) {
                 features = new TreeMap<>();
             } else {
@@ -301,7 +300,6 @@ public class ConllWord {
 
             whquestion = false;
 
-
             deps = new ArrayList<>();
 
             if (elems.length > shift + 9) {
@@ -364,7 +362,6 @@ public class ConllWord {
 //    public boolean isBasicdeps_in_ed_column() {
 //        return basicdeps_in_ed_column;
 //    }
-
     public List<String> getPrefixed() {
         return prefixed;
     }
@@ -800,18 +797,18 @@ public class ConllWord {
             jword.addProperty("xposerror", 1);
             ae.xpos++;
         }
-       // if (head != 0 /*&& "root".equals(deplabel)*/) { //(head > -1 /*&& !EmptyColumn.equals(deplabel)*/) {
-            // we don't mount a deplabel "root", since it should not exist if head != 0
-            // and if head == 0, it will not be displayed
-            // TODO: delete "root" if head != 0 ??
-            jword.addProperty("deprel", deplabel);
-            if (validdeprels != null && toktype == Tokentype.WORD && !validdeprels.contains(deplabel)) {
-                jword.addProperty("deprelerror", 1);
-                ae.deprel++;
-            }
-       // }
+        // if (head != 0 /*&& "root".equals(deplabel)*/) { //(head > -1 /*&& !EmptyColumn.equals(deplabel)*/) {
+        // we don't mount a deplabel "root", since it should not exist if head != 0
+        // and if head == 0, it will not be displayed
+        // TODO: delete "root" if head != 0 ??
+        jword.addProperty("deprel", deplabel);
+        if (validdeprels != null && toktype == Tokentype.WORD && !validdeprels.contains(deplabel)) {
+            jword.addProperty("deprelerror", 1);
+            ae.deprel++;
+        }
+        // }
 
-        if (highlight != null  && highlight.ids.contains(id) //&& highlight.wordid <= id && highlight.lastwordid >= id
+        if (highlight != null && highlight.ids.contains(id) //&& highlight.wordid <= id && highlight.lastwordid >= id
                 ) {
             //System.err.println("tttt " + this + " " + highlight);
             switch (highlight.field) {
@@ -1191,8 +1188,7 @@ public class ConllWord {
         if (misckey.equals("SpaceAfter") && miscval.equals("No")) {
             spacesAfter = "";
             return true;
-        }
-        else if (misckey.equals("SpacesAfter")) {
+        } else if (misckey.equals("SpacesAfter")) {
             spacesAfter = miscval.replace("\\s", " ").replace("\\t", "\t").replace("\\n", "\n");
             return true;
         }
@@ -1205,7 +1201,9 @@ public class ConllWord {
         for (Map.Entry<String, Object> pair : misc.entrySet()) {
             if (pair.getValue() instanceof String) {
                 boolean rtc = setSpacesAfter(pair.getKey(), (String) pair.getValue());
-                if (rtc) break; // spaceafter found
+                if (rtc) {
+                    break; // spaceafter found
+                }
             }
         }
     }
@@ -1249,6 +1247,67 @@ public class ConllWord {
 
     public boolean matchesDeplabel(String d) {
         return deplabel.matches(d);
+    }
+
+    /** checks whether you can go up and down from the current word to another
+         by following the relations and directions
+    @param rels
+    @param direction
+    @return
+     */
+    public boolean matchesTree(int start, String[] rels, String[] direction, Set<Integer>toHighlight) {
+        ConllWord head;
+        //System.err.println("MT " + start);
+        //System.err.println("  RL " + String.join(",", rels));
+        //System.err.println("  UD " + String.join(",", direction));
+        for (int r = start; r < rels.length; ++r) {
+            if (direction[r].equals(">")) {
+                // check whether head matches
+                head = this.getHeadWord();
+                if (head == null || !head.matchesDeplabel(rels[r])) {
+                    return false;
+                }
+                //System.err.println("2=============" + start + "  " + head.getId());
+                toHighlight.add(head.getId());
+                return head.matchesTree(r+1, rels, direction, toHighlight);
+            } else {
+                List<ConllWord> deps;
+                if (direction[r].equals("=")) {
+                    // check whether there is a sibling
+                    head = this.getHeadWord();
+                    deps = head.getDWordsRE(rels[r], false);
+                } else {
+                    // check whether child matches ("<")
+                    deps = this.getDWordsRE(rels[r], false);
+                }
+                if (deps == null || deps.isEmpty()) {
+                    //System.err.println("no deps");
+                    return false;
+                }
+                boolean ok = false;
+                for (ConllWord dep : deps) {
+                    if (dep.equals(this)) continue;
+                    //System.err.println("DEP " + r + " " + dep);
+                    if (dep.matchesDeplabel(rels[r])) {
+                        boolean rtc = dep.matchesTree(r+1, rels, direction, toHighlight);
+                        ok = ok || rtc;
+                        if (rtc) {
+                            //System.err.println("3=============" + start + "  " + this.getId());
+                            toHighlight.add(this.getId());
+                        }
+                    }
+                }
+                if (ok) {
+                    //System.err.println("1=============" + start + "  " + this.getId());
+                    toHighlight.add(this.getId());
+                }
+                return ok;
+            }
+        }
+        toHighlight.add(this.getId());
+        //System.err.println("==============" + start + "  " + this.getId());
+
+        return true;
     }
 
     public List<ConllWord> getDependents() {

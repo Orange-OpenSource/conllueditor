@@ -1041,7 +1041,7 @@ public class ConllSentence {
                 }
             }
         }
-        
+
         // update ids of contracted words
         if (contracted != null) {
             Map<Integer, ConllWord> c2 = new HashMap<>();
@@ -1270,12 +1270,12 @@ public class ConllSentence {
             //this.wordid = wordid;
             //this.lastwordid = lastwordid;
         }
-        
+
         public Highlight(ConllWord.Fields field, Set<Integer>ids) {
             this.field = field;
             this.ids = ids;
         }
-        
+
     }
 
     public static class AnnotationErrors {
