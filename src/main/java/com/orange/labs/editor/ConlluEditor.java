@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.4 as of 29th July 2019
+ @version 1.12.6 as of 28th August 2019
  */
 package com.orange.labs.editor;
 
@@ -1465,6 +1465,7 @@ public class ConlluEditor {
         System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) after each modification");
         System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
         System.err.println("   --noedit             only browsing");
+        System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
         System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
     }
 
@@ -1515,6 +1516,9 @@ public class ConlluEditor {
                 if (mode == 0) {
                     mode = 1;
                 }
+                argindex += 1;
+            } else if (args[a].equals("--relax")) {
+                ConllWord.RELAXED = true;
                 argindex += 1;
             } else if (args[a].equals("--reinit")) {
                 mode = 2;

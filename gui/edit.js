@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.1 as of 19th Mai 2019
+ @version 1.12.6 as of 28th August 2019
  */
 
 
@@ -214,12 +214,12 @@ function ToggleSearch() {
     if (more) {
         $("#act_search").text("show search");
         $(".search").hide();
-        $('body').css("margin-top", "150"); // header is smaller, decrease body margin
+        $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         more = false;
     } else {
         $("#act_search").text("hide search");
         $(".search").show();
-        $('body').css("margin-top", "280");
+        $('body').css("margin-top", "280px");
         more = true;
     }
 }

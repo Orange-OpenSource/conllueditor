@@ -11,7 +11,6 @@ if [[ "$1" =~  ^[4].[0-9]+$ ]]; then
     NEWESTJAR=$TARGETDIR/ConlluEditor-$1-jar-with-dependencies.jar
     shift
 else
-    #echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
     NEWESTJAR=$(ls -tr $TARGETDIR/ConlluEditor-* | grep with-dep | tail -1)
 fi
 
@@ -31,7 +30,7 @@ if [ "$1" == "-r" ]; then
 fi
 
 
-java -cp $NEWESTJAR com.orange.labs.editor.ConlluEditor ${ROOTDIR} $*
+java -cp $NEWESTJAR com.orange.labs.editor.ConlluEditor ${ROOTDIR} "$@"
 
 
 

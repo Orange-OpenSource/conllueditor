@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.5 as of 30th July 2019
+ @version 1.12.6 as of 28th August 2019
  */
 package com.orange.labs.conllparser;
 
@@ -82,6 +82,9 @@ public class ConllWord {
 
     private static Pattern number = Pattern.compile("\\d{1,3}(#\\d{3})+");
     public static final boolean DEBUG = false;
+    public static boolean RELAXED = false; // if true, we correct errors in conllu file which are non ambiguous
+    // if head == id --> set head to 0
+    // empty columns --> set to "_"
 
     private int partOfChunk = 0; // 0 no chunk calculated
     // this word is a wh question pronoun
@@ -158,7 +161,7 @@ public class ConllWord {
     }
 
     public ConllWord(String conllline, Set<Annotation> lastannots) throws ConllException {
-        this(conllline, lastannots, 0);
+        this(conllline, lastannots, 0, -1);
     }
 
     public ConllWord(String form) {
@@ -195,7 +198,7 @@ public class ConllWord {
     }
 
     /*    @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé deux colonne au format CONLL "normal"   */
-    public ConllWord(String conllline, Set<Annotation> lastannots, int shift) throws ConllException {
+    public ConllWord(String conllline, Set<Annotation> lastannots, int shift, int linenumber) throws ConllException {
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
         String[] elems = conllline.split("\t");
@@ -203,7 +206,7 @@ public class ConllWord {
         //System.err.println("SHIFT " + shift + "  LEN " +  elems.length + "\t" + conllline);
         //System.err.println("     " + elems.length);
         if (elems.length < 8 + shift) {
-            throw new ConllException("invalid line: '" + conllline + "'");
+            throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'");
         }
         //System.out.println("L:"+conllline);
         String[] idelems = elems[shift].split("[\\.-]");
@@ -240,7 +243,7 @@ public class ConllWord {
         }
 
         if (form.isEmpty()) {
-            throw new ConllException("empty form. Use '" + EmptyColumn + "': " + conllline);
+            throw new ConllException("empty form. Use '" + EmptyColumn + "' in line (" + linenumber + "): " + conllline);
         }
 
         misc = new LinkedHashMap<>();
@@ -256,17 +259,35 @@ public class ConllWord {
         } else {
             lemma = elems[shift + 2];
             if (lemma.isEmpty()) {
-                throw new ConllException("empty lemma. Use '" + EmptyColumn + "': " + conllline);
+                if (RELAXED) {
+		    lemma = EmptyColumn;
+		    System.err.println("lemma column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
+		}
+                else {
+		    throw new ConllException("empty lemma. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
+		}
             }
 
             upostag = elems[shift + 3];
             if (upostag.isEmpty()) {
-                throw new ConllException("empty upostag. Use '" + EmptyColumn + "': " + conllline);
+                if (RELAXED) {
+		    upostag = EmptyColumn;
+		    System.err.println("upostag column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
+		}
+                else {
+		    throw new ConllException("empty upostag. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
+		}
             }
 
             xpostag = elems[shift + 4];
             if (xpostag.isEmpty()) {
-                throw new ConllException("empty xpostag. Use '" + EmptyColumn + "': " + conllline);
+                if (RELAXED) {
+		    xpostag = EmptyColumn;
+		    System.err.println("xpostag column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
+		}
+                else {
+		    throw new ConllException("empty xpostag. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
+		}
             }
 
             if (orderfeatures) {
@@ -274,10 +295,23 @@ public class ConllWord {
             } else {
                 features = new LinkedHashMap<>();
             }
+	    if (elems[shift + 5].isEmpty()) {
+                if (RELAXED) {
+		    elems[shift + 5] = EmptyColumn;
+		    System.err.println("feature column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
+		} else {
+		    throw new ConllException("empty features. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
+		}
+	    }
             this.setFeatures(elems[shift + 5]);
 
             if (elems[shift + 6].isEmpty()) {
-                throw new ConllException("empty head. Use '" + EmptyColumn + "' or head number: " + conllline);
+                if (RELAXED) {
+                   head = 0;
+                   System.err.println("head id is empty. Set to 0 in line (" + linenumber +") \"" + conllline + '"');
+                } else {
+		    throw new ConllException("empty head. Use '" + EmptyColumn + "' or head number in line (" + linenumber +") \"" + conllline + '"');
+		}
             }
             if (elems[shift + 6].equals(EmptyColumn)) {
                 head = -1;
@@ -285,17 +319,33 @@ public class ConllWord {
                 try {
                     head = Integer.parseInt(elems[shift + 6]);
                 } catch (NumberFormatException e) {
-                    throw new ConllException("head id must be a number: " + conllline);
+                    if (RELAXED) {
+                      head = 0;
+                      System.err.println("head id is no number. Set to 0 in line (" + linenumber +") \"" + conllline + '"');
+                    } else {
+			throw new ConllException("head id must be a number in line (" + linenumber +") \"" + conllline + '"');
+		    }
                 }
             }
 
             if (head == id && head != 0) {
-                throw new ConllException("head id cannot be id: " + conllline);
+                if (RELAXED) {
+                   head = 0;
+                   System.err.println("head id == word id. Set to 0 in line (" + linenumber +") \"" + conllline + '"');
+                } else {
+		    throw new ConllException("head id must be different from word id in line (" + linenumber +") \"" + conllline + '"');
+		}
             }
 
             deplabel = elems[shift + 7];
             if (deplabel.isEmpty()) {
-                throw new ConllException("empty deplabel. Use '" + EmptyColumn + "': " + conllline);
+                if (RELAXED) {
+		    deplabel = EmptyColumn;
+		    System.err.println("deplabel column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
+		}
+                else {
+		    throw new ConllException("empty deplabel. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
+		}
             }
 
             whquestion = false;
@@ -1183,7 +1233,7 @@ public class ConllWord {
         }
     }
 
-    /** set the spaces afterthe token, return true, if the key was Soace(s)After */
+    /** set the spaces afterthe token, return true, if the key was Space(s)After */
     private boolean setSpacesAfter(String misckey, String miscval) {
         if (misckey.equals("SpaceAfter") && miscval.equals("No")) {
             spacesAfter = "";

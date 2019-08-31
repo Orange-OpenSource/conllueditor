@@ -28,12 +28,13 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.4 as of 29th July 2019
+ @version 1.12.6 as of 28th August 2019
  */
 package com.orange.labs.conllparser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,7 +86,7 @@ public class ConllSentence {
      * @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé
      * deux colonne au format CONLL "normal"
      */
-    public ConllSentence(List<String> conlllines, Integer shift) throws ConllException {
+    public ConllSentence(List<AbstractMap.SimpleEntry<Integer, String>> conlllines, Integer shift) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
         this.shift = shift;
         parse(conlllines);
@@ -94,8 +95,12 @@ public class ConllSentence {
     public ConllSentence(String conllstring, int shift) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
         this.shift = shift;
-
-        parse(new ArrayList<>(Arrays.asList(conllstring.split("\n"))));
+	List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
+	int ct = 0;
+	for (String line : conllstring.split("\n")) {
+	    sentenceLines.add(new AbstractMap.SimpleEntry(ct, line));
+	}
+	parse(sentenceLines);
     }
 
     public ConllSentence(List<ConllWord> cw) {
@@ -149,14 +154,15 @@ public class ConllSentence {
         sentid = orig.sentid;
     }
 
-    private void parse(List<String> conlllines) throws ConllException {
+    private void parse(List<AbstractMap.SimpleEntry<Integer, String>> conlllines) throws ConllException {
         words = new ArrayList<>();
         frames = new HashMap<>();
         comments = new ArrayList<>();
         hasEnhancedDeps = false;
         Set<Annotation> lastAnnots = null;
 
-        for (String line : conlllines) {
+        for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
+	    String line = cline.getValue();
             if (line.startsWith("#")) {
                 if (line.startsWith("# newpar")) {
                     newpar = line.substring(8).trim();
@@ -172,11 +178,11 @@ public class ConllSentence {
             String[] fields = line.split("\t", shift + 1);
             //System.err.println("LINE\t" + line + " ");
             if (fields.length < shift + 1) {
-                System.err.println("WARNING: ignoring short line: " + line);
+                System.err.format("WARNING: ignoring short line %d: \"%s\"\n", cline.getKey(), line);
                 continue;
             }
 
-            ConllWord w = new ConllWord(line, lastAnnots, shift);
+            ConllWord w = new ConllWord(line, lastAnnots, shift, cline.getKey());
 
             if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                 hasEnhancedDeps = true;

@@ -1,3 +1,9 @@
+Version 1.12.6
+- conlluedit.sh accepts filenames with spaces
+- relaxed mode (corrects some formal errors in conllu-file)
+- show linenumbers in error messages
+- layout problem corrected
+
 Version 1.12.5
 - searching chaines of deprels (up and down) corrected
 

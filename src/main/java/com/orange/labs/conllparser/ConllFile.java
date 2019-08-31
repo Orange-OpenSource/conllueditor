@@ -46,6 +46,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import com.google.gson.JsonObject;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -125,13 +127,14 @@ public class ConllFile {
         BufferedReader br = new BufferedReader(new InputStreamReader(ips, StandardCharsets.UTF_8));
         sentences = new ArrayList<>();
 
-        List<String> sentenceLines = new ArrayList<>();
+        List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
         int countWords = 0; // count only non-comment lines
         String line;
         // on lit des commentaires dans le fichier CONLL qui sont uniquement utiles pour Gift
         boolean showgrana = true;
         boolean showID = true;
         ctline = 0;
+
         try {
             while ((line = br.readLine()) != null) {
                 //System.out.println("LINE1:" + line);
@@ -141,8 +144,7 @@ public class ConllFile {
                         processSentence(sentenceLines, shift, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID);
                         countWords = 0;
                     }
-                } else //System.out.println("LINE2:" + line);
-                {
+                } else {
                     if (line.startsWith("#")) {
                         if (line.startsWith("#NOGRANA")) {
                             showgrana = false;
@@ -153,7 +155,7 @@ public class ConllFile {
                         } else if (line.startsWith("#ID")) {
                             showID = true;
                         }
-                        sentenceLines.add(line); // we add comments line to sentence to be able to reproduce them in output
+			sentenceLines.add(new AbstractMap.SimpleEntry(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
                     } else {
 
                         // il faut ignoré les lignes qui ne sont pas en format CONLL.
@@ -163,7 +165,7 @@ public class ConllFile {
                         if (elems.length >= 8 + shift && !elems[shift].isEmpty() && Character.isDigit(elems[shift].charAt(0))) {
                             // supprimer les lignes commentaires ou autres
                             //System.out.println("ADDING " + line);
-                            sentenceLines.add(line);
+                            sentenceLines.add(new AbstractMap.SimpleEntry(ctline, line));
                             countWords++;
                         } else {
                             //System.err.println("WARNING: incorrect line ignored: (line " + ctline + "): " + line);
@@ -176,14 +178,6 @@ public class ConllFile {
             if (!sentenceLines.isEmpty() && countWords > 0) {
                 processSentence(sentenceLines, shift, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget,
                         showgrana, showID);
-//                ConllSentence c = new ConllSentence(sentenceLines, shift);
-//                if (!ignoreSentencesWithoutAnnot || c.isAnnotated()) {
-//                    if (!ignoreSentencesWithoutTarget || c.hasTargets()) {
-//                        sentences.add(c);
-//                    }
-//                }
-//                c.setShowID(showID);
-//                c.setShowgrana(showgrana);
             }
         } catch (ConllException e) {
             throw new ConllException(e.getMessage() + " (line " + ctline + ")");
@@ -194,7 +188,7 @@ public class ConllFile {
      * on a lu des lignes qui font une phrases/règle et on est arrivé à la fin
      * du block, maintenant on les traite.
      */
-    private void processSentence(List<String> sentenceLines, int shift,
+    private void processSentence(List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines, int shift,
             boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget,
             boolean showgrana, boolean showID) throws ConllException {
         // on a lu un bloc de lignes CONLL qui font une phrase
@@ -203,7 +197,6 @@ public class ConllFile {
             c = new ConllSentence(sentenceLines, shift);
         } else {
             try {
-
                 Class[] cargs = new Class[2];
                 cargs[0] = List.class;
                 cargs[1] = Integer.class;

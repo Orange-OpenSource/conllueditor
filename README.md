@@ -138,6 +138,7 @@ Point your navigator  to `http://localhost:8888` .
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
 especially if the file is on a network drive.
+* `--relax` accepts some formal errors in the CoNLL-U file and corrects them (empty column instead of `_`, invalid head id set to 0)
 * `--noedit` deactivates editing, useful to browse an existing treebank
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
@@ -210,8 +211,8 @@ Alternatively, enhanced dependenclies can be edited manually via the word edit m
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
 To be on the safe side, start a server for every annotator on a different port/machine.
 After each modification the edited file is saved:
-* under a different filename (adding `.2`) in the same directory
 * if the edited file is in a git versioned directory, each change is git-commited using the sentence number and the word id in the commit message.
+* if not, it is saved under a different filename (adding `.2`) in the same directory, the original file is not modified.
 
 # Validation
 The ConlluEditor is able to load run a validation script on the current sentence. The programme and its arguments
