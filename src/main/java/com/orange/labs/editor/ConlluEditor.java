@@ -1123,7 +1123,7 @@ public class ConlluEditor {
                 }
                 return formatErrMsg("No more redo possible", currentSentenceId);
 
-            } else if (command.startsWith("mod ed")) {
+            } else if (command.startsWith("mod ed ")) {
                 // enhanced deps
                 // we expect
                 //        "mod ed add <dep> <head> nsubj"
@@ -1437,7 +1437,7 @@ public class ConlluEditor {
 
                 }
             } else {
-                String backUpFilename = filename + ".2";
+                String backUpFilename = filename + suffix;
                 //System.err.println("Write ddddd " );
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(backUpFilename), StandardCharsets.UTF_8));
                 bw.write(cfile.toString());

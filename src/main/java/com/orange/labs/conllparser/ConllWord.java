@@ -889,8 +889,18 @@ public class ConllWord {
                 jword.addProperty("type", a.getSemanticRole());
                 break;
             }
+        } else if (nonstandardInfo != null) {
+            // TODO change one conllu plus support is OK
+            // for the time being we just display anything in columns > 10 as is, without interpretation
+            int colct = 11;
+            for (String colvalue : nonstandardInfo) {
+                jword.addProperty("col" + colct, colvalue);
+                colct++;
+            }
         }
 
+        
+        
         if (!dependents.isEmpty()) {
             JsonArray jchildren = new JsonArray();
             jword.add("children", jchildren);
