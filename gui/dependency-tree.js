@@ -28,8 +28,8 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.9.0 as of 8th March 2019
-*/
+ @version 1.13.0 as of 3rd September 2019
+ */
 
 var xlink = "http://www.w3.org/1999/xlink";
 var svgNS = "http://www.w3.org/2000/svg";
@@ -37,11 +37,14 @@ var svgNS = "http://www.w3.org/2000/svg";
 var svgmaxx = 0;
 var svgmaxy = 0;
 
+var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra exist
+
+
 /** sessiner un arbre de dépendance
  @param {type} svg élément svg à remplir
  @param {type} trees une liste des arbres
  @return {undefined}
-*/
+ */
 function drawDepTree(svg, trees, sentencelength, use_deprel_as_type) {
     svgmaxx = 0;
     svgmaxy = 0;
@@ -56,45 +59,55 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type) {
     marker.setAttribute("markerHeight", "13");
     marker.setAttribute("refX", "11");
     marker.setAttribute("refY", "5");
-                        marker.setAttribute("orient", "auto");
-                        defs.appendChild(marker);
-                        var path = document.createElementNS(svgNS, "path");
-                        path.setAttribute("d", "M2,2 L4,5 2,8 L12,5 L2,2");
-                        path.setAttribute("fill", "black");
-                        marker.appendChild(path);
-                        var marker = document.createElementNS(svgNS, "marker");
-                        marker.setAttribute("id", "markerArrowInv");
-                        marker.setAttribute("markerWidth", "13");
-                        marker.setAttribute("markerHeight", "13");
-                        marker.setAttribute("refX", "4");
-                        marker.setAttribute("refY", "5");
-                        marker.setAttribute("orient", "auto");
-                        defs.appendChild(marker);
-                        var path = document.createElementNS(svgNS, "path");
-                        path.setAttribute("d", "M2,5 L12,2 10,5 L12,8 L2,5");
-                        path.setAttribute("fill", "black");
-                        marker.appendChild(path);
-                        svg.setAttribute("xmlns:xlink", xlink);
-                        for (i = 0; i < trees.length; ++i) {
-                // for each head
-                // insert head and all dependants
-    var tree = trees[i];
-    insertNode(svg, "1", tree, 0, 20, tree.indexshift || 0, 0, 0, sentencelength, //useitalic,
-               use_deprel_as_type);
+    marker.setAttribute("orient", "auto");
+    defs.appendChild(marker);
+    var path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", "M2,2 L4,5 2,8 L12,5 L2,2");
+    path.setAttribute("fill", "black");
+    marker.appendChild(path);
+    var marker = document.createElementNS(svgNS, "marker");
+    marker.setAttribute("id", "markerArrowInv");
+    marker.setAttribute("markerWidth", "13");
+    marker.setAttribute("markerHeight", "13");
+    marker.setAttribute("refX", "4");
+    marker.setAttribute("refY", "5");
+    marker.setAttribute("orient", "auto");
+    defs.appendChild(marker);
+    var path = document.createElementNS(svgNS, "path");
+    path.setAttribute("d", "M2,5 L12,2 10,5 L12,8 L2,5");
+    path.setAttribute("fill", "black");
+    marker.appendChild(path);
+    svg.setAttribute("xmlns:xlink", xlink);
+    extracolumnstypes.clear();
+
+    for (i = 0; i < trees.length; ++i) {
+        // for each head
+        // insert head and all dependants
+        var tree = trees[i];
+        insertNode(svg, "1", tree, 0, 20, tree.indexshift || 0, 0, 0, sentencelength, //useitalic,
+                use_deprel_as_type);
     }
 
     svgmaxy += 50; // + 30 pour les mots en dessous
-    svg.setAttribute('height', svgmaxy + 30);
-    svg.setAttribute('width', svgmaxx + 40);
+
     // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
     svg.setAttribute('onmousedown', "ModifyTree(evt)");
     //svg.setAttribute('onmouseup', "MakeRoot(evt)");
 
-    // insert words at the bottom of the tree
+    // insert words at the bottom of the tree (and MWEs if activated)
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
         insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
+        if (showextra) insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
     }
+
+    // add space for extracolumns
+    if (showextra && extracolumnstypes.size > 0) {
+        svgmaxy += 40 + extracolumnstypes.size*20;
+    }
+    svg.setAttribute('height', svgmaxy + 30);
+    svg.setAttribute('width', svgmaxx + 40);
+
     return defs;
 }
 
@@ -117,15 +130,15 @@ function setSize(width, height) {
  * @param {type} originy coordinné y de la tête ou 0
  * @param {sentencelength} longueur de la phrase: si != 0 on écrit de droite à gauche
  * @returns {undefined}
-*/
+ */
 function insertNode(svg, curid, item, head, level, indexshift, originx, originy, sentencelength = 0, //useitalic = true,
-                   use_deprel_as_type = false) {
+        use_deprel_as_type = false) {
     //var hor = 90;
     //console.log("item " + item);
     //console.log("cc " + curid)
     //alert("insNode hor:" + hor + " v:" + vertspace);
     var index = item.position - indexshift;
-    var x = index * hor - hor/2;
+    var x = index * hor - hor / 2;
     //console.log("index " + index + " hor " + hor + " x " + x);
 
     if (sentencelength > 0) {
@@ -136,14 +149,28 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     //var vertdiff = 12;
 
     var levelinit = level + 5;
-    //level = drawWord(item, x, hor, levelinit, curid, svg);
+
+
+    if (showextra) {
+        // get all extra columns in this word
+        var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
+        for (var i = 0; i < colNN.length; i++) {
+            extracolumnstypes.add(colNN[i]);
+        }
+    }
+
+
+    // insert word (with, form, lemma, POS etc)
     bottomlevels = drawWord(item, x, hor, levelinit, curid, svg);
+
     level = bottomlevels[1]; // x-level at bottom of word (with features, if present)
     level += 6;
     svgmaxy = Math.max(svgmaxy, level + 1);
     svgmaxx = Math.max(svgmaxx, x + 10);
     // on garde le bas du noeud pour y mettre lies lignes verticales à la fin
     item.yy = level;
+
+
     // faire la ligne entre tete est dépendant
     if (originx != 0 && originy != 0) {
         // si ce n'est pas la tete de la phrase
@@ -157,7 +184,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         if (use_deprel_as_type) {
             //path.setAttribute("stroke-width", "2");
             path.setAttribute('class', item.deprel.replace(/:/, "_"));
-        //} else {
+            //} else {
             //path.setAttribute("stroke-width", "1");
         }
         path.setAttribute("opacity", 1);
@@ -170,12 +197,12 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
             path.setAttribute("d", "M " + x + " " + (levelinit - 1) + " L " + originx + " " + originy);
             path.setAttribute("style", "marker-start: url(#markerArrowInv);");
             path.setAttribute("class", "deprel_followinghead");
-	    path.setAttribute("stroke", "#880088"); // only needed for svg download
+            path.setAttribute("stroke", "#880088"); // only needed for svg download
         } else {
             path.setAttribute("d", "M " + originx + " " + originy + " L " + x + " " + (levelinit - 1));
             path.setAttribute("style", "marker-end: url(#markerArrow);");
             path.setAttribute("class", "deprel_precedinghead");
-	    path.setAttribute("stroke", "blue"); // only needed for svg download
+            path.setAttribute("stroke", "blue"); // only needed for svg download
         }
 
         svg.appendChild(path);
@@ -195,11 +222,11 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         deprelpath.setAttribute("fill", "#008800"); // only needed for svg download
         // textpath side only supported in Firefox >= 61
         /*
-        if (x > originx)
-            deprelpath.setAttribute("side", "left");
-        else
-            deprelpath.setAttribute("side", "right");
-        */
+         if (x > originx)
+         deprelpath.setAttribute("side", "left");
+         else
+         deprelpath.setAttribute("side", "right");
+         */
         if (item.deprelerror == 1) {
             //deprelpath.setAttribute("fill", "red");
             deprelpath.setAttribute("class", "words deprel worderror");
@@ -220,31 +247,30 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
             deprelpath.setAttribute('startOffset', "40%");
         else
             deprelpath.setAttribute('startOffset', "60%");
-            deprelpath.textContent = item.deprel;
-            depreltext.appendChild(deprelpath);
-            svg.appendChild(depreltext);
-        }
-        else {
-            var depreltext = document.createElementNS(svgNS, "text");
-            depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
-            depreltext.setAttribute("class", "deprel words");
-            //depreltext.setAttribute("font-size", "1rem");
-            //depreltext.setAttribute("font-size", "12");
+        deprelpath.textContent = item.deprel;
+        depreltext.appendChild(deprelpath);
+        svg.appendChild(depreltext);
+    } else {
+        var depreltext = document.createElementNS(svgNS, "text");
+        depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
+        depreltext.setAttribute("class", "deprel words");
+        //depreltext.setAttribute("font-size", "1rem");
+        //depreltext.setAttribute("font-size", "12");
 
-            depreltext.setAttribute('x', x);
-            depreltext.setAttribute('y', 10);
-            depreltext.setAttribute("text-anchor", "middle");
-            depreltext.textContent = item.deprel;
-            svg.appendChild(depreltext);
-        }
-
-        if (item.children) {
-        for (var i = 0; i < item.children.length; i++) {
-           //alert(item.children[i]);
-            insertNode(svg, curid, item.children[i], item.id, level + vertspace, indexshift, x, level, sentencelength, //useitalic,
-                      use_deprel_as_type);
-        }
+        depreltext.setAttribute('x', x);
+        depreltext.setAttribute('y', 10);
+        depreltext.setAttribute("text-anchor", "middle");
+        depreltext.textContent = item.deprel;
+        svg.appendChild(depreltext);
     }
+
+    if (item.children) {
+        for (var i = 0; i < item.children.length; i++) {
+            //alert(item.children[i]);
+            insertNode(svg, curid, item.children[i], item.id, level + vertspace, indexshift, x, level, sentencelength, //useitalic,
+                    use_deprel_as_type);
+        }
+}
 }
 
 
@@ -265,10 +291,10 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     //console.log("cc " + curid)
 
     var index = item.position - indexshift;
-    var x = index * hor - hor/2;
+    var x = index * hor - hor / 2;
     if (sentencelength > 0) {
         // we write the tree from right to left
-        x = ((sentencelength ) * hor) - x;
+        x = ((sentencelength) * hor) - x;
     }
     // en arrivant ici, on a déssiné tout l'arbre. Maintenant on connait la profondeur de l'arbre et on peut écrire les mots en bas avec des ligne
     // du noeud vers le mot
@@ -285,7 +311,8 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     wordtext.setAttribute("text-anchor", "middle");
     wordtext.textContent = item.form;
     svg.appendChild(wordtext);
-    var wordy = svgmaxy - 30;
+
+    // show word ID
     var idtext = document.createElementNS(svgNS, "text");
     idtext.setAttribute("id", "id" + curid + "_" + item.id);
     idtext.setAttribute("font-size", "10");
@@ -297,6 +324,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     svg.appendChild(idtext);
     //level += vertdiff;
 
+    // vertical line between tree and bottom word
     var path = document.createElementNS(svgNS, "path");
     var pathvar = "pathb" + curid + "_" + item.id + "_" + level;
     path.setAttribute("id", pathvar);
@@ -307,7 +335,11 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     path.setAttribute("fill", "none");
     path.setAttribute("d", "M " + x + " " + item.yy + " L " + x + " " + (svgmaxy - 15));
     svg.appendChild(path);
+
+
+    // multi word entites
     if (item.mwe != undefined) {
+        var wordy = svgmaxy - 30;
         var mwe = document.createElementNS(svgNS, "path");
         var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;
         mwe.setAttribute("id", mwepathvar);
@@ -347,6 +379,4 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
             insertBottomWord(svg, curid, item.children[i], 0 /*level*/, indexshift, sentencelength, useitalic);
         }
     }
-
 }
-

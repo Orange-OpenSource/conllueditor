@@ -78,7 +78,6 @@ public class TestConlluEditor {
 
     private void name(String n) {
         System.out.format("\n***** Testing: %S ****\n", n);
-
     }
 
     @Test
@@ -99,7 +98,7 @@ public class TestConlluEditor {
 
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
-        Assert.assertEquals("LaTeX output incorrect",
+        Assert.assertEquals(String.format("LaTeX output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
@@ -131,7 +130,7 @@ public class TestConlluEditor {
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString()+"\n", StandardCharsets.UTF_8, true);
 
-        Assert.assertEquals("CoNLL-U output incorrect",
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
@@ -148,7 +147,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/test.mod.conllu");
         URL res = this.getClass().getResource("/test.conllu.2"); // modified file
-        Assert.assertEquals("CoNLL-U output incorrect",
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
@@ -163,7 +162,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/test.split-mwt.conllu");
         URL res = this.getClass().getResource("/test.conllu.5"); // modified file
-        Assert.assertEquals("CoNLL-U output incorrect",
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }    
@@ -178,7 +177,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/test.split-ew.conllu");
         URL res = this.getClass().getResource("/test.conllu.6"); // modified file
-        Assert.assertEquals("CoNLL-U output incorrect",
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     } 
@@ -194,7 +193,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/test.split-ed.conllu");
         URL res = this.getClass().getResource("/test.conllu.7"); // modified file
-        Assert.assertEquals("CoNLL-U output incorrect",
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     } 
@@ -213,7 +212,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/read.json");
 
-        Assert.assertEquals("Read return incorrect",
+        Assert.assertEquals(String.format("Read return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
@@ -232,7 +231,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/read_16.json");
 
-        Assert.assertEquals("Read return incorrect",
+        Assert.assertEquals(String.format("read return code incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
@@ -252,7 +251,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/findlemma.json");
 
-        Assert.assertEquals("Find lemma return incorrect",
+        Assert.assertEquals(String.format("Find lemma return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
@@ -273,7 +272,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/findform.json");
 
-        Assert.assertEquals("Find form return incorrect",
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
@@ -294,7 +293,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/finduposKO.json");
 
-        Assert.assertEquals("Find upos error return incorrect",
+        Assert.assertEquals(String.format("Find upos error return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
@@ -311,7 +310,7 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/test.mod.undo.conllu");
         URL res = this.getClass().getResource("/test.conllu.3");
-        Assert.assertEquals("mod undo output incorrect",
+        Assert.assertEquals(String.format("mod undo output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
@@ -327,7 +326,8 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("/test.add_ed.conllu");
         URL res = this.getClass().getResource("/test.conllu.4");
-        Assert.assertEquals("mod undo output incorrect",
+        
+        Assert.assertEquals(String.format("mod ed incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }

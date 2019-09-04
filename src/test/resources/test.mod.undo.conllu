@@ -1,6 +1,6 @@
 # sent_id = fr-ud-dev_00001
 # sentence 0
-# text = Aviator, un film sur la vie de Hughes.
+# text = Aviator, un film sur la vie de Howard Hughes.
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No	B:Work	B:Coref1
 2	,	,	PUNCT	_	_	1	punct	_	_
 3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_	_	B:Coref1
@@ -9,8 +9,9 @@
 6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
 7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
 8	de	de	ADP	_	_	9	case	_	_
-9	Hughes	Hughes	PROPN	_	_	7	nmod	_	SpaceAfter=No	B:Person
-10	.	.	PUNCT	_	_	1	punct	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_	B:Person
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No	I:Person
+11	.	.	PUNCT	_	_	1	punct	_	_
 
 # sent_id = fr-ud-dev_00002
 # sentence 1

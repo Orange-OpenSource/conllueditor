@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.6 as of 28th August 2019
+ @version 1.13.0 as of 3rd September 2019
  */
 
 
@@ -212,12 +212,12 @@ function ToggleSearch() {
     //$("#act_search").show();
     // }
     if (more) {
-        $("#act_search").text("show search");
+        $("#act_search").text("more");
         $(".search").hide();
         $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         more = false;
     } else {
-        $("#act_search").text("hide search");
+        $("#act_search").text("less");
         $(".search").show();
         $('body').css("margin-top", "280px");
         more = true;
@@ -462,6 +462,7 @@ var flatgraph = false;
 var showfeats = false;
 var showmisc = false;
 var showr2l = false;
+var showextra = false;
 var backwards = false;
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var editing_enhanced = false;
@@ -942,6 +943,15 @@ $(document).ready(function () {
                 $(this).removeClass('active');
             }
             showr2l = !showr2l;
+            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+            sendmodifs(datadico);        }
+        else if (this.id == "extracols") {
+            if (!showextra) {
+                $(this).addClass('active');
+            } else {
+                $(this).removeClass('active');
+            }
+            showextra = !showextra;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id == "backwards") {

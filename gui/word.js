@@ -1,21 +1,21 @@
 /** This library is under the 3-Clause BSD License
-
-Copyright (c) 2018, Orange S.A.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-  1. Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-
-  2. Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
-     and/or other materials provided with the distribution.
-
-  3. Neither the name of the copyright holder nor the names of its contributors
-     may be used to endorse or promote products derived from this software without
-     specific prior written permission.
-
+ 
+ Copyright (c) 2018, Orange S.A.
+ 
+ Redistribution and use in source and binary forms, with or without modification,
+ are permitted provided that the following conditions are met:
+ 
+ 1. Redistributions of source code must retain the above copyright notice,
+ this list of conditions and the following disclaimer.
+ 
+ 2. Redistributions in binary form must reproduce the above copyright notice,
+ this list of conditions and the following disclaimer in the documentation
+ and/or other materials provided with the distribution.
+ 
+ 3. Neither the name of the copyright holder nor the names of its contributors
+ may be used to endorse or promote products derived from this software without
+ specific prior written permission.
+ 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,13 +26,12 @@ are permitted provided that the following conditions are met:
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+ 
  @author Johannes Heinecke
- @version 1.11.2 as of 9th Mai 2019
-*/
+ @version 1.13.0 as of 3rd September 2019
+ */
 
 var svgNS = "http://www.w3.org/2000/svg";
-
 //function createClass(name,rules){
 //    var style = document.createElement('style');
 //    style.type = 'text/css';
@@ -56,16 +55,17 @@ var nodes = {}; // id: {item: svg, types [AGENT, PATIENT]}
 function drawWord(item, x, hor, levelinit, curid, svg) {
     var vertdiff = 12;
     var level = levelinit;
-    var bottomlevels={}; // keep the height of the word with and without features (needed in dependency-flat)
+    var bottomlevels = {}; // keep the height of the word with and without features (needed in dependency-flat)
 
     var formtext = document.createElementNS(svgNS, "text");
     formtext.setAttribute("id", "word" + curid + "_" + item.id);
     formtext.setAttribute("class", "words wordform");
     formtext.setAttribute("font-size", "12");
-    var fs =  parseFloat(window.getComputedStyle(formtext).getPropertyValue('font-size'));
+    var fs = parseFloat(window.getComputedStyle(formtext).getPropertyValue('font-size'));
     //console.log("zzz " + window.getComputedStyle(formtext, null).getPropertyValue('font-size'));
-    if (!fs) fs = 12; // for chrome
-    level += fs*1.2; // start in function of fontsize
+    if (!fs)
+        fs = 12; // for chrome
+    level += fs * 1.2; // start in function of fontsize
     formtext.setAttribute("font-weight", "bold");
     formtext.setAttribute('x', x);
     formtext.setAttribute('y', level);
@@ -74,8 +74,8 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     if (item.formhighlight == 1) {
         formtext.setAttribute("class", "words wordform highlight");
-	highlightX = x;
-	highlightY = level;
+        highlightX = x;
+        highlightY = level;
     }
 
 
@@ -83,9 +83,10 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     lemmatext.setAttribute("id", "lemma" + curid + "_" + item.id);
     lemmatext.setAttribute("class", "words wordlemma");
     lemmatext.setAttribute("font-size", "10");
-    fs =  parseFloat(window.getComputedStyle(lemmatext).getPropertyValue('font-size'));
-     if (!fs) fs = 10; // for chrome
-    level += fs*1.2;
+    fs = parseFloat(window.getComputedStyle(lemmatext).getPropertyValue('font-size'));
+    if (!fs)
+        fs = 10; // for chrome
+    level += fs * 1.2;
     if (useitalic)
         lemmatext.setAttribute("font-style", "italic");
     lemmatext.setAttribute('x', x);
@@ -95,8 +96,8 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     if (item.lemmahighlight == 1) {
         lemmatext.setAttribute("class", "words wordlemma highlight");
-	highlightX = x;
-	highlightY = level;
+        highlightX = x;
+        highlightY = level;
     }
 
 
@@ -105,8 +106,9 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     idtext.setAttribute("class", "words wordid");
     idtext.setAttribute("font-size", "10");
     fs = parseFloat(window.getComputedStyle(idtext).getPropertyValue('font-size'));
-     if (!fs) fs = 10; // for chrome
-    level += fs*1.2;
+    if (!fs)
+        fs = 10; // for chrome
+    level += fs * 1.2;
     idtext.setAttribute('x', x);
     idtext.setAttribute('y', level);
     idtext.setAttribute("text-anchor", "middle");
@@ -118,8 +120,9 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     upostext.setAttribute("font-size", "10");
     upostext.setAttribute("class", "words wordupos");
     fs = parseFloat(window.getComputedStyle(upostext).getPropertyValue('font-size'));
-     if (!fs) fs = 10; // for chrome
-    level += fs*1.2;
+    if (!fs)
+        fs = 10; // for chrome
+    level += fs * 1.2;
     upostext.setAttribute('x', x);
     upostext.setAttribute('y', level);
     upostext.setAttribute("text-anchor", "middle");
@@ -129,8 +132,8 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     if (item.uposhighlight == 1) {
         upostext.setAttribute("class", "words wordupos highlight");
-	highlightX = x;
-	highlightY = level;
+        highlightX = x;
+        highlightY = level;
     }
     upostext.textContent = item.upos;
 
@@ -142,8 +145,9 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
         xpostext.setAttribute("class", "words wordxpos");
 
         fs = parseFloat(window.getComputedStyle(xpostext).getPropertyValue('font-size'));
-         if (!fs) fs = 10; // for chrome
-        level += fs*1.2;
+        if (!fs)
+            fs = 10; // for chrome
+        level += fs * 1.2;
 
         xpostext.setAttribute('x', x);
         xpostext.setAttribute('y', level);
@@ -156,17 +160,17 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
         if (item.xposhighlight == 1) {
             xpostext.setAttribute("class", "words wordxpos highlight");
-	    highlightX = x;
-	    highlightY = level;
+            highlightX = x;
+            highlightY = level;
         }
     }
 
     // finaly calculate surrounding box
     var rect = document.createElementNS(svgNS, "rect");
-    rect.setAttribute("id", "rect_" + item.id + "_" + item.upos + "_" +  item.xpos + "_" +  item.lemma + "_"+  item.form + "_" + item.deprel);
+    rect.setAttribute("id", "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
     rect.setAttribute('x', x - ((hor - 6) / 2));
     rect.setAttribute('y', levelinit);
-    rect.setAttribute('height', level-levelinit+6);
+    rect.setAttribute('height', level - levelinit + 6);
     rect.setAttribute('width', hor - 6);
     rect.setAttribute('stroke', 'black');
     rect.setAttribute('fill', '#fffff4'); // only needed for svg download, since the download does not add depgraph.css
@@ -177,7 +181,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     } else if (item.chunk && item.chunk != 0) {
         rect.setAttribute('class', "chunk" + item.chunk % 6);
     } else {
-        // needed for ConllEditor
+        // needed for ConlluEditor
         if (item.token == "empty") {
             rect.setAttribute('class', "wordnode emptynode");
             rect.setAttribute('stroke-dasharray', '10 5');
@@ -200,9 +204,9 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     }
 
 
-   bottomlevels[0] = level;
-   bottomlevels[1] = level;
-   if (showfeats && item.feats != undefined) { // display morph-syntactical features if active
+    bottomlevels[0] = level;
+    bottomlevels[1] = level;
+    if (showfeats && item.feats != undefined) { // display morph-syntactical features if active
         level += vertdiff * 2;
         for (var f in item.feats) {
 //            if (item.feats[f] == "_") {
@@ -225,10 +229,11 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
             ftext.setAttribute("id", "ftext" + curid + "_" + item.id);
             ftext.setAttribute("class", "wordfeature");
             ftext.setAttribute("font-size", "10");
-             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
-              if (!fs) fs = 10; // for chrome
-              if (f > 0)
-                level += fs*1.2;
+            fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
+            if (!fs)
+                fs = 10; // for chrome
+            if (f > 0)
+                level += fs * 1.2;
             ftext.setAttribute('x', x - 5);
             ftext.setAttribute('y', level);
             ftext.setAttribute("text-anchor", "end");
@@ -279,15 +284,16 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
             ftext.setAttribute("id", "mtext" + curid + "_" + item.id);
             ftext.setAttribute("class", "wordfeature");
             ftext.setAttribute("font-size", "10");
-             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
-              if (!fs) fs = 10; // for chrome
-              if (f > 0)
-                level += fs*1.2;
+            fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
+            if (!fs)
+                fs = 10; // for chrome
+            if (f > 0)
+                level += fs * 1.2;
             ftext.setAttribute('x', x - 5);
             ftext.setAttribute('y', level);
             ftext.setAttribute("text-anchor", "end");
             ftext.setAttribute("fill", "#440000");
-            ftext.textContent = key; 
+            ftext.textContent = key;
             svg.appendChild(ftext);
 
             var septext = document.createElementNS(svgNS, "text");
@@ -317,6 +323,170 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     //return level;
     return bottomlevels;
+}
+
+
+
+/** calculate a hashcode (needed to define the color for the extra colums)
+ *
+ * @return {Number}
+ */
+String.prototype.hashCode = function () {
+    var hash = 0, i, chr;
+    if (this.length === 0)
+        return hash;
+    for (i = 0; i < this.length; i++) {
+        chr = this.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+};
+
+
+/** display contents of columns > 10 underneath the words
+ *
+ * @param {type} svg    svg to add the object
+ * @param {type} curid  ide of current word
+ * @param {type} item   the word as JSON object (sent drom server)
+ * @param {type} level  level of recursion (not needed here)
+ * @param {type} indexshift
+ * @param {type} sentencelength if >0: right2left
+ */
+function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength = 0) {
+    //var hor = 90;
+    //console.log("item ", item);
+    //console.log("cc " + curid)
+
+    var index = item.position - indexshift;
+    var x = index * hor - hor / 2;
+    if (sentencelength > 0) {
+        // we write the tree from right to left
+        x = ((sentencelength) * hor) - x;
+    }
+    // we try all columtypes of this sentences for each word and draw them
+    var ypos = 50 // start y difference under word
+    for (coltype of extracolumnstypes) {
+        if (item[coltype] == undefined)
+            continue;
+        if (item[coltype] == "_") {
+            // nothing to show, but keep empty space
+            ypos += 30;
+            continue;
+        }
+
+        // calculate background color (cut BIO prefixes if present)
+        if (item[coltype][1] == ':')
+            colvalue = item[coltype].substr(2);
+        else
+            colvalue = item[coltype];
+        //console.log("QQQ", item[coltype], colvalue, colvalue.hashCode());
+        var hcode = colvalue.hashCode();
+        var red = Math.abs(hcode % 148);
+        var blue = Math.abs((hcode >> 4) % 148);
+        var green = Math.abs((hcode >> 10) % 148);
+
+        color = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) + ("0" + blue.toString(16)).substr(-2);
+        //console.log("TTT", colvalue,  red, blue, green, color);
+        var rect = document.createElementNS(svgNS, "rect");
+        rect.setAttribute("id", "rect_" + item.id + "_" + coltype);
+        rect.setAttribute('x', x - ((hor - 8) / 2));
+        rect.setAttribute('y', svgmaxy + ypos - 18);
+        rect.setAttribute('height', 22);
+        rect.setAttribute('width', hor - 8);
+        rect.setAttribute('stroke', color);
+        rect.setAttribute('fill', color); // only needed for svg download, since the download does not add depgraph.css
+        rect.setAttribute("rx", "5");
+        rect.setAttribute("ry", "25");
+        svg.appendChild(rect);
+
+
+        var coltext = document.createElementNS(svgNS, "text");
+        coltext.setAttribute("id", coltype + "_" + curid + "_" + item.id);
+        //wordtext.setAttribute("class", "words word");
+        coltext.setAttribute("font-size", "14");
+        //if (useitalic)
+        //   wordtext.setAttribute("font-style", "italic");
+        //else
+        //     wordtext.setAttribute("font-weight", "bold");
+        coltext.setAttribute('x', x);
+        coltext.setAttribute('y', svgmaxy + ypos);
+        coltext.setAttribute("fill", "white");
+        ypos += 30;
+        coltext.setAttribute("text-anchor", "middle");
+        coltext.textContent = item[coltype];
+        svg.appendChild(coltext);
+    }
+    /*
+     // show word ID
+     
+     var idtext = document.createElementNS(svgNS, "text");
+     idtext.setAttribute("id", "id" + curid + "_" + item.id);
+     idtext.setAttribute("font-size", "10");
+     idtext.setAttribute("class", "words wordid");
+     idtext.setAttribute('x', x);
+     idtext.setAttribute('y', svgmaxy + vertdiff + 7);
+     idtext.setAttribute("text-anchor", "middle");
+     idtext.textContent = item.id;
+     svg.appendChild(idtext);
+     //level += vertdiff;
+     
+     // vertical line between tree and bottom word
+     var path = document.createElementNS(svgNS, "path");
+     var pathvar = "pathb" + curid + "_" + item.id + "_" + level;
+     path.setAttribute("id", pathvar);
+     path.setAttribute("stroke", "gray");
+     path.setAttribute("stroke-width", "1");
+     path.setAttribute("opacity", 1);
+     path.setAttribute("stroke-dasharray", "3,3");
+     path.setAttribute("fill", "none");
+     path.setAttribute("d", "M " + x + " " + item.yy + " L " + x + " " + (svgmaxy - 15));
+     svg.appendChild(path);
+     
+     
+     // multi word entites
+     if (item.mwe != undefined) {
+     var wordy = svgmaxy - 30;
+     var mwe = document.createElementNS(svgNS, "path");
+     var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;
+     mwe.setAttribute("id", mwepathvar);
+     mwe.setAttribute("stroke", "#888888");
+     mwe.setAttribute("stroke-width", "4");
+     mwe.setAttribute("opacity", 1);
+     mwe.setAttribute("fill", "none");
+     var length = item.mwe.toid - item.mwe.fromid + 1;
+     if (sentencelength > 0) {
+     //mwe.setAttribute("d", "M " + (x - 5 + hor/2) + " " + (wordy) + " l " + (-hor*length + 10) + " " + 0);
+     mwe.setAttribute("d", "M " + (x + 5 - hor * length + hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
+     } else {
+     mwe.setAttribute("d", "M " + (x + 5 - hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
+     }
+     svg.appendChild(mwe);
+     // creer le texte pour cette ligne
+     var mwetext = document.createElementNS(svgNS, "text");
+     mwetext.setAttribute("id", "mwetext" + pathvar);
+     mwetext.setAttribute("font-size", "14");
+     mwetext.setAttribute("dy", "-8");
+     mwetext.setAttribute("text-anchor", "middle");
+     // associer le texte avec la ligne
+     var mwepath = document.createElementNS(svgNS, "textPath");
+     mwepath.setAttributeNS(xlink, "xlink:href", "#" + mwepathvar); // Id of the path
+     mwepath.setAttribute("id", "mwetextpath_" + item.mwe.fromid + "_" + item.mwe.toid);
+     //mwepath.setAttribute("class", "words deprel");
+     mwepath.setAttribute("fill", "#888888");
+     mwepath.setAttribute('startOffset', "50%");
+     mwepath.textContent = item.mwe.form;
+     mwetext.appendChild(mwepath);
+     svg.appendChild(mwetext);
+     }
+     */
+
+    if (item.children) {
+        for (var i = 0; i < item.children.length; i++) {
+            //alert(item.children[i]);
+            insertExtracolumns(svg, curid, item.children[i], 0 /*level*/, indexshift, sentencelength);
+        }
+}
 }
 
 

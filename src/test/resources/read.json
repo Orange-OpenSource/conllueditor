@@ -2,7 +2,7 @@
   "sentenceid": 13,
   "maxsentence": 17,
   "sentence": "Sam fixed lunch and Kim dinner ",
-  "length": 6,
+  "length": 7,
   "changes": 0,
   "tree": [
     {
@@ -46,7 +46,8 @@
           "upos": "PROPN",
           "deprel": "nsubj",
           "chunk": 0,
-          "type": ""
+          "type": "",
+          "col11": "B:Person"
         },
         {
           "position": 3,
@@ -95,6 +96,7 @@
           "deprel": "conj",
           "chunk": 0,
           "type": "",
+          "col11": "B:Person",
           "children": [
             {
               "position": 4,

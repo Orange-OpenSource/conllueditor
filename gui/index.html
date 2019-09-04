@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.12.2 as of 30th Mai 2019
+    version 1.13.0 as of 3rd September 2019
     -->
 
     <head>
@@ -97,15 +97,16 @@
                         <span class="contain"><button class="editbuttons mybutton" id="next">&nbsp;</button> <!--  &gt;&gt; --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="last">&nbsp;</button> <!--  &gt;| --></span>
 
-                        <button class="mycheck mybutton" id="feat2">features</button>
-                        <button class="mycheck mybutton" id="misc2">misc</button>
+                        <button class="mycheck mybutton" id="feat2" title="show morpho-syntactic features">features</button>
+                        <button class="mycheck mybutton" id="misc2" title="show contents of MISC column">misc</button>
                         <button class="mycheck mybutton" id="flat2">flat graph</button>
-                        <button class="mycheck mybutton" id="r2l">display right to left</button>
-
+                        <button class="mycheck mybutton" id="r2l" title="activate for sentennces in Arabic or Hebrew script">right to left</button>
+                        <button class="mycheck mybutton" id="extracols" title="show contents of columns > 10">extra cols</button>
+                        
                         <button class ="editbuttons mybutton editmode" id="save">save file on server</button>
                         <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
 
-                        <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();">hide search</button>
+                        <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();" title="hide/show search fields">less</button>
                     </td>
                 </tr>
 

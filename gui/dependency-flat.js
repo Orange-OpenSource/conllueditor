@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.2 as of 9th Mai 2019
+ @version 1.13.0 as of 3rd September 2019
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -40,6 +40,8 @@ var svgminy = 0;
 var svgmaxy = 0;
 
 var ct = 0;
+
+var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra columns exist
 
 function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type) {
     svgmaxx = 0;
@@ -82,28 +84,45 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type) {
 
     svg.setAttribute("xmlns:xlink", xlink);
 
-    var mwey = 0; // y-position of MWE bars (set when drawing the head word=
+    extracolumnstypes.clear();
+
+    //var mwey = 0; // y-position of MWE bars (set when drawing the head word=
     // insert words at the bottom of the tree
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
         insertWord(svg, "1", tree, 0, 5, sentencelength, use_deprel_as_type);
     }
-    svgmaxy += 20; // for MWE
-    // TOD increade svgmaxy with correct valuesfrom enhanced deps
-    //svgmaxy += 400;
-    svg.setAttribute('height', svgmaxy - svgminy);
-    svg.setAttribute('width', svgmaxx + 40);
-    svg.setAttribute('viewBox', "0 " + svgminy + " " + (svgmaxx + 40) + " " + (svgmaxy - svgminy));
+    svgmaxy += 30; // MWEs are shown a bit above the bottom line
+
     // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
     svg.setAttribute('onmousedown', "ModifyTree(evt)");
     //svg.setAttribute('onmouseup', "MakeRoot(evt)");
     //console.log("h: " + svgmaxy + " " + svgminy);
     //console.log(svg.getAttribute("height"))
     //console.log(svg.getAttribute("viewBox"))
+
+
+    if (showextra) {
+        svgmaxy -= 40;
+        // insert words at the bottom of the tree
+        for (i = 0; i < trees.length; ++i) {
+            var tree = trees[i];
+            insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
+        }
+
+        // add space for extracolumns
+        svgmaxy += 80 + extracolumnstypes.size*20;
+
+    }
+
+    svg.setAttribute('height', svgmaxy - svgminy);
+    svg.setAttribute('width', svgmaxx + 40);
+    svg.setAttribute('viewBox', "0 " + svgminy + " " + (svgmaxx + 40) + " " + (svgmaxy - svgminy));
 }
 
+/** insert a word in the flat graph */
 function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel_as_type) {
-    var index = item.position// - indexshift;
+    var index = item.position;
     var depx = (index * hor) - (hor/2);
 
     if (sentencelength > 0) {
@@ -114,6 +133,14 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
     var levelinit = level;
     level = levelinit + vertdiff;
+
+    if (showextra) {
+        // get all extra columns in this word
+        var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
+        for (var i = 0; i < colNN.length; i++) {
+            extracolumnstypes.add(colNN[i]);
+        }
+    }
 
     //level = drawWord(item, depx, hor, levelinit, curid, svg);
     bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg);
@@ -236,7 +263,6 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
             makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type);
         }
     }
-
 }
 
 

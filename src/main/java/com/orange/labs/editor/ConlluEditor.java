@@ -214,7 +214,7 @@ public class ConlluEditor {
         }
         JsonObject solution = prepare(sentid);
         solution.addProperty("sentence", csent.getSentence());
-        solution.addProperty("length", csent.getWords().size());
+        solution.addProperty("length", (csent.getWords().size()+csent.numOfEmptyWords()));
 
         if (csent.getSentid() != null) {
             solution.addProperty("sent_id", csent.getSentid());

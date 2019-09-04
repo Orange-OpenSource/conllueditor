@@ -1,6 +1,6 @@
 # sent_id = fr-ud-dev_00001
 # sentence 0
-# text = Aviator, un film sur la vie de Hughes.
+# text = Aviator, un film sur la vie de Howard Hughes.
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No	B:Work	B:Coref1
 2	,	,	PUNCT	_	_	1	punct	_	_
 3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_	_	B:Coref1
@@ -9,8 +9,9 @@
 6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
 7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
 8	de	de	ADP	_	_	9	case	_	_
-9	Hughes	Hughes	PROPN	_	_	7	nmod	_	SpaceAfter=No	B:Person
-10	.	.	PUNCT	_	_	1	punct	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_	B:Person
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No	I:Person
+11	.	.	PUNCT	_	_	1	punct	_	_
 
 # sent_id = fr-ud-dev_00002
 # sentence 1
@@ -135,7 +136,7 @@
 90-100	du	_	_	_	_	_	_	_	_
 90	de	de	ADP	_	_	120	case	_	_
 100	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	120	det	_	_
-110	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	120	amod	_	_
+110	VIe	VIe	ADJ	_	Gender=Masc|NumType=Ord|Number=Sing	120	amod	_	_
 120	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	80	nmod	_	SpaceAfter=No
 130	.	.	PUNCT	_	_	30	punct	_	_
 
@@ -228,11 +229,11 @@
 
 # text = Sam fixed lunch and Kim dinner
 # sentence 13
-1	Sam	Sam	PROPN	_	Number=Sing	2	nsubj	_	_
+1	Sam	Sam	PROPN	_	Number=Sing	2	nsubj	_	_	B:Person
 2	fixed	fix	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
 3	lunch	lunch	NOUN	_	Number=Sing	2	obj	_	_
 4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
-5	Kim	Kim	PROPN	_	Number=Sing	2	conj	2:conj|5.1:nsubj	_
+5	Kim	Kim	PROPN	_	Number=Sing	2	conj	2:conj|5.1:nsubj	_	B:Person
 5.1	fixed	fix	VERB	_	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
 6	dinner	dinner	NOUN	_	Number=Sing	5	orphan	5:orphan|5.1:obj	_
 
@@ -290,3 +291,4 @@
 24	sammanlagt	sammanlagd	ADV	AB	_	22	advmod	22:advmod	_
 25	6:22	6:22	NUM	RG|NOM	Case=Nom|NumType=Card	22	nummod	22:nummod	SpaceAfter=No
 26	.	.	PUNCT	MAD	_	22	punct	22:punct	_
+
