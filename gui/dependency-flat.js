@@ -266,7 +266,19 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 }
 
 
-
+/** produce a nice dependency relation for the flat view. The height is provided by the server
+ *
+ * @param {type} svg  the svg object to place the arc in
+ * @param {type} item the dependent word
+ * @param {type} headpos the position of the head (horizontal, in word units, not pixels)
+ * @param {type} deprel  the dependency label
+ * @param {type} depx    the x axis pixel of the arc at the dependent word
+ * @param {type} sentencelength
+ * @param {type} basey
+ * @param {type} above
+ * @param {type} use_deprel_as_type
+ * @return {undefined}
+ */
 function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type) {
     var headx = headpos * hor - hor/2;
     var headbeforedep = (headpos < item.position);

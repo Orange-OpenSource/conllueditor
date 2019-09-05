@@ -12,6 +12,7 @@ The editor provides the following functionalities:
 * join/split sentences  (to correct tokenization errors)
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels and comments, sequences of any of these
+* displays non-CoNLL-U columns (from column 11 onwards)
 * runs validation script on sentence (CoNLL-U format)
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or 
@@ -139,7 +140,7 @@ Point your navigator  to `http://localhost:8888` .
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
 especially if the file is on a network drive.
 * `--relax` accepts some formal errors in the CoNLL-U file and corrects them (empty column instead of `_`, invalid head id set to 0)
-* `--noedit` deactivates editing, useful to browse an existing treebank
+* `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
 # Editing
@@ -151,7 +152,7 @@ An edit window opens to enter the relation a name. Existing relations can be ren
 Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
 
-The sentence is shown as a tree or as a flat graph, morphological features can be shown or hidden with the `features` button,
+The sentence is shown as a dependency tree or as a flat (“dependency hedge”) graph, morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
 If any UPOS/XPOS/deprel is not in the validation lists (specified with the `--UPOS` etc options)
@@ -207,6 +208,16 @@ clicking on words creates enhanced dependency relations. Click on the dependency
 delete the enhanced dependency relation.
 Alternatively, enhanced dependenclies can be edited manually via the word edit menu.
 
+## Other annotation
+Even though, the CoNLL-U standard defines only 10 columns, columns beyond the 10th (MISC) column are conserved when editing such files.
+They can be displayed in both modes (tree/flat) if the `extra cols` button is activated, but not (yet) be edited.
+The values in these columns are not interpreted (for instance BIO markings), theyr are just shown.
+
+![extra columns in tree view](doc/tree_extracols.png)
+
+
+![extra columns in graph view](doc/graph_extracols.png)
+
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
 To be on the safe side, start a server for every annotator on a different port/machine.
@@ -238,6 +249,7 @@ the enhanced dependency field must contain one `head:deprel` pair per line (or `
 
 # Todo list
 * be able to read/write CoNLL-U plus (.conllp) files [http://universaldependencies.org/ext-format.html]
+* edit columns from column 11 onwards
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch
 * use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)

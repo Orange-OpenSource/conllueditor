@@ -102,7 +102,7 @@
                         <button class="mycheck mybutton" id="flat2">flat graph</button>
                         <button class="mycheck mybutton" id="r2l" title="activate for sentennces in Arabic or Hebrew script">right to left</button>
                         <button class="mycheck mybutton" id="extracols" title="show contents of columns > 10">extra cols</button>
-                        
+
                         <button class ="editbuttons mybutton editmode" id="save">save file on server</button>
                         <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
 
@@ -276,13 +276,15 @@
                                 <td>delete an enhanced dependency</td>
                         </table>
 
+                        <h3>Non standard columns (from column 11 onwards)</h3>
+                        If the conllu-file contains non standard columns (from position 11 onwards), the contents of these
+                        columns can be displayed by activating the <span class="buttondoc">extra cols</span> button.
+
                         <h2>Run a validator</h2>
                         Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
                         needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
-                        <pre>
-                            script: /path/to/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}
-                        </pre>
-                        and give this file as option to the server.
+                        <br><tt>&nbsp;   script: /path/to/UDtools/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}</tt>
+                        <br>and give this file as option to the server.
                         When hitting the <span class="buttondoc">validate</span> button, the validation programme
                         is run on the current sentence.
 

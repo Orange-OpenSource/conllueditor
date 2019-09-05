@@ -1,21 +1,21 @@
 /** This library is under the 3-Clause BSD License
- 
+
  Copyright (c) 2018, Orange S.A.
- 
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
- 
+
  1. Redistributions of source code must retain the above copyright notice,
  this list of conditions and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation
  and/or other materials provided with the distribution.
- 
+
  3. Neither the name of the copyright holder nor the names of its contributors
  may be used to endorse or promote products derived from this software without
  specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,7 +26,7 @@
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+
  @author Johannes Heinecke
  @version 1.13.0 as of 3rd September 2019
  */
@@ -419,7 +419,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength 
     }
     /*
      // show word ID
-     
+
      var idtext = document.createElementNS(svgNS, "text");
      idtext.setAttribute("id", "id" + curid + "_" + item.id);
      idtext.setAttribute("font-size", "10");
@@ -430,7 +430,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength 
      idtext.textContent = item.id;
      svg.appendChild(idtext);
      //level += vertdiff;
-     
+
      // vertical line between tree and bottom word
      var path = document.createElementNS(svgNS, "path");
      var pathvar = "pathb" + curid + "_" + item.id + "_" + level;
@@ -442,8 +442,8 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength 
      path.setAttribute("fill", "none");
      path.setAttribute("d", "M " + x + " " + item.yy + " L " + x + " " + (svgmaxy - 15));
      svg.appendChild(path);
-     
-     
+
+
      // multi word entites
      if (item.mwe != undefined) {
      var wordy = svgmaxy - 30;

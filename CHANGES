@@ -1,3 +1,12 @@
+Version 1.13.0
+- can display columns > 10, if present (new button "extra cols")
+- verbosity in test
+- tests updated for the extra columns
+- corrected bug for right2left display of sentences with empty words
+
+Version 1.12.7
+- bug in tests (without git) corrected
+
 Version 1.12.6
 - conlluedit.sh accepts filenames with spaces
 - relaxed mode (corrects some formal errors in conllu-file)
