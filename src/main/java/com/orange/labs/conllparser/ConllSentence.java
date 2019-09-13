@@ -868,27 +868,28 @@ public class ConllSentence {
 
             for (int ec = 0; ec < extracols; ++ec) {
                 first = true;
+		sb.append('%');
                 for (ConllWord word : words) {
                     if (first) {
                         first = false;
                     } else {
-                        sb.append("\\&\n\t% ");
+                        sb.append(" \\&\n%\t");
                     }
                     if (word.getExtracolumns() != null && word.getExtracolumns().size() > ec) {
                         if (!"_".endsWith(word.getExtracolumns().get(ec)))
                             sb.append(word.getExtracolumns().get(ec));
                     } 
-                    sb.append("\t");
+                    //sb.append("\t");
                     if (emptywords != null) {
                         List<ConllWord> ews = emptywords.get(word.getId());
                         if (ews != null) {
                             for (ConllWord ew : ews) {
-                                sb.append("\\&\n\t% ");
-                                if (word.getExtracolumns() != null && word.getExtracolumns().size() > ec) {
-                                    if (!"_".endsWith(word.getExtracolumns().get(ec)))
+                                sb.append(" \\&\n%\t");
+                                if (ew.getExtracolumns() != null && ew.getExtracolumns().size() > ec) {
+                                    if (!"_".endsWith(ew.getExtracolumns().get(ec)))
                                         sb.append(ew.getExtracolumns().get(ec));
                                 }
-                                sb.append("\t");
+                                //sb.append("\t");
                             }
                         }
                     }
