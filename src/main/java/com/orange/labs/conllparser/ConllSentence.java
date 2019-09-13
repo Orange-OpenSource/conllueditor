@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.6 as of 28th August 2019
+ @version 1.13.1 as of 5th September 2019
  */
 package com.orange.labs.conllparser;
 
@@ -36,7 +36,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -95,12 +94,12 @@ public class ConllSentence {
     public ConllSentence(String conllstring, int shift) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
         this.shift = shift;
-	List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
-	int ct = 0;
-	for (String line : conllstring.split("\n")) {
-	    sentenceLines.add(new AbstractMap.SimpleEntry(ct, line));
-	}
-	parse(sentenceLines);
+        List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
+        int ct = 0;
+        for (String line : conllstring.split("\n")) {
+            sentenceLines.add(new AbstractMap.SimpleEntry(ct, line));
+        }
+        parse(sentenceLines);
     }
 
     public ConllSentence(List<ConllWord> cw) {
@@ -162,7 +161,7 @@ public class ConllSentence {
         Set<Annotation> lastAnnots = null;
 
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
-	    String line = cline.getValue();
+            String line = cline.getValue();
             if (line.startsWith("#")) {
                 if (line.startsWith("# newpar")) {
                     newpar = line.substring(8).trim();
@@ -806,6 +805,27 @@ public class ConllSentence {
                 } else {
                     sb.append("\\& ");
                 }
+                sb.append(word.getXpostag()).append("\t");
+
+                if (emptywords != null) {
+                    List<ConllWord> ews = emptywords.get(word.getId());
+                    if (ews != null) {
+                        for (ConllWord ew : ews) {
+                            sb.append("\\& ")
+                                    .append(ew.getXpostag()).append("\t");
+                        }
+                    }
+                }
+            }
+            sb.append("\\\\ % xpos\n% ");
+
+            first = true;
+            for (ConllWord word : words) {
+                if (first) {
+                    first = false;
+                } else {
+                    sb.append("\\& ");
+                }
                 sb.append(word.getFullId()).append("\t");
 
                 if (emptywords != null) {
@@ -821,7 +841,12 @@ public class ConllSentence {
             sb.append("\\\\ % ids\n% ");
 
             first = true;
+            // check also if there are extra columns
+            int extracols = 0;
             for (ConllWord word : words) {
+                if (word.getExtracolumns() != null && word.getExtracolumns().size() > extracols) {
+                    extracols = word.getExtracolumns().size();
+                }
                 if (first) {
                     first = false;
                 } else {
@@ -839,7 +864,39 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % position\n\\end{deptext}\n\n%        tete dep fonc\n");
+            sb.append("\\\\ % position\n");
+
+            for (int ec = 0; ec < extracols; ++ec) {
+                first = true;
+                for (ConllWord word : words) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\&\n\t% ");
+                    }
+                    if (word.getExtracolumns() != null && word.getExtracolumns().size() > ec) {
+                        if (!"_".endsWith(word.getExtracolumns().get(ec)))
+                            sb.append(word.getExtracolumns().get(ec));
+                    } 
+                    sb.append("\t");
+                    if (emptywords != null) {
+                        List<ConllWord> ews = emptywords.get(word.getId());
+                        if (ews != null) {
+                            for (ConllWord ew : ews) {
+                                sb.append("\\&\n\t% ");
+                                if (word.getExtracolumns() != null && word.getExtracolumns().size() > ec) {
+                                    if (!"_".endsWith(word.getExtracolumns().get(ec)))
+                                        sb.append(ew.getExtracolumns().get(ec));
+                                }
+                                sb.append("\t");
+                            }
+                        }
+                    }
+                }
+                sb.append(String.format("\\\\ %% col%s\n%% ", ec+11));
+            }
+
+            sb.append("\\end{deptext}\n\n%        tete dep fonc\n");
 
             int maxdist = 0; // calculate here the most distant word in terms of deprels from root
             // System.err.println("ppp " + position);
@@ -913,8 +970,8 @@ public class ConllSentence {
             for (ConllWord cw : words2) {
                 if (cw.getHead() != 0) {
                     sb.append(String.format("\\dep{%d}{%s}{%d}{%s}{%s}{%s}\n", cw.getHead(), cw.getId(),
-                            getDistanceFromSentenceHead(cw) - 1,
-                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
+                                            getDistanceFromSentenceHead(cw) - 1,
+                                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
                 }
             }
 
@@ -1018,7 +1075,8 @@ public class ConllSentence {
         return words.get(i - 1);
     }
 
-    private static final int factor=10; // needed to create space for inserting a new word
+    private static final int factor = 10; // needed to create space for inserting a new word
+
     /**
      * add a new word after the word with id (0 inserts at the beginning).
      * invalidates word2chunks and chunk2words
@@ -1055,13 +1113,13 @@ public class ConllSentence {
                 ConllWord mwt = contracted.get(id2);
                 mwt.setId(id2 * factor);
                 mwt.setSubId(mwt.getSubid() * factor);
-                c2.put(id2*factor, mwt);
+                c2.put(id2 * factor, mwt);
             }
             contracted = c2;
         }
 
         // update ids of empty words
-          // updating ids of normal words (including ehnanced deps)
+        // updating ids of normal words (including ehnanced deps)
         if (emptywords != null) {
             Map<Integer, List<ConllWord>> ews2 = new HashMap<>();
             for (Integer id2 : emptywords.keySet()) {
@@ -1255,7 +1313,7 @@ public class ConllSentence {
     public static class Highlight {
 
         public ConllWord.Fields field;
-        public Set<Integer>ids;
+        public Set<Integer> ids;
         //public int wordid;
         //public int lastwordid;
 
@@ -1270,14 +1328,14 @@ public class ConllSentence {
         public Highlight(ConllWord.Fields field, int wordid, int lastwordid) {
             this.field = field;
             ids = new HashSet<>();
-            for(int id = wordid; id <= lastwordid; id++) {
-                 ids.add(id);
+            for (int id = wordid; id <= lastwordid; id++) {
+                ids.add(id);
             }
             //this.wordid = wordid;
             //this.lastwordid = lastwordid;
         }
 
-        public Highlight(ConllWord.Fields field, Set<Integer>ids) {
+        public Highlight(ConllWord.Fields field, Set<Integer> ids) {
             this.field = field;
             this.ids = ids;
         }
@@ -1298,7 +1356,7 @@ public class ConllSentence {
      * produire un arbre en Json. Nécessite l'appel a makeTrees()
      */
     public JsonArray toJsonTree(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
-            Highlight highlight, AnnotationErrors ae) {
+                                Highlight highlight, AnnotationErrors ae) {
         JsonArray jheads = new JsonArray();
 
         for (ConllWord head : headss) {

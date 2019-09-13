@@ -354,7 +354,6 @@ String.prototype.hashCode = function () {
  * @param {type} sentencelength if >0: right2left
  */
 function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength = 0) {
-    //var hor = 90;
     //console.log("item ", item);
     //console.log("cc " + curid)
 
@@ -380,14 +379,14 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength 
             colvalue = item[coltype].substr(2);
         else
             colvalue = item[coltype];
-        //console.log("QQQ", item[coltype], colvalue, colvalue.hashCode());
+
         var hcode = colvalue.hashCode();
         var red = Math.abs(hcode % 148);
         var blue = Math.abs((hcode >> 4) % 148);
         var green = Math.abs((hcode >> 10) % 148);
 
         color = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) + ("0" + blue.toString(16)).substr(-2);
-        //console.log("TTT", colvalue,  red, blue, green, color);
+
         var rect = document.createElementNS(svgNS, "rect");
         rect.setAttribute("id", "rect_" + item.id + "_" + coltype);
         rect.setAttribute('x', x - ((hor - 8) / 2));
@@ -398,95 +397,29 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength 
         rect.setAttribute('fill', color); // only needed for svg download, since the download does not add depgraph.css
         rect.setAttribute("rx", "5");
         rect.setAttribute("ry", "25");
+        rect.setAttribute("class", "extracol_rect");
         svg.appendChild(rect);
 
 
         var coltext = document.createElementNS(svgNS, "text");
         coltext.setAttribute("id", coltype + "_" + curid + "_" + item.id);
-        //wordtext.setAttribute("class", "words word");
         coltext.setAttribute("font-size", "14");
-        //if (useitalic)
-        //   wordtext.setAttribute("font-style", "italic");
-        //else
-        //     wordtext.setAttribute("font-weight", "bold");
         coltext.setAttribute('x', x);
         coltext.setAttribute('y', svgmaxy + ypos);
         coltext.setAttribute("fill", "white");
         ypos += 30;
         coltext.setAttribute("text-anchor", "middle");
         coltext.textContent = item[coltype];
+        coltext.setAttribute("class", "extracol");
         svg.appendChild(coltext);
     }
-    /*
-     // show word ID
-
-     var idtext = document.createElementNS(svgNS, "text");
-     idtext.setAttribute("id", "id" + curid + "_" + item.id);
-     idtext.setAttribute("font-size", "10");
-     idtext.setAttribute("class", "words wordid");
-     idtext.setAttribute('x', x);
-     idtext.setAttribute('y', svgmaxy + vertdiff + 7);
-     idtext.setAttribute("text-anchor", "middle");
-     idtext.textContent = item.id;
-     svg.appendChild(idtext);
-     //level += vertdiff;
-
-     // vertical line between tree and bottom word
-     var path = document.createElementNS(svgNS, "path");
-     var pathvar = "pathb" + curid + "_" + item.id + "_" + level;
-     path.setAttribute("id", pathvar);
-     path.setAttribute("stroke", "gray");
-     path.setAttribute("stroke-width", "1");
-     path.setAttribute("opacity", 1);
-     path.setAttribute("stroke-dasharray", "3,3");
-     path.setAttribute("fill", "none");
-     path.setAttribute("d", "M " + x + " " + item.yy + " L " + x + " " + (svgmaxy - 15));
-     svg.appendChild(path);
-
-
-     // multi word entites
-     if (item.mwe != undefined) {
-     var wordy = svgmaxy - 30;
-     var mwe = document.createElementNS(svgNS, "path");
-     var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;
-     mwe.setAttribute("id", mwepathvar);
-     mwe.setAttribute("stroke", "#888888");
-     mwe.setAttribute("stroke-width", "4");
-     mwe.setAttribute("opacity", 1);
-     mwe.setAttribute("fill", "none");
-     var length = item.mwe.toid - item.mwe.fromid + 1;
-     if (sentencelength > 0) {
-     //mwe.setAttribute("d", "M " + (x - 5 + hor/2) + " " + (wordy) + " l " + (-hor*length + 10) + " " + 0);
-     mwe.setAttribute("d", "M " + (x + 5 - hor * length + hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
-     } else {
-     mwe.setAttribute("d", "M " + (x + 5 - hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
-     }
-     svg.appendChild(mwe);
-     // creer le texte pour cette ligne
-     var mwetext = document.createElementNS(svgNS, "text");
-     mwetext.setAttribute("id", "mwetext" + pathvar);
-     mwetext.setAttribute("font-size", "14");
-     mwetext.setAttribute("dy", "-8");
-     mwetext.setAttribute("text-anchor", "middle");
-     // associer le texte avec la ligne
-     var mwepath = document.createElementNS(svgNS, "textPath");
-     mwepath.setAttributeNS(xlink, "xlink:href", "#" + mwepathvar); // Id of the path
-     mwepath.setAttribute("id", "mwetextpath_" + item.mwe.fromid + "_" + item.mwe.toid);
-     //mwepath.setAttribute("class", "words deprel");
-     mwepath.setAttribute("fill", "#888888");
-     mwepath.setAttribute('startOffset', "50%");
-     mwepath.textContent = item.mwe.form;
-     mwetext.appendChild(mwepath);
-     svg.appendChild(mwetext);
-     }
-     */
 
     if (item.children) {
         for (var i = 0; i < item.children.length; i++) {
             //alert(item.children[i]);
             insertExtracolumns(svg, curid, item.children[i], 0 /*level*/, indexshift, sentencelength);
         }
-}
+    }
 }
 
 

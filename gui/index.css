@@ -445,3 +445,7 @@ input {
   font-weight: bold;
   margin-left: 1em;
 }
+
+text {
+   font-family: "Lato", sans-serif;
+}

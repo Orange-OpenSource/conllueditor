@@ -24,7 +24,7 @@
           "val": "Fin"
         }
       ],
-      "xpos": "_",
+      "xpos": "VBD",
       "upos": "VERB",
       "deprel": "root",
       "chunk": 0,
@@ -42,7 +42,7 @@
               "val": "Sing"
             }
           ],
-          "xpos": "_",
+          "xpos": "NNP",
           "upos": "PROPN",
           "deprel": "nsubj",
           "chunk": 0,
@@ -61,7 +61,7 @@
               "val": "Sing"
             }
           ],
-          "xpos": "_",
+          "xpos": "NN",
           "upos": "NOUN",
           "deprel": "obj",
           "chunk": 0,
@@ -79,7 +79,7 @@
               "val": "Sing"
             }
           ],
-          "xpos": "_",
+          "xpos": "NNP",
           "upos": "PROPN",
           "enhancedheads": [
             {
@@ -104,7 +104,7 @@
               "id": 4,
               "form": "and",
               "lemma": "and",
-              "xpos": "_",
+              "xpos": "CC",
               "upos": "CCONJ",
               "enhancedheads": [
                 {
@@ -134,7 +134,7 @@
                   "val": "Sing"
                 }
               ],
-              "xpos": "_",
+              "xpos": "NN",
               "upos": "NOUN",
               "enhancedheads": [
                 {
@@ -177,7 +177,7 @@
           "val": "Fin"
         }
       ],
-      "xpos": "_",
+      "xpos": "VBD",
       "upos": "VERB",
       "enhancedheads": [
         {

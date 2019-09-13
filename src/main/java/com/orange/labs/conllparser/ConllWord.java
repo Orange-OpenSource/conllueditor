@@ -899,8 +899,8 @@ public class ConllWord {
             }
         }
 
-        
-        
+
+
         if (!dependents.isEmpty()) {
             JsonArray jchildren = new JsonArray();
             jword.add("children", jchildren);
@@ -911,6 +911,11 @@ public class ConllWord {
         }
         return jword;
     }
+
+    public List<String> getExtracolumns() {
+        return nonstandardInfo;
+    }
+
 
     public Set<Annotation> getAnnots() {
         return annot;
