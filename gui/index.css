@@ -453,6 +453,16 @@ text {
 
 #shortcuthelp {
     display: none;
-    font-size: 80%
+    font-size: 80%;
+    border: 1px solid;
 } 
+
+/* table of shortcut help (invoked with "?" key) */
+.sc {
+  padding-left: 0px;
+}
+
+.sckey {
+  font-weight: bold;
+}
 

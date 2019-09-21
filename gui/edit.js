@@ -223,18 +223,19 @@ function ToggleShortcutHelp() {
     if (showshortcathelp) {
         //$("#act_search").text("more");
         $("#shortcuthelp").hide();
-        //$('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         showshortcathelp = false;
         if (lastmore) ToggleSearch();
     } else {
         //$("#act_search").text("less");
         $("#shortcuthelp").show();
-        //$('body').css("margin-top", "280px");
+        
         showshortcathelp = true;
         lastmore = more; // show search again when shortcut help is switched off
 	if (more) {
 	  ToggleSearch();
         }
+        $('body').css("margin-top", "260px");
     }
 }
 
@@ -295,13 +296,13 @@ function showshortcuts() {
         for (var p in shortcutsUPOS) {
             //console.log("eee", shortcutsUPOS[p]);
             $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
-	    sc_uposString += p + ":" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
+	    sc_uposString += '<span class="sckey">' + p + "</span>:" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
         }
 	$("#uposshortcuts").append(sc_uposString);
 
         for (var p in shortcutsDEPL) {
             $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
-	    sc_deplString += p + ":" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
+	    sc_deplString += '<span class="sckey">' + p + "</span>:" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
         }
         $("#deplshortcuts").append(sc_deplString);
 	
@@ -309,7 +310,7 @@ function showshortcuts() {
 	    $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
                                            + shortcutsXPOS[p][0] + "</td> <td>"
                                            + shortcutsXPOS[p][1] + "</td></tr>");
-            sc_xposString += p + ":" + shortcutsXPOS[p][0]  +"/" + shortcutsXPOS[p][0] + "&nbsp;&nbsp;";
+            sc_xposString += '<span class="sckey">' + p + "</span>:" + shortcutsXPOS[p][0]  +"/" + shortcutsXPOS[p][1] + "&nbsp;&nbsp;";
         	// $.each(shortcutsUPOS, function(k, v) {
                 //     result += k + " , " + v + "\n";
                 // });
@@ -339,7 +340,7 @@ $(window).on('keypress', function (evt) {
         shortcutsDEPL = json.deplabel;
     });
 
-    $("#shortcuthelp").hide(); // initially hidden
+    //$("#shortcuthelp").hide(); // initially hidden
 
     if (evt.keyCode == 63) {
 	ToggleShortcutHelp();

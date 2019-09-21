@@ -33,7 +33,9 @@
     "xpos": {
         "i": ["impf", "AUX"],
         "j": ["pred", "PART"],
-        "k": ["verbnoun", "NOUN"]
+        "k": ["verbnoun", "NOUN"],
+        "f": ["place", "PROPN"],
+        "g": ["person", "PROPN"]
     }
 }
 
