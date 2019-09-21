@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.6 as of 28th August 2019
+ @version 1.14.0 as of 20th September 2019
  */
 package com.orange.labs.editor;
 
@@ -753,6 +753,7 @@ public class ConlluEditor {
                     || command.startsWith("mod xpos ")
                     || command.startsWith("mod lemma ")
                     || command.startsWith("mod form ")
+                    || command.startsWith("mod deprel ")
                     || command.startsWith("mod enhdeps ")
                     || command.startsWith("mod feat ")
                     || command.startsWith("mod misc ")) {
@@ -806,6 +807,9 @@ public class ConlluEditor {
                         break;
                     case "lemma":
                         modWord.setLemma(f[3]);
+                        break;
+                    case "deprel": // change only dep label, not head
+                        modWord.setDeplabel(f[3]);
                         break;
                     case "feat": {
                         modWord.setFeatures(f[3]);

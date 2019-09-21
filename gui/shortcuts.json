@@ -1,0 +1,39 @@
+{
+    "comment": "this files defines shortcuts to fast edit UPOS, xpos and deprel of the active word. For xpos two values can to be given in a list: XPOS and UPOS)",
+    "upos": {
+        "A": "ADV",
+        "C": "CCONJ",
+        "D": "DET",
+        "E": "PROPN",
+        "I": "INTJ",
+        "J": "ADJ",
+        "N": "NOUN",
+        "P": "ADP",
+        "R": "PRON",
+        "S": "SCONJ",
+        "T": "PART",
+        "U": "NUM",
+        "V": "VERB",
+        "X": "AUX",
+        ".": "PUNCT"
+    },
+    "deplabel": {
+        "a": "amod",
+        "c": "case",
+        "d": "det",
+        "l": "acl",
+        "m": "nmod",
+        "o": "obj",
+        "p": "punct",
+        "s": "nsubj",
+        "u": "nummod",
+        "v": "advcl",
+        "x": "xcomp"
+    },
+    "xpos": {
+        "i": ["impf", "AUX"],
+        "j": ["pred", "PART"],
+        "k": ["verbnoun", "NOUN"]
+    }
+}
+

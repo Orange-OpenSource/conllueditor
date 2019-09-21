@@ -1,21 +1,21 @@
 /** This library is under the 3-Clause BSD License
-
+ 
  Copyright (c) 2018, Orange S.A.
-
+ 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
-
+ 
  1. Redistributions of source code must retain the above copyright notice,
  this list of conditions and the following disclaimer.
-
+ 
  2. Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation
  and/or other materials provided with the distribution.
-
+ 
  3. Neither the name of the copyright holder nor the names of its contributors
  may be used to endorse or promote products derived from this software without
  specific prior written permission.
-
+ 
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,9 +26,9 @@
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+ 
  @author Johannes Heinecke
- @version 1.13.0 as of 3rd September 2019
+ @version 1.14.0 as of 20th September 2019
  */
 
 
@@ -36,8 +36,8 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 
 /* test with curl
  curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://localhost:8888/edit/
-
-
+ 
+ 
  */
 
 // Return the value of the named parameter
@@ -164,21 +164,21 @@ function getServerInfo() {
                 $("#cupos").autocomplete({
                     source: uposlist,
                     // https://www.plus2net.com/jquery/msg-demo/autocomplete-position.php
-                    position: { my: "left top", at: "left bottom"}
+                    position: {my: "left top", at: "left bottom"}
                 });
             });
 
             $(function () {
                 $("#cxpos").autocomplete({
                     source: xposlist,
-                    position: { my: "left top", at: "left bottom"}
+                    position: {my: "left top", at: "left bottom"}
                 });
             });
 
             $(function () {
                 $("#cdeprel").autocomplete({
                     source: deprellist,
-                    position: { my: "left top", at: "left bottom"}
+                    position: {my: "left top", at: "left bottom"}
                 });
             });
 
@@ -224,6 +224,73 @@ function ToggleSearch() {
     }
 }
 
+// default shortcuts (overriden by from configuration file)
+var shortcutsUPOS = {
+    "N": "NOUN",
+    "A": "ADV",
+    "J": "ADJ",
+    "V": "VERB",
+    "E": "PROPN", // named entity
+    "D": "DET",
+    ".": "PUNCT",
+    "C": "CCONJ",
+    "S": "SCONJ",
+    "U": "NUM",
+    "R": "PRON",
+    "X": "AUX",
+    "I": "INTJ",
+    "P": "ADP",
+    "T": "PART",
+};
+
+var shortcutsDEPL = {
+    "s": "nsubj",
+    "o": "obj",
+    "m": "nmod",
+    "c": "case",
+    "d": "det",
+    "p": "punct",
+    "a": "amod",
+    "l": "acl",
+    "v": "advcl",
+    "x": "xcomp",
+    "u": "nummod",
+};
+
+var shortcutsXPOS= { // no point defining language specific xpos here. 
+    //"N": ["NN", "NOUN"], // XPOS modifies also upos
+    //"E": ["NNP", "PROPN"],
+    //"W": ["VBZ"] // xpos keeps upos unchanged
+}; 
+
+
+// run when index.html is loaded. reads shortcut.json and updates help page
+function showshortcuts() {
+    $.getJSON("shortcuts.json", function (json) {
+        console.log("zzzzzz", json); 
+        // if no error, we override defaults
+        shortcutsUPOS = json.upos;
+        shortcutsXPOS = json.xpos;
+        shortcutsDEPL = json.deplabel;
+  
+
+        for (var p in shortcutsUPOS) {
+            console.log("eee", shortcutsUPOS[p]);
+            $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
+        }
+        for (var p in shortcutsDEPL) {
+            $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
+        }
+        for (var p in shortcutsXPOS) {           
+	    $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
+                                           + shortcutsXPOS[p][0] + "</td> <td>"
+                                           + shortcutsXPOS[p][1] + "</td></tr>");
+        	// $.each(shortcutsUPOS, function(k, v) {
+                //     result += k + " , " + v + "\n";
+                // });
+        }
+   });
+}
 
 var conllwords = {};
 var clickedNodes = [];
@@ -232,6 +299,58 @@ var uposs = [];
 var clickCount = 0;
 var wordedit = false;
 var editword_with_doubleclick = true; // in order to deactivate word-edit with double click, set to false
+
+
+// process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
+$(window).on('keypress', function (evt) {
+    //console.log("AEVT", evt, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+
+    $.getJSON("shortcuts.json", function (json) {
+        //console.log("zzzzzz", json); 
+        // if no error, we override defaults
+        shortcutsUPOS = json.upos;
+        shortcutsXPOS = json.xpos;
+        shortcutsDEPL = json.deplabel;
+    });
+
+    if (clickedNodes.length == 1) {
+        //
+        // a word is active
+        // interpret shortkeys
+
+        var newval = shortcutsUPOS[String.fromCharCode(evt.keyCode)];
+        if (newval != undefined) {
+            //console.log("UPOS", newval);
+            sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
+        }
+
+        newval = shortcutsDEPL[String.fromCharCode(evt.keyCode)];
+        if (newval != undefined) {
+            //console.log("DEPL", newval);
+            sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
+        }
+
+        newval = shortcutsXPOS[String.fromCharCode(evt.keyCode)];
+        if (newval != undefined) {
+            console.log("XPOS", newval, newval[0]);
+            sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
+            if (newval.length > 1) {
+                 console.log("--UPOS", newval[1]);
+                sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval[1]});
+            }
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
+        }
+           
+    }
+})
 
 // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
 // il faut clikcer sur un mot et sur sa future tete pour changer l'arbre
@@ -814,10 +933,10 @@ $(document).ready(function () {
     $('#savedeprel').click(function () {
         //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdep").text()];
-       /* if (flatgraph && editing_enhanced) {
-            alert("not good " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val())
-            //sendmodifs({"cmd": "mod ed add " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
-        } else */
+        /* if (flatgraph && editing_enhanced) {
+         alert("not good " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val())
+         //sendmodifs({"cmd": "mod ed add " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
+         } else */
         if (conllword.deprel != $("#cdeprel").val()) {
             sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
@@ -831,8 +950,8 @@ $(document).ready(function () {
         if (flatgraph && editing_enhanced) {
             //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val())
             sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val()});
-       // } else if (conllword.deprel != $("#cdeprel").val()) {
-        //    sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
+            // } else if (conllword.deprel != $("#cdeprel").val()) {
+            //    sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
         $('#enhdeprelEdit').modal('hide');
     });
@@ -944,8 +1063,8 @@ $(document).ready(function () {
             }
             showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
-            sendmodifs(datadico);        }
-        else if (this.id == "extracols") {
+            sendmodifs(datadico);
+        } else if (this.id == "extracols") {
             if (!showextra) {
                 $(this).addClass('active');
             } else {

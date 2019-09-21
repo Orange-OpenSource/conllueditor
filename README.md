@@ -5,7 +5,7 @@ This Software is a tool which facilitates the editing of syntactic relations and
 loads the CoNLL-U file and saves every change to disk (and performs a `git commit` if the file is under git version control).
 
 The editor provides the following functionalities:
-* editing words (forms, lemmas, upos, xpos, features, enhanced dependencies)
+* editing words (forms, lemmas, upos, xpos, features, enhanced dependencies) (fast edit for UPOS and deprel)
 * editing dependency relations
 * indicates invalid UPOS, XPOS or dependency relations
 * join/split words (to correct tokenization errors)
@@ -15,7 +15,7 @@ The editor provides the following functionalities:
 * displays non-CoNLL-U columns (from column 11 onwards)
 * runs validation script on sentence (CoNLL-U format)
 * git support
-* export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or 
+* export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 * prohibits invalid (cyclic) trees
 
@@ -164,7 +164,7 @@ Clicking on `flat graph` changes the dependency graph layout to a more horizonta
 
 ![Edit screen (flat graph)](doc/graph.png)
 
-Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server, 
+Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server,
 autocompletion is proposed
 
 ![Edit screen (flat graph)](doc/edit.png)
@@ -181,7 +181,7 @@ Empty nodes (having `n.1` ids) are shown in a dashed box.
 
 ![Empty nodes](doc/tree_emptynode.png)
 
-The flat graph mode also displays enhanced dependencies. In this mode enhanced 
+The flat graph mode also displays enhanced dependencies. In this mode enhanced
 dependencies can be added/modified/deleted (activate `edit enhanced dependencies`).
 if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayet too.
 
@@ -218,6 +218,10 @@ The values in these columns are not interpreted (for instance BIO markings), the
 
 ![extra columns in graph view](doc/graph_extracols.png)
 
+## Shortcuts
+ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
+the active word to the defined value. To activate a word, click once on the word.
+
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
 To be on the safe side, start a server for every annotator on a different port/machine.
@@ -239,7 +243,7 @@ The validation button will launch the validator on the current sentence.
 * `curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentences is `read 0`, sendit is only used for edit commands)
 * `curl -s --noproxy '*' 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
 * `curl -s --noproxy '*' 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
-* `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use 
+* `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use
   with the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) or   [doc/deptree.sty](doc/deptree.sty) packages)
 
 # Known bugs

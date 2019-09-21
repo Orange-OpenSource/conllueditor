@@ -1,3 +1,6 @@
+Version 1.14.0
+- added shortcuts to change UPOS or deprel with click + key (hardwired defaults, gui/shortcuts.json file to personalise)
+
 Version 1.13.1
 - add xpos and extra columns to LaTeX output
 
