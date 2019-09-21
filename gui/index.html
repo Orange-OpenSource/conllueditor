@@ -164,8 +164,16 @@
                         <button class ="onlyWithTree mybutton" id="sdparse">SD-Parse</button>
                     </td>
                 </tr>
-
             </table>
+
+            <div id="shortcuthelp">
+               <table>
+               <tr><td>UPOS shortcuts</td><td id="uposshortcuts"></td></tr>
+               <tr><td>XPOS shortcuts</td><td id="xposshortcuts"></td></tr>
+               <tr><td>Deplabel shortcuts</td><td id="deplshortcuts"></td></tr>
+               </table>
+            </div>
+
             <div id="sentencetext">
                 <span id="currentsent">1</span>/<span id="total"></span>: <span id="titre"></span>
                 <span id="cursentid"></span>
@@ -267,7 +275,10 @@
 
 <p>
 
-                        More definitions can be added to <tt>gui/shortcuts.json</tt>. If this file is not valid JSON
+                        More definitions can be added to <tt>gui/shortcuts.json</tt>. Hitting <tt>?</tt> displays the current
+                        shortcuts on the top of the screen (and hiding the search fields atthe same time). Hitting
+                        <tt>?</tt> a second, hides the shortcut list.
+                        If this file is not valid JSON
                         default shortcuts will be used. Check validity with e.g. <tt>cat gui/shortcuts.json | jq .</tt>
 
 

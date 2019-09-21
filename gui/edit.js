@@ -201,16 +201,8 @@ function getServerInfo() {
 
 
 var more = true;
+var lastmore = true;
 function ToggleSearch() {
-    //alert("eee " + evt);
-    //if ($("#act_search").is(":visible")) {
-    // searc is hidden, since button is visible
-    //$(".search").show();
-    //$("#act_search").hide();
-    //} else {
-    //$(".search").hide();
-    //$("#act_search").show();
-    // }
     if (more) {
         $("#act_search").text("more");
         $(".search").hide();
@@ -221,8 +213,31 @@ function ToggleSearch() {
         $(".search").show();
         $('body').css("margin-top", "280px");
         more = true;
+	if (showshortcathelp) ToggleShortcutHelp();
     }
 }
+
+var showshortcathelp = false;
+
+function ToggleShortcutHelp() {
+    if (showshortcathelp) {
+        //$("#act_search").text("more");
+        $("#shortcuthelp").hide();
+        //$('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        showshortcathelp = false;
+        if (lastmore) ToggleSearch();
+    } else {
+        //$("#act_search").text("less");
+        $("#shortcuthelp").show();
+        //$('body').css("margin-top", "280px");
+        showshortcathelp = true;
+        lastmore = more; // show search again when shortcut help is switched off
+	if (more) {
+	  ToggleSearch();
+        }
+    }
+}
+
 
 // default shortcuts (overriden by from configuration file)
 var shortcutsUPOS = {
@@ -273,22 +288,33 @@ function showshortcuts() {
         shortcutsXPOS = json.xpos;
         shortcutsDEPL = json.deplabel;
   
+	var sc_uposString = "";
+	var sc_xposString = "";
+	var sc_deplString = "";
 
         for (var p in shortcutsUPOS) {
-            console.log("eee", shortcutsUPOS[p]);
+            //console.log("eee", shortcutsUPOS[p]);
             $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
+	    sc_uposString += p + ":" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
         }
+	$("#uposshortcuts").append(sc_uposString);
+
         for (var p in shortcutsDEPL) {
             $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
+	    sc_deplString += p + ":" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
         }
+        $("#deplshortcuts").append(sc_deplString);
+	
         for (var p in shortcutsXPOS) {           
 	    $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
                                            + shortcutsXPOS[p][0] + "</td> <td>"
                                            + shortcutsXPOS[p][1] + "</td></tr>");
+            sc_xposString += p + ":" + shortcutsXPOS[p][0]  +"/" + shortcutsXPOS[p][0] + "&nbsp;&nbsp;";
         	// $.each(shortcutsUPOS, function(k, v) {
                 //     result += k + " , " + v + "\n";
                 // });
         }
+	$("#xposshortcuts").append(sc_xposString);
    });
 }
 
@@ -313,7 +339,12 @@ $(window).on('keypress', function (evt) {
         shortcutsDEPL = json.deplabel;
     });
 
-    if (clickedNodes.length == 1) {
+    $("#shortcuthelp").hide(); // initially hidden
+
+    if (evt.keyCode == 63) {
+	ToggleShortcutHelp();
+    } 
+    else if (clickedNodes.length == 1) {
         //
         // a word is active
         // interpret shortkeys

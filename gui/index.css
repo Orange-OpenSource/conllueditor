@@ -449,3 +449,10 @@ input {
 text {
    font-family: "Lato", sans-serif;
 }
+
+
+#shortcuthelp {
+    display: none;
+    font-size: 80%
+} 
+
