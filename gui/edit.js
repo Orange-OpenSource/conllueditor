@@ -119,7 +119,12 @@ var deprellist = [];
 var uposlist = [];
 var xposlist = [];
 
-/** get information from ConlluEditor server  */
+/** get information from ConlluEditor server:
+ name of edited file
+ lists of valid UPOX, XPOS, deprel
+ version of server
+ edit mode
+ */
 function getServerInfo() {
     //var urlbase = 'http://' + window.location.host + ':' + $("#port").val() + '/';
 
@@ -129,6 +134,7 @@ function getServerInfo() {
 
     $.ajax({
         url: urlbase, //+'/foo/fii?fuu=...',
+        async: false,
         type: 'GET',
         headers: {
             'Content-type': 'text/plain'
@@ -146,6 +152,18 @@ function getServerInfo() {
                 uposlist = data.validUPOS;
             if (data.validXPOS)
                 xposlist = data.validXPOS;
+
+            if (data.shortcuts) {
+                console.log("SHORTCUTS", data.shortcuts);
+                if (data.shortcuts.deplabel)
+                    shortcutsDEPL = data.shortcuts.deplabel;
+                if (data.shortcuts.upos) {
+                    shortcutsUPOS = data.shortcuts.upos;
+                }
+                if (data.shortcuts.xpos)
+                    shortcutsXPOS = data.shortcuts.xpos;
+                parseShortcuts();
+            }
 
             $('#filename').empty();
             $('#filename').append(data.filename);
@@ -213,7 +231,8 @@ function ToggleSearch() {
         $(".search").show();
         $('body').css("margin-top", "280px");
         more = true;
-	if (showshortcathelp) ToggleShortcutHelp();
+        if (showshortcathelp)
+            ToggleShortcutHelp();
     }
 }
 
@@ -225,15 +244,16 @@ function ToggleShortcutHelp() {
         $("#shortcuthelp").hide();
         $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         showshortcathelp = false;
-        if (lastmore) ToggleSearch();
+        if (lastmore)
+            ToggleSearch();
     } else {
         //$("#act_search").text("less");
         $("#shortcuthelp").show();
-        
+
         showshortcathelp = true;
         lastmore = more; // show search again when shortcut help is switched off
-	if (more) {
-	  ToggleSearch();
+        if (more) {
+            ToggleSearch();
         }
         $('body').css("margin-top", "260px");
     }
@@ -242,81 +262,103 @@ function ToggleShortcutHelp() {
 
 // default shortcuts (overriden by from configuration file)
 var shortcutsUPOS = {
-    "N": "NOUN",
-    "A": "ADV",
-    "J": "ADJ",
-    "V": "VERB",
-    "E": "PROPN", // named entity
-    "D": "DET",
-    ".": "PUNCT",
-    "C": "CCONJ",
-    "S": "SCONJ",
-    "U": "NUM",
-    "R": "PRON",
-    "X": "AUX",
-    "I": "INTJ",
-    "P": "ADP",
-    "T": "PART",
+    /*   "N": "NOUN",
+     "A": "ADV",
+     "J": "ADJ",
+     "V": "VERB",
+     "E": "PROPN", // named entity
+     "D": "DET",
+     ".": "PUNCT",
+     "C": "CCONJ",
+     "S": "SCONJ",
+     "U": "NUM",
+     "R": "PRON",
+     "X": "AUX",
+     "I": "INTJ",
+     "P": "ADP",
+     "T": "PART",*/
 };
 
 var shortcutsDEPL = {
-    "s": "nsubj",
-    "o": "obj",
-    "m": "nmod",
-    "c": "case",
-    "d": "det",
-    "p": "punct",
-    "a": "amod",
-    "l": "acl",
-    "v": "advcl",
-    "x": "xcomp",
-    "u": "nummod",
+    /*   "s": "nsubj",
+     "o": "obj",
+     "m": "nmod",
+     "c": "case",
+     "d": "det",
+     "p": "punct",
+     "a": "amod",
+     "l": "acl",
+     "v": "advcl",
+     "x": "xcomp",
+     "u": "nummod",*/
 };
 
-var shortcutsXPOS= { // no point defining language specific xpos here. 
+var shortcutsXPOS = {// no point defining language specific xpos here.
     //"N": ["NN", "NOUN"], // XPOS modifies also upos
     //"E": ["NNP", "PROPN"],
     //"W": ["VBZ"] // xpos keeps upos unchanged
-}; 
+};
 
 
-// run when index.html is loaded. reads shortcut.json and updates help page
+/** run when index.html is loaded. reads gui/shortcut.json and updates help page.
+ these values are overriden by values sent by the server getServerInfo()
+ */
 function showshortcuts() {
+    //console.log("load DEFAULT shortcuts");
     $.getJSON("shortcuts.json", function (json) {
-        console.log("zzzzzz", json); 
+        //console.log("zzzzzz", json);
         // if no error, we override defaults
         shortcutsUPOS = json.upos;
         shortcutsXPOS = json.xpos;
         shortcutsDEPL = json.deplabel;
-  
-	var sc_uposString = "";
-	var sc_xposString = "";
-	var sc_deplString = "";
 
-        for (var p in shortcutsUPOS) {
-            //console.log("eee", shortcutsUPOS[p]);
-            $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
-	    sc_uposString += '<span class="sckey">' + p + "</span>:" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
-        }
-	$("#uposshortcuts").append(sc_uposString);
+        parseShortcuts();
 
-        for (var p in shortcutsDEPL) {
-            $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
-	    sc_deplString += '<span class="sckey">' + p + "</span>:" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
-        }
-        $("#deplshortcuts").append(sc_deplString);
-	
-        for (var p in shortcutsXPOS) {           
-	    $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
-                                           + shortcutsXPOS[p][0] + "</td> <td>"
-                                           + shortcutsXPOS[p][1] + "</td></tr>");
-            sc_xposString += '<span class="sckey">' + p + "</span>:" + shortcutsXPOS[p][0]  +"/" + shortcutsXPOS[p][1] + "&nbsp;&nbsp;";
-        	// $.each(shortcutsUPOS, function(k, v) {
-                //     result += k + " , " + v + "\n";
-                // });
-        }
-	$("#xposshortcuts").append(sc_xposString);
-   });
+    });
+}
+
+/** read json from shortcutsUPOS and update Help Modal */
+function parseShortcuts() {
+    //console.log("PPPP");
+    var sc_uposString = "";
+    var sc_xposString = "";
+    var sc_deplString = "";
+
+    $("#shortcuttableUPOS").empty(); // clear default values
+    $("#shortcuttableUPOS").append("<tr><th>key</th> <th>set UPOS to</th></tr>"); // add header
+    $("#uposshortcuts").empty();
+    for (var p in shortcutsUPOS) {
+        //console.log("eee", shortcutsUPOS[p]);
+        $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
+        sc_uposString += '<span class="sckey">' + p + "</span>:" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
+    }
+    $("#uposshortcuts").append(sc_uposString);
+
+
+    $("#shortcuttableDEPL").empty();
+    $("#shortcuttableDEPL").append("<tr><th>key</th> <th>set deplabel to</th></tr>"); // add header
+    $("#deplshortcuts").empty();
+    for (var p in shortcutsDEPL) {
+        $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
+        sc_deplString += '<span class="sckey">' + p + "</span>:" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
+    }
+    $("#deplshortcuts").append(sc_deplString);
+
+
+    $("#xposshortcuts").empty();
+    $("#shortcuttableXPOS").empty();
+    $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>set UPOS to</th></tr>"); // add header
+    for (var p in shortcutsXPOS) {
+        //console.log("XXX", p, shortcutsXPOS[p][0], shortcutsXPOS[p][1]);
+        $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
+                + shortcutsXPOS[p][0] + "</td> <td>"
+                + shortcutsXPOS[p][1] + "</td></tr>");
+        sc_xposString += '<span class="sckey">' + p + "</span>:" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "&nbsp;&nbsp;";
+        // $.each(shortcutsUPOS, function(k, v) {
+        //     result += k + " , " + v + "\n";
+        // });
+    }
+    $("#xposshortcuts").append(sc_xposString);
 }
 
 var conllwords = {};
@@ -331,21 +373,20 @@ var editword_with_doubleclick = true; // in order to deactivate word-edit with d
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
     //console.log("AEVT", evt, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
-
-    $.getJSON("shortcuts.json", function (json) {
-        //console.log("zzzzzz", json); 
-        // if no error, we override defaults
-        shortcutsUPOS = json.upos;
-        shortcutsXPOS = json.xpos;
-        shortcutsDEPL = json.deplabel;
-    });
-
+    /*
+     $.getJSON("shortcuts.json", function (json) {
+     //console.log("zzzzzz", json);
+     // if no error, we override defaults
+     shortcutsUPOS = json.upos;
+     shortcutsXPOS = json.xpos;
+     shortcutsDEPL = json.deplabel;
+     });
+     */
     //$("#shortcuthelp").hide(); // initially hidden
 
     if (evt.keyCode == 63) {
-	ToggleShortcutHelp();
-    } 
-    else if (clickedNodes.length == 1) {
+        ToggleShortcutHelp();
+    } else if (clickedNodes.length == 1) {
         //
         // a word is active
         // interpret shortkeys
@@ -373,14 +414,14 @@ $(window).on('keypress', function (evt) {
             console.log("XPOS", newval, newval[0]);
             sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
             if (newval.length > 1) {
-                 console.log("--UPOS", newval[1]);
+                console.log("--UPOS", newval[1]);
                 sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval[1]});
             }
             clickedNodes = [];
             deprels = [];
             uposs = [];
         }
-           
+
     }
 })
 
@@ -823,6 +864,7 @@ function sendmodifs(commands) {
     $.ajax({
         url: URL_BASE,
         type: 'POST',
+        async: false, // wait for HTTP finished before returning
         data: commands, //{ "cmd" : inputtext },
         headers: {
             'Content-type': 'text/plain',

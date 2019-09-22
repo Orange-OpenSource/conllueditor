@@ -28,7 +28,8 @@
         "s": "nsubj",
         "u": "nummod",
         "v": "advcl",
-        "x": "xcomp"
+        "x": "xcomp",
+	"h": "aux"
     },
     "xpos": {
         "i": ["impf", "AUX"],

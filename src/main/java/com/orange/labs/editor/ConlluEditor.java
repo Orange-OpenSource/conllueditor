@@ -32,6 +32,7 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.editor;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.orange.labs.conllparser.ConllException;
@@ -45,6 +46,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -85,6 +87,7 @@ public class ConlluEditor {
     Set<String> validUPOS = null;
     Set<String> validXPOS = null;
     Set<String> validDeprels = null;
+    JsonObject shortcuts = null;
     Validator validator = null;
     History history;
     boolean callgitcommit = true;
@@ -168,6 +171,14 @@ public class ConlluEditor {
     public void setValidDeprels(List<String> filenames) throws IOException {
         validDeprels = readList(filenames);
         System.err.format("%d valid Deprel read from %s\n", validDeprels.size(), filenames.toString());
+    }
+
+    public void setShortcuts(String filename) throws IOException {
+         BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+
+        Gson gson = new Gson();
+        shortcuts = gson.fromJson(bufferedReader, JsonObject.class);
+        System.err.format("Shortcut file '%s' read\n", filename);
     }
 
     public void setValidator(String validatorconf) {
@@ -367,6 +378,10 @@ public class ConlluEditor {
                 jd.add(d);
             }
             solution.add("validXPOS", jd);
+        }
+
+        if (shortcuts != null) {
+            solution.add("shortcuts", shortcuts);
         }
 
         solution.addProperty("filename", filename.getAbsolutePath());
@@ -1468,6 +1483,7 @@ public class ConlluEditor {
         System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
         System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) after each modification");
         System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
+        System.err.println("   --shortcuts <file>   list of shortcut definition (json)");
         System.err.println("   --noedit             only browsing");
         System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
         System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
@@ -1484,6 +1500,7 @@ public class ConlluEditor {
         List<String> uposfiles = null;
         List<String> xposfiles = null;
         List<String> deprelfiles = null;
+        String shortcutfile = null;
         String rootdir = null;
         String validator = null;
         int debug = 3;
@@ -1503,6 +1520,9 @@ public class ConlluEditor {
             } else if (args[a].equals("--deprels")) {
                 String[] fns = args[++a].split(",");
                 deprelfiles = Arrays.asList(fns);
+                argindex += 2;
+            } else if (args[a].equals("--shortcuts")) {
+                shortcutfile = args[++a];
                 argindex += 2;
             } else if (args[a].equals("--validator")) {
                 validator = args[++a];
@@ -1547,6 +1567,9 @@ public class ConlluEditor {
             }
             if (validator != null) {
                 ce.setValidator(validator);
+            }
+            if (shortcutfile != null) {
+                ce.setShortcuts(shortcutfile);
             }
             if (saveafter != 0) {
                 ce.setSaveafter(saveafter);

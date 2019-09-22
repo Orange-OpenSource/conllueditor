@@ -135,6 +135,7 @@ Point your navigator  to `http://localhost:8888` .
 * `--XPOS <file>` comma separated list of files containing valid XPOS
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
 * `--validator <file>` validator configuration file (see section [validation](#Validation) below)
+* `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
@@ -221,6 +222,7 @@ The values in these columns are not interpreted (for instance BIO markings), the
 ## Shortcuts
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
 the active word to the defined value. To activate a word, click once on the word.
+A personalised list (same format as [gui/shortcuts.json](gui/hortcuts.json)) can be sued with the `--shortcuts` option. 
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
