@@ -1,21 +1,21 @@
 /** This library is under the 3-Clause BSD License
- 
+
  Copyright (c) 2018, Orange S.A.
- 
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
- 
+
  1. Redistributions of source code must retain the above copyright notice,
  this list of conditions and the following disclaimer.
- 
+
  2. Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation
  and/or other materials provided with the distribution.
- 
+
  3. Neither the name of the copyright holder nor the names of its contributors
  may be used to endorse or promote products derived from this software without
  specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -26,7 +26,7 @@
  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+
  @author Johannes Heinecke
  @version 1.14.0 as of 20th September 2019
  */
@@ -36,8 +36,8 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 
 /* test with curl
  curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://localhost:8888/edit/
- 
- 
+
+
  */
 
 // Return the value of the named parameter
@@ -128,13 +128,12 @@ var xposlist = [];
 function getServerInfo() {
     //var urlbase = 'http://' + window.location.host + ':' + $("#port").val() + '/';
 
-
     // also get the lists of valid upos and deprels
     var urlbase = URL_BASE + "validlists";
 
     $.ajax({
         url: urlbase, //+'/foo/fii?fuu=...',
-        async: false,
+        //async: false,
         type: 'GET',
         headers: {
             'Content-type': 'text/plain'
@@ -155,6 +154,7 @@ function getServerInfo() {
 
             if (data.shortcuts) {
                 console.log("SHORTCUTS", data.shortcuts);
+                $("#scfilename").html(data.shortcuts.filename);
                 if (data.shortcuts.deplabel)
                     shortcutsDEPL = data.shortcuts.deplabel;
                 if (data.shortcuts.upos) {
@@ -163,6 +163,8 @@ function getServerInfo() {
                 if (data.shortcuts.xpos)
                     shortcutsXPOS = data.shortcuts.xpos;
                 parseShortcuts();
+            } else {
+               showshortcuts();
             }
 
             $('#filename').empty();
@@ -300,26 +302,25 @@ var shortcutsXPOS = {// no point defining language specific xpos here.
 };
 
 
-/** run when index.html is loaded. reads gui/shortcut.json and updates help page.
- these values are overriden by values sent by the server getServerInfo()
+/** run gy getServerInfo() when no shortcuts are provided by server.
+    Reads defaults from gui/shortcut.json and updates help page.
  */
 function showshortcuts() {
-    //console.log("load DEFAULT shortcuts");
+    console.log("load DEFAULT shortcuts");
     $.getJSON("shortcuts.json", function (json) {
         //console.log("zzzzzz", json);
         // if no error, we override defaults
         shortcutsUPOS = json.upos;
         shortcutsXPOS = json.xpos;
         shortcutsDEPL = json.deplabel;
-
+        $("#scfilename").html("gui/shortcuts.json");
         parseShortcuts();
-
     });
 }
 
 /** read json from shortcutsUPOS and update Help Modal */
 function parseShortcuts() {
-    //console.log("PPPP");
+    console.log("PPPP");
     var sc_uposString = "";
     var sc_xposString = "";
     var sc_deplString = "";

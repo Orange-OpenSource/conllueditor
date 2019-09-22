@@ -178,6 +178,7 @@ public class ConlluEditor {
 
         Gson gson = new Gson();
         shortcuts = gson.fromJson(bufferedReader, JsonObject.class);
+        shortcuts.addProperty("filename", filename);
         System.err.format("Shortcut file '%s' read\n", filename);
     }
 
