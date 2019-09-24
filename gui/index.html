@@ -166,6 +166,7 @@
                 </tr>
 
                 <tr><td>
+                        <!-- tables with shortcuts (invoked with key "?" -->
                    <table id="shortcuthelp">
                       <tr><td class="sc">shortcuts</td> <td id="scfilename" class="sc"></td></tr>
                       <tr><td class="sc">UPOS</td><td id="uposshortcuts"></td></tr>
@@ -273,10 +274,10 @@
 <p>
 
                         More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
-                        load with the server option <tt>--shortcuts</tt>. Hitting <tt>?</tt> displays the current
+                        load it with the server option <tt>--shortcuts</tt>. Hitting <tt>?</tt> displays the current
                         shortcuts on the top of the screen (and hiding the search fields atthe same time). Hitting
                         <tt>?</tt> a second, hides the shortcut list.
-                        If this file is not valid JSON
+                        If this file is not valid JSON,
                         default shortcuts will be used. Check validity with e.g. <tt>cat gui/shortcuts.json | jq .</tt>
 
 
@@ -312,7 +313,7 @@
 
                         <h3>Non standard columns (from column 11 onwards)</h3>
                         If the conllu-file contains non standard columns (from position 11 onwards), the contents of these
-                        columns can be displayed by activating the <span class="buttondoc">extra cols</span> button.
+                        columns can be displayed (on the bottom of the graph) by activating the <span class="buttondoc">extra cols</span> button.
 
                         <h2>Run a validator</h2>
                         Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all

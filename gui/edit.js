@@ -153,7 +153,7 @@ function getServerInfo() {
                 xposlist = data.validXPOS;
 
             if (data.shortcuts) {
-                console.log("SHORTCUTS", data.shortcuts);
+                //console.log("SHORTCUTS", data.shortcuts);
                 $("#scfilename").html(data.shortcuts.filename);
                 if (data.shortcuts.deplabel)
                     shortcutsDEPL = data.shortcuts.deplabel;
@@ -222,43 +222,77 @@ function getServerInfo() {
 
 var more = true;
 var lastmore = true;
-function ToggleSearch() {
-    if (more) {
-        $("#act_search").text("more");
-        $(".search").hide();
-        $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
-        more = false;
-    } else {
+
+
+function switchSearch(on) {
+    if (on) {
+        console.log("SEARCH OPENING");
         $("#act_search").text("less");
         $(".search").show();
         $('body').css("margin-top", "280px");
         more = true;
-        if (showshortcathelp)
-            ToggleShortcutHelp();
+    } else {
+        console.log("SEARCH CLOSING");
+        $("#act_search").text("more");
+        $(".search").hide();
+        $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        more = false;
     }
+}
+
+function ToggleSearch() {
+    if (more) {
+        // is on
+        switchSearch(false);
+        //more = false;
+    } else {
+        // is off: switch it on
+        switchSearch(true);
+        //more = true;
+        if (showshortcathelp) {
+             // switch off
+            //ToggleShortcutHelp();
+            switchSCHelp(false);
+        }
+    }
+    console.log("SEARCH", more, lastmore);
 }
 
 var showshortcathelp = false;
 
-function ToggleShortcutHelp() {
-    if (showshortcathelp) {
-        //$("#act_search").text("more");
+
+function switchSCHelp(on) {
+    if (on) {
+        $("#shortcuthelp").show();
+        $('body').css("margin-top", "260px");
+        showshortcathelp = true;
+    } else {
         $("#shortcuthelp").hide();
         $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         showshortcathelp = false;
-        if (lastmore)
-            ToggleSearch();
-    } else {
-        //$("#act_search").text("less");
-        $("#shortcuthelp").show();
+    }
+}
 
-        showshortcathelp = true;
+function ToggleShortcutHelp() {
+    if (showshortcathelp) {
+        // hide short cut help
+        switchSCHelp(false);
+        if (lastmore) {
+            // if before showing the help, the search fields were shown
+            // show them again
+            switchSearch(true);
+            //more = true;
+        }
+    } else {
+        // show short cut help
+        switchSCHelp(true);
         lastmore = more; // show search again when shortcut help is switched off
         if (more) {
-            ToggleSearch();
+            // we have to switch off the search fields
+            switchSearch(false);            
+            //more = true;
         }
-        $('body').css("margin-top", "260px");
-    }
+    }     
 }
 
 
@@ -306,7 +340,7 @@ var shortcutsXPOS = {// no point defining language specific xpos here.
     Reads defaults from gui/shortcut.json and updates help page.
  */
 function showshortcuts() {
-    console.log("load DEFAULT shortcuts");
+    //console.log("load DEFAULT shortcuts");
     $.getJSON("shortcuts.json", function (json) {
         //console.log("zzzzzz", json);
         // if no error, we override defaults
@@ -320,7 +354,7 @@ function showshortcuts() {
 
 /** read json from shortcutsUPOS and update Help Modal */
 function parseShortcuts() {
-    console.log("PPPP");
+    //console.log("PPPP");
     var sc_uposString = "";
     var sc_xposString = "";
     var sc_deplString = "";
@@ -413,11 +447,14 @@ $(window).on('keypress', function (evt) {
         newval = shortcutsXPOS[String.fromCharCode(evt.keyCode)];
         if (newval != undefined) {
             console.log("XPOS", newval, newval[0]);
-            sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
             if (newval.length > 1) {
-                console.log("--UPOS", newval[1]);
-                sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval[1]});
+                // change UPOS and XPOS
+                sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
+            } else {
+                // change only XPOS
+                sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
             }
+
             clickedNodes = [];
             deprels = [];
             uposs = [];

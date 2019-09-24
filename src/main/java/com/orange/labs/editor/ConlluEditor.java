@@ -767,6 +767,7 @@ public class ConlluEditor {
 
             } else if (command.startsWith("mod upos ")
                     || command.startsWith("mod xpos ")
+                    || command.startsWith("mod pos ") // changes upos and xpos
                     || command.startsWith("mod lemma ")
                     || command.startsWith("mod form ")
                     || command.startsWith("mod deprel ")
@@ -775,10 +776,18 @@ public class ConlluEditor {
                     || command.startsWith("mod misc ")) {
                 // on attend
                 //    "mod upos id newupos" par ex. mod xpos 3 ART"
-                String[] f = command.trim().split(" +", 4);
+                String[] f = command.trim().split(" +", 4); // 4th element may contain blanks
                 if (f.length < 4) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
                 }
+                if ("pos".equals(f[1])) {
+                    // resplit, since we to expect an UPOS and an XPOS without any blanks
+                     f = command.trim().split(" +", 5);
+                    if (f.length < 5) {
+                        return formatErrMsg("INVALID a command length '" + command + "'", currentSentenceId);
+                    }
+                }
+
                 ConllWord modWord = null;
                 try {
                     csent = cfile.getSentences().get(currentSentenceId);
@@ -812,6 +821,10 @@ public class ConlluEditor {
 
                 //ConllWord modWord = csent.getWords().get(id - 1);
                 switch (f[1]) {
+                    case "pos":
+                        modWord.setUpostag(f[3]);
+                        modWord.setXpostag(f[4]);
+                        break;
                     case "upos":
                         modWord.setUpostag(f[3]);
                         break;
