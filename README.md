@@ -222,7 +222,7 @@ The values in these columns are not interpreted (for instance BIO markings), the
 ## Shortcuts
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
 the active word to the defined value. To activate a word, click once on the word.
-A personalised list (same format as [gui/shortcuts.json](gui/hortcuts.json)) can be sued with the `--shortcuts` option. 
+A personalised list (same format as [gui/shortcuts.json](gui/hortcuts.json)) can be used with the `--shortcuts` option. 
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
