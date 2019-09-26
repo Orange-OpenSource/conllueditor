@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018, Orange S.A.
+ Copyright (c) 2018-2019, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -344,6 +344,7 @@ String.prototype.hashCode = function () {
 };
 
 
+
 /** display contents of columns > 10 underneath the words
  *
  * @param {type} svg    svg to add the object
@@ -353,7 +354,7 @@ String.prototype.hashCode = function () {
  * @param {type} indexshift
  * @param {type} sentencelength if >0: right2left
  */
-function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength = 0) {
+function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength) {
     //console.log("item ", item);
     //console.log("cc " + curid)
 
@@ -364,7 +365,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength 
         x = ((sentencelength) * hor) - x;
     }
     // we try all columtypes of this sentences for each word and draw them
-    var ypos = 50 // start y difference under word
+    var ypos = 50; // start y difference under word
     for (coltype of extracolumnstypes) {
         if (item[coltype] == undefined)
             continue;

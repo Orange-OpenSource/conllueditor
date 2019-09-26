@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018, Orange S.A.
+ Copyright (c) 2018-2019, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.13.0 as of 3rd September 2019
+ @version 1.14.1 as of 26th September 2019
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -131,8 +131,8 @@ function setSize(width, height) {
  * @param {sentencelength} longueur de la phrase: si != 0 on écrit de droite à gauche
  * @returns {undefined}
  */
-function insertNode(svg, curid, item, head, level, indexshift, originx, originy, sentencelength = 0, //useitalic = true,
-        use_deprel_as_type = false) {
+function insertNode(svg, curid, item, head, level, indexshift, originx, originy, sentencelength, //useitalic = true,
+        use_deprel_as_type) {
     //var hor = 90;
     //console.log("item " + item);
     //console.log("cc " + curid)

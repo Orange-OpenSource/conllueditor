@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018, Orange S.A.
+ Copyright (c) 2018-2019, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.0 as of 20th September 2019
+ @version 1.14.1 as of 26th September 2019
  */
 
 
@@ -49,7 +49,8 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 
 // TODO add new sentence
 
-
+var isIE = /*@cc_on!@*/false || !!document.documentMode;
+var isEdge = !isIE && !!window.StyleMedia;
 var sentenceId = 0;
 
 function choosePort() {
@@ -60,8 +61,17 @@ function choosePort() {
         $("#portinfo").hide();
     }
     URL_BASE = 'http://' + window.location.hostname + ':' + $("#port").val() + '/edit/';
-    var url = new URL(window.location.href);
-    var c = url.searchParams.get("port");
+    
+    var c = null;
+    if (!isIE && !isEdge) {
+        var url = new URL(window.location.href);
+        c = url.searchParams.get("port"); // crashes apparently on Edge 41
+    } else {
+        var url = new URL(window.location.href);
+        console.log(url);
+        c = url.port;
+        $("#logo").empty(); // badly scaled on Edge, just don't show it for the time being
+    }
     //alert(c);
     if (c != null) {
         if (c == "6666") {
@@ -235,7 +245,7 @@ function switchSearch(on) {
         console.log("SEARCH CLOSING");
         $("#act_search").text("more");
         $(".search").hide();
-        $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         more = false;
     }
 }
@@ -268,7 +278,7 @@ function switchSCHelp(on) {
         showshortcathelp = true;
     } else {
         $("#shortcuthelp").hide();
-        $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        if (!more) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         showshortcathelp = false;
     }
 }
@@ -407,26 +417,16 @@ var editword_with_doubleclick = true; // in order to deactivate word-edit with d
 
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
-    //console.log("AEVT", evt, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
-    /*
-     $.getJSON("shortcuts.json", function (json) {
-     //console.log("zzzzzz", json);
-     // if no error, we override defaults
-     shortcutsUPOS = json.upos;
-     shortcutsXPOS = json.xpos;
-     shortcutsDEPL = json.deplabel;
-     });
-     */
-    //$("#shortcuthelp").hide(); // initially hidden
+    console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
 
-    if (evt.keyCode == 63) {
+    if (evt.which == 63) {
         ToggleShortcutHelp();
     } else if (clickedNodes.length == 1) {
         //
         // a word is active
         // interpret shortkeys
 
-        var newval = shortcutsUPOS[String.fromCharCode(evt.keyCode)];
+        var newval = shortcutsUPOS[String.fromCharCode(evt.which)];
         if (newval != undefined) {
             //console.log("UPOS", newval);
             sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
@@ -435,7 +435,7 @@ $(window).on('keypress', function (evt) {
             uposs = [];
         }
 
-        newval = shortcutsDEPL[String.fromCharCode(evt.keyCode)];
+        newval = shortcutsDEPL[String.fromCharCode(evt.which)];
         if (newval != undefined) {
             //console.log("DEPL", newval);
             sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
@@ -444,9 +444,9 @@ $(window).on('keypress', function (evt) {
             uposs = [];
         }
 
-        newval = shortcutsXPOS[String.fromCharCode(evt.keyCode)];
+        newval = shortcutsXPOS[String.fromCharCode(evt.which)];
         if (newval != undefined) {
-            console.log("XPOS", newval, newval[0]);
+            //console.log("XPOS", newval, newval[0]);
             if (newval.length > 1) {
                 // change UPOS and XPOS
                 sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});

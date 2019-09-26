@@ -1,3 +1,7 @@
+Version 1.14.1
+- modification to make ConlluEditor run with Edge
+- layout regression in 1.14.0 corrected
+
 Version 1.14.0
 - added shortcuts to change UPOS or deprel with click + key (hardwired defaults, gui/shortcuts.json file to personalise)
 
