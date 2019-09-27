@@ -1,0 +1,57 @@
+[
+  {
+    "paragraphs": [
+      {
+        "raw": "Sam fixed lunch and Kim dinner ",
+        "sentences": [
+          {
+            "tokens": [
+              {
+                "id": 1,
+                "dep": "nsubj",
+                "head": 1,
+                "tag": "nsubj",
+                "orth": "Sam"
+              },
+              {
+                "id": 2,
+                "dep": "root",
+                "head": 0,
+                "tag": "root",
+                "orth": "fixed"
+              },
+              {
+                "id": 3,
+                "dep": "obj",
+                "head": -1,
+                "tag": "obj",
+                "orth": "lunch"
+              },
+              {
+                "id": 4,
+                "dep": "cc",
+                "head": 1,
+                "tag": "cc",
+                "orth": "and"
+              },
+              {
+                "id": 5,
+                "dep": "conj",
+                "head": -3,
+                "tag": "conj",
+                "orth": "Kim"
+              },
+              {
+                "id": 6,
+                "dep": "orphan",
+                "head": -1,
+                "tag": "orphan",
+                "orth": "dinner"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

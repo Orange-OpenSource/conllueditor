@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.3 as of 31th May 2019
+ @version 1.14.2 as of 27th September 2019
  */
 
 import com.google.gson.Gson;
@@ -102,6 +102,28 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
+    }
+
+    @Test
+    public void testJson() throws IOException {
+        name("JSON output");
+
+        //System.out.println("=================== " + folder.getRoot());
+        File out = new File(folder,  "test.json");
+
+        URL url = this.getClass().getResource("/test.json");
+
+        // call proces to be sure makeTrees has been  called
+        String rtc = ce.process("read 13", 1, "editinfo");
+        String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13);
+        JsonElement jelement = new JsonParser().parse(res);
+        JsonObject jobject = jelement.getAsJsonObject();
+
+        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
+
+        Assert.assertEquals(String.format("JSON output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
+                FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
