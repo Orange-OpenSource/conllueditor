@@ -1114,7 +1114,7 @@ $(document).ready(function () {
 
     // run validation
     $("#valid").click(function () {
-        getRaw("validation");
+        getRaw("validation", "validation");
         //$("#showraw").dialog("open");
         $("#showRawModal").modal()
 
