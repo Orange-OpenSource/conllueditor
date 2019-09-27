@@ -99,11 +99,11 @@ function downloadSVG(ident) {
 }
 
 
-function getRaw(what) {
+function getRaw(what, title) {
     var urlbase = URL_BASE + "get" + what + "?sentid=" + ($("#currentsent").text() - 1);
     //console.log("UU " + urlbase);
     $('#rawtext').empty(); // clean text
-    $('#showRawModalLabel').html(what); //update modal title
+    $('#showRawModalLabel').html(title); //update modal title
     $.ajax({
         url: urlbase,
         type: 'GET',
@@ -1082,7 +1082,7 @@ $(document).ready(function () {
     // start show latex
     $("#latex").click(function () {
         //$('#showraw').dialog({title: 'LaTeX code'});
-        getRaw("latex");
+        getRaw("latex", '<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>');
         //$("#showraw").dialog("open");
         $("#showRawModal").modal()
 
@@ -1091,7 +1091,7 @@ $(document).ready(function () {
     // start show conllu
     $("#conllu").click(function () {
         //$('#showraw').dialog({title: "CoNLL-U format"});
-        getRaw("conllu");
+        getRaw("conllu", "CoNLL-U");
         //$("#showraw").dialog("open");
         $("#showRawModal").modal()
     });
@@ -1099,7 +1099,7 @@ $(document).ready(function () {
     // start show sdparse
     $("#sdparse").click(function () {
         //$('#showraw').dialog({title: "SD-Parse format"});
-        getRaw("sdparse");
+        getRaw("sdparse", "SD-Parse");
         //$("#showraw").dialog("open");
         $("#showRawModal").modal()
     });

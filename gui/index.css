@@ -36,7 +36,7 @@ body {
     height: 100%;
    
     text-align: justify;
-    font-family: /* Lato, */ Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
+    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
     overflow: scroll;
     
 }
@@ -135,12 +135,13 @@ img.helptextbutton {
 }
 
 /* make normal buttons look like mycheckbuttons */
-.mybutton, .btn-primary {
+.mybutton, btn-primary {
     font-family: inherit;
     /* top right bottom left */
-    padding: 5px 5px 5px 5px;
+    qqpadding: 5px 5px 5px 5px;
     border: 1px solid #959595;
     height: 30px;  
+    vertical-align: middle;
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -171,10 +172,30 @@ input {
    font-family: inherit;
 }
 
+/* input field design */
+.inputfield {
+    vertical-align: middle;
+    border-radius: 5px;
+    border: solid 1px #959595;
+    padding-left: 3px;
+}
+
+/* widht of the input fields for searching */
+.searchfield {
+    width: 10em;
+}
+
+#multifield {
+    width: 14em;
+}
+
+
 /* background for buttons with icons */
 .contain {
+    border-radius: 5px;
     overflow: hidden;
     display: inline-block;
+    vertical-align: middle;
     background-image: -webkit-gradient(
         linear,
         left bottom,
@@ -183,12 +204,12 @@ input {
         color-stop(1, rgb(252,252,252))
         );
     position: relative;
-    top: 6px; /** position of the button from top */
-    padding: 0px 0px 0px 0px;
+    sstop: 6px; /** position of the button from top */
+    sspadding: 0px 0px 0px 0px;
 }
 .contain:hover {
     overflow: hidden;
-    display: inline-block;
+    ssdisplay: inline-block;
     background-image: -webkit-gradient(
         linear,
         left bottom,
@@ -197,8 +218,8 @@ input {
         color-stop(1, rgb(255,255,255))
         );
     position: relative;
-    top: 6px; 
-    padding: 0px 0px 0px 0px;
+    sstop: 6px; 
+    sspadding: 0px 0px 0px 0px;
 }
 
 
@@ -304,27 +325,15 @@ input {
 .mycheck {
     display: inline-block;
     text-decoration: none;
-    /* ddfont-family: "Ubuntu", Arial, Helvetica, Sans; */
-    /*
-    color: black;
-    font-weight: bold;
-    background-color: #538fbe;
-    font-size: 24px;
-    */
+
     /* top right bottom left */
-    padding: 5px 5px 5px 5px;
+    qqpadding: 5px 5px 5px 5px;
     border: 1px solid #959595;
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    /*
-    background-image: linear-gradient(bottom, rgb(112,112,112) 0%, rgb(252,252,252) 100%);
-    background-image: -o-linear-gradient(bottom, rgb(73,132,10) 0%, rgb(97,155,203) 100%);
-    background-image: -moz-linear-gradient(bottom, rgb(73,132,10) 0%, rgb(97,155,203) 100%);
-    background-image: -webkit-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
-    background-image: -ms-linear-gradient(bottom, rgb(73,132,180) 0%, rgb(97,155,203) 100%);
-    */
+
     background-image: -webkit-gradient(
         linear,
         left bottom,
@@ -332,22 +341,10 @@ input {
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
         );
-    /* text-shadow: 0px  -1px 0px rgba(0,0,0,.5); /*
-    /*
-       -webkit-box-shadow: 0px 6px 0px #2b638f;
-       -moz-box-shadow: 0px 6px 0px #2b638f;
-       box-shadow: 0px 6px 0px #2b638f;
-    */
+
 }
 
 .mycheck.active {
-    /*
-    background-image: linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
-    background-image: -o-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
-    background-image: -moz-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
-    background-image: -webkit-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
-    background-image: -ms-linear-gradient(bottom, rgb(88,154,204) 0%, rgb(90,150,199) 100%);
-    */
     background-image: -webkit-gradient(
         linear,
         left bottom,
@@ -356,24 +353,9 @@ input {
         color-stop(1, rgb(252, 145, 14))
         );
 
-    /*-webkit-box-shadow: 0px 2px 0px #2b638f;
-    -moz-box-shadow: 0px 2px 0px #2b638f;
-    box-shadow: 0px 2px 0px #2b638f;
-
-    -webkit-transform: translate(0, 4px);
-    -moz-transform: translate(0, 4px);
-    transform: translate(0, 4px);
-    */
 }
 
 .mycheck:hover {
-    /*
-    background-image: linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
-    background-image: -o-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
-    background-image: -moz-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
-    background-image: -webkit-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
-    background-image: -ms-linear-gradient(bottom, rgb(79,142,191) 0%, rgb(102,166,214) 100%);
-    */
     background-image: -webkit-gradient(
         linear,
         left bottom,
@@ -401,6 +383,9 @@ input {
     transform: rotateY(180deg);
 }
 
+.latex {
+    font-family: Serif;    
+}
 
 /* A and E of LATEX spellt in upper case */
 .latex sub,
@@ -411,7 +396,7 @@ input {
 
 /* size, position of the lowered E of LATEX */
 .latex sub {
-  vertical-align: -0.1ex;
+  vertical-align: -0.05ex;
   margin-left: -0.15em;
   margin-right: -0.1em;
   font-size: 1em;

@@ -3,7 +3,7 @@
     <!--
     This library is under the 3-Clause BSD License
 
-    Copyright (c) 2018, Orange S.A.
+    Copyright (c) 2018-2019, Orange S.A.
 
     Redistribution and use in source and binary forms, with or without modification,
     are permitted provided that the following conditions are met:
@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.14.0 as of 20th September 2019
+    version 1.14.1 as of 26th September 2019
     -->
 
     <head>
@@ -68,6 +68,8 @@
         <script src="./dependency-tree.js" type="text/javascript"></script>
         <script src="./dependency-flat.js" type="text/javascript"></script>
         <script src="./edit.js" type="text/javascript"></script>
+        
+        <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"> 
     </head>
 
     <body>
@@ -91,7 +93,8 @@
                     <td colspan="6">
                         <span class="contain"><button class="editbuttons mybutton" id="undo">&nbsp;</button> <!-- ↺ --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="redo">&nbsp;</button> <!-- ↻ --></span>
-                        <button class="editbuttons mybutton" id="lire">read sentence</button><input type="text" id="sentid" size="2" value="1">
+                        <button class="editbuttons mybutton" id="lire">read sentence</button>
+                        <input type="text" id="sentid" class="inputfield" size="4" value="1">
                         <span class="contain"><button class="editbuttons mybutton" id="first">&nbsp;</button> <!--  |&lt; --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="prec">&nbsp;</button> <!-- &lt;&lt; --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="next">&nbsp;</button> <!--  &gt;&gt; --></span>
@@ -112,19 +115,19 @@
 
                 <tr class="search">
                     <td colspan="6">
-                        <input placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findword">&nbsp;</button></span>
 
-                        <input placeholder="find lemma (regex/...)" title="regex[/regex/...]" type="text" id="lemma" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find lemma (regex/...)" title="regex[/regex/...]" type="text" id="lemma" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findlemma">&nbsp;</button></span>
 
-                        <input placeholder="find upos (regex/...)" title="regex[/regex/...]" type="text" id="upos" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find upos (regex/...)" title="regex[/regex/...]" type="text" id="upos" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findupos">&nbsp;</button></span>
 
-                        <input placeholder="find xpos (regex/...)" title="regex[/regex/...]" type="text" id="xpos" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find xpos (regex/...)" title="regex[/regex/...]" type="text" id="xpos" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findxpos">&nbsp;</button></span>
 
-                        <input placeholder="find deprel (regex/...)" title="regex  of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find deprel (regex/...)" title="regex  of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="finddeprel">&nbsp;</button></span>
 
                         <span class="contain"><button class="mybutton mycheck" title="search backwards" id="backwards">&nbsp;</button></span>
@@ -133,14 +136,13 @@
                 </tr>
                 <tr class="search">
                     <td colspan="6">
-                        <input placeholder="find comment (string)" title="regex" type="text" id="comment" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" size="10" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findcomment">&nbsp;</button></span>
 
-                        <input placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" size="20" value="">
+                        <input class="inputfield searchfield" placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" size="20" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
 
 
-                        <button class ="mybutton" id="valid">validation</button>
                         <button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button>
                         <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced dependencies</button>
                     </td>
@@ -148,8 +150,8 @@
                 <tr class="search">
                     <td colspan="6">
                         <span id="portinfo">Port  <input type="text" id="port" size="2" value="12345"></span>
-                        Width  <input type="text" id="bwidth" size="2" value="90">
-                        Height <input type="text" id="bheight" size="2" value="50">
+                        Width  <input class="inputfield" type="text" id="bwidth" size="2" value="90">
+                        Height <input class="inputfield" type="text" id="bheight" size="2" value="50">
                         <span class="editmode"><button class="mybutton editbuttons onlyWithTree" id="modifier">modify</button>
                             <input placeholder="modify commands (see help)"  class="onlyWithTree" type="text" id="mods" size="20" value="">
                         </span>
@@ -158,6 +160,8 @@
                 <tr class="search">
                     <td colspan="6" -->
                         <!--button class ="editbuttons" id="save">save file on server</button-->
+                        
+                        <button class ="mybutton onlyWithTree" id="valid">validation</button>
                         <a class="onlyWithTree" id="a2" download="arbre.svg" type="image/svg+xml"><button class="mybutton">download image</button></a>
                         <button class ="onlyWithTree mybutton" id="latex"><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span></button>
                         <button class ="onlyWithTree mybutton" id="conllu">CoNLL-U</button>
