@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.12.6 as of 28th August 2019
+ @version 1.14.2 as of 27th September 2019
  */
 package com.orange.labs.conllparser;
 
@@ -910,6 +910,18 @@ public class ConllWord {
             }
         }
         return jword;
+    }
+
+    public JsonObject toSpacyJson() {
+        JsonObject w = new JsonObject();
+        w.addProperty("id", getId());
+        if (!EmptyColumn.equals(getDeplabel())) w.addProperty("dep", getDeplabel());
+        if (getHead() <= 0) w.addProperty("head", 0);
+        else w.addProperty("head", getHead()-getId());
+        if (!EmptyColumn.equals(getUpostag())) w.addProperty("tag", getDeplabel());
+        w.addProperty("orth", getForm());
+
+        return w;
     }
 
     public List<String> getExtracolumns() {

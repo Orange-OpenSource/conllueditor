@@ -104,6 +104,22 @@ the tree definitions automatically from any CoNLL-U file.
 }
 
 
+\def\beispielNOPOS{
+\setbottom{3} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=19mm,y=20mm]
+\root{2}{gefais}{}
+% headpos,xpos,ypos,form,pos,label
+\dep{2}{1}{1}{Mi}{}{advmod}
+\dep{2}{3}{1}{i}{}{nsubj}
+\dep{2}{5}{1}{ngheni}{}{ccomp}
+\dep{2}{7}{1}{Nghaerdydd}{}{obl}
+\dep{2}{8}{1}{.}{}{punct}
+\dep{5}{4}{2}{fy}{}{nmod:obj}
+\dep{7}{6}{2}{yng}{}{case}
+\end{tikzpicture}
+}
+
+
 \begin{figure}[H]
 \beispiel
 \caption{Default dependency tree}\label{ex1}
@@ -169,6 +185,21 @@ the tree definition, results in figure~\ref{ex2}:
 \end{figure}
 
 
+Setting the label background color to an empty value, prints the dependency labels
+above the edges without box nor background (cf. figure \ref{ex3})
+
+\begin{verbatim}
+\setdeprelbgcolor{}
+\setdepreltextfont{\footnotesize}
+\end{verbatim}
+
+
+\setdeprelbgcolor{}
+\setdepreltextfont{\footnotesize}
+\begin{figure}[H]
+\beispielNOPOS
+\caption{Customized dependency tree}\label{ex3}
+\end{figure}
 
 The vertical position can be used to modify the layout of the
 trees. For instance if we change the line from figure \ref{def1}
@@ -176,7 +207,7 @@ to \verb+\dep{5}{4}{2.3}{fy}{PRON}{nmod:obj}+
  will lower the node of
 word \emph{fy} slightly (cf. figure \ref{ex3}).
 
-
+\setdeprelbgcolor{blue!15}
 
 \begin{figure}[H]
 \setbottom{3} % set to 0 to hide bottom line of forms

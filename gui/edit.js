@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.1 as of 26th September 2019
+ @version 1.14.2 as of 27th September 2019
  */
 
 
@@ -1101,6 +1101,13 @@ $(document).ready(function () {
         //$('#showraw').dialog({title: "SD-Parse format"});
         getRaw("sdparse", "SD-Parse");
         //$("#showraw").dialog("open");
+        $("#showRawModal").modal()
+    });
+
+    // start show spacy's json
+    $("#json").click(function () {
+        //$('#showraw').dialog({title: "SD-Parse format"});
+        getRaw("spacyjson", "JSON (Spacy)");
         $("#showRawModal").modal()
     });
 

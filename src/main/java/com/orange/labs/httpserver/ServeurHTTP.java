@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.0 as of 3rd May 2019
+ @version 1.14.2 as of 27th September 2019
  */
 package com.orange.labs.httpserver;
 
@@ -259,6 +259,10 @@ public class ServeurHTTP {
                             json = true;
                         } else if (path.equals("/edit/getsdparse")) {
                             response = ce.getraw(ConlluEditor.Raw.SDPARSE, sentid) + "\n";
+                            http_rtc = HttpURLConnection.HTTP_OK;
+                            json = true;
+                        } else if (path.equals("/edit/getspacyjson")) {
+                            response = ce.getraw(ConlluEditor.Raw.SPACY_JSON, sentid) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;
                         } else {

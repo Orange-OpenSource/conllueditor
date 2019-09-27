@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.13.1 as of 5th September 2019
+ @version 1.14.2 as of 27th September 2019
  */
 package com.orange.labs.conllparser;
 
@@ -1367,6 +1367,35 @@ public class ConllSentence {
             jheads.add(jhead);
         }
         return jheads;
+    }
+
+    /** json in spacy's format. @see https://spacy.io/api/annotation */
+    public JsonArray toSpacyJson() {
+        JsonArray jdocs = new JsonArray();
+        JsonObject jdoc = new JsonObject();
+        jdocs.add(jdoc);
+
+        jdoc.addProperty("id", getSentid());
+
+        JsonArray jpars = new JsonArray();
+        jdoc.add("paragraphs", jpars);
+        JsonObject jpar = new JsonObject();
+        jpars.add(jpar);
+        jpar.addProperty("raw", getSentence());
+
+        JsonArray jsents = new JsonArray();
+        jpar.add("sentences", jsents);
+        JsonObject jsent = new JsonObject();
+        jsents.add(jsent);
+
+        JsonArray jtoks = new JsonArray();
+        jsent.add("tokens", jtoks);
+
+        for (ConllWord cw : words) {
+            jtoks.add(cw.toSpacyJson());
+        }
+
+        return jdocs;
     }
 
     public String[] tokens() {

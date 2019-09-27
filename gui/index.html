@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.14.1 as of 26th September 2019
+    version 1.14.2 as of 27th September 2019
     -->
 
     <head>
@@ -166,6 +166,7 @@
                         <button class ="onlyWithTree mybutton" id="latex"><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span></button>
                         <button class ="onlyWithTree mybutton" id="conllu">CoNLL-U</button>
                         <button class ="onlyWithTree mybutton" id="sdparse">SD-Parse</button>
+                        <button class ="onlyWithTree mybutton" id="json">JSON (Spacy)</button>
                     </td>
                 </tr>
 
@@ -220,6 +221,8 @@
                         <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
                         <br><b>modify the dependency relation</b>: click on the relation label
                         <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: control-click or double-click on the node to modify
+                        <br><b>edit a multi-word token</b>: click on the grey bar spanning the words (to change start token, a new MWT has to be created). Setting the end token to 0 deletes the multiword token. 
+                        the <span class="userinputdoc">compose <i>id length</i></span> command allows ti add new MW tokens.
                         <br><br>or use a command and hit the <span class="buttondoc">modify</span> button:
 
                         <!-- class="helpstyle" ici pour mettre les meme font-size (jquery-ui fait ça différemment -->
@@ -566,7 +569,7 @@
                     <div class="modal-body" >
                         <!--span id="qqcurrentmwefrom"></span>-<span id="qqcurrentmweto"></span-->
                         <table>
-                            <tr><td>multitoken start</td> <td><div class="ui-widget"><input type="text" id="currentmwefrom"  value=""></div></td></tr>
+                            <tr><td>multitoken start</td> <td><div class="ui-widget"><input type="text" id="currentmwefrom"  value="" disabled></div></td></tr>
                             <tr><td>multitoken end</td>   <td><div class="ui-widget"><input type="text" id="currentmweto"    value=""></div></td></tr>
                             <tr><td>form</td>             <td><div class="ui-widget"><input type="text" id="currentmweform"  value=""></div></td></tr>
                         </table>

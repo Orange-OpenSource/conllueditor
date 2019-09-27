@@ -17,8 +17,8 @@
 % define styles for arrows, words and dep labels
 \tikzstyle{dottedline} = [draw, dashed, color=gray]
 \tikzstyle{line} = [draw, very thick, color=\@deprelcolor, -latex']
-\tikzstyle{wort} = [rectangle, %draw=blue, %fill=blue!60,
-                    inner sep=1pt,
+\tikzstyle{wort} = [rectangle, %draw=blue, fill=blue!60,
+                    %inner sep=1pt,
                     font=\@wordfont,
 		    align=center, %% needed to make \\ work
                     %    text width=5em,
@@ -34,10 +34,23 @@
                     %minimum height=4ex
 ]
 
+
 \tikzstyle{deplabel} = [rectangle,line width=0.2pt,
                         draw=\@deprellabelcolor,
                         text=\@depreltextcolor,
                         fill=\@deprelbgcolor, %violet!10,
+                        inner sep=3pt,
+                        %inner sep=0pt,
+		        align=center, %% needed to make \\ work
+                        font=\@depreltextfont,
+                        % text width=5em,
+                        text centered,
+                        rounded corners %, minimum  height=\minheight
+]
+
+% if background color is empty, we do not draw neither fill nor border
+\tikzstyle{deplabel2} = [rectangle,line width=0.2pt,above,
+                        text=\@depreltextcolor,
                         inner sep=3pt,
                         %inner sep=0pt,
 		        align=center, %% needed to make \\ work
@@ -72,9 +85,14 @@
 \def\@bottom{0}
 \def\setbottom#1{\def\@bottom{#1}}
 
-%         xpos form,pos
+%         x_pos form,pos
 \def\root#1#2#3{
- \node [wort] (#1) at(#1,0) {#2\\#3};
+  \def\@@pos{#3}%
+  \ifx\@@pos\@empty%
+    \node [wort] (#1) at(#1,0) {#2};
+  \else
+    \node [wort] (#1) at(#1,0) {#2\\#3};
+  \fi
   \ifthenelse{\NOT 0 =\@bottom}{
     \node [bottomwort] (bottom_#1) at(#1,-\@bottom)  {#2};
     \path [dottedline] (#1) -- (bottom_#1);
@@ -95,8 +113,18 @@
 % add some horizontal space to xpos
 %        headpos,xpos,ypos,form,pos,label, addtoxpos
 \def\depX#1#2#3#4#5#6#7{
-  \node [wort] (#2) at(#2.#7,-#3)  {#4\\#5}; 
-  \path [line] (#1) -> node [deplabel,sloped,midway] {#6} (#2);
+  \def\@@pos{#5}%
+  \ifx\@@pos\@empty%
+	  \node [wort] (#2) at(#2.#7,-#3)  {#4}; 
+  \else
+	  \node [wort] (#2) at(#2.#7,-#3)  {#4\\#5}; 
+  \fi
+  
+  \ifx\@deprelbgcolor\@empty
+	\path [line] (#1) -> node [deplabel2,sloped,midway] {#6} (#2);
+  \else
+	\path [line] (#1) -> node [deplabel,sloped,midway] {#6} (#2);
+  \fi
   \ifthenelse{\NOT 0 =\@bottom}{
     \node [bottomwort] (bottom_#2) at(#2.#7,-\@bottom)  {#4}; 
     \path [dottedline] (#2) -- (bottom_#2);

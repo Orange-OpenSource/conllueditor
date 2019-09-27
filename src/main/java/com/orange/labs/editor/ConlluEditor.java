@@ -28,11 +28,12 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.0 as of 20th September 2019
+ @version 1.14.2 as of 27th September 2019
  */
 package com.orange.labs.editor;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.orange.labs.conllparser.ConllException;
@@ -97,7 +98,7 @@ public class ConlluEditor {
     private String programmeversion;
 
     public enum Raw {
-        LATEX, CONLLU, SDPARSE, VALIDATION
+        LATEX, CONLLU, SDPARSE, VALIDATION, SPACY_JSON
     };
 
     public ConlluEditor(String conllfile) throws ConllException, IOException {
@@ -328,6 +329,11 @@ public class ConlluEditor {
                     break;
                 case SDPARSE:
                     solution.addProperty("raw", csent.getSDparse());
+                    break;
+                case SPACY_JSON:
+                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                    String jsonOutput = gson.toJson(csent.toSpacyJson());
+                    solution.addProperty("raw", jsonOutput);
                     break;
                 case CONLLU:
                 default:
@@ -895,7 +901,7 @@ public class ConlluEditor {
                 csent.addWord(composedWord, id);
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod editmwe")) { // mod editmwe start end form
+            } else if (command.startsWith("mod editmwe")) { // mod editmwe currentstart newend form
                 String[] f = command.trim().split(" +");
                 if (f.length < 5) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
