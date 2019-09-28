@@ -1,3 +1,6 @@
+Version 1.14.3
+- layout, save button only visible when server is started with --saveAfter option
+
 Version 1.14.2
 - add JSON export (following Spacy)
 

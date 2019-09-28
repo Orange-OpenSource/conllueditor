@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.2 as of 27th September 2019
+ @version 1.14.3 as of 28th September 2019
  */
 
 
@@ -187,6 +187,12 @@ function getServerInfo() {
                 $('.editmode').show();
             }
 
+            if (data.saveafter && data.saveafter > 1) {
+                $('#save').show();
+            } else {
+                $('#save').hide();
+            }
+
             // set version number to logo (shown if mouse hovers on the logo)
             $('#logo').attr("title", data.version);
 
@@ -227,6 +233,7 @@ function getServerInfo() {
     $('#undo').prop('disabled', true);
     $('#redo').prop('disabled', true);
     $('#save').prop('disabled', true);
+    //$('#save').hide();
 }
 
 
@@ -375,7 +382,8 @@ function parseShortcuts() {
     for (var p in shortcutsUPOS) {
         //console.log("eee", shortcutsUPOS[p]);
         $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
-        sc_uposString += '<span class="sckey">' + p + "</span>:" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
+        //sc_uposString += '<span class="sckey">' + p + "</span>:" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
+        sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
     }
     $("#uposshortcuts").append(sc_uposString);
 
@@ -385,7 +393,8 @@ function parseShortcuts() {
     $("#deplshortcuts").empty();
     for (var p in shortcutsDEPL) {
         $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
-        sc_deplString += '<span class="sckey">' + p + "</span>:" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
+        //sc_deplString += '<span class="sckey">' + p + "</span>:" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
+        sc_deplString += '<span class="sckey">' + p + "=" + shortcutsDEPL[p] + "</span>&nbsp;&nbsp;";
     }
     $("#deplshortcuts").append(sc_deplString);
 
@@ -398,7 +407,8 @@ function parseShortcuts() {
         $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
                 + shortcutsXPOS[p][0] + "</td> <td>"
                 + shortcutsXPOS[p][1] + "</td></tr>");
-        sc_xposString += '<span class="sckey">' + p + "</span>:" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "&nbsp;&nbsp;";
+        //sc_xposString += '<span class="sckey">' + p + "</span>:" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "&nbsp;&nbsp;";
+        sc_xposString += '<span class="sckey">' + p + "=" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp;&nbsp;";
         // $.each(shortcutsUPOS, function(k, v) {
         //     result += k + " , " + v + "\n";
         // });
@@ -433,6 +443,7 @@ $(window).on('keypress', function (evt) {
             clickedNodes = [];
             deprels = [];
             uposs = [];
+            return;
         }
 
         newval = shortcutsDEPL[String.fromCharCode(evt.which)];
@@ -442,6 +453,7 @@ $(window).on('keypress', function (evt) {
             clickedNodes = [];
             deprels = [];
             uposs = [];
+            return;
         }
 
         newval = shortcutsXPOS[String.fromCharCode(evt.which)];
@@ -458,6 +470,7 @@ $(window).on('keypress', function (evt) {
             clickedNodes = [];
             deprels = [];
             uposs = [];
+            return;
         }
 
     }

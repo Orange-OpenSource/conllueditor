@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.2 as of 27th September 2019
+ @version 1.14.3 as of 28th September 2019
  */
 package com.orange.labs.editor;
 
@@ -394,6 +394,7 @@ public class ConlluEditor {
         solution.addProperty("filename", filename.getAbsolutePath());
         solution.addProperty("version", programmeversion);
         solution.addProperty("reinit", mode);
+        solution.addProperty("saveafter", saveafter);
         return solution.toString();
     }
 
