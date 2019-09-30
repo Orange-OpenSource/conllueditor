@@ -24,17 +24,18 @@ The editor provides the following functionalities:
 ### Requirements
 
 * Java jre 8.0
-* Firefox (tested with version 60.9 on Windows 10 and >= 63 on Linux),
+* Firefox (tested with version 60.9 on Windows 10, >= 63 on Linux and 69.0.1 on MacOS Sierra),
   Chromium or Chrome (both tested with version 70 on Linux),
   Edge (tested with version 44.17763.1.0 on Windows 10),
-  Opera (tested with version 63 on Linux)
+  Opera (tested with version 63 on Linux),
+  Safari (tested with version 11.1 on MacOS Sierra)
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js), needed by bootstrap
 * optionally apache or lighttpd
 
 In order two compile the server, you also need
-* Java jdk 8.0
+* Java jdk >= 8.0
 * maven (tested with >= 3.3.9)
 
 ### License
