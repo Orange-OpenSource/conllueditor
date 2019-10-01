@@ -209,7 +209,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         // creer le texte pour cette ligne
         var depreltext = document.createElementNS(svgNS, "text");
         depreltext.setAttribute("id", "text" + pathvar);
-        depreltext.setAttribute("font-size", "14");
+        //depreltext.setAttribute("font-size", "14");
         depreltext.setAttribute("dy", "-3");
         //depreltext.setAttribute("filter", "url(#solid)");
 
