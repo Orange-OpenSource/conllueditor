@@ -137,14 +137,15 @@ The package has limited configuration options:
   
 \item \verb:\setdepreltextcolor{violet}:colour of the dependency relation name
 \item \verb:\setdepreltextfont{\sf}: font for the dependency relation  name
-\item \verb:\setwordfont{\sf}: font for word nodes
+\item \verb:\setwordfont{\sf}: font for word nodes (form and POS, unless the latter is overriden)
+\item \verb:\setposfont{\sf}: font for POS in word nodes
 \item \verb:\setbottomwordfont{\sf}: font for words on the bottom line
 \item \verb:\setmtwfont{\it\scriptsize}: font for multiword token (bottom line)
 \item \verb:\setmtwlabelcolor{blue!10}: background colour for multiword token
 \end{itemize}
 
 The \verb:set*font: commands accept any font command, including new
-fonts declared with \XeLaTeX' \verb:fontspec:.
+fonts declared with \XeLaTeX' \verb:fontspec: package.
 
 For instance, adding the the customization shown in figure \ref{def2}
 \emph{before} 
@@ -158,6 +159,7 @@ the tree definition, results in figure~\ref{ex2}:
 \setdeprelbgcolor{blue!15}    
 \setdepreltextfont{\it\scriptsize}
 \setwordfont{\large\sf}
+\setposfont{\rm\small}
 \setbottomwordfont{\footnotesize\sf}
 \setmtwfont{\it\scriptsize}
 \setmtwlabelcolor{blue!10}
@@ -173,6 +175,7 @@ the tree definition, results in figure~\ref{ex2}:
 \setdeprelbgcolor{blue!15}
 \setdepreltextfont{\it\scriptsize}
 \setwordfont{\large\sf}
+\setposfont{\rm\small}
 \setbottomwordfont{\footnotesize\sf}
 \setmtwfont{\it\scriptsize}
 \setmtwlabelcolor{blue!10}

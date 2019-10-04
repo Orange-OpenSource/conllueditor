@@ -1,4 +1,4 @@
-\ProvidesPackage{deptree}[2019/04/22, v1.00 simple dependency trees]
+\ProvidesPackage{deptree}[2019/10/04, v1.10 simple dependency trees]
 \NeedsTeXFormat{LaTeX2e}[2016/02/01]
 
 \RequirePackage{ifthen}
@@ -12,13 +12,16 @@
 \def\@deprelbgcolor{black!5}
 \def\@depreltextfont{\footnotesize} 
 \def\@wordfont{}
+\def\@wordcolor{black}
 \def\@bottomwordfont{\small} 
+\def\@posfont{} 
 \def\@mtwfont{\scriptsize} 
 % define styles for arrows, words and dep labels
 \tikzstyle{dottedline} = [draw, dashed, color=gray]
 \tikzstyle{line} = [draw, very thick, color=\@deprelcolor, -latex']
 \tikzstyle{wort} = [rectangle, %draw=blue, fill=blue!60,
                     %inner sep=1pt,
+                    color=\@wordcolor,
                     font=\@wordfont,
 		    align=center, %% needed to make \\ work
                     %    text width=5em,
@@ -34,12 +37,12 @@
                     %minimum height=4ex
 ]
 
-
+% label with background color on the dependency line
 \tikzstyle{deplabel} = [rectangle,line width=0.2pt,
                         draw=\@deprellabelcolor,
                         text=\@depreltextcolor,
                         fill=\@deprelbgcolor, %violet!10,
-                        inner sep=3pt,
+                        inner sep=2pt,
                         %inner sep=0pt,
 		        align=center, %% needed to make \\ work
                         font=\@depreltextfont,
@@ -49,9 +52,10 @@
 ]
 
 % if background color is empty, we do not draw neither fill nor border
-\tikzstyle{deplabel2} = [rectangle,line width=0.2pt,above,
+% printed next to the dependency line
+\tikzstyle{deplabel2} = [rectangle,line width=0.2pt, above,
                         text=\@depreltextcolor,
-                        inner sep=3pt,
+                        inner sep=2pt,
                         %inner sep=0pt,
 		        align=center, %% needed to make \\ work
                         font=\@depreltextfont,
@@ -78,7 +82,9 @@
 \def\setdeprelbgcolor#1{\def\@deprelbgcolor{#1}}
 \def\setdepreltextfont#1{\def\@depreltextfont{#1}}
 \def\setwordfont#1{\def\@wordfont{#1}}
+\def\setwordcolor#1{\def\@wordcolor{#1}}
 \def\setbottomwordfont#1{\def\@bottomwordfont{#1}}
+\def\setposfont#1{\def\@posfont{#1}}
 \def\setmtwfont#1{\def\@mtwfont{#1}}
 \def\setmtwlabelcolor#1{\def\@mtwlabelcolor{#1}}
 
@@ -91,7 +97,7 @@
   \ifx\@@pos\@empty%
     \node [wort] (#1) at(#1,0) {#2};
   \else
-    \node [wort] (#1) at(#1,0) {#2\\#3};
+    \node [wort] (#1) at(#1,0) {#2\\\@posfont #3};
   \fi
   \ifthenelse{\NOT 0 =\@bottom}{
     \node [bottomwort] (bottom_#1) at(#1,-\@bottom)  {#2};
@@ -102,12 +108,6 @@
 %        headpos,xpos,ypos,form,pos,label
 \def\dep#1#2#3#4#5#6{
  \depX{#1}{#2}{#3}{#4}{#5}{#6}{0}
-%  \node [wort] (#2) at(#2,-#3)  {#4\\#5}; 
-%  \path [line] (#1) -> node [deplabel,sloped,midway] {#6} (#2);
-%  \ifthenelse{\NOT 0 =\@bottom}{
-%    \node [bottomwort] (bottom-#2) at(#2,-\@bottom)  {#4}; 
-%    \path [dottedline] (#2) -- (bottom-#2);
-%  }{}
 }
 
 % add some horizontal space to xpos
@@ -117,7 +117,7 @@
   \ifx\@@pos\@empty%
 	  \node [wort] (#2) at(#2.#7,-#3)  {#4}; 
   \else
-	  \node [wort] (#2) at(#2.#7,-#3)  {#4\\#5}; 
+	  \node [wort] (#2) at(#2.#7,-#3)  {#4\\\@posfont #5}; 
   \fi
   
   \ifx\@deprelbgcolor\@empty
