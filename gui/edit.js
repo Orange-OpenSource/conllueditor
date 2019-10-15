@@ -131,7 +131,7 @@ var xposlist = [];
 
 /** get information from ConlluEditor server:
  name of edited file
- lists of valid UPOX, XPOS, deprel
+ lists of valid UPOS, XPOS, deprel
  version of server
  edit mode
  */
@@ -427,12 +427,22 @@ var editword_with_doubleclick = true; // in order to deactivate word-edit with d
 
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
-    console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+
+    if($(".modal").is(":visible")) {
+        // if a model is open, we do not want to catch keypress events, since we are editing text
+        return;
+    }
 
     if (evt.which == 63) {
         ToggleShortcutHelp();
+    } else if (evt.which == 43) { // +
+        sendmodifs({"cmd": "next"});
+    } else if (evt.which == 45) { // -
+        sendmodifs({"cmd": "prec"});
+    } else if (evt.which == 61) { // = valid
+         $("#valid").click();
     } else if (clickedNodes.length == 1) {
-        //
         // a word is active
         // interpret shortkeys
 

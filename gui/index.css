@@ -118,20 +118,51 @@ img.helptextbutton {
     border: 1px solid #222;
     padding: 5px;
     width: 25px;
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
 }
 
+/* format of application buttons in the help text */
 .buttondoc {
     font-style: italic;
     border-radius: 5px;
     border: 1px solid #222;
     padding: 5px;
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
 }
 
+/* format of keys to press in the help text */
+.keydoc {
+    font-weight: bold;
+    font-family: Courier, FreeMono, Mono;
+    border-radius: 3px;
+    border: 1px solid #222;
+    padding: 1px;
+}
+
+/* format of user commands in the help text */
 .userinputdoc {
     font-family: Courier, FreeMono, Mono;
     background-color: #f8f8f8;
     padding-left: .1em;
     padding-right: .3em;
+}
+
+/* format of command line commands in the help text */
+.commandline {
+    font-family: Courier, FreeMono, Mono;
+    padding-left: 6em;
 }
 
 /* make normal buttons look like mycheckbuttons */

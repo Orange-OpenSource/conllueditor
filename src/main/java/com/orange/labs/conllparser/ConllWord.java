@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.2 as of 27th September 2019
+ @version 1.14.4 as of 1st October 2019
  */
 package com.orange.labs.conllparser;
 
@@ -786,18 +786,19 @@ public class ConllWord {
         }
 
         if (!features.isEmpty()) { // && !"_".equals(features.get(0))) {
-            JsonArray jfeats = new JsonArray();
-            for (String f : features.keySet()) {
-
-                JsonObject jfeat = new JsonObject();
-                jfeat.addProperty("name", f);
-                String val = features.get(f);
-                if (val != null) {
-                    jfeat.addProperty("val", val);
-                }
-                jfeats.add(jfeat);
-            }
-            jword.add("feats", jfeats);
+//            JsonArray jfeats = new JsonArray();
+//            for (String f : features.keySet()) {
+//
+//                JsonObject jfeat = new JsonObject();
+//                jfeat.addProperty("name", f);
+//                String val = features.get(f);
+//                if (val != null) {
+//                    jfeat.addProperty("val", val);
+//                }
+//                jfeats.add(jfeat);
+//            }
+//            jword.add("feats", jfeats);
+            jword.add("feats", getFeaturesJson());
         }
 
         if (misc != null && !misc.isEmpty()) {
@@ -1105,6 +1106,21 @@ public class ConllWord {
         return features;
     }
 
+    public JsonArray getFeaturesJson() {
+        JsonArray jfeats = new JsonArray();
+        for (String f : features.keySet()) {
+            JsonObject jfeat = new JsonObject();
+            jfeat.addProperty("name", f);
+            String val = features.get(f);
+            if (val != null) {
+                jfeat.addProperty("val", val);
+            }
+            jfeats.add(jfeat);
+        }
+        return jfeats;
+    }
+    
+    
     /** return reafures as UD string */
     public String getFeaturesStr() {
         if (features.isEmpty()) {

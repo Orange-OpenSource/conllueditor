@@ -210,7 +210,8 @@
                         <h2>Navigating</h2>
                         Click <span class="buttondoc">read sentence</span> to load the sentence with the number given in the entry field to the right of the button.
                         The buttons <img class="helptextbutton" src="img/preceding.svg"> and
-                        <img class="helptextbutton" src="img/following.svg"> change to the preceding/next sentence,
+                        <img class="helptextbutton" src="img/following.svg"> change to the preceding/next sentence 
+                        (also <span class="keydoc">-</span> and <span class="keydoc">+</span> keys),
                         use <img class="helptextbutton" style="width: 30px;" src="img/Start.svg"> and
                         <img class="helptextbutton" style="width: 30px;" src="img/End.svg"> to go to the first/last sentence.
 
@@ -247,7 +248,7 @@
                         <br>other commands for <span class="buttondoc">modify</span> (no graphical equivalent) :
 
                         <table border ="0" class="bhelpstyle">
-                            <tr><td width="42%">&bull; <span class="userinputdoc">split <i>id</i> [<i>splitpos</i>]</span></td> <td>split a word in two
+                            <tr><td width="440px">&bull; <span class="userinputdoc">split <i>id</i> [<i>splitpos</i>]</span></td> <td>split a word in two
                                     (it will be copied to a new node and attached to the same head). If <i>splitpos</i> the characters of Form and Lemma left of <i>splitpos</i> will
                                     remain in the original word, the rest will be the new word</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following</td></tr>
@@ -278,16 +279,20 @@
 <p>
 
                         More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
-                        load it with the server option <tt>--shortcuts</tt>. Hitting <tt>?</tt> displays the current
+                        load it with the server option <tt>--shortcuts</tt>. Hitting <span class="keydoc">?</span> displays the current
                         shortcuts on the top of the screen (and hiding the search fields atthe same time). Hitting
-                        <tt>?</tt> a second, hides the shortcut list.
+                        <span class="keydoc">?</span> a second time, hides the shortcut list again.
                         If this file is not valid JSON,
-                        default shortcuts will be used. Check validity with e.g. <tt>cat gui/shortcuts.json | jq .</tt>
+                        default shortcuts will be used. Check validity with e.g. <br>
+                        <span class="commandline">$ cat gui/shortcuts.json | jq .</span>
 
 
                         <p><b>Modify comment</b> (shown underneath the sentence): click the comment.</p>
                         <p>The <span class="buttondoc">download image</span> button downloads the current dependency tree as an <tt>.svg</tt> file. Use the following commands
-                            to transform it into <tt>.pdf</tt> or <tt>.png</tt>: <tt>inkscape -A arbre.pdf arbre.svg</tt>.</p>
+                        to transform it into <tt>.pdf</tt> or <tt>.png</tt>:<br>
+                        <span class="commandline">$ inkscape -A arbre.pdf arbre.svg</span><br>
+                        <span class="commandline">$ inkscape -e arbre.png arbre.svg</span>
+                        </p>
                         <p>In order to downlad the entire sentence in CoNLL-U, SD-Parser or
                             <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> (for tikz-dependencies),
                             click the corresponding buttons)</p>
@@ -324,11 +329,11 @@
                         needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
                         <br><tt>&nbsp;   script: /path/to/UDtools/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}</tt>
                         <br>and give this file as option to the server.
-                        When hitting the <span class="buttondoc">validate</span> button, the validation programme
+                        When hitting the <span class="buttondoc">validate</span> button or the <span class="keydoc">=</span> key, the validation programme
                         is run on the current sentence.
 
                         <h2>Searching</h2>
-                        Activate the search form by clicking on <span class="buttondoc">show search</span>
+                        Make search forms visible by clicking on <span class="buttondoc">more</span>
                         <ul>
                             <li>The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).
                                 <br>For example
@@ -339,10 +344,15 @@
                                 </ul>
                             <li>The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
                                 <ul>
-                                    <li>Upos: <span class="userinputdoc">AUX/.*/VERB</span> looks for a sequence of words with upos tags AUX, any, VERB
+                                    <li>Upos: <span class="userinputdoc">AUX/.*/VERB</span> looks for a sequence of words with upos tags <i>AUX, any, VERB</i>
                                 </ul>
                             <li>The <i>any</i> search fields accepts a /-separated list of <i>searchfield:regex</i> to find a sequence on different criteria.
-                                <i>searchfield</i> can be any of <i>f, l, u, x, d</i> (form, lemma, upos, xpos, deprel)
+                                <i>searchfield</i> can be any of 
+                                <span class="userinputdoc">f</span>,
+                                <span class="userinputdoc">l</span>, 
+                                <span class="userinputdoc">u</span>, 
+                                <span class="userinputdoc">x</span>, 
+                                <span class="userinputdoc">d</span> (form, lemma, upos, xpos, deprel)
                                 <ul>
                                     <li><span class="userinputdoc">l:the/u:ADJ/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
                                         any adjective and the last is <i>mouse</i>
@@ -411,7 +421,7 @@
 
                        <h2>About</h2>
                        Author: Johannes Heinecke.
-                       Copyright © 2018 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
+                       Copyright © 2018-2019 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
                        <p>
                            Powered by <a target="_blank" href="https://jquery.com/">jquery</a>,
                            <a target="_blank" href="https://getbootstrap.com">bootstrap</a> and

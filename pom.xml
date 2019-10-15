@@ -32,13 +32,13 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 1.14.3 as of 28th September 2019
+    version 1.14.4 as of 1st October 2019
     -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>1.14.3</version>
+    <version>1.14.4</version>
     <packaging>jar</packaging>
 
     <properties>

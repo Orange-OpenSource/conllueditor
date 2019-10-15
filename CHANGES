@@ -1,3 +1,7 @@
+Version 1.14.4
+- factorisation in ConllWord class
+- added shortcuts: to go to next (+) or preceding (-) sentence, run validation (=)
+
 Version 1.14.3
 - layout, save button only visible when server is started with --saveAfter option
 

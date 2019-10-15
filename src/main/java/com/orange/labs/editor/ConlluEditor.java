@@ -1077,6 +1077,8 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod insert ")) {
+                // add new word:
+                // mod insert id form [lemma [upos [xpos]]]
                 String[] f = command.trim().split(" +");
                 if (f.length < 4) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
