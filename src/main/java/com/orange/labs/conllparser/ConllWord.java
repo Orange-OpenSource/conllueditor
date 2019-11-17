@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.4 as of 1st October 2019
+ @version 1.14.5 as of 17th November 2019
  */
 package com.orange.labs.conllparser;
 
@@ -138,15 +138,14 @@ public class ConllWord {
         }
         head = orig.getHead();
         deplabel = orig.getDeplabel();
-        //deps = orig.getDeps();
-        deps = new ArrayList<>();
-        for (EnhancedDeps ed : orig.getDeps()) {
-            deps.add(new EnhancedDeps(ed));
-        }
 
-        //basicdeps_in_ed_column = orig.basicdeps_in_ed_column;
-        //misc = orig.getMisc();
-        misc = new LinkedHashMap<>(orig.misc);
+        if (toktype != Tokentype.CONTRACTED) {
+            deps = new ArrayList<>();
+            for (EnhancedDeps ed : orig.getDeps()) {
+                deps.add(new EnhancedDeps(ed));
+            }
+            misc = new LinkedHashMap<>(orig.misc);
+        }
         spacesAfter = orig.spacesAfter;
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
