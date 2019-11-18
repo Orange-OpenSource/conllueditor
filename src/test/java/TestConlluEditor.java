@@ -218,8 +218,26 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-    } 
-    
+    }
+
+    @Test
+    public void testCreateMWT() throws IOException {
+        name("create two MWT with three/two words and rename contracted form");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".8");
+        String rtc = ce.process("mod compose 1 3", 17, "editinfo");
+        rtc = ce.process("mod editmwe 1 3 Dáselle", 17, "editinfo");
+
+        rtc = ce.process("mod compose 6 2", 17, "editinfo");
+        rtc = ce.process("mod editmwe 6 7 ao", 17, "editinfo");
+
+        URL ref = this.getClass().getResource("/test.create-mwt.conllu");
+        URL res = this.getClass().getResource("/test.conllu.8"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
     @Test
     public void testRead() throws IOException {
         name("read sentence");

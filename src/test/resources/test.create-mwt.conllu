@@ -161,8 +161,8 @@
 4	mangé	manger	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
 5	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
 6	fromage	fromage	NOUN	NOUN	Gender=Masc|Number=Sing	4	obj	_	_
-7	qui	qui	PRON	REL	PronType=Rel	8	nsubj	6:ref	_
-8	pue	puer	VERB	VERB	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	6:nsubj	_
+7	qui	qui	PRON	REL	PronType=Rel	8	nsubj	_	_
+8	pue	puer	VERB	VERB	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	_	_
 9	.	.	PUNCT	PUNCT	_	4	punct	_	_
 
 # text = il habite à Los Angeles.
@@ -212,7 +212,7 @@
 
 # sentence 11
 # text = Sam bought and prepared dinner
-1	Sam	Sam	PROPN	_	_	2	nsubj	2:nsubj	_
+1	Sam	Sam	PROPN	_	_	2	nsubj	2:nsubj|4:nsubj	_
 2	bought	buy	VERB	_	_	0	root	_	_
 3	and	and	CCONJ	_	_	4	cc	_	_
 4	prepared	prepare	VERB	_	_	2	conj	_	_
@@ -296,11 +296,13 @@
 # sentence 17
 # used to test adding MWT 1-3 and 6-7
 # text = Dáselle nova redacción ao punto 2 do artigo 7, que queda redactado nos seguintes termos: 2 Enténdese por solo de natureza urbana: a) O clasificado ou definido polo plan urbanístico como urbano, urbanizado ou equivalente.
+1-3	Dáselle	_	_	_	_	_	_	_	_
 1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler:sentence=null
 2	se	se	PRON	PP3CN000	_	1	nsubj	_	Treeler:suj=null
 3	lle	lle	PRON	PP3CSD00	_	1	nsubj	_	Treeler:suj=null
 4	nova	novo	ADJ	AQ0FS0	_	5	amod	_	Treeler:s.a=null
 5	redacción	redacción	NOUN	NCFS000	_	1	obj	_	Treeler:cd=null
+6-7	ao	_	_	_	_	_	_	_	_
 6	a	a	ADP	SPS00	_	1	iobj	_	Treeler:ci=null
 7	o	o	DET	DA0MS0	_	8	det	_	Treeler:spec=null
 8	punto	punto	NOUN	NCMS000	_	6	nmod	_	ToDo=nmod|Treeler:sn=null

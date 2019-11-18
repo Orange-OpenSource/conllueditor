@@ -293,3 +293,17 @@
 25	6:22	6:22	NUM	RG|NOM	Case=Nom|NumType=Card	22	nummod	22:nummod	SpaceAfter=No
 26	.	.	PUNCT	MAD	_	22	punct	22:punct	_
 
+# sent_id = gl_ctg-ud-dev.conllu 625
+# sentence 17
+# used to test adding MWT 1-3 and 6-7
+# text = Dáselle nova redacción ao punto 2 do artigo 7, que queda redactado nos seguintes termos: 2 Enténdese por solo de natureza urbana: a) O clasificado ou definido polo plan urbanístico como urbano, urbanizado ou equivalente.
+1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler:sentence=null
+2	se	se	PRON	PP3CN000	_	1	nsubj	_	Treeler:suj=null
+3	lle	lle	PRON	PP3CSD00	_	1	nsubj	_	Treeler:suj=null
+4	nova	novo	ADJ	AQ0FS0	_	5	amod	_	Treeler:s.a=null
+5	redacción	redacción	NOUN	NCFS000	_	1	obj	_	Treeler:cd=null
+6	a	a	ADP	SPS00	_	1	iobj	_	Treeler:ci=null
+7	o	o	DET	DA0MS0	_	8	det	_	Treeler:spec=null
+8	punto	punto	NOUN	NCMS000	_	6	nmod	_	ToDo=nmod|Treeler:sn=null
+9	2	2	NUM	Z	_	8	nmod	_	Treeler:sn=null
+
