@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.2 as of 27th September 2019
+ @version 1.14.5 as of 17th November 2019
  */
 package com.orange.labs.conllparser;
 
@@ -720,7 +720,7 @@ public class ConllSentence {
             makeTrees(null);
 
             Map<String, Integer> position = new HashMap<>(); // position of each word, needed for latex-deprel
-            sb.append("% for tikz-dependency\n");
+            sb.append("%% for tikz-dependency\n");
             if (newdoc != null) {
                 sb.append("% newdoc ").append(newdoc).append('\n');
             }
@@ -733,6 +733,7 @@ public class ConllSentence {
             sb.append("\\begin{dependency}\n\\begin{deptext}\n");
 
             boolean first = true;
+            sb.append("%% forms:\n");
             for (ConllWord word : words) {
                 position.put(word.getFullId(), position.size() + 1);
 
@@ -754,8 +755,9 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % forms\n% ");
+            sb.append("\\\\\n");
 
+            sb.append("%% lemmas:\n% ");
             first = true;
             for (ConllWord word : words) {
                 if (first) {
@@ -775,8 +777,9 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % lemmas\n% ");
+            sb.append("\\\\\n");
 
+            sb.append("%% UPOS:\n% ");
             first = true;
             for (ConllWord word : words) {
                 if (first) {
@@ -796,8 +799,10 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % upos\n% ");
+            sb.append("\\\\\n");
 
+            
+            sb.append("%% XPOS:\n% ");
             first = true;
             for (ConllWord word : words) {
                 if (first) {
@@ -817,8 +822,10 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % xpos\n% ");
+            sb.append("\\\\\n");
 
+            
+            sb.append("%% IDs\n% ");
             first = true;
             for (ConllWord word : words) {
                 if (first) {
@@ -838,8 +845,10 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % ids\n% ");
+            sb.append("\\\\\n");
 
+            
+            sb.append("%% Position in sentence:\n% ");
             first = true;
             // check also if there are extra columns
             int extracols = 0;
@@ -864,7 +873,7 @@ public class ConllSentence {
                     }
                 }
             }
-            sb.append("\\\\ % position\n");
+            sb.append("\\\\\n");
 
             for (int ec = 0; ec < extracols; ++ec) {
                 first = true;
@@ -897,7 +906,7 @@ public class ConllSentence {
                 sb.append(String.format("\\\\ %% col%s\n%% ", ec+11));
             }
 
-            sb.append("\\end{deptext}\n\n%        tete dep fonc\n");
+            sb.append("\\end{deptext}\n\n%        head dependent deprel\n");
 
             int maxdist = 0; // calculate here the most distant word in terms of deprels from root
             // System.err.println("ppp " + position);
@@ -957,14 +966,14 @@ public class ConllSentence {
 
             sb.append("\\end{dependency}\n");
 
-            sb.append("\n\n% for deptrees.sty\n");
+            sb.append("\n\n%% for deptrees.sty\n");
             sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist + 1));
             sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
             for (ConllWord head : getHeads()) {
                 sb.append(String.format("\\root{%d}{%s}{%s}\n", head.getId(), head.getForm(), head.getUpostag()));
             }
 
-            sb.append("% headpos,xpos,ypos,form,pos,label\n");
+            sb.append("% headpos, hor-pos, vert-pos, form, UPOS, deprel\n");
             List<ConllWord> words2 = new ArrayList<>();
             words2.addAll(words);
             Collections.sort(words2, new CWSortbyHead());
