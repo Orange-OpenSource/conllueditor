@@ -1,12 +1,18 @@
-% for tikz-dependency
+%% for tikz-dependency
 \begin{dependency}
 \begin{deptext}
-Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\ % forms
-% Sam	\& fix	\& lunch	\& and	\& Kim	\& fix	\& dinner	\\ % lemmas
-% PROPN	\& VERB	\& NOUN	\& CCONJ	\& PROPN	\& VERB	\& NOUN	\\ % upos
-% NNP	\& VBD	\& NN	\& CC	\& NNP	\& VBD	\& NN	\\ % xpos
-% 1	\& 2	\& 3	\& 4	\& 5	\& 5.1	\& 6	\\ % ids
-% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\\ % position
+%% forms:
+Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\
+%% lemmas:
+% Sam	\& fix	\& lunch	\& and	\& Kim	\& fix	\& dinner	\\
+%% UPOS:
+% PROPN	\& VERB	\& NOUN	\& CCONJ	\& PROPN	\& VERB	\& NOUN	\\
+%% XPOS:
+% NNP	\& VBD	\& NN	\& CC	\& NNP	\& VBD	\& NN	\\
+%% IDs
+% 1	\& 2	\& 3	\& 4	\& 5	\& 5.1	\& 6	\\
+%% Position in sentence:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\\
 %B:Person \&
 %	 \&
 %	 \&
@@ -16,7 +22,7 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\ % forms
 %	\\ % col11
 % \end{deptext}
 
-%        tete dep fonc
+%        head dependent deprel
 \depedge{2}{1}{nsubj}
 \deproot[edge unit distance=4ex]{2}{root}%%
 \depedge{2}{3}{obj}
@@ -33,12 +39,12 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\ % forms
 \end{dependency}
 
 
-% for deptrees.sty
+%% for deptrees.sty
 \setbottom{4} % set to 0 to hide bottom line of forms
 \begin{tikzpicture}[x=15mm,y=20mm]
 \root{2}{fixed}{VERB}
 \root{5}{fixed}{VERB}
-% headpos,xpos,ypos,form,pos,label
+% headpos, hor-pos, vert-pos, form, UPOS, deprel
 \dep{2}{1}{1}{Sam}{PROPN}{nsubj}
 \dep{2}{3}{1}{lunch}{NOUN}{obj}
 \dep{2}{5}{1}{Kim}{PROPN}{conj}
