@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.3 as of 28th September 2019
+ @version 1.14.6 as of 22th November 2019
  */
 package com.orange.labs.editor;
 
@@ -900,6 +900,13 @@ public class ConlluEditor {
 
                 ConllWord composedWord = new ConllWord(csent.getWords().get(id - 1).getForm(), id, id+complen-1);
                 csent.addWord(composedWord, id);
+
+                try {
+                    writeBackup(currentSentenceId, composedWord, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod editmwe")) { // mod editmwe currentstart newend form
@@ -947,6 +954,13 @@ public class ConlluEditor {
                     cw.setSubId(end);
                     cw.setId(start);
                 }
+
+                try {
+                    writeBackup(currentSentenceId, cw, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod split ")

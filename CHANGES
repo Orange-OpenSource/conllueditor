@@ -1,3 +1,6 @@
+Version 1.14.6
+- bug corrected: missing write
+
 Version 1.14.5
 - bug corrected: NullPointerException at multitokens created with "compose <start> <length>"
 
