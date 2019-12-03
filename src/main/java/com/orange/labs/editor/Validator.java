@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.11.0 as of 3rd May 2019
+ @version 1.14.8 as of 28th November 2019
  */
 package com.orange.labs.editor;
 
@@ -42,7 +42,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Validation wrapper, to call an (external) validation script with one CoNLL-U sentence
@@ -98,7 +97,7 @@ public class Validator {
         File f = File.createTempFile("ce_", ".conllu");
         FileOutputStream fos = new FileOutputStream(f);
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
-        bw.append(cs.toString()).append('\n');
+        bw.append(cs.toString());
         bw.close();
 
         // TODO: add timeout

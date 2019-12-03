@@ -138,19 +138,19 @@ public class TestConlluEditor {
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13);
         JsonElement jelement = new JsonParser().parse(res);
         JsonObject jobject = jelement.getAsJsonObject();
-        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString()+"\n", StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         String rtc = ce.process("read 14", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 14);
         jelement = new JsonParser().parse(res);
         jobject = jelement.getAsJsonObject();
-        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString()+"\n", StandardCharsets.UTF_8, true);
+        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
         rtc = ce.process("read 15", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 15);
         jelement = new JsonParser().parse(res);
         jobject = jelement.getAsJsonObject();
-        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString()+"\n", StandardCharsets.UTF_8, true);
+        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),

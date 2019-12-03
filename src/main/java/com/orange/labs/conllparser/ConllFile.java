@@ -46,7 +46,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import com.google.gson.JsonObject;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -251,10 +250,9 @@ public class ConllFile {
         StringBuilder sb = new StringBuilder();
         //sb.append("# number of sentences " + sentences.size() + "\n");
         for (ConllSentence c : sentences) {
-            //sb.append('\n').append(c.getSentence());
-            sb.append(c).append('\n');
+            sb.append(c);
         }
-        return sb.toString(); //sb.append('\n').toString();
+        return sb.toString();
     }
 
     public String getAnn() {
@@ -324,7 +322,7 @@ public class ConllFile {
                         } else {
                             switch (output) {
                                 case CONLL:
-                                    out.println(cs.toString());
+                                    out.print(cs.toString());
                                     break;
                                 case LATEX:
                                     out.println(cs.getLaTeX());
@@ -338,7 +336,7 @@ public class ConllFile {
                         for (ConllWord w : cs.getWords()) {
                             if (w.matchesUpostag(filter) || w.matchesXpostag(filter)) {
                                 if (output == Output.CONLL) {
-                                    out.println(cs.toString());
+                                    out.print(cs.toString());
                                 } else {
                                     out.println(cs.getSentence());
                                 }
@@ -383,11 +381,11 @@ public class ConllFile {
             for (ConllSentence cs : sentences) {
                 if ((sct + i) % cvparts == 0) {
                     bwtest.write(cs.toString());
-                    bwtest.write('\n');
+                    //bwtest.write('\n');
                     cttest++;
                 } else {
                     bwtrain.write(cs.toString());
-                    bwtrain.write('\n');
+                    //bwtrain.write('\n');
                     cttrain++;
                 }
                 sct++;

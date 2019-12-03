@@ -684,6 +684,7 @@ public class ConllSentence {
             }
         }
         nextToStringcomplete = false;
+        sb.append('\n');
         return sb.toString();
     }
 

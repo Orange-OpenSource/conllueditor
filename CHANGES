@@ -1,3 +1,6 @@
+Version 1.14.7
+- ConllSentence.toString(): add final empty line
+
 Version 1.14.6
 - bug corrected: missing write
 
