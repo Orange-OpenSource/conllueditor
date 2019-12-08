@@ -194,7 +194,8 @@ function getServerInfo() {
             }
 
             // set version number to logo (shown if mouse hovers on the logo)
-            $('#logo').attr("title", data.version);
+            //$('#logo').attr("title", data.version);
+            $('#ce_version').text(data.version);
 
             $(function () {
                 $("#cupos").autocomplete({
