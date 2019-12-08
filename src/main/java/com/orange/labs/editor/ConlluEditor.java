@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018, Orange S.A.
+Copyright (c) 2018-2019, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.6 as of 22th November 2019
+ @version 1.14.8 as of 8th December 2019
  */
 package com.orange.labs.editor;
 
@@ -551,6 +551,7 @@ public class ConlluEditor {
                 return formatErrMsg("Word not found '" + motAtrouver + "'", currentSentenceId);
 
             } else if (command.startsWith("findmulti ")) {
+                // find sequences of words by different criteria:  u:NOUN/l:yn/x:verbnoun
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
                     return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
