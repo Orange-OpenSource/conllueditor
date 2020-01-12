@@ -220,7 +220,7 @@ public class ConlluEditor {
         csent.normalise();
         csent.makeTrees(null);
 
-        Map<Integer, Integer> heights = calculate_flat_arcs_height(csent);
+        Map<Integer, Integer> heights = csent.calculate_flat_arcs_height(); //calculate_flat_arcs_height(csent);
         for (Integer id : heights.keySet()) {
             ConllWord cw = csent.getWord(id);
             cw.setArc_height(heights.get(id));
@@ -1345,80 +1345,6 @@ public class ConlluEditor {
             e.printStackTrace();
             return formatErrMsg("CoNLL error: " + e.getMessage(), currentSentenceId);
         }
-    }
-
-    /**
-     * calculate the height if each arc, by taking into account all short arcs
-     * below. Does not take into account non-projective arcs, on ly arcs from n
-     * to m
-     *
-     * @param cs
-     */
-    private Map<Integer, Integer> calculate_flat_arcs_height(ConllSentence cs) {
-        // min heights of deps
-        Map<Integer, Integer> minheightsLeft = new HashMap<>(); // head: highest arc to the left
-        Map<Integer, Integer> minheightsRight = new HashMap<>(); // head: highest arc to the right
-        // height for my arc
-        Map<Integer, Integer> height = new HashMap<>(); // position: height
-
-//        System.err.println("A maxdist " + cs.getMaxdist());
-        for (int d = 1; d <= cs.getMaxdist(); ++d) {
-//            System.err.println("D: " + d);
-//            System.err.println(" LEFT  " + minheightsLeft);
-//            System.err.println(" RIGHT " + minheightsRight);
-//            System.err.println(" H     " + height);
-            for (ConllWord cw : cs.getWords()) {
-                if (cw.getHead() <= 0) {
-                    continue;
-                }
-
-                int dist = cw.getId() - cw.getHead(); // negative: head is right
-                if (Math.abs(dist) != d) {
-                    continue;
-                }
-//                System.err.println(" cw: " + cw.getId() + " dist " + dist);
-                if (dist < 0) {
-                    // head is right, so we look at deps following (left of) the head
-                    Integer mh = minheightsLeft.getOrDefault(cw.getHead(), 0);
-                    Integer m = height.getOrDefault(cw.getId(), 0);
-//                    System.err.println("  minh l for cw " + mh + " " + m);
-
-                    int h = Math.min(Math.max(mh + 1, m + 1), d);
-
-//                    System.err.println("   l id:" + cw.getId() + " h:" + cw.getHead());
-//                    System.err.println("   lheight " + h);
-                    for (int i = cw.getId(); i < cw.getHead(); ++i) {
-                        h = Math.max(h, height.getOrDefault(i, 0) + 1);
-//                        System.err.println("  li:" + i + " " + h);
-                    }
-//                    System.err.println("  height for cw " + h);
-                    height.put(cw.getId(), h);
-                    minheightsLeft.put(cw.getHead(), h);
-
-                } else {
-                    Integer mh = minheightsRight.getOrDefault(cw.getHead(), 0);
-                    Integer m = height.getOrDefault(cw.getId(), 0);
-//                    System.err.println("  rminh for cw " + mh + " " + m);
-
-                    int h = Math.min(Math.max(mh + 1, m + 1), d);
-
-//                    System.err.println("   r id:" + cw.getId() + " h:" + cw.getHead());
-//                    System.err.println("   rheight " + h);
-                    for (int i = cw.getId(); i > cw.getHead(); --i) {
-                        h = Math.max(h, height.getOrDefault(i, 0) + 1);
-//                        System.err.println("  ri:" + i + " " + h);
-                    }
-
-                    height.put(cw.getId(), h);
-//                    System.err.println("  rheight for cw " + h);
-                    minheightsRight.put(cw.getHead(), h);
-                }
-            }
-        }
-//        System.err.println("LEFT  " + minheightsLeft);
-//        System.err.println("RIGHT " + minheightsRight);
-//        System.err.println("H     " + height);
-        return height;
     }
 
     /**

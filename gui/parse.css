@@ -1,0 +1,367 @@
+/** This library is under the 3-Clause BSD License
+
+Copyright (c) 2020, Orange S.A.
+
+Redistribution and use in source and binary forms, with or without modification, 
+are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution.
+
+  3. Neither the name of the copyright holder nor the names of its contributors 
+     may be used to endorse or promote products derived from this software without
+     specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ @author Johannes Heinecke
+ @version 2.0.0 as of 11th January 2019
+*/
+
+body {
+    margin-top: 180px; /* header height + top offset */
+    height: 100%;
+   
+    text-align: justify;
+    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
+    overflow: scroll;
+    
+}
+
+tt {
+    font-family: Courier, FreeMono, Mono;
+}
+
+h1  { 
+    color:#ff6600;
+}
+
+
+h2 {
+    margin-top: 20px;
+}
+#comm,
+#sentencetext,
+#arbre {
+    margin-left: 5px;
+}
+
+
+#oooarbre {
+    /*white-space: nowrap; */
+    overflow-x: auto;
+}
+
+
+#header {
+    position:fixed; /* make the header (navigation and search buttons) stick to the top */
+    width:100%;
+    top:0;
+    height: whatever;
+    /*background: white; */
+
+    /*background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgba(247,220,180, 1)),
+        color-stop(1, rgba(255,255,255, 0))
+        );
+    */
+    background-image: linear-gradient(rgba(247,220,180, 1), 
+        rgba(251,235,212, 1), 
+        rgba(254,246,233, 1),
+        rgba(255,255,255, 0));
+}
+
+
+textArea {
+    text-align:justify;
+    font-family: /*Pecita, */ Sans, Arial, Helvetica;
+    /*font-size: 125%;*/
+}
+
+
+td, th {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+table {
+    border-collapse: inherit;
+}
+
+
+
+img.helptextbutton {
+    border-radius: 5px;
+    border: 1px solid #222;
+    padding: 5px;
+    width: 25px;
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+}
+
+/* format of application buttons in the help text */
+.buttondoc {
+    font-style: italic;
+    border-radius: 5px;
+    border: 1px solid #222;
+    padding: 5px;
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+}
+
+/* format of keys to press in the help text */
+.keydoc {
+    font-weight: bold;
+    font-family: Courier, FreeMono, Mono;
+    border-radius: 3px;
+    border: 1px solid #222;
+    padding: 1px;
+}
+
+/* format of user commands in the help text */
+.userinputdoc {
+    font-family: Courier, FreeMono, Mono;
+    background-color: #f8f8f8;
+    padding-left: .1em;
+    padding-right: .3em;
+}
+
+/* format of command line commands in the help text */
+.commandline {
+    font-family: Courier, FreeMono, Mono;
+    padding-left: 6em;
+}
+
+/* make normal buttons look like mycheckbuttons */
+.mybutton, btn-primary {
+    font-family: inherit;
+    /* top right bottom left */
+    qqpadding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+    height: 30px;  
+    vertical-align: middle;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+}
+
+.mybutton:hover {
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(227,227,227)),
+        color-stop(1, rgb(255,255,255))
+        );
+}
+
+
+
+input {
+   font-family: inherit;
+}
+
+/* input field design */
+.inputfield {
+    vertical-align: middle;
+    border-radius: 5px;
+    border: solid 1px #959595;
+    padding-left: 3px;
+}
+
+/* widht of the input fields for searching */
+.searchfield {
+    width: 10em;
+}
+
+#multifield {
+    width: 14em;
+}
+
+
+/* background for buttons with icons */
+.contain {
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+    position: relative;
+    sstop: 6px; /** position of the button from top */
+    sspadding: 0px 0px 0px 0px;
+}
+.contain:hover {
+    overflow: hidden;
+    ssdisplay: inline-block;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(227,227,227)),
+        color-stop(1, rgb(255,255,255))
+        );
+    position: relative;
+    sstop: 6px; 
+    sspadding: 0px 0px 0px 0px;
+}
+
+
+.contain.active {
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(224, 116, 13)),
+        color-stop(1, rgb(252, 145, 14))
+        );
+}
+
+
+/* inspired by https://designmodo.com/3d-css3-button/ */
+.mycheck {
+    display: inline-block;
+    text-decoration: none;
+
+    /* top right bottom left */
+    qqpadding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+
+}
+
+.mycheck.active {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(224, 116, 13)),
+        color-stop(1, rgb(252, 145, 14))
+        );
+
+}
+
+.mycheck:hover {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgba(244, 146, 13)),
+        color-stop(1, rgba(245, 187, 15))
+        );
+    color: #222;
+}
+
+
+
+/* (xe)latex logos */
+.revcap {
+    display: inline-block;
+    text-transform: uppercase;
+    transform: rotateY(180deg);
+}
+
+.latex {
+    font-family: Serif;    
+}
+
+/* A and E of LATEX spellt in upper case */
+.latex sub,
+.latex sup {
+  text-transform: uppercase;
+}
+
+
+/* size, position of the lowered E of LATEX */
+.latex sub {
+  vertical-align: -0.05ex;
+  margin-left: -0.15em;
+  margin-right: -0.1em;
+  font-size: 1em;
+}
+
+
+/* size, position of the raised A of LATEX. modifies <sup> tag */
+.latex sup {
+  font-size: 0.79em;
+  vertical-align: -0.1em;
+  margin-left: -0.16em;
+  qqmargin-right: -0.15em;
+}
+
+.modal-header {
+    background-image: linear-gradient(rgba(255,153,51, 1), 
+      /*  rgba(251,235,212, 1), 
+        rgba(254,246,233, 1),*/
+        rgba(255,255,255, 0));
+}
+
+.modal-xl {
+   sswidth: 90%;
+   max-width:1300px;
+}
+
+.ui-autocomplete.ui-widget {
+  /*font-family: sans; */
+  color: blue;
+  font-size: 90%;
+  font-weight: bold;
+  margin-left: 1em;
+}
+
+text {
+   font-family: "Lato", sans-serif;
+}
+

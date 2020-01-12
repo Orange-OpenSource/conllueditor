@@ -1,4 +1,4 @@
-# Editor for Treebanks in CoNLL-U format
+# Editor for Treebanks in CoNLL-U format and Front-End for dependency parser servers
 
 This Software is a tool which facilitates the editing of syntactic relations and morphological features of files in CoNLL-U format
 (http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor
@@ -18,6 +18,11 @@ The editor provides the following functionalities:
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 * prohibits invalid (cyclic) trees
+
+Since version 2.0.0 the tool can be used as front-end to display the results of dependency parsing in the same way as the editor.
+* dependency tree/dependency hedge
+* CoNLL-U/LaTeX/SD-Parse format
+For more information see section [Parser Front-End](#parser-front-end)
 
 ## Installation
 
@@ -190,7 +195,7 @@ The flat graph mode also displays enhanced dependencies. In this mode enhanced
 dependencies can be added/modified/deleted (activate `edit enhanced dependencies`).
 if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayet too.
 
-![empty nodes](doc/graph_emptynode.png)
+![Empty nodes](doc/graph_emptynode.png)
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
@@ -258,11 +263,62 @@ The feature, and misc column fields must contain one `name=value` pair per line 
 the enhanced dependency field must contain one `head:deprel` pair per line (or `_`).
 
 # Todo list
-* be able to read/write CoNLL-U plus (.conllp) files [http://universaldependencies.org/ext-format.html]
+* be able to read/write CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
 * edit columns from column 11 onwards
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch
 * use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
+
+
+# Parser Front-End
+In order to display the CoNLL-U output of taggers/dependency parser servers, there the front-end provides a graphical user interface 
+and sends the sentenced to be parsed to the back-end server such as [UDPipe](https://ufal.mff.cuni.cz/udpipe).
+You can either use a local instance of the UDPipe-Server, or the instance provided by the authors of UDPipe (http://lindat.mff.cuni.cz/services/udpipe/).
+
+First edit the configuration file [src/test/resources/udpipeserver.conf](src/test/resources/udpipeserver.conf):
+
+```ini
+# configuration to  make a request to a UDPipe server
+
+# the url to send raw text to in order to get a CoNLL-U result (HTTP POST)
+url: http://lindat.mff.cuni.cz/services/udpipe/api/process
+
+# the URL providing some information on the parser (HTTP GET)
+info: http://lindat.mff.cuni.cz/services/udpipe/api/models
+
+# the name of the field to contain the text to be parsed
+txt: data
+
+# other fields which need to be present in the call to the parser
+other: model=english-ud-1.2-160523,tokenizer=,tagger=,parser=
+
+# if the parser response is in json, give the path to the CoNLL-U result
+jsonpath: result
+```
+
+Second, run the Front-End server:
+
+```
+./bin/parserclient.sh -r src/test/resources/udpipeserver.conf 3434
+```
+
+Open your browser on the given port: `http://localhost:3434`
+
+![Parser Front End Main view](doc/parser-front-end.png)
+
+The dependency tree can also be displays as a hedge
+
+![Parser Front End Main view flat](doc/parser-front-end-flat.png)
+
+The `parser info` buttons provides information given by the parser server
+
+![Parser Front End Main Info](doc/parser-front-end-info.png)
+
+If the tokenizer segments the input in several sentences, all we be displayed.
+
+The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
+LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
+
 
 # Reference
 
