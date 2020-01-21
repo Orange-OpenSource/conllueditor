@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018, Orange S.A.
+Copyright (c) 2018-2020, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.5 as of 17th November 2019
+ @version 2.0.1 as of 20th January 2020
  */
 package com.orange.labs.conllparser;
 
@@ -44,6 +44,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * read and parse CONLL
@@ -158,7 +159,8 @@ public class ConllSentence {
         frames = new HashMap<>();
         comments = new ArrayList<>();
         hasEnhancedDeps = false;
-        Set<Annotation> lastAnnots = null;
+        //Set<Annotation> lastAnnots = null;
+        List<String>lastnonstandardinfo = null;
 
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             String line = cline.getValue();
@@ -181,21 +183,23 @@ public class ConllSentence {
                 continue;
             }
 
-            ConllWord w = new ConllWord(line, lastAnnots, shift, cline.getKey());
+            ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, shift, cline.getKey());
 
             if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                 hasEnhancedDeps = true;
             }
 
-            lastAnnots = w.getAnnots();
-            if (lastAnnots != null) {
-                hasAnnot = true;
-                for (Annotation a : lastAnnots) {
-                    if (a.target && a.begin) {
-                        frames.put(a.frame, w);
-                    }
-                }
-            }
+//            lastAnnots = w.getAnnots();
+//            if (lastAnnots != null) {
+//                hasAnnot = true;
+//                for (Annotation a : lastAnnots) {
+//                    if (a.target && a.begin) {
+//                        frames.put(a.frame, w);
+//                    }
+//                }
+//            }
+
+
             if (w.getTokentype() == ConllWord.Tokentype.WORD) {
                 if (!w.hasXpostag("NON-VU")) {
                     words.add(w);
@@ -852,11 +856,14 @@ public class ConllSentence {
             sb.append("%% Position in sentence:\n% ");
             first = true;
             // check also if there are extra columns
-            int extracols = 0;
+            //int extracols = 0;
+            Set<Integer>extracols = new TreeSet<>(); //
             for (ConllWord word : words) {
-                if (word.getExtracolumns() != null && word.getExtracolumns().size() > extracols) {
-                    extracols = word.getExtracolumns().size();
-                }
+                //if (word.getExtracolumns() != null && word.getExtracolumns().size() > extracols) {
+                //    extracols = word.getExtracolumns().size();
+                //}
+                if (word.getExtracolumns() != null)
+                    extracols.addAll(word.getExtracolumns().keySet());
                 if (first) {
                     first = false;
                 } else {
@@ -876,7 +883,9 @@ public class ConllSentence {
             }
             sb.append("\\\\\n");
 
-            for (int ec = 0; ec < extracols; ++ec) {
+            //for (int ec = 0; ec < extracols; ++ec) {
+            for(Integer ec : extracols) {
+            
                 first = true;
 		sb.append('%');
                 for (ConllWord word : words) {
@@ -885,26 +894,29 @@ public class ConllSentence {
                     } else {
                         sb.append(" \\&\n%\t");
                     }
-                    if (word.getExtracolumns() != null && word.getExtracolumns().size() > ec) {
-                        if (!"_".endsWith(word.getExtracolumns().get(ec)))
-                            sb.append(word.getExtracolumns().get(ec));
-                    } 
+                    if (word.getExtracolumns() != null) {
+                        if (!word.getExtracolumns().get(ec).isEmpty()) {
+                            sb.append(String.join(",", word.getExtracolumns().get(ec)));
+                        }
+                        
+                    }
                     //sb.append("\t");
                     if (emptywords != null) {
                         List<ConllWord> ews = emptywords.get(word.getId());
                         if (ews != null) {
                             for (ConllWord ew : ews) {
                                 sb.append(" \\&\n%\t");
-                                if (ew.getExtracolumns() != null && ew.getExtracolumns().size() > ec) {
-                                    if (!"_".endsWith(ew.getExtracolumns().get(ec)))
-                                        sb.append(ew.getExtracolumns().get(ec));
+                                if (ew.getExtracolumns() != null) {
+                                    if (!word.getExtracolumns().get(ec).isEmpty()) {
+                                       sb.append(String.join(",", word.getExtracolumns().get(ec)));
+                                    }
                                 }
                                 //sb.append("\t");
                             }
                         }
                     }
                 }
-                sb.append(String.format("\\\\ %% col%s\n%% ", ec+11));
+                sb.append(String.format("\\\\ %% col%s\n%% ", ec));
             }
 
             sb.append("\\end{deptext}\n\n%        head dependent deprel\n");
@@ -1168,6 +1180,10 @@ public class ConllSentence {
         throw new ConllException("No composed form with id " + id);
     }
 
+    public Map<Integer, ConllWord> getContractedWords() {
+        return contracted;
+    }
+    
     /**
      * join word with following. Use the attachment of the one closer to the
      * head. if both are equally close, chose the left
@@ -1611,5 +1627,20 @@ public class ConllSentence {
 
     public String getSentid() {
         return sentid;
+    }
+    
+    /** calculate start and end offset for each word.
+       contracted word as well. Parts of contracted words copy the values form the MTW
+    @param start offset of first word
+    @param return the offset after the last word (including SpaceAfter)
+    */
+    public int calculateOffsets(int start) {
+        for (ConllWord cw : words) {
+            cw.setStart(start);
+            int end = start + cw.getForm().length();
+            cw.setEnd(end);
+            start = end + cw.getSpacesAfter().length();
+        }
+        return start;
     }
 }

@@ -38,7 +38,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orange.labs.editor.ConlluEditor;
 import com.orange.labs.conllparser.ConllException;
+import com.orange.labs.conllparser.ConllFile;
+import com.orange.labs.conllparser.ConllSentence;
+import com.orange.labs.conllparser.ConllWord;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -79,9 +83,9 @@ public class TestConlluEditor {
     private void name(String n) {
         System.out.format("\n***** Testing: %S ****\n", n);
     }
-
+ 
     @Test
-    public void testLatex() throws IOException {
+    public void test01Latex() throws IOException {
         name("LaTeX output");
 
         //System.out.println("=================== " + folder.getRoot());
@@ -101,11 +105,10 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("LaTeX output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-
     }
 
     @Test
-    public void testJson() throws IOException {
+    public void test02Json() throws IOException {
         name("JSON output");
 
         //System.out.println("=================== " + folder.getRoot());
@@ -127,7 +130,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testConllu() throws IOException {
+    public void test03Conllu() throws IOException {
         name("CoNLL-U output");
 
         //File out = folder.newFile("out1.conllu");
@@ -159,7 +162,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testEditJoinSplit() throws IOException {
+    public void test11EditJoinSplit() throws IOException {
         name("modifying lemma, deprel, and split/join");
         ce.setCallcitcommot(false);
         String rtc = ce.process("mod lemma 3 Oasis", 3, "editinfo");
@@ -175,7 +178,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testEditJoinSplitBeforeMWT() throws IOException {
+    public void test12EditJoinSplitBeforeMWT() throws IOException {
         name("split/join before a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".5");
@@ -190,7 +193,7 @@ public class TestConlluEditor {
     }    
 
     @Test
-    public void testEditJoinSplitBeforeEmptyNode() throws IOException {
+    public void test13EditJoinSplitBeforeEmptyNode() throws IOException {
         name("split/join before a empty word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".6");
@@ -205,7 +208,7 @@ public class TestConlluEditor {
     } 
 
     @Test
-    public void testEditJoinSplitWithEnhDeps() throws IOException {
+    public void test14EditJoinSplitWithEnhDeps() throws IOException {
         name("split/join before a enhanced deps");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".7");
@@ -221,7 +224,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testCreateMWT() throws IOException {
+    public void test15CreateMWT() throws IOException {
         name("create two MWT with three/two words and rename contracted form");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".8");
@@ -239,7 +242,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testRead() throws IOException {
+    public void test21Read() throws IOException {
         name("read sentence");
         ce.setCallcitcommot(false);
         String rtc = ce.process("read 13", 1, "");
@@ -258,7 +261,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testRead2() throws IOException {
+    public void test22ReadSecond() throws IOException {
         name("read a second sentence");
         ce.setCallcitcommot(false);
         String rtc = ce.process("read 16", 1, "");
@@ -277,7 +280,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testFindLemma() throws IOException {
+    public void test31FindLemma() throws IOException {
         name("findlemma");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findlemma false fromage/.*/puer", 1, "");
@@ -298,7 +301,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testFindForm() throws IOException {
+    public void test32FindForm() throws IOException {
         name("findword");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findword false \" and \"", 1, "");
@@ -319,7 +322,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testFindNothing() throws IOException {
+    public void test33FindNothing() throws IOException {
         name("findupos (error)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findupos false TOTO", 1, "");
@@ -340,7 +343,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testUndo() throws IOException {
+    public void test34Undo() throws IOException {
         name("modifying UPOS and Lemma, followed by undo");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
@@ -356,7 +359,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void testAddED() throws IOException {
+    public void test35AddED() throws IOException {
         name("adding/deleting enhanced dependency");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".4");
@@ -372,6 +375,31 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
 
+    @Test
+    public void test41AddExtraColumn() throws IOException, ConllException {
+        name("adding extra columns");
+        ce.setCallcitcommot(false);
+
+        URL url = this.getClass().getResource("/test.conllu");
+        ConllFile cf = new ConllFile(new FileInputStream(url.getFile()));
+        ConllSentence csent = cf.getSentences().get(1);
+        ConllWord cw = csent.getWord(1);
+        cw.addExtracolumn(13, "B:ADDED13");
+        cw = csent.getWord(2);
+        cw.addExtracolumn(13, "I:ADDED13");
+        cw.addExtracolumn(12, "B:ADDED12");
+
+        File out = new File(folder,  "test_added.conllu");
+        FileUtils.writeStringToFile(out, csent.toString(), StandardCharsets.UTF_8);
+        ConllSentence csent2 = new ConllSentence(csent);
+        FileUtils.writeStringToFile(out, csent2.toString(), StandardCharsets.UTF_8, true);
+
+        URL urlref = this.getClass().getResource("/added.conllu");
+
+        Assert.assertEquals(String.format("addin extracolumn incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
+                FileUtils.readFileToString(new File(urlref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
 
     private String prettyprintJSON(JsonElement j) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

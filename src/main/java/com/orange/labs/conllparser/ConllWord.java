@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2019, Orange S.A.
+Copyright (c) 2018-2020, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,15 +28,17 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.8 as of 8th December 2019
+ @version 2.0.1 as of 20th January 2020
  */
 package com.orange.labs.conllparser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -90,12 +92,15 @@ public class ConllWord {
     // this word is a wh question pronoun
     private boolean whquestion = false;
     // additional semantic annotation (non-conllu)
-    private Set<Annotation> annot = null; // column 11 if B/I/O:....
+    //private Set<Annotation> annot = null; // column 11 if B/I/O:....
     // column 11 otherwise
-    private List<String> nonstandardInfo = null;
+    private Map<Integer, LinkedHashSet<String> > namedColumns; // non standardcolums. the index is the column position (11, 12 ...) 
 
     public static boolean orderfeatures = true; // order morphological features ore keep them as they are in the CoNLL-U data
 
+    private int start = -1; // start offset in the sentence 
+    private int end = -1; // offset after the last character (not taking into account SpaceAfter !)
+    
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
     };
@@ -150,16 +155,29 @@ public class ConllWord {
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
 
-        if (orig.annot != null) {
-            annot = new TreeSet<>();
-            for (Annotation a : orig.getAnnots()) {
-                annot.add(new Annotation(a));
+//        if (orig.annot != null) {
+//            annot = new TreeSet<>();
+//            for (Annotation a : orig.getAnnots()) {
+//                annot.add(new Annotation(a));
+//            }
+//        } else 
+//        if (orig.nonstandardInfo != null) {
+//            nonstandardInfo = new ArrayList<>();
+//            nonstandardInfo.addAll(orig.nonstandardInfo);
+//        }
+        if (orig.namedColumns != null) {
+            namedColumns = new TreeMap<>();
+            for (Integer key : orig.namedColumns.keySet()) {                
+                LinkedHashSet<String>l = new LinkedHashSet<>();
+                l.addAll(orig.namedColumns.get(key));
+                namedColumns.put(key, l);
             }
         }
+        
         whquestion = orig.isWhquestion();
     }
 
-    public ConllWord(String conllline, Set<Annotation> lastannots) throws ConllException {
+    public ConllWord(String conllline, List<String> lastannots) throws ConllException {
         this(conllline, lastannots, 0, -1);
     }
 
@@ -197,7 +215,7 @@ public class ConllWord {
     }
 
     /*    @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé deux colonne au format CONLL "normal"   */
-    public ConllWord(String conllline, Set<Annotation> lastannots, int shift, int linenumber) throws ConllException {
+    public ConllWord(String conllline, List<String> lastannots, int shift, int linenumber) throws ConllException {
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
         String[] elems = conllline.split("\t");
@@ -372,28 +390,35 @@ public class ConllWord {
                 setMisc(elems[shift + 9]);
 
                 if (elems.length > shift + 10) {
-                    try {
-                        // est-ce qu'il s'agit dun mot avec une annotation en frame ?
-                        Annotation a = new Annotation(elems[shift + 10], null, lastannots);
-                        annot = new TreeSet<>();
-                        annot.add(a);
-                        for (int i = shift + 10 + 1; i < elems.length; ++i) {
-                            try {
-                                annot.add(new Annotation(elems[i], null, lastannots));
-                            } catch (ConllException ex) {
-                                System.err.println("Annotation error " + ex.getMessage());
-                            }
-                        }
-                        if (annot.isEmpty()) {
-                            annot = null;
-                        }
-                    } catch (ConllException ex) {
-                        // non, apparament c'est autre chose
-                        nonstandardInfo = new ArrayList<>();
+//                    try {
+//                        // est-ce qu'il s'agit dun mot avec une annotation en frame ?
+//                        Annotation a = new Annotation(elems[shift + 10], null, lastannots);
+//                        annot = new TreeSet<>();
+//                        annot.add(a);
+//                        for (int i = shift + 10 + 1; i < elems.length; ++i) {
+//                            try {
+//                                annot.add(new Annotation(elems[i], null, lastannots));
+//                            } catch (ConllException ex) {
+//                                System.err.println("Annotation error " + ex.getMessage());
+//                            }
+//                        }
+//                        if (annot.isEmpty()) {
+//                            annot = null;
+//                        }
+//                    } catch (ConllException ex) {
+                        // non, apparament c'est autre chose                        
+//                        nonstandardInfo = new ArrayList<>();
+//                        for (int i = shift + 10; i < elems.length; ++i) {
+//                            nonstandardInfo.add(elems[i]);
+//                        }
+                        
+                        namedColumns = new TreeMap<>();
+                        int j = 11;
                         for (int i = shift + 10; i < elems.length; ++i) {
-                            nonstandardInfo.add(elems[i]);
+                            namedColumns.put(j++, new LinkedHashSet(Arrays.asList(elems[i].split("\\|"))));
                         }
-                    }
+                        
+//                    }
 
                 }
             }
@@ -883,19 +908,35 @@ public class ConllWord {
         jword.addProperty("chunk", partOfChunk);
         //jword.addProperty("type", word.getPartialDeplabel());
         jword.addProperty("type", "");
-        //Set<Annotation> annots = word.getAnnots();
-        if (annot != null) {
-            for (Annotation a : annot) {
-                jword.addProperty("type", a.getSemanticRole());
-                break;
-            }
-        } else if (nonstandardInfo != null) {
-            // TODO change one conllu plus support is OK
-            // for the time being we just display anything in columns > 10 as is, without interpretation
-            int colct = 11;
-            for (String colvalue : nonstandardInfo) {
-                jword.addProperty("col" + colct, colvalue);
-                colct++;
+
+//        if (annot != null) {
+//            for (Annotation a : annot) {
+//                jword.addProperty("type", a.getSemanticRole());
+//                break;
+//            }
+//        } else 
+//        if (nonstandardInfo != null) {
+//            // TODO change when conllu plus support is OK
+//            // for the time being we just display anything in columns > 10 as is, without interpretation
+//            int colct = 11;
+//            for (String colvalue : nonstandardInfo) {
+//                jword.addProperty("col" + colct, colvalue);
+//                colct++;
+//            }
+//        }
+        if (namedColumns != null) {
+            for (Integer key : namedColumns.keySet()) {
+                if (key == 12) {
+                    // temporary solution for RelationExtraction (project which (ab)uses ConlluEditor.jar)
+                    LinkedHashSet<String>values = namedColumns.get(key);
+                    String val = values.iterator().next();
+                    String []fields = val.split(":");
+                    if (fields.length >= 4)
+                        jword.addProperty("type", fields[3]);
+                } else {
+                    LinkedHashSet<String>values = namedColumns.get(key);
+                    jword.addProperty("col" + key, String.join("|", values));
+                }
             }
         }
 
@@ -924,50 +965,89 @@ public class ConllWord {
         return w;
     }
 
-    public List<String> getExtracolumns() {
-        return nonstandardInfo;
+    public Map<Integer, LinkedHashSet<String> > getExtracolumns() {
+        //return nonstandardInfo;
+        return namedColumns;
     }
 
-
-    public Set<Annotation> getAnnots() {
-        return annot;
-    }
-
-    /**
-     * retourner l'Annotation si elle est du frame frameName
-     *
-     * @param framename nom du frame qu'on cherche
-     * @return l'annotation ou null
-     */
-    public Annotation getAnnot(String framename) {
-        if (annot == null) {
-            return null;
-        }
-        for (Annotation a : annot) {
-            //if (!a.framenet) {
-            //return null; // non-frame annotation (role semantique de base
-            //}
-            if (a.frame.equals(framename)) {
-                return a;
-            }
-        }
+    public LinkedHashSet<String> getExtracolumn(int id) {
+        //return nonstandardInfo;
+        if (namedColumns != null) return namedColumns.get(id);
         return null;
     }
+    
+//    public void setExtracolumns(List<String> extra) {
+//        nonstandardInfo = extra;
+//    }
+//
+//    // set 11th column
+//    public void setExtracolumns(String extra) {
+//        if (nonstandardInfo == null) {
+//            nonstandardInfo = new ArrayList<>();
+//            nonstandardInfo.add(extra);
+//        } else {
+//            nonstandardInfo.set(0, extra);
+//        }
+//    }
 
-    public synchronized void addAnnot(Annotation a) {
-        if (annot == null) {
-            annot = new TreeSet<>();
-        }
-        annot.add(a);
-    }
-
-    public void addAnnots(Set<Annotation> a) {
-        if (annot == null) {
-            annot = a;
+    
+//
+//    public Set<Annotation> getAnnots() {
+//        return annot;
+//    }
+//
+//    /**
+//     * retourner l'Annotation si elle est du frame frameName
+//     *
+//     * @param framename nom du frame qu'on cherche
+//     * @return l'annotation ou null
+//     */
+//    public Annotation getAnnot(String framename) {
+//        if (annot == null) {
+//            return null;
+//        }
+//        for (Annotation a : annot) {
+//            //if (!a.framenet) {
+//            //return null; // non-frame annotation (role semantique de base
+//            //}
+//            if (a.frame.equals(framename)) {
+//                return a;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public synchronized void addAnnot(Annotation a) {
+//        if (annot == null) {
+//            annot = new TreeSet<>();
+//        }
+//        annot.add(a);
+//    }
+    public synchronized void addExtracolumn(int id, String a) {
+        if (namedColumns != null) {
+            LinkedHashSet<String> current = namedColumns.get(id);
+            if (current != null) {                                
+                current.add(a);
+            } else {
+               current = new LinkedHashSet<>();
+               current.add(a);
+               namedColumns.put(id, current);
+            }
         } else {
-            annot.addAll(a);
+            namedColumns = new TreeMap<>();
+            LinkedHashSet<String> current = new LinkedHashSet<>();
+            current.add(a);
+            namedColumns.put(id, current);
         }
     }
+    
+//    public void addAnnots(Set<Annotation> a) {
+//        if (annot == null) {
+//            annot = a;
+//        } else {
+//            annot.addAll(a);
+//        }
+//    }
 
     public int getPosition() {
         return position;
@@ -1315,7 +1395,7 @@ public class ConllWord {
         return prexists;
     }
 
-    String getSpacesAfter() {
+    public String getSpacesAfter() {
         return spacesAfter;
     }
 
@@ -1567,13 +1647,29 @@ public class ConllWord {
 
             sb.append("\t").append(getMiscStr());
 
-            if (annot != null) {
-                for (Annotation a : annot) {
-                    sb.append('\t').append(a);
-                }
-            } else if (nonstandardInfo != null) {
-                for (String i : nonstandardInfo) {
-                    sb.append('\t').append(i);
+//            if (annot != null) {
+//                for (Annotation a : annot) {
+//                    sb.append('\t').append(a);
+//                }
+//            } else
+//            if (nonstandardInfo != null) {
+//                for (String i : nonstandardInfo) {
+//                    sb.append('\t').append(i);
+//                }
+//            }
+            
+            //System.err.println("ZZZZZZZZZZZZZZZZZ " + namedColumns + " " + form);
+            if (namedColumns != null && !namedColumns.isEmpty()) {
+                // TODO, do not sopt at column 20, but stop at highest
+                Integer last = (Integer)((TreeMap)namedColumns).lastKey();
+                //System.err.println("zzzzzzzzzzzzzzzzz " + last);
+                for(int i=11; i<=last; ++i) {
+                    String value = "_";
+                    LinkedHashSet<String> extra = namedColumns.get(i);
+                    if (extra != null /*&& !extra.isEmpty()*/) {
+                        value = String.join("|", extra);
+                    }
+                     sb.append('\t').append(value);
                 }
             }
         }
@@ -1599,6 +1695,24 @@ public class ConllWord {
         return true;
     }
 
+    public int getStart() {
+        return start;
+    }
+        
+    public int getEnd() {
+        return end;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+        
+    
     /** enhanced deps are in the 9th column of a CoNLL-U file.
      */
     public class EnhancedDeps {
@@ -1643,7 +1757,7 @@ public class ConllWord {
                 return Integer.toString(headid);
             }
         }
-
+        
         public String toString() {
             return getFullHeadId() + ":" + deprel;
         }
