@@ -24,14 +24,17 @@ if [[ "$1" =~ ^Xmx[0-9]g$ ]]; then
     shift
 fi
 
-#if [ "$1" == "-r" ]; then
-    ROOTDIR="--rootdir $BASENAME/../gui"
-#    shift
-#fi
+ROOTDIR="--rootdir $BASENAME/../gui"
+if [ "$1" == "--rootdir" ]; then
+    ROOTDIR="--rootdir $2"
+    shift
+    shift
+fi
 
+PROXY="-Dhttp.proxyHost=niceway.rd.francetelecom.fr -Dhttp.proxyPort=3128"
+#PROxY=-Djava.net.useSytemProxies=true
 
-
-java -cp $NEWESTJAR com.orange.labs.parserclient.ParserClient ${ROOTDIR} "$@"
+java -cp $NEWESTJAR $PROXY com.orange.labs.parserclient.ParserClient ${ROOTDIR} "$@"
 
 
 

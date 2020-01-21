@@ -32,8 +32,6 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.parserclient;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,7 +41,6 @@ import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
-import com.orange.labs.editor.ConlluEditor;
 import com.orange.labs.httpserver.ServeurHTTP;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -53,7 +50,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -237,9 +233,7 @@ public class ParserClient {
                     JsonElement je = jp.parse(response);
                     solution.add("info", je);
                 } catch (JsonSyntaxException e) {
-                    //System.err.println("ZZZZ" + response);
                     solution.addProperty("info", response);
-                        
                 }
             } catch (IOException e) {
                 return e.getMessage();
@@ -347,6 +341,11 @@ public class ParserClient {
             }
         }
 
+        if (args.length < 2 + argindex) {
+            help();
+            System.exit(1);
+        }
+        
         try {
             ParserClient cl = new ParserClient(args[argindex]);
 
