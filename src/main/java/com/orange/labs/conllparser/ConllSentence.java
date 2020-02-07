@@ -41,6 +41,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -895,7 +897,8 @@ public class ConllSentence {
                         sb.append(" \\&\n%\t");
                     }
                     if (word.getExtracolumns() != null) {
-                        if (!word.getExtracolumns().get(ec).isEmpty()) {
+                        LinkedHashSet<String> tmp = word.getExtracolumns().get(ec);
+                        if (tmp != null && !tmp.isEmpty()) {
                             sb.append(String.join(",", word.getExtracolumns().get(ec)));
                         }
                         

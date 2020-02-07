@@ -969,6 +969,10 @@ public class ConllWord {
         //return nonstandardInfo;
         return namedColumns;
     }
+    
+    public synchronized void setExtracolumns(Map<Integer, LinkedHashSet<String> > ecs) {
+        namedColumns = ecs;
+    }
 
     public LinkedHashSet<String> getExtracolumn(int id) {
         //return nonstandardInfo;
