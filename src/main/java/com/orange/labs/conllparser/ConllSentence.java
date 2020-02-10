@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.0.1 as of 20th January 2020
+ @version 2.0.2 as of 10th February 2020
  */
 package com.orange.labs.conllparser;
 
@@ -41,7 +41,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +161,7 @@ public class ConllSentence {
         comments = new ArrayList<>();
         hasEnhancedDeps = false;
         //Set<Annotation> lastAnnots = null;
-        List<String>lastnonstandardinfo = null;
+        List<String> lastnonstandardinfo = null;
 
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             String line = cline.getValue();
@@ -200,8 +199,6 @@ public class ConllSentence {
 //                    }
 //                }
 //            }
-
-
             if (w.getTokentype() == ConllWord.Tokentype.WORD) {
                 if (!w.hasXpostag("NON-VU")) {
                     words.add(w);
@@ -464,7 +461,10 @@ public class ConllSentence {
             Map<Integer, List<ConllWord>> e2 = new HashMap<>();
             for (List<ConllWord> ews : emptywords.values()) {
                 for (ConllWord ew : ews) {
-                    ew.setId(oldnewIds.get(ew.getId()));
+                    if (ew.getId() != 0) {
+                        // enhanced dependencies may contain words with id 0.1
+                        ew.setId(oldnewIds.get(ew.getId()));
+                    }
                     for (ConllWord.EnhancedDeps ed : ew.getDeps()) {
                         if (ed.headid > 0) {
                             ed.headid = oldnewIds.get(ed.headid);
@@ -666,6 +666,16 @@ public class ConllSentence {
             sb.append("# ").append(c).append('\n');
         }
 
+        // output 0.1 empty words, if present
+        if (emptywords != null) {
+            List<ConllWord> ews = emptywords.get(0);
+            if (ews != null) {
+                for (ConllWord ew : ews) {
+                    sb.append(ew.toString(hasEnhancedDeps/* withpartialhead*/)).append("\n");
+                }
+            }
+        }
+
         for (ConllWord word : words) {
             if (nextToStringcomplete) {
                 word.nextToStringComplete();
@@ -741,6 +751,23 @@ public class ConllSentence {
 
             boolean first = true;
             sb.append("%% forms:\n");
+
+            // sentence initial empty words
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(0);
+                if (ews != null) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\& ");
+                    }
+                    for (ConllWord ew : ews) {
+                        sb.append(ew.getForm()).append("\t");
+                        position.put(ew.getFullId(), position.size() + 1);
+                    }
+                }
+            }
+
             for (ConllWord word : words) {
                 position.put(word.getFullId(), position.size() + 1);
 
@@ -766,6 +793,21 @@ public class ConllSentence {
 
             sb.append("%% lemmas:\n% ");
             first = true;
+            // sentence initial empty words
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(0);
+                if (ews != null) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\& ");
+                    }
+                    for (ConllWord ew : ews) {
+                        sb.append(ew.getLemma()).append("\t");
+                    }
+                }
+            }
+
             for (ConllWord word : words) {
                 if (first) {
                     first = false;
@@ -788,6 +830,21 @@ public class ConllSentence {
 
             sb.append("%% UPOS:\n% ");
             first = true;
+            // sentence initial empty words
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(0);
+                if (ews != null) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\& ");
+                    }
+                    for (ConllWord ew : ews) {
+                        sb.append(ew.getUpostag()).append("\t");
+                    }
+                }
+            }
+
             for (ConllWord word : words) {
                 if (first) {
                     first = false;
@@ -808,9 +865,23 @@ public class ConllSentence {
             }
             sb.append("\\\\\n");
 
-            
             sb.append("%% XPOS:\n% ");
             first = true;
+            // sentence initial empty words
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(0);
+                if (ews != null) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\& ");
+                    }
+                    for (ConllWord ew : ews) {
+                        sb.append(ew.getXpostag()).append("\t");
+                    }
+                }
+            }
+
             for (ConllWord word : words) {
                 if (first) {
                     first = false;
@@ -831,9 +902,23 @@ public class ConllSentence {
             }
             sb.append("\\\\\n");
 
-            
             sb.append("%% IDs\n% ");
             first = true;
+            // sentence initial empty words
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(0);
+                if (ews != null) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\& ");
+                    }
+                    for (ConllWord ew : ews) {
+                        sb.append(ew.getFullId()).append("\t");
+                    }
+                }
+            }
+
             for (ConllWord word : words) {
                 if (first) {
                     first = false;
@@ -854,18 +939,34 @@ public class ConllSentence {
             }
             sb.append("\\\\\n");
 
-            
             sb.append("%% Position in sentence:\n% ");
             first = true;
             // check also if there are extra columns
             //int extracols = 0;
-            Set<Integer>extracols = new TreeSet<>(); //
+            Set<Integer> extracols = new TreeSet<>(); //
+
+            // sentence initial empty words
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(0);
+                if (ews != null) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        sb.append("\\& ");
+                    }
+                    for (ConllWord ew : ews) {
+                        sb.append(position.get(ew.getFullId())).append("\t");
+                    }
+                }
+            }
+
             for (ConllWord word : words) {
                 //if (word.getExtracolumns() != null && word.getExtracolumns().size() > extracols) {
                 //    extracols = word.getExtracolumns().size();
                 //}
-                if (word.getExtracolumns() != null)
+                if (word.getExtracolumns() != null) {
                     extracols.addAll(word.getExtracolumns().keySet());
+                }
                 if (first) {
                     first = false;
                 } else {
@@ -886,10 +987,9 @@ public class ConllSentence {
             sb.append("\\\\\n");
 
             //for (int ec = 0; ec < extracols; ++ec) {
-            for(Integer ec : extracols) {
-            
+            for (Integer ec : extracols) {
                 first = true;
-		sb.append('%');
+                sb.append('%');
                 for (ConllWord word : words) {
                     if (first) {
                         first = false;
@@ -901,7 +1001,7 @@ public class ConllSentence {
                         if (tmp != null && !tmp.isEmpty()) {
                             sb.append(String.join(",", word.getExtracolumns().get(ec)));
                         }
-                        
+
                     }
                     //sb.append("\t");
                     if (emptywords != null) {
@@ -911,7 +1011,7 @@ public class ConllSentence {
                                 sb.append(" \\&\n%\t");
                                 if (ew.getExtracolumns() != null) {
                                     if (!word.getExtracolumns().get(ec).isEmpty()) {
-                                       sb.append(String.join(",", word.getExtracolumns().get(ec)));
+                                        sb.append(String.join(",", word.getExtracolumns().get(ec)));
                                     }
                                 }
                                 //sb.append("\t");
@@ -919,13 +1019,13 @@ public class ConllSentence {
                         }
                     }
                 }
-                sb.append(String.format("\\\\ %% col%s\n%% ", ec));
+                sb.append(String.format("\\\\ %% col%s\n", ec));
             }
 
             sb.append("\\end{deptext}\n\n%        head dependent deprel\n");
 
             int maxdist = 0; // calculate here the most distant word in terms of deprels from root
-            // System.err.println("ppp " + position);
+            //System.err.println("ppppppppppp " + position);
             for (ConllWord word : words) {
                 maxdist = Math.max(getDistanceFromSentenceHead(word), maxdist);
                 int mypos = position.get(word.getFullId());
@@ -941,9 +1041,10 @@ public class ConllSentence {
 
                 // adding enhanced deps
                 for (ConllWord.EnhancedDeps ed : word.getDeps()) {
-                    if (ed.headid != 0) {
+                    // eds can have headid 0 if they are sentence initial
+                    if (headpos != 0 /*ed.headid != 0*/) {
                         if (!position.containsKey(ed.getFullHeadId())) {
-                            System.err.println("Invalid empty word head " + ed.getFullHeadId());
+                            System.err.println("Invalid empty word head " + ed.getFullHeadId() + " " + ed);
                         } else {
                             int ewheadpos = position.get(ed.getFullHeadId());
                             if (ewheadpos != headpos) {
@@ -1186,7 +1287,7 @@ public class ConllSentence {
     public Map<Integer, ConllWord> getContractedWords() {
         return contracted;
     }
-    
+
     /**
      * join word with following. Use the attachment of the one closer to the
      * head. if both are equally close, chose the left
@@ -1257,8 +1358,23 @@ public class ConllSentence {
             w.getDependents().clear();
             w.getDependentsMap().clear();
         }
+
         //System.err.println("aaaaaa " + words);
         int position = 1;
+
+        // sentence initial empty word (0.1)
+        if (emptywords != null) {
+            List<ConllWord> ews = emptywords.get(0);
+            if (ews != null) {
+                for (ConllWord ew : ews) {
+                    ew.setPosition(position++);
+                    //sb.append(ew.toString(withpartialhead)).append("\n");
+                    headss.add(ew);
+                    table.put(ew.getFullId(), ew);
+                }
+            }
+        }
+
         for (ConllWord w : words) {
             table.put(w.getFullId(), w);
 
@@ -1323,8 +1439,7 @@ public class ConllSentence {
         }
     }
 
-    
-        /**
+    /**
      * calculate the height if each arc, by taking into account all short arcs
      * below. Does not take into account non-projective arcs, on ly arcs from n
      * to m
@@ -1396,7 +1511,7 @@ public class ConllSentence {
 //        System.err.println("H     " + height);
         return height;
     }
-    
+
     public int getMaxdist() {
         return maxdist;
     }
@@ -1631,12 +1746,12 @@ public class ConllSentence {
     public String getSentid() {
         return sentid;
     }
-    
+
     /** calculate start and end offset for each word.
        contracted word as well. Parts of contracted words copy the values form the MTW
     @param start offset of first word
     @param return the offset after the last word (including SpaceAfter)
-    */
+     */
     public int calculateOffsets(int start) {
         for (ConllWord cw : words) {
             cw.setStart(start);

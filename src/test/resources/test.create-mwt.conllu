@@ -308,3 +308,20 @@
 8	punto	punto	NOUN	NCMS000	_	6	nmod	_	ToDo=nmod|Treeler:sn=null
 9	2	2	NUM	Z	_	8	nmod	_	Treeler:sn=null
 
+# sent_id = fi_tdt-ud-train.conllu b712.11
+# sentence 18
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.
+0.1	Laitoin	laittaa	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
+1	Sekaan	sekaan	ADV	Adv	_	3	orphan	0.1:advmod	_
+2	1	1	NUM	Num	NumType=Card	3	nummod	3:nummod	_
+3	purkillinen	purkillinen	NOUN	N	Case=Nom|Number=Sing	0	root	0:root|0.1:obj	_
+4	kermaviiliä	kerma#viili	NOUN	N	Case=Par|Number=Sing	3	nmod	3:nmod:par	_
+5	ja	ja	CCONJ	C	_	8	cc	8:cc	_
+6	ja	ja	CCONJ	C	_	8	cc	8:cc	_
+7	sitten	sitten	ADV	Adv	_	8	advmod	8:advmod	_
+8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_
+9	perustahnan	perus#tahna	NOUN	N	Case=Gen|Number=Sing	8	obj	8:obj	_
+10	4	4	NUM	Num	NumType=Card	11	nummod	11:nummod	_
+11	lautaselle	lautanen	NOUN	N	Case=All|Number=Sing	8	obl	8:obl:all	SpaceAfter=No
+12	.	.	PUNCT	Punct	_	3	punct	0.1:punct|3:punct	_
+

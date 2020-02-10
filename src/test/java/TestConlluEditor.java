@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.2 as of 27th September 2019
+ @version 2.0.2 as of 10th February 2020
  */
 
 import com.google.gson.Gson;
@@ -97,10 +97,21 @@ public class TestConlluEditor {
         // call proces to be sure makeTrees has been  called
         String rtc = ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.LATEX, 13);
+        // first sentence 13
         JsonElement jelement = new JsonParser().parse(res);
         JsonObject jobject = jelement.getAsJsonObject();
 
-        FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
+        StringBuilder sb = new StringBuilder();
+        sb.append(jobject.get("raw").getAsString()).append('\n');
+
+        // add LateX for sentence 18
+        res = ce.getraw(ConlluEditor.Raw.LATEX, 18);
+        jelement = new JsonParser().parse(res);
+        jobject = jelement.getAsJsonObject();
+        sb.append(jobject.get("raw").getAsString()).append('\n');
+
+        FileUtils.writeStringToFile(out, sb.toString(), //jobject.get("raw").getAsString(), 
+                                         StandardCharsets.UTF_8);
 
         Assert.assertEquals(String.format("LaTeX output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),

@@ -20,7 +20,7 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\
 %	B:Person \&
 %	 \&
 %	\\ % col11
-% \end{deptext}
+\end{deptext}
 
 %        head dependent deprel
 \depedge{2}{1}{nsubj}
@@ -51,3 +51,63 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\
 \dep{5}{4}{2}{and}{CCONJ}{cc}
 \dep{5}{6}{2}{dinner}{NOUN}{orphan}
 \end{tikzpicture}
+
+%% for tikz-dependency
+% sentid = fi_tdt-ud-train.conllu b712.11
+\begin{dependency}
+\begin{deptext}
+%% forms:
+Laitoin	\& Sekaan	\& 1	\& purkillinen	\& kermaviiliä	\& ja	\& ja	\& sitten	\& jaoin	\& perustahnan	\& 4	\& lautaselle	\& .	\\
+%% lemmas:
+% laittaa	\& sekaan	\& 1	\& purkillinen	\& kerma#viili	\& ja	\& ja	\& sitten	\& jakaa	\& perus#tahna	\& 4	\& lautanen	\& .	\\
+%% UPOS:
+% VERB	\& ADV	\& NUM	\& NOUN	\& NOUN	\& CCONJ	\& CCONJ	\& ADV	\& VERB	\& NOUN	\& NUM	\& NOUN	\& PUNCT	\\
+%% XPOS:
+% _	\& Adv	\& Num	\& N	\& N	\& C	\& C	\& Adv	\& V	\& N	\& Num	\& N	\& Punct	\\
+%% IDs
+% 0.1	\& 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\& 8	\& 9	\& 10	\& 11	\& 12	\\
+%% Position in sentence:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\& 8	\& 9	\& 10	\& 11	\& 12	\& 13	\\
+\end{deptext}
+
+%        head dependent deprel
+\depedge{4}{2}{orphan}
+
+\depedge[edge below]{1}{2}{advmod}
+\depedge{4}{3}{nummod}
+\deproot[edge unit distance=4ex]{4}{root}%%
+\depedge{4}{5}{nmod}
+\depedge{9}{6}{cc}
+\depedge{9}{7}{cc}
+\depedge{9}{8}{advmod}
+\depedge{4}{9}{conj}
+
+\depedge[edge below]{1}{9}{conj}
+\depedge{9}{10}{obj}
+\depedge{12}{11}{nummod}
+\depedge{9}{12}{obl}
+\depedge{4}{13}{punct}
+
+\depedge[edge below]{1}{13}{punct}
+\end{dependency}
+
+
+%% for deptrees.sty
+\setbottom{5} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{0}{Laitoin}{VERB}
+\root{3}{purkillinen}{NOUN}
+% headpos, hor-pos, vert-pos, form, UPOS, deprel
+\dep{3}{1}{1}{Sekaan}{ADV}{orphan}
+\dep{3}{2}{1}{1}{NUM}{nummod}
+\dep{3}{4}{1}{kermaviiliä}{NOUN}{nmod}
+\dep{3}{8}{1}{jaoin}{VERB}{conj}
+\dep{3}{12}{1}{.}{PUNCT}{punct}
+\dep{8}{5}{2}{ja}{CCONJ}{cc}
+\dep{8}{6}{2}{ja}{CCONJ}{cc}
+\dep{8}{7}{2}{sitten}{ADV}{advmod}
+\dep{8}{9}{2}{perustahnan}{NOUN}{obj}
+\dep{8}{11}{2}{lautaselle}{NOUN}{obl}
+\dep{11}{10}{3}{4}{NUM}{nummod}
+\end{tikzpicture}
+
