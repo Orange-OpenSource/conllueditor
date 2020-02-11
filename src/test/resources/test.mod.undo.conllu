@@ -227,13 +227,14 @@
 50	fix	fix	VERB	_	_	20	xcomp	_	_
 60	dinner	dinner	NOUN	_	_	50	obj	_	_
 
+# sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
 # sentence 13
-1	Sam	Sammie	PROPN	NNP	Number=Sing	2	nsubj	_	_	B:Person
+1	Sam	Sammie	PROPN	NNP	Number=Sing	2	nsubj	_	_	B:Person	B:id01
 2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
 3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	_	_
 4	and	and	CCONJ	CC	_	5	cc	5:cc|5.1:cc	_
-5	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|5.1:nsubj	_	B:Person
+5	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|5.1:nsubj	_	B:Person	B:id02
 5.1	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
 6	dinner	dinner	NOUN	NN	Number=Sing	5	orphan	5:orphan|5.1:obj	_
 
