@@ -262,111 +262,6 @@ public class ConllSentence {
         }
     }
 
-//    public Map<Integer, Integer> getWord2chunks() {
-//        return word2chunks;
-//    }
-    /**
-     * integrate the chunk id to the "depscolumn"
-     */
-//    public void note_chunkId() {
-//        for (ConllWord word : words) {
-//            int chunkid = word2chunks.get(word.getId());
-//            //word.setDeps(""+chunkid);
-//            //word.setMisc("ChunkID");
-//            // TODO use chunkid with key=value
-//            //word.setMisc("" + chunkid);
-//            word.addMisc("Chunk", chunkid);
-//        }
-//    }
-//    public Map<Integer, Set<Integer>> getChunks2word() {
-//        return chunks2word;
-//    }
-//
-//    public void setWord2chunks(Map<Integer, Integer> word2chunks) {
-//        this.word2chunks = word2chunks;
-//    }
-//
-//    public void setChunks2word(Map<Integer, Set<Integer>> chunks2word) {
-//        this.chunks2word = chunks2word;
-//    }
-//    /**
-//     * return a chunk (necessites a call ro Dep2Chunk). Does not check, whether
-//     * chunks2word is null !!
-//     */
-//
-//    public List<String> getChunk(int id) {
-//        Set<Integer> chunkIDs = chunks2word.get(id);
-//        if (chunkIDs != null) {
-//            //StringBuilder sb = new StringBuilder();
-//            List<String> res = new ArrayList<>();
-//            //boolean first = true;
-//            for (Integer wordid : chunkIDs) {
-//                ConllWord w = this.getWord(wordid);
-//                //if (!first) {
-//                //    sb.append(" ");
-//                //}
-//                //first = false;
-//                //sb.append(w.getForm());
-//                res.add(w.getForm());
-//            }
-//            //return sb.toString();
-//            return res;
-//        }
-//        return null;
-//    }
-//
-//
-//    public String getChunks() {
-//        StringBuilder sb = new StringBuilder();
-//        int lastid = -1;
-//        for (ConllWord word : words) {
-//            int chunkid = (Integer) word.getMisc().get("Chunk");
-//            if (lastid != chunkid/*Integer.parseInt(word.getMisc())*/) {
-//                if (lastid != -1) {
-//                    // close last chunk
-//                    sb.append("] ");
-//                }
-//                sb.append("[");
-//                lastid = chunkid; //Integer.parseInt(word.getMisc());
-//            } else {
-//                sb.append(" ");
-//            }
-//            List<String> feats = word.getFeatures();
-//            String f;
-//            if (feats.isEmpty()) {
-//                f = EmptyColumn;
-//            } else {
-//                //f = String.join("|", feats);
-//                List<String> ts = new ArrayList<>();
-//                for (String t : feats) {
-//                    if (t.startsWith("Number") || t.startsWith("Gender") || t.startsWith("Case")) {
-//                        ts.add(t);
-//                    }
-//                }
-//                if (ts.isEmpty()) {
-//                    f = EmptyColumn;
-//                } else {
-//                    //f = String.join(",", ts);
-//                    StringBuilder sb2 = new StringBuilder();
-//                    boolean first = true;
-//                    for (String t : ts) {
-//                        if (!first) {
-//                            sb2.append(',');
-//                        } else {
-//                            first = false;
-//                        }
-//                        sb2.append(t);
-//                    }
-//                    f = sb2.toString();
-//                }
-//            }
-//            sb.append(String.format("%s|%s|%s|%s", word.getUpostag(), word.getLemma(), word.getForm(), f));
-//        }
-//        if (lastid != -1) {
-//            sb.append("]");
-//        }
-//        return sb.toString();
-//    }
     public int size() {
         return words.size();
     }
@@ -641,7 +536,6 @@ public class ConllSentence {
                 it.remove();
             }
         }
-
     }
 
     /**
@@ -652,6 +546,7 @@ public class ConllSentence {
         nextToStringcomplete = true;
     }
 
+    /** format the sentence in CoNLL-U format */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (newdoc != null && !newdoc.isEmpty()) {
@@ -705,6 +600,7 @@ public class ConllSentence {
         return sb.toString();
     }
 
+    /** format the sentence in SD-parse format */
     public String getSDparse() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -732,6 +628,7 @@ public class ConllSentence {
         return sb.toString();
     }
 
+    /** format the sentence for use with xelatex (tikz-dependencie) */
     public String getLaTeX() {
         StringBuilder sb = new StringBuilder();
         try {
@@ -971,392 +868,7 @@ public class ConllSentence {
         return sb.toString();
     }
 
-//    public String oogetLaTeX() {
-//        StringBuilder sb = new StringBuilder();
-//        try {
-//            makeTrees(null);
-//
-//            Map<String, Integer> position = new HashMap<>(); // position of each word, needed for latex-deprel
-//            sb.append("%% for tikz-dependency\n");
-//            if (newdoc != null) {
-//                sb.append("% newdoc ").append(newdoc).append('\n');
-//            }
-//            if (newpar != null) {
-//                sb.append("% newpar ").append(newpar).append('\n');
-//            }
-//            if (sentid != null && !sentid.isEmpty()) {
-//                sb.append("% sentid = ").append(sentid).append('\n');
-//            }
-//            sb.append("\\begin{dependency}\n\\begin{deptext}\n");
-//
-//            boolean first = true;
-//            sb.append("%% forms:\n");
-//
-//            // sentence initial empty words
-//            if (emptywords != null) {
-//                List<ConllWord> ews = emptywords.get(0);
-//                if (ews != null) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append("\\& ");
-//                    }
-//                    for (ConllWord ew : ews) {
-//                        sb.append(ew.getForm()).append("\t");
-//                        position.put(ew.getFullId(), position.size() + 1);
-//                    }
-//                }
-//            }
-//
-//            for (ConllWord word : words) {
-//                position.put(word.getFullId(), position.size() + 1);
-//
-//                if (first) {
-//                    first = false;
-//                } else {
-//                    sb.append("\\& ");
-//                }
-//                sb.append(word.getForm()).append("\t");
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            sb.append("\\& ")
-//                                    .append(ew.getForm()).append("\t");
-//                            position.put(ew.getFullId(), position.size() + 1);
-//                        }
-//                    }
-//                }
-//            }
-//            sb.append("\\\\\n");
-//
-//            sb.append("%% lemmas:\n% ");
-//            first = true;
-//            // sentence initial empty words
-//            if (emptywords != null) {
-//                List<ConllWord> ews = emptywords.get(0);
-//                if (ews != null) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append("\\& ");
-//                    }
-//                    for (ConllWord ew : ews) {
-//                        sb.append(ew.getLemma()).append("\t");
-//                    }
-//                }
-//            }
-//
-//            for (ConllWord word : words) {
-//                if (first) {
-//                    first = false;
-//                } else {
-//                    sb.append("\\& ");
-//                }
-//                sb.append(word.getLemma()).append("\t");
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            sb.append("\\& ")
-//                                    .append(ew.getLemma()).append("\t");
-//                        }
-//                    }
-//                }
-//            }
-//            sb.append("\\\\\n");
-//
-//            sb.append("%% UPOS:\n% ");
-//            first = true;
-//            // sentence initial empty words
-//            if (emptywords != null) {
-//                List<ConllWord> ews = emptywords.get(0);
-//                if (ews != null) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append("\\& ");
-//                    }
-//                    for (ConllWord ew : ews) {
-//                        sb.append(ew.getUpostag()).append("\t");
-//                    }
-//                }
-//            }
-//
-//            for (ConllWord word : words) {
-//                if (first) {
-//                    first = false;
-//                } else {
-//                    sb.append("\\& ");
-//                }
-//                sb.append(word.getUpostag()).append("\t");
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            sb.append("\\& ")
-//                                    .append(ew.getUpostag()).append("\t");
-//                        }
-//                    }
-//                }
-//            }
-//            sb.append("\\\\\n");
-//
-//            sb.append("%% XPOS:\n% ");
-//            first = true;
-//            // sentence initial empty words
-//            if (emptywords != null) {
-//                List<ConllWord> ews = emptywords.get(0);
-//                if (ews != null) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append("\\& ");
-//                    }
-//                    for (ConllWord ew : ews) {
-//                        sb.append(ew.getXpostag()).append("\t");
-//                    }
-//                }
-//            }
-//
-//            for (ConllWord word : words) {
-//                if (first) {
-//                    first = false;
-//                } else {
-//                    sb.append("\\& ");
-//                }
-//                sb.append(word.getXpostag()).append("\t");
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            sb.append("\\& ")
-//                                    .append(ew.getXpostag()).append("\t");
-//                        }
-//                    }
-//                }
-//            }
-//            sb.append("\\\\\n");
-//
-//            sb.append("%% IDs\n% ");
-//            first = true;
-//            // sentence initial empty words
-//            if (emptywords != null) {
-//                List<ConllWord> ews = emptywords.get(0);
-//                if (ews != null) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append("\\& ");
-//                    }
-//                    for (ConllWord ew : ews) {
-//                        sb.append(ew.getFullId()).append("\t");
-//                    }
-//                }
-//            }
-//
-//            for (ConllWord word : words) {
-//                if (first) {
-//                    first = false;
-//                } else {
-//                    sb.append("\\& ");
-//                }
-//                sb.append(word.getFullId()).append("\t");
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            sb.append("\\& ")
-//                                    .append(ew.getFullId()).append("\t");
-//                        }
-//                    }
-//                }
-//            }
-//            sb.append("\\\\\n");
-//
-//            sb.append("%% Position in sentence:\n% ");
-//            first = true;
-//            // check also if there are extra columns
-//            //int extracols = 0;
-//            Set<Integer> extracols = new TreeSet<>(); //
-//
-//            // sentence initial empty words
-//            if (emptywords != null) {
-//                List<ConllWord> ews = emptywords.get(0);
-//                if (ews != null) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append("\\& ");
-//                    }
-//                    for (ConllWord ew : ews) {
-//                        sb.append(position.get(ew.getFullId())).append("\t");
-//                    }
-//                }
-//            }
-//
-//            for (ConllWord word : words) {
-//                //if (word.getExtracolumns() != null && word.getExtracolumns().size() > extracols) {
-//                //    extracols = word.getExtracolumns().size();
-//                //}
-//                if (word.getExtracolumns() != null) {
-//                    extracols.addAll(word.getExtracolumns().keySet());
-//                }
-//                if (first) {
-//                    first = false;
-//                } else {
-//                    sb.append("\\& ");
-//                }
-//                sb.append(position.get(word.getFullId())).append("\t");
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            sb.append("\\& ")
-//                                    .append(position.get(ew.getFullId())).append("\t");
-//                        }
-//                    }
-//                }
-//            }
-//            sb.append("\\\\\n");
-//
-//            //for (int ec = 0; ec < extracols; ++ec) {
-//            for (Integer ec : extracols) {
-//                first = true;
-//                sb.append('%');
-//                for (ConllWord word : words) {
-//                    if (first) {
-//                        first = false;
-//                    } else {
-//                        sb.append(" \\&\n%\t");
-//                    }
-//                    if (word.getExtracolumns() != null) {
-//                        LinkedHashSet<String> tmp = word.getExtracolumns().get(ec);
-//                        if (tmp != null && !tmp.isEmpty()) {
-//                            sb.append(String.join(",", word.getExtracolumns().get(ec)));
-//                        }
-//
-//                    }
-//                    //sb.append("\t");
-//                    if (emptywords != null) {
-//                        List<ConllWord> ews = emptywords.get(word.getId());
-//                        if (ews != null) {
-//                            for (ConllWord ew : ews) {
-//                                sb.append(" \\&\n%\t");
-//                                if (ew.getExtracolumns() != null) {
-//                                    if (!word.getExtracolumns().get(ec).isEmpty()) {
-//                                        sb.append(String.join(",", word.getExtracolumns().get(ec)));
-//                                    }
-//                                }
-//                                //sb.append("\t");
-//                            }
-//                        }
-//                    }
-//                }
-//                sb.append(String.format("\\\\ %% col%s\n", ec));
-//            }
-//
-//            sb.append("\\end{deptext}\n\n%        head dependent deprel\n");
-//
-//            int maxdist = 0; // calculate here the most distant word in terms of deprels from root
-//            //System.err.println("ppppppppppp " + position);
-//            for (ConllWord word : words) {
-//                maxdist = Math.max(getDistanceFromSentenceHead(word), maxdist);
-//                int mypos = position.get(word.getFullId());
-//                int headpos = 0;
-//                if (word.getHead() == 0) {
-//                    sb.append("\\deproot[edge unit distance=4ex]{").append(mypos).append("}{root}%%\n");
-//                } else if (word.getHead() > 0) {
-//                    headpos = position.get(word.getHeadWord().getFullId());
-//                    sb.append("\\depedge{").append(headpos).append("}{")
-//                            .append(mypos).append("}{")
-//                            .append(word.getDeplabel()).append("}\n");
-//                }
-//
-//                // adding enhanced deps
-//                for (ConllWord.EnhancedDeps ed : word.getDeps()) {
-//                    // eds can have headid 0 if they are sentence initial
-//                    if (headpos != 0 /*ed.headid != 0*/) {
-//                        if (!position.containsKey(ed.getFullHeadId())) {
-//                            System.err.println("Invalid empty word head " + ed.getFullHeadId() + " " + ed);
-//                        } else {
-//                            int ewheadpos = position.get(ed.getFullHeadId());
-//                            if (ewheadpos != headpos) {
-//                                sb.append("\n\\depedge[edge below]{").append(ewheadpos).append("}{")
-//                                        .append(mypos).append("}{")
-//                                        .append(ed.deprel).append("}\n");
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                if (emptywords != null) {
-//                    List<ConllWord> ews = emptywords.get(word.getId());
-//                    if (ews != null) {
-//                        for (ConllWord ew : ews) {
-//                            int ewpos = position.get(ew.getFullId());
-//                            for (ConllWord.EnhancedDeps ehd : ew.getDeps()) {
-//                                int ewheadpos = position.get(ehd.getFullHeadId());
-//                                sb.append("\\depedge[edge below]{").append(ewheadpos).append("}{")
-//                                        .append(ewpos).append("}{")
-//                                        .append(ehd.deprel).append("}\n");
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            if (contracted != null) {
-//                for (ConllWord cc : contracted.values()) {
-//                    sb.append("\\wordgroup{1}{")
-//                            .append(position.get(Integer.toString(cc.getId()))).append("}{")
-//                            .append(position.get(Integer.toString(cc.getSubid()))).append("}{mw")
-//                            .append(cc.getId()).append("}\n"); // id
-//                }
-//            }
-//
-//            sb.append("\\end{dependency}\n");
-//
-//            sb.append("\n\n%% for deptrees.sty\n");
-//            sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist + 1));
-//            sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
-//            for (ConllWord head : getHeads()) {
-//                sb.append(String.format("\\root{%d}{%s}{%s}\n", head.getId(), head.getForm(), head.getUpostag()));
-//            }
-//
-//            sb.append("% headpos, hor-pos, vert-pos, form, UPOS, deprel\n");
-//            List<ConllWord> words2 = new ArrayList<>();
-//            words2.addAll(words);
-//            Collections.sort(words2, new CWSortbyHead());
-//            for (ConllWord cw : words2) {
-//                if (cw.getHead() != 0) {
-//                    sb.append(String.format("\\dep{%d}{%s}{%d}{%s}{%s}{%s}\n", cw.getHead(), cw.getId(),
-//                                            getDistanceFromSentenceHead(cw) - 1,
-//                                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
-//                }
-//            }
-//
-//            if (contracted != null) {
-//                for (ConllWord cc : contracted.values()) {
-//                    sb.append("\\mtw{")
-//                            .append(position.get(Integer.toString(cc.getId()))).append("}{")
-//                            .append(position.get(Integer.toString(cc.getSubid()))).append("}{")
-//                            .append(cc.getForm()).append("}\n");
-//                }
-//            }
-//
-//            sb.append("\\end{tikzpicture}\n");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return sb.toString();
-//    }
+
     public List<ConllWord> getWords() {
         return words;
     }
@@ -1562,7 +1074,6 @@ public class ConllSentence {
     }
 
     private int getDistanceFromSentenceHead(ConllWord cw) {
-
         if (cw.getHead() == 0) {
             return 0;
         }
@@ -1580,7 +1091,6 @@ public class ConllSentence {
         // chercher les autres feuilles qui dépendent de cette racine
         // extraire cet arbre partiel
         //PrintStream out = System.out;
-
         Map<String, ConllWord> table = new HashMap<>(); // All nodes (including empty nodes) and their stringified id
 
         headss = new ArrayList<>();
@@ -1616,7 +1126,6 @@ public class ConllSentence {
 
         for (ConllWord w : words) {
             table.put(w.getFullId(), w);
-
             w.setPosition(position++);
             if (w.getHead() > 0) {
                 // mettre W dans la liste des dépendants de sa tête
@@ -1680,7 +1189,7 @@ public class ConllSentence {
 
     /**
      * calculate the height if each arc, by taking into account all short arcs
-     * below. Does not take into account non-projective arcs, on ly arcs from n
+     * below. Does not take into account non-projective arcs, only arcs from n
      * to m
      *
      */
