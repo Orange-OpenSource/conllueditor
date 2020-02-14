@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2019, Orange S.A.
+ Copyright (c) 2018-2020, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.3 as of 28th September 2019
+ @version 2.1.0 as of 14th February 2020
  */
 
 
@@ -1254,7 +1254,11 @@ $(document).ready(function () {
             inputtext = "findcomment " + backwards + " " + $("#comment").val();
         } else if (this.id == "findmulti") {
             inputtext = "findmulti " + backwards + " " + $("#multifield").val();
-        } else if (this.id == "save") {
+        } else if (this.id == "findsentid") {
+            inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
+        }
+        
+        else if (this.id == "save") {
             inputtext = "save";
         } else if (this.id == "redo") {
             var inputtext = "mod redo";

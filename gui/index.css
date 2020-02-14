@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2019, Orange S.A.
+Copyright (c) 2018-2020, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.1 as of 26th September 2019
+ @version 2.1.0 as of 14th February 2020
 */
 
 body {
@@ -343,7 +343,7 @@ input {
 }
 
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti {
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti, #findsentid {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;

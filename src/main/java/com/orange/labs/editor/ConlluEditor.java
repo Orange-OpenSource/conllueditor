@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2019, Orange S.A.
+Copyright (c) 2018-2020, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.8 as of 8th December 2019
+ @version 2.1.0 as of 14th February 2020
  */
 package com.orange.labs.editor;
 
@@ -63,6 +63,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -433,6 +436,32 @@ public class ConlluEditor {
                 }
                 csent = cfile.getSentences().get(currentSentenceId);
                 return returnTree(currentSentenceId, csent);
+
+            } else if (command.startsWith("findsentid")) {
+                String[] f = command.trim().split(" +", 3);
+                if (f.length != 3) {
+                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                }
+
+                // si le deuxième mot est "true" on cherche en arrière
+                boolean backwards = f[1].equalsIgnoreCase("true");
+                Pattern idAtrouver = Pattern.compile(f[2]);
+
+                for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
+                        (backwards ? i >= 0 : i < numberOfSentences);
+                        i = (backwards ? i - 1 : i + 1)) {
+                    ConllSentence cs = cfile.getSentences().get(i);
+                    String sid = cs.getSentid();
+                    if (sid != null) {
+                        Matcher m = idAtrouver.matcher(sid);
+                        if (m.find()) {
+                            currentSentenceId = i;
+                            return returnTree(currentSentenceId, cs, null /* highlight*/);
+                        }
+                    }
+                }
+
+                return formatErrMsg("Sentence id not found '" + idAtrouver + "'", currentSentenceId);
 
             } else if (command.startsWith("findcomment ")) {
                 String[] f = command.trim().split(" +", 3);
@@ -1340,9 +1369,11 @@ public class ConlluEditor {
             }
         } catch (ConllException e) {
             return formatErrMsg("CoNLL error: " + e.getMessage(), currentSentenceId);
+        } catch (PatternSyntaxException e) {
+            return formatErrMsg("Bad regular expression: " + e.getMessage(), currentSentenceId);
         } catch (Exception e) {
             e.printStackTrace();
-            return formatErrMsg("CoNLL error: " + e.getMessage(), currentSentenceId);
+            return formatErrMsg("General error: " + e.getMessage(), currentSentenceId);
         }
     }
 

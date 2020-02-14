@@ -266,7 +266,7 @@ input {
 }
 
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment {
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findsentid {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;

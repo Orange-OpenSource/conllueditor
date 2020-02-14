@@ -1,0 +1,5 @@
+{
+  "sentenceid": 1,
+  "maxsentence": 19,
+  "error": "Bad regular expression: Unclosed character class near index 7\nc.*[]-ud\n       ^"
+}

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.0.2 as of 10th February 2020
+ @version 2.1.0 as of 15th February 2020
  */
 
 import com.google.gson.Gson;
@@ -308,7 +308,6 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("Find lemma return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-
     }
 
     @Test
@@ -329,11 +328,50 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-
     }
 
     @Test
-    public void test33FindNothing() throws IOException {
+    public void test33FindSentenceId() throws IOException {
+        name("findsenteid");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("findsentid false c.*-ud", 1, "");
+        JsonElement jelement = new JsonParser().parse(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "findsentid.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("/findsentid.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test34FindSentenceIdBadRE() throws IOException {
+        name("findsenteid (bad RE)");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("findsentid false c.*[]-ud", 1, "");
+        JsonElement jelement = new JsonParser().parse(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "findsentidBadRE.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("/findsentidBadRE.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+    
+    @Test
+    public void test35FindNothing() throws IOException {
         name("findupos (error)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findupos false TOTO", 1, "");
@@ -350,11 +388,10 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("Find upos error return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-
     }
 
     @Test
-    public void test34Undo() throws IOException {
+    public void test36Undo() throws IOException {
         name("modifying UPOS and Lemma, followed by undo");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
@@ -370,7 +407,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test35AddED() throws IOException {
+    public void test37AddED() throws IOException {
         name("adding/deleting enhanced dependency");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".4");
