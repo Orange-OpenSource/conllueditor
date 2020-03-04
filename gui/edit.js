@@ -812,7 +812,7 @@ function formatPhrase(item) {
             if (item.errors.heads)
                 $("#errors").append("|" + item.errors.heads + " roots");
             if (item.errors.badroots)
-                $("#errors").append("|" + item.errors.badroots + " 'root' without head == 0");
+                $("#errors").append("|" + item.errors.badroots + " deprel 'root' used for non-root");
             if (item.errors.invalidUPOS)
                 $("#errors").append("|" + item.errors.invalidUPOS + " invalid UPOS");
             if (item.errors.invalidXPOS)
