@@ -9,9 +9,9 @@ The editor provides the following functionalities:
 * editing dependency relations
 * indicates invalid UPOS, XPOS or dependency relations
 * join/split words (to correct tokenization errors)
-* join/split sentences  (to correct tokenization errors)
+* join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
-* search: forms, lemmas, UPOS, XPOS, deprels and comments, sequences of any of these
+* search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these
 * displays non-CoNLL-U columns (from column 11 onwards)
 * runs validation script on sentence (CoNLL-U format)
 * git support
@@ -162,7 +162,7 @@ An edit window opens to enter the relation a name. Existing relations can be ren
 Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
 
-The sentence is shown as a dependency tree or as a flat (“dependency hedge”) graph, morphological features can be shown or hidden with the `features` button,
+The sentence is shown as a dependency tree or as a flat graph (“dependency hedge”), morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
 If any UPOS/XPOS/deprel is not in the validation lists (specified with the `--UPOS` etc options)
@@ -193,7 +193,7 @@ Empty nodes (having `n.1` ids) are shown in a dashed box.
 
 The flat graph mode also displays enhanced dependencies. In this mode enhanced
 dependencies can be added/modified/deleted (activate `edit enhanced dependencies`).
-if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayet too.
+if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayed too.
 
 ![Empty nodes](doc/graph_emptynode.png)
 
@@ -259,8 +259,8 @@ The validation button will launch the validator on the current sentence.
 
 # Known bugs
 * not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server.
-The feature, and misc column fields must contain one `name=value` pair per line (or `_`),
-the enhanced dependency field must contain one `head:deprel` pair per line (or `_`).
+The feature, and misc column fields must contain one or more `|`-separated `name=value` pair per line (or `_`),
+the enhanced dependency field must contain one or more `|`-separated `head:deprel` pair per line (or `_`).
 
 # Todo list
 * be able to read/write CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
