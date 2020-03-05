@@ -1279,34 +1279,53 @@ public class ConllSentence {
      */
     public static class Highlight {
 
-        public ConllWord.Fields field;
-        public Set<Integer> ids;
-        //public int wordid;
-        //public int lastwordid;
+        //public ConllWord.Fields field;
+        //public Set<Integer> ids;
+        public Map<Integer, ConllWord.Fields> idshl;
 
+        // highlight a single word on field
         public Highlight(ConllWord.Fields field, int wordid) {
-            this.field = field;
-            ids = new HashSet<>();
-            ids.add(wordid);
-            //this.wordid = wordid;
-            //this.lastwordid = wordid;
+            //this.field = field;
+            //ids = new HashSet<>();
+            //ids.add(wordid);
+            idshl = new HashMap<>();
+            idshl.put(wordid, field);
         }
 
         public Highlight(ConllWord.Fields field, int wordid, int lastwordid) {
-            this.field = field;
-            ids = new HashSet<>();
+            //this.field = field;
+            //ids = new HashSet<>();
+            idshl = new HashMap<>();
             for (int id = wordid; id <= lastwordid; id++) {
-                ids.add(id);
+                //ids.add(id);
+                 idshl.put(id, field);
             }
-            //this.wordid = wordid;
-            //this.lastwordid = lastwordid;
         }
 
+        // highlight a set of words on field
         public Highlight(ConllWord.Fields field, Set<Integer> ids) {
-            this.field = field;
-            this.ids = ids;
+            //this.field = field;
+            //this.ids = ids;
+            idshl = new HashMap<>();
+             for (Integer id : ids) {
+                //ids.add(id);
+                idshl.put(id, field);
+            }
         }
 
+        // highlight a set of words on different fields
+        public Highlight(List<ConllWord.Fields> fields, int wordid, int lastwordid) {
+            //this.field = field;
+            //this.ids = ids;
+            idshl = new HashMap<>();
+            int ct = 0;
+             for (int id = wordid; id <= lastwordid; ++id, ++ct) {
+                idshl.put(id, fields.get(ct));
+            }
+            
+        }
+
+        
     }
 
     public static class AnnotationErrors {

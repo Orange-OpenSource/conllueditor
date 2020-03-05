@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.0 as of 14th February 2020
+ @version 2.1.1 as of 5th March 2020
 */
 
 body {
@@ -339,6 +339,15 @@ input {
     background-repeat:no-repeat;
     height: 30px;  
     width: 45px;
+    background-position: 5px center;
+}
+
+#clear {
+    background: url('img/clear.svg');
+    background-size: auto 16px;
+    background-repeat:no-repeat;
+    height: 30px;  
+    width: 37px;
     background-position: 5px center;
 }
 

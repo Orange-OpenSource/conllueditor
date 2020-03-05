@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.0 as of 14th February 2020
+ @version 2.1.1 as of 5th March 2020
  */
 package com.orange.labs.editor;
 
@@ -631,6 +631,8 @@ public class ConlluEditor {
                             currentSentenceId = i;
                             int firstid = cw.getId();
                             boolean ok = true;
+                            List<ConllWord.Fields>fl = new ArrayList<>();
+                            fl.add(fields.get(0).field);
                             for (int j = 1; j < elems.length; ++j) {
                                 if (!cwit.hasNext()) {
                                     ok = false;
@@ -641,10 +643,13 @@ public class ConlluEditor {
                                     ok = false;
                                     break;
                                 }
+                                fl.add(fields.get(j).field);
                             }
                             if (ok) {
-                                ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.LEMMA, firstid, cw.getId());
-                                return returnTree(currentSentenceId, cs, hl); //cw.getUpostag());
+                                ConllSentence.Highlight hl = new ConllSentence.Highlight(//fields.get(0).field,
+                                        fl,
+                                        firstid, cw.getId());
+                                return returnTree(currentSentenceId, cs, hl);
                             }
                         }
                     }

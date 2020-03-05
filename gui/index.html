@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.1.0 as of 14th February 2020
+    version 2.1.1 as of 5th March 2020
     -->
 
     <head>
@@ -133,15 +133,17 @@
                 </tr>
                 <tr class="search">
                     <td colspan="6">
-                        <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" size="10" value="">
-                        <span class="contain"><button class="editbuttons mybutton go" id="findcomment">&nbsp;</button></span>
-
                         <input class="inputfield searchfield" placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" size="20" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
+
+                        <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" size="10" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findcomment">&nbsp;</button></span>
 
                         <input class="inputfield searchfield" placeholder="find sent-id (regex)" title="regex" type="text" id="sentenceid" size="20" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findsentid">&nbsp;</button></span>
 
+                        <span class="contain"><button class="mybutton mycheck" title="clear sall earch fields" id="clear">&nbsp;</button></span>
+ 
                         <button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button>
                         <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced dependencies</button>
                     </td>
@@ -152,7 +154,7 @@
                         Width  <input class="inputfield" type="text" id="bwidth" size="2" value="90">
                         Height <input class="inputfield" type="text" id="bheight" size="2" value="50">
                         <span class="editmode"><button class="mybutton editbuttons onlyWithTree" id="modifier">modify</button>
-                            <input placeholder="modify commands (see help)"  class="onlyWithTree" type="text" id="mods" size="20" value="">
+                            <input placeholder="modify commands (see help)"  class="onlyWithTree inputfield" type="text" id="mods" size="20" value="">
                         </span>
                     <!--/td>
                 </tr>
@@ -370,7 +372,7 @@
                         <p>
                         The search starts with the sentence following the displayed one. Activating the
                         <img class="helptextbutton" style="width: 40px;" src="img/backwards.svg"> button
-                        searches towards the beginning of the file.
+                        searches towards the beginning of the file. <img class="helptextbutton" style="width: 40px;" src="img/clear.svg"> clears all search fields.
 
                         <h2>UD Dependency Relations</h2>
 

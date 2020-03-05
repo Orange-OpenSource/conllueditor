@@ -1,3 +1,8 @@
+Version 2.1.1
+- clear button for search fields
+- bug correction in "find any" search
+- highlight found words according to column prefix used in "fin any" search (f,l,u,x,d)
+
 Version 2.1.0
 - search for sentence id
 

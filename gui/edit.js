@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.0 as of 14th February 2020
+ @version 2.1.1 as of 5th March 2020
  */
 
 
@@ -1226,6 +1226,14 @@ $(document).ready(function () {
                 $(this).parent().removeClass('active');
                 //$("#flat2").text("show tree" + flatgraph);
             }
+        } else if (this.id == "clear") {
+            $("#word").val("");
+            $("#lemma").val("");
+            $("#upos").val("");
+            $("#xpos").val("");
+            $("#deprel").val("");
+            $("#multifield").val("");
+            $("#sentenceid").val("");
         }
     });
 
