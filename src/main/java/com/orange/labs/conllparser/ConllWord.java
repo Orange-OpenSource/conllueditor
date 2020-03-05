@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.1 as of 5th March 2020
+ @version 2.2.0 as of 5th March 2020
  */
 package com.orange.labs.conllparser;
 
@@ -44,7 +44,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,7 +105,7 @@ public class ConllWord {
     };
 
     public enum Fields {
-        FORM, LEMMA, UPOS, XPOS, DEPREL
+        FORM, LEMMA, UPOS, XPOS, DEPREL, FEATURE
     };
 
     /**
@@ -889,6 +888,7 @@ public class ConllWord {
             //switch (highlight.field) {
             switch (highlight.idshl.get(id)) {
                 case FORM:
+                case FEATURE:
                     jword.addProperty("formhighlight", 1);
                     break;
                 case LEMMA:
@@ -1189,7 +1189,12 @@ public class ConllWord {
                 return matchesDeplabel(regex);
             case FORM:
                 return matchesForm(regex);
-
+            case FEATURE:
+                // split regex in two: feature name: regex of value
+                String [] elems = regex.split(":", 2);
+                if (elems.length == 2) {
+                    return matchesFeatureValue(elems[0], elems[1]);
+                } else return false;
             default:
                 return false;
         }

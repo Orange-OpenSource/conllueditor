@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.1.1 as of 5th March 2020
+    version 2.2.0 as of 5th March 2020
     -->
 
     <head>
@@ -113,39 +113,42 @@
 
                 <tr class="search">
                     <td colspan="6">
-                        <input class="inputfield searchfield" placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findword">&nbsp;</button></span>
 
-                        <input class="inputfield searchfield" placeholder="find lemma (regex/...)" title="regex[/regex/...]" type="text" id="lemma" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find lemma (regex/...)" title="regex[/regex/...]" type="text" id="lemma" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findlemma">&nbsp;</button></span>
 
-                        <input class="inputfield searchfield" placeholder="find upos (regex/...)" title="regex[/regex/...]" type="text" id="upos" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find upos (regex/...)" title="regex[/regex/...]" type="text" id="upos" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findupos">&nbsp;</button></span>
 
-                        <input class="inputfield searchfield" placeholder="find xpos (regex/...)" title="regex[/regex/...]" type="text" id="xpos" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find xpos (regex/...)" title="regex[/regex/...]" type="text" id="xpos" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findxpos">&nbsp;</button></span>
 
-                        <input class="inputfield searchfield" placeholder="find deprel (regex/...)" title="regex  of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find deprel (regex/...)" title="regex of deprels (separated by &gt; or &lt; in order to find a branch)" type="text" id="deprel" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="finddeprel">&nbsp;</button></span>
+
+                        <input class="inputfield searchfield" placeholder="find feature (name:regex/...)" title="name:regex of feature (separated by &gt; or &lt; in order to find a branch)" type="text" id="featureval" value="">
+                        <span class="contain"><button class="editbuttons mybutton go" id="findfeature">&nbsp;</button></span>
 
                         <span class="contain"><button class="mybutton mycheck" title="search backwards" id="backwards">&nbsp;</button></span>
                     </td>
                 </tr>
                 <tr class="search">
                     <td colspan="6">
-                        <input class="inputfield searchfield" placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" size="20" value="">
+                        <input class="inputfield searchfield" placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
 
-                        <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" size="10" value="">
+                        <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findcomment">&nbsp;</button></span>
 
-                        <input class="inputfield searchfield" placeholder="find sent-id (regex)" title="regex" type="text" id="sentenceid" size="20" value="">
+                        <input class="inputfield searchfield" placeholder="find sent-id (regex)" title="regex" type="text" id="sentenceid" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findsentid">&nbsp;</button></span>
 
                         <span class="contain"><button class="mybutton mycheck" title="clear sall earch fields" id="clear">&nbsp;</button></span>
  
                         <button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button>
-                        <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced dependencies</button>
+                        <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced deps</button>
                     </td>
                 </tr>
                 <tr class="search">

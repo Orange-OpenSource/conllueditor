@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.1 as of 5th March 2020
+ @version 2.2.0 as of 5th March 2020
 */
 
 body {
@@ -211,12 +211,13 @@ input {
     padding-left: 3px;
 }
 
-/* widht of the input fields for searching */
+/* width of the input fields for searching */
 .searchfield {
-    width: 10em;
+    width: 8em;
 }
 
-#multifield {
+/* reset sice for multifield and comment search, since the value given in searchfield is too small */
+#multifield, #comment {
     width: 14em;
 }
 
@@ -352,7 +353,7 @@ input {
 }
 
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti, #findsentid {
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti, #findsentid, #findfeature {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;

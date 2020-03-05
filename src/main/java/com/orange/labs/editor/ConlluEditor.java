@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.1 as of 5th March 2020
+ @version 2.2.0 as of 5th March 2020
  */
 package com.orange.labs.editor;
 
@@ -657,6 +657,7 @@ public class ConlluEditor {
                 return formatErrMsg("not found '" + f[2] + "'", currentSentenceId);
 
             } else if (command.startsWith("findlemma ")
+                    || command.startsWith("findfeat ")
                     || command.startsWith("findupos ")
                     || command.startsWith("findxpos ")) {
                 String[] f = command.trim().split(" +");
@@ -666,6 +667,8 @@ public class ConlluEditor {
                 ConllWord.Fields field;
                 if (f[0].equals("findlemma")) {
                     field = ConllWord.Fields.LEMMA;
+                } else if (f[0].equals("findfeat")) {
+                    field = ConllWord.Fields.FEATURE;
                 } else if (f[0].equals("findupos")) {
                     field = ConllWord.Fields.UPOS;
                 } else /*if (f[0].equals("findxpos")) */ {

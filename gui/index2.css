@@ -274,7 +274,7 @@ input {
     background-position: 5px center;
 }
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findsentid {
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findsentid, #findfeature {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;

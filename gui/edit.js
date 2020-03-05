@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.1 as of 5th March 2020
+ @version 2.2.0 as of 5th March 2020
  */
 
 
@@ -1108,7 +1108,7 @@ $(document).ready(function () {
         //$('#showraw').dialog({title: 'LaTeX code'});
         getRaw("latex", '<span class="latex">L<sup>a</sup>T<sub>e</sub>X</span>');
         //$("#showraw").dialog("open");
-        $("#showRawModal").modal()
+        $("#showRawModal").modal();
 
     });
 
@@ -1117,7 +1117,7 @@ $(document).ready(function () {
         //$('#showraw').dialog({title: "CoNLL-U format"});
         getRaw("conllu", "CoNLL-U");
         //$("#showraw").dialog("open");
-        $("#showRawModal").modal()
+        $("#showRawModal").modal();
     });
 
     // start show sdparse
@@ -1125,14 +1125,14 @@ $(document).ready(function () {
         //$('#showraw').dialog({title: "SD-Parse format"});
         getRaw("sdparse", "SD-Parse");
         //$("#showraw").dialog("open");
-        $("#showRawModal").modal()
+        $("#showRawModal").modal();
     });
 
     // start show spacy's json
     $("#json").click(function () {
         //$('#showraw').dialog({title: "SD-Parse format"});
         getRaw("spacyjson", "JSON (Spacy)");
-        $("#showRawModal").modal()
+        $("#showRawModal").modal();
     });
 
 
@@ -1140,12 +1140,12 @@ $(document).ready(function () {
     $("#valid").click(function () {
         getRaw("validation", "validation");
         //$("#showraw").dialog("open");
-        $("#showRawModal").modal()
+        $("#showRawModal").modal();
 
     });
 
     $(".mycheck").click(function () {
-        if (this.id == "flat2") {
+        if (this.id === "flat2") {
             if (!flatgraph) {
                 $(this).addClass('active');
                 $("#bie").show();
@@ -1161,7 +1161,7 @@ $(document).ready(function () {
             flatgraph = !flatgraph;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id == "feat2") {
+        } else if (this.id === "feat2") {
             if (!showfeats) {
                 $(this).addClass('active');
             } else {
@@ -1170,7 +1170,7 @@ $(document).ready(function () {
             showfeats = !showfeats;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id == "misc2") {
+        } else if (this.id === "misc2") {
             if (!showmisc) {
                 $(this).addClass('active');
             } else {
@@ -1180,7 +1180,7 @@ $(document).ready(function () {
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
 
-        } else if (this.id == "bie") {
+        } else if (this.id === "bie") {
             if (!show_basic_in_enhanced) {
                 $(this).addClass('active');
             } else {
@@ -1189,7 +1189,7 @@ $(document).ready(function () {
             show_basic_in_enhanced = !show_basic_in_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id == "edit_ed") {
+        } else if (this.id === "edit_ed") {
             if (!editing_enhanced) {
                 $(this).addClass('active');
             } else {
@@ -1198,7 +1198,7 @@ $(document).ready(function () {
             editing_enhanced = !editing_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id == "r2l") {
+        } else if (this.id === "r2l") {
             if (!showr2l) {
                 $(this).addClass('active');
             } else {
@@ -1207,7 +1207,7 @@ $(document).ready(function () {
             showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id == "extracols") {
+        } else if (this.id === "extracols") {
             if (!showextra) {
                 $(this).addClass('active');
             } else {
@@ -1216,7 +1216,7 @@ $(document).ready(function () {
             showextra = !showextra;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id == "backwards") {
+        } else if (this.id === "backwards") {
             backwards = !backwards;
             if (backwards) {
                 //$(this).addClass('active');
@@ -1248,44 +1248,46 @@ $(document).ready(function () {
         //var backwards = $("#backwards").is(":checked");
 
         var inputtext;
-        if (this.id == "findword") {
+        if (this.id === "findword") {
             inputtext = "findword " + backwards + " " + $("#word").val();
-        } else if (this.id == "findlemma") {
+        } else if (this.id === "findlemma") {
             inputtext = "findlemma " + backwards + " " + $("#lemma").val();
-        } else if (this.id == "findupos") {
+        } else if (this.id === "findupos") {
             inputtext = "findupos " + backwards + " " + $("#upos").val();
-        } else if (this.id == "findxpos") {
+        } else if (this.id === "findxpos") {
             inputtext = "findxpos " + backwards + " " + $("#xpos").val();
-        } else if (this.id == "finddeprel") {
+        } else if (this.id === "finddeprel") {
             inputtext = "finddeprel " + backwards + " " + $("#deprel").val();
-        } else if (this.id == "findcomment") {
+       } else if (this.id === "findfeature") {
+            inputtext = "findfeat " + backwards + " " + $("#featureval").val();
+        } else if (this.id === "findcomment") {
             inputtext = "findcomment " + backwards + " " + $("#comment").val();
-        } else if (this.id == "findmulti") {
+        } else if (this.id === "findmulti") {
             inputtext = "findmulti " + backwards + " " + $("#multifield").val();
-        } else if (this.id == "findsentid") {
+        } else if (this.id === "findsentid") {
             inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
         }
         
-        else if (this.id == "save") {
+        else if (this.id === "save") {
             inputtext = "save";
-        } else if (this.id == "redo") {
+        } else if (this.id === "redo") {
             var inputtext = "mod redo";
-        } else if (this.id == "undo") {
+        } else if (this.id === "undo") {
             var inputtext = "mod undo";
-        } else if (this.id == "next") {
+        } else if (this.id === "next") {
             inputtext = "next";
             //$("#sentid").val(inputtext);
-        } else if (this.id == "prec") {
+        } else if (this.id === "prec") {
             inputtext = "prec";
-        } else if (this.id == "first") {
+        } else if (this.id === "first") {
             inputtext = "read 0";
-        } else if (this.id == "last") {
+        } else if (this.id === "last") {
             inputtext = "read last";
-        } else if (this.id == "lire") {
+        } else if (this.id === "lire") {
             inputtext = "read " + ($("#sentid").val() - 1);
-        } else if (this.id == "modifier") {
+        } else if (this.id === "modifier") {
             var inputtext = "mod " + $("#mods").val();
-        } else if (this.id == "valid") {
+        } else if (this.id === "valid") {
             inputtext = "valid";
         } else {
             alert("error in GUI" + this)
@@ -1298,42 +1300,48 @@ $(document).ready(function () {
 
     // use ENTER to read sentence
     $("#sentid").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#lire").click();
         }
     });
 
     // use ENTER to read sentence
     $("#word").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#findword").click();
         }
     });
 
     // use ENTER to read sentence
     $("#lemma").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#findlemma").click();
         }
     });
 
     // use ENTER to read sentence
     $("#xpos").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#findxpos").click();
         }
     });
 
     // use ENTER to read sentence
     $("#upos").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#findupos").click();
         }
     });
 
     $("#deprel").keyup(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode === 13) {
             $("#finddeprel").click();
+        }
+    });
+
+    $("#featureval").keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#findfeature").click();
         }
     });
 
