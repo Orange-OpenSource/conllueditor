@@ -34,7 +34,6 @@ are permitted provided that the following conditions are met:
 body {
     margin-top: 280px; /* header height + top offset */
     height: 100%;
-   
     text-align: justify;
     font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
     overflow: scroll;
@@ -53,18 +52,17 @@ h1  {
 h2 {
     margin-top: 20px;
 }
+
 #comm,
 #sentencetext,
 #arbre {
     margin-left: 5px;
 }
 
-
 #oooarbre {
     /*white-space: nowrap; */
     overflow-x: auto;
 }
-
 
 #header {
     position:fixed; /* make the header (navigation and search buttons) stick to the top */
@@ -87,13 +85,11 @@ h2 {
         rgba(255,255,255, 0));
 }
 
-
 textArea {
     text-align:justify;
     font-family: /*Pecita, */ Sans, Arial, Helvetica;
     /*font-size: 125%;*/
 }
-
 
 td, th {
     padding-right: 5px;
@@ -111,7 +107,6 @@ table {
 .chunk3 {background-color:#ffd200; fill:#ffd200 }
 .chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
 .chunk5 {background-color:#a885d880; fill:#a885d880 }
-
 
 img.helptextbutton {
     border-radius: 5px;
@@ -197,8 +192,6 @@ img.helptextbutton {
         );
 }
 
-
-
 input {
    font-family: inherit;
 }
@@ -221,7 +214,6 @@ input {
     width: 14em;
 }
 
-
 /* background for buttons with icons */
 .contain {
     border-radius: 5px;
@@ -239,6 +231,7 @@ input {
     sstop: 6px; /** position of the button from top */
     sspadding: 0px 0px 0px 0px;
 }
+
 .contain:hover {
     overflow: hidden;
     ssdisplay: inline-block;
@@ -253,7 +246,6 @@ input {
     sstop: 6px; 
     sspadding: 0px 0px 0px 0px;
 }
-
 
 .contain.active {
     border-radius: 5px;
@@ -271,7 +263,6 @@ input {
     /* font: 25px "Ubuntu Mono", mono, Arial, Helvetica, sans-serif; */
 }
 
-
 #undo {
     background: url('img/undo.svg');
     background-size: 20px 20px !important;
@@ -285,7 +276,6 @@ input {
     background: url( 'img/undo_disabled.svg' ) ;
 }
 
-
 #redo {
     background: url('img/redo.svg');
     background-size: 20px 20px !important;
@@ -298,7 +288,6 @@ input {
 #redo:disabled {
     background: url('img/redo_disabled.svg');
 }
-
 
 #first {
     background: url('img/Start.svg'); 
@@ -317,6 +306,7 @@ input {
     width: 30px;
     background-position: 7px center;
 }
+
 #prec {
     background: url('img/preceding.svg');
     background-size: auto 16px;
@@ -325,6 +315,7 @@ input {
     width: 30px;
     background-position: 8px center;
 }
+
 #next {
     background: url('img/following.svg');
     background-size: auto 16px;
@@ -351,7 +342,6 @@ input {
     width: 37px;
     background-position: 5px center;
 }
-
 
 #findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti, #findsentid, #findfeature {
     background: url('img/search.svg');
@@ -382,7 +372,6 @@ input {
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
         );
-
 }
 
 .mycheck.active {
@@ -407,9 +396,12 @@ input {
     color: #222;
 }
 
-
 #errors {
     color: red;
+}
+
+.sentinfo {
+    font-family: "Lato Light"
 }
 
 /** redefine font for thie <pre></pre> */
@@ -431,25 +423,24 @@ input {
 /* A and E of LATEX spellt in upper case */
 .latex sub,
 .latex sup {
-  text-transform: uppercase;
+    text-transform: uppercase;
 }
-
 
 /* size, position of the lowered E of LATEX */
 .latex sub {
-  vertical-align: -0.05ex;
-  margin-left: -0.15em;
-  margin-right: -0.1em;
-  font-size: 1em;
+    vertical-align: -0.05ex;
+    margin-left: -0.15em;
+    margin-right: -0.1em;
+    font-size: 1em;
 }
 
 
 /* size, position of the raised A of LATEX. modifies <sup> tag */
 .latex sup {
-  font-size: 0.79em;
-  vertical-align: -0.1em;
-  margin-left: -0.16em;
-  qqmargin-right: -0.15em;
+    font-size: 0.79em;
+    vertical-align: -0.1em;
+    margin-left: -0.16em;
+    qqmargin-right: -0.15em;
 }
 
 .modal-header {
@@ -460,22 +451,21 @@ input {
 }
 
 .modal-xl {
-   sswidth: 90%;
-   max-width:1300px;
+    sswidth: 90%;
+    max-width:1300px;
 }
 
 .ui-autocomplete.ui-widget {
-  /*font-family: sans; */
-  color: blue;
-  font-size: 90%;
-  font-weight: bold;
-  margin-left: 1em;
+    /*font-family: sans; */
+    color: blue;
+    font-size: 90%;
+    font-weight: bold;
+    margin-left: 1em;
 }
 
 text {
-   font-family: "Lato", "Amiri", "KacstOne", sans-serif;
+    font-family: "Lato", "Amiri", "KacstOne", sans-serif;
 }
-
 
 #shortcuthelp {
     display: none;
@@ -485,10 +475,11 @@ text {
 
 /* table of shortcut help (invoked with "?" key) */
 .sc {
-  padding-left: 0px;
+    padding-left: 0px;
 }
 
 /*.sckey {
-  font-weight: bold;
+    font-weight: bold;
 } */
+
 

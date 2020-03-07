@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.2.0 as of 5th March 2020
+ @version 2.2.0 as of 7th March 2020
  */
 package com.orange.labs.editor;
 
@@ -104,7 +104,7 @@ public class ConlluEditor {
     };
 
     public ConlluEditor(String conllfile) throws ConllException, IOException {
-        // produit avec le mvn plugin "properties-maven-plugin" (voir pom.xml)
+        // read properties file created by the maven plugin "properties-maven-plugin" (cf. pom.xml)
         java.util.Properties p = new Properties();
         p.load(ClassLoader.getSystemResourceAsStream("conllueditor.properties"));
         programmeversion = p.getProperty("version");
@@ -114,17 +114,19 @@ public class ConlluEditor {
         init();
         System.out.println("Number of sentences loaded: " + numberOfSentences);
 
+	// get CTRL-C and try two write changes not yet saved (if used with option --saveAfter)
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
                     Thread.sleep(200);
                     if (changesSinceSave > 0) {
-                        System.err.println("Shutting down ConlluEditor...");
+                        System.err.println("Shutting down ConlluEditor, saving pending " + changesSinceSave + " edits ...");
                         changesSinceSave = saveafter;
                         String f = writeBackup(0, null, null);
                         System.err.println("Saved " + f);
+                    } else {
+                        System.err.println("Shutting down ConlluEditor ...");
                     }
-
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (IOException ex) {
