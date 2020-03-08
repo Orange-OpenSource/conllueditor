@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.2.0 as of 5th March 2020
+ @version 2.3.0 as of 8th March 2020
  */
 
 
@@ -856,7 +856,17 @@ function formatPhrase(item) {
         if (flatgraph) {
             drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type);
         } else {
-            drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type);
+            console.log(item.comparisontree);
+            if (item.comparisontree) {
+                $("#scores").empty();
+                $("#scores").append("(Lemma: " + item.Lemma);
+                $("#scores").append(", Features: " + item.Features);
+                $("#scores").append(", UPOS: " + item.UPOS);
+                $("#scores").append(", XPOS: " + item.XPOS);
+                $("#scores").append(", LAS: " + item.LAS + ")");
+                drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1);
+            }
+            drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0);
         }
 
 

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2019, Orange S.A.
+ Copyright (c) 2018-2020, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.14.1 as of 26th September 2019
+ @version 2.3.0 as of 8th March 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -45,7 +45,7 @@ var extracolumnstypes = new Set(); // here we stock all colNN instances, two kno
  @param {type} trees une liste des arbres
  @return {undefined}
  */
-function drawDepTree(svg, trees, sentencelength, use_deprel_as_type) {
+function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold) {
     svgmaxx = 0;
     svgmaxy = 0;
     useitalic = false;
@@ -85,7 +85,7 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type) {
         // insert head and all dependants
         var tree = trees[i];
         insertNode(svg, "1", tree, 0, 20, tree.indexshift || 0, 0, 0, sentencelength, //useitalic,
-                use_deprel_as_type);
+                use_deprel_as_type, isgold);
     }
 
     svgmaxy += 50; // + 30 pour les mots en dessous
@@ -132,7 +132,7 @@ function setSize(width, height) {
  * @returns {undefined}
  */
 function insertNode(svg, curid, item, head, level, indexshift, originx, originy, sentencelength, //useitalic = true,
-        use_deprel_as_type) {
+        use_deprel_as_type, isgold) {
     //var hor = 90;
     //console.log("item " + item);
     //console.log("cc " + curid)
@@ -150,6 +150,15 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
     var levelinit = level + 5;
 
+    // display gold tree in comparison mode in gray
+    var grayclass = ""; // text
+    var grayclass2 = ""; // lines 
+    var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
+    if (isgold == 1) {
+        grayclass = " goldtree";
+        grayclass2 = " goldtree2";
+        gold_idprefix = "g";
+    }
 
     if (showextra) {
         // get all extra columns in this word
@@ -161,7 +170,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
 
     // insert word (with, form, lemma, POS etc)
-    bottomlevels = drawWord(item, x, hor, levelinit, curid, svg);
+    bottomlevels = drawWord(item, x, hor, levelinit, curid, svg, isgold);
 
     level = bottomlevels[1]; // x-level at bottom of word (with features, if present)
     level += 6;
@@ -178,12 +187,12 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         // creer le path pour le connecteur tete - fille (une ligne)
         var path = document.createElementNS(svgNS, "path");
         //var pathvar = "path" + curid + "_" + item.id + "_" + level;
-        var pathvar = "path_" + head + "_" + item.id + "_" + item.deprel;
+        var pathvar = gold_idprefix + "path_" + head + "_" + item.id + "_" + item.deprel;
         path.setAttribute("id", pathvar);
         path.setAttribute("stroke", "black");
         if (use_deprel_as_type) {
             //path.setAttribute("stroke-width", "2");
-            path.setAttribute('class', item.deprel.replace(/:/, "_"));
+            path.setAttribute('class', item.deprel.replace(/:/, "_") );
             //} else {
             //path.setAttribute("stroke-width", "1");
         }
@@ -196,12 +205,12 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         if (x < originx) {
             path.setAttribute("d", "M " + x + " " + (levelinit - 1) + " L " + originx + " " + originy);
             path.setAttribute("style", "marker-start: url(#markerArrowInv);");
-            path.setAttribute("class", "deprel_followinghead");
+            path.setAttribute("class", "deprel_followinghead" + grayclass2);
             path.setAttribute("stroke", "#880088"); // only needed for svg download
         } else {
             path.setAttribute("d", "M " + originx + " " + originy + " L " + x + " " + (levelinit - 1));
             path.setAttribute("style", "marker-end: url(#markerArrow);");
-            path.setAttribute("class", "deprel_precedinghead");
+            path.setAttribute("class", "deprel_precedinghead" + grayclass2);
             path.setAttribute("stroke", "blue"); // only needed for svg download
         }
 
@@ -218,7 +227,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         var deprelpath = document.createElementNS(svgNS, "textPath");
         deprelpath.setAttributeNS(xlink, "xlink:href", "#" + pathvar); // Id of the path
         deprelpath.setAttribute("id", "textpath_" + head + "_" + item.id + "_" + item.deprel);
-        deprelpath.setAttribute("class", "words deprel");
+        deprelpath.setAttribute("class", "words deprel" + grayclass);
         deprelpath.setAttribute("fill", "#008800"); // only needed for svg download
         // textpath side only supported in Firefox >= 61
         /*
@@ -268,7 +277,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         for (var i = 0; i < item.children.length; i++) {
             //alert(item.children[i]);
             insertNode(svg, curid, item.children[i], item.id, level + vertspace, indexshift, x, level, sentencelength, //useitalic,
-                    use_deprel_as_type);
+                    use_deprel_as_type, isgold);
         }
 }
 }

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.0.3 as of 11th February 2020
+ @version 2.3.0 as of 8th March 2020
  */
 package com.orange.labs.conllparser;
 
@@ -82,6 +82,10 @@ public class ConllSentence {
     private boolean showID = true;
 
     private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
+
+    public enum Scoretype {
+        FORM, LEMMA, UPOS, XPOS, FEATS, LAS, CLAS
+    };
 
     /**
      * @param conlllines les lignes d'une phrase d'un fichier CONLL à parser
@@ -1187,6 +1191,38 @@ public class ConllSentence {
         }
     }
 
+
+    /** calculate the Labelled Attachment Score and other metrics.
+        Does not take into accound empty words */
+    public double score(ConllSentence gold, Scoretype scoretype) {
+        if (gold.size() != this.size()) return 0.0;
+        double score = 0.0;
+        for (int ix = 0; ix < this.size(); ++ix) {
+            ConllWord goldw = gold.getWord(ix+1);
+            ConllWord sysw = this.getWord(ix+1);
+            switch(scoretype) {
+                case UPOS:
+                    if (goldw.getUpostag().equals(sysw.getUpostag())) score++;
+                    break;
+                case XPOS:
+                    if (goldw.getXpostag().equals(sysw.getXpostag())) score++;
+                    break;
+                case LEMMA:
+                    if (goldw.getLemma().equals(sysw.getLemma())) score ++;
+                    break;
+                case LAS:
+                    if (goldw.getHead() == sysw.getHead()  &&  goldw.getDeplabel().equals(sysw.getDeplabel())) score ++;
+                    break;
+                //case CLAS:
+                //    if (goldw.getHead() == sysw.getHead()  &&  goldw.getDeplabel().equals(sysw.getDeplabel())) score ++;
+                //    break;
+                case FEATS:
+                    if (goldw.getFeaturesStr().equals(sysw.getFeaturesStr())) score++;
+            }
+        }
+        return score/gold.size();
+    }
+    
     /**
      * calculate the height if each arc, by taking into account all short arcs
      * below. Does not take into account non-projective arcs, only arcs from n
@@ -1344,7 +1380,6 @@ public class ConllSentence {
     public JsonArray toJsonTree(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
                                 Highlight highlight, AnnotationErrors ae) {
         JsonArray jheads = new JsonArray();
-
         for (ConllWord head : headss) {
             //if (head.getTokentype() != ConllWord.Tokentype.WORD) continue;
             JsonObject jhead = head.toJson(validupos, validxpos, validdeprels, highlight, ae, contracted); //conllWord2json(head);

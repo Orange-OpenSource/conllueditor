@@ -1,3 +1,6 @@
+Version 2.3.0
+- new option --compare to comare a CoNLL-U file with the currently edited file
+
 Version 2.2.0
 - search field for morpho syntactic features
 - highlight found words according to column prefix used in "fin any" search (f,l,u,x,d)

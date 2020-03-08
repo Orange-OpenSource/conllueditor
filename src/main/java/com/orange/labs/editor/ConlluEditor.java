@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.2.0 as of 7th March 2020
+ @version 2.3.0 as of 8th March 2020
  */
 package com.orange.labs.editor;
 
@@ -96,6 +96,8 @@ public class ConlluEditor {
     boolean callgitcommit = true;
     int changesSinceSave = 0;
     int saveafter = 0; // save after n changes
+
+    ConllFile comparisonFile = null;
 
     private String programmeversion;
 
@@ -196,6 +198,21 @@ public class ConlluEditor {
         System.err.format("saving file after %d edits\n", saveafter);
     }
 
+    public void setComparisonFile(String compfilename) {
+        try {
+            comparisonFile = new ConllFile(new File(compfilename), null);
+            if (cfile.getSentences().size() != comparisonFile.getSentences().size()) {
+                System.err.println("Comparison file and edited file must have the same number of sentences");
+                comparisonFile = null;
+            }
+            for (ConllSentence cs : comparisonFile.getSentences()) {
+                cs.makeTrees(null);
+            }
+        } catch (IOException | ConllException e) {
+            System.err.format("Cannot use comparison file '%s': %s\n", compfilename, e.getMessage());
+        }
+    }
+
     private JsonObject prepare(int sentid) {
         JsonObject solution = new JsonObject();
         solution.addProperty("sentenceid", sentid); //currentSentenceId);
@@ -240,6 +257,15 @@ public class ConlluEditor {
         //solution.addProperty("latex", csent.getLaTeX());
         ConllSentence.AnnotationErrors ae = new ConllSentence.AnnotationErrors();
         solution.add("tree", csent.toJsonTree(validUPOS, validXPOS, validDeprels, highlight, ae)); // RelationExtractor.conllSentence2Json(csent));
+        if (comparisonFile != null) {
+            ConllSentence goldsent = comparisonFile.getSentences().get(sentid);
+            solution.add("comparisontree", goldsent.toJsonTree(validUPOS, validXPOS, validDeprels, null, ae));
+            solution.addProperty("Lemma", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.LEMMA)));
+            solution.addProperty("Features", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.FEATS)));
+            solution.addProperty("UPOS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.UPOS)));
+            solution.addProperty("XPOS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.XPOS)));
+            solution.addProperty("LAS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.LAS)));
+        }
         solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce chapps
 
         // returning number of errors
@@ -1491,6 +1517,7 @@ public class ConlluEditor {
         System.err.println("   --noedit             only browsing");
         System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
         System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
+        System.err.println("   --compare            comparison mode: display a second (gold) tree in gray behind the current tree to see differences");
     }
 
     public static void main(String[] args) {
@@ -1510,6 +1537,7 @@ public class ConlluEditor {
         int debug = 3;
         int saveafter = 0;
         int mode = 0; // noedit: 1, reinit: 2
+        String comparisonFile = null;
 
         int argindex = 0;
         for (int a = 0; a < args.length - 1; ++a) {
@@ -1551,6 +1579,9 @@ public class ConlluEditor {
             } else if (args[a].equals("--reinit")) {
                 mode = 2;
                 argindex += 1;
+            } else if (args[a].equals("--compare")) {
+                comparisonFile = args[++a];
+                argindex += 2;
             } else if (args[a].startsWith("-")) {
                 System.err.println("Invalid option " + args[a]);
                 help();
@@ -1577,6 +1608,10 @@ public class ConlluEditor {
             }
             if (saveafter != 0) {
                 ce.setSaveafter(saveafter);
+            }
+            
+            if (comparisonFile != null) {
+                ce.setComparisonFile(comparisonFile);
             }
 
             if (args.length > argindex + 1) {

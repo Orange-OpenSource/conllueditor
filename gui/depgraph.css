@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018, Orange S.A.
+Copyright (c) 2018-2020, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.0 as of 5th November 2018
+ @version 2.3.0 as of 8th March 2020
 */
 
 .dia {
@@ -155,3 +155,17 @@ ul.ui-autocomplete {
     font-weight: bold;
 }
 
+/* in comparison mode, we deisplay the gold tree in gray behind the system tree */
+.goldtree {
+   fill: gray;  
+}
+
+.goldtreefeats {
+   fill: red;  
+}
+
+
+.goldtree2 {
+   fill: #eeeeee;
+   stroke: gray;
+}

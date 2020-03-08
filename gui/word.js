@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.13.0 as of 3rd September 2019
+ @version 2.3.0 as of 8th March 2020
  */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -52,14 +52,24 @@ var nodes = {}; // id: {item: svg, types [AGENT, PATIENT]}
  * @param {type} svg
  * @return {drawWord.level} height without/with features
  */
-function drawWord(item, x, hor, levelinit, curid, svg) {
+function drawWord(item, x, hor, levelinit, curid, svg, gold) {
     var vertdiff = 12;
     var level = levelinit;
     var bottomlevels = {}; // keep the height of the word with and without features (needed in dependency-flat)
-
+    var grayclass = ""; // text
+    var grayclassf = ""; // feature text
+    var grayclass2 = ""; // background
+    var rect_idprefix = ""; // give word boxes a different ID to avoid editing on them
+    // the dep graph in the background is the gold graph in comparison mode, 
+    if (gold == 1) {
+        grayclass = " goldtree";
+        grayclassf = " goldtreefeats";
+        grayclass2 = " goldtree2";
+        rect_idprefix = "g";
+    }
     var formtext = document.createElementNS(svgNS, "text");
     formtext.setAttribute("id", "word" + curid + "_" + item.id);
-    formtext.setAttribute("class", "words wordform");
+    formtext.setAttribute("class", "words wordform" + grayclass);
     formtext.setAttribute("font-size", "12");
     var fs = parseFloat(window.getComputedStyle(formtext).getPropertyValue('font-size'));
     //console.log("zzz " + window.getComputedStyle(formtext, null).getPropertyValue('font-size'));
@@ -81,7 +91,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     var lemmatext = document.createElementNS(svgNS, "text");
     lemmatext.setAttribute("id", "lemma" + curid + "_" + item.id);
-    lemmatext.setAttribute("class", "words wordlemma");
+    lemmatext.setAttribute("class", "words wordlemma" + grayclass);
     lemmatext.setAttribute("font-size", "10");
     fs = parseFloat(window.getComputedStyle(lemmatext).getPropertyValue('font-size'));
     if (!fs)
@@ -103,7 +113,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     var idtext = document.createElementNS(svgNS, "text");
     idtext.setAttribute("id", "id" + curid + "_" + item.id);
-    idtext.setAttribute("class", "words wordid");
+    idtext.setAttribute("class", "words wordid" + grayclass);
     idtext.setAttribute("font-size", "10");
     fs = parseFloat(window.getComputedStyle(idtext).getPropertyValue('font-size'));
     if (!fs)
@@ -118,7 +128,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     var upostext = document.createElementNS(svgNS, "text");
     upostext.setAttribute("id", "pos" + curid + "_" + item.id);
     upostext.setAttribute("font-size", "10");
-    upostext.setAttribute("class", "words wordupos");
+    upostext.setAttribute("class", "words wordupos" + grayclass);
     fs = parseFloat(window.getComputedStyle(upostext).getPropertyValue('font-size'));
     if (!fs)
         fs = 10; // for chrome
@@ -142,7 +152,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
         var xpostext = document.createElementNS(svgNS, "text");
         xpostext.setAttribute("id", "pos" + curid + "_" + item.id);
         xpostext.setAttribute("font-size", "10");
-        xpostext.setAttribute("class", "words wordxpos");
+        xpostext.setAttribute("class", "words wordxpos" + grayclass);
 
         fs = parseFloat(window.getComputedStyle(xpostext).getPropertyValue('font-size'));
         if (!fs)
@@ -167,7 +177,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
     // finaly calculate surrounding box
     var rect = document.createElementNS(svgNS, "rect");
-    rect.setAttribute("id", "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
+    rect.setAttribute("id", rect_idprefix + "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
     rect.setAttribute('x', x - ((hor - 6) / 2));
     rect.setAttribute('y', levelinit);
     rect.setAttribute('height', level - levelinit + 6);
@@ -183,10 +193,10 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
     } else {
         // needed for ConlluEditor
         if (item.token == "empty") {
-            rect.setAttribute('class', "wordnode emptynode");
+            rect.setAttribute('class', rect_idprefix + "wordnode emptynode" + grayclass2);
             rect.setAttribute('stroke-dasharray', '10 5');
         } else
-            rect.setAttribute('class', "wordnode");
+            rect.setAttribute('class', rect_idprefix + "wordnode"+ grayclass2);
     }
 
 
@@ -227,7 +237,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
             var ftext = document.createElementNS(svgNS, "text");
             ftext.setAttribute("id", "ftext" + curid + "_" + item.id);
-            ftext.setAttribute("class", "wordfeature");
+            ftext.setAttribute("class", "wordfeature" + grayclassf);
             ftext.setAttribute("font-size", "10");
             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
             if (!fs)
@@ -243,7 +253,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
             var septext = document.createElementNS(svgNS, "text");
             septext.setAttribute("id", "septext" + curid + "_" + item.id);
-            septext.setAttribute("class", "wordfeature words");
+            septext.setAttribute("class", "wordfeature words" + grayclassf);
             septext.setAttribute("font-size", "10");
             septext.setAttribute('x', x);
             septext.setAttribute('y', level);
@@ -254,7 +264,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
             var valtext = document.createElementNS(svgNS, "text");
             valtext.setAttribute("id", "valtext" + curid + "_" + item.id);
-            valtext.setAttribute("class", "wordfeature words");
+            valtext.setAttribute("class", "wordfeature words" + grayclassf);
             valtext.setAttribute("font-size", "10");
             valtext.setAttribute('x', x + 5);
             valtext.setAttribute('y', level);
@@ -282,7 +292,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
             var ftext = document.createElementNS(svgNS, "text");
             ftext.setAttribute("id", "mtext" + curid + "_" + item.id);
-            ftext.setAttribute("class", "wordfeature");
+            ftext.setAttribute("class", "wordfeature" + grayclassf);
             ftext.setAttribute("font-size", "10");
             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
             if (!fs)
@@ -298,7 +308,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
             var septext = document.createElementNS(svgNS, "text");
             septext.setAttribute("id", "mseptext" + curid + "_" + item.id);
-            septext.setAttribute("class", "wordfeature words");
+            septext.setAttribute("class", "wordfeature words" + grayclassf);
             septext.setAttribute("font-size", "10");
             septext.setAttribute('x', x);
             septext.setAttribute('y', level);
@@ -309,7 +319,7 @@ function drawWord(item, x, hor, levelinit, curid, svg) {
 
             var valtext = document.createElementNS(svgNS, "text");
             valtext.setAttribute("id", "mvaltext" + curid + "_" + item.id);
-            valtext.setAttribute("class", "wordfeature words");
+            valtext.setAttribute("class", "wordfeature words" + grayclassf);
             valtext.setAttribute("font-size", "10");
             valtext.setAttribute('x', x + 5);
             valtext.setAttribute('y', level);
