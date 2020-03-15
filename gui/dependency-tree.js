@@ -45,7 +45,7 @@ var extracolumnstypes = new Set(); // here we stock all colNN instances, two kno
  @param {type} trees une liste des arbres
  @return {undefined}
  */
-function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold) {
+function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
     svgmaxx = 0;
     svgmaxy = 0;
     useitalic = false;
@@ -85,7 +85,7 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold) {
         // insert head and all dependants
         var tree = trees[i];
         insertNode(svg, "1", tree, 0, 20, tree.indexshift || 0, 0, 0, sentencelength, //useitalic,
-                use_deprel_as_type, isgold);
+                use_deprel_as_type, isgold, incorrectwords);
     }
 
     svgmaxy += 50; // + 30 pour les mots en dessous
@@ -95,10 +95,12 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold) {
     //svg.setAttribute('onmouseup', "MakeRoot(evt)");
 
     // insert words at the bottom of the tree (and MWEs if activated)
-    for (i = 0; i < trees.length; ++i) {
-        var tree = trees[i];
-        insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
-        if (showextra) insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
+    if (isgold == 0) {
+        for (i = 0; i < trees.length; ++i) {
+            var tree = trees[i];
+            insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
+            if (showextra) insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
+        }
     }
 
     // add space for extracolumns
@@ -132,7 +134,7 @@ function setSize(width, height) {
  * @returns {undefined}
  */
 function insertNode(svg, curid, item, head, level, indexshift, originx, originy, sentencelength, //useitalic = true,
-        use_deprel_as_type, isgold) {
+        use_deprel_as_type, isgold, incorrectwords) {
     //var hor = 90;
     //console.log("item " + item);
     //console.log("cc " + curid)
@@ -170,7 +172,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
 
     // insert word (with, form, lemma, POS etc)
-    bottomlevels = drawWord(item, x, hor, levelinit, curid, svg, isgold);
+    bottomlevels = drawWord(item, x, hor, levelinit, curid, svg, isgold, incorrectwords);
 
     level = bottomlevels[1]; // x-level at bottom of word (with features, if present)
     level += 6;
@@ -277,7 +279,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         for (var i = 0; i < item.children.length; i++) {
             //alert(item.children[i]);
             insertNode(svg, curid, item.children[i], item.id, level + vertspace, indexshift, x, level, sentencelength, //useitalic,
-                    use_deprel_as_type, isgold);
+                    use_deprel_as_type, isgold, incorrectwords);
         }
 }
 }

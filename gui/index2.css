@@ -58,6 +58,20 @@ h2 {
     margin-left: 5px;
 }
 
+.comparediff {
+    margin-left: 5px;
+}
+
+#goldword {
+    color:#00bb00;
+    background-color: white;
+}
+
+#editedword {
+    color:#bb4400;
+    background-color: white;
+}
+
 #header {
     position:fixed;
     width:100%;

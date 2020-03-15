@@ -52,7 +52,8 @@ var nodes = {}; // id: {item: svg, types [AGENT, PATIENT]}
  * @param {type} svg
  * @return {drawWord.level} height without/with features
  */
-function drawWord(item, x, hor, levelinit, curid, svg, gold) {
+function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
+    //console.log("eeee", incorrectwords);
     var vertdiff = 12;
     var level = levelinit;
     var bottomlevels = {}; // keep the height of the word with and without features (needed in dependency-flat)
@@ -195,8 +196,21 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold) {
         if (item.token == "empty") {
             rect.setAttribute('class', rect_idprefix + "wordnode emptynode" + grayclass2);
             rect.setAttribute('stroke-dasharray', '10 5');
-        } else
-            rect.setAttribute('class', rect_idprefix + "wordnode"+ grayclass2);
+        } else {
+            //console.log("aaa", item.id, gold,  incorrectwords.has("" + item.id))
+            if (gold == 0 && incorrectwords[item.id]) {
+                rect.setAttribute('class', rect_idprefix + "wordnode compareError");
+                // needed to pass arguments to ShowCompareErrors()
+                function showce() {
+                    ShowCompareErrors(incorrectwords[item.id]);
+                }
+
+                rect.addEventListener("mouseover", showce);
+                rect.addEventListener('mouseout', HideCompareErrors);
+            } else {
+                rect.setAttribute('class', rect_idprefix + "wordnode"+ grayclass2);
+            }
+        }
     }
 
 

@@ -260,6 +260,33 @@ public class ConlluEditor {
         if (comparisonFile != null) {
             ConllSentence goldsent = comparisonFile.getSentences().get(sentid);
             solution.add("comparisontree", goldsent.toJsonTree(validUPOS, validXPOS, validDeprels, null, ae));
+//            JsonArray diffs = new JsonArray();
+//            for (ConllWord sysw : csent.getWords()) {
+//                ConllWord goldw = goldsent.getWord(sysw.getFullId());
+//                if (goldw == null) diffs.add(sysw.getFullId());
+//                else if (!sysw.equals(goldw)) diffs.add(sysw.getFullId());
+//            }
+//            //System.err.println("sssss" + diffs);
+//            solution.add("differs", diffs);
+
+            JsonObject diffmap = new JsonObject();
+            for (ConllWord sysw : csent.getWords()) {
+                ConllWord goldw = goldsent.getWord(sysw.getFullId());
+                if (goldw == null) {
+                //    diffmap.add(sysw.getFullId());
+                }
+                else if (!sysw.equals(goldw)) {
+                    JsonObject lines = new JsonObject();
+                    // TODO improve: do notcode HTML in json !!
+                    lines.addProperty("gold", "<td>" + goldw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
+                    lines.addProperty("edit", "<td>" +  sysw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
+
+                    diffmap.add(sysw.getFullId(), lines);
+                }
+            }
+            //System.err.println("sssss" + diffs);
+            solution.add("differs", diffmap);
+
             solution.addProperty("Lemma", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.LEMMA)));
             solution.addProperty("Features", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.FEATS)));
             solution.addProperty("UPOS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.UPOS)));

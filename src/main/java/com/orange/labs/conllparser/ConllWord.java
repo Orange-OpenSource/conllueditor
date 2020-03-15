@@ -432,9 +432,7 @@ public class ConllWord {
         this.whquestion = whquestion;
     }
 
-//    public boolean isBasicdeps_in_ed_column() {
-//        return basicdeps_in_ed_column;
-//    }
+
     public List<String> getPrefixed() {
         return prefixed;
     }
@@ -460,20 +458,59 @@ public class ConllWord {
             return false;
         }
         ConllWord cw = (ConllWord) o;
+        //System.err.println("==== " + cw + "\n---- " + this);
         // System.out.println("AAA"+form.equals(((ConllWord)o).getForm())+"\n  " + o + "\n  " + this);
         if (!form.equals(cw.getForm())) {
+            //System.err.println("inc FORM");
             return false;
         }
         if (id != cw.getId()) {
+            //System.err.println("inc ID");
             return false;
         }
         if (!upostag.equals(cw.getUpostag())) {
+           // System.err.println("inc UPOS");
             return false;
         }
         if (!lemma.equals(cw.getLemma())) {
+            //System.err.println("inc LEMMA\n" + lemma + "\n" + cw.getLemma());
             return false;
         }
 
+        if (!xpostag.equals(cw.getXpostag())) {
+            //System.err.println("inc XPOS");
+            return false;
+        }
+        if (head != cw.getHead()) {
+            //System.err.println("inc HEAD");
+            return false;
+        }
+        if (!deplabel.equals(cw.getDeplabel())) {
+            //System.err.println("inc DEP");
+            return false;
+        }
+        if (!features.equals(cw.getFeatures())) {
+            //System.err.println("inc FEAT");
+            return false;
+        }
+
+        if (toktype != cw.getTokentype()) {
+            //System.err.println("inc TOK");
+            return false;
+        }
+
+        if (!misc.equals(cw.getMisc())) {
+            //System.err.println("inc MISC");
+            return false;
+        }
+        //System.err.println("CC " + this.deps + "\ncc " + cw.getDeps());
+        //System.err.println("   " + this.deps.equals(cw.getDeps()));
+        if (!this.deps.equals(cw.getDeps())) {
+            //System.err.println("FFF");
+            return false;
+        }
+
+        //System.err.println("CORRECT");
         return true;
 
 //        if (form.equals(((ConllWord) o).getForm())) {
@@ -1778,6 +1815,17 @@ public class ConllWord {
         
         public String toString() {
             return getFullHeadId() + ":" + deprel;
+        }
+        
+        public boolean equals(Object o) {
+            if (!(o instanceof EnhancedDeps)) {
+                return false;
+            }
+            EnhancedDeps ed = (EnhancedDeps) o;
+            if (headid != ed.headid) return false;
+            if (headsubid != ed.headsubid) return false;
+            if (!deprel.equals(ed.deprel)) return false;
+            return true;
         }
     }
 }

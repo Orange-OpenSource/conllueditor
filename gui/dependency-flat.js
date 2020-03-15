@@ -143,7 +143,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     }
 
     //level = drawWord(item, depx, hor, levelinit, curid, svg);
-    bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg);
+    bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg, 0, new Set());
     level = bottomlevels[0]; // x-level at bottom of word (with features, if present)
 
     if (showfeats || showmisc) {

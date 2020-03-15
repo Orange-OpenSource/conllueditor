@@ -128,6 +128,7 @@ function getRaw(what, title) {
 var deprellist = [];
 var uposlist = [];
 var xposlist = [];
+var incorrectwords = {};
 
 /** get information from ConlluEditor server:
  name of edited file
@@ -244,13 +245,13 @@ var lastmore = true;
 
 function switchSearch(on) {
     if (on) {
-        console.log("SEARCH OPENING");
+        //console.log("SEARCH OPENING");
         $("#act_search").text("less");
         $(".search").show();
         $('body').css("margin-top", "280px");
         more = true;
     } else {
-        console.log("SEARCH CLOSING");
+        //console.log("SEARCH CLOSING");
         $("#act_search").text("more");
         $(".search").hide();
         if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
@@ -487,6 +488,18 @@ $(window).on('keypress', function (evt) {
     }
 })
 
+// hovering on a word which differes from the corresponding word in the --compare file 
+// will show the differences
+function ShowCompareErrors(v) {
+    $("#goldword").append(v.gold);
+    $("#editedword").append(v.edit);
+}
+
+function HideCompareErrors() {
+    $(".comparediff").empty();
+}
+
+
 // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
 // il faut clikcer sur un mot et sur sa future tete pour changer l'arbre
 // si on click deux fois sur le meme mot, ce mot devient racine
@@ -576,7 +589,17 @@ function ModifyTree(evt) {
                 // open edit window
                 $("#wordEdit").modal();
                 clickedNodes = [];
+               
+                
+              
+                // clean all nodes (delete clocked-status)
                 $(".wordnode").attr("class", "wordnode");
+                
+                // add errorclass for words which are different from gold
+                if (incorrectwords.has("" +id[1])) {
+                    errorclass = " compareError";
+                    $('#' + target.id).attr("class", "wordnode compareError");
+                }
             } else {
                 // dependency editing
                 clickedNodes.push(id[1]);
@@ -657,7 +680,7 @@ function ModifyTree(evt) {
                     $("#mods").val(clickedNodes[0] + " ");
                 }
             }
-        } else if (id[0] == "textpath" || id[0] == "path") { // TODO use classes ?
+        } else if (id[0] === "textpath" || id[0] === "path") { // TODO use classes ?
             // update deprel
             $("#chead").text(id[1]);
             $("#cdep").text(id[2]);
@@ -685,30 +708,50 @@ function ModifyTree(evt) {
             $("#editMWE").modal();
 
             $("#mods").val("");
-            //$(".wordnode").attr('fill', 'white');
-            $(".wordnode").attr("class", "wordnode");
+
+            //$(".wordnode").attr("class", "wordnode");
+            unhighlight();
             clickedNodes = [];
             deprels = [];
             uposs = [];
 
         } else {
             //alert("MT " + target.id + " == " + target);
-            $("#mods").val("");
-            //$(".wordnode").attr('fill', 'white');
-            $(".wordnode").attr("class", "wordnode");
+            $("#mods").val(""); 
+            //$(".wordnode").attr("class", "wordnode");
+            unhighlight();
             clickedNodes = [];
             deprels = [];
             uposs = [];
         }
     } else {
         $("#mods").val("");
-        //$(".wordnode").attr('fill', 'white');
-        $(".wordnode").attr("class", "wordnode");
+        unhighlight();
+        /*$(".wordnode").each(function( index ) {
+            // get all word rectangles, and delete highlighting (boxhighlight) class but keep compareError class (in case of compare mode)
+            var currentclasses = $(this).attr("class");
+            currentclasses = currentclasses.replace("boxhighlight", "");
+              console.log( index + "A::: " + $(this).attr("class") );
+            $(this).attr("class", currentclasses)
+            console.log( index + "B::: " + $(this).attr("class") );
+        });*/
+        //$(".wordnode").attr("class", "wordnode");
+
         clickedNodes = [];
         deprels = [];
         uposs = [];
     }
     //console.log("aaa " + JSON.stringify(clickedNodes));
+}
+
+function unhighlight() {
+    // delete boxhighlight class from all word rectangles
+    $(".wordnode").each(function( index ) {
+        // get all word rectangles, and delete highlighting (boxhighlight) class but keep compareError class (in case of compare mode)
+        var currentclasses = $(this).attr("class");
+        currentclasses = currentclasses.replace("boxhighlight", "");
+        $(this).attr("class", currentclasses)
+    });
 }
 
 
@@ -856,7 +899,8 @@ function formatPhrase(item) {
         if (flatgraph) {
             drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type);
         } else {
-            console.log(item.comparisontree);
+            //console.log(item.comparisontree);
+            incorrectwords = new Set(); // put incorrect word in comparison mode
             if (item.comparisontree) {
                 $("#scores").empty();
                 $("#scores").append("(Lemma: " + item.Lemma);
@@ -864,9 +908,16 @@ function formatPhrase(item) {
                 $("#scores").append(", UPOS: " + item.UPOS);
                 $("#scores").append(", XPOS: " + item.XPOS);
                 $("#scores").append(", LAS: " + item.LAS + ")");
-                drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1);
+                drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, new Set());
+                if (item.differs) {
+                    //console.log("zz", item.differs);
+                    //for (i = 0; i < item.differs.length; i++) { 
+                    //    incorrectwords.add(item.differs[i]);
+                    //}
+                    incorrectwords = item.differs;
+                }              
             }
-            drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0);
+            drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
         }
 
 
@@ -1248,7 +1299,7 @@ $(document).ready(function () {
     });
 
     /**
-     * cliquer su un des boutons déclenche une action en fonction de leur attribut id
+     * cliquer sur un des boutons déclenche une action en fonction de leur attribut id
      */
     $(".editbuttons").click(function () {
         //console.log("sss " + this.id);
@@ -1371,6 +1422,17 @@ $(document).ready(function () {
      }
      });
      */
+
+    // displays differences between word from goldfile (--compare) and editied file
+    // when hovering on the word rectangle
+    $(".wordnode").hover(function(){
+        $("#comparediff").append("eeeee");
+        
+    }, 
+    function(){
+      $("#comparediff").empty();
+        
+    });
 
     // TODO pour lire la phrase r
     //unction relirePhraseCourante() {

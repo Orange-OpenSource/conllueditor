@@ -77,6 +77,11 @@ ul.ui-autocomplete {
      fill: #fffff4;
 }
 
+.compareError {
+    stroke: #bb0000;
+    stroke-width: 2;
+}
+
 .emptynode {
      fill: #fffff4;
      stroke-dasharray: 10 5;
