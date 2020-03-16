@@ -241,6 +241,7 @@ public class ConlluEditor {
         csent.normalise();
         csent.makeTrees(null);
 
+        // calculate arcs for dependency hedge
         Map<Integer, Integer> heights = csent.calculate_flat_arcs_height(); //calculate_flat_arcs_height(csent);
         for (Integer id : heights.keySet()) {
             ConllWord cw = csent.getWord(id);
@@ -259,6 +260,13 @@ public class ConlluEditor {
         solution.add("tree", csent.toJsonTree(validUPOS, validXPOS, validDeprels, highlight, ae)); // RelationExtractor.conllSentence2Json(csent));
         if (comparisonFile != null) {
             ConllSentence goldsent = comparisonFile.getSentences().get(sentid);
+            // calculate arcs for dependency hedge
+            heights = goldsent.calculate_flat_arcs_height(); //calculate_flat_arcs_height(csent);
+            for (Integer id : heights.keySet()) {
+                ConllWord cw = goldsent.getWord(id);
+                cw.setArc_height(heights.get(id));
+            }
+
             solution.add("comparisontree", goldsent.toJsonTree(validUPOS, validXPOS, validDeprels, null, ae));
 //            JsonArray diffs = new JsonArray();
 //            for (ConllWord sysw : csent.getWords()) {

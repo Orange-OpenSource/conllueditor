@@ -60,7 +60,7 @@ h2 {
 }
 
 
-.comparediff {
+#compare {
     margin-left: 5px;
 }
 
@@ -74,6 +74,9 @@ h2 {
     background-color: white;
 }
 
+.compfilename {
+    color: black;
+}
 
 #oooarbre {
     /*white-space: nowrap; */
@@ -416,7 +419,7 @@ input {
     color: red;
 }
 
-.sentinfo {
+.sentinfo, #changespendingsave {
     font-family: "Lato Light"
 }
 
@@ -499,3 +502,10 @@ text {
 } */
 
 
+#compare table  {
+  border-collapse: collapse;
+}
+
+#compare table tr td {
+  border: 1px solid black;
+}

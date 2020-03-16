@@ -1,5 +1,5 @@
 Version 2.3.0
-- new option --compare to comare a CoNLL-U file with the currently edited file
+- new option --compare to compare a CoNLL-U file with the currently edited file (shown in tree and hedge mode)
 
 Version 2.2.0
 - search field for morpho syntactic features

@@ -491,8 +491,9 @@ $(window).on('keypress', function (evt) {
 // hovering on a word which differes from the corresponding word in the --compare file 
 // will show the differences
 function ShowCompareErrors(v) {
-    $("#goldword").append(v.gold);
-    $("#editedword").append(v.edit);
+    //$("#goldword").append('<td class="filename">' + $('#filename').text() + "</td>").append(v.gold);
+    $("#goldword").append('<td class="compfilename">' + "gold file:" + "</td>").append(v.gold);
+    $("#editedword").append('<td class="compfilename">' + "edited file:" + "</td>").append(v.edit);
 }
 
 function HideCompareErrors() {
@@ -897,18 +898,36 @@ function formatPhrase(item) {
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
         if (flatgraph) {
-            drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type);
+             if (item.comparisontree) {
+                // we display the gold tree (given with --compare) in gray underneath the edited tree
+                $("#scores").empty();
+                $("#scores").append("(evaluation Lemma: " + item.Lemma);
+                $("#scores").append(", Features: " + item.Features);
+                $("#scores").append(", UPOS: " + item.UPOS);
+                $("#scores").append(", XPOS: " + item.XPOS);
+                $("#scores").append(", LAS: " + item.LAS + ")");
+                drawDepFlat(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
+
+                if (item.differs) {
+                    //console.log("zz", item.differs);
+                    //for (i = 0; i < item.differs.length; i++) {
+                    //    incorrectwords.add(item.differs[i]);
+                    //}
+                    incorrectwords = item.differs;
+                }
+            }
+            drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
         } else {
             //console.log(item.comparisontree);
             incorrectwords = new Set(); // put incorrect word in comparison mode
             if (item.comparisontree) {
                 $("#scores").empty();
-                $("#scores").append("(Lemma: " + item.Lemma);
+                $("#scores").append("(evaluation: Lemma: " + item.Lemma);
                 $("#scores").append(", Features: " + item.Features);
                 $("#scores").append(", UPOS: " + item.UPOS);
                 $("#scores").append(", XPOS: " + item.XPOS);
                 $("#scores").append(", LAS: " + item.LAS + ")");
-                drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, new Set());
+                drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
                 if (item.differs) {
                     //console.log("zz", item.differs);
                     //for (i = 0; i < item.differs.length; i++) { 

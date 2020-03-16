@@ -43,7 +43,7 @@ var ct = 0;
 
 var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra columns exist
 
-function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type) {
+function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
     svgmaxx = 0;
     svgmaxy = 0;
     svgminy = 0;
@@ -90,7 +90,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type) {
     // insert words at the bottom of the tree
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
-        insertWord(svg, "1", tree, 0, 5, sentencelength, use_deprel_as_type);
+        insertWord(svg, "1", tree, 0, 5, sentencelength, use_deprel_as_type, isgold, incorrectwords);
     }
     svgmaxy += 30; // MWEs are shown a bit above the bottom line
 
@@ -121,7 +121,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type) {
 }
 
 /** insert a word in the flat graph */
-function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel_as_type) {
+function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
     var index = item.position;
     var depx = (index * hor) - (hor/2);
 
@@ -134,6 +134,16 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     var levelinit = level;
     level = levelinit + vertdiff;
 
+    // display gold tree in comparison mode in gray
+    var grayclass = ""; // text
+    var grayclass2 = ""; // lines
+    var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
+    if (isgold == 1) {
+        grayclass = " goldtree";
+        grayclass2 = " goldtree2";
+        gold_idprefix = "g";
+    }
+
     if (showextra) {
         // get all extra columns in this word
         var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
@@ -143,7 +153,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     }
 
     //level = drawWord(item, depx, hor, levelinit, curid, svg);
-    bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg, 0, new Set());
+    bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg, isgold, incorrectwords);
     level = bottomlevels[0]; // x-level at bottom of word (with features, if present)
 
     if (showfeats || showmisc) {
@@ -163,7 +173,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     if (item.children) {
         for (var i = 0; i < item.children.length; i++) {
             //alert(item.children[i]);
-            insertWord(svg, curid, item.children[i], item.position, levelinit, sentencelength, use_deprel_as_type);
+            insertWord(svg, curid, item.children[i], item.position, levelinit, sentencelength, use_deprel_as_type, isgold, incorrectwords);
         }
     }
 
@@ -180,7 +190,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         path.setAttribute("fill", "none");
         path.setAttribute("d", "M " + depx + " " + -140 + " L " + depx + " " + (levelinit - 1));
         path.setAttribute("style", "marker-end: url(#markerArrow);");
-        path.setAttribute("class", "deprel_root");
+        path.setAttribute("class", "deprel_root" + grayclass2);
 	path.setAttribute("stroke", "red"); // only needed for svg download
         svg.appendChild(path);
 
@@ -189,7 +199,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
         var depreltext = document.createElementNS(svgNS, "text");
         depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
-        depreltext.setAttribute("class", "words deprel");
+        depreltext.setAttribute("class", "words deprel" + grayclass);
         depreltext.setAttribute("fill", "green");
         //depreltext.setAttribute("font-size", "14");
 
@@ -200,7 +210,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         svg.appendChild(depreltext);
 
     } else {
-        makeDep(svg, item, headpos, item.deprel, depx, sentencelength, levelinit, true, use_deprel_as_type);
+        makeDep(svg, item, headpos, item.deprel, depx, sentencelength, levelinit, true, use_deprel_as_type, isgold);
     }
 
     // make multi word expressions
@@ -260,7 +270,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
             if (ed.position == headpos && !show_basic_in_enhanced)
                 continue;
 
-            makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type);
+            makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type, isgold);
         }
     }
 }
@@ -279,7 +289,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
  * @param {type} use_deprel_as_type
  * @return {undefined}
  */
-function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type) {
+function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type, isgold) {
     var headx = headpos * hor - hor/2;
     var headbeforedep = (headpos < item.position);
 
@@ -300,6 +310,17 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     }
 
 
+    // display gold tree in comparison mode in gray
+    var grayclass = ""; // text
+    var grayclass2 = ""; // lines 
+    var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
+    if (isgold == 1) {
+        grayclass = " goldtree";
+        grayclass2 = " goldtreearc";
+        gold_idprefix = "g";
+    }
+
+
     if (above) {
        // var middley = /*basey - */-Math.sqrt(Math.abs(headpos - item.position)) * 45;
         var middley = /*basey - */-(item.archeight) * 25;
@@ -315,7 +336,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     }
     // creer le path pour le connecteur tete - fille
     var path = document.createElementNS(svgNS, "path");
-    var pathvar = idprefix + "path_" + headpos + "_" + item.id + "_" + deprel;
+    var pathvar = gold_idprefix + idprefix + "path_" + headpos + "_" + item.id + "_" + deprel;
     path.setAttribute("id", pathvar);
 
     path.setAttribute("stroke", "black");
@@ -336,12 +357,12 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
         // head is left of dep
         path.setAttribute("d", niceArc2(headx, basey /* levelinit */, depx, middley));
         path.setAttribute("style", "marker-end: url(#markerArrow);");
-        path.setAttribute("class", "deprel_precedinghead");
+        path.setAttribute("class", "deprel_precedinghead" + grayclass2);
 	path.setAttribute("stroke", "#880088"); // only needed for svg download
     } else {
         path.setAttribute("d", niceArc2(depx, basey /*levelinit*/, headx, middley));
         path.setAttribute("style", "marker-start: url(#markerArrowInv);");
-        path.setAttribute("class", "deprel_followinghead");
+        path.setAttribute("class", "deprel_followinghead" + grayclass2);
 	path.setAttribute("stroke", "blue"); // only needed for svg download
     }
 
@@ -360,7 +381,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     var deprelpath = document.createElementNS(svgNS, "textPath");
     deprelpath.setAttributeNS(xlink, "xlink:href", "#" + pathvar); // Id of the path
     deprelpath.setAttribute("id", idprefix + "textpath_" + headpos + "_" + item.id + "_" + deprel);
-    deprelpath.setAttribute("class", classname);
+    deprelpath.setAttribute("class", classname + grayclass);
     deprelpath.setAttribute("fill", "#008800"); // only needed for svg download
     // textpath side only supported in Firefox >= 61
     /*
@@ -370,12 +391,12 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
      deprelpath.setAttribute("side", "right");
      */
     if (item.deprelerror == 1) {
-        deprelpath.setAttribute("class", classname + " worderror");
+        deprelpath.setAttribute("class", classname + grayclass + " worderror");
     }
 
 
     if (item.deprelhighlight == 1) {
-        deprelpath.setAttribute("class", classname + " highlight");
+        deprelpath.setAttribute("class", classname + grayclass + " highlight");
 	highlightX = headx;
 	highlightY = middley;
     }

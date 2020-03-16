@@ -169,6 +169,9 @@ ul.ui-autocomplete {
    fill: red;  
 }
 
+.goldtreearc {
+   stroke: gray;
+}
 
 .goldtree2 {
    fill: #eeeeee;

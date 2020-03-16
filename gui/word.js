@@ -198,7 +198,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             rect.setAttribute('stroke-dasharray', '10 5');
         } else {
             //console.log("aaa", item.id, gold,  incorrectwords.has("" + item.id))
-            if (gold == 0 && incorrectwords[item.id]) {
+            if (incorrectwords != null && gold == 0 && incorrectwords[item.id]) {
                 rect.setAttribute('class', rect_idprefix + "wordnode compareError");
                 // needed to pass arguments to ShowCompareErrors()
                 function showce() {
