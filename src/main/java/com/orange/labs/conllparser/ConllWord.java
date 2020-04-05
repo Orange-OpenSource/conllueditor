@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.2.0 as of 5th March 2020
+ @version 2.3.1 as of 5th April 2020
  */
 package com.orange.labs.conllparser;
 
@@ -148,8 +148,9 @@ public class ConllWord {
             for (EnhancedDeps ed : orig.getDeps()) {
                 deps.add(new EnhancedDeps(ed));
             }
-            misc = new LinkedHashMap<>(orig.misc);
         }
+        misc = new LinkedHashMap<>(orig.misc);
+
         spacesAfter = orig.spacesAfter;
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
@@ -211,6 +212,7 @@ public class ConllWord {
         upostag = EmptyColumn;
         xpostag = EmptyColumn;
         deplabel = EmptyColumn;
+        misc = new LinkedHashMap<>();
     }
 
     /*    @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé deux colonne au format CONLL "normal"   */
@@ -836,11 +838,32 @@ public class ConllWord {
 
         if (contracted != null) {
             ConllWord contr = contracted.get(id);
+            // attach an contracted word (n-m) to the word with id n
             if (contr != null) {
                 JsonObject jcontr = new JsonObject();
                 jcontr.addProperty("fromid", contr.id);
                 jcontr.addProperty("toid", contr.subid);
                 jcontr.addProperty("form", contr.form);
+
+                if (contr.misc != null && !contr.misc.isEmpty()) {
+                    JsonArray jmiscs = new JsonArray();
+                    for (String f : contr.misc.keySet()) {
+
+                        JsonObject jcontrmisc = new JsonObject();
+                        jcontrmisc.addProperty("name", f);
+                        Object val = contr.misc.get(f);
+                        if (val != null) {
+                            if (val instanceof Number) {
+                                jcontrmisc.addProperty("val", (Number) val);
+                            } else {
+                                jcontrmisc.addProperty("val", (String) val);
+                            }
+                        }
+                        jmiscs.add(jcontrmisc);
+                    }
+                    jcontr.add("misc", jmiscs);
+                }
+
                 jword.add("mwe", jcontr);
             }
         }
@@ -1380,7 +1403,6 @@ public class ConllWord {
         }
         List<String> e = new ArrayList<>();
         for (String k : misc.keySet()) {
-
             e.add(k + "=" + misc.get(k));
         }
         return String.join("|", e);

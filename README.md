@@ -25,7 +25,8 @@ Since version 2.0.0 the tool can be used as front-end to display the results of 
 For more information see section [Parser Front-End](#parser-front-end)
 
 In order to compare two files (e.g. a gold file with a predicted file)
-ConlluEditor provides a compare mode since version 2.3.0.
+since version 2.3.0 ConlluEditor provides
+* a file compare mode
 For more information see section [File Comparison](#file-comparison)
 
 ## Installation
@@ -324,7 +325,7 @@ The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the c
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
 
 
-# File Comparison
+# File Comparison
 
 ConlluEditor permits you to visualise the differences of two CoNLL-U files, as for instance a gold file and 
 the output of a parsing tool. In order use the comparison mode start ConlluEditor with

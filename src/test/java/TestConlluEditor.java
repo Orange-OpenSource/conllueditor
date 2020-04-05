@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.1.0 as of 15th February 2020
+ @version 2.3.1 as of 5th April 2020
  */
 
 import com.google.gson.Gson;
@@ -243,7 +243,7 @@ public class TestConlluEditor {
         rtc = ce.process("mod editmwe 1 3 Dáselle", 17, "editinfo");
 
         rtc = ce.process("mod compose 6 2", 17, "editinfo");
-        rtc = ce.process("mod editmwe 6 7 ao", 17, "editinfo");
+        rtc = ce.process("mod editmwe 6 7 ao Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("/test.create-mwt.conllu");
         URL res = this.getClass().getResource("/test.conllu.8"); // modified file

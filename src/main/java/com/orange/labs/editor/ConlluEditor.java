@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.0 as of 8th March 2020
+ @version 2.3.1 as of 5th April 2020
  */
 package com.orange.labs.editor;
 
@@ -1009,7 +1009,7 @@ public class ConlluEditor {
 
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod editmwe")) { // mod editmwe currentstart newend form
+            } else if (command.startsWith("mod editmwe")) { // mod editmwe current_start new_end form [MISC column data]
                 String[] f = command.trim().split(" +");
                 if (f.length < 5) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
@@ -1018,6 +1018,8 @@ public class ConlluEditor {
                 int start;
                 int end;
                 String form = f[4];
+                String misc = null;
+                if (f.length > 5) misc = f[5];
 
                 try {
                     start = Integer.parseInt(f[2]);
@@ -1053,6 +1055,7 @@ public class ConlluEditor {
                     cw.setForm(form);
                     cw.setSubId(end);
                     cw.setId(start);
+                    if (misc != null) cw.setMisc(misc);
                 }
 
                 try {

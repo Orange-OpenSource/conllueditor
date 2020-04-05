@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.0 as of 8th March 2020
+ @version 2.3.1 as of 5th April 2020
  */
 
 
@@ -418,7 +418,8 @@ function parseShortcuts() {
     $("#xposshortcuts").append(sc_xposString);
 }
 
-var conllwords = {};
+var conllwords = {}; // all words of current sentence
+var mwes = {}; // all multitoke words of current sentence
 var clickedNodes = [];
 var deprels = [];
 var uposs = [];
@@ -705,6 +706,20 @@ function ModifyTree(evt) {
             $("#currentmwefrom").val(id[1]);
             $("#currentmweto").val(id[2])
             $("#currentmweform").val(id[3])
+            
+            var mc = "";
+            //console.log('qqq', mwes);
+            if (mwes[id[1]].misc != undefined) {
+                    for (e = 0; e < mwes[id[1]].misc.length; ++e) {
+                        var mch = mwes[id[1]].misc[e];
+                        if (e > 0)
+                            mc += "#"; //\n";
+                        mc += mch.name + "=" + mch.val;
+                    }
+                } else
+                    mc = "_";
+            $("#currentmwemisc").val(mc)
+
 
             $("#editMWE").modal();
 
@@ -975,9 +990,19 @@ function formatPhrase(item) {
 
         // make a table wordid: word to access data easier for editing
         conllwords = {};
+        
         for (i = 0; i < item.tree.length; ++i) {
             var head = item.tree[i];
             getConllWords(conllwords, head);
+        }
+        
+        // create similar table for MWE
+        mwes = {};
+        for (wid in conllwords) {
+            cw = conllwords[wid];
+            if (cw.mwe != undefined) {
+                mwes[wid] = cw.mwe;
+            }
         }
     }
     // make modals draggable
@@ -1071,8 +1096,13 @@ $(document).ready(function () {
 
     /* delete clicked MWE form */
     $('#editMWtoken').click(function () {
-        // send comments to server directly (not via #mods)
-        sendmodifs({"cmd": "mod editmwe " + $("#currentmwefrom").val() + " " + $("#currentmweto").val() + " " + $("#currentmweform").val()});
+        misc = $("#currentmwemisc").val(); //.replace(/\n+/, ",");
+        sendmodifs({"cmd": "mod editmwe "
+                    + $("#currentmwefrom").val()
+                    + " " + $("#currentmweto").val()
+                    + " " + $("#currentmweform").val()
+                    + " " + misc});
+        
         $('#editMWE').modal('hide');
     });
 

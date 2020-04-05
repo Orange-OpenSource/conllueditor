@@ -1,3 +1,6 @@
+Version 2.3.1
+- new field to edit MISC column for MultiWord tokens
+
 Version 2.3.0
 - new option --compare to compare a CoNLL-U file with the currently edited file (shown in tree and hedge mode)
 
