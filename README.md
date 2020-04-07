@@ -339,8 +339,8 @@ The dependency tree of the gold file is shown in gray underneath the tree ofthe 
 The results of some evaluation metrics for the current sentence are presented at the bottom of the header.
 Individual words of the edited file, which differ from the gold file are shown with a red border. If the mouse
 hovers over such a word, the corresponding lines from the edited file and the gold file are shown 
-under the evaluation scores.
-The comparison mode worsk in the flat view too.
+underneath the evaluation scores.
+The comparison mode works in the flat view too.
 
 ![CoNLL-U File Comparison](doc/comparemode.png)
 
