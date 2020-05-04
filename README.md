@@ -234,7 +234,7 @@ in the first line
 ```
 # global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC SEM:NE SEM:COREF
 ```
-Valid CoNLL-U Plus with missing standard columns are currently rejected (a transformation program is provided)
+Valid CoNLL-U Plus with missing standard columns are currently rejected.
 
 The additional columns are displayed under the graph/hedge and can be edited.
 The values in these columns are not interpreted (for instance BIO markings), they are just shown.
@@ -246,6 +246,40 @@ The values in these columns are not interpreted (for instance BIO markings), the
 
 
 ![editing extra columns](doc/edit_extracols.png)
+
+### CoNLL-U / CoNLLu Plus conversion
+
+A simple conversion program is provided to convert any CoNLL-U (Plus) file into another. It takes
+as arguments the inputfile name and a comma separated list of output columns. Specified output columns
+absent in the input file will be replaced with `_`. If the output column list is absent, a standard CoNLL-U file is produced.
+
+for instance
+
+`   bin/conlluconvert.sh` [`src/test/resources/test.conllup`](src/test/resources/test.conllup) ` ID,FORM,DEPREL,HEAD,SEM:NE`
+
+generates
+
+```
+# global.columns = ID FORM DEPREL HEAD SEM:NE
+# sent_id = fr-ud-dev_00001
+# sentence 0
+# text = Aviator, un film sur la vie de Howard Hughes.
+1	Aviator	root	0	B:Work
+2	,	punct	1	_
+3	un	det	4	_
+4	film	appos	1	_
+5	sur	case	7	_
+6	la	det	7	_
+7	vie	nmod	4	_
+8	de	case	9	_
+9	Howard	nmod	7	B:Person
+10	Hughes	flat:name	9	I:Person
+...
+```
+
+No semanitc/plausability check is performed. E.g. 
+`bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
+will happily delete the `ID`column from the output file, so the `HEAD` columns does not make much sense anymore.
 
 ## Shortcuts
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
@@ -275,19 +309,6 @@ The validation button will launch the validator on the current sentence.
 * `curl -s --noproxy '*' 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
 * `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use
   with the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) or   [doc/deptree.sty](doc/deptree.sty) packages)
-
-# Known bugs
-* not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server.
-The feature, and misc column fields must contain one or more `|`-separated `name=value` pair per line (or `_`),
-the enhanced dependency field must contain one or more `|`-separated `head:deprel` pair per line (or `_`).
-
-# Todo list
-* be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
-* edit columns from column 11 onwards
-* better support for empty nodes
-* rewrite ConllWord/ConllSentence classes from scratch
-* use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
-
 
 # Parser Front-End
 In order to display the CoNLL-U output of taggers/dependency parser servers, there the front-end provides a graphical user interface 
@@ -358,6 +379,17 @@ The comparison mode works in the flat view too.
 
 ![CoNLL-U File Comparison](doc/comparemode.png)
 
+# Known bugs
+* not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server.
+The feature, and misc column fields must contain one or more `|`-separated `name=value` pair per line (or `_`),
+the enhanced dependency field must contain one or more `|`-separated `head:deprel` pair per line (or `_`).
+
+# Todo list
+* be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
+* edit columns from column 11 onwards
+* better support for empty nodes
+* rewrite ConllWord/ConllSentence classes from scratch
+* use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
 
 # Reference
 
