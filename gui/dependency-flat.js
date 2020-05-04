@@ -102,7 +102,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     //console.log(svg.getAttribute("viewBox"))
 
 
-    if (tree.nonstandard != undefined /*showextra*/) {
+    if (tree.nonstandard != undefined) {
         svgmaxy -= 40;
         // insert words at the bottom of the tree
         for (i = 0; i < trees.length; ++i) {
@@ -144,13 +144,6 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         gold_idprefix = "g";
     }
 
-//    if (showextra) {
-//        // get all extra columns in this word
-//        var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
-//        for (var i = 0; i < colNN.length; i++) {
-//            extracolumnstypes.add(colNN[i]);
-//        }
-//    }
 
     //level = drawWord(item, depx, hor, levelinit, curid, svg);
     bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg, isgold, incorrectwords);

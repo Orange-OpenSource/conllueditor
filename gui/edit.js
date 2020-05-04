@@ -801,7 +801,6 @@ var flatgraph = false;
 var showfeats = false;
 var showmisc = false;
 var showr2l = false;
-//var showextra = false;
 var backwards = false;
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var editing_enhanced = false;
@@ -1360,15 +1359,6 @@ $(document).ready(function () {
             showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-//        } else if (this.id === "extracols") {
-//            if (!showextra) {
-//                $(this).addClass('active');
-//            } else {
-//                $(this).removeClass('active');
-//            }
-//            showextra = !showextra;
-//            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
-//            sendmodifs(datadico);
         } else if (this.id === "backwards") {
             backwards = !backwards;
             if (backwards) {
@@ -1498,6 +1488,17 @@ $(document).ready(function () {
         }
     });
 
+    $("#comment").keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#findcomment").click();
+        }
+    });
+
+    $("#sentenceid").keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#findsentid").click();
+        }
+    });
     /*$('#depreledit').live('keyup', function(e){
      if (e.keyCode == 13) {
      $(':button:contains("Ok")').click();

@@ -99,17 +99,12 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
         for (i = 0; i < trees.length; ++i) {
             var tree = trees[i];
             insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
-            //if (showextra) 
             if (tree.nonstandard != undefined)    insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
         }
     }
 
     // add space for extracolumns
-//    if (showextra && extracolumnstypes.size > 0) {
-//        svgmaxy += 40 + extracolumnstypes.size*20;
-//    }
-    if (//showextra 
-            tree.nonstandard != undefined && Object.keys(tree.nonstandard).length > 0) {
+    if (tree.nonstandard != undefined && Object.keys(tree.nonstandard).length > 0) {
         svgmaxy += 40 + Object.keys(tree.nonstandard).length*20;
     }
 
@@ -168,14 +163,6 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         grayclass2 = " goldtree2";
         gold_idprefix = "g";
     }
-
-//    if (showextra) {
-//        // get all extra columns in this word
-//        var colNN = Object.keys(item).filter((name) => /^col_.*/.test(name));
-//        for (var i = 0; i < colNN.length; i++) {
-//            extracolumnstypes.add(colNN[i]);
-//        }
-//    }
 
 
     // insert word (with, form, lemma, POS etc)
