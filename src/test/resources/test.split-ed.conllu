@@ -1,16 +1,16 @@
 # sent_id = fr-ud-dev_00001
 # sentence 0
 # text = Aviator, un film sur la vie de Howard Hughes.
-1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No	B:Work	B:Coref1
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
 2	,	,	PUNCT	_	_	1	punct	_	_
-3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_	_	B:Coref1
-4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_	_	I:Coref1
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_
 5	sur	sur	ADP	_	_	7	case	_	_
 6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
 7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
 8	de	de	ADP	_	_	9	case	_	_
-9	Howard	Howard	PROPN	_	_	7	nmod	_	_	B:Person
-10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No	I:Person
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
 11	.	.	PUNCT	_	_	1	punct	_	_
 
 # sent_id = fr-ud-dev_00002
@@ -117,9 +117,9 @@
 11	,	,	PUNCT	_	_	4	punct	_	_
 12	dans	dans	ADP	_	_	14	case	_	_
 13	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	_
-14	château	château	NOUN	_	Gender=Masc|Number=Sing	4	obl	_	_	B:PLACE
-15	de	de	ADP	_	_	16	case	_	_	I:PLACE
-16	Versailles	Versailles	PROPN	_	_	14	nmod	_	SpaceAfter=No	I:PLACE
+14	château	château	NOUN	_	Gender=Masc|Number=Sing	4	obl	_	_
+15	de	de	ADP	_	_	16	case	_	_
+16	Versailles	Versailles	PROPN	_	_	14	nmod	_	SpaceAfter=No
 17	.	.	PUNCT	_	_	4	punct	_	_
 
 # sent_id = fr-ud-train_00024
@@ -142,15 +142,15 @@
 
 # text = ils ont visité le Musée du Louvre.
 # sentence 6
-1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_	_	B:visiter:FE:AGENT:G:3:SUBJECT1
-2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_	_	B:visiter:TARGET:VERB:G:3:NONE
-3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_	_	I:visiter:TARGET:VERB:G:3:NONE
-4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_	_	B:visiter:FE:PATIENT:G:3:OBJECT1|B:musée:TARGET:VERB:G:5:NONE
-5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_	_	I:visiter:FE:PATIENT:G:3:OBJECT1|I:musée:TARGET:VERB:G:5:NONE
+1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
+2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_
+3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
+5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_
 6-7	du	_	_	_	_	_	_	_	_
 6	de	de	ADP	ADP	_	8	case	_	_
-7	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	8	det	_	_	_	B:musée:FE:Modifier:G:5:GENITIVE
-8	Louvre	Louvre	PROPN	PROPN	_	5	nmod	_	SpaceAfter=No	_	I:musée:FE:Modifier:G:5:GENITIVE
+7	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	8	det	_	_
+8	Louvre	Louvre	PROPN	PROPN	_	5	nmod	_	SpaceAfter=No
 9	.	.	PUNCT	PUNCT	_	3	punct	_	_
 
 # text = la souris a mangé le fromage qui pue.
@@ -170,8 +170,8 @@
 1	il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
 2	habite	habiter	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
 3	à	à	ADP	ADP	_	4	case	_	_
-4	Los	Los	PROPN	PROPN	_	2	obl	_	_	_	_	B:coref1
-5	Angeles	Angeles	PROPN	PROPN	_	4	flat:name	_	_	_	_	I:coref1
+4	Los	Los	PROPN	PROPN	_	2	obl	_	_
+5	Angeles	Angeles	PROPN	PROPN	_	4	flat:name	_	_
 6	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
 # text = Il aime bien le Miroir aux Alouettes.
@@ -230,12 +230,12 @@
 # sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
 # sentence 13
-1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	_	_	B:Person	B:id01
+1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	_	_
 2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
 3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	_	_
 4	lunchand	lunchand	NOUN	NN	Number=Sing	2	obj	_	_
 5	and	and	CCONJ	CC	_	6	cc	_	_
-6	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|6.1:nsubj	_	B:Person	B:id02
+6	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|6.1:nsubj	_
 6.1	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
 7	dinner	dinner	NOUN	NN	Number=Sing	6	orphan	6:orphan|6.1:obj	_
 

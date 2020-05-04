@@ -1,0 +1,1 @@
+Column definition ('UPOS' != 'LEMMA') does not follow Standard column order in conllu+ definition: '# global.columns = ID FORM UPOS HEAD DEPREL DEPS MISC SEM:NE SEM:COREF' (line 1)

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.0 as of 8th March 2020
+ @version 2.4.0 as of 4th May 2020
  */
 package com.orange.labs.conllparser;
 
@@ -41,6 +41,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class ConllSentence {
     protected Map<Integer, List<ConllWord>> emptywords = null; // main id (before "."): empty nodes
     protected Map<Integer, ConllWord> contracted = null; // contracted words (MWE) startid (before hyphen): word
 
-    private final int shift; // il y a des fichiers conll qui ont des colonnes supplémentaires AVANT la colonne id il faut les ignorer; shift est le nombre des colonnes à gauche à ignorer
+    //private final int shift; // il y a des fichiers conll qui ont des colonnes supplémentaires AVANT la colonne id il faut les ignorer; shift est le nombre des colonnes à gauche à ignorer
     private boolean hasAnnot = false; // au moins une annotation dans la phrase
     private boolean hasEnhancedDeps = false; // at least one word with enhanced deps (in this case we add basic deps to deps in conllu output)
     private Map<String, ConllWord> frames; // collect frame names of targets of this sentence
@@ -81,7 +82,8 @@ public class ConllSentence {
     private boolean showgrana = true;
     private boolean showID = true;
 
-    private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
+    //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
+    Map<String, Integer>columndefs = null; 
 
     public enum Scoretype {
         FORM, LEMMA, UPOS, XPOS, FEATS, LAS, CLAS
@@ -89,28 +91,26 @@ public class ConllSentence {
 
     /**
      * @param conlllines les lignes d'une phrase d'un fichier CONLL à parser
-     * @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé
-     * deux colonne au format CONLL "normal"
      */
-    public ConllSentence(List<AbstractMap.SimpleEntry<Integer, String>> conlllines, Integer shift) throws ConllException {
+    public ConllSentence(List<AbstractMap.SimpleEntry<Integer, String>> conlllines, Map<String, Integer>columndefs) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
-        this.shift = shift;
+        //this.shift = shift;
+        this.columndefs = columndefs;
         parse(conlllines);
     }
 
-    public ConllSentence(String conllstring, int shift) throws ConllException {
+    public ConllSentence(String conllstring, Map<String, Integer>columndefs) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
-        this.shift = shift;
         List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
         int ct = 0;
         for (String line : conllstring.split("\n")) {
             sentenceLines.add(new AbstractMap.SimpleEntry(ct, line));
         }
+        this.columndefs = columndefs;
         parse(sentenceLines);
     }
 
     public ConllSentence(List<ConllWord> cw) {
-        shift = 0;
         words = cw;
         frames = new HashMap<>();
         //hasEnhancedDeps = words.get(0).isBasicdeps_in_ed_column();
@@ -127,9 +127,9 @@ public class ConllSentence {
 
     /**
      * cloner une phrase (sans annotations et dépendances)
+     * @param orig sentence to be cloned
      */
     public ConllSentence(ConllSentence orig) {
-        shift = 0;
         words = new ArrayList<>();
         frames = new HashMap<>();
         comments = new ArrayList<>(orig.comments);
@@ -158,6 +158,7 @@ public class ConllSentence {
         newdoc = orig.newdoc;
         newpar = orig.newpar;
         sentid = orig.sentid;
+        columndefs = orig.columndefs;
     }
 
     private void parse(List<AbstractMap.SimpleEntry<Integer, String>> conlllines) throws ConllException {
@@ -182,14 +183,14 @@ public class ConllSentence {
                 }
                 continue;
             }
-            String[] fields = line.split("\t", shift + 1);
+            String[] fields = line.split("\t", 1);
             //System.err.println("LINE\t" + line + " ");
-            if (fields.length < shift + 1) {
+            if (fields.length < 1) {
                 System.err.format("WARNING: ignoring short line %d: \"%s\"\n", cline.getKey(), line);
                 continue;
             }
 
-            ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, shift, cline.getKey());
+            ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, columndefs, cline.getKey());
 
             if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                 hasEnhancedDeps = true;
@@ -297,10 +298,6 @@ public class ConllSentence {
 
     public Map<String, ConllWord> getFrameNames() {
         return frames;
-    }
-
-    public int getShift() {
-        return shift;
     }
 
     public ConllWord getHead() {
@@ -522,7 +519,7 @@ public class ConllSentence {
                 modified.setDeplabel(keepInfo.getDeplabel());
                 modified.setDeps(keepInfo.getDeps());
                 modified.setMisc(keepInfo.getMisc());
-                modified.setPrefixed(keepInfo.getPrefixed());
+                //modified.setPrefixed(keepInfo.getPrefixed());
                 modified.setHead(0);
             }
         }
@@ -546,9 +543,9 @@ public class ConllSentence {
      * next call to toString() prefixes columns cut off with shift parameter in
      * Constructor
      */
-    public void nextToStringComplete() {
-        nextToStringcomplete = true;
-    }
+//    public void nextToStringComplete() {
+//        nextToStringcomplete = true;
+//    }
 
     /** format the sentence in CoNLL-U format */
     public String toString() {
@@ -577,9 +574,9 @@ public class ConllSentence {
         }
 
         for (ConllWord word : words) {
-            if (nextToStringcomplete) {
-                word.nextToStringComplete();
-            }
+//            if (nextToStringcomplete) {
+//                word.nextToStringComplete();
+//            }
 
             // output eventual contracted form
             if (contracted != null) {
@@ -599,7 +596,7 @@ public class ConllSentence {
                 }
             }
         }
-        nextToStringcomplete = false;
+        //nextToStringcomplete = false;
         sb.append('\n');
         return sb.toString();
     }
@@ -659,7 +656,7 @@ public class ConllSentence {
             StringBuilder positions = new StringBuilder("%% Position in sentence:\n% ");
 
             // find the extracolumns used by any of the words
-            Set<Integer> extracols = new TreeSet<>();
+            Set<String> extracols = new LinkedHashSet<>();
             for (ConllWord word : words) {
                 if (word.getExtracolumns() != null) {
                     extracols.addAll(word.getExtracolumns().keySet());
@@ -667,9 +664,9 @@ public class ConllSentence {
             }
 
             // stringbuilders for all needed extra columns
-            Map<Integer, StringBuilder> ecs = new TreeMap<>();
-            for (Integer ec : extracols) {
-                StringBuilder extra = new StringBuilder(String.format("%%%% extra column %d:\n%% ", ec));
+            Map<String, StringBuilder> ecs = new LinkedHashMap<>();
+            for (String ec : extracols) {
+                StringBuilder extra = new StringBuilder(String.format("%%%% extra column %s:\n%% ", ec));
                 ecs.put(ec, extra);
             }
 
@@ -711,7 +708,7 @@ public class ConllSentence {
                     xposs.append("\\& ");
                     ids.append("\\& ");
                     positions.append("\\& ");
-                    for (Integer ec : extracols) {
+                    for (String ec : extracols) {
                         StringBuilder ecsb = ecs.get(ec);
                         ecsb.append("\t\\&\n% ");
                     }
@@ -725,7 +722,7 @@ public class ConllSentence {
                 position.put(word.getFullId(), position.size() + 1);
                 positions.append(position.size()).append("\t");
 
-                for (Integer ec : extracols) {
+                for (String ec : extracols) {
                     LinkedHashSet<String> tmp = null;
                     if (word.getExtracolumns() != null) {
                         tmp = word.getExtracolumns().get(ec);
@@ -750,7 +747,7 @@ public class ConllSentence {
                             positions.append("\\& ").append(position.size()).append("\t");
 
                             if (ew.getExtracolumns() != null) {
-                                for (Integer ec : extracols) {
+                                for (String ec : extracols) {
                                     LinkedHashSet<String> tmp = word.getExtracolumns().get(ec);
                                     StringBuilder ecsb = ecs.get(ec);
                                     ecsb.append("\\& ");
@@ -771,7 +768,7 @@ public class ConllSentence {
             sb.append(xposs).append("\\\\\n");
             sb.append(ids).append("\\\\\n");
             sb.append(positions).append("\\\\\n");
-            for (Integer ec : extracols) {
+            for (String ec : extracols) {
                 sb.append(ecs.get(ec)).append("\\\\\n");
             }
 

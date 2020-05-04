@@ -12,8 +12,7 @@ The editor provides the following functionalities:
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these
-* displays non-CoNLL-U columns (from column 11 onwards)
-* runs validation script on sentence (CoNLL-U format)
+* edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
@@ -113,6 +112,9 @@ In order two compile the server, you also need
 
 ## Starting the server
 
+On smaller machines, the memory managment of the java VM (`-Xmx...` option) may be modified in
+`bin/conlluedit.sh`. The current value (`-Xmx4g`) is largely sufficient to load larger treebanks with up to 1,5M tokens.
+
 ### Using a locally installed Apache our Lighttpd Server
 
 * create a symbolic link from your HTTP-server root to the `gui` directory:
@@ -142,6 +144,7 @@ bin/conlluedit.sh -r treebank.conllu 8888
 
 
 Point your navigator  to `http://localhost:8888` .
+
 
 
 ### Other options
@@ -224,14 +227,25 @@ delete the enhanced dependency relation.
 Alternatively, enhanced dependenclies can be edited manually via the word edit menu.
 
 ## Other annotation
-Even though, the CoNLL-U standard defines only 10 columns, columns beyond the 10th (MISC) column are conserved when editing such files.
-They can be displayed in both modes (tree/flat) if the `extra cols` button is activated, but not (yet) be edited.
-The values in these columns are not interpreted (for instance BIO markings), theyr are just shown.
+Since version 2.4.0 a subset of the [CoNLL-U Plus](http://universaldependencies.org/ext-format.html) is supported.
+The CoNLL-U Plus file must have the standard 10 CoNLL-U columns and the additional columns defined
+in the first line
+
+```
+# global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC SEM:NE SEM:COREF
+```
+Valid CoNLL-U Plus with missing standard columns are currently rejected (a transformation program is provided)
+
+The additional columns are displayed under the graph/hedge and can be edited.
+The values in these columns are not interpreted (for instance BIO markings), they are just shown.
 
 ![extra columns in tree view](doc/tree_extracols.png)
 
 
 ![extra columns in graph view](doc/graph_extracols.png)
+
+
+![editing extra columns](doc/edit_extracols.png)
 
 ## Shortcuts
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
@@ -268,7 +282,7 @@ The feature, and misc column fields must contain one or more `|`-separated `name
 the enhanced dependency field must contain one or more `|`-separated `head:deprel` pair per line (or `_`).
 
 # Todo list
-* be able to read/write CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
+* be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
 * edit columns from column 11 onwards
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch

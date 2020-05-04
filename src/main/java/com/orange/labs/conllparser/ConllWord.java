@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.1 as of 5th April 2020
+ @version 2.4.0 as of 2nd May 2020
  */
 package com.orange.labs.conllparser;
 
@@ -52,8 +52,8 @@ import java.util.regex.Pattern;
  * @author Johannes Heinecke <johannes.heinecke@orange.com>
  */
 public class ConllWord {
-    private List<String> prefixed = null; // colonnes à ignorer avec shift
-    private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
+    //private List<String> prefixed = null; // colonnes à ignorer avec shift
+    //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
 
     private int position; // needed for GUI, since empty nodes will be inserted in between regulare nodes. Filled by makeTrees
     private int arc_height = 0; // needed for GUI to disply arc height in flat graphs nicely
@@ -93,13 +93,14 @@ public class ConllWord {
     // additional semantic annotation (non-conllu)
     //private Set<Annotation> annot = null; // column 11 if B/I/O:....
     // column 11 otherwise
-    private Map<Integer, LinkedHashSet<String> > namedColumns; // non standardcolums. the index is the column position (11, 12 ...) 
+    //private Map<Integer, LinkedHashSet<String>> namedColumns; // non standardcolums. the index is the column position (11, 12 ...) 
+    private Map<String, LinkedHashSet<String>> namedColumns; // non standardcolums: name: values 
 
     public static boolean orderfeatures = true; // order morphological features ore keep them as they are in the CoNLL-U data
 
     private int start = -1; // start offset in the sentence 
     private int end = -1; // offset after the last character (not taking into account SpaceAfter !)
-    
+
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
     };
@@ -114,10 +115,10 @@ public class ConllWord {
      * @param orig
      */
     public ConllWord(ConllWord orig) {
-        if (orig.getPrefixed() != null) {
-            prefixed = new ArrayList<>();
-            prefixed.addAll(orig.getPrefixed());
-        }
+//        if (orig.getPrefixed() != null) {
+//            prefixed = new ArrayList<>();
+//            prefixed.addAll(orig.getPrefixed());
+//        }
 
         position = orig.getPosition();
         id = orig.getId();
@@ -166,19 +167,19 @@ public class ConllWord {
 //            nonstandardInfo.addAll(orig.nonstandardInfo);
 //        }
         if (orig.namedColumns != null) {
-            namedColumns = new TreeMap<>();
-            for (Integer key : orig.namedColumns.keySet()) {                
-                LinkedHashSet<String>l = new LinkedHashSet<>();
+            namedColumns = new LinkedHashMap<>();
+            for (String key : orig.namedColumns.keySet()) {
+                LinkedHashSet<String> l = new LinkedHashSet<>();
                 l.addAll(orig.namedColumns.get(key));
                 namedColumns.put(key, l);
             }
         }
-        
+
         whquestion = orig.isWhquestion();
     }
 
-    public ConllWord(String conllline, List<String> lastannots) throws ConllException {
-        this(conllline, lastannots, 0, -1);
+    public ConllWord(String conllline, List<String> lastannots, Map<String, Integer> columndefs) throws ConllException {
+        this(conllline, lastannots, columndefs, -1);
     }
 
     public ConllWord(String form) {
@@ -215,97 +216,138 @@ public class ConllWord {
         misc = new LinkedHashMap<>();
     }
 
+    private int getColumn(String colname, Map<String, Integer> columndefs) {
+        if (columndefs == null) {
+            // standard conllu
+            switch (colname) {
+                case "ID":
+                    return 0;
+                case "FORM":
+                    return 1;
+                case "LEMMA":
+                    return 2;
+                case "UPOS":
+                    return 3;
+                case "XPOS":
+                    return 4;
+                case "FEATS":
+                    return 5;
+                case "HEAD":
+                    return 6;
+                case "DEPREL":
+                    return 7;
+                case "DEPS":
+                    return 8;
+                case "MISC":
+                    return 9;
+                default:
+                    return 9;
+            }
+        } else {
+            return columndefs.getOrDefault(colname, -1);
+        }
+    }
+
     /*    @param shift si > 0 on ignore les premières colonnes (le LIF a préfixé deux colonne au format CONLL "normal"   */
-    public ConllWord(String conllline, List<String> lastannots, int shift, int linenumber) throws ConllException {
+    public ConllWord(String conllline, List<String> lastannots,
+            Map<String, Integer> columndefs,
+            int linenumber) throws ConllException {
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
         String[] elems = conllline.split("\t");
 
-        //System.err.println("SHIFT " + shift + "  LEN " +  elems.length + "\t" + conllline);
-        //System.err.println("     " + elems.length);
-        if (elems.length < 8 + shift) {
+        if (elems.length < columndefs.size()) { //if (elems.length < 8) {
             throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'");
         }
         //System.out.println("L:"+conllline);
-        String[] idelems = elems[shift].split("[\\.-]");
-        id = Integer.parseInt(idelems[0]);
-        if (idelems.length > 1) {
-            subid = Integer.parseInt(idelems[1]);
-            if (elems[shift].contains(".")) {
-                toktype = Tokentype.EMPTY;
-            } else {
-                toktype = Tokentype.CONTRACTED;
+        int posID = getColumn("ID", columndefs);
+        if (posID != -1) {
+            String[] idelems = elems[/*0*/posID].split("[\\.-]");
+            id = Integer.parseInt(idelems[0]);
+            if (idelems.length > 1) {
+                subid = Integer.parseInt(idelems[1]);
+                if (elems[posID].contains(".")) {
+                    toktype = Tokentype.EMPTY;
+                } else {
+                    toktype = Tokentype.CONTRACTED;
+                }
             }
         }
 
-        if (shift > 0) {
-            prefixed = new ArrayList<>();
-            for (int i = 0; i < shift; ++i) {
-                prefixed.add(elems[i]);
-            }
-        }
+        int posFORM = getColumn("FORM", columndefs);
+        if (posFORM != -1) {
+            form = elems[posFORM];
 
-        form = elems[shift + 1];
-
-        //System.err.println("FORM:"+form);
-        Matcher m = number.matcher(form);
-        if (m.matches()) {
-            //System.out.println("NNN " + form);
-            form = form.replaceAll("#", "");
-            /* } else if (form.contains("#")) {
+            //System.err.println("FORM:"+form);
+            Matcher m = number.matcher(form);
+            if (m.matches()) {
+                //System.out.println("NNN " + form);
+                form = form.replaceAll("#", "");
+                /* } else if (form.contains("#")) {
             if (form.charAt(0) == '#') {
                 form = form.replaceAll("#", "-");
             } else {
                 form = form.replaceAll("#", " ");
             }*/
-        }
+            }
 
-        if (form.isEmpty()) {
-            throw new ConllException("empty form. Use '" + EmptyColumn + "' in line (" + linenumber + "): " + conllline);
+            if (form.isEmpty()) {
+                throw new ConllException("empty form. Use '" + EmptyColumn + "' in line (" + linenumber + "): " + conllline);
+            }
         }
-
+        int posMISC = getColumn("MISC", columndefs);
         misc = new LinkedHashMap<>();
+
         if (toktype == Tokentype.CONTRACTED) {
-            for (int x = 2 + shift; x < shift + 9; ++x) {
+            for (int x = 2; x < /*9*/ columndefs.size() - 1; ++x) {
                 if (!elems[x].equals(EmptyColumn)) {
                     throw new ConllException("Contracted word must not have columns filled after position 2");
                 }
                 // processing Misc column
             }
-            setMisc(elems[shift + 9]);
+
+            if (posMISC != -1) {
+                setMisc(elems[posMISC]);
+            }
             deps = new ArrayList<>(); // TODO either keep this or add checks to getDeps() calls
         } else {
-            lemma = elems[shift + 2];
-            if (lemma.isEmpty()) {
-                if (RELAXED) {
-		    lemma = EmptyColumn;
-		    System.err.println("lemma column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
-		}
-                else {
-		    throw new ConllException("empty lemma. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
-		}
+            int posLEMMA = getColumn("LEMMA", columndefs);
+            if (posLEMMA != -1) {
+                lemma = elems[posLEMMA];
+                if (lemma.isEmpty()) {
+                    if (RELAXED) {
+                        lemma = EmptyColumn;
+                        System.err.println("lemma column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                    } else {
+                        throw new ConllException("empty lemma. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
+                    }
+                }
             }
 
-            upostag = elems[shift + 3];
-            if (upostag.isEmpty()) {
-                if (RELAXED) {
-		    upostag = EmptyColumn;
-		    System.err.println("upostag column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
-		}
-                else {
-		    throw new ConllException("empty upostag. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
-		}
+            int posUPOS = getColumn("UPOS", columndefs);
+            if (posUPOS != -1) {
+                upostag = elems[posUPOS];
+                if (upostag.isEmpty()) {
+                    if (RELAXED) {
+                        upostag = EmptyColumn;
+                        System.err.println("upostag column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                    } else {
+                        throw new ConllException("empty upostag. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
+                    }
+                }
             }
 
-            xpostag = elems[shift + 4];
-            if (xpostag.isEmpty()) {
-                if (RELAXED) {
-		    xpostag = EmptyColumn;
-		    System.err.println("xpostag column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
-		}
-                else {
-		    throw new ConllException("empty xpostag. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
-		}
+            int posXPOS = getColumn("XPOS", columndefs);
+            if (posXPOS != -1) {
+                xpostag = elems[posXPOS];
+                if (xpostag.isEmpty()) {
+                    if (RELAXED) {
+                        xpostag = EmptyColumn;
+                        System.err.println("xpostag column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                    } else {
+                        throw new ConllException("empty xpostag. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
+                    }
+                }
             }
 
             if (orderfeatures) {
@@ -313,117 +355,111 @@ public class ConllWord {
             } else {
                 features = new LinkedHashMap<>();
             }
-	    if (elems[shift + 5].isEmpty()) {
-                if (RELAXED) {
-		    elems[shift + 5] = EmptyColumn;
-		    System.err.println("feature column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
-		} else {
-		    throw new ConllException("empty features. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
-		}
-	    }
-            this.setFeatures(elems[shift + 5]);
 
-            if (elems[shift + 6].isEmpty()) {
-                if (RELAXED) {
-                   head = 0;
-                   System.err.println("head id is empty. Set to 0 in line (" + linenumber +") \"" + conllline + '"');
-                } else {
-		    throw new ConllException("empty head. Use '" + EmptyColumn + "' or head number in line (" + linenumber +") \"" + conllline + '"');
-		}
-            }
-            if (elems[shift + 6].equals(EmptyColumn)) {
-                head = -1;
-            } else {
-                try {
-                    head = Integer.parseInt(elems[shift + 6]);
-                } catch (NumberFormatException e) {
+            int posFEAT = getColumn("FEATS", columndefs);
+            if (posFEAT != -1) {
+                if (elems[posFEAT].isEmpty()) {
                     if (RELAXED) {
-                      head = 0;
-                      System.err.println("head id is no number. Set to 0 in line (" + linenumber +") \"" + conllline + '"');
+                        elems[5] = EmptyColumn;
+                        System.err.println("feature column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
                     } else {
-			throw new ConllException("head id must be a number in line (" + linenumber +") \"" + conllline + '"');
-		    }
+                        throw new ConllException("empty features. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
+                    }
+                }
+                this.setFeatures(elems[posFEAT]);
+            }
+
+            int posHEAD = getColumn("HEAD", columndefs);
+            if (posHEAD != -1) {
+                if (elems[posHEAD].isEmpty()) {
+                    if (RELAXED) {
+                        head = 0;
+                        System.err.println("head id is empty. Set to 0 in line (" + linenumber + ") \"" + conllline + '"');
+                    } else {
+                        throw new ConllException("empty head. Use '" + EmptyColumn + "' or head number in line (" + linenumber + ") \"" + conllline + '"');
+                    }
+                }
+                if (elems[posHEAD].equals(EmptyColumn)) {
+                    head = -1;
+                } else {
+                    try {
+                        head = Integer.parseInt(elems[posHEAD]);
+                    } catch (NumberFormatException e) {
+                        if (RELAXED) {
+                            head = 0;
+                            System.err.println("head id is no number. Set to 0 in line (" + linenumber + ") \"" + conllline + '"');
+                        } else {
+                            throw new ConllException("head id must be a number in line (" + linenumber + ") \"" + conllline + '"');
+                        }
+                    }
+                }
+
+                if (head == id && head != 0) {
+                    if (RELAXED) {
+                        head = 0;
+                        System.err.println("head id == word id. Set to 0 in line (" + linenumber + ") \"" + conllline + '"');
+                    } else {
+                        throw new ConllException("head id must be different from word id in line (" + linenumber + ") \"" + conllline + '"');
+                    }
                 }
             }
 
-            if (head == id && head != 0) {
-                if (RELAXED) {
-                   head = 0;
-                   System.err.println("head id == word id. Set to 0 in line (" + linenumber +") \"" + conllline + '"');
-                } else {
-		    throw new ConllException("head id must be different from word id in line (" + linenumber +") \"" + conllline + '"');
-		}
-            }
-
-            deplabel = elems[shift + 7];
-            if (deplabel.isEmpty()) {
-                if (RELAXED) {
-		    deplabel = EmptyColumn;
-		    System.err.println("deplabel column empty. Set to \"_\" in line (" + linenumber +") \"" + conllline + '"');
-		}
-                else {
-		    throw new ConllException("empty deplabel. Use '" + EmptyColumn + "' in line (" + linenumber +") \"" + conllline + '"');
-		}
+            int posDEPREL = getColumn("DEPREL", columndefs);
+            if (posDEPREL != -1) {
+                deplabel = elems[posDEPREL];
+                if (deplabel.isEmpty()) {
+                    if (RELAXED) {
+                        deplabel = EmptyColumn;
+                        System.err.println("deplabel column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                    } else {
+                        throw new ConllException("empty deplabel. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
+                    }
+                }
             }
 
             whquestion = false;
 
             deps = new ArrayList<>();
 
-            if (elems.length > shift + 9) {
-                if (!elems[shift + 8].equals(EmptyColumn)) {
+            //if (elems.length > 9) {
+            int posEHD = getColumn("DEPS", columndefs);
+            if (posEHD != -1) {
+                if (!elems[posEHD].equals(EmptyColumn)) {
                     //basicdeps_in_ed_column = true;
-                    String[] eds = elems[shift + 8].split("\\|");
+                    String[] eds = elems[posEHD].split("\\|");
                     for (String ed : eds) {
                         if (!ed.equals("0")) {
                             EnhancedDeps ehd = new EnhancedDeps(ed);
-//                            if (ehd.headid == head && ehd.headsubid == 0) {
-//                                // we do not read the copy of basic deps in the enhanced deps column
-//                                // but we keep in mind that it is so
-//                                continue;
-//                            }
                             deps.add(ehd);
                         }
                     }
                 }
-
-                // processing Misc column
-                setMisc(elems[shift + 9]);
-
-                if (elems.length > shift + 10) {
-//                    try {
-//                        // est-ce qu'il s'agit dun mot avec une annotation en frame ?
-//                        Annotation a = new Annotation(elems[shift + 10], null, lastannots);
-//                        annot = new TreeSet<>();
-//                        annot.add(a);
-//                        for (int i = shift + 10 + 1; i < elems.length; ++i) {
-//                            try {
-//                                annot.add(new Annotation(elems[i], null, lastannots));
-//                            } catch (ConllException ex) {
-//                                System.err.println("Annotation error " + ex.getMessage());
-//                            }
-//                        }
-//                        if (annot.isEmpty()) {
-//                            annot = null;
-//                        }
-//                    } catch (ConllException ex) {
-                        // non, apparament c'est autre chose                        
-//                        nonstandardInfo = new ArrayList<>();
-//                        for (int i = shift + 10; i < elems.length; ++i) {
-//                            nonstandardInfo.add(elems[i]);
-//                        }
-                        
-                        namedColumns = new TreeMap<>();
-                        int j = 11;
-                        for (int i = shift + 10; i < elems.length; ++i) {
-                            namedColumns.put(j++, new LinkedHashSet(Arrays.asList(elems[i].split("\\|"))));
-                        }
-                        
-//                    }
-
-                }
+            }
+            
+            // processing Misc column
+            if (posMISC != -1) {
+                setMisc(elems[posMISC]);
             }
         }
+            /* process non-standard colums*/
+            for (String col : columndefs.keySet()) {
+                if (!ConllFile.conllustandard.contains(col)) {
+                    if (namedColumns == null) {
+                        namedColumns = new LinkedHashMap<>();
+                    }
+                    namedColumns.put(col, new LinkedHashSet(Arrays.asList(elems[columndefs.get(col)].split("\\|"))));
+                }
+            }
+            /*
+            if (elems.length > 10) {
+                namedColumns = new TreeMap<>();
+                int j = 11;
+                for (int i = 10; i < elems.length; ++i) {
+                    namedColumns.put(j++, new LinkedHashSet(Arrays.asList(elems[i].split("\\|"))));
+                }
+            } */
+        
+            
     }
 
     public boolean isWhquestion() {
@@ -432,15 +468,6 @@ public class ConllWord {
 
     public void setWhquestion(boolean whquestion) {
         this.whquestion = whquestion;
-    }
-
-
-    public List<String> getPrefixed() {
-        return prefixed;
-    }
-
-    public void setPrefixed(List<String> p) {
-        prefixed = p;
     }
 
     public void setPartOfChunk(int i) {
@@ -471,7 +498,7 @@ public class ConllWord {
             return false;
         }
         if (!upostag.equals(cw.getUpostag())) {
-           // System.err.println("inc UPOS");
+            // System.err.println("inc UPOS");
             return false;
         }
         if (!lemma.equals(cw.getLemma())) {
@@ -820,8 +847,8 @@ public class ConllWord {
      */
     // TODO: add misc column
     public JsonObject toJson(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
-                             ConllSentence.Highlight highlight, ConllSentence.AnnotationErrors ae,
-                             Map<Integer, ConllWord> contracted) {
+            ConllSentence.Highlight highlight, ConllSentence.AnnotationErrors ae,
+            Map<Integer, ConllWord> contracted) {
         JsonObject jword = new JsonObject();
         jword.addProperty("position", position);
         if (arc_height > 0) {
@@ -986,22 +1013,24 @@ public class ConllWord {
 //            }
 //        }
         if (namedColumns != null) {
-            for (Integer key : namedColumns.keySet()) {
-                if (key == 12) {
-                    // temporary solution for RelationExtraction (project which (ab)uses ConlluEditor.jar)
-                    LinkedHashSet<String>values = namedColumns.get(key);
-                    String val = values.iterator().next();
-                    String []fields = val.split(":");
-                    if (fields.length >= 4)
-                        jword.addProperty("type", fields[3]);
-                } else {
-                    LinkedHashSet<String>values = namedColumns.get(key);
-                    jword.addProperty("col" + key, String.join("|", values));
-                }
+            JsonObject extracols = new JsonObject();
+            for (String key : namedColumns.keySet()) {
+//                if (key == 12) {
+//                    // temporary solution for RelationExtraction (project which (ab)uses ConlluEditor.jar)
+//                    LinkedHashSet<String> values = namedColumns.get(key);
+//                    String val = values.iterator().next();
+//                    String[] fields = val.split(":");
+//                    if (fields.length >= 4) {
+//                        jword.addProperty("type", fields[3]);
+//                    }
+//                } //else {
+                LinkedHashSet<String> values = namedColumns.get(key);
+                jword.addProperty("col_" + key, String.join("|", values));
+                extracols.addProperty(key, String.join("|", values));
+                //}
             }
+            jword.add("nonstandard", extracols);
         }
-
-
 
         if (!dependents.isEmpty()) {
             JsonArray jchildren = new JsonArray();
@@ -1017,30 +1046,46 @@ public class ConllWord {
     public JsonObject toSpacyJson() {
         JsonObject w = new JsonObject();
         w.addProperty("id", getId());
-        if (!EmptyColumn.equals(getDeplabel())) w.addProperty("dep", getDeplabel());
-        if (getHead() <= 0) w.addProperty("head", 0);
-        else w.addProperty("head", getHead()-getId());
-        if (!EmptyColumn.equals(getUpostag())) w.addProperty("tag", getDeplabel());
+        if (!EmptyColumn.equals(getDeplabel())) {
+            w.addProperty("dep", getDeplabel());
+        }
+        if (getHead() <= 0) {
+            w.addProperty("head", 0);
+        } else {
+            w.addProperty("head", getHead() - getId());
+        }
+        if (!EmptyColumn.equals(getUpostag())) {
+            w.addProperty("tag", getDeplabel());
+        }
         w.addProperty("orth", getForm());
 
         return w;
     }
 
-    public Map<Integer, LinkedHashSet<String> > getExtracolumns() {
+    public Map<String, LinkedHashSet<String>> getExtracolumns() {
         //return nonstandardInfo;
         return namedColumns;
     }
+
+    public synchronized void setExtracolumns(String colname, String strecs) {
+        if (namedColumns == null) {
+            namedColumns = new LinkedHashMap<>();
+        }
+        namedColumns.put(colname, new LinkedHashSet(Arrays.asList(strecs.split("\\|"))));
+    }
     
-    public synchronized void setExtracolumns(Map<Integer, LinkedHashSet<String> > ecs) {
+    public synchronized void setExtracolumns(Map<String, LinkedHashSet<String>> ecs) {
         namedColumns = ecs;
     }
 
-    public LinkedHashSet<String> getExtracolumn(int id) {
+    public LinkedHashSet<String> getExtracolumn(String id) {
         //return nonstandardInfo;
-        if (namedColumns != null) return namedColumns.get(id);
+        if (namedColumns != null) {
+            return namedColumns.get(id);
+        }
         return null;
     }
-    
+
 //    public void setExtracolumns(List<String> extra) {
 //        nonstandardInfo = extra;
 //    }
@@ -1054,8 +1099,6 @@ public class ConllWord {
 //            nonstandardInfo.set(0, extra);
 //        }
 //    }
-
-    
 //
 //    public Set<Annotation> getAnnots() {
 //        return annot;
@@ -1088,24 +1131,24 @@ public class ConllWord {
 //        }
 //        annot.add(a);
 //    }
-    public synchronized void addExtracolumn(int id, String a) {
+    public synchronized void addExtracolumn(String name, String a) {
         if (namedColumns != null) {
-            LinkedHashSet<String> current = namedColumns.get(id);
-            if (current != null) {                                
+            LinkedHashSet<String> current = namedColumns.get(name);
+            if (current != null) {
                 current.add(a);
             } else {
-               current = new LinkedHashSet<>();
-               current.add(a);
-               namedColumns.put(id, current);
+                current = new LinkedHashSet<>();
+                current.add(a);
+                namedColumns.put(name, current);
             }
         } else {
             namedColumns = new TreeMap<>();
             LinkedHashSet<String> current = new LinkedHashSet<>();
             current.add(a);
-            namedColumns.put(id, current);
+            namedColumns.put(name, current);
         }
     }
-    
+
 //    public void addAnnots(Set<Annotation> a) {
 //        if (annot == null) {
 //            annot = a;
@@ -1113,7 +1156,6 @@ public class ConllWord {
 //            annot.addAll(a);
 //        }
 //    }
-
     public int getPosition() {
         return position;
     }
@@ -1231,12 +1273,11 @@ public class ConllWord {
     public boolean matchesLemma(String regex) {
         return lemma.matches(regex);
     }
-    
+
     public boolean matchesForm(String regex) {
         return form.matches(regex);
     }
 
-    
     public boolean matchesField(Fields f, String regex) {
         switch (f) {
             case LEMMA:
@@ -1251,16 +1292,20 @@ public class ConllWord {
                 return matchesForm(regex);
             case FEATURE:
                 // split regex in two: feature name: regex of value
-                String [] elems = regex.split(":", 2);
+                String[] elems = regex.split(":", 2);
                 if (elems.length == 2) {
                     return matchesFeatureValue(elems[0], elems[1]);
-                } else return false;
+                } else {
+                    return false;
+                }
             default:
                 return false;
         }
     }
 
-    /** return feature map */
+    /**
+     * return feature map
+     */
     public Map<String, String> getFeatures() {
         return features;
     }
@@ -1278,9 +1323,10 @@ public class ConllWord {
         }
         return jfeats;
     }
-    
-    
-    /** return reafures as UD string */
+
+    /**
+     * return reafures as UD string
+     */
     public String getFeaturesStr() {
         if (features.isEmpty()) {
             return EmptyColumn;
@@ -1297,12 +1343,16 @@ public class ConllWord {
         return sb.toString();
     }
 
-    /** replace features by other features */
+    /**
+     * replace features by other features
+     */
     public void setFeatures(Map<String, String> fs) {
         features = fs;
     }
 
-    /** replace features by other features (in an unparsed UD string */
+    /**
+     * replace features by other features (in an unparsed UD string
+     */
     public void setFeatures(String unparsed_featsstring) {
         features.clear();
 
@@ -1421,7 +1471,7 @@ public class ConllWord {
                         misc.put(kv[0], null);
                     } else {
                         if (isPosNumeric(kv[1])) {
-                            misc.put(kv[0], Integer.parseInt(kv[1]));
+                            misc.put(kv[0], Long.parseLong(kv[1]));
                         } else {
                             misc.put(kv[0], kv[1]);
                             setSpacesAfter(kv[0], kv[1]);
@@ -1434,7 +1484,9 @@ public class ConllWord {
         }
     }
 
-    /** set the spaces afterthe token, return true, if the key was Space(s)After */
+    /**
+     * set the spaces afterthe token, return true, if the key was Space(s)After
+     */
     private boolean setSpacesAfter(String misckey, String miscval) {
         if (misckey.equals("SpaceAfter") && miscval.equals("No")) {
             spacesAfter = "";
@@ -1466,7 +1518,7 @@ public class ConllWord {
         return prexists;
     }
 
-    public boolean addMisc(String key, Integer val) {
+    public boolean addMisc(String key, Long val) {
         boolean prexists = misc.containsKey(key);
         misc.put(key, val);
         return prexists;
@@ -1500,13 +1552,15 @@ public class ConllWord {
         return deplabel.matches(d);
     }
 
-    /** checks whether you can go up and down from the current word to another
-         by following the relations and directions
-    @param rels
-    @param direction
-    @return
+    /**
+     * checks whether you can go up and down from the current word to another by
+     * following the relations and directions
+     *
+     * @param rels
+     * @param direction
+     * @return
      */
-    public boolean matchesTree(int start, String[] rels, String[] direction, Set<Integer>toHighlight) {
+    public boolean matchesTree(int start, String[] rels, String[] direction, Set<Integer> toHighlight) {
         ConllWord head;
         //System.err.println("MT " + start);
         //System.err.println("  RL " + String.join(",", rels));
@@ -1520,7 +1574,7 @@ public class ConllWord {
                 }
                 //System.err.println("2=============" + start + "  " + head.getId());
                 toHighlight.add(head.getId());
-                return head.matchesTree(r+1, rels, direction, toHighlight);
+                return head.matchesTree(r + 1, rels, direction, toHighlight);
             } else {
                 List<ConllWord> deps;
                 if (direction[r].equals("=")) {
@@ -1537,10 +1591,12 @@ public class ConllWord {
                 }
                 boolean ok = false;
                 for (ConllWord dep : deps) {
-                    if (dep.equals(this)) continue;
+                    if (dep.equals(this)) {
+                        continue;
+                    }
                     //System.err.println("DEP " + r + " " + dep);
                     if (dep.matchesDeplabel(rels[r])) {
-                        boolean rtc = dep.matchesTree(r+1, rels, direction, toHighlight);
+                        boolean rtc = dep.matchesTree(r + 1, rels, direction, toHighlight);
                         ok = ok || rtc;
                         if (rtc) {
                             //System.err.println("3=============" + start + "  " + this.getId());
@@ -1623,10 +1679,9 @@ public class ConllWord {
      * next call to toString() prefixes columns cut off with shift parameter in
      * Constructor
      */
-    public void nextToStringComplete() {
-        nextToStringcomplete = true;
-    }
-
+//    public void nextToStringComplete() {
+//        nextToStringcomplete = true;
+//    }
     /**
      * return this, dependents and their dependents (top to bottom)
      *
@@ -1649,6 +1704,7 @@ public class ConllWord {
     }
 
     public class SortIgnoreCase implements Comparator<String> {
+
         @Override
         public int compare(String s1, String s2) {
             return s1.toLowerCase().compareTo(s2.toLowerCase());
@@ -1657,12 +1713,12 @@ public class ConllWord {
 
     public String toString(boolean withEnhancedDeps) {
         StringBuilder sb = new StringBuilder();
-        if (nextToStringcomplete && prefixed != null) {
-            for (String c : prefixed) {
-                sb.append(c).append("\t");
-            }
-            nextToStringcomplete = false;
-        }
+//        if (nextToStringcomplete && prefixed != null) {
+//            for (String c : prefixed) {
+//                sb.append(c).append("\t");
+//            }
+//            nextToStringcomplete = false;
+//        }
 
         sb.append(getFullId());
         sb.append("\t").append(form);
@@ -1673,8 +1729,9 @@ public class ConllWord {
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn)
-                    .append('\t').append(EmptyColumn)
-                    .append("\t").append(getMiscStr());
+                    .append('\t').append(EmptyColumn);
+                   // .append("\t").append(getMiscStr());
+           
         } else {
             sb.append("\t").append(lemma);
             sb.append("\t").append(upostag);
@@ -1721,35 +1778,33 @@ public class ConllWord {
             } else {
                 sb.append('\t').append(EmptyColumn);
             }
-
+        }
             sb.append("\t").append(getMiscStr());
 
-//            if (annot != null) {
-//                for (Annotation a : annot) {
-//                    sb.append('\t').append(a);
-//                }
-//            } else
-//            if (nonstandardInfo != null) {
-//                for (String i : nonstandardInfo) {
-//                    sb.append('\t').append(i);
-//                }
-//            }
-            
-            //System.err.println("ZZZZZZZZZZZZZZZZZ " + namedColumns + " " + form);
+
             if (namedColumns != null && !namedColumns.isEmpty()) {
-                // TODO, do not sopt at column 20, but stop at highest
-                Integer last = (Integer)((TreeMap)namedColumns).lastKey();
-                //System.err.println("zzzzzzzzzzzzzzzzz " + last);
-                for(int i=11; i<=last; ++i) {
+                for (String col : namedColumns.keySet()) {
+                    LinkedHashSet<String> extra = namedColumns.get(col);
                     String value = "_";
-                    LinkedHashSet<String> extra = namedColumns.get(i);
-                    if (extra != null /*&& !extra.isEmpty()*/) {
-                        value = String.join("|", extra);
+                    if (!extra.isEmpty()) {
+                         value = String.join("|", extra);
                     }
-                     sb.append('\t').append(value);
+                    sb.append('\t').append(value);
                 }
+                
+                // TODO, do not sopt at column 20, but stop at highest
+//                Integer last = (Integer) ((TreeMap) namedColumns).lastKey();
+//                //System.err.println("zzzzzzzzzzzzzzzzz " + last);
+//                for (int i = 11; i <= last; ++i) {
+//                    String value = "_";
+//                    LinkedHashSet<String> extra = namedColumns.get(i);
+//                    if (extra != null /*&& !extra.isEmpty()*/) {
+//                        value = String.join("|", extra);
+//                    }
+//                    sb.append('\t').append(value);
+//                }
             }
-        }
+        
         return sb.toString();
     }
 
@@ -1775,7 +1830,7 @@ public class ConllWord {
     public int getStart() {
         return start;
     }
-        
+
     public int getEnd() {
         return end;
     }
@@ -1788,11 +1843,11 @@ public class ConllWord {
         this.end = end;
     }
 
-        
-    
-    /** enhanced deps are in the 9th column of a CoNLL-U file.
+    /**
+     * enhanced deps are in the 9th column of a CoNLL-U file.
      */
     public class EnhancedDeps {
+
         int headid;
         int headsubid;
         String deprel;
@@ -1834,19 +1889,25 @@ public class ConllWord {
                 return Integer.toString(headid);
             }
         }
-        
+
         public String toString() {
             return getFullHeadId() + ":" + deprel;
         }
-        
+
         public boolean equals(Object o) {
             if (!(o instanceof EnhancedDeps)) {
                 return false;
             }
             EnhancedDeps ed = (EnhancedDeps) o;
-            if (headid != ed.headid) return false;
-            if (headsubid != ed.headsubid) return false;
-            if (!deprel.equals(ed.deprel)) return false;
+            if (headid != ed.headid) {
+                return false;
+            }
+            if (headsubid != ed.headsubid) {
+                return false;
+            }
+            if (!deprel.equals(ed.deprel)) {
+                return false;
+            }
             return true;
         }
     }

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.1 as of 5th April 2020
+ @version 2.4.0 as of 4th May 2020
  */
 package com.orange.labs.editor;
 
@@ -400,9 +400,13 @@ public class ConlluEditor {
                     String jsonOutput = gson.toJson(csent.toSpacyJson());
                     solution.addProperty("raw", jsonOutput);
                     break;
+                //case CONLLUPLUS:
+                //    solution.addProperty("raw", cfile.getColDefString() + csent.toString());
+                //    break;
                 case CONLLU:
                 default:
-                    solution.addProperty("raw", csent.toString());
+                    solution.addProperty("raw", cfile.getColDefString() + csent.toString());
+                    //solution.addProperty("raw", csent.toString());
                     break;
             }
         } else {
@@ -872,7 +876,7 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID sentence number '" + command + "'", currentSentenceId);
                 }
 
-            } else if (command.startsWith("mod upos ")
+            } else if (command.startsWith("mod upos ") // mod upos id val
                     || command.startsWith("mod xpos ")
                     || command.startsWith("mod pos ") // changes upos and xpos
                     || command.startsWith("mod lemma ")
@@ -880,16 +884,18 @@ public class ConlluEditor {
                     || command.startsWith("mod deprel ")
                     || command.startsWith("mod enhdeps ")
                     || command.startsWith("mod feat ")
-                    || command.startsWith("mod misc ")) {
+                    || command.startsWith("mod misc ")
+                    || command.startsWith("mod extracol ") // mod extracol id colname vals....
+                    ) {
                 // on attend
                 //    "mod upos id newupos" par ex. mod xpos 3 ART"
                 String[] f = command.trim().split(" +", 4); // 4th element may contain blanks
                 if (f.length < 4) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
                 }
-                if ("pos".equals(f[1])) {
+                if ("pos".equals(f[1]) || "extracol".equals(f[1])) {
                     // resplit, since we to expect an UPOS and an XPOS without any blanks
-                     f = command.trim().split(" +", 5);
+                    f = command.trim().split(" +", 5);
                     if (f.length < 5) {
                         return formatErrMsg("INVALID a command length '" + command + "'", currentSentenceId);
                     }
@@ -959,7 +965,10 @@ public class ConlluEditor {
                         modWord.setDeps(f[3]);
                         break;
                     }
-
+                    case "extracol": {
+                        modWord.setExtracolumns(f[3], f[4]);
+                        break;
+                    }
                 }
 
                 try {

@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.13.0 as of 3rd September 2019
+ @version 2.4.0 as of 5th May 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -41,7 +41,7 @@ var svgmaxy = 0;
 
 var ct = 0;
 
-var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra columns exist
+//var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra columns exist
 
 function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
     svgmaxx = 0;
@@ -84,7 +84,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
 
     svg.setAttribute("xmlns:xlink", xlink);
 
-    extracolumnstypes.clear();
+    //extracolumnstypes.clear();
 
     //var mwey = 0; // y-position of MWE bars (set when drawing the head word=
     // insert words at the bottom of the tree
@@ -102,7 +102,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     //console.log(svg.getAttribute("viewBox"))
 
 
-    if (showextra) {
+    if (tree.nonstandard != undefined /*showextra*/) {
         svgmaxy -= 40;
         // insert words at the bottom of the tree
         for (i = 0; i < trees.length; ++i) {
@@ -111,8 +111,8 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
         }
 
         // add space for extracolumns
-        svgmaxy += 80 + extracolumnstypes.size*20;
-
+        //svgmaxy += 80 + extracolumnstypes.size*20;
+        svgmaxy += 80 + Object.keys(tree.nonstandard).length*20;
     }
 
     svg.setAttribute('height', svgmaxy - svgminy);
@@ -144,13 +144,13 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         gold_idprefix = "g";
     }
 
-    if (showextra) {
-        // get all extra columns in this word
-        var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
-        for (var i = 0; i < colNN.length; i++) {
-            extracolumnstypes.add(colNN[i]);
-        }
-    }
+//    if (showextra) {
+//        // get all extra columns in this word
+//        var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
+//        for (var i = 0; i < colNN.length; i++) {
+//            extracolumnstypes.add(colNN[i]);
+//        }
+//    }
 
     //level = drawWord(item, depx, hor, levelinit, curid, svg);
     bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg, isgold, incorrectwords);

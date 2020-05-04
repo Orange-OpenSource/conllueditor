@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.0 as of 8th March 2020
+ @version 2.4.0 as of 5th May 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -37,7 +37,7 @@ var svgNS = "http://www.w3.org/2000/svg";
 var svgmaxx = 0;
 var svgmaxy = 0;
 
-var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra exist
+//var extracolumnstypes = new Set(); // here we stock all colNN instances, two know how many different extra exist
 
 
 /** sessiner un arbre de dépendance
@@ -78,7 +78,7 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     path.setAttribute("fill", "black");
     marker.appendChild(path);
     svg.setAttribute("xmlns:xlink", xlink);
-    extracolumnstypes.clear();
+    //extracolumnstypes.clear();
 
     for (i = 0; i < trees.length; ++i) {
         // for each head
@@ -99,14 +99,21 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
         for (i = 0; i < trees.length; ++i) {
             var tree = trees[i];
             insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
-            if (showextra) insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
+            //if (showextra) 
+            if (tree.nonstandard != undefined)    insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
         }
     }
 
     // add space for extracolumns
-    if (showextra && extracolumnstypes.size > 0) {
-        svgmaxy += 40 + extracolumnstypes.size*20;
+//    if (showextra && extracolumnstypes.size > 0) {
+//        svgmaxy += 40 + extracolumnstypes.size*20;
+//    }
+    if (//showextra 
+            tree.nonstandard != undefined && Object.keys(tree.nonstandard).length > 0) {
+        svgmaxy += 40 + Object.keys(tree.nonstandard).length*20;
     }
+
+
     svg.setAttribute('height', svgmaxy + 30);
     svg.setAttribute('width', svgmaxx + 40);
 
@@ -162,13 +169,13 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         gold_idprefix = "g";
     }
 
-    if (showextra) {
-        // get all extra columns in this word
-        var colNN = Object.keys(item).filter((name) => /^col.*/.test(name));
-        for (var i = 0; i < colNN.length; i++) {
-            extracolumnstypes.add(colNN[i]);
-        }
-    }
+//    if (showextra) {
+//        // get all extra columns in this word
+//        var colNN = Object.keys(item).filter((name) => /^col_.*/.test(name));
+//        for (var i = 0; i < colNN.length; i++) {
+//            extracolumnstypes.add(colNN[i]);
+//        }
+//    }
 
 
     // insert word (with, form, lemma, POS etc)

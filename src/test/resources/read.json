@@ -47,8 +47,7 @@
           "upos": "PROPN",
           "deprel": "nsubj",
           "chunk": 0,
-          "type": "",
-          "col11": "B:Person"
+          "type": ""
         },
         {
           "position": 3,
@@ -97,7 +96,6 @@
           "deprel": "conj",
           "chunk": 0,
           "type": "",
-          "col11": "B:Person",
           "children": [
             {
               "position": 4,

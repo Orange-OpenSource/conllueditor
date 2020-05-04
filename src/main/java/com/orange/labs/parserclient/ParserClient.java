@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.0.0 as of 5th January 2020
+ @version 2.3.3 as of 2nd May 2020
  */
 package com.orange.labs.parserclient;
 
@@ -216,7 +216,7 @@ public class ParserClient {
             result = je.getAsString();
         }
 
-        ConllFile cf = new ConllFile(result, 0, false, false);
+        ConllFile cf = new ConllFile(result, false, false);
 
         return cf.getSentences();
     }

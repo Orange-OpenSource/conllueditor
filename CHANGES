@@ -1,3 +1,10 @@
+Version 2.4.0
+- first (partial) implementation of CoNLL-U plus format. Only conllup files with 10 standard columns and additional columns can be edited
+- correction for displaying data in columns > 10
+
+Version 2.3.2
+- deal correctly with very big number values in MISC column (like LNumValue=4000000000)
+
 Version 2.3.1
 - new field to edit MISC column for MultiWord tokens
 

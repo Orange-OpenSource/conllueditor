@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.1 as of 5th April 2020
+ @version 2.4.0 as of 5th May 2020
  */
 
 
@@ -501,6 +501,7 @@ function HideCompareErrors() {
     $(".comparediff").empty();
 }
 
+var extracols = []; // ids of extra column fields
 
 // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
 // il faut clikcer sur un mot et sur sa future tete pour changer l'arbre
@@ -534,8 +535,14 @@ function ModifyTree(evt) {
                     wordedit = true;
                 }
             }
-
-            if (evt.ctrlKey || wordedit) {
+           
+//            if (evt.altKey) {
+//                // editing columns > 10
+//                var conllword = conllwords[id[1]];
+//                console.log("zzzz", conllword.col11);
+//            } else 
+                if (evt.ctrlKey || wordedit) {
+                // editing a word (form, lemma, UPOS, XPOS, features, MISC)
                 wordedit = false;
                 //if (evt.shiftKey) {
                 var conllword = conllwords[id[1]];
@@ -544,6 +551,25 @@ function ModifyTree(evt) {
                 $("#clemma").val(conllword.lemma);
                 $("#cupos").val(conllword.upos);
                 $("#cxpos").val(conllword.xpos);
+                extracols = [];
+                // delete eventually remaining table rows for extra columns
+                var ecs = document.getElementsByClassName("extracoltr");
+                while (ecs.length > 0) {
+                    ecs[0].remove();
+                }
+                if (conllword.nonstandard != undefined) {
+                    var table = document.getElementById('wordedittable');
+                    for (let [coltype, colval] of Object.entries(conllword.nonstandard)) {
+                        var row = table.insertRow(-1);
+                        row.className = "extracoltr";
+                        extracols.push(coltype);
+                        var cell1 = row.insertCell(0);
+                        cell1.innerHTML = coltype;
+                        var cell2 = row.insertCell(1);
+                        cell2.innerHTML = '<div class="ui-widget"><textarea type="text" id="ct_' + coltype + '" rows="1" cols="60">' + colval + '</textarea></div>';
+                    }
+                }
+                
 
                 // get features from json and put them into a list for the edit window
                 // TODO improve edit window
@@ -775,7 +801,7 @@ var flatgraph = false;
 var showfeats = false;
 var showmisc = false;
 var showr2l = false;
-var showextra = false;
+//var showextra = false;
 var backwards = false;
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var editing_enhanced = false;
@@ -1109,7 +1135,7 @@ $(document).ready(function () {
 
 
     /* save edited word */
-    $('#saveword').click(function () {
+    $('#saveword').click(function () {       
         conllword = conllwords[$("#cid").text()];
         if (conllword.form != $("#cform").val()) {
             sendmodifs({"cmd": "mod form " + conllword.id + " " + $("#cform").val()});
@@ -1122,6 +1148,23 @@ $(document).ready(function () {
         }
         if (conllword.xpos != $("#cxpos").val()) {
             sendmodifs({"cmd": "mod xpos " + conllword.id + " " + $("#cxpos").val()});
+        }
+
+        for (i = 0; i < extracols.length; i++) {        
+           //curval = document.getElementById("ct_" + extracols[i]).textContent.replace("[ \n]+", "\|");
+           curval = document.getElementById("ct_" + extracols[i]).value.replace(/[ \n]+/, "\|");
+           origval = conllword.nonstandard[extracols[i]];
+           //console.log("DDDDD", curval, origval);
+           
+           if (curval != origval) {
+               sendmodifs({"cmd": "mod extracol " + conllword.id + " " + extracols[i] + " " + curval});
+           }
+        }
+
+        // delete table rows for additional columns
+        var ecs = document.getElementsByClassName("extracoltr");
+        while (ecs.length > 0) {
+            ecs[0].remove();
         }
 
         // TODO: well, can be improved too
@@ -1317,15 +1360,15 @@ $(document).ready(function () {
             showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id === "extracols") {
-            if (!showextra) {
-                $(this).addClass('active');
-            } else {
-                $(this).removeClass('active');
-            }
-            showextra = !showextra;
-            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
-            sendmodifs(datadico);
+//        } else if (this.id === "extracols") {
+//            if (!showextra) {
+//                $(this).addClass('active');
+//            } else {
+//                $(this).removeClass('active');
+//            }
+//            showextra = !showextra;
+//            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+//            sendmodifs(datadico);
         } else if (this.id === "backwards") {
             backwards = !backwards;
             if (backwards) {

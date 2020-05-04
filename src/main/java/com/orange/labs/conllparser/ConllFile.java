@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018, Orange S.A.
+ Copyright (c) 2018-2020, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 1.8.0 as of 30th January 2019
+ @version 2.4.0 as of 4th May 2020
 */
 package com.orange.labs.conllparser;
 
@@ -51,7 +51,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -64,12 +68,16 @@ public class ConllFile {
     List<ConllSentence> sentences;
     Class conllsentenceSubclass = null;
     int ctline;
+    boolean standardcols = true;
+    Map<String, Integer>columndefs = null; // column definitions: column name: position
+    // standard columns for conllu which can be edited graphically (more or less)
+    // conllup columns are edited as text only
+    static Set<String> conllustandard =  new LinkedHashSet<>(Arrays.asList("ID", "FORM", "LEMMA", "UPOS", "XPOS", "FEATS", "HEAD", "DEPREL", "DEPS", "MISC"));
 
     /**
-     * open CONLL File and read its contents
+     * open CoNLL-U File and read its contents
      *
      * @param file CONLL file
-     * @param shift number of columns to ignore at the beginning
      * @param ignoreSentencesWithoutAnnot ignore sentences which do not have any
      * information above columns 12
      * @param ignoreSentencesWithoutTarget ignore sentences which do not have
@@ -77,16 +85,15 @@ public class ConllFile {
      * @throws IOException
      * @throws com.orange.labs.nlp.conllparser.ConllWord.ConllWordException
      */
-    public ConllFile(File file, int shift, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws IOException, ConllException {
+    public ConllFile(File file, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws IOException, ConllException {
         FileInputStream fis = new FileInputStream(file);
-        parse(fis, shift, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
+        parse(fis, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
         fis.close();
     }
 
     /**
      *
      * @param filecontents contenu du fichier COLL
-     * @param shift number of columns to ignore at the beginning
      * @param ignoreSentencesWithoutAnnot ignore sentences which do not have any
      * information above columns 12
      * @param ignoreSentencesWithoutTarget ignore sentences which do not have
@@ -94,15 +101,15 @@ public class ConllFile {
      * @throws ConllException
      * @throws IOException
      */
-    public ConllFile(String filecontents, int shift, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
+    public ConllFile(String filecontents, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
         InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-        parse(inputStream, shift, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
+        parse(inputStream, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
     }
 
     public ConllFile(File file, Class cs) throws IOException, ConllException {
         conllsentenceSubclass = cs;
         FileInputStream fis = new FileInputStream(file);
-        parse(fis, 0, false, false);
+        parse(fis, false, false);
         fis.close();
     }
 
@@ -113,16 +120,16 @@ public class ConllFile {
     public ConllFile(String filecontents, Class cs) throws ConllException, IOException {
         conllsentenceSubclass = cs;
         InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-        parse(inputStream, 0, false, false);
+        parse(inputStream, false, false);
     }
 
     public ConllFile(InputStream inputStream) throws ConllException, IOException {
 
         //InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-        parse(inputStream, 0, false, false);
+        parse(inputStream, false, false);
     }
 
-    private void parse(InputStream ips, int shift, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
+    private void parse(InputStream ips, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(ips, StandardCharsets.UTF_8));
         sentences = new ArrayList<>();
 
@@ -133,14 +140,63 @@ public class ConllFile {
         boolean showgrana = true;
         boolean showID = true;
         ctline = 0;
-
+        
+        columndefs = new LinkedHashMap<>();
         try {
             while ((line = br.readLine()) != null) {
-                //System.out.println("LINE1:" + line);
                 ctline++;
+                if (ctline == 1) {
+                    // check whether we read a CoNLL-U plus file
+                    if (line.startsWith("# global.columns =")) {
+                        String [] elems = line.substring(18).trim().split("[ \\t]+");
+                        if (elems.length < 2) {
+                            throw new ConllException("invalid conllu+ definition " + line);
+                        }
+                        for (String d : elems) {
+                            int pos = columndefs.size();
+                            if (columndefs.containsKey(d)) {
+                                throw new ConllException("doubled column name in  conllu+ definition " + line);
+                            }
+                            columndefs.put(d, pos);
+                        }
+                        standardcols = false;
+                        // currently only additional columns are allowed, so the first 10 MUST be the standard CoNLL-U columns
+                        Iterator<String> cdefs = columndefs.keySet().iterator();
+                        Iterator<String> cst  = conllustandard.iterator();                        
+                        for (int i = 0; i < 10; ++i) {
+                            String st = cst.next();
+                            if (!cdefs.hasNext()) {
+                                throw new ConllException("Missing Standard column '" + st + "' in conllu+ definition " + line);
+                            }
+                            String def = cdefs.next();
+                  
+                            if (!def.equals(st)) {
+                                 throw new ConllException("Column definition ('" + def + "' != '" + st + "') does not follow Standard column order in conllu+ definition: '" + line + "'");
+                            }
+                        }
+                        continue;
+                    } else {
+                        // standard CoNLL-U columns
+                        columndefs.put("ID", 0);
+                        columndefs.put("FORM", 1);
+                        columndefs.put("LEMMA", 2);
+                        columndefs.put("UPOS", 3);
+                        columndefs.put("XPOS", 4);
+                        columndefs.put("FEATS", 5);
+                        columndefs.put("HEAD", 6);
+                        columndefs.put("DEPREL", 7);
+                        columndefs.put("DEPS", 8);
+                        columndefs.put("MISC", 9);
+                    }
+                }
+                //System.out.println("LINE1:" + line);
+                
+                if (ctline % 100000 == 0) {
+                    System.err.format("%d lines (%d sentences) read\r", ctline, sentences.size());
+                }
                 if (line.trim().isEmpty()) {
                     if (!sentenceLines.isEmpty() && countWords != 0) {
-                        processSentence(sentenceLines, shift, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID);
+                        processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID, columndefs);
                         countWords = 0;
                     }
                 } else {
@@ -157,11 +213,11 @@ public class ConllFile {
 			sentenceLines.add(new AbstractMap.SimpleEntry(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
                     } else {
 
-                        // il faut ignoré les lignes qui ne sont pas en format CONLL.
-                        // les lignes CONLL commence toujours avec un numbre, SAUF si on utilise le
+                        // les lignes CONLL commence toujours avec un nombre, SAUF si on utilise le
                         // shift, dans ce cas on peut trouver autre choses dans des colonnes < shift ...
                         String[] elems = line.split("\t");
-                        if (elems.length >= 8 + shift && !elems[shift].isEmpty() && Character.isDigit(elems[shift].charAt(0))) {
+                        if (//elems.length >= 8 &&
+                                !elems[0].isEmpty() && Character.isDigit(elems[0].charAt(0))) {
                             // supprimer les lignes commentaires ou autres
                             //System.out.println("ADDING " + line);
                             sentenceLines.add(new AbstractMap.SimpleEntry(ctline, line));
@@ -175,32 +231,34 @@ public class ConllFile {
             }
             // stock last block
             if (!sentenceLines.isEmpty() && countWords > 0) {
-                processSentence(sentenceLines, shift, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget,
-                        showgrana, showID);
+                processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget,
+                        showgrana, showID, columndefs);
             }
         } catch (ConllException e) {
             throw new ConllException(e.getMessage() + " (line " + ctline + ")");
         }
+        System.err.format("%d lines (%d sentences) read\n", ctline, sentences.size());
     }
 
     /**
      * on a lu des lignes qui font une phrases/règle et on est arrivé à la fin
      * du block, maintenant on les traite.
      */
-    private void processSentence(List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines, int shift,
+    private void processSentence(List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines,
             boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget,
-            boolean showgrana, boolean showID) throws ConllException {
+            boolean showgrana, boolean showID,
+            Map<String, Integer>columndefs) throws ConllException {
         // on a lu un bloc de lignes CONLL qui font une phrase
         ConllSentence c = null;
         if (conllsentenceSubclass == null) {
-            c = new ConllSentence(sentenceLines, shift);
+            c = new ConllSentence(sentenceLines, columndefs);
         } else {
             try {
                 Class[] cargs = new Class[2];
                 cargs[0] = List.class;
                 cargs[1] = Integer.class;
-
-                c = (ConllSentence) conllsentenceSubclass.getDeclaredConstructor(cargs).newInstance(sentenceLines, shift);
+                // TODO: conllsentence sublcasses do not use yet the CoNLL-U+ format
+                c = (ConllSentence) conllsentenceSubclass.getDeclaredConstructor(cargs).newInstance(sentenceLines);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException ex) {
                 System.err.println("Invalid ConllSentence subclass " + ex + ":: " + ex.getMessage());
             } catch (InvocationTargetException ex) {
@@ -246,9 +304,21 @@ public class ConllFile {
         sentences.add(main);
     }
 
+    public String getColDefString() {
+        if (standardcols) return "";
+        StringBuilder sb = new StringBuilder();
+        sb.append("# global.columns =");
+        for (String col : columndefs.keySet()) {
+            sb.append(' ').append(col);
+        }
+        sb.append('\n');
+        return sb.toString();
+    }
+    
     public String toString() {
         StringBuilder sb = new StringBuilder();
         //sb.append("# number of sentences " + sentences.size() + "\n");
+        sb.append(getColDefString());
         for (ConllSentence c : sentences) {
             sb.append(c);
         }
@@ -306,6 +376,9 @@ public class ConllFile {
             }
 
             int ct = 0;
+            if (output == Output.CONLL) {
+                out.print(cf.getColDefString());
+            }
             for (ConllSentence cs : sentences) {
                 ct++;
                 if (ct < first) {
@@ -345,10 +418,9 @@ public class ConllFile {
                         }
                     }
                 } else {
-
                     switch (output) {
                         case CONLL:
-                            out.println(cs);
+                            out.print(cs);
                             break;
                         case LATEX:
                             out.println(cs.getLaTeX());
@@ -400,10 +472,9 @@ public class ConllFile {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.out.println("usage: ConllFile [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|- [shift]");
+            System.out.println("usage: ConllFile [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
         } else {
             //for (String a : args) System.err.println("arg " + a);
-            int shift = 0;
             String filter = null;
 
             boolean shuffle = false;
@@ -471,9 +542,7 @@ public class ConllFile {
                 System.err.println("Missing CoNLL-file or - ");
                 System.exit(2);
             }
-            if (args.length == (2 + argindex)) {
-                shift = Integer.parseInt(args[argindex + 1]);
-            }
+
 
             try {
 
@@ -500,7 +569,7 @@ public class ConllFile {
                     }
 
                 } else {
-                    cf = new ConllFile(new File(args[argindex]), shift, false, false);
+                    cf = new ConllFile(new File(args[argindex]), false, false);
                     if (subphrase_deprels != null) {
                         for (ConllSentence cs : cf.sentences) {
                             String s = cs.getSubTreeAsText(subphrase_deprels);

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018, Orange S.A.
+Copyright (c) 2018-2020, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.1 as of 5th April 2020
+ @version 2.4.0 as of 2nd May 2020
  */
 
 import com.google.gson.Gson;
@@ -38,11 +38,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orange.labs.editor.ConlluEditor;
 import com.orange.labs.conllparser.ConllException;
-import com.orange.labs.conllparser.ConllFile;
-import com.orange.labs.conllparser.ConllSentence;
-import com.orange.labs.conllparser.ConllWord;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -423,31 +419,31 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
 
-    @Test
-    public void test41AddExtraColumn() throws IOException, ConllException {
-        name("adding extra columns");
-        ce.setCallcitcommot(false);
-
-        URL url = this.getClass().getResource("/test.conllu");
-        ConllFile cf = new ConllFile(new FileInputStream(url.getFile()));
-        ConllSentence csent = cf.getSentences().get(1);
-        ConllWord cw = csent.getWord(1);
-        cw.addExtracolumn(13, "B:ADDED13");
-        cw = csent.getWord(2);
-        cw.addExtracolumn(13, "I:ADDED13");
-        cw.addExtracolumn(12, "B:ADDED12");
-
-        File out = new File(folder,  "test_added.conllu");
-        FileUtils.writeStringToFile(out, csent.toString(), StandardCharsets.UTF_8);
-        ConllSentence csent2 = new ConllSentence(csent);
-        FileUtils.writeStringToFile(out, csent2.toString(), StandardCharsets.UTF_8, true);
-
-        URL urlref = this.getClass().getResource("/added.conllu");
-
-        Assert.assertEquals(String.format("addin extracolumn incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
-                FileUtils.readFileToString(new File(urlref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-    }
+//    @Test
+//    public void test41AddExtraColumn() throws IOException, ConllException {
+//        name("adding extra columns");
+//        ce.setCallcitcommot(false);
+//
+//        URL url = this.getClass().getResource("/test.conllu");
+//        ConllFile cf = new ConllFile(new FileInputStream(url.getFile()));
+//        ConllSentence csent = cf.getSentences().get(1);
+//        ConllWord cw = csent.getWord(1);
+//        cw.addExtracolumn(13, "B:ADDED13");
+//        cw = csent.getWord(2);
+//        cw.addExtracolumn(13, "I:ADDED13");
+//        cw.addExtracolumn(12, "B:ADDED12");
+//
+//        File out = new File(folder,  "test_added.conllu");
+//        FileUtils.writeStringToFile(out, csent.toString(), StandardCharsets.UTF_8);
+//        ConllSentence csent2 = new ConllSentence(csent);
+//        FileUtils.writeStringToFile(out, csent2.toString(), StandardCharsets.UTF_8, true);
+//
+//        URL urlref = this.getClass().getResource("/added.conllu");
+//
+//        Assert.assertEquals(String.format("addin extracolumn incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
+//                FileUtils.readFileToString(new File(urlref.getFile()), StandardCharsets.UTF_8),
+//                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+//    }
 
     private String prettyprintJSON(JsonElement j) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();

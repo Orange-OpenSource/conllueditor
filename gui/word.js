@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.0 as of 8th March 2020
+ @version 2.4.0 as of 5th May 2020
  */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -390,21 +390,27 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
     }
     // we try all columtypes of this sentences for each word and draw them
     var ypos = 50; // start y difference under word
-    for (coltype of extracolumnstypes) {
-        if (item[coltype] == undefined)
-            continue;
-        if (item[coltype] == "_") {
+    for (let [coltype, colval] of Object.entries(item.nonstandard)) {
+    //for (coltype of extracolumnstypes) {
+        //if (item[coltype] == undefined)
+        //    continue;
+        //if (item[coltype] == "_") {
+        if (colval == "_") {
             // nothing to show, but keep empty space
             ypos += 30;
             continue;
         }
 
         // calculate background color (cut BIO prefixes if present)
-        if (item[coltype][1] == ':')
-            colvalue = item[coltype].substr(2);
+        //if (item[coltype][1] == ':')
+        //    colvalue = item[coltype].substr(2);
+        //else
+        //    colvalue = item[coltype];
+        if (colval[1] == ':')
+            colvalue = colval.substr(2);
         else
-            colvalue = item[coltype];
-
+            colvalue = colval;
+        
         var hcode = colvalue.hashCode();
         var red = Math.abs(hcode % 148);
         var blue = Math.abs((hcode >> 4) % 148);
@@ -434,7 +440,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
         coltext.setAttribute("fill", "white");
         ypos += 30;
         coltext.setAttribute("text-anchor", "middle");
-        coltext.textContent = item[coltype];
+        coltext.textContent = colval;
         coltext.setAttribute("class", "extracol");
         svg.appendChild(coltext);
     }
