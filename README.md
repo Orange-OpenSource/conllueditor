@@ -12,7 +12,7 @@ The editor provides the following functionalities:
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these
-* edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
+* edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html) (since version 2.4.0)
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
@@ -27,6 +27,7 @@ In order to compare two files (e.g. a gold file with a predicted file)
 since version 2.3.0 ConlluEditor provides
 * a file compare mode
 For more information see section [File Comparison](#file-comparison)
+
 
 ## Installation
 
@@ -339,7 +340,7 @@ jsonpath: result
 Second, run the Front-End server:
 
 ```
-./bin/parserclient.sh -r src/test/resources/udpipeserver.conf 3434
+./bin/parserclient.sh src/test/resources/udpipeserver.conf 3434
 ```
 
 Open your browser on the given port: `http://localhost:3434`
@@ -386,7 +387,6 @@ the enhanced dependency field must contain one or more `|`-separated `head:depre
 
 # Todo list
 * be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
-* edit columns from column 11 onwards
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch
 * use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
