@@ -36,8 +36,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
+import com.orange.labs.conllparser.ConlluPlusConverter;
 import com.orange.labs.editor.ConlluEditor;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -56,7 +58,7 @@ public class TestConlluPlus {
 
     @Before
     public void setUp() throws ConllException, IOException {
-        URL url = this.getClass().getResource("/test.conllup");
+        URL url = this.getClass().getResource("test.conllup");
         File file = new File(url.getFile());
         try {
             ce = new ConlluEditor(file.toString());
@@ -80,7 +82,7 @@ public class TestConlluPlus {
     public void test01Conllu() throws ConllException, IOException {
         name("CoNLL-U PLUS read valid file");
 
-        URL inurl = this.getClass().getResource("/test.conllup");
+        URL inurl = this.getClass().getResource("test.conllup");
         ConllFile cd = new ConllFile(new File(inurl.getFile()), false, false);
         File out = new File(folder, "fileout.conllup");
         FileUtils.writeStringToFile(out, cd.toString(), StandardCharsets.UTF_8, false);
@@ -95,7 +97,7 @@ public class TestConlluPlus {
         name("CoNLL-U PLUS read invalid file");
 
 
-        URL inurl = this.getClass().getResource("/test2.conllup");
+        URL inurl = this.getClass().getResource("test2.conllup");
         File out = new File(folder, "fileout2.txt");
         try {
             ConllFile cd = new ConllFile(new File(inurl.getFile()), false, false);
@@ -119,7 +121,7 @@ public class TestConlluPlus {
         File out = new File(folder, "out1.conllup");
         FileUtils.writeStringToFile(out, "", StandardCharsets.UTF_8);
 
-        URL url = this.getClass().getResource("/out1.conllup");
+        URL url = this.getClass().getResource("out1.conllup");
 
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0); // to have the global.columns line
         JsonElement jelement = new JsonParser().parse(res);
@@ -144,4 +146,36 @@ public class TestConlluPlus {
 
     }
 
+
+    @Test
+    public void test04ConlluConversion() throws ConllException, IOException {
+        name("CoNLL-U PLUS conversion");
+
+        // first conversion
+        ConlluPlusConverter cpc = new ConlluPlusConverter("ID,FORM,HEAD,DEPREL,SEM:NE");
+        URL inurl = this.getClass().getResource("test.conllup");
+        //ConllFile cd = new ConllFile(new File(inurl.getFile()), false, false);
+        String converted = cpc.convert(new FileInputStream(new File(inurl.getFile())));
+        File out = new File(folder, "conversion.conllup");
+        FileUtils.writeStringToFile(out, converted, StandardCharsets.UTF_8, false);
+
+        URL ref = this.getClass().getResource("conversion.conllup");
+
+        Assert.assertEquals(String.format("CoNLL-U Plus conversion incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+        FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+
+        // convert result back into a (incomplete) conllu
+        ConlluPlusConverter cpc2 = new ConlluPlusConverter(null);
+        String converted2 = cpc2.convert(new FileInputStream(out));
+        File out2 = new File(folder, "conversion2.conllu");
+        FileUtils.writeStringToFile(out2, converted2, StandardCharsets.UTF_8, false);
+
+
+        URL ref2 = this.getClass().getResource("conversion2.conllu");
+
+        Assert.assertEquals(String.format("CoNLL-U conversion incorrect\n ref: %s\n res: %s\n", ref2.toString(), out2.toString()),
+        FileUtils.readFileToString(new File(ref2.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out2, StandardCharsets.UTF_8));
+    }
 }

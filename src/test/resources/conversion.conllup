@@ -1,0 +1,50 @@
+# sent_id = fr-ud-dev_00001
+# sentence 0
+# text = Aviator, un film sur la vie de Howard Hughes.
+1	Aviator	0	root	B:Work
+2	,	1	punct	_
+3	un	4	det	_
+4	film	1	appos	_
+5	sur	7	case	_
+6	la	7	det	_
+7	vie	4	nmod	_
+8	de	9	case	_
+9	Howard	7	nmod	B:Person
+10	Hughes	9	flat:name	I:Person
+11	.	1	punct	_
+
+# sent_id = fr-ud-dev_00003
+# sentence 2
+# text = Mais comment faire dans un contexte structurellement raciste ?
+1	Mais	3	cc	_
+2	comment	3	advmod	_
+3	faire	0	root	_
+4	dans	6	case	_
+5	un	6	det	_
+6	contexte	3	obl	_
+7	structurellement	8	advmod	_
+8	raciste	6	amod	_
+9	?	3	punct	_
+
+# sent_id = fr-ud-train_00002
+# sentence 4
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+1	L'	2	det	_
+2	œuvre	4	nsubj	_
+3	est	4	aux	_
+4	située	0	root	_
+5	dans	7	case	_
+6	la	7	det	_
+7	galerie	4	obl	_
+8-9	des	_	_	_
+8	de	10	case	_
+9	les	10	det	_
+10	batailles	7	nmod	_
+11	,	4	punct	_
+12	dans	14	case	_
+13	le	14	det	_
+14	château	4	obl	B:PLACE
+15	de	16	case	I:PLACE
+16	Versailles	14	nmod	I:PLACE
+17	.	4	punct	_
+

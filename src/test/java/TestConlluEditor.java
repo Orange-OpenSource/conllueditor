@@ -60,7 +60,7 @@ public class TestConlluEditor {
 
     @Before
     public void setUp() throws ConllException, IOException {
-        URL url = this.getClass().getResource("/test.conllu");
+        URL url = this.getClass().getResource("test.conllu");
         File file = new File(url.getFile());
         try {
             ce = new ConlluEditor(file.toString());
@@ -88,7 +88,7 @@ public class TestConlluEditor {
         //File out = folder.newFile("test.tex");
         File out = new File(folder,  "test.tex");
 
-        URL url = this.getClass().getResource("/test.tex");
+        URL url = this.getClass().getResource("test.tex");
 
         // call proces to be sure makeTrees has been  called
         String rtc = ce.process("read 13", 1, "editinfo");
@@ -121,7 +121,7 @@ public class TestConlluEditor {
         //System.out.println("=================== " + folder.getRoot());
         File out = new File(folder,  "test.json");
 
-        URL url = this.getClass().getResource("/test.json");
+        URL url = this.getClass().getResource("test.json");
 
         // call proces to be sure makeTrees has been  called
         String rtc = ce.process("read 13", 1, "editinfo");
@@ -143,7 +143,7 @@ public class TestConlluEditor {
         //File out = folder.newFile("out1.conllu");
         File out = new File(folder, "out1.conllu");
 
-        URL url = this.getClass().getResource("/out1.conllu");
+        URL url = this.getClass().getResource("out1.conllu");
 
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13);
         JsonElement jelement = new JsonParser().parse(res);
@@ -177,8 +177,8 @@ public class TestConlluEditor {
         rtc = ce.process("mod split 19", 3, "editinfo");
         rtc = ce.process("mod join 5", 3, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.mod.conllu");
-        URL res = this.getClass().getResource("/test.conllu.2"); // modified file
+        URL ref = this.getClass().getResource("test.mod.conllu");
+        URL res = this.getClass().getResource("test.conllu.2"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
@@ -192,8 +192,8 @@ public class TestConlluEditor {
         String rtc = ce.process("mod split 2 3", 4, "editinfo");
         rtc = ce.process("mod join 5", 4, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.split-mwt.conllu");
-        URL res = this.getClass().getResource("/test.conllu.5"); // modified file
+        URL ref = this.getClass().getResource("test.split-mwt.conllu");
+        URL res = this.getClass().getResource("test.conllu.5"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
@@ -207,8 +207,8 @@ public class TestConlluEditor {
         String rtc = ce.process("mod split 5 ", 16, "editinfo");
         rtc = ce.process("mod join 13", 16, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.split-ew.conllu");
-        URL res = this.getClass().getResource("/test.conllu.6"); // modified file
+        URL ref = this.getClass().getResource("test.split-ew.conllu");
+        URL res = this.getClass().getResource("test.conllu.6"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
@@ -223,8 +223,8 @@ public class TestConlluEditor {
         rtc = ce.process("mod split 3", 13, "editinfo");
         rtc = ce.process("mod join 4", 13, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.split-ed.conllu");
-        URL res = this.getClass().getResource("/test.conllu.7"); // modified file
+        URL ref = this.getClass().getResource("test.split-ed.conllu");
+        URL res = this.getClass().getResource("test.conllu.7"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
@@ -241,8 +241,8 @@ public class TestConlluEditor {
         rtc = ce.process("mod compose 6 2", 17, "editinfo");
         rtc = ce.process("mod editmwe 6 7 ao Gloss=to_him", 17, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.create-mwt.conllu");
-        URL res = this.getClass().getResource("/test.conllu.8"); // modified file
+        URL ref = this.getClass().getResource("test.create-mwt.conllu");
+        URL res = this.getClass().getResource("test.conllu.8"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
@@ -260,7 +260,7 @@ public class TestConlluEditor {
         //System.err.println(prettyprintJSON(jelement));
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/read.json");
+        URL ref = this.getClass().getResource("read.json");
 
         Assert.assertEquals(String.format("Read return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -279,7 +279,7 @@ public class TestConlluEditor {
         //System.err.println(prettyprintJSON(jelement));
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/read_16.json");
+        URL ref = this.getClass().getResource("read_16.json");
 
         Assert.assertEquals(String.format("read return code incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -299,7 +299,7 @@ public class TestConlluEditor {
         //System.err.println(prettyprintJSON(jelement));
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/findlemma.json");
+        URL ref = this.getClass().getResource("findlemma.json");
 
         Assert.assertEquals(String.format("Find lemma return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -319,7 +319,7 @@ public class TestConlluEditor {
         //System.err.println(prettyprintJSON(jelement));
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/findform.json");
+        URL ref = this.getClass().getResource("findform.json");
 
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -339,7 +339,7 @@ public class TestConlluEditor {
         //System.err.println(prettyprintJSON(jelement));
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/findsentid.json");
+        URL ref = this.getClass().getResource("findsentid.json");
 
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -357,9 +357,10 @@ public class TestConlluEditor {
         File out = new File(folder, "findsentidBadRE.json");
 
         //System.err.println(prettyprintJSON(jelement));
-        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/findsentidBadRE.json");
+        URL ref = this.getClass().getResource("findsentidBadRE.json");
 
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -379,7 +380,7 @@ public class TestConlluEditor {
         //System.err.println(prettyprintJSON(jelement));
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("/finduposKO.json");
+        URL ref = this.getClass().getResource("finduposKO.json");
 
         Assert.assertEquals(String.format("Find upos error return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -395,8 +396,8 @@ public class TestConlluEditor {
         rtc = ce.process("mod upos 2 VERBPAST", 13, "editinfo");
         rtc = ce.process("mod undo", 13, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.mod.undo.conllu");
-        URL res = this.getClass().getResource("/test.conllu.3");
+        URL ref = this.getClass().getResource("test.mod.undo.conllu");
+        URL res = this.getClass().getResource("test.conllu.3");
         Assert.assertEquals(String.format("mod undo output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
@@ -411,8 +412,8 @@ public class TestConlluEditor {
         rtc = ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
         rtc = ce.process("mod ed del 1 4", 11, "editinfo");
 
-        URL ref = this.getClass().getResource("/test.add_ed.conllu");
-        URL res = this.getClass().getResource("/test.conllu.4");
+        URL ref = this.getClass().getResource("test.add_ed.conllu");
+        URL res = this.getClass().getResource("test.conllu.4");
         
         Assert.assertEquals(String.format("mod ed incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -424,7 +425,7 @@ public class TestConlluEditor {
 //        name("adding extra columns");
 //        ce.setCallcitcommot(false);
 //
-//        URL url = this.getClass().getResource("/test.conllu");
+//        URL url = this.getClass().getResource("test.conllu");
 //        ConllFile cf = new ConllFile(new FileInputStream(url.getFile()));
 //        ConllSentence csent = cf.getSentences().get(1);
 //        ConllWord cw = csent.getWord(1);
@@ -438,7 +439,7 @@ public class TestConlluEditor {
 //        ConllSentence csent2 = new ConllSentence(csent);
 //        FileUtils.writeStringToFile(out, csent2.toString(), StandardCharsets.UTF_8, true);
 //
-//        URL urlref = this.getClass().getResource("/added.conllu");
+//        URL urlref = this.getClass().getResource("added.conllu");
 //
 //        Assert.assertEquals(String.format("addin extracolumn incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
 //                FileUtils.readFileToString(new File(urlref.getFile()), StandardCharsets.UTF_8),
