@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 2nd May 2020
+ @version 2.4.0 as of 7th May 2020
  */
 
 import com.google.gson.JsonElement;
@@ -148,7 +148,42 @@ public class TestConlluPlus {
 
 
     @Test
-    public void test04ConlluConversion() throws ConllException, IOException {
+    public void test11EditExtraCol() throws IOException {
+        name("modifying columns 11 and 12");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".3");
+        String rtc = ce.process("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
+        rtc = ce.process("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
+        rtc = ce.process("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
+
+
+        URL ref = this.getClass().getResource("test.mod.conllup");
+        URL res = this.getClass().getResource("test.conllup.3"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test12EditInvalidExtraCol() throws IOException {
+        name("trying to modify columns 11 and 12 with invalid colname");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".4");
+
+        String rtc = ce.process("mod extracol 8 ZZSEM:COREF I:COREF9", 0, "editinfo");
+        File out = new File(folder, "fileout3.json");
+        FileUtils.writeStringToFile(out, rtc, StandardCharsets.UTF_8, false);
+        URL ref = this.getClass().getResource("error3.json");
+
+        Assert.assertEquals(String.format("CoNLL-U Plus format incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+        FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test44ConlluConversion() throws ConllException, IOException {
         name("CoNLL-U PLUS conversion");
 
         // first conversion

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 4th May 2020
+ @version 2.4.0 as of 7th May 2020
  */
 package com.orange.labs.conllparser;
 
@@ -46,8 +46,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  * read and parse CONLL
@@ -228,6 +226,11 @@ public class ConllSentence {
         }
     }
 
+    public boolean isValidExtraColumn(String colname) {
+        if (columndefs == null) return false;
+        return columndefs.containsKey(colname);
+    }
+    
     public void setHasEnhancedDeps(boolean hasEnhancedDeps) {
         this.hasEnhancedDeps = hasEnhancedDeps;
     }

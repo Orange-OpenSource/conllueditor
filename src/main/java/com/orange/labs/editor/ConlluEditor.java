@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 4th May 2020
+ @version 2.4.0 as of 7th May 2020
  */
 package com.orange.labs.editor;
 
@@ -966,6 +966,10 @@ public class ConlluEditor {
                         break;
                     }
                     case "extracol": {
+                        // reject invalid column
+                        if (!csent.isValidExtraColumn(f[3])) {
+                            return formatErrMsg("Invalid extracolumn for this sentence: " +f[3], currentSentenceId);
+                        }
                         modWord.setExtracolumns(f[3], f[4]);
                         break;
                     }
