@@ -388,7 +388,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     }
 
 
-    if (item.deprelhighlight == 1) {
+    if ((above && item.deprelhighlight == 1) || (!above && item.depshighlight)) {
         deprelpath.setAttribute("class", classname + grayclass + " highlight");
 	highlightX = headx;
 	highlightY = middley;
