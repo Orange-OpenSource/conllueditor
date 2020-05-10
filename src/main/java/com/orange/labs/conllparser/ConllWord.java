@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 2nd May 2020
+ @version 2.4.0 as of 10th May 2020
  */
 package com.orange.labs.conllparser;
 
@@ -106,7 +106,7 @@ public class ConllWord {
     };
 
     public enum Fields {
-        FORM, LEMMA, UPOS, XPOS, DEPREL, FEATURE
+        FORM, LEMMA, UPOS, XPOS, DEPREL, FEATURE, DEPS
     };
 
     /**
@@ -990,6 +990,9 @@ public class ConllWord {
                 case DEPREL:
                     jword.addProperty("deprelhighlight", 1);
                     break;
+                case DEPS:
+                    jword.addProperty("depshighlight", 1); // enhanced deps
+                    break;
             }
         }
 
@@ -1298,6 +1301,15 @@ public class ConllWord {
                 } else {
                     return false;
                 }
+            case DEPS:
+                if (deps == null) return false;
+
+                for (EnhancedDeps ehd : deps) {
+                    if(ehd.deprel.matches(regex)) {
+                       return true;
+                    }
+                }
+                return false;
             default:
                 return false;
         }

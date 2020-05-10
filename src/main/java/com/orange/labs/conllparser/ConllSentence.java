@@ -882,6 +882,23 @@ public class ConllSentence {
         return contracted.get(id);
     }
 
+    /** get all words, including empty words in a list (mainly for searching consecutive words)
+     *
+     * @return a (copied) list of all Words and EmptyWords
+     */
+    public List<ConllWord>getAllWords() {
+        List<ConllWord>allwords = new ArrayList<>();
+        List<ConllWord>current = getEmptyWords(0);
+        if (current != null) allwords.addAll(current);
+        for (ConllWord cw : words) {
+            allwords.add(cw); // get normal word
+            // get eventual empty word after cw
+            current = getEmptyWords(cw.getId());
+            if (current != null) allwords.addAll(current);
+        }
+        return allwords;
+    }
+
     public Map<Integer, List<ConllWord>> getEmptyWords() {
         return emptywords;
     }
@@ -908,6 +925,13 @@ public class ConllSentence {
         return null;
     }
 
+    /**
+     * get an empty word (n.m). If it does not exist return null
+     *
+     * @param id the n.m CoNLL-U id (m.)
+     * @param subid the n.m CoNLL-U subid (.n)
+     * @return the word nor null
+     */
     public ConllWord getEmptyWord(int id, int subid) {
         List<ConllWord> ews = emptywords.get(id);
         if (ews.isEmpty()) {
@@ -917,6 +941,21 @@ public class ConllSentence {
             return ews.get(subid - 1);
         }
         return null;
+    }
+
+    /**
+     * get all empty word of an id (id.m). If it does not exist return null
+     *
+     * @param id the n.m CoNLL-U id (m.)
+     * @return the word nor null
+     */
+    public List<ConllWord> getEmptyWords(int id) {
+        if (emptywords == null) return null;
+        List<ConllWord> ews = emptywords.get(id);
+        if (ews == null || ews.isEmpty()) {
+            return null;
+        }
+        return ews;
     }
 
     public int numOfEmptyWords() {

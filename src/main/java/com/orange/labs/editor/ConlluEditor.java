@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 7th May 2020
+ @version 2.4.0 as of 10th May 2020
  */
 package com.orange.labs.editor;
 
@@ -672,6 +672,9 @@ public class ConlluEditor {
                             field = ConllWord.Fields.XPOS;
                         } else if (tmp[0].startsWith("d")) {
                             field = ConllWord.Fields.DEPREL;
+                        } else if (tmp[0].startsWith("e")) {
+                            // enhanced deps
+                            field = ConllWord.Fields.DEPS;
                         } else /*if (f[0].equals("findxpos")) */ {
                             field = ConllWord.Fields.FORM;
                         }
@@ -691,7 +694,7 @@ public class ConlluEditor {
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
 
-                    Iterator<ConllWord> cwit = cs.getWords().iterator();
+                    Iterator<ConllWord> cwit = cs.getAllWords().iterator();//cs.getWords().iterator();
                     while (cwit.hasNext()) {
                         ConllWord cw = cwit.next();
                         if (cw.matchesField(fields.get(0).field, fields.get(0).value)) {
@@ -713,7 +716,8 @@ public class ConlluEditor {
                                 fl.add(fields.get(j).field);
                             }
                             if (ok) {
-                                ConllSentence.Highlight hl = new ConllSentence.Highlight(//fields.get(0).field,
+                                // TODO in case of enhanced deps, all ehds of a word are highlighted
+                                ConllSentence.Highlight hl = new ConllSentence.Highlight(
                                         fl,
                                         firstid, cw.getId());
                                 return returnTree(currentSentenceId, cs, hl);

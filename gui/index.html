@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.4.0 as of 3rd May 2020
+    version 2.4.0 as of 10th May 2020
     -->
 
     <head>
@@ -136,7 +136,7 @@
                 </tr>
                 <tr class="search">
                     <td colspan="6">
-                        <input class="inputfield searchfield" placeholder="find any ([fluxd]:regex)" title="column:regex[/...]" type="text" id="multifield" value="">
+                        <input class="inputfield searchfield" placeholder="find any ([fluxde]:regex)" title="column:regex[/...]" type="text" id="multifield" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
 
                         <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" value="">
@@ -361,10 +361,11 @@
                             <li>The <i>any</i> search fields accepts a /-separated list of <i>searchfield:regex</i> to find a sequence on different criteria.
                                 <i>searchfield</i> can be any of 
                                 <span class="userinputdoc">f</span>,
-                                <span class="userinputdoc">l</span>, 
-                                <span class="userinputdoc">u</span>, 
-                                <span class="userinputdoc">x</span>, 
-                                <span class="userinputdoc">d</span> (form, lemma, upos, xpos, deprel)
+                                <span class="userinputdoc">l</span>,
+                                <span class="userinputdoc">u</span>,
+                                <span class="userinputdoc">x</span>,
+                                <span class="userinputdoc">d</span>,
+                                <span class="userinputdoc">e</span> (form, lemma, upos, xpos, deprel, enhanced deps)
                                 <ul>
                                     <li><span class="userinputdoc">l:the/u:ADJ/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
                                         any adjective and the last is <i>mouse</i>
