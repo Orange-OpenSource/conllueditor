@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 5th May 2020
+ @version 2.4.2 as of 11th May 2020
  */
 
 
@@ -72,7 +72,7 @@ function choosePort() {
         c = url.port;
         $("#logo").empty(); // badly scaled on Edge, just don't show it for the time being
     }
-    //alert(c);
+
     if (c != null) {
         if (c == "6666") {
             alert("Port blocked by Firefox (also 6000, 6665, 6667, 6668, 6669)")
@@ -80,7 +80,6 @@ function choosePort() {
         URL_BASE = 'http://' + window.location.hostname + ':' + c + '/edit/';
         document.getElementById('port').value = c;
     }
-    //alert(c + " " + URL_BASE);
 }
 
 
@@ -219,7 +218,6 @@ function getServerInfo() {
                     position: {my: "left top", at: "left bottom"}
                 });
             });
-
         },
         error: function (data) {
             // do something else
@@ -232,6 +230,7 @@ function getServerInfo() {
     $('.onlyWithTree').hide();
     $('#bie').hide();
     $('#edit_ed').hide();
+    $('#widthinfo').hide();
     $('#undo').prop('disabled', true);
     $('#redo').prop('disabled', true);
     $('#save').prop('disabled', true);
@@ -319,32 +318,11 @@ function ToggleShortcutHelp() {
 var shortcutsUPOS = {
     /*   "N": "NOUN",
      "A": "ADV",
-     "J": "ADJ",
-     "V": "VERB",
-     "E": "PROPN", // named entity
-     "D": "DET",
-     ".": "PUNCT",
-     "C": "CCONJ",
-     "S": "SCONJ",
-     "U": "NUM",
-     "R": "PRON",
-     "X": "AUX",
-     "I": "INTJ",
-     "P": "ADP",
-     "T": "PART",*/
+    ...*/
 };
 
 var shortcutsDEPL = {
     /*   "s": "nsubj",
-     "o": "obj",
-     "m": "nmod",
-     "c": "case",
-     "d": "det",
-     "p": "punct",
-     "a": "amod",
-     "l": "acl",
-     "v": "advcl",
-     "x": "xcomp",
      "u": "nummod",*/
 };
 
@@ -361,7 +339,6 @@ var shortcutsXPOS = {// no point defining language specific xpos here.
 function showshortcuts() {
     //console.log("load DEFAULT shortcuts");
     $.getJSON("shortcuts.json", function (json) {
-        //console.log("zzzzzz", json);
         // if no error, we override defaults
         shortcutsUPOS = json.upos;
         shortcutsXPOS = json.xpos;
@@ -373,7 +350,6 @@ function showshortcuts() {
 
 /** read json from shortcutsUPOS and update Help Modal */
 function parseShortcuts() {
-    //console.log("PPPP");
     var sc_uposString = "";
     var sc_xposString = "";
     var sc_deplString = "";
@@ -382,9 +358,7 @@ function parseShortcuts() {
     $("#shortcuttableUPOS").append("<tr><th>key</th> <th>set UPOS to</th></tr>"); // add header
     $("#uposshortcuts").empty();
     for (var p in shortcutsUPOS) {
-        //console.log("eee", shortcutsUPOS[p]);
         $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
-        //sc_uposString += '<span class="sckey">' + p + "</span>:" + shortcutsUPOS[p] + "&nbsp;&nbsp;";
         sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
     }
     $("#uposshortcuts").append(sc_uposString);
@@ -395,27 +369,99 @@ function parseShortcuts() {
     $("#deplshortcuts").empty();
     for (var p in shortcutsDEPL) {
         $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
-        //sc_deplString += '<span class="sckey">' + p + "</span>:" + shortcutsDEPL[p] + "&nbsp;&nbsp;";
         sc_deplString += '<span class="sckey">' + p + "=" + shortcutsDEPL[p] + "</span>&nbsp;&nbsp;";
     }
     $("#deplshortcuts").append(sc_deplString);
-
 
     $("#xposshortcuts").empty();
     $("#shortcuttableXPOS").empty();
     $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>set UPOS to</th></tr>"); // add header
     for (var p in shortcutsXPOS) {
-        //console.log("XXX", p, shortcutsXPOS[p][0], shortcutsXPOS[p][1]);
         $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
                 + shortcutsXPOS[p][0] + "</td> <td>"
                 + shortcutsXPOS[p][1] + "</td></tr>");
-        //sc_xposString += '<span class="sckey">' + p + "</span>:" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "&nbsp;&nbsp;";
         sc_xposString += '<span class="sckey">' + p + "=" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp;&nbsp;";
-        // $.each(shortcutsUPOS, function(k, v) {
-        //     result += k + " , " + v + "\n";
-        // });
     }
     $("#xposshortcuts").append(sc_xposString);
+}
+
+// in order to have word "boxes" as wide as needed, we stock here the width needed for each
+// word (taking the word form) as well as the x-position of each word in the graph
+var wordlengths = {}; // position (not ID !!): width in px
+var wordpositions = {}; // position: x-position in graph
+var rightmostwordpos = 0; // position of the last word (needed to draw R2L trees)
+var hordist = 6; // horizontal distance beween words (if auto-adpat is active)
+
+
+/* get width needed by a word box (form, xpos, features, misc*/
+function getWordLength(cword) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    //ctx.fontSize = "12px"; //document.getElementsByClassName("wordnode").style.fontSize;
+    //ctx.fontFamily = "Lato"; //document.getElementsByClassName("wordnode").style.fontFamily;
+    ctx.font = "17px Lato"; // TODO get from current Font !!
+    wlen = ctx.measureText(cword.form).width;
+    wlen = Math.max(wlen, ctx.measureText(cword.xpos).width); // sometimes XPOS are long
+
+    ctx.font = "11px Lato";
+    // take into accound Feature values width
+    if (showfeats && cword.feats != undefined) { // display misc column info if active
+        for (var f in cword.feats) {
+            //console.log("ggg", cword.feats[f].val, wlen, 2*ctx.measureText(cword.feats[f].val).width);
+            wlen = Math.max(wlen, 2*ctx.measureText(cword.feats[f].name).width);
+            wlen = Math.max(wlen, 2*ctx.measureText(cword.feats[f].val).width);
+            //console.log("hhh", wlen);
+        }
+    }
+
+    // take into accound MISC values width
+    if (showmisc && cword.misc != undefined) { // display misc column info if active
+        for (var f in cword.misc) {
+            //console.log("ggg", cword.misc[f].val, wlen, 2*ctx.measureText(cword.misc[f].val).width);
+            wlen = Math.max(wlen, 2*ctx.measureText(cword.misc[f].name).width);
+            wlen = Math.max(wlen, 2*ctx.measureText(cword.misc[f].val).width);
+            //console.log("hhh", wlen);
+        }
+    }
+    wordlengths[cword.position] = Math.max(50, wlen); // get 50px minimal size
+    //console.log("iii", wlen);
+    return wlen;
+}
+
+/* get word of all words of all trees of the sentence (all trees in case of multiple trees) */
+function getAllWordLengths(trees, maxlen) {
+    wordlengths = {};
+    for (var k = 0; k < trees.tree.length; ++k) {
+        var item = trees.tree[k];
+        maxlen = Math.max(maxlen, getWordLengthsOfTree(item, maxlen));
+    }
+
+    // calculate x-positions
+    //console.log("aaa", wordlengths);
+    wordpositions = {};
+    rightmostwordpos = 0;
+    var pos = Object.keys(wordlengths); //.sort();
+    var last = 0;
+    for (var i = 0; i < pos.length; ++i) {
+        wordpositions[pos[i]] = last + wordlengths[pos[i]]/2;
+        last += wordlengths[pos[i]] + hordist;
+        rightmostwordpos = Math.max(last, rightmostwordpos);
+        //console.log("aa2", i, ids[i], last);
+    }
+    //console.log("bbb", wordpositions);
+    return maxlen;
+}
+
+/* get word length for all words of a tree */
+function getWordLengthsOfTree(item, maxlen) {
+    maxlen = Math.max(maxlen, getWordLength(item, maxlen));   
+    if (item.children) {
+        for (var i = 0; i < item.children.length; i++) {
+            maxlen = Math.max(maxlen, getWordLengthsOfTree(item.children[i], maxlen));
+        }
+    }
+
+    return Math.round(maxlen);
 }
 
 var conllwords = {}; // all words of current sentence
@@ -734,7 +780,7 @@ function ModifyTree(evt) {
             $("#currentmweform").val(id[3])
             
             var mc = "";
-            //console.log('qqq', mwes);
+
             if (mwes[id[1]].misc != undefined) {
                     for (e = 0; e < mwes[id[1]].misc.length; ++e) {
                         var mch = mwes[id[1]].misc[e];
@@ -801,6 +847,7 @@ var flatgraph = false;
 var showfeats = false;
 var showmisc = false;
 var showr2l = false;
+var autoadaptwidth = true;
 var backwards = false;
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var editing_enhanced = false;
@@ -815,6 +862,12 @@ var highlightY = 0;
  */
 function formatPhrase(item) {
     //console.log("eee " + item.message )
+    if (autoadaptwidth) {
+        var maxlen =  getAllWordLengths(item, 0);
+        // set calculate maxwidth
+       // $("#bwidth").val(maxlen); //$("#bheight").val()));
+    }
+
 
     highlightX = 0;
     highlightY = 0;
@@ -1297,6 +1350,7 @@ $(document).ready(function () {
     });
 
     $(".mycheck").click(function () {
+        //console.log("clicked", this.id);
         if (this.id === "flat2") {
             if (!flatgraph) {
                 $(this).addClass('active');
@@ -1357,6 +1411,24 @@ $(document).ready(function () {
                 $(this).removeClass('active');
             }
             showr2l = !showr2l;
+            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+            sendmodifs(datadico);
+        } else if (this.id === "adaptwidth") {
+            if (!autoadaptwidth) {
+                // was disabled, enable
+                //$(this).addClass('active');
+                $("#widthinfo").hide();
+                $("#adaptwidth").text("fixed width");
+            } else {
+                // was endabled, disable
+                //$(this).removeClass('active');
+                // and clear wordlength/position tables
+                wordlengths = {};
+                wordpositions = {};
+                $("#widthinfo").show();
+                $("#adaptwidth").text("var. width");
+            }
+            autoadaptwidth = !autoadaptwidth;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "backwards") {

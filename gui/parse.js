@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.0.0 as of 11th January 2020
+ @version 2.4.2 as of 12th May 2020
  */
 
 
@@ -74,6 +74,7 @@ var showfeats = false;
 var showmisc = false;
 var showr2l = false;
 var showextra = false;
+var autoadaptwidth = false; // TODO factorise word width calculation and add here
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var parserinfo = null; // output from HTTP get to URL at "info" key in in configuration file
 var parseraddress = "?"
@@ -113,7 +114,7 @@ function formatPhrase(item) {
     if (flatgraph) {
         drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type);
     } else {
-        drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type);
+        drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0);
     }
 }
 

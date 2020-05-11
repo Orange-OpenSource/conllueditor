@@ -1,3 +1,7 @@
+Version 2.4.2
+- option "auto-adapt" which sets the horizontal width of words to the size needed
+- added test whether we are on MacOS in start script
+
 Version 2.4.1
 - test error corrected
 

@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018, Orange S.A.
+ Copyright (c) 2018-2020, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 5th May 2020
+ @version 2.4.2 as of 11th May 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -122,12 +122,22 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
 
 /** insert a word in the flat graph */
 function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
-    var index = item.position;
-    var depx = (index * hor) - (hor/2);
+    if (!autoadaptwidth) {
+        var index = item.position;
+        var depx = (index * hor) - (hor/2);
+    } else {
+        var depx = wordpositions[item.position];
+        hor = 50; // needed for arcs
+    }
+
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        depx = ((sentencelength ) * hor) - depx;
+        if (!autoadaptwidth) {
+            depx = ((sentencelength ) * hor) - depx;
+        } else {
+            depx = rightmostwordpos - depx;
+        }
     }
     //console.log(index + " " + depx + " " + sentencelength);
 
@@ -152,7 +162,8 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     if (showfeats || showmisc) {
         // if features are displayed we add some space. to avoid the enhanced dependencies cross
         // the feature/values
-        level += 70;
+        //level += 70;
+        level = bottomlevels[1];
     }
 
     level += 6;
@@ -283,13 +294,22 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
  * @return {undefined}
  */
 function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type, isgold) {
-    var headx = headpos * hor - hor/2;
+     if (!autoadaptwidth) {
+        var headx = headpos * hor - hor/2;
+    } else {
+        var headx = wordpositions[headpos];
+    }
+    
     var headbeforedep = (headpos < item.position);
 
     if (sentencelength != 0) {
         // we write the tree from right to left
-        headx = ((sentencelength) * hor) - headx;
         headbeforedep = !headbeforedep;
+        if (!autoadaptwidth) {
+            headx = ((sentencelength) * hor) - headx;   
+        } else {
+            headx = rightmostwordpos - headx;
+        }
     }
 
 

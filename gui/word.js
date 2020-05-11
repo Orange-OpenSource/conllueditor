@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 5th May 2020
+ @version 2.4.2 as of 11th May 2020
  */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -56,7 +56,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     //console.log("eeee", incorrectwords);
     var vertdiff = 12;
     var level = levelinit;
-    var bottomlevels = {}; // keep the height of the word with and without features (needed in dependency-flat)
+    var bottomlevels = {}; // keep the height of the word with and without features/misc (needed in dependency-flat)
     var grayclass = ""; // text
     var grayclassf = ""; // feature text
     var grayclass2 = ""; // background
@@ -179,10 +179,16 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     // finaly calculate surrounding box
     var rect = document.createElementNS(svgNS, "rect");
     rect.setAttribute("id", rect_idprefix + "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
-    rect.setAttribute('x', x - ((hor - 6) / 2));
+    if (!autoadaptwidth) {
+        rect.setAttribute('x', x - ((hor - 6) / 2));
+        rect.setAttribute('width', hor - 6);
+    } else {
+        rect.setAttribute('x', x-(wordlengths[item.position]/2));
+        rect.setAttribute('width', wordlengths[item.position]);
+        //console.log("jjj", item.form, wordlengths[item.position]);
+    }
     rect.setAttribute('y', levelinit);
     rect.setAttribute('height', level - levelinit + 6);
-    rect.setAttribute('width', hor - 6);
     rect.setAttribute('stroke', 'black');
     rect.setAttribute('fill', '#fffff4'); // only needed for svg download, since the download does not add depgraph.css
     rect.setAttribute("rx", "5");
@@ -253,17 +259,18 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             ftext.setAttribute("id", "ftext" + curid + "_" + item.id);
             ftext.setAttribute("class", "wordfeature" + grayclassf);
             ftext.setAttribute("font-size", "10");
+            ftext.setAttribute('x', x - 5);
+            svg.appendChild(ftext); // can only calculat wordsize if it is attached to the document
             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
             if (!fs)
                 fs = 10; // for chrome
             if (f > 0)
                 level += fs * 1.2;
-            ftext.setAttribute('x', x - 5);
             ftext.setAttribute('y', level);
             ftext.setAttribute("text-anchor", "end");
             ftext.setAttribute("fill", "#004400");
             ftext.textContent = key; // + " :"; //item.feats[f];
-            svg.appendChild(ftext);
+
 
             var septext = document.createElementNS(svgNS, "text");
             septext.setAttribute("id", "septext" + curid + "_" + item.id);
@@ -308,17 +315,19 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             ftext.setAttribute("id", "mtext" + curid + "_" + item.id);
             ftext.setAttribute("class", "wordfeature" + grayclassf);
             ftext.setAttribute("font-size", "10");
+            ftext.setAttribute('x', x - 5);
+            svg.appendChild(ftext);
             fs = parseFloat(window.getComputedStyle(ftext).getPropertyValue('font-size'));
+            //console.log("rrrr", fs, window.getComputedStyle(ftext).getPropertyValue('font-size'))
             if (!fs)
                 fs = 10; // for chrome
             if (f > 0)
                 level += fs * 1.2;
-            ftext.setAttribute('x', x - 5);
             ftext.setAttribute('y', level);
             ftext.setAttribute("text-anchor", "end");
             ftext.setAttribute("fill", "#440000");
             ftext.textContent = key;
-            svg.appendChild(ftext);
+
 
             var septext = document.createElementNS(svgNS, "text");
             septext.setAttribute("id", "mseptext" + curid + "_" + item.id);
@@ -382,12 +391,30 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
     //console.log("item ", item);
     //console.log("cc " + curid)
 
-    var index = item.position - indexshift;
-    var x = index * hor - hor / 2;
+    //var index = item.position - indexshift;
+    //var x = index * hor - hor / 2;
+    //if (sentencelength > 0) {
+    //    // we write the tree from right to left
+    //    x = ((sentencelength) * hor) - x;
+    //}
+
+    if (!autoadaptwidth) {
+        var index = item.position - indexshift;
+        var x = index * hor - hor / 2;
+    } else {
+        var x = wordpositions[item.position];
+    }
+    //console.log("index " + index + " hor " + hor + " x " + x);
+
     if (sentencelength > 0) {
         // we write the tree from right to left
-        x = ((sentencelength) * hor) - x;
+        if (!autoadaptwidth) {
+            x = ((sentencelength) * hor) - x;
+        } else {
+            x = rightmostwordpos - x;
+        }
     }
+
     // we try all columtypes of this sentences for each word and draw them
     var ypos = 50; // start y difference under word
     for (let [coltype, colval] of Object.entries(item.nonstandard)) {

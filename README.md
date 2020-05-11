@@ -43,6 +43,7 @@ For more information see section [File Comparison](#file-comparison)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js), needed by bootstrap
 * optionally apache or lighttpd
+* on MacOS: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
 * Java jdk >= 8.0
@@ -179,7 +180,8 @@ it is shown in red.
 
 ![Edit screen (tree graph)](doc/tree.png)
 
-Clicking on `flat graph` changes the dependency graph layout to a more horizontal representation.
+Clicking on `flat graph` changes the dependency graph layout to a more horizontal representation. The button `fixed width`
+displays the tree/hedge width a (configurable) fixed word width.
 
 ![Edit screen (flat graph)](doc/graph.png)
 
@@ -331,7 +333,7 @@ info: http://lindat.mff.cuni.cz/services/udpipe/api/models
 txt: data
 
 # other fields which need to be present in the call to the parser
-other: model=english-ud-1.2-160523,tokenizer=,tagger=,parser=
+other: model=english-ewt-ud-2.5-191206,tokenizer=,tagger=,parser=
 
 # if the parser response is in json, give the path to the CoNLL-U result
 jsonpath: result

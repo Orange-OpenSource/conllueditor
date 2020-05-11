@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.4.0 as of 10th May 2020
+    version 2.4.2 as of 11th May 2020
     -->
 
     <head>
@@ -154,10 +154,15 @@
                 <tr class="search">
                     <td colspan="6">
                         <span id="portinfo">Port  <input type="text" id="port" size="2" value="12345"></span>
-                        Width  <input class="inputfield" type="text" id="bwidth" size="2" value="90">
-                        Height <input class="inputfield" type="text" id="bheight" size="2" value="50">
+                        <button class="mybutton mycheck onlyWithTree" id="adaptwidth" title="variable word widths in function of word length">fixed width</button>
+                        <span id="widthinfo">
+                            Width  <input class="inputfield" type="text" id="bwidth" size="2" value="90">
+                            Height <input class="inputfield" type="text" id="bheight" size="2" value="50">
+                        </span>
+
+
                         <span class="editmode"><button class="mybutton editbuttons onlyWithTree" id="modifier">modify</button>
-                            <input placeholder="modify commands (see help)"  class="onlyWithTree inputfield" type="text" id="mods" size="20" value="">
+                            <input placeholder="modify commands (see help)"  class="onlyWithTree inputfield" type="text" id="mods" size="15" value="">
                         </span>
                     <!--/td>
                 </tr>

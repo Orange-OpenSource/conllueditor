@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 5th May 2020
+ @version 2.4.2 as of 11th May 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -129,7 +129,7 @@ function setSize(width, height) {
  * @param {type} svg élément svg à remplir
  * @param {type} item le mot
  * @param {type} level le niveau (valeur y)
- * @param {type} indexshift index du premier mot de la phrase (on utilise index pour calculer la valeur x)
+ * @param {type} indexshift index du premier mot de la phrase (on utilise index pour calculer la valeur x) dans le cas où on a plusieurs arbres
  * @param {type} originx coordinné x de la tête ou 0
  * @param {type} originy coordinné y de la tête ou 0
  * @param {sentencelength} longueur de la phrase: si != 0 on écrit de droite à gauche
@@ -140,15 +140,25 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     //var hor = 90;
     //console.log("item " + item);
     //console.log("cc " + curid)
-    //alert("insNode hor:" + hor + " v:" + vertspace);
-    var index = item.position - indexshift;
-    var x = index * hor - hor / 2;
+    //console.log("insNode hor:", hor, " v:", vertspace);
+
+    if (!autoadaptwidth) {
+        var index = item.position - indexshift;
+        var x = index * hor - hor / 2;
+    } else {
+        var x = wordpositions[item.position];
+    }
     //console.log("index " + index + " hor " + hor + " x " + x);
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        x = ((sentencelength) * hor) - x;
+        if (!autoadaptwidth) {
+            x = ((sentencelength) * hor) - x;
+        } else {
+            x = rightmostwordpos - x;
+        }
     }
+
     //console.log("dep " + index + " " + x + " sl: " + sentencelength);
     //var vertdiff = 12;
 
@@ -275,7 +285,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
             insertNode(svg, curid, item.children[i], item.id, level + vertspace, indexshift, x, level, sentencelength, //useitalic,
                     use_deprel_as_type, isgold, incorrectwords);
         }
-}
+    }
 }
 
 
@@ -295,11 +305,23 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     //console.log("item " + item);
     //console.log("cc " + curid)
 
-    var index = item.position - indexshift;
-    var x = index * hor - hor / 2;
+    //var index = item.position - indexshift;
+    //var x = index * hor - hor / 2;
+
+    if (!autoadaptwidth) {
+        var index = item.position - indexshift;
+        var x = index * hor - hor / 2;
+    } else {
+        var x = wordpositions[item.position];
+    }
+
     if (sentencelength > 0) {
         // we write the tree from right to left
-        x = ((sentencelength) * hor) - x;
+        if (!autoadaptwidth) {
+            x = ((sentencelength) * hor) - x;
+        } else {
+             x = rightmostwordpos - x;
+        }
     }
     // en arrivant ici, on a déssiné tout l'arbre. Maintenant on connait la profondeur de l'arbre et on peut écrire les mots en bas avec des ligne
     // du noeud vers le mot

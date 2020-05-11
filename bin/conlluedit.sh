@@ -3,7 +3,23 @@
 
 #LANG=en_US.UTF-8
 
-BASENAME=$(dirname $(readlink -f $0))
+OSTYPE=$(uname -s)
+
+case "$OSTYPE" in
+    Darwin*)
+        # Mac
+        BASENAME=$(dirname $(greadlink -f $0))
+        ;;
+    Linux*)
+        # Linux, including WSL
+        BASENAME=$(dirname $(readlink -f $0))
+        ;;
+    *)
+        # all the rest
+        BASENAME=$(dirname $(readlink -f $0))
+        ;;
+esac
+
 TARGETDIR=$BASENAME/../target
 
 
