@@ -1,3 +1,4 @@
+# global.columns = ID FORM HEAD DEPREL SEM:NE
 # sent_id = fr-ud-dev_00001
 # sentence 0
 # text = Aviator, un film sur la vie de Howard Hughes.

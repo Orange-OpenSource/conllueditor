@@ -1,3 +1,6 @@
+Version 2.4.1
+- test error corrected
+
 Version 2.4.0
 - first (partial) implementation of CoNLL-U plus format. Only conllup files with 10 standard columns and additional columns can be edited
 - correction for displaying data in columns > 10
