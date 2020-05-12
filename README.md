@@ -21,11 +21,13 @@ The editor provides the following functionalities:
 Since version 2.0.0 the tool can be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
 * CoNLL-U/LaTeX/SD-Parse format
+
 For more information see section [Parser Front-End](#parser-front-end)
 
 In order to compare two files (e.g. a gold file with a predicted file)
 since version 2.3.0 ConlluEditor provides
 * a file compare mode
+
 For more information see section [File Comparison](#file-comparison)
 
 
@@ -33,7 +35,7 @@ For more information see section [File Comparison](#file-comparison)
 
 ### Requirements
 
-* Java jre 8.0
+* Java jre >= 8.0
 * Firefox (tested with version 60.9 on Windows 10, >= 63 on Linux and 69.0.1 on MacOS Sierra),
   Chromium or Chrome (both tested with version 70 on Linux),
   Edge (tested with version 44.17763.1.0 on Windows 10),
@@ -117,6 +119,24 @@ In order two compile the server, you also need
 On smaller machines, the memory managment of the java VM (`-Xmx...` option) may be modified in
 `bin/conlluedit.sh`. The current value (`-Xmx4g`) is largely sufficient to load larger treebanks with up to 1,5M tokens.
 
+
+### Stand-alone (preferred)
+
+if you do not have or do not want to install an HTTP server, ConlluEditor comes with a simple HTTP server:
+
+```bash
+bin/conlluedit.sh --rootdir  /path/to/ConlluEditor/gui treebank.conllu 8888
+```
+
+or (the option `-r` calculates the rootdir from the position of `conlluedit.sh`)
+
+```bash
+bin/conlluedit.sh -r treebank.conllu 8888
+```
+
+Point your navigator  to `http://localhost:8888` .
+
+
 ### Using a locally installed Apache our Lighttpd Server
 
 * create a symbolic link from your HTTP-server root to the `gui` directory:
@@ -130,28 +150,11 @@ bin/conlluedit.sh treebank.conllu 8888
 ```
 Point your navigator to `http://localhost/conllueditor?port=8888` .
 
-### Stand-alone
-
-* if you do not have or do not want to install an HTTP server, ConlluEditor comes with a simple HTTP server:
-
-```bash
-bin/conlluedit.sh --rootdir  /path/to/ConlluEditor/gui treebank.conllu 8888
-```
-
-or (the option `-r` calculates the rootdir from the position of `conlluedit.sh`)
-
-```bash
-bin/conlluedit.sh -r treebank.conllu 8888
-```
-
-
-Point your navigator  to `http://localhost:8888` .
-
 
 
 ### Other options
-* `--UPOS <file>` comma separated list of files containing valid UPOS (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
-* `--XPOS <file>` comma separated list of files containing valid XPOS
+* `--UPOS <file>` comma separated list of files containing valid UPOS tags (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
+* `--XPOS <file>` comma separated list of files containing valid XPOS tags
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
 * `--validator <file>` validator configuration file (see section [validation](#Validation) below)
 * `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
@@ -280,7 +283,7 @@ generates
 ...
 ```
 
-No semanitc/plausability check is performed. E.g. 
+No semantic/plausability check is performed. E.g. 
 `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
 will happily delete the `ID`column from the output file, so the `HEAD` columns does not make much sense anymore.
 
@@ -307,11 +310,31 @@ This configuration file must be given to the server with the option `--validator
 The validation button will launch the validator on the current sentence.
 
 # Server API (used by the GUI)
-* `curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentences is `read 0`, sendit is only used for edit commands)
-* `curl -s --noproxy '*' 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
-* `curl -s --noproxy '*' 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
-* `curl -s --noproxy '*' 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use
+* `curl -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentence of a file is `read 0`, `sentid` is only used only for editing commands but must be present)
+* `curl 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
+* `curl 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
+* `curl 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use
   with the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) or   [doc/deptree.sty](doc/deptree.sty) packages)
+
+The GUI uses the following API when editing
+* `curl -F "sentid=1" -F "cmd=mod upos 3 VERB"  http://host:port/edit/` set upos of word with id 3 to _VERB_ in sentence 1
+* `curl -F "sentid=2" -F "cmd=mod pos 4 VERB VV"  http://host:port/edit/` set upos of word with id 4 to _VERB_ and xpos to _VV_ in sentence 2
+* `curl -F "sentid=3" -F "cmd=mod extracol 4 SEM:NE B:Person"  http://host:port/edit/` set the non-standard UD column named _SEM:EN_ of word 4 to _B:Person_
+
+`upos` (in the first example) can be replaced with 
+`form`, `lemma`, `xpos`, `head`, `deprel`, `feat`, `misc` -for the latter two tha value must be a comma separated list of `Key=Value`. 
+In all cases the new version of the edited sentence is returned (in json). 
+However if the `sentid` or `id` are invalid, a error messages (in json format) is returned.
+
+For searching, the following API is implemented
+* `curl -F "sentid=2" -F "cmd=findlemma false regex"  http://host:port/edit/` search forward from sentence 2 onwards for a word whose lemma matches the given regex
+
+To earch backwards use `cmd=findlemma true regex`. Other columns can be found with
+`findupos`, `findxpos`, `finddeprel`, `findfeat`, `findcomment` (searches comments preceding a sentence)
+and `findsentid` (searches `# sent_id`). `findform` can be used for search forms. In difference to the other 
+`find`-commands, `findform` searches for strings (no regex) in the sentence (across several words)
+* `curl -F "sentid=2" -F 'cmd=findword false " in the"'  http://host:port/edit/` searches for the string `in the` (including the preceding space)
+
 
 # Parser Front-End
 In order to display the CoNLL-U output of taggers/dependency parser servers, there the front-end provides a graphical user interface 
