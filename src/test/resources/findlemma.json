@@ -1,7 +1,7 @@
 {
   "sentenceid": 7,
   "maxsentence": 19,
-  "sentence": "la souris a mangé le fromage qui pue . ",
+  "sentence": "la souris a mangé le fromage qui pue. ",
   "length": 9,
   "changes": 0,
   "tree": [
@@ -203,6 +203,12 @@
                   "val": "Fin"
                 }
               ],
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
               "xpos": "VERB",
               "upos": "VERB",
               "deprel": "acl:relcl",
@@ -250,7 +256,7 @@
     }
   ],
   "info": "_",
-  "comments": "text \u003d la souris a mangé le fromage qui pue.\nsentence 7\n",
+  "comments": "sentence 7\n",
   "canUndo": false,
   "canRedo": false
 }

@@ -1,6 +1,6 @@
 # sent_id = fr-ud-dev_00002
-# sentence 1
 # text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
+# sentence 1
 1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
 2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
 3	durent	durer	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
@@ -17,8 +17,8 @@
 14	.	.	PUNCT	_	_	3	punct	_	_
 
 # sent_id = fr-ud-dev_00002
-# sentence 1
 # text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
+# sentence 1
 1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
 2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
 3	durent	durer	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_

@@ -1,7 +1,7 @@
 # global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC SEM:NE SEM:COREF
 # sent_id = fr-ud-dev_00001
-# sentence 0
 # text = Aviator, un film sur la vie de Howard Hughes.
+# sentence 0
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No	B:OEUVRE	B:Coref1
 2	,	,	PUNCT	_	_	1	punct	_	_	_	_
 3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_	_	B:Coref1
@@ -15,8 +15,8 @@
 11	.	.	PUNCT	_	_	1	punct	_	_	_	_
 
 # sent_id = fr-ud-dev_00003
-# sentence 2
 # text = Mais comment faire dans un contexte structurellement raciste ?
+# sentence 2
 1	Mais	mais	CCONJ	_	_	3	cc	_	_	_	_
 2	comment	comment	ADV	_	_	3	advmod	_	_	_	_
 3	faire	faire	VERB	_	VerbForm=Inf	0	root	_	_	_	_
@@ -28,8 +28,8 @@
 9	?	?	PUNCT	_	_	3	punct	_	_	_	_
 
 # sent_id = fr-ud-train_00002
-# sentence 4
 # text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# sentence 4
 1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No	_	_
 2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_	_	_
 3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_	_	_

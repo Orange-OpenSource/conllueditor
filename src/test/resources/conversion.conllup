@@ -1,7 +1,7 @@
 # global.columns = ID FORM HEAD DEPREL SEM:NE
 # sent_id = fr-ud-dev_00001
-# sentence 0
 # text = Aviator, un film sur la vie de Howard Hughes.
+# sentence 0
 1	Aviator	0	root	B:Work
 2	,	1	punct	_
 3	un	4	det	_
@@ -15,8 +15,8 @@
 11	.	1	punct	_
 
 # sent_id = fr-ud-dev_00003
-# sentence 2
 # text = Mais comment faire dans un contexte structurellement raciste ?
+# sentence 2
 1	Mais	3	cc	_
 2	comment	3	advmod	_
 3	faire	0	root	_
@@ -28,8 +28,8 @@
 9	?	3	punct	_
 
 # sent_id = fr-ud-train_00002
-# sentence 4
 # text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# sentence 4
 1	L'	2	det	_
 2	œuvre	4	nsubj	_
 3	est	4	aux	_

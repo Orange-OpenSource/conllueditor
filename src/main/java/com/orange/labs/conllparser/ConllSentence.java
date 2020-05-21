@@ -72,6 +72,7 @@ public class ConllSentence {
     private String newpar = null;
     private String newdoc = null;
     private String sentid = null;
+    private String text = null; // # text = ... (only to detect errors, when editing (TODO). For the output we regenerate this from the words
     private int maxdist = 0; // maximal distance between a word and its head (calculated by mameTrees())
 
     // store preceding comments
@@ -177,6 +178,8 @@ public class ConllSentence {
                     newdoc = line.substring(8).trim();
                 } else if (line.startsWith("# sent_id = ")) {
                     sentid = line.substring(12).trim();
+                } else if (line.startsWith("# text = ")) {
+                    text = line.substring(9).trim();
                 } else {
                     comments.add(line.substring(1).trim());
                 }
@@ -566,6 +569,7 @@ public class ConllSentence {
         if (sentid != null && !sentid.isEmpty()) {
             sb.append("# sent_id = ").append(sentid).append('\n');
         }
+        sb.append("# text = ").append(getSentence().trim()).append('\n');
         for (String c : comments) {
             sb.append("# ").append(c).append('\n');
         }

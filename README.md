@@ -56,7 +56,7 @@ In order two compile the server, you also need
 
 ### Compilation
 
-* `mvn install` (add `-DskipTests` to avoid running the JUnit tests)
+* `mvn install` (add `-DskipTests` to avoid running the JUnit tests, individual tests can be run by `mvn test -Dtest=TestConlluEditor#<testmethod>`)
 * download javascript libraries (bootstrap, popper, jquery and jquery-ui), the script [bin/installJQ.sh](bin/installJQ.sh) will do the job
 * or change the corresponding lines in [gui/index.html](gui/index.html) to load the libraries from a public server:
 

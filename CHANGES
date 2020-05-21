@@ -1,7 +1,8 @@
 Version 2.4.3
 - multi word token larger, bug for variable size corrected
-- if two words overlapping with a MWE are joined, the MWE will be deleted
-- fixing issue #7
+- fixing issue #7 (if two words overlapping with a MWE are joined, the MWE will be deleted)
+- fixing issue #6 (joining/splitting sentences sets correctly '# text =' metadata)
+- new tests, tests updates
 
 Version 2.4.2
 - option "auto-adapt" which sets the horizontal width of words to the size needed
