@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 2nd May 2020
+ @version 2.4.3 as of 21st May 2020
  */
 
 import com.google.gson.Gson;
@@ -248,6 +248,34 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
 
+    @Test
+    public void test16JoinOverlapMWTstart() throws IOException {
+        name("join overlapping be first word of a MWT");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".9");
+        String rtc = ce.process("mod join 5", 6, "editinfo");
+
+        URL ref = this.getClass().getResource("test.join-mwt.conllu");
+        URL res = this.getClass().getResource("test.conllu.9"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }    
+
+    @Test
+    public void test17JoinOverlapMWTend() throws IOException {
+        name("join overlapping be last word of a MWT");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".10");
+        String rtc = ce.process("mod join 6", 6, "editinfo");
+
+        URL ref = this.getClass().getResource("test.join-mwt-2.conllu");
+        URL res = this.getClass().getResource("test.conllu.10"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }    
+   
     @Test
     public void test21Read() throws IOException {
         name("read sentence");

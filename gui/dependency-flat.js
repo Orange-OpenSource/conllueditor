@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.2 as of 11th May 2020
+ @version 2.4.3 as of 21st May 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -225,21 +225,22 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         mwe.setAttribute("id", mwepathvar);
 
         mwe.setAttribute("stroke", "#888888");
-        mwe.setAttribute("stroke-width", "7");
+        mwe.setAttribute("stroke-width", "10");
 
         mwe.setAttribute("opacity", 1);
         mwe.setAttribute("fill", "none");
         var length = item.mwe.toid - item.mwe.fromid + 1;
         //svgmaxy+=20;
 
-        if (sentencelength > 0) {
-            // mwe.setAttribute("d", "M " + (depx - 5 + hor/2) + " " + (svgmaxy+20) + " l " + (-hor*length + 10) + " " + 0);
-	    mwe.setAttribute("d", "M " + (depx + 5 - hor * length + hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
-
-        } else {
-	    mwe.setAttribute("d", "M " + (depx + 5 - hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
-
-        }
+        MWEbar(mwe, item, depx, mwey, sentencelength);
+//        if (sentencelength > 0) {
+//            // mwe.setAttribute("d", "M " + (depx - 5 + hor/2) + " " + (svgmaxy+20) + " l " + (-hor*length + 10) + " " + 0);
+//	    mwe.setAttribute("d", "M " + (depx + 5 - hor * length + hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
+//
+//        } else {
+//	    mwe.setAttribute("d", "M " + (depx + 5 - hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
+//
+//        }
 
         svg.appendChild(mwe);
 

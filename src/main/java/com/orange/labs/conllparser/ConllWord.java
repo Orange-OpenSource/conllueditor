@@ -55,7 +55,7 @@ public class ConllWord {
     //private List<String> prefixed = null; // colonnes à ignorer avec shift
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
 
-    private int position; // needed for GUI, since empty nodes will be inserted in between regulare nodes. Filled by makeTrees
+    private int position; // needed for GUI, since empty nodes will be inserted in between regular nodes. Filled by makeTrees
     private int arc_height = 0; // needed for GUI to disply arc height in flat graphs nicely
     private int id; // colonne 1 (or bit before -/. in case of contracted words or empty nodes
     private int subid = -1; // the bit after . or -)

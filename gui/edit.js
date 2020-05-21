@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.2 as of 11th May 2020
+ @version 2.4.3 as of 21st May 2020
  */
 
 
@@ -389,6 +389,7 @@ function parseShortcuts() {
 // word (taking the word form) as well as the x-position of each word in the graph
 var wordlengths = {}; // position (not ID !!): width in px
 var wordpositions = {}; // position: x-position in graph
+var wordpos = {}; // id: position
 var rightmostwordpos = 0; // position of the last word (needed to draw R2L trees)
 var hordist = 6; // horizontal distance beween words (if auto-adpat is active)
 
@@ -425,6 +426,7 @@ function getWordLength(cword) {
     }
     wordlengths[cword.position] = Math.max(50, wlen); // get 50px minimal size
     //console.log("iii", wlen);
+    wordpos[cword.id] = cword.position;
     return wlen;
 }
 

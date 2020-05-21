@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.2 as of 11th May 2020
+ @version 2.4.3 as of 21st May 2020
  */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -183,7 +183,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         rect.setAttribute('x', x - ((hor - 6) / 2));
         rect.setAttribute('width', hor - 6);
     } else {
-        rect.setAttribute('x', x-(wordlengths[item.position]/2));
+        rect.setAttribute('x', x - (wordlengths[item.position] / 2));
         rect.setAttribute('width', wordlengths[item.position]);
         //console.log("jjj", item.form, wordlengths[item.position]);
     }
@@ -214,7 +214,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
                 rect.addEventListener("mouseover", showce);
                 rect.addEventListener('mouseout', HideCompareErrors);
             } else {
-                rect.setAttribute('class', rect_idprefix + "wordnode"+ grayclass2);
+                rect.setAttribute('class', rect_idprefix + "wordnode" + grayclass2);
             }
         }
     }
@@ -418,7 +418,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
     // we try all columtypes of this sentences for each word and draw them
     var ypos = 50; // start y difference under word
     for (let [coltype, colval] of Object.entries(item.nonstandard)) {
-    //for (coltype of extracolumnstypes) {
+        //for (coltype of extracolumnstypes) {
         //if (item[coltype] == undefined)
         //    continue;
         //if (item[coltype] == "_") {
@@ -437,7 +437,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
             colvalue = colval.substr(2);
         else
             colvalue = colval;
-        
+
         var hcode = colvalue.hashCode();
         var red = Math.abs(hcode % 148);
         var blue = Math.abs((hcode >> 4) % 148);
@@ -481,3 +481,31 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
 }
 
 
+function MWEbar(mwe, item, x, wordy, sentencelength) {
+    if (autoadaptwidth) {
+        if (sentencelength > 0) {
+            // right-to-left
+            // xposition are always for left-to-right, we haveto inverse them
+            var mwestart = x + wordlengths[item.position] / 2 - 5;
+            var mweend = wordpositions[wordpos[item.mwe.toid]] + wordlengths[wordpos[item.mwe.toid]] / 2 - 5;
+            mweend = rightmostwordpos - mweend;
+
+            mwe.setAttribute("d", "M " + mwestart + " " + (wordy) + " L " + mweend + " " + (wordy));
+        } else {
+            var mwestart = x - wordlengths[item.position] / 2 + 5;
+            var mweend = wordpositions[wordpos[item.mwe.toid]] + wordlengths[wordpos[item.mwe.toid]] / 2 - 5;
+            mwe.setAttribute("d", "M " + mwestart + " " + (wordy) + " L " + mweend + " " + wordy);
+        }
+    } else {
+        // width of the first and last word of the MWE
+        var length = item.mwe.toid - item.mwe.fromid + 1;
+        var bwidth = hor * length - 10;
+
+        if (sentencelength > 0) {
+            // right-to-left
+            mwe.setAttribute("d", "M " + (x + 5 - hor * length + hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
+        } else {
+            mwe.setAttribute("d", "M " + (x + 5 - hor / 2) + " " + (wordy) + " l " + bwidth + " " + 0);
+        }
+    }
+}

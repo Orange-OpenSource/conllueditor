@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.2 as of 11th May 2020
+ @version 2.4.3 as of 21st May 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -99,13 +99,14 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
         for (i = 0; i < trees.length; ++i) {
             var tree = trees[i];
             insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
-            if (tree.nonstandard != undefined)    insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
+            if (tree.nonstandard != undefined)
+                insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
         }
     }
 
     // add space for extracolumns
     if (tree.nonstandard != undefined && Object.keys(tree.nonstandard).length > 0) {
-        svgmaxy += 40 + Object.keys(tree.nonstandard).length*20;
+        svgmaxy += 40 + Object.keys(tree.nonstandard).length * 20;
     }
 
 
@@ -198,7 +199,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         path.setAttribute("stroke", "black");
         if (use_deprel_as_type) {
             //path.setAttribute("stroke-width", "2");
-            path.setAttribute('class', item.deprel.replace(/:/, "_") );
+            path.setAttribute('class', item.deprel.replace(/:/, "_"));
             //} else {
             //path.setAttribute("stroke-width", "1");
         }
@@ -320,7 +321,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
         if (!autoadaptwidth) {
             x = ((sentencelength) * hor) - x;
         } else {
-             x = rightmostwordpos - x;
+            x = rightmostwordpos - x;
         }
     }
     // en arrivant ici, on a déssiné tout l'arbre. Maintenant on connait la profondeur de l'arbre et on peut écrire les mots en bas avec des ligne
@@ -371,16 +372,37 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
         var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;
         mwe.setAttribute("id", mwepathvar);
         mwe.setAttribute("stroke", "#888888");
-        mwe.setAttribute("stroke-width", "4");
+        mwe.setAttribute("stroke-width", "10");
         mwe.setAttribute("opacity", 1);
         mwe.setAttribute("fill", "none");
-        var length = item.mwe.toid - item.mwe.fromid + 1;
-        if (sentencelength > 0) {
-            //mwe.setAttribute("d", "M " + (x - 5 + hor/2) + " " + (wordy) + " l " + (-hor*length + 10) + " " + 0);
-            mwe.setAttribute("d", "M " + (x + 5 - hor * length + hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
-        } else {
-            mwe.setAttribute("d", "M " + (x + 5 - hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
-        }
+
+        MWEbar(mwe, item, x, wordy, sentencelength);
+//        if (autoadaptwidth) {
+//            if (sentencelength > 0) {
+//                // right-to-left
+//                // xposition are always for left-to-right, we haveto inverse them
+//                var mwestart = x + wordlengths[item.position] / 2 - 5;
+//                var mweend = wordpositions[wordpos[item.mwe.toid]] + wordlengths[wordpos[item.mwe.toid]] / 2 - 5;
+//                mweend = rightmostwordpos - mweend;
+//
+//                mwe.setAttribute("d", "M " + mwestart + " " + (wordy) + " L " + mweend + " " + (wordy ));
+//            } else {
+//                var mwestart = x - wordlengths[item.position] / 2 + 5;
+//                var mweend = wordpositions[wordpos[item.mwe.toid]] + wordlengths[wordpos[item.mwe.toid]] / 2 - 5;
+//                mwe.setAttribute("d", "M " + mwestart + " " + (wordy) + " L " + mweend + " " + wordy);
+//            }
+//        } else {
+//            // width of the first and last word of the MWE
+//            var length = item.mwe.toid - item.mwe.fromid + 1;          
+//            var bwidth = hor * length - 10;
+//
+//            if (sentencelength > 0) {
+//                // right-to-left
+//                mwe.setAttribute("d", "M " + (x + 5 - hor * length + hor / 2) + " " + (wordy) + " l " + (hor * length - 10) + " " + 0);
+//            } else {
+//                mwe.setAttribute("d", "M " + (x + 5 - hor / 2) + " " + (wordy) + " l " + bwidth + " " + 0);
+//            }
+//        }
         svg.appendChild(mwe);
         // creer le texte pour cette ligne
         var mwetext = document.createElementNS(svgNS, "text");
@@ -405,5 +427,5 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
             //alert(item.children[i]);
             insertBottomWord(svg, curid, item.children[i], 0 /*level*/, indexshift, sentencelength, useitalic);
         }
-    }
+}
 }

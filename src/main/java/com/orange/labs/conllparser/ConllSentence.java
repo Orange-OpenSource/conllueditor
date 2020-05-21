@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 7th May 2020
+ @version 2.4.3 as of 21st May 2020
  */
 package com.orange.labs.conllparser;
 
@@ -81,7 +81,7 @@ public class ConllSentence {
     private boolean showID = true;
 
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
-    Map<String, Integer>columndefs = null; 
+    Map<String, Integer> columndefs = null;
 
     public enum Scoretype {
         FORM, LEMMA, UPOS, XPOS, FEATS, LAS, CLAS
@@ -90,14 +90,14 @@ public class ConllSentence {
     /**
      * @param conlllines les lignes d'une phrase d'un fichier CONLL à parser
      */
-    public ConllSentence(List<AbstractMap.SimpleEntry<Integer, String>> conlllines, Map<String, Integer>columndefs) throws ConllException {
+    public ConllSentence(List<AbstractMap.SimpleEntry<Integer, String>> conlllines, Map<String, Integer> columndefs) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
         //this.shift = shift;
         this.columndefs = columndefs;
         parse(conlllines);
     }
 
-    public ConllSentence(String conllstring, Map<String, Integer>columndefs) throws ConllException {
+    public ConllSentence(String conllstring, Map<String, Integer> columndefs) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
         List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
         int ct = 0;
@@ -125,6 +125,7 @@ public class ConllSentence {
 
     /**
      * cloner une phrase (sans annotations et dépendances)
+     *
      * @param orig sentence to be cloned
      */
     public ConllSentence(ConllSentence orig) {
@@ -227,10 +228,12 @@ public class ConllSentence {
     }
 
     public boolean isValidExtraColumn(String colname) {
-        if (columndefs == null) return false;
+        if (columndefs == null) {
+            return false;
+        }
         return columndefs.containsKey(colname);
     }
-    
+
     public void setHasEnhancedDeps(boolean hasEnhancedDeps) {
         this.hasEnhancedDeps = hasEnhancedDeps;
     }
@@ -549,8 +552,9 @@ public class ConllSentence {
 //    public void nextToStringComplete() {
 //        nextToStringcomplete = true;
 //    }
-
-    /** format the sentence in CoNLL-U format */
+    /**
+     * format the sentence in CoNLL-U format
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (newdoc != null && !newdoc.isEmpty()) {
@@ -604,7 +608,9 @@ public class ConllSentence {
         return sb.toString();
     }
 
-    /** format the sentence in SD-parse format */
+    /**
+     * format the sentence in SD-parse format
+     */
     public String getSDparse() {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
@@ -632,7 +638,9 @@ public class ConllSentence {
         return sb.toString();
     }
 
-    /** format the sentence for use with xelatex (tikz-dependencie) */
+    /**
+     * format the sentence for use with xelatex (tikz-dependencie)
+     */
     public String getLaTeX() {
         StringBuilder sb = new StringBuilder();
         try {
@@ -850,8 +858,8 @@ public class ConllSentence {
             for (ConllWord cw : words2) {
                 if (cw.getHead() != 0) {
                     sb.append(String.format("\\dep{%d}{%s}{%d}{%s}{%s}{%s}\n", cw.getHead(), cw.getId(),
-                                            getDistanceFromSentenceHead(cw) - 1,
-                                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
+                            getDistanceFromSentenceHead(cw) - 1,
+                            cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
                 }
             }
 
@@ -872,7 +880,6 @@ public class ConllSentence {
         return sb.toString();
     }
 
-
     public List<ConllWord> getWords() {
         return words;
     }
@@ -882,19 +889,25 @@ public class ConllSentence {
         return contracted.get(id);
     }
 
-    /** get all words, including empty words in a list (mainly for searching consecutive words)
+    /**
+     * get all words, including empty words in a list (mainly for searching
+     * consecutive words)
      *
      * @return a (copied) list of all Words and EmptyWords
      */
-    public List<ConllWord>getAllWords() {
-        List<ConllWord>allwords = new ArrayList<>();
-        List<ConllWord>current = getEmptyWords(0);
-        if (current != null) allwords.addAll(current);
+    public List<ConllWord> getAllWords() {
+        List<ConllWord> allwords = new ArrayList<>();
+        List<ConllWord> current = getEmptyWords(0);
+        if (current != null) {
+            allwords.addAll(current);
+        }
         for (ConllWord cw : words) {
             allwords.add(cw); // get normal word
             // get eventual empty word after cw
             current = getEmptyWords(cw.getId());
-            if (current != null) allwords.addAll(current);
+            if (current != null) {
+                allwords.addAll(current);
+            }
         }
         return allwords;
     }
@@ -950,7 +963,9 @@ public class ConllSentence {
      * @return the word nor null
      */
     public List<ConllWord> getEmptyWords(int id) {
-        if (emptywords == null) return null;
+        if (emptywords == null) {
+            return null;
+        }
         List<ConllWord> ews = emptywords.get(id);
         if (ews == null || ews.isEmpty()) {
             return null;
@@ -1090,8 +1105,25 @@ public class ConllSentence {
         if (id < words.size()) {
             ConllWord current = words.get(id - 1);
             ConllWord other = words.get(id);
+
+            // get all first and last tokens of MWE
+            // we delete a MWE if the joined words are at hte border or overlapping with the MWE
+            if (contracted != null) {
+                Set<ConllWord> mwes = new HashSet<>();
+                for (ConllWord mwe : contracted.values()) {
+                    if (mwe.getId() == id  || mwe.getId() == id + 1
+                            || mwe.getSubid() == id || mwe.getSubid() == id + 1) {
+                        mwes.add(mwe);
+                    }
+                }
+
+                for (ConllWord mwe : mwes) {
+                    contracted.remove(mwe.getId());
+                }
+            }
+
             //System.err.println("THIS  " + current + ": " + getDistanceFromSentenceHead(current));
-            //System.err.println("OTHER " + other   + ": " + getDistanceFromSentenceHead(other));
+            //System.err.println("OTHER " + other + ": " + getDistanceFromSentenceHead(other));
             if (getDistanceFromSentenceHead(current) > getDistanceFromSentenceHead(other)) {
                 // current word further down than following
                 other.setForm(current.getForm() + other.getForm());
@@ -1110,7 +1142,7 @@ public class ConllSentence {
                 //System.err.println("OTHER FURTHER DOWN, deleting " + other);
                 words.remove(other);
             }
-            //System.err.println("eeee\n" + this);
+            System.err.println("eeee\n" + this);
             normalise(1);
             makeTrees(null);
         }
@@ -1230,38 +1262,51 @@ public class ConllSentence {
         }
     }
 
-
-    /** calculate the Labelled Attachment Score and other metrics.
-        Does not take into accound empty words */
+    /**
+     * calculate the Labelled Attachment Score and other metrics. Does not take
+     * into accound empty words
+     */
     public double score(ConllSentence gold, Scoretype scoretype) {
-        if (gold.size() != this.size()) return 0.0;
+        if (gold.size() != this.size()) {
+            return 0.0;
+        }
         double score = 0.0;
         for (int ix = 0; ix < this.size(); ++ix) {
-            ConllWord goldw = gold.getWord(ix+1);
-            ConllWord sysw = this.getWord(ix+1);
-            switch(scoretype) {
+            ConllWord goldw = gold.getWord(ix + 1);
+            ConllWord sysw = this.getWord(ix + 1);
+            switch (scoretype) {
                 case UPOS:
-                    if (goldw.getUpostag().equals(sysw.getUpostag())) score++;
+                    if (goldw.getUpostag().equals(sysw.getUpostag())) {
+                        score++;
+                    }
                     break;
                 case XPOS:
-                    if (goldw.getXpostag().equals(sysw.getXpostag())) score++;
+                    if (goldw.getXpostag().equals(sysw.getXpostag())) {
+                        score++;
+                    }
                     break;
                 case LEMMA:
-                    if (goldw.getLemma().equals(sysw.getLemma())) score ++;
+                    if (goldw.getLemma().equals(sysw.getLemma())) {
+                        score++;
+                    }
                     break;
                 case LAS:
-                    if (goldw.getHead() == sysw.getHead()  &&  goldw.getDeplabel().equals(sysw.getDeplabel())) score ++;
+                    if (goldw.getHead() == sysw.getHead() && goldw.getDeplabel().equals(sysw.getDeplabel())) {
+                        score++;
+                    }
                     break;
                 //case CLAS:
                 //    if (goldw.getHead() == sysw.getHead()  &&  goldw.getDeplabel().equals(sysw.getDeplabel())) score ++;
                 //    break;
                 case FEATS:
-                    if (goldw.getFeaturesStr().equals(sysw.getFeaturesStr())) score++;
+                    if (goldw.getFeaturesStr().equals(sysw.getFeaturesStr())) {
+                        score++;
+                    }
             }
         }
-        return score/gold.size();
+        return score / gold.size();
     }
-    
+
     /**
      * calculate the height if each arc, by taking into account all short arcs
      * below. Does not take into account non-projective arcs, only arcs from n
@@ -1373,7 +1418,7 @@ public class ConllSentence {
             idshl = new HashMap<>();
             for (int id = wordid; id <= lastwordid; id++) {
                 //ids.add(id);
-                 idshl.put(id, field);
+                idshl.put(id, field);
             }
         }
 
@@ -1382,7 +1427,7 @@ public class ConllSentence {
             //this.field = field;
             //this.ids = ids;
             idshl = new HashMap<>();
-             for (Integer id : ids) {
+            for (Integer id : ids) {
                 //ids.add(id);
                 idshl.put(id, field);
             }
@@ -1394,13 +1439,12 @@ public class ConllSentence {
             //this.ids = ids;
             idshl = new HashMap<>();
             int ct = 0;
-             for (int id = wordid; id <= lastwordid; ++id, ++ct) {
+            for (int id = wordid; id <= lastwordid; ++id, ++ct) {
                 idshl.put(id, fields.get(ct));
             }
-            
+
         }
 
-        
     }
 
     public static class AnnotationErrors {
@@ -1417,7 +1461,7 @@ public class ConllSentence {
      * produire un arbre en Json. Nécessite l'appel a makeTrees()
      */
     public JsonArray toJsonTree(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
-                                Highlight highlight, AnnotationErrors ae) {
+            Highlight highlight, AnnotationErrors ae) {
         JsonArray jheads = new JsonArray();
         for (ConllWord head : headss) {
             //if (head.getTokentype() != ConllWord.Tokentype.WORD) continue;
@@ -1428,7 +1472,9 @@ public class ConllSentence {
         return jheads;
     }
 
-    /** json in spacy's format. @see https://spacy.io/api/annotation */
+    /**
+     * json in spacy's format. @see https://spacy.io/api/annotation
+     */
     public JsonArray toSpacyJson() {
         JsonArray jdocs = new JsonArray();
         JsonObject jdoc = new JsonObject();
@@ -1588,10 +1634,12 @@ public class ConllSentence {
         return sentid;
     }
 
-    /** calculate start and end offset for each word.
-       contracted word as well. Parts of contracted words copy the values form the MTW
-    @param start offset of first word
-    @param return the offset after the last word (including SpaceAfter)
+    /**
+     * calculate start and end offset for each word. contracted word as well.
+     * Parts of contracted words copy the values form the MTW
+     *
+     * @param start offset of first word
+     * @param return the offset after the last word (including SpaceAfter)
      */
     public int calculateOffsets(int start) {
         for (ConllWord cw : words) {
