@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.3 as of 21st May 2020
+ @version 2.5.0 as of 23rd May 2020
  */
 
 
@@ -127,6 +127,8 @@ function getRaw(what, title) {
 var deprellist = [];
 var uposlist = [];
 var xposlist = [];
+var featlist = [];
+var misclist = ["Gloss=", "LGloss=", "SpaceAfter=No", "SpacesAfter=", "Translit=", "LTranslit=", "Typo=Yes"];
 var incorrectwords = {};
 
 /** get information from ConlluEditor server:
@@ -161,6 +163,8 @@ function getServerInfo() {
                 uposlist = data.validUPOS;
             if (data.validXPOS)
                 xposlist = data.validXPOS;
+            if (data.validFeatures)
+                featlist = data.validFeatures;
 
             if (data.shortcuts) {
                 //console.log("SHORTCUTS", data.shortcuts);
@@ -218,6 +222,92 @@ function getServerInfo() {
                     position: {my: "left top", at: "left bottom"}
                 });
             });
+
+
+            // inspired by https://jsfiddle.net/Twisty/yfdjyq79/
+            $(function () {
+                function split(val) {
+                     return val.split("\n");
+                }
+
+                function extractLast(term) {
+                    return split(term).pop();
+                }
+
+                $("#cfeats")
+                .on("keydown", function(event) {
+                    if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                        minLength: 1, // min length to type before autocomplete kicks in
+                        source: function(request, response) {
+                            // delegate back to autocomplete, but extract the last term
+                            //console.log("aaa", request, response);
+                            response($.ui.autocomplete.filter(featlist, extractLast(request.term)));
+                        },
+                        focus: function() {
+                            // prevent value inserted on focus
+                            return false;
+                        },
+                        select: function(event, ui) {
+                            //console.log("bbb", this.value);
+                            var terms = split(this.value);
+                            // remove the current input
+                            terms.pop();
+                            // add the selected item
+                            terms.push(ui.item.value);
+                            // add placeholder to get the comma-and-space at the end
+                            terms.push("");
+                            this.value = terms.join("\r\n");
+                            return false;
+                        }
+                });
+            });
+
+            $(function () {
+                function split(val) {
+                     return val.split("\n");
+                }
+
+                function extractLast(term) {
+                    return split(term).pop();
+                }
+
+                $("#cmisc")
+                .on("keydown", function(event) {
+                    if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                        minLength: 1, // min length to type before autocomplete kicks in
+                        position: {my: "left top", at: "left bottom-25%"},
+                        source: function(request, response) {
+                            // delegate back to autocomplete, but extract the last term
+                            //console.log("aaa", request, response);
+                            response($.ui.autocomplete.filter(misclist, extractLast(request.term)));
+                        },
+                        focus: function() {
+                            // prevent value inserted on focus
+                            return false;
+                        },
+                        select: function(event, ui) {
+                            //console.log("bbb", this.value);
+                            var terms = split(this.value);
+                            // remove the current input
+                            terms.pop();
+                            // add the selected item
+                            terms.push(ui.item.value);
+                            // add placeholder to get the comma-and-space at the end
+                            terms.push("");
+                            this.value = terms.join("");
+                            return false;
+                        }
+                });
+            });
+
         },
         error: function (data) {
             // do something else
@@ -958,6 +1048,9 @@ function formatPhrase(item) {
                 $("#errors").append("|" + item.errors.invalidXPOS + " invalid XPOS");
             if (item.errors.invalidDeprels)
                 $("#errors").append("|" + item.errors.invalidDeprels + " invalid Deprels");
+            if (item.errors.invalidFeatures)
+                $("#errors").append("|" + item.errors.invalidFeatures + " invalid Features");
+
             $("#errors").append("|");
         }
         $("#sentencetext").show();

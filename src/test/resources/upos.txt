@@ -1,0 +1,4 @@
+# partial list of valid UPOS
+NOUN
+VERB
+

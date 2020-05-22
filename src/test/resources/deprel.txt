@@ -1,0 +1,6 @@
+amod
+nsubj
+obj
+root
+punct
+

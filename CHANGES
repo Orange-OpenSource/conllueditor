@@ -1,3 +1,7 @@
+Version 2.5.0
+- new option --features to specify a list of files which define valid feature=value pairs and lists of valid features for a given upos
+- autocomplete for feature=value pairs and misc entries
+
 Version 2.4.3
 - multi word token larger, bug for variable size corrected
 - fixing issue #7 (if two words overlapping with a MWE are joined, the MWE will be deleted)

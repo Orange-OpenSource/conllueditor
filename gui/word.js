@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.3 as of 21st May 2020
+ @version 2.5.0 as of 23rd May 2020
  */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -253,6 +253,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             } else {
                 var key = item.feats[f].name;
                 var val = item.feats[f].val;
+                var error = item.feats[f].error;
             }
 
             var ftext = document.createElementNS(svgNS, "text");
@@ -270,7 +271,6 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             ftext.setAttribute("text-anchor", "end");
             ftext.setAttribute("fill", "#004400");
             ftext.textContent = key; // + " :"; //item.feats[f];
-
 
             var septext = document.createElementNS(svgNS, "text");
             septext.setAttribute("id", "septext" + curid + "_" + item.id);
@@ -293,6 +293,13 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             valtext.setAttribute("fill", "#000044");
             valtext.textContent = val; //item.feats[f];
             svg.appendChild(valtext);
+
+            if (error == "name") {
+                ftext.setAttribute("class", "words wordfeature worderror " + grayclass);
+            }
+            if (error == "name" || error == "value") {
+                valtext.setAttribute("class", "words wordfeature worderror " + grayclass);
+            }
         }
         bottomlevels[1] = level;
     }

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.3.3 as of 2nd May 2020
+ @version 2.5.0 as of 23rd May 2020
  */
 package com.orange.labs.parserclient;
 
@@ -272,7 +272,7 @@ public class ParserClient {
                     solution.addProperty("sent_id", csent.getSentid());
                 }
 
-                solution.add("tree", csent.toJsonTree(null, null, null, null, null));
+                solution.add("tree", csent.toJsonTree(null, null, null, null, null, null));
                 solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce chapps
                 
                 // adding also a CoNLL-U, sd-parse and a LaTeX representation

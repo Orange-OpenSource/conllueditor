@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 10th May 2020
+ @version 2.5.0 as of 23rd May 2020
  */
 package com.orange.labs.conllparser;
 
@@ -838,15 +838,17 @@ public class ConllWord {
     /**
      * le mots (avec ses dépendants) en json
      *
-     * @param validupos
-     * @param validxpos
-     * @param validdeprels
+     * @param validupos set of valid UPOS values
+     * @param validxpos set of valid XPOS values
+     * @param validdeprels set of valid deprel values
+     * @param validfeats  map of valid UPOS:feat=value values
      * @param highlight
-     * @param ae
+     * @param contracted map of MWEs
+     * @param ae collect error types here
      * @return
      */
-    // TODO: add misc column
     public JsonObject toJson(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
+            ValidFeatures validfeats,
             ConllSentence.Highlight highlight, ConllSentence.AnnotationErrors ae,
             Map<Integer, ConllWord> contracted) {
         JsonObject jword = new JsonObject();
@@ -908,7 +910,7 @@ public class ConllWord {
 //                jfeats.add(jfeat);
 //            }
 //            jword.add("feats", jfeats);
-            jword.add("feats", getFeaturesJson());
+            jword.add("feats", getFeaturesJson(validfeats, ae));
         }
 
         if (misc != null && !misc.isEmpty()) {
@@ -1039,7 +1041,7 @@ public class ConllWord {
             JsonArray jchildren = new JsonArray();
             jword.add("children", jchildren);
             for (ConllWord child : dependents) {
-                JsonObject jchild = child.toJson(validupos, validxpos, validdeprels, highlight, ae, contracted);
+                JsonObject jchild = child.toJson(validupos, validxpos, validdeprels, validfeats, highlight, ae, contracted);
                 jchildren.add(jchild);
             }
         }
@@ -1316,13 +1318,13 @@ public class ConllWord {
     }
 
     /**
-     * return feature map
+     * @return feature map
      */
     public Map<String, String> getFeatures() {
         return features;
     }
 
-    public JsonArray getFeaturesJson() {
+    public JsonArray getFeaturesJson(ValidFeatures validfeats, ConllSentence.AnnotationErrors ae) {
         JsonArray jfeats = new JsonArray();
         for (String f : features.keySet()) {
             JsonObject jfeat = new JsonObject();
@@ -1332,6 +1334,19 @@ public class ConllWord {
                 jfeat.addProperty("val", val);
             }
             jfeats.add(jfeat);
+            // check whether feat/val is valid
+            if (validfeats != null) {
+                int rtc = validfeats.isValid(upostag, xpostag, f, val);
+
+                if (rtc == 1) {
+                    jfeat.addProperty("error", "name");
+                    ae.features++;
+                }
+                else if (rtc == 2) {
+                    jfeat.addProperty("error", "value");
+                    ae.features++;
+                }
+            }
         }
         return jfeats;
     }
@@ -1363,7 +1378,7 @@ public class ConllWord {
     }
 
     /**
-     * replace features by other features (in an unparsed UD string
+     * replace features by other features (in an unparsed UD string)
      */
     public void setFeatures(String unparsed_featsstring) {
         features.clear();

@@ -1,0 +1,181 @@
+{
+  "sentenceid": 2,
+  "maxsentence": 19,
+  "sentence": "Mais comment faire dans un contexte structurellement raciste ? ",
+  "length": 9,
+  "sent_id": "fr-ud-dev_00003",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 3,
+      "id": 3,
+      "form": "faire",
+      "lemma": "faire",
+      "feats": [
+        {
+          "name": "VerbForm",
+          "val": "Inf"
+        }
+      ],
+      "xpos": "_",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 2,
+          "id": 1,
+          "form": "Mais",
+          "lemma": "mais",
+          "xpos": "_",
+          "upos": "CCONJ",
+          "deprel": "cc",
+          "deprelerror": 1,
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 2,
+          "archeight": 1,
+          "id": 2,
+          "form": "comment",
+          "lemma": "comment",
+          "xpos": "_",
+          "upos": "ADV",
+          "deprel": "advmod",
+          "deprelerror": 1,
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 6,
+          "archeight": 3,
+          "id": 6,
+          "form": "contexte",
+          "lemma": "contexte",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "obl",
+          "deprelerror": 1,
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 2,
+              "id": 4,
+              "form": "dans",
+              "lemma": "dans",
+              "xpos": "_",
+              "upos": "ADP",
+              "deprel": "case",
+              "deprelerror": 1,
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 5,
+              "archeight": 1,
+              "id": 5,
+              "form": "un",
+              "lemma": "un",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Ind"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "_",
+              "upos": "DET",
+              "deprel": "det",
+              "deprelerror": 1,
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 8,
+              "archeight": 2,
+              "id": 8,
+              "form": "raciste",
+              "lemma": "raciste",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "_",
+              "upos": "ADJ",
+              "deprel": "amod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 7,
+                  "archeight": 1,
+                  "id": 7,
+                  "form": "structurellement",
+                  "lemma": "structurellement",
+                  "xpos": "_",
+                  "upos": "ADV",
+                  "deprel": "advmod",
+                  "deprelerror": 1,
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 9,
+          "archeight": 4,
+          "id": 9,
+          "form": "?",
+          "lemma": "?",
+          "xpos": "_",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "errors": {
+    "invalidDeprels": 6
+  },
+  "comments": "sentence 2\n",
+  "canUndo": false,
+  "canRedo": false
+}

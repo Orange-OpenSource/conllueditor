@@ -1,0 +1,6 @@
+Gender=Masc
+Number=Sing
+Definite=Ind
+PronType=Prs
+U:NOUN Gender Number
+U:DET Number PronType

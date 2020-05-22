@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 10th May 2020
+ @version 2.5.0 as of 23rd May 2020
  */
 package com.orange.labs.editor;
 
@@ -40,6 +40,7 @@ import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
+import com.orange.labs.conllparser.ValidFeatures;
 import com.orange.labs.httpserver.ServeurHTTP;
 import java.io.BufferedReader;
 
@@ -56,6 +57,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -90,6 +92,8 @@ public class ConlluEditor {
     Set<String> validUPOS = null;
     Set<String> validXPOS = null;
     Set<String> validDeprels = null;
+    //Map<String, Set<String>> validFeatures = null; // [upos:]features = [values]
+    ValidFeatures validFeatures = null;
     JsonObject shortcuts = null;
     Validator validator = null;
     History history;
@@ -180,6 +184,10 @@ public class ConlluEditor {
         System.err.format("%d valid Deprel read from %s\n", validDeprels.size(), filenames.toString());
     }
 
+    public void setValidFeatures(List<String> filenames) throws IOException {
+        validFeatures = new ValidFeatures(filenames);
+    }
+
     public void setShortcuts(String filename) throws IOException {
          BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
 
@@ -257,7 +265,7 @@ public class ConlluEditor {
         solution.addProperty("changes", changesSinceSave);
         //solution.addProperty("latex", csent.getLaTeX());
         ConllSentence.AnnotationErrors ae = new ConllSentence.AnnotationErrors();
-        solution.add("tree", csent.toJsonTree(validUPOS, validXPOS, validDeprels, highlight, ae)); // RelationExtractor.conllSentence2Json(csent));
+        solution.add("tree", csent.toJsonTree(validUPOS, validXPOS, validDeprels, validFeatures, highlight, ae)); // RelationExtractor.conllSentence2Json(csent));
         if (comparisonFile != null) {
             ConllSentence goldsent = comparisonFile.getSentences().get(sentid);
             // calculate arcs for dependency hedge
@@ -267,7 +275,7 @@ public class ConlluEditor {
                 cw.setArc_height(heights.get(id));
             }
 
-            solution.add("comparisontree", goldsent.toJsonTree(validUPOS, validXPOS, validDeprels, null, ae));
+            solution.add("comparisontree", goldsent.toJsonTree(validUPOS, validXPOS, validDeprels, validFeatures, null, ae));
 //            JsonArray diffs = new JsonArray();
 //            for (ConllWord sysw : csent.getWords()) {
 //                ConllWord goldw = goldsent.getWord(sysw.getFullId());
@@ -334,6 +342,10 @@ public class ConlluEditor {
         if (ae.deprel > 0) {
             anyerrors = true;
             errors.addProperty("invalidDeprels", ae.deprel);
+        }
+        if (ae.features > 0) {
+            anyerrors = true;
+            errors.addProperty("invalidFeatures", ae.features);
         }
         if (anyerrors) {
             solution.add("errors", errors);
@@ -454,6 +466,14 @@ public class ConlluEditor {
                 jd.add(d);
             }
             solution.add("validXPOS", jd);
+        }
+
+        if (validFeatures != null) {
+            JsonArray jd = new JsonArray();
+            for (String d : validFeatures.getList()) {
+                jd.add(d);
+            }
+            solution.add("validFeatures", jd);
         }
 
         if (shortcuts != null) {
@@ -1564,6 +1584,7 @@ public class ConlluEditor {
         System.err.println("   --UPOS <files>       comma separated list of files with valid UPOS");
         System.err.println("   --XPOS <files>       comma separated list of files with valid UPOS");
         System.err.println("   --deprels <file>     comma separated list of files with valid deprels");
+        System.err.println("   --features <file>    comma separated list of files with valid [upos:]feature=value pairs");
         System.err.println("   --validator <file>   file with validator configuration");
         System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
         System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) after each modification");
@@ -1586,6 +1607,7 @@ public class ConlluEditor {
         List<String> uposfiles = null;
         List<String> xposfiles = null;
         List<String> deprelfiles = null;
+        List<String> featurefiles = null;
         String shortcutfile = null;
         String rootdir = null;
         String validator = null;
@@ -1603,6 +1625,10 @@ public class ConlluEditor {
             } else if (args[a].equals("--XPOS")) {
                 String[] fns = args[++a].split(",");
                 xposfiles = Arrays.asList(fns);
+                argindex += 2;
+            } else if (args[a].equals("--features")) {
+                String[] fns = args[++a].split(",");
+                featurefiles = Arrays.asList(fns);
                 argindex += 2;
             } else if (args[a].equals("--deprels")) {
                 String[] fns = args[++a].split(",");
@@ -1654,6 +1680,9 @@ public class ConlluEditor {
             }
             if (deprelfiles != null) {
                 ce.setValidDeprels(deprelfiles);
+            }
+            if (featurefiles != null) {
+                ce.setValidFeatures(featurefiles);
             }
             if (validator != null) {
                 ce.setValidator(validator);

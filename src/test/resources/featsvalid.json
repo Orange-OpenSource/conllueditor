@@ -1,0 +1,343 @@
+{
+  "sentenceid": 1,
+  "maxsentence": 19,
+  "sentence": "Les études durent six ans mais leur contenu diffère donc selon les Facultés. ",
+  "length": 14,
+  "sent_id": "fr-ud-dev_00002",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 3,
+      "id": 3,
+      "form": "durent",
+      "lemma": "durer",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind",
+          "error": "name"
+        },
+        {
+          "name": "Number",
+          "val": "Plur",
+          "error": "value"
+        },
+        {
+          "name": "Person",
+          "val": "3",
+          "error": "name"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres",
+          "error": "name"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin",
+          "error": "name"
+        }
+      ],
+      "xpos": "_",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 2,
+          "archeight": 1,
+          "id": 2,
+          "form": "études",
+          "lemma": "étude",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Fem",
+              "error": "value"
+            },
+            {
+              "name": "Number",
+              "val": "Plur",
+              "error": "value"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 1,
+              "archeight": 1,
+              "id": 1,
+              "form": "Les",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def",
+                  "error": "value"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem",
+                  "error": "value"
+                },
+                {
+                  "name": "Number",
+                  "val": "Plur",
+                  "error": "value"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art",
+                  "error": "value"
+                }
+              ],
+              "xpos": "_",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 5,
+          "archeight": 2,
+          "id": 5,
+          "form": "ans",
+          "lemma": "an",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Plur",
+              "error": "value"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 1,
+              "id": 4,
+              "form": "six",
+              "lemma": "six",
+              "xpos": "_",
+              "upos": "NUM",
+              "deprel": "nummod",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 9,
+          "archeight": 3,
+          "id": 9,
+          "form": "diffère",
+          "lemma": "différer",
+          "feats": [
+            {
+              "name": "Mood",
+              "val": "Ind",
+              "error": "name"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Person",
+              "val": "3",
+              "error": "name"
+            },
+            {
+              "name": "Tense",
+              "val": "Pres",
+              "error": "name"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Fin",
+              "error": "name"
+            }
+          ],
+          "xpos": "_",
+          "upos": "VERB",
+          "deprel": "conj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 6,
+              "archeight": 2,
+              "id": 6,
+              "form": "mais",
+              "lemma": "mais",
+              "xpos": "_",
+              "upos": "CCONJ",
+              "deprel": "cc",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 8,
+              "archeight": 1,
+              "id": 8,
+              "form": "contenu",
+              "lemma": "contenu",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "_",
+              "upos": "NOUN",
+              "deprel": "nsubj",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 7,
+                  "archeight": 1,
+                  "id": 7,
+                  "form": "leur",
+                  "lemma": "son",
+                  "feats": [
+                    {
+                      "name": "Gender",
+                      "val": "Masc",
+                      "error": "name"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Prs"
+                    }
+                  ],
+                  "xpos": "_",
+                  "upos": "DET",
+                  "deprel": "nmod:poss",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            },
+            {
+              "position": 10,
+              "archeight": 1,
+              "id": 10,
+              "form": "donc",
+              "lemma": "donc",
+              "xpos": "_",
+              "upos": "ADV",
+              "deprel": "advmod",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 13,
+              "archeight": 3,
+              "id": 13,
+              "form": "Facultés",
+              "lemma": "Facultés",
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "_",
+              "upos": "PROPN",
+              "deprel": "obl",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 11,
+                  "archeight": 2,
+                  "id": 11,
+                  "form": "selon",
+                  "lemma": "selon",
+                  "xpos": "_",
+                  "upos": "ADP",
+                  "deprel": "case",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 12,
+                  "archeight": 1,
+                  "id": 12,
+                  "form": "les",
+                  "lemma": "le",
+                  "feats": [
+                    {
+                      "name": "Definite",
+                      "val": "Def",
+                      "error": "value"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Plur",
+                      "error": "value"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Art",
+                      "error": "value"
+                    }
+                  ],
+                  "xpos": "_",
+                  "upos": "DET",
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 14,
+          "archeight": 4,
+          "id": 14,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "_",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "errors": {
+    "invalidFeatures": 20
+  },
+  "comments": "sentence 1\n",
+  "canUndo": false,
+  "canRedo": false
+}

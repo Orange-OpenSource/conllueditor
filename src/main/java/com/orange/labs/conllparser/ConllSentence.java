@@ -28,14 +28,21 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.3 as of 21st May 2020
+ @version 2.5.0 as of 23rd May 2020
  */
 package com.orange.labs.conllparser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1115,7 +1122,7 @@ public class ConllSentence {
             if (contracted != null) {
                 Set<ConllWord> mwes = new HashSet<>();
                 for (ConllWord mwe : contracted.values()) {
-                    if (mwe.getId() == id  || mwe.getId() == id + 1
+                    if (mwe.getId() == id || mwe.getId() == id + 1
                             || mwe.getSubid() == id || mwe.getSubid() == id + 1) {
                         mwes.add(mwe);
                     }
@@ -1456,6 +1463,7 @@ public class ConllSentence {
         public int xpos; // invalid xpos
         public int upos;
         public int deprel;
+        public int features;
 
         public AnnotationErrors() {
         }
@@ -1463,13 +1471,22 @@ public class ConllSentence {
 
     /**
      * produire un arbre en Json. Nécessite l'appel a makeTrees()
+     *
+     * @param validupos
+     * @param validxpos
+     * @param validdeprels
+     * @param validfeats
+     * @param highlight
+     * @param ae
+     * @return
      */
     public JsonArray toJsonTree(Set<String> validupos, Set<String> validxpos, Set<String> validdeprels,
+            ValidFeatures validfeats,
             Highlight highlight, AnnotationErrors ae) {
         JsonArray jheads = new JsonArray();
         for (ConllWord head : headss) {
             //if (head.getTokentype() != ConllWord.Tokentype.WORD) continue;
-            JsonObject jhead = head.toJson(validupos, validxpos, validdeprels, highlight, ae, contracted); //conllWord2json(head);
+            JsonObject jhead = head.toJson(validupos, validxpos, validdeprels, validfeats, highlight, ae, contracted); //conllWord2json(head);
             jhead.addProperty("indexshift", words.get(0).getId() - 1); // nécessaire s'il y a plusieurs arbres dans la phrase
             jheads.add(jhead);
         }

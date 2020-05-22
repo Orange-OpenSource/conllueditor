@@ -42,6 +42,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -79,7 +81,7 @@ public class TestConlluEditor {
     private void name(String n) {
         System.out.format("\n***** Testing: %S ****\n", n);
     }
- 
+
     @Test
     public void test01Latex() throws IOException {
         name("LaTeX output");
@@ -106,7 +108,7 @@ public class TestConlluEditor {
         jobject = jelement.getAsJsonObject();
         sb.append(jobject.get("raw").getAsString()).append('\n');
 
-        FileUtils.writeStringToFile(out, sb.toString(), //jobject.get("raw").getAsString(), 
+        FileUtils.writeStringToFile(out, sb.toString(), //jobject.get("raw").getAsString(),
                                          StandardCharsets.UTF_8);
 
         Assert.assertEquals(String.format("LaTeX output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
@@ -197,7 +199,7 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-    }    
+    }
 
     @Test
     public void test13EditJoinSplitBeforeEmptyNode() throws IOException {
@@ -212,7 +214,7 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-    } 
+    }
 
     @Test
     public void test14EditJoinSplitWithEnhDeps() throws IOException {
@@ -260,7 +262,7 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-    }    
+    }
 
     @Test
     public void test17JoinOverlapMWTend() throws IOException {
@@ -274,8 +276,8 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
-    }    
-   
+    }
+
     @Test
     public void test21Read() throws IOException {
         name("read sentence");
@@ -394,7 +396,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
-    
+
     @Test
     public void test35FindNothing() throws IOException {
         name("findupos (error)");
@@ -442,11 +444,84 @@ public class TestConlluEditor {
 
         URL ref = this.getClass().getResource("test.add_ed.conllu");
         URL res = this.getClass().getResource("test.conllu.4");
-        
+
         Assert.assertEquals(String.format("mod ed incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void test41validUPOS() throws IOException {
+        name("testing valid UPOS");
+        ce.setCallcitcommot(false);
+        URL url = this.getClass().getResource("upos.txt");
+        File file = new File(url.getFile());
+        List<String>filenames = new ArrayList<>();
+        filenames.add(file.toString());
+        ce.setValidUPOS(filenames);
+
+        String rtc = ce.process("read 2", 1, "");
+        JsonElement jelement = new JsonParser().parse(rtc);
+
+        File out = new File(folder, "uposvalid.json");
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("uposvalid.json");
+
+        Assert.assertEquals(String.format("Read return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test42validDeprel() throws IOException {
+        name("testing valid deprels");
+        ce.setCallcitcommot(false);
+        URL url = this.getClass().getResource("deprel.txt");
+        File file = new File(url.getFile());
+        List<String>filenames = new ArrayList<>();
+        filenames.add(file.toString());
+        ce.setValidDeprels(filenames);
+
+        String rtc = ce.process("read 2", 1, "");
+        JsonElement jelement = new JsonParser().parse(rtc);
+
+        File out = new File(folder, "deprelvalid.json");
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("deprelvalid.json");
+
+        Assert.assertEquals(String.format("Read return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test43validFeuts() throws IOException {
+        name("testing valid features");
+        ce.setCallcitcommot(false);
+        URL url = this.getClass().getResource("feat_val.txt");
+        File file = new File(url.getFile());
+        List<String>filenames = new ArrayList<>();
+        filenames.add(file.toString());
+        ce.setValidFeatures(filenames);
+
+        String rtc = ce.process("read 1", 1, "");
+        JsonElement jelement = new JsonParser().parse(rtc);
+
+        File out = new File(folder, "featsvalid.json");
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("featsvalid.json");
+
+        Assert.assertEquals(String.format("Read return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
 
 //    @Test
 //    public void test41AddExtraColumn() throws IOException, ConllException {

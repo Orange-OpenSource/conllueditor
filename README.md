@@ -156,6 +156,8 @@ Point your navigator to `http://localhost/conllueditor?port=8888` .
 * `--UPOS <file>` comma separated list of files containing valid UPOS tags (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS tags
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
+* `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud)
+in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
 * `--validator <file>` validator configuration file (see section [validation](#Validation) below)
 * `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
@@ -420,5 +422,15 @@ the enhanced dependency field must contain one or more `|`-separated `head:depre
 
 * Johannes Heinecke (2019): [ConlluEditor: a fully graphical editor for Universal dependencies treebank files](https://syntaxfest.github.io/syntaxfest19/proceedings/papers/paper_55.pdf). In: [Universal Dependencies Workshop 2019](http://universaldependencies.org/udw19/). Paris. ([Short demo video](https://syntaxfest.github.io/syntaxfest19/slides/conllueditor_demo_windows_subtitled.mp4))
 
-
+```
+@inproceedings{heinecke2019,
+  author = {Heinecke, Johannes},
+  title = {{ConlluEditor: a fully graphical editor for Universal dependencies treebank files}},
+  year = {2019},
+  booktitle = {{Universal Dependencies Workshop 2019}},
+  address = {Paris},
+  url = {https://github.com/Orange-OpenSource/conllueditor/},
+  howpublished = {\url{https://syntaxfest.github.io/syntaxfest19/proceedings/papers/paper_55.pdf}},
+}
+```
 
