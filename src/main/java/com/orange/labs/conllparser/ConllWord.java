@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.0 as of 23rd May 2020
+ @version 2.5.1 as of 11th June 2020
  */
 package com.orange.labs.conllparser;
 
@@ -1384,7 +1384,7 @@ public class ConllWord {
         features.clear();
 
         if (!EmptyColumn.equals(unparsed_featsstring)) {
-            String[] elems = unparsed_featsstring.split("[\\|,\n]");
+            String[] elems = unparsed_featsstring.split("[\\|\n]");
             for (String fv : elems) {
                 addFeature(fv);
             }
@@ -1394,7 +1394,7 @@ public class ConllWord {
     // add a unparsed feature=value pair */
     public void addFeature(String fval_unparsed) {
         String[] name_val = fval_unparsed.split("=", 2);
-        features.put(name_val[0], name_val.length > 1 ? name_val[1] : null);
+        features.put(name_val[0], name_val.length > 1 ? name_val[1] : "");
     }
 
     // check whether any fatures are present

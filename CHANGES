@@ -1,3 +1,6 @@
+Version 2.5.1
+- allow comma seperated feature value list
+
 Version 2.5.0
 - new option --features to specify a list of files which define valid feature=value pairs and lists of valid features for a given upos
 - autocomplete for feature=value pairs and misc entries
