@@ -136,7 +136,7 @@
 90-100	du	_	_	_	_	_	_	_	_
 90	de	de	ADP	_	_	120	case	_	_
 100	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	120	det	_	_
-110	VIe	VIe	ADJ	_	Gender=Masc|NumType=Ord|Number=Sing	120	amod	_	_
+110	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	120	amod	_	_
 120	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	80	nmod	_	SpaceAfter=No
 130	.	.	PUNCT	_	_	30	punct	_	_
 

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.1 as of 11th June 2020
+ @version 2.5.2 as of 16th June 2020
  */
 package com.orange.labs.conllparser;
 
@@ -136,7 +136,7 @@ public class ConllWord {
             }
         } else {
             if (orderfeatures) {
-                features = new TreeMap<>();
+                features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             } else {
                 features = new LinkedHashMap<>();
             }
@@ -193,7 +193,7 @@ public class ConllWord {
         xpostag = EmptyColumn;
         deplabel = EmptyColumn;
         if (orderfeatures) {
-            features = new TreeMap<>(); //Arrays.asList(elems[shift + 5].split("\\|")));
+            features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER); //Arrays.asList(elems[shift + 5].split("\\|")));
         } else {
             features = new LinkedHashMap<>();
         }
@@ -351,7 +351,7 @@ public class ConllWord {
             }
 
             if (orderfeatures) {
-                features = new TreeMap<>();
+                features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             } else {
                 features = new LinkedHashMap<>();
             }
