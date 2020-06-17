@@ -202,7 +202,7 @@ public class ParserClient {
         String result = response.toString();
 
         if (jsonpath != null) {
-            JsonElement jelem = new JsonParser().parse(result);
+            JsonElement jelem = JsonParser.parseString(result); // new JsonParser().parse(result);
             JsonObject jobject = jelem.getAsJsonObject();
             Iterator<String> it = jsonpath.iterator();
             JsonElement je = null;
@@ -228,9 +228,10 @@ public class ParserClient {
         if (info != null) {
             try {
                 String response = httpget(info);
-                JsonParser jp = new JsonParser();
                 try {
-                    JsonElement je = jp.parse(response);
+                	//JsonParser jp = new JsonParser();
+                    //JsonElement je = jp.parse(response);
+                	JsonElement je = JsonParser.parseString(response);
                     solution.add("info", je);
                 } catch (JsonSyntaxException e) {
                     solution.addProperty("info", response);

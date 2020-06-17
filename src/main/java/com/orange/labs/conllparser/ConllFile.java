@@ -66,7 +66,7 @@ import java.util.Set;
 public class ConllFile {
 
     List<ConllSentence> sentences;
-    Class conllsentenceSubclass = null;
+    Class<ConllSentence> conllsentenceSubclass = null;
     int ctline;
     boolean standardcols = true;
     Map<String, Integer>columndefs = null; // column definitions: column name: position
@@ -210,7 +210,7 @@ public class ConllFile {
                         } else if (line.startsWith("#ID")) {
                             showID = true;
                         }
-			sentenceLines.add(new AbstractMap.SimpleEntry(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
+                        sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
                     } else {
 
                         // les lignes CONLL commence toujours avec un nombre, SAUF si on utilise le
@@ -220,7 +220,7 @@ public class ConllFile {
                                 !elems[0].isEmpty() && Character.isDigit(elems[0].charAt(0))) {
                             // supprimer les lignes commentaires ou autres
                             //System.out.println("ADDING " + line);
-                            sentenceLines.add(new AbstractMap.SimpleEntry(ctline, line));
+                            sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ctline, line));
                             countWords++;
                         } else {
                             //System.err.println("WARNING: incorrect line ignored: (line " + ctline + "): " + line);
@@ -254,11 +254,14 @@ public class ConllFile {
             c = new ConllSentence(sentenceLines, columndefs);
         } else {
             try {
-                Class[] cargs = new Class[2];
+                @SuppressWarnings("rawtypes")
+				Class [] cargs = new Class[2];
                 cargs[0] = List.class;
-                cargs[1] = Integer.class;
+                cargs[1] = Map.class;
                 // TODO: conllsentence sublcasses do not use yet the CoNLL-U+ format
-                c = (ConllSentence) conllsentenceSubclass.getDeclaredConstructor(cargs).newInstance(sentenceLines);
+                // get the constructor with arguments cargs (a list)
+                // and create a new instance
+                c = (ConllSentence) conllsentenceSubclass.getDeclaredConstructor(cargs).newInstance(sentenceLines, columndefs);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException ex) {
                 System.err.println("Invalid ConllSentence subclass " + ex + ":: " + ex.getMessage());
             } catch (InvocationTargetException ex) {

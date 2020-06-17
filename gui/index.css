@@ -509,3 +509,23 @@ text {
 #compare table tr td {
   border: 1px solid black;
 }
+
+
+.oodewis {
+    width: 120px;
+    padding: 5px;
+  
+    line-height: 1;
+  
+   
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+   
+    background: url('img/select.svg'); 
+    background-size: auto .8em; 
+    background-position: right .5em top 50%;
+    background-repeat:no-repeat;
+
+
+}

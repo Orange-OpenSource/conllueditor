@@ -111,7 +111,7 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
 
 
     svg.setAttribute('height', svgmaxy + 30);
-    svg.setAttribute('width', svgmaxx + 40);
+    svg.setAttribute('width', svgmaxx + 50); // width of entire scg. TODO get real width from word drawing, taking into account feats/misc
 
     return defs;
 }

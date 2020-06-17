@@ -61,7 +61,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     var grayclassf = ""; // feature text
     var grayclass2 = ""; // background
     var rect_idprefix = ""; // give word boxes a different ID to avoid editing on them
-    // the dep graph in the background is the gold graph in comparison mode, 
+    // the dep graph in the background is the gold graph in comparison mode,
     if (gold == 1) {
         grayclass = " goldtree";
         grayclassf = " goldtreefeats";
@@ -176,7 +176,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         }
     }
 
-    // finaly calculate surrounding box
+    // finally calculate surrounding box
     var rect = document.createElementNS(svgNS, "rect");
     rect.setAttribute("id", rect_idprefix + "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
     if (!autoadaptwidth) {
@@ -236,7 +236,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
 
     bottomlevels[0] = level;
     bottomlevels[1] = level;
-    if (showfeats && item.feats != undefined) { // display morph-syntactical features if active
+    if (showfeats && item.feats != undefined) { // display morpho-syntactical features if active
         level += vertdiff * 2;
         for (var f in item.feats) {
 //            if (item.feats[f] == "_") {

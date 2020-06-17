@@ -1,0 +1,91 @@
+
+.conllutable  {
+    border-collapse: collapse;
+    table-layout:fixed;
+    oomargin: 0 auto;
+    margin-top: 0px;
+}
+
+
+
+table.conllutable td {
+    border: 1px solid #8a8;
+    oocolor: black;
+}
+
+/*table.conllutable input { */
+.tablecell {
+    border: 0px; /* solid #aaffaa; */
+    color: darkgreen;
+    background-color: #edffed;
+}
+
+.noedit {
+   background-color: #edd;
+}
+
+.tdid {
+    color: #aaa;
+    width: 30px;
+    text-align: right;
+}
+
+.tdform, .tdlemma {
+    width: 100px;
+}
+
+
+.iform, .ilemma {
+    width: 100px;
+    /*font-family: serif; */
+}
+
+
+.tdupos {
+    width: 90px;
+} 
+
+
+.tdxpos {
+    width: 120px;
+} 
+
+table.conllutable select {
+    color: darkgreen;
+}
+
+.iupos {
+    width: 90px;
+
+}
+.ixpos {
+    width: 120px; 
+
+}
+
+.ifeat { 
+    width: 250px;
+}
+.tdfeat { 
+    width: 250px;
+}
+
+
+.ihead { 
+    width: 40px;
+    ootext-align: right;
+}
+
+.ideprel {
+    width: 80px;
+}
+
+.iehd {
+    width: 100px;
+}
+
+.imisc {
+    width: 120px;
+}
+
+

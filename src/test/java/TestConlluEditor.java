@@ -92,11 +92,12 @@ public class TestConlluEditor {
 
         URL url = this.getClass().getResource("test.tex");
 
-        // call proces to be sure makeTrees has been  called
-        String rtc = ce.process("read 13", 1, "editinfo");
+        // call process to be sure makeTrees has been  called
+        //String rtc = 
+        ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.LATEX, 13);
         // first sentence 13
-        JsonElement jelement = new JsonParser().parse(res);
+        JsonElement jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
         JsonObject jobject = jelement.getAsJsonObject();
 
         StringBuilder sb = new StringBuilder();
@@ -104,7 +105,7 @@ public class TestConlluEditor {
 
         // add LateX for sentence 18
         res = ce.getraw(ConlluEditor.Raw.LATEX, 18);
-        jelement = new JsonParser().parse(res);
+        jelement = JsonParser.parseString(res); 
         jobject = jelement.getAsJsonObject();
         sb.append(jobject.get("raw").getAsString()).append('\n');
 
@@ -126,9 +127,10 @@ public class TestConlluEditor {
         URL url = this.getClass().getResource("test.json");
 
         // call proces to be sure makeTrees has been  called
-        String rtc = ce.process("read 13", 1, "editinfo");
+        //String rtc = 
+        ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13);
-        JsonElement jelement = new JsonParser().parse(res);
+        JsonElement jelement = JsonParser.parseString(res); 
         JsonObject jobject = jelement.getAsJsonObject();
 
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
@@ -148,19 +150,21 @@ public class TestConlluEditor {
         URL url = this.getClass().getResource("out1.conllu");
 
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13);
-        JsonElement jelement = new JsonParser().parse(res);
+        JsonElement jelement = JsonParser.parseString(res); 
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
-        String rtc = ce.process("read 14", 1, "editinfo");
+        //String rtc =
+        ce.process("read 14", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 14);
-        jelement = new JsonParser().parse(res);
+        jelement = JsonParser.parseString(res); 
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
-        rtc = ce.process("read 15", 1, "editinfo");
+        //rtc = 
+        ce.process("read 15", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 15);
-        jelement = new JsonParser().parse(res);
+        jelement = JsonParser.parseString(res); 
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
@@ -174,10 +178,11 @@ public class TestConlluEditor {
     public void test11EditJoinSplit() throws IOException {
         name("modifying lemma, deprel, and split/join");
         ce.setCallcitcommot(false);
-        String rtc = ce.process("mod lemma 3 Oasis", 3, "editinfo");
-        rtc = ce.process("mod 1 2 detfalse", 3, "editinfo");
-        rtc = ce.process("mod split 19", 3, "editinfo");
-        rtc = ce.process("mod join 5", 3, "editinfo");
+        //String rtc = 
+        ce.process("mod lemma 3 Oasis", 3, "editinfo");
+        /*rtc = */ce.process("mod 1 2 detfalse", 3, "editinfo");
+        ce.process("mod split 19", 3, "editinfo");
+        ce.process("mod join 5", 3, "editinfo");
 
         URL ref = this.getClass().getResource("test.mod.conllu");
         URL res = this.getClass().getResource("test.conllu.2"); // modified file
@@ -191,8 +196,8 @@ public class TestConlluEditor {
         name("split/join before a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".5");
-        String rtc = ce.process("mod split 2 3", 4, "editinfo");
-        rtc = ce.process("mod join 5", 4, "editinfo");
+        ce.process("mod split 2 3", 4, "editinfo");
+        ce.process("mod join 5", 4, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-mwt.conllu");
         URL res = this.getClass().getResource("test.conllu.5"); // modified file
@@ -206,8 +211,9 @@ public class TestConlluEditor {
         name("split/join before a empty word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".6");
-        String rtc = ce.process("mod split 5 ", 16, "editinfo");
-        rtc = ce.process("mod join 13", 16, "editinfo");
+        //String rtc = 
+        ce.process("mod split 5 ", 16, "editinfo");
+        ce.process("mod join 13", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-ew.conllu");
         URL res = this.getClass().getResource("test.conllu.6"); // modified file
@@ -221,9 +227,9 @@ public class TestConlluEditor {
         name("split/join before a enhanced deps");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".7");
-        String rtc = ce.process("mod split 4 ", 13, "editinfo");
-        rtc = ce.process("mod split 3", 13, "editinfo");
-        rtc = ce.process("mod join 4", 13, "editinfo");
+        ce.process("mod split 4 ", 13, "editinfo");
+        ce.process("mod split 3", 13, "editinfo");
+        ce.process("mod join 4", 13, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-ed.conllu");
         URL res = this.getClass().getResource("test.conllu.7"); // modified file
@@ -237,11 +243,11 @@ public class TestConlluEditor {
         name("create two MWT with three/two words and rename contracted form");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".8");
-        String rtc = ce.process("mod compose 1 3", 17, "editinfo");
-        rtc = ce.process("mod editmwe 1 3 Dáselle", 17, "editinfo");
+        ce.process("mod compose 1 3", 17, "editinfo");
+        ce.process("mod editmwe 1 3 Dáselle", 17, "editinfo");
 
-        rtc = ce.process("mod compose 6 2", 17, "editinfo");
-        rtc = ce.process("mod editmwe 6 7 ao Gloss=to_him", 17, "editinfo");
+        ce.process("mod compose 6 2", 17, "editinfo");
+        ce.process("mod editmwe 6 7 ao Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
         URL res = this.getClass().getResource("test.conllu.8"); // modified file
@@ -255,7 +261,8 @@ public class TestConlluEditor {
         name("join overlapping be first word of a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".9");
-        String rtc = ce.process("mod join 5", 6, "editinfo");
+        //String rtc = 
+        ce.process("mod join 5", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt.conllu");
         URL res = this.getClass().getResource("test.conllu.9"); // modified file
@@ -269,7 +276,8 @@ public class TestConlluEditor {
         name("join overlapping be last word of a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".10");
-        String rtc = ce.process("mod join 6", 6, "editinfo");
+        //String rtc = 
+        ce.process("mod join 6", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt-2.conllu");
         URL res = this.getClass().getResource("test.conllu.10"); // modified file
@@ -283,7 +291,7 @@ public class TestConlluEditor {
         name("read sentence");
         ce.setCallcitcommot(false);
         String rtc = ce.process("read 13", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("read.json");
         File out = new File(folder, "read.json");
@@ -302,7 +310,7 @@ public class TestConlluEditor {
         name("read a second sentence");
         ce.setCallcitcommot(false);
         String rtc = ce.process("read 16", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("read.json");
         File out = new File(folder, "read_16.json");
@@ -321,7 +329,7 @@ public class TestConlluEditor {
         name("findlemma");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findlemma false fromage/.*/puer", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("findlemma.json");
         File out = new File(folder, "findlemma.json");
@@ -341,7 +349,7 @@ public class TestConlluEditor {
         name("findword");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findword false \" and \"", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "findform.json");
@@ -361,7 +369,7 @@ public class TestConlluEditor {
         name("findsenteid");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findsentid false c.*-ud", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "findsentid.json");
@@ -381,7 +389,7 @@ public class TestConlluEditor {
         name("findsenteid (bad RE)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findsentid false c.*[]-ud", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "findsentidBadRE.json");
@@ -402,7 +410,7 @@ public class TestConlluEditor {
         name("findupos (error)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findupos false TOTO", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         //File out = folder.newFile("finduposKO.json");
         File out = new File(folder, "finduposKO.json");
@@ -422,9 +430,9 @@ public class TestConlluEditor {
         name("modifying UPOS and Lemma, followed by undo");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
-        String rtc = ce.process("mod lemma 1 Sammie", 13, "editinfo");
-        rtc = ce.process("mod upos 2 VERBPAST", 13, "editinfo");
-        rtc = ce.process("mod undo", 13, "editinfo");
+        ce.process("mod lemma 1 Sammie", 13, "editinfo");
+        ce.process("mod upos 2 VERBPAST", 13, "editinfo");
+        ce.process("mod undo", 13, "editinfo");
 
         URL ref = this.getClass().getResource("test.mod.undo.conllu");
         URL res = this.getClass().getResource("test.conllu.3");
@@ -438,9 +446,9 @@ public class TestConlluEditor {
         name("adding/deleting enhanced dependency");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".4");
-        String rtc = ce.process("mod ed add 7 6 ref", 7, "editinfo");
-        rtc = ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
-        rtc = ce.process("mod ed del 1 4", 11, "editinfo");
+        ce.process("mod ed add 7 6 ref", 7, "editinfo");
+        ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
+        ce.process("mod ed del 1 4", 11, "editinfo");
 
         URL ref = this.getClass().getResource("test.add_ed.conllu");
         URL res = this.getClass().getResource("test.conllu.4");
@@ -461,7 +469,7 @@ public class TestConlluEditor {
         ce.setValidUPOS(filenames);
 
         String rtc = ce.process("read 2", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         File out = new File(folder, "uposvalid.json");
         //System.err.println(prettyprintJSON(jelement));
@@ -485,7 +493,7 @@ public class TestConlluEditor {
         ce.setValidDeprels(filenames);
 
         String rtc = ce.process("read 2", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         File out = new File(folder, "deprelvalid.json");
         //System.err.println(prettyprintJSON(jelement));
@@ -509,7 +517,7 @@ public class TestConlluEditor {
         ce.setValidFeatures(filenames);
 
         String rtc = ce.process("read 1", 1, "");
-        JsonElement jelement = new JsonParser().parse(rtc);
+        JsonElement jelement = JsonParser.parseString(rtc); 
 
         File out = new File(folder, "featsvalid.json");
         //System.err.println(prettyprintJSON(jelement));

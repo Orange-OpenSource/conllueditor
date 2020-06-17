@@ -34,15 +34,8 @@ package com.orange.labs.conllparser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -110,7 +103,7 @@ public class ConllSentence {
         List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines = new ArrayList<>();
         int ct = 0;
         for (String line : conllstring.split("\n")) {
-            sentenceLines.add(new AbstractMap.SimpleEntry(ct, line));
+            sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ct, line));
         }
         this.columndefs = columndefs;
         parse(sentenceLines);
@@ -236,7 +229,11 @@ public class ConllSentence {
             }
         }
     }
-
+    
+    public Map<String, Integer>getColumndefs() {
+        return columndefs;
+    }
+    
     public boolean isValidExtraColumn(String colname) {
         if (columndefs == null) {
             return false;
@@ -770,7 +767,7 @@ public class ConllSentence {
 
                             if (ew.getExtracolumns() != null) {
                                 for (String ec : extracols) {
-                                    LinkedHashSet<String> tmp = word.getExtracolumns().get(ec);
+                                    //LinkedHashSet<String> tmp = word.getExtracolumns().get(ec);
                                     StringBuilder ecsb = ecs.get(ec);
                                     ecsb.append("\\& ");
                                     if (!word.getExtracolumns().get(ec).isEmpty()) {
@@ -1153,7 +1150,7 @@ public class ConllSentence {
                 //System.err.println("OTHER FURTHER DOWN, deleting " + other);
                 words.remove(other);
             }
-            System.err.println("eeee\n" + this);
+
             normalise(1);
             makeTrees(null);
         }

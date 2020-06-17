@@ -60,6 +60,7 @@ public class TestConlluPlus {
     public void setUp() throws ConllException, IOException {
         URL url = this.getClass().getResource("test.conllup");
         File file = new File(url.getFile());
+
         try {
             ce = new ConlluEditor(file.toString());
         } catch (Exception e) {
@@ -100,7 +101,8 @@ public class TestConlluPlus {
         URL inurl = this.getClass().getResource("test2.conllup");
         File out = new File(folder, "fileout2.txt");
         try {
-            ConllFile cd = new ConllFile(new File(inurl.getFile()), false, false);
+            //ConllFile cd = 
+            		new ConllFile(new File(inurl.getFile()), false, false);
         } catch (Exception e) {
             FileUtils.writeStringToFile(out, e.getMessage()+ "\n", StandardCharsets.UTF_8, false);
         }
@@ -124,19 +126,21 @@ public class TestConlluPlus {
         URL url = this.getClass().getResource("out1.conllup");
 
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0); // to have the global.columns line
-        JsonElement jelement = new JsonParser().parse(res);
+        JsonElement jelement = JsonParser.parseString(res); 
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
-        String rtc = ce.process("read 1", 1, "editinfo");
+       // String rtc = 
+        		ce.process("read 1", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 1);
-        jelement = new JsonParser().parse(res);
+        jelement = JsonParser.parseString(res); 
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
-        rtc = ce.process("read 2", 1, "editinfo");
+        //rtc = 
+        		ce.process("read 2", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 2);
-        jelement = new JsonParser().parse(res);
+        jelement = JsonParser.parseString(res); 
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
@@ -152,9 +156,12 @@ public class TestConlluPlus {
         name("modifying columns 11 and 12");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
-        String rtc = ce.process("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
-        rtc = ce.process("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
-        rtc = ce.process("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
+        //String rtc = 
+        ce.process("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
+        //rtc =
+        ce.process("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
+        //rtc = 
+        ce.process("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
 
 
         URL ref = this.getClass().getResource("test.mod.conllup");

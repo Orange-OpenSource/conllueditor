@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.0 as of 23rd May 2020
+ @version 2.6.0 as of 17th June 2020
  */
 
 
@@ -575,13 +575,18 @@ $(window).on('keypress', function (evt) {
         return;
     }
 
+    if (graphtype == 3) {
+        // in table mode, we need all keys to edit the table cells
+        return;
+    }
+
     if (evt.which == 63) {
         ToggleShortcutHelp();
     } else if (evt.which == 43) { // +
         sendmodifs({"cmd": "next"});
     } else if (evt.which == 45) { // -
         sendmodifs({"cmd": "prec"});
-    } else if (evt.which == 61) { // = valid
+    } else if (evt.which == 61) { // = validator
          $("#valid").click();
     } else if (clickedNodes.length == 1) {
         // a word is active
@@ -935,7 +940,8 @@ function unhighlight() {
 }
 
 
-var flatgraph = false;
+//var flatgraph = false;
+var graphtype = 1; // 1: tree, 2: hedge, 3: table
 var showfeats = false;
 var showmisc = false;
 var showr2l = false;
@@ -953,12 +959,12 @@ var highlightY = 0;
  * @returns {undefined}
  */
 function formatPhrase(item) {
-    //console.log("eee " + item.message )
+    //console.log("eee " + item.message);
     if (autoadaptwidth) {
         var maxlen =  getAllWordLengths(item, 0);
-        // set calculate maxwidth
-       // $("#bwidth").val(maxlen); //$("#bheight").val()));
+        //console.log("MAXLEN " + maxlen);
     }
+
 
 
     highlightX = 0;
@@ -1075,7 +1081,7 @@ function formatPhrase(item) {
                 document.getElementById("titre").style.color = "#101010";
         } else
             document.getElementById("titre").style.color = "#101010";
-        $("#arbre").append(svg);
+        if (graphtype != 3) $("#arbre").append(svg);
         var use_deprel_as_type = true;
         var sentencelength = 0;
         //if ($("#right2left").is(":checked")) {
@@ -1085,7 +1091,7 @@ function formatPhrase(item) {
         //alert("SENT LENGTH: " + item.length);
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
-        if (flatgraph) {
+        if (graphtype == 2 /*flatgraph*/) {
              if (item.comparisontree) {
                 // we display the gold tree (given with --compare) in gray underneath the edited tree
                 $("#scores").empty();
@@ -1105,6 +1111,8 @@ function formatPhrase(item) {
                 }
             }
             drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
+        } else if (graphtype == 3) {
+            drawTable($("#arbre"), item.tree);
         } else {
             //console.log(item.comparisontree);
             incorrectwords = new Set(); // put incorrect word in comparison mode
@@ -1320,7 +1328,7 @@ $(document).ready(function () {
             for (e = 0; e < conllword.feats.length; ++e) {
                 var feat = conllword.feats[e];
                 if (e > 0)
-                    fs += ",";
+                    fs += "|";
                 fs += feat.name + "=" + feat.val;
             }
         } else
@@ -1369,10 +1377,7 @@ $(document).ready(function () {
     $('#savedeprel').click(function () {
         //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdep").text()];
-        /* if (flatgraph && editing_enhanced) {
-         alert("not good " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val())
-         //sendmodifs({"cmd": "mod ed add " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
-         } else */
+
         if (conllword.deprel != $("#cdeprel").val()) {
             sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
@@ -1383,7 +1388,7 @@ $(document).ready(function () {
     $('#savedeprelen').click(function () {
         //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdepen").text()];
-        if (flatgraph && editing_enhanced) {
+        if (/*flatgraph*/ graphtype == 2 && editing_enhanced) {
             //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val())
             sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val()});
             // } else if (conllword.deprel != $("#cdeprel").val()) {
@@ -1396,7 +1401,7 @@ $(document).ready(function () {
     $('#deletedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
         //alert("AAA "+ flatgraph + " "+ editing_enhanced);
-        if (flatgraph /* && editing_enhanced */) {
+        if (/*flatgraph*/ graphtype == 2 /* && editing_enhanced */) {
             sendmodifs({"cmd": "mod ed del " + $("#cdepen").text() + " " + $("#cheaden").text()});
         }
         $('#enhdeprelEdit').modal('hide');
@@ -1444,25 +1449,75 @@ $(document).ready(function () {
 
     });
 
-    $(".mycheck").click(function () {
-        //console.log("clicked", this.id);
-        if (this.id === "flat2") {
-            if (!flatgraph) {
-                $(this).addClass('active');
-                $("#bie").show();
-                $("#edit_ed").show();
-            } else {
-                $(this).removeClass('active');
-                //$("#flat2").text("show tree" + flatgraph);
+    $(".dewis").click(function () {
+        if (this.id === "flat3") {
+            //console.log("zzz", $(this).val());
+        
+            if ($(this).val() === "tree") {
+                //$(this).addClass('active');
                 $("#bie").hide();
                 $("#edit_ed").hide();
+                //flatgraph = false;
+                graphtype = 1;
+            } else if ($(this).val() === "table") {
+                graphtype = 3;
+            } else {
+                //$(this).removeClass('active');
+                //$("#flat2").text("show tree" + flatgraph);
+                //flatgraph = true;
+                graphtype = 2;
+                $("#bie").show();
+                $("#edit_ed").show();
                 editing_enhanced = false;
-                $("#edit_ed").removeClass('active');
+                //$("#edit_ed").removeClass('active');
             }
-            flatgraph = !flatgraph;
+
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id === "feat2") {
+        }
+    });
+
+    $(".mycheck").click(function () {
+        //console.log("clicked", this.id);
+//        if (this.id === "flat2") {
+//            if (!flatgraph) {
+//                $(this).addClass('active');
+//                $("#bie").show();
+//                $("#edit_ed").show();
+//            } else {
+//                $(this).removeClass('active');
+//                //$("#flat2").text("show tree" + flatgraph);
+//                $("#bie").hide();
+//                $("#edit_ed").hide();
+//                editing_enhanced = false;
+//                $("#edit_ed").removeClass('active');
+//            }
+//            flatgraph = !flatgraph;
+//            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+//            sendmodifs(datadico);
+//        } else 
+//        if (this.id === "flat3") {
+//            //console.log("zzz", $(this).val());
+//        
+//            if ($(this).val() === "tree") {
+//                //$(this).addClass('active');
+//                $("#bie").show();
+//                $("#edit_ed").show();
+//                flatgraph = false;
+//            } else {
+//                //$(this).removeClass('active');
+//                //$("#flat2").text("show tree" + flatgraph);
+//                flatgraph = true;
+//                $("#bie").hide();
+//                $("#edit_ed").hide();
+//                editing_enhanced = false;
+//                $("#edit_ed").removeClass('active');
+//            }
+//            //flatgraph = !flatgraph;
+//            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
+//            sendmodifs(datadico);
+//        } else 
+        if (this.id === "feat2") {
             if (!showfeats) {
                 $(this).addClass('active');
             } else {

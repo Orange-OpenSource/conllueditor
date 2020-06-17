@@ -70,19 +70,19 @@ public class ValidFeatures {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fn), StandardCharsets.UTF_8));
 
             String line;
-            int ct = 0;
+            //int ct = 0;
             while ((line = br.readLine()) != null) {
                 if (!line.isEmpty() && !line.startsWith("#")) {
                     if (line.startsWith("U:")) {
                         if (uposFnames == null)  uposFnames = new HashMap<>();
-                        // list of feature names avaible for a given UPOS. Format U:UPOS Fname
+                        // list of feature names available for a given UPOS. Format U:UPOS Fname
                         String[] elems = line.substring(2).split("[ \t]+");
                         Set<String> tmp = new HashSet<>(Arrays.asList(elems));
                         uposFnames.put(elems[0], tmp);
                         tmp.remove(elems[0]); // upos
                     } else if (line.startsWith("X:")) {
                         if (xposFnames == null)  xposFnames = new HashMap<>();
-                        // list of feature names avaible for a given UPOS. Format U:UPOS Fname
+                        // list of feature names available for a given UPOS. Format U:UPOS Fname
                         String[] elems = line.substring(2).split("[ \t]+");
                         Set<String> tmp = new HashSet<>(Arrays.asList(elems));
                         xposFnames.put(elems[0], tmp);
@@ -98,6 +98,7 @@ public class ValidFeatures {
                     }
                 }
             }
+            br.close();
         }
         System.err.format("%d valid Features read from %s\n", validFeatures.size(), filenames.toString());
     }

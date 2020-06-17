@@ -125,6 +125,7 @@ public class Client {
                 }
                 connection.disconnect();
             }
+            brf.close();
 
             // reset to original debugcode
             if (!olddebugCode.isEmpty()) {

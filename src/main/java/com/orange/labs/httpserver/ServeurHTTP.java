@@ -67,7 +67,7 @@ public class ServeurHTTP {
     private int port;
     private ConlluEditor ce = null;
     private ParserClient pc = null;
-    private Date startdate;
+    //private Date startdate;
 
     /* x1   show connections
        x2   show hostname of client (deactivate when no DNS is available, e.g. sometimes in Docker)

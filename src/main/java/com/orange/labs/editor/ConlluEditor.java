@@ -57,7 +57,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -122,6 +121,7 @@ public class ConlluEditor {
 
 	// get CTRL-C and try two write changes not yet saved (if used with option --saveAfter)
         Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
             public void run() {
                 try {
                     Thread.sleep(200);
@@ -159,12 +159,13 @@ public class ConlluEditor {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fn), StandardCharsets.UTF_8));
 
             String line;
-            int ct = 0;
+            //int ct = 0;
             while ((line = br.readLine()) != null) {
                 if (!line.isEmpty() && !line.startsWith("#")) {
                     valid.add(line);
                 }
             }
+            br.close();
         }
         return valid;
     }
@@ -580,7 +581,7 @@ public class ConlluEditor {
                         }
 
                         int firstid = -1;
-                        int lastid = -1;
+                        //int lastid = -1;
                         int id = 0;
                         for (int ix : startindex) {
                             //System.err.println("AAA " + wordoffset + " ix:" + ix + " " + id);
@@ -590,7 +591,7 @@ public class ConlluEditor {
                             }
                             id++;
                             if (ix <= wordoffset + motAtrouver.length()) {
-                                lastid = id;
+                                //lastid = id;
                                 //System.err.println("Last " + lastid);
                             }
                         }
@@ -600,9 +601,9 @@ public class ConlluEditor {
                         if (motAtrouver.charAt(0) == ' ') {
                             firstid++;
                         }
-                        if (motAtrouver.endsWith(" ")) {
-                            lastid--;
-                        }
+                        //if (motAtrouver.endsWith(" ")) {
+                        //    lastid--;
+                        //}
 
                         ConllSentence.Highlight hl = null; //new ConllSentence.Highlight(ConllWord.Fields.FORM, firstid, lastid);
                         return returnTree(currentSentenceId, cs, hl /*, motAtrouver*/);
@@ -1209,7 +1210,7 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod sentjoin")) {
-                String[] f = command.trim().split(" +");
+                //String[] f = command.trim().split(" +");
                 csent = cfile.getSentences().get(currentSentenceId);
 
 //                if (history == null) {
@@ -1693,16 +1694,17 @@ public class ConlluEditor {
             if (saveafter != 0) {
                 ce.setSaveafter(saveafter);
             }
-            
+
             if (comparisonFile != null) {
                 ce.setComparisonFile(comparisonFile);
             }
 
             if (args.length > argindex + 1) {
-                ServeurHTTP sh = new ServeurHTTP(Integer.parseInt(args[argindex + 1]), ce, rootdir, debug);
                 if (mode > 0) {
                     ce.setMode(mode);
                 }
+                //ServeurHTTP sh =
+                new ServeurHTTP(Integer.parseInt(args[argindex + 1]), ce, rootdir, debug);
             } else {
                 System.err.println("Error: no port given");
                 help();
