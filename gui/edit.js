@@ -130,6 +130,7 @@ var xposlist = [];
 var featlist = [];
 var misclist = ["Gloss=", "LGloss=", "SpaceAfter=No", "SpacesAfter=", "Translit=", "LTranslit=", "Typo=Yes"];
 var incorrectwords = {};
+var conllucolumns = [];
 
 /** get information from ConlluEditor server:
  name of edited file
@@ -165,7 +166,8 @@ function getServerInfo() {
                 xposlist = data.validXPOS;
             if (data.validFeatures)
                 featlist = data.validFeatures;
-
+            if (data.columns)
+            	conllucolumns = data.columns;
             if (data.shortcuts) {
                 //console.log("SHORTCUTS", data.shortcuts);
                 $("#scfilename").html(data.shortcuts.filename);
@@ -1205,10 +1207,13 @@ function getConllWords(table, head) {
     }
 }
 
+
+var olddata = undefined;
 /* send correct command to ConlluEditor server using ajax http post
  and re diesplay sentence afterwards (with json receivend from server after the modif) */
 function sendmodifs(commands) {
     commands["sentid"] = $("#currentsent").text() - 1;
+    
     $.ajax({
         url: URL_BASE,
         type: 'POST',
@@ -1228,11 +1233,24 @@ function sendmodifs(commands) {
         },
         success: function (data) {
             //console.log("zzzz " + JSON.stringify(data));
-            formatPhrase(data);
+
+        	if (data.error != undefined) {
+        		//alert(data.error);
+       	        /* show error message */
+       	        $("#errormessagefield").text(data.error);
+        	    $("#errorMessage").modal();
+
+    			if (olddata != undefined) {
+        			formatPhrase(olddata);
+        		}
+        	} else {
+            	formatPhrase(data);
+            	olddata = data;
+        	}
         },
         error: function (data) {
             //console.log("ERREUR " + data);
-            alert("An error occurred (i the ConlluEditor server running?)" + data);
+            alert("An error occurred (is the ConlluEditor server running?)" + data);
         }
     });
 }
@@ -1244,13 +1262,11 @@ $(document).ready(function () {
     getServerInfo();
     $("#sentencetext").hide();
 
-
     /* start comment edit function */
     $("#commentfield").click(function () {
         //alert("rrr "+ $("#commentfield").text());
         $("#commenttext").val($("#commentfield").text());
         //$("#commentedit").dialog("open");
-
         $("#commentEdit").modal()
     });
 
@@ -1259,7 +1275,6 @@ $(document).ready(function () {
         //alert("rrr "+ $("#commentfield").text());
         $("#commenttext").val($("#commentfield").text());
         //$("#commentedit").dialog("open");
-
         $("#commentEdit").modal()
     });
 
@@ -1271,9 +1286,9 @@ $(document).ready(function () {
             // send comments to server directly (not via #mods)
             sendmodifs({"cmd": "mod comments " + newcomment});
         }
-
         $('#commentEdit').modal('hide');
     });
+
 
     /* delete clicked MWE form */
     $('#editMWtoken').click(function () {
@@ -1283,10 +1298,8 @@ $(document).ready(function () {
                     + " " + $("#currentmweto").val()
                     + " " + $("#currentmweform").val()
                     + " " + misc});
-        
         $('#editMWE').modal('hide');
     });
-
 
 
     /* save edited word */
@@ -1305,12 +1318,12 @@ $(document).ready(function () {
             sendmodifs({"cmd": "mod xpos " + conllword.id + " " + $("#cxpos").val()});
         }
 
-        for (i = 0; i < extracols.length; i++) {        
+        for (i = 0; i < extracols.length; i++) {
            //curval = document.getElementById("ct_" + extracols[i]).textContent.replace("[ \n]+", "\|");
            curval = document.getElementById("ct_" + extracols[i]).value.replace(/[ \n]+/, "\|");
            origval = conllword.nonstandard[extracols[i]];
            //console.log("DDDDD", curval, origval);
-           
+
            if (curval != origval) {
                sendmodifs({"cmd": "mod extracol " + conllword.id + " " + extracols[i] + " " + curval});
            }
@@ -1449,10 +1462,10 @@ $(document).ready(function () {
 
     });
 
-    $(".dewis").click(function () {
+    $("#flat3").click(function () {
         if (this.id === "flat3") {
             //console.log("zzz", $(this).val());
-        
+
             if ($(this).val() === "tree") {
                 //$(this).addClass('active');
                 $("#bie").hide();

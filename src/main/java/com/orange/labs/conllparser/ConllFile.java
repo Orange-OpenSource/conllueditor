@@ -140,7 +140,7 @@ public class ConllFile {
         boolean showgrana = true;
         boolean showID = true;
         ctline = 0;
-        
+
         columndefs = new LinkedHashMap<>();
         try {
             while ((line = br.readLine()) != null) {
@@ -162,14 +162,14 @@ public class ConllFile {
                         standardcols = false;
                         // currently only additional columns are allowed, so the first 10 MUST be the standard CoNLL-U columns
                         Iterator<String> cdefs = columndefs.keySet().iterator();
-                        Iterator<String> cst  = conllustandard.iterator();                        
+                        Iterator<String> cst  = conllustandard.iterator();
                         for (int i = 0; i < 10; ++i) {
                             String st = cst.next();
                             if (!cdefs.hasNext()) {
                                 throw new ConllException("Missing Standard column '" + st + "' in conllu+ definition " + line);
                             }
                             String def = cdefs.next();
-                  
+
                             if (!def.equals(st)) {
                                  throw new ConllException("Column definition ('" + def + "' != '" + st + "') does not follow Standard column order in conllu+ definition: '" + line + "'");
                             }
@@ -190,7 +190,7 @@ public class ConllFile {
                     }
                 }
                 //System.out.println("LINE1:" + line);
-                
+
                 if (ctline % 100000 == 0) {
                     System.err.format("%d lines (%d sentences) read\r", ctline, sentences.size());
                 }
@@ -261,7 +261,7 @@ public class ConllFile {
                 // TODO: conllsentence sublcasses do not use yet the CoNLL-U+ format
                 // get the constructor with arguments cargs (a list)
                 // and create a new instance
-                c = (ConllSentence) conllsentenceSubclass.getDeclaredConstructor(cargs).newInstance(sentenceLines, columndefs);
+                c = conllsentenceSubclass.getDeclaredConstructor(cargs).newInstance(sentenceLines, columndefs);
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException ex) {
                 System.err.println("Invalid ConllSentence subclass " + ex + ":: " + ex.getMessage());
             } catch (InvocationTargetException ex) {
@@ -317,7 +317,12 @@ public class ConllFile {
         sb.append('\n');
         return sb.toString();
     }
-    
+
+    public Map<String, Integer> getColDefs() {
+        return columndefs;
+    }
+
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         //sb.append("# number of sentences " + sentences.size() + "\n");

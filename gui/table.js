@@ -32,7 +32,21 @@ $(document).ready(function() {
 var formalErrors = 0;
 function drawTable(parent, trees) {
     formalErrors = 0;
+    var tbl = document.createElement("table");
+    tbl.className = "conllutable";
+
     var rows = {}; // position: row
+
+    if (conllucolumns.length > 0) {
+        var headerrow = document.createElement("tr");
+        for (var i = 0; i < conllucolumns.length; ++i) {
+            var hdcell = document.createElement('th');
+            headerrow.append(hdcell);
+            hdcell.innerHTML = conllucolumns[i]
+            //hdcell.className = "tdid";
+        }
+        tbl.append(headerrow);
+    }
 
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
@@ -42,9 +56,7 @@ function drawTable(parent, trees) {
         //row.className = "extracoltr";
 
     }
-    var tbl = document.createElement("table");
 
-    tbl.className = "conllutable";
     for (const pos in rows) {
         tbl.append(rows[pos]);
     }

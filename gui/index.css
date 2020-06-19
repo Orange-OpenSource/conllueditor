@@ -191,18 +191,21 @@ img.helptextbutton {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background-image: -webkit-gradient(
+    background: -webkit-gradient(
         linear,
         left bottom,
         left top,
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
         );
+    oobackground: -webkit-linear-gradient(bottom, #d9d9d9, #fcfcfc);
+    oobackground:    -moz-linear-gradient(bottom, #d9d9d9, #fcfcfc);
+    oobackground:        -linear-gradient(bottom, #d9d9d9, #fcfcfc);
 }
 
 .mybutton:hover {
     border-radius: 5px;
-    background-image: -webkit-gradient(
+    background: -webkit-gradient(
         linear,
         left bottom,
         left top,
@@ -510,22 +513,54 @@ text {
   border: 1px solid black;
 }
 
+.dewis  {
+	font-family: inherit;
+    /* top right bottom left */
+    qqpadding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+    height: 30px;
+    vertical-align: middle;
 
-.oodewis {
-    width: 120px;
-    padding: 5px;
-  
-    line-height: 1;
-  
-   
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-   
-    background: url('img/select.svg'); 
-    background-size: auto .8em; 
-    background-position: right .5em top 50%;
-    background-repeat:no-repeat;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+    display: inline-block;
+    oooverflow:hidden;
 
 
 }
+/* http://jsfiddle.net/fbnw9g5x/4/ */
+.dewis select {
+    width: 110px;
+    padding: 5px;
+    height:30px;
+    line-height: 1;
+    border: none;
+
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    background: transparent url('img/select.svg');
+    background-size: auto .8em; 
+    background-position: right .3em top 50%;
+    background-repeat:no-repeat;
+}
+
+.dewis:hover {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(227,227,227)),
+        color-stop(1, rgb(255,255,255))
+        );
+}
+

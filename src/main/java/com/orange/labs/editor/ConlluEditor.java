@@ -428,6 +428,10 @@ public class ConlluEditor {
         return solution.toString();
     }
 
+    /** get the lists of valid UPOS/XMPOS/deprel/Features as well as other information
+     *
+     * @return
+     */
     public String getValidlists() {
         JsonObject solution = new JsonObject();
         if (validDeprels != null) {
@@ -485,6 +489,11 @@ public class ConlluEditor {
         solution.addProperty("version", programmeversion);
         solution.addProperty("reinit", mode);
         solution.addProperty("saveafter", saveafter);
+        JsonArray coldefs = new JsonArray();
+        for (String cd : cfile.getColDefs().keySet()) {
+            coldefs.add(cd);
+        }
+        solution.add("columns", coldefs);
         return solution.toString();
     }
 
@@ -922,7 +931,7 @@ public class ConlluEditor {
                     // resplit, since we to expect an UPOS and an XPOS without any blanks
                     f = command.trim().split(" +", 5);
                     if (f.length < 5) {
-                        return formatErrMsg("INVALID a command length '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
                     }
                 }
 
@@ -1393,12 +1402,12 @@ public class ConlluEditor {
                     dep_id = Integer.parseInt(f[1]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (dep_id < 1 || dep_id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID dep id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID dependant id '" + command + "'", currentSentenceId);
                     }
 
                     newhead_id = Integer.parseInt(f[2]);
                     if (newhead_id < 0 || newhead_id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID new head id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("head id must be 0 < headid <= " + csent.getWords().size() + " '" + command + "'", currentSentenceId);
 
                     }
                 } catch (NumberFormatException e) {
@@ -1406,7 +1415,7 @@ public class ConlluEditor {
                 }
 
                 if (newhead_id == dep_id) {
-                    return formatErrMsg("INVALID new head id '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID head id. Cannot be identical to id '" + command + "'", currentSentenceId);
                 }
 
                 String newdeprel = null;
