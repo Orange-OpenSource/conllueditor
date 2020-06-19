@@ -158,7 +158,7 @@ Point your navigator to `http://localhost/conllueditor?port=8888` .
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
 * `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud)
 in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
-* `--validator <file>` validator configuration file (see section [validation](#Validation) below)
+* `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
@@ -185,10 +185,18 @@ it is shown in red.
 
 ![Edit screen (tree graph)](doc/tree.png)
 
-Clicking on `flat graph` changes the dependency graph layout to a more horizontal representation. The button `fixed width`
+The select button `tree graph` allows to toogle between a dependency tree layout to a more horizontal representation or a tabular view. 
+
+![Choose view](doc/chooseview.png)
+
+The button `fixed width`
 displays the tree/hedge width a (configurable) fixed word width.
 
 ![Edit screen (flat graph)](doc/graph.png)
+
+The table view is still *experimental*, all green fields can be edited:
+
+![Edit screen (flat graph)](doc/table.png)
 
 Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server,
 autocompletion is proposed
@@ -212,6 +220,7 @@ dependencies can be added/modified/deleted (activate `edit enhanced dependencies
 if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayed too.
 
 ![Empty nodes](doc/graph_emptynode.png)
+
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
@@ -287,7 +296,7 @@ generates
 
 No semantic/plausability check is performed. E.g. 
 `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
-will happily delete the `ID`column from the output file, so the `HEAD` columns does not make much sense anymore.
+will happily delete the `ID` column from the output file, so the `HEAD` columns does not make much sense anymore.
 
 ## Shortcuts
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
