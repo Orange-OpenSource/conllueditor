@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.0 as of 23rd May 2020
+ @version 2.6.0 as of 20th June 2020
  */
 package com.orange.labs.parserclient;
 
@@ -144,7 +144,7 @@ public class ParserClient {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("GET");
-        
+
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             StringBuilder result = new StringBuilder();
             InputStream isd = connection.getInputStream();
@@ -158,7 +158,7 @@ public class ParserClient {
         }
         return "ERROR " + connection.getResponseCode();
     }
-    
+
     public List<ConllSentence> makerequest(String text) throws IOException, ConllException {
         System.err.println(API + " " + txt_param + " " + other + " " + jsonpath);
 
@@ -224,7 +224,7 @@ public class ParserClient {
     public String getInfo() {
         JsonObject solution = new JsonObject();
         solution.addProperty("url", API);
-        
+
         if (info != null) {
             try {
                 String response = httpget(info);
@@ -240,7 +240,7 @@ public class ParserClient {
                 return e.getMessage();
             }
         }
-        
+
         return solution.toString();
     }
 
@@ -275,7 +275,7 @@ public class ParserClient {
 
                 solution.add("tree", csent.toJsonTree(null, null, null, null, null, null));
                 solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce chapps
-                
+
                 // adding also a CoNLL-U, sd-parse and a LaTeX representation
                 solution.addProperty("latex", csent.getLaTeX());
                 solution.addProperty("sdparse", csent.getSDparse());
@@ -346,7 +346,7 @@ public class ParserClient {
             help();
             System.exit(1);
         }
-        
+
         try {
             ParserClient cl = new ParserClient(args[argindex]);
 

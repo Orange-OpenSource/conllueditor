@@ -4,6 +4,8 @@ This Software is a tool which facilitates the editing of syntactic relations and
 (http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor
 loads the CoNLL-U file and saves every change to disk (and performs a `git commit` if the file is under git version control).
 
+New in version 2.6.0: table edit mode (in addition to tree and hedge mode)
+
 The editor provides the following functionalities:
 * editing words (forms, lemmas, upos, xpos, features, enhanced dependencies) (fast edit for UPOS and deprel)
 * editing dependency relations
@@ -348,8 +350,7 @@ and `findsentid` (searches `# sent_id`). `findform` can be used for search forms
 
 
 # Parser Front-End
-In order to display the CoNLL-U output of taggers/dependency parser servers, there the front-end provides a graphical user interface 
-and sends the sentenced to be parsed to the back-end server such as [UDPipe](https://ufal.mff.cuni.cz/udpipe).
+In order to display the CoNLL-U output of taggers/dependency parser servers, there the front-end provides a graphical user interface and sends the sentenced to be parsed to the back-end server such as [UDPipe](https://ufal.mff.cuni.cz/udpipe).
 You can either use a local instance of the UDPipe-Server, or the instance provided by the authors of UDPipe (http://lindat.mff.cuni.cz/services/udpipe/).
 
 First edit the configuration file [src/test/resources/udpipeserver.conf](src/test/resources/udpipeserver.conf):

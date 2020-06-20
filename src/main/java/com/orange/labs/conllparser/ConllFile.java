@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 4th May 2020
+ @version 2.6.0 as of 20th June 2020
 */
 package com.orange.labs.conllparser;
 

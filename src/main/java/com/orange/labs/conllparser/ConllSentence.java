@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.0 as of 23rd May 2020
+ @version 2.6.0 as of 20th June 2020
  */
 package com.orange.labs.conllparser;
 
@@ -229,11 +229,11 @@ public class ConllSentence {
             }
         }
     }
-    
+
     public Map<String, Integer>getColumndefs() {
         return columndefs;
     }
-    
+
     public boolean isValidExtraColumn(String colname) {
         if (columndefs == null) {
             return false;
@@ -562,6 +562,7 @@ public class ConllSentence {
     /**
      * format the sentence in CoNLL-U format
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         if (newdoc != null && !newdoc.isEmpty()) {
@@ -1396,6 +1397,7 @@ public class ConllSentence {
         // Used for sorting in ascending order of
         // roll number
 
+        @Override
         public int compare(ConllWord a, ConllWord b) {
             return a.getHead() - b.getHead();
         }
