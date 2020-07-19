@@ -85,7 +85,7 @@ public class ConllSentence {
     Map<String, Integer> columndefs = null;
 
     public enum Scoretype {
-        FORM, LEMMA, UPOS, XPOS, FEATS, LAS, CLAS
+        /*FORM, */LEMMA, UPOS, XPOS, FEATS, LAS /*, CLAS*/
     };
 
     /**

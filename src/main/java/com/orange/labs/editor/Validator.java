@@ -57,19 +57,19 @@ public class Validator {
             FileInputStream fis = new FileInputStream(new File(conffile));
             BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
             String line;
-                while ((line = br.readLine()) != null) {
-                    line = line.trim();
-                    if (line.isEmpty()) continue;
-                    if (line.charAt(0) == '#') continue;
-                    String [] elems = line.split(":", 2);
-                    if (elems.length == 2) {
-                        if (elems[0].equals("script")) {
-                            if(elems[1].contains("{FILE}")) {
-                                validationcommand = elems[1].trim();
-                            } else {
-                                System.err.format("Validator ERROR: \"script:\" value does not contain \"{FILE}\"\n");
-                            }
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                if (line.charAt(0) == '#') continue;
+                String [] elems = line.split(":", 2);
+                if (elems.length == 2) {
+                    if (elems[0].equals("script")) {
+                        if(elems[1].contains("{FILE}")) {
+                            validationcommand = elems[1].trim();
+                        } else {
+                            System.err.format("Validator ERROR: \"script:\" value does not contain \"{FILE}\"\n");
                         }
+                    }
 //                        else if (elems[0].equals("stdout")) {
 //                            if (elems[1].equals("true") || elems[1].equals("yes") ) {
 //                            } else {
@@ -82,10 +82,11 @@ public class Validator {
 //                                readStderr = false;
 //                            }
 //                        }
-                    } else {
-                        System.err.format("Validator ERROR: invalid format <%s>\n", line);
-                    }
+                } else {
+                    System.err.format("Validator ERROR: invalid format <%s>\n", line);
                 }
+            }
+            br.close();
         } catch (IOException ex) {
             System.err.format("Validator ERROR: Cannot load validation configuration: %s: %s\n", conffile, ex.getMessage());
         }
@@ -105,28 +106,28 @@ public class Validator {
                 .redirectErrorStream(true);
         Process validationprocess = pb.start();
 
-       
+
         StringBuilder sb = new StringBuilder();
         String line = null;
 
         //BufferedReader br =  new BufferedReader(new InputStreamReader(val.getErrorStream()));
         BufferedReader br =  new BufferedReader(new InputStreamReader(validationprocess.getInputStream()));
         while ( (line = br.readLine()) != null) {
-            sb.append(line);            
+            sb.append(line);
             sb.append(System.getProperty("line.separator"));
         }
-     
 
-//        System.err.println("zzzzzz");        
+
+//        System.err.println("zzzzzz");
 //        boolean exitednormally = validationprocess.waitFor(10, TimeUnit.SECONDS);  // let the process run for 5 seconds
 //        validationprocess.destroy();                     // tell the process to stop
 //        boolean killed = validationprocess.waitFor(10, TimeUnit.SECONDS); // give it a chance to stop
 //        validationprocess.destroyForcibly();             // tell the OS to kill the process
-//        validationprocess.waitFor();     
-//        
+//        validationprocess.waitFor();
+//
 //        if (killed) sb.append("Validation process killed after timeout of 20 seconds");
 //        else if (!exitednormally) sb.append("Validation process terminated after timeout of 10 seconds");
-//     
+//
         f.delete();
         return sb.toString();
     }

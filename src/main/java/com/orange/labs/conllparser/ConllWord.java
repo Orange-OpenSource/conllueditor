@@ -93,12 +93,12 @@ public class ConllWord {
     // additional semantic annotation (non-conllu)
     //private Set<Annotation> annot = null; // column 11 if B/I/O:....
     // column 11 otherwise
-    //private Map<Integer, LinkedHashSet<String>> namedColumns; // non standardcolums. the index is the column position (11, 12 ...) 
-    private Map<String, LinkedHashSet<String>> namedColumns; // non standardcolums: name: values 
+    //private Map<Integer, LinkedHashSet<String>> namedColumns; // non standardcolums. the index is the column position (11, 12 ...)
+    private Map<String, LinkedHashSet<String>> namedColumns; // non standardcolums: name: values
 
     public static boolean orderfeatures = true; // order morphological features ore keep them as they are in the CoNLL-U data
 
-    private int start = -1; // start offset in the sentence 
+    private int start = -1; // start offset in the sentence
     private int end = -1; // offset after the last character (not taking into account SpaceAfter !)
 
     public enum Tokentype {
@@ -161,7 +161,7 @@ public class ConllWord {
 //            for (Annotation a : orig.getAnnots()) {
 //                annot.add(new Annotation(a));
 //            }
-//        } else 
+//        } else
 //        if (orig.nonstandardInfo != null) {
 //            nonstandardInfo = new ArrayList<>();
 //            nonstandardInfo.addAll(orig.nonstandardInfo);
@@ -435,7 +435,7 @@ public class ConllWord {
                     }
                 }
             }
-            
+
             // processing Misc column
             if (posMISC != -1) {
                 setMisc(elems[posMISC]);
@@ -447,7 +447,7 @@ public class ConllWord {
                     if (namedColumns == null) {
                         namedColumns = new LinkedHashMap<>();
                     }
-                    namedColumns.put(col, new LinkedHashSet(Arrays.asList(elems[columndefs.get(col)].split("\\|"))));
+                    namedColumns.put(col, new LinkedHashSet<String>(Arrays.asList(elems[columndefs.get(col)].split("\\|"))));
                 }
             }
             /*
@@ -458,8 +458,8 @@ public class ConllWord {
                     namedColumns.put(j++, new LinkedHashSet(Arrays.asList(elems[i].split("\\|"))));
                 }
             } */
-        
-            
+
+
     }
 
     public boolean isWhquestion() {
@@ -971,7 +971,7 @@ public class ConllWord {
         }
         // }
 
-        if (highlight != null && highlight.idshl.containsKey(id) //&& highlight.ids.contains(id) 
+        if (highlight != null && highlight.idshl.containsKey(id) //&& highlight.ids.contains(id)
                 ) {
             //System.err.println("tttt " + this + " " + highlight);
             //switch (highlight.field) {
@@ -1007,7 +1007,7 @@ public class ConllWord {
 //                jword.addProperty("type", a.getSemanticRole());
 //                break;
 //            }
-//        } else 
+//        } else
 //        if (nonstandardInfo != null) {
 //            // TODO change when conllu plus support is OK
 //            // for the time being we just display anything in columns > 10 as is, without interpretation
@@ -1076,9 +1076,9 @@ public class ConllWord {
         if (namedColumns == null) {
             namedColumns = new LinkedHashMap<>();
         }
-        namedColumns.put(colname, new LinkedHashSet(Arrays.asList(strecs.split("\\|"))));
+        namedColumns.put(colname, new LinkedHashSet<String>(Arrays.asList(strecs.split("\\|"))));
     }
-    
+
     public synchronized void setExtracolumns(Map<String, LinkedHashSet<String>> ecs) {
         namedColumns = ecs;
     }
@@ -1592,7 +1592,7 @@ public class ConllWord {
         //System.err.println("MT " + start);
         //System.err.println("  RL " + String.join(",", rels));
         //System.err.println("  UD " + String.join(",", direction));
-        for (int r = start; r < rels.length; ++r) {
+        for (int r = start; r < rels.length; /* ++r*/) {
             if (direction[r].equals(">")) {
                 // check whether head matches
                 head = this.getHeadWord();
@@ -1758,7 +1758,7 @@ public class ConllWord {
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn);
                    // .append("\t").append(getMiscStr());
-           
+
         } else {
             sb.append("\t").append(lemma);
             sb.append("\t").append(upostag);
@@ -1818,7 +1818,7 @@ public class ConllWord {
                     }
                     sb.append('\t').append(value);
                 }
-                
+
                 // TODO, do not sopt at column 20, but stop at highest
 //                Integer last = (Integer) ((TreeMap) namedColumns).lastKey();
 //                //System.err.println("zzzzzzzzzzzzzzzzz " + last);
@@ -1831,7 +1831,7 @@ public class ConllWord {
 //                    sb.append('\t').append(value);
 //                }
             }
-        
+
         return sb.toString();
     }
 
@@ -1845,7 +1845,7 @@ public class ConllWord {
 
     private boolean isPosNumeric(String str) {
         for (char c : str.toCharArray()) {
-            int cp = (int) c;
+            int cp = c;
             if (cp < 48 || cp > 57) {
                 //if (!Character.isDigit(c)) {
                 return false;
@@ -1917,10 +1917,12 @@ public class ConllWord {
             }
         }
 
+        @Override
         public String toString() {
             return getFullHeadId() + ":" + deprel;
         }
 
+        @Override
         public boolean equals(Object o) {
             if (!(o instanceof EnhancedDeps)) {
                 return false;
