@@ -28,12 +28,13 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.6.0 as of 20th June 2020
+ @version 2.7.0 as of 19th July 2020
  */
 package com.orange.labs.conllparser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.orange.labs.conllparser.ConllWord.EnhancedDeps;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,7 +86,9 @@ public class ConllSentence {
     Map<String, Integer> columndefs = null;
 
     public enum Scoretype {
-        /*FORM, */LEMMA, UPOS, XPOS, FEATS, LAS /*, CLAS*/
+        /*FORM, */
+        LEMMA, UPOS, XPOS, FEATS, LAS
+        /*, CLAS*/
     };
 
     /**
@@ -230,7 +233,23 @@ public class ConllSentence {
         }
     }
 
-    public Map<String, Integer>getColumndefs() {
+    // adds a new emptyword, at the position given in emptyword. 
+    public void addEmptyWord(ConllWord emptyword) {
+        emptyword.setTokenType(ConllWord.Tokentype.EMPTY);
+        if (emptywords == null) {
+            emptywords = new HashMap<>();
+        }
+        List<ConllWord> ew = emptywords.get(emptyword.getId());
+        if (ew == null) {
+            ew = new ArrayList<>();
+            emptywords.put(emptyword.getId(), ew);
+            emptyword.setSubId(1);
+        }
+        ew.add(emptyword);
+        emptyword.setSubId(ew.size());
+    }
+
+    public Map<String, Integer> getColumndefs() {
         return columndefs;
     }
 
@@ -341,9 +360,9 @@ public class ConllSentence {
             word.setId(ct);
             ct++;
         }
+
         // mettre à jours les IDs des tetes
         for (ConllWord word : words) {
-            //System.err.println("AA " + word);
             if (word.getHead() > 0) {
                 word.setHead(oldnewIds.get(word.getHead()));
             }
@@ -956,7 +975,7 @@ public class ConllSentence {
      */
     public ConllWord getEmptyWord(int id, int subid) {
         List<ConllWord> ews = emptywords.get(id);
-        if (ews.isEmpty()) {
+        if (ews == null || ews.isEmpty()) {
             return null;
         }
         if (subid <= ews.size()) {
@@ -1104,6 +1123,111 @@ public class ConllSentence {
 
     public Map<Integer, ConllWord> getContractedWords() {
         return contracted;
+    }
+
+    /**
+     * delete empty word
+     *
+     * @param id (1 .. lastWord)
+     * @param subid (1.. n)
+     * @return true if deletion worked
+     */
+    public boolean deleteEmptyWord(int id, int subid) throws ConllException {
+        List<ConllWord> ews = this.getEmptyWords(id);
+        if (ews == null) {
+            return false;
+        }
+        if (ews.size() < subid) {
+            return false;
+        }
+
+        ews.remove(subid - 1);
+
+        if (ews.isEmpty()) {
+            emptywords.remove(id);
+        } else {
+            // renumber remaining empty words
+            int ct = 1;
+            for (ConllWord ew : ews) {
+                ew.setSubId(ct++);
+            }
+        }
+        normalise(1);
+        makeTrees(null);
+        return true;
+    }
+
+    public void deleteWord(int id) throws ConllException {
+         makeTrees(null);
+        if (id < words.size()) {
+            // make all dependants of word to be removed root
+            for (ConllWord cw : words.get(id - 1).getDependents()) {                
+                cw.setHead(0);
+            }
+
+            // delete MWE of which removed word is part
+            if (contracted != null) {
+                Set<ConllWord> mwes = new HashSet<>();
+                for (ConllWord mwe : contracted.values()) {
+                    if (mwe.getId() == id || mwe.getSubid() == id) {
+                        mwes.add(mwe);
+                    }
+                }
+
+                for (ConllWord mwe : mwes) {
+                    contracted.remove(mwe.getId());
+                }
+            }
+
+            // atach eventual existing empty word to next word, or (if we delete the last word to preceding word
+            //System.err.println("QSQSQSQS " + emptywords);
+            if (emptywords != null) {
+                List<ConllWord> ews = emptywords.get(id);
+                //System.err.println("GGGGGG " + ews);
+                if (ews != null) {
+                    // found some empty words
+                    // check whether following word has emptywords
+                    List<ConllWord> ewsnext = emptywords.get(id + 1);
+                    if (ewsnext == null) {
+                        // no, put current ones to following word
+                        emptywords.put(id, ews);
+                        for (ConllWord cw : ews) {
+                            cw.setId(id + 1);
+                        }
+
+                    } else {
+                        // yes add current ones to following word
+                        ewsnext.addAll(ews);
+                        int ct = 1;
+                        for (ConllWord cw : ewsnext) {
+                            cw.setSubId(ct++);
+                            cw.setId(id + 1);
+                        }
+                    }
+                }
+            }
+
+            // delete enhanced dependencies to removed word
+            for (ConllWord cw : words) {
+                List<EnhancedDeps> ehds = cw.getDeps();
+                if (ehds != null) {
+                    List<EnhancedDeps> toremove = new ArrayList<>();
+                    for (EnhancedDeps eh : ehds) {
+                        if (eh.headid == id) {
+                            toremove.add(eh);
+                        }
+                    }
+                    //System.err.println("DELETE EHDS " + toremove);
+                    for (EnhancedDeps eh : toremove) {
+                        ehds.remove(eh);
+                    }
+                }
+            }
+
+            words.remove(id - 1);
+            normalise(1);
+            makeTrees(null);
+        }
     }
 
     /**

@@ -116,6 +116,16 @@ In order two compile the server, you also need
 ./gui/lib/jquery-ui-1.12.1/jquery-ui.min.js
 ```
 
+### Update
+
+to get bug corrections/new features, run
+
+```
+git pull
+mvn install
+
+```
+
 ## Starting the server
 
 On smaller machines, the memory managment of the java VM (`-Xmx...` option) may be modified in
@@ -171,6 +181,8 @@ especially if the file is on a network drive.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
 # Editing
+
+More help on editing can be found by clicking the `help` button.
 
 If the server has been (re)started reload the page in your navigator.
 

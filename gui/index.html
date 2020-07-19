@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.6.0 as of 19th May 2020
+    @version 2.7.0 as of 19th July 2020
     -->
 
     <head>
@@ -280,15 +280,23 @@
                                     remain in the original word, the rest will be the new word</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following. If the merged word overlap in any way with a multiword token (MWT), the MWT will be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">insert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new word after word with <i>id</i></td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">delete <i>id</i></span></td> <td>delete word with <i>id</i>. Any overlapping MWE will also be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentsplit <i>id</i></span></td> <td>split current sentence at word id (id will be in the second sentence)</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentjoin</span></td> <td>merge current sentence with following</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">compose <i>id length</i></span></td> <td>create a multiword token (MWT).
                                     The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multiword token, click on the multitoken
                                     bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multiword token.
                                     </td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">emptyinsert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new empty word after word with <i>id</i>.
+                                    The new empty word gets the id <i>id.1</i> if it is the first empty word at thihs position.
+                                    If there is already an empty word, the new one will have the id <i>id.2</i> etc.</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">emptydelete <i>id.subid</i></span></td> <td>delete empty word
+                                    with id <i>id.subid</i>.</td></tr>
+                            
+                            
                         </table>
 
-                        <p><b>fast editing</b> Some UPOS/deprel can be changed by clicking on the word and than hit a key. UPOS and depre
+                        <p><b>fast editing</b> Some UPOS/deprel can be changed by clicking on the word and than hit a key. UPOS and deprel
                             can be modified without going into the edit window. The following keys are defined
                         <table>
                           <tr>
@@ -303,9 +311,9 @@
                           </tr>
                         </table>
 
-<p>
+                        <p>The <tt>delete</tt> deletes the clicked word or empty word.
 
-                        More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
+                        <p>More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
                         load it with the server option <tt>--shortcuts</tt>. Hitting <span class="keydoc">?</span> displays the current
                         shortcuts on the top of the screen (and hiding the search fields atthe same time). Hitting
                         <span class="keydoc">?</span> a second time, hides the shortcut list again.
@@ -442,7 +450,7 @@
                         </table>
 
                        <h2>About</h2>
-                       ConlluEditor v<span id="ce_version"></span><br>
+                       ConlluEditor v<span id="ce_version"></span>, <a href="https://github.com/Orange-OpenSource/conllueditor">https://github.com/Orange-OpenSource/conllueditor</a> <br>
                        Author: Johannes Heinecke.
                        Copyright © 2018-2020 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
                        <p>

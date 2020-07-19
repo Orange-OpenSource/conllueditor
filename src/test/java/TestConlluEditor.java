@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.3 as of 21st May 2020
+ @version 2.7.0 as of 19th July 2020
  */
 
 import com.google.gson.Gson;
@@ -93,7 +93,7 @@ public class TestConlluEditor {
         URL url = this.getClass().getResource("test.tex");
 
         // call process to be sure makeTrees has been  called
-        //String rtc = 
+        //String rtc =
         ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.LATEX, 13);
         // first sentence 13
@@ -105,7 +105,7 @@ public class TestConlluEditor {
 
         // add LateX for sentence 18
         res = ce.getraw(ConlluEditor.Raw.LATEX, 18);
-        jelement = JsonParser.parseString(res); 
+        jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         sb.append(jobject.get("raw").getAsString()).append('\n');
 
@@ -127,10 +127,10 @@ public class TestConlluEditor {
         URL url = this.getClass().getResource("test.json");
 
         // call proces to be sure makeTrees has been  called
-        //String rtc = 
+        //String rtc =
         ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13);
-        JsonElement jelement = JsonParser.parseString(res); 
+        JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
 
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
@@ -150,21 +150,21 @@ public class TestConlluEditor {
         URL url = this.getClass().getResource("out1.conllu");
 
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13);
-        JsonElement jelement = JsonParser.parseString(res); 
+        JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         //String rtc =
         ce.process("read 14", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 14);
-        jelement = JsonParser.parseString(res); 
+        jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
-        //rtc = 
+        //rtc =
         ce.process("read 15", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 15);
-        jelement = JsonParser.parseString(res); 
+        jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
@@ -178,7 +178,7 @@ public class TestConlluEditor {
     public void test11EditJoinSplit() throws IOException {
         name("modifying lemma, deprel, and split/join");
         ce.setCallcitcommot(false);
-        //String rtc = 
+        //String rtc =
         ce.process("mod lemma 3 Oasis", 3, "editinfo");
         /*rtc = */ce.process("mod 1 2 detfalse", 3, "editinfo");
         ce.process("mod split 19", 3, "editinfo");
@@ -211,7 +211,7 @@ public class TestConlluEditor {
         name("split/join before a empty word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".6");
-        //String rtc = 
+        //String rtc =
         ce.process("mod split 5 ", 16, "editinfo");
         ce.process("mod join 13", 16, "editinfo");
 
@@ -261,7 +261,7 @@ public class TestConlluEditor {
         name("join overlapping be first word of a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".9");
-        //String rtc = 
+        //String rtc =
         ce.process("mod join 5", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt.conllu");
@@ -276,7 +276,7 @@ public class TestConlluEditor {
         name("join overlapping be last word of a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".10");
-        //String rtc = 
+        //String rtc =
         ce.process("mod join 6", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt-2.conllu");
@@ -291,7 +291,7 @@ public class TestConlluEditor {
         name("read sentence");
         ce.setCallcitcommot(false);
         String rtc = ce.process("read 13", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("read.json");
         File out = new File(folder, "read.json");
@@ -310,7 +310,7 @@ public class TestConlluEditor {
         name("read a second sentence");
         ce.setCallcitcommot(false);
         String rtc = ce.process("read 16", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("read.json");
         File out = new File(folder, "read_16.json");
@@ -329,7 +329,7 @@ public class TestConlluEditor {
         name("findlemma");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findlemma false fromage/.*/puer", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findlemma.json");
         File out = new File(folder, "findlemma.json");
@@ -349,7 +349,7 @@ public class TestConlluEditor {
         name("findword");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findword false \" and \"", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "findform.json");
@@ -369,7 +369,7 @@ public class TestConlluEditor {
         name("findsenteid");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findsentid false c.*-ud", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "findsentid.json");
@@ -389,7 +389,7 @@ public class TestConlluEditor {
         name("findsenteid (bad RE)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findsentid false c.*[]-ud", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "findsentidBadRE.json");
@@ -410,7 +410,7 @@ public class TestConlluEditor {
         name("findupos (error)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findupos false TOTO", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("finduposKO.json");
         File out = new File(folder, "finduposKO.json");
@@ -469,7 +469,7 @@ public class TestConlluEditor {
         ce.setValidUPOS(filenames);
 
         String rtc = ce.process("read 2", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "uposvalid.json");
         //System.err.println(prettyprintJSON(jelement));
@@ -493,7 +493,7 @@ public class TestConlluEditor {
         ce.setValidDeprels(filenames);
 
         String rtc = ce.process("read 2", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "deprelvalid.json");
         //System.err.println(prettyprintJSON(jelement));
@@ -507,7 +507,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test43validFeuts() throws IOException {
+    public void test43validFeats() throws IOException {
         name("testing valid features");
         ce.setCallcitcommot(false);
         URL url = this.getClass().getResource("feat_val.txt");
@@ -517,7 +517,7 @@ public class TestConlluEditor {
         ce.setValidFeatures(filenames);
 
         String rtc = ce.process("read 1", 1, "");
-        JsonElement jelement = JsonParser.parseString(rtc); 
+        JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "featsvalid.json");
         //System.err.println(prettyprintJSON(jelement));
@@ -531,6 +531,113 @@ public class TestConlluEditor {
     }
 
 
+
+    @Test
+    public void test50deleteWords() throws IOException {
+        name("delete words");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".11");
+        ce.process("mod delete 12", 16, "editinfo");
+        ce.process("mod delete 9", 16, "editinfo");
+        ce.process("mod delete 10", 16, "editinfo");
+
+        URL ref = this.getClass().getResource("test.delete.conllu");
+        URL res = this.getClass().getResource("test.conllu.11");
+
+        Assert.assertEquals(String.format("delete words incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test51insertEmptyWords() throws IOException {
+        name("insert empty word");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".12");
+        ce.process("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
+        ce.process("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
+
+        ce.process("mod emptyinsert 3 premier lemma3 POS1 XPOS1", 0, "editinfo");
+
+        URL ref = this.getClass().getResource("test.insertempty.conllu");
+        URL res = this.getClass().getResource("test.conllu.12");
+
+        Assert.assertEquals(String.format("insert empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+
+
+        // delete empty word
+        ce.setBacksuffix(".13");
+        ce.process("mod emptydelete 4.1", 0, "editinfo");
+        URL ref2 = this.getClass().getResource("test.insertempty+delete.conllu");
+        URL res2 = this.getClass().getResource("test.conllu.13");
+
+        Assert.assertEquals(String.format("delete empty words incorrect\n ref: %s\n res: %s\n", ref2.toString(), res2.toString()),
+                FileUtils.readFileToString(new File(ref2.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res2.getFile()), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test52deleteEmptyWords() throws IOException {
+        name("delete empty word");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".14");
+
+        ce.process("mod emptydelete 5.1", 13, "editinfo");
+        URL ref = this.getClass().getResource("test.deleteempty.conllu");
+        URL res = this.getClass().getResource("test.conllu.14");
+
+        Assert.assertEquals(String.format("delete empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+    
+    @Test
+    public void test53deleteEmptyWords_Invald() throws IOException {
+        name("delete empty word (error)");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".15");
+
+        String msg = ce.process("mod emptydelete 5.2", 13, "editinfo");
+        //URL ref = this.getClass().getResource("test.deleteempty.conllu");
+        //URL res = this.getClass().getResource("test.conllu.15");
+
+        String expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"Empty word noes not exist 'mod emptydelete 5.2'\"}";
+        Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+                expected, msg);
+
+        msg = ce.process("mod delete 5.1", 13, "editinfo"); // bad command
+
+        expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"INVALID id (not an integer) 'mod delete 5.1' For input string: \\\"5.1\\\"\"}";
+        Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+                expected, msg);
+
+    }
+
+    
+    @Test
+    public void test54deleteWords_Invald() throws IOException {
+        name("delete word (error)");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".16");
+
+        String msg = ce.process("mod delete 11", 9, "editinfo");
+        //URL ref = this.getClass().getResource("test.deleteempty.conllu");
+        //URL res = this.getClass().getResource("test.conllu.16");
+
+        String expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID id 'mod delete 11'\"}";
+        Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+                expected, msg);
+
+        msg = ce.process("mod emptydelete 11", 9, "editinfo"); // bad command
+        expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID empty word id 'mod emptydelete 11'\"}";
+        Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+                expected, msg);
+
+    }
+
+    
 //    @Test
 //    public void test41AddExtraColumn() throws IOException, ConllException {
 //        name("adding extra columns");

@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.6.0 as of 17th June 2020
+ @version 2.7.0 as of 19th July 2020
  */
 
 
@@ -567,10 +567,43 @@ var clickCount = 0;
 var wordedit = false;
 var editword_with_doubleclick = true; // in order to deactivate word-edit with double click, set to false
 
+// capture delete key
+$(window).on('keydown', function (evt) {
+    console.log("DDAEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+
+    if($(".modal").is(":visible")) {
+        // if a model is open, we do not want to catch keypress events, since we are editing text
+        return;
+    }
+
+    if (graphtype == 3) {
+        // in table mode, we need all keys to edit the table cells
+        return;
+    }
+   
+    // a word is active
+    if (clickedNodes.length == 1) {
+        if (evt.which == 46) {
+            //console.log("UPOS", newval);
+            if (clickedNodes[0].indexOf(".") !== -1) {
+                // delete empty word
+                sendmodifs({"cmd": "mod emptydelete " + clickedNodes[0]});
+            } else {
+                // delete word
+                sendmodifs({"cmd": "mod delete " + clickedNodes[0]});
+            }
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
+            return;
+        } 
+    }
+   
+})
 
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
-    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+    console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
 
     if($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
@@ -606,7 +639,7 @@ $(window).on('keypress', function (evt) {
 
         newval = shortcutsDEPL[String.fromCharCode(evt.which)];
         if (newval != undefined) {
-            //console.log("DEPL", newval);
+            console.log("DEPL", newval);
             sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
             clickedNodes = [];
             deprels = [];

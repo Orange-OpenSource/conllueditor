@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.2 as of 16th June 2020
+ @version 2.7.0 as of 19th July 2020
  */
 package com.orange.labs.conllparser;
 
@@ -68,7 +68,7 @@ public class ConllWord {
     private int head; //7
     private String deplabel; // 8
 
-    private List<EnhancedDeps> deps; // 9 // badly named, its the heads of the enhanced dependencies
+    private List<EnhancedDeps> deps; // 9 // badly named, it's the heads of the enhanced dependencies
     //private boolean basicdeps_in_ed_column = false; // true if basic deps are copied to column 9
     Map<String, Object> misc; // 10 value can be string or integer
 
@@ -256,7 +256,8 @@ public class ConllWord {
         depmap = new TreeMap<>();
         String[] elems = conllline.split("\t");
 
-        if (elems.length < columndefs.size()) { //if (elems.length < 8) {
+        if ((columndefs != null && elems.length < columndefs.size()) || elems.length < 10) { //if (elems.length < 8) {
+        //if (elems.length < columndefs.size()) { //if (elems.length < 8) {
             throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'");
         }
         //System.out.println("L:"+conllline);
@@ -299,7 +300,9 @@ public class ConllWord {
         misc = new LinkedHashMap<>();
 
         if (toktype == Tokentype.CONTRACTED) {
-            for (int x = 2; x < /*9*/ columndefs.size() - 1; ++x) {
+            int columndefssize = 10;
+            if (columndefs != null) columndefssize = columndefs.size();
+            for (int x = 2; x < /*9*/ columndefssize - 1; ++x) {
                 if (!elems[x].equals(EmptyColumn)) {
                     throw new ConllException("Contracted word must not have columns filled after position 2");
                 }
@@ -442,6 +445,7 @@ public class ConllWord {
             }
         }
             /* process non-standard colums*/
+            if (columndefs != null)
             for (String col : columndefs.keySet()) {
                 if (!ConllFile.conllustandard.contains(col)) {
                     if (namedColumns == null) {
@@ -1136,17 +1140,30 @@ public class ConllWord {
 //        }
 //        annot.add(a);
 //    }
+
+    /**
+    Add an extra column with a value.
+    If the extra column does not yet exist, it is added. if a is "_" it is deleted
+    @param name
+    @param a
+    */
     public synchronized void addExtracolumn(String name, String a) {
         if (namedColumns != null) {
             LinkedHashSet<String> current = namedColumns.get(name);
             if (current != null) {
-                current.add(a);
+                if (a == null || "_".equals(a)) {
+                    namedColumns.remove(name);
+                } else {
+                    current.add(a);
+                }
             } else {
-                current = new LinkedHashSet<>();
-                current.add(a);
-                namedColumns.put(name, current);
+                if (a != null && !"_".equals(a)) {
+                    current = new LinkedHashSet<>();
+                    current.add(a);
+                    namedColumns.put(name, current);
+                }
             }
-        } else {
+        } else if (a != null && !"_".equals(a)) {
             namedColumns = new TreeMap<>();
             LinkedHashSet<String> current = new LinkedHashSet<>();
             current.add(a);
@@ -1197,6 +1214,10 @@ public class ConllWord {
 
     public Tokentype getTokentype() {
         return toktype;
+    }
+
+    void setTokenType(Tokentype tt) {
+        toktype = tt;
     }
 
     public void setId(int i) {

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.6.0 as of 20th June 2020
+ @version 2.7.0 as of 19th July 2020
  */
 package com.orange.labs.editor;
 
@@ -1114,7 +1114,9 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod split ")
-                    || command.startsWith("mod join ")) {
+                    || command.startsWith("mod join ")
+                    || command.startsWith("mod delete ")
+                    ) {
                 String[] f = command.trim().split(" +");
 
                 if (f.length < 3) {
@@ -1172,6 +1174,12 @@ public class ConlluEditor {
                     }
                     modWord = csent.getWords().get(id - 1);
                     csent.joinWords(id);
+                } else if (f[1].equals("delete")) {
+                    if (id >= csent.getWords().size()) {
+                        return formatErrMsg("Cannot delete last word '" + command + "'", currentSentenceId);
+                    }
+                    modWord = csent.getWords().get(id - 1);
+                    csent.deleteWord(id);
                 }
 
                 try {
@@ -1239,10 +1247,66 @@ public class ConlluEditor {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }
                 return returnTree(currentSentenceId, csent);
-
-            } else if (command.startsWith("mod insert ")) {
+            } else if (command.startsWith("mod emptydelete ")) {
+                // mod emptydelete id.subid
+                
+                String[] f = command.trim().split(" +");
+                if (f.length != 3) {
+                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                }
+                
+                
+                String [] g = f[2].split("\\.");
+                if (g.length != 2) {
+                    return formatErrMsg("INVALID empty word id '" + command + "'", currentSentenceId);
+                }
+                
+                int id;
+                int subid;
+                
+                
+                try {
+                    id = Integer.parseInt(g[0]);
+                    csent = cfile.getSentences().get(currentSentenceId);
+                    if (id < 1 || id > csent.getWords().size()) {
+                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                    }
+                } catch (NumberFormatException e) {
+                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                }
+                
+                try {
+                    subid = Integer.parseInt(g[1]);                   
+                    csent = cfile.getSentences().get(currentSentenceId);
+                    ConllWord ew = csent.getEmptyWord(id, subid);
+                    if (ew == null) {
+                        return formatErrMsg("Empty word noes not exist '" + command + "'", currentSentenceId);
+                    }
+                } catch (NumberFormatException e) {
+                    return formatErrMsg("INVALID subid (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                }
+                
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
+                
+                csent.deleteEmptyWord(id, subid);
+              
+                try {
+                    writeBackup(currentSentenceId, null, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+                return returnTree(currentSentenceId, csent);
+                
+            } else if (command.startsWith("mod insert ")
+                    || command.startsWith("mod emptyinsert ")
+                    ) {
                 // add new word:
                 // mod insert id form [lemma [upos [xpos]]]
+                // or add new empty word
+                // mod emptyinsert id form [lemma [upos [xpos]]]
                 String[] f = command.trim().split(" +");
                 if (f.length < 4) {
                     return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
@@ -1274,7 +1338,13 @@ public class ConlluEditor {
                         }
                     }
                 }
-                csent.addWord(newword, id);
+                if ("emptyinsert".equals(f[1])) {
+                    newword.setId(id);
+                    csent.addEmptyWord(newword);
+                } else {                
+                    csent.addWord(newword, id);
+                }
+                
                 try {
                     writeBackup(currentSentenceId, newword, editinfo);
                 } catch (IOException ex) {
