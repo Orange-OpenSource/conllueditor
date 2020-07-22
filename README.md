@@ -128,7 +128,7 @@ mvn install
 
 ## Starting the server
 
-On smaller machines, the memory managment of the java VM (`-Xmx...` option) may be modified in
+On smaller machines, the memory management of the java VM (`-Xmx...` option) may have to be modified in
 `bin/conlluedit.sh`. The current value (`-Xmx4g`) is largely sufficient to load larger treebanks with up to 1,5M tokens.
 
 
@@ -189,17 +189,17 @@ If the server has been (re)started reload the page in your navigator.
 Load the first sentence by clicking on `read sentence`: clicking on a word and then clicking on the head-word creates a dependency relation.
 An edit window opens to enter the relation a name. Existing relations can be renamed by clicking on their name.
 Clicking twice on a word deletes its eventual dependency relation and makes it root.
-To edit form, lemma etc. CTRL-click or doubleclick on the word. For more help use the `Help` button.
+To edit form, lemma etc. CTRL-click or double click on the word. For more help use the `Help` button.
 
 The sentence is shown as a dependency tree or as a flat graph (“dependency hedge”), morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
-If any UPOS/XPOS/deprel is not in the validation lists (specified with the `--UPOS` etc options)
+If any UPOS/XPOS/deprel is not in the validation lists (specified with the `--UPOS` etc. options)
 it is shown in red.
 
 ![Edit screen (tree graph)](doc/tree.png)
 
-The select button `tree graph` allows to toogle between a dependency tree layout to a more horizontal representation or a tabular view. 
+The select button `tree graph` allows to toggle between a dependency tree layout to a more horizontal representation or a tabular view. 
 
 ![Choose view](doc/chooseview.png)
 
@@ -213,7 +213,7 @@ The table view is still *experimental*, all green fields can be edited:
 ![Edit screen (flat graph)](doc/table.png)
 
 Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server,
-autocompletion is proposed
+autocompleting is proposed
 
 ![Edit screen (flat graph)](doc/edit.png)
 
@@ -221,7 +221,7 @@ autocompletion is proposed
 
 ![Edit screen (flat graph)](doc/editdeprel.png)
 
-For languages which are written from the right to the left like Arabic or Hebrew, activate the `display right to left`-checkbutton
+For languages which are written from the right to the left like Arabic or Hebrew, activate the `display right to left`-check button
 
 ![Edit screen (Arabic)](doc/tree_R2L.png)
 
@@ -240,7 +240,8 @@ The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the c
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
 
 In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new
-word to the right of <wordid>. This new word can then be edit, with a CTRL-click. The command `join <wordid>` merges the word with <wordid>
+word to the right of `<wordid>`. This new word can then be edit, with a CTRL-click.
+The command `join <wordid>` merges the word with `<wordid>`
 with the following. This joined word gets the dependency relation of the word closer to root.
 
 Whole sentences can be split with the `sentsplit <wordid>` command. The current sentences can be concatenated with the following sentence
@@ -255,7 +256,7 @@ Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-a
 in graphic mode can only be edited in flat mode. If the button `edit enhanced dependencies` is activated
 clicking on words creates enhanced dependency relations. Click on the dependency label to modify it or to
 delete the enhanced dependency relation.
-Alternatively, enhanced dependenclies can be edited manually via the word edit menu.
+Alternatively, enhanced dependencies can be edited manually via the word edit menu.
 
 ## Other annotation
 Since version 2.4.0 a subset of the [CoNLL-U Plus](http://universaldependencies.org/ext-format.html) is supported.
@@ -281,7 +282,7 @@ The values in these columns are not interpreted (for instance BIO markings), the
 ### CoNLL-U / CoNLLu Plus conversion
 
 A simple conversion program is provided to convert any CoNLL-U (Plus) file into another. It takes
-as arguments the inputfile name and a comma separated list of output columns. Specified output columns
+as arguments the input file name and a comma separated list of output columns. Specified output columns
 absent in the input file will be replaced with `_`. If the output column list is absent, a standard CoNLL-U file is produced.
 
 for instance
@@ -308,12 +309,12 @@ generates
 ...
 ```
 
-No semantic/plausability check is performed. E.g. 
+No semantic/plausibility check is performed. E.g. 
 `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
-will happily delete the `ID` column from the output file, so the `HEAD` columns does not make much sense anymore.
+will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense anymore.
 
 ## Shortcuts
-ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelarate editing: These single letter keys change the UPOS/XPOS/deplabel of
+ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing: These single letter keys change the UPOS/XPOS/deplabel of
 the active word to the defined value. To activate a word, click once on the word.
 A personalised list (same format as [gui/shortcuts.json](gui/hortcuts.json)) can be used with the `--shortcuts` option. 
 
@@ -326,7 +327,7 @@ After each modification the edited file is saved:
 
 # Validation
 The ConlluEditor is able to load run a validation script on the current sentence. The programme and its arguments
-must be configurated in a text file
+must be configured in a text file
 ```
 script: /path/to/UniversalDependencies/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}
 ```
@@ -347,14 +348,14 @@ The GUI uses the following API when editing
 * `curl -F "sentid=3" -F "cmd=mod extracol 4 SEM:NE B:Person"  http://host:port/edit/` set the non-standard UD column named _SEM:EN_ of word 4 to _B:Person_
 
 `upos` (in the first example) can be replaced with 
-`form`, `lemma`, `xpos`, `head`, `deprel`, `feat`, `misc` -for the latter two tha value must be a comma separated list of `Key=Value`. 
+`form`, `lemma`, `xpos`, `head`, `deprel`, `feat`, `misc` -for the latter two the value must be a comma separated list of `Key=Value`. 
 In all cases the new version of the edited sentence is returned (in json). 
-However if the `sentid` or `id` are invalid, a error messages (in json format) is returned.
+However if the `sentid` or `id` are invalid, an error messages (in json format) is returned.
 
 For searching, the following API is implemented
 * `curl -F "sentid=2" -F "cmd=findlemma false regex"  http://host:port/edit/` search forward from sentence 2 onwards for a word whose lemma matches the given regex
 
-To earch backwards use `cmd=findlemma true regex`. Other columns can be found with
+To search backwards use `cmd=findlemma true regex`. Other columns can be found with
 `findupos`, `findxpos`, `finddeprel`, `findfeat`, `findcomment` (searches comments preceding a sentence)
 and `findsentid` (searches `# sent_id`). `findform` can be used for search forms. In difference to the other 
 `find`-commands, `findform` searches for strings (no regex) in the sentence (across several words)
@@ -420,7 +421,7 @@ an option to indicate the gold file
 ./bin/conlluedit.sh --rootdir  /path/to/ConlluEditor/gui --compare gold.conllu predicted.conllu 8888
 ```
 
-The dependency tree of the gold file is shown in gray underneath the tree ofthe file being edited.
+The dependency tree of the gold file is shown in grey underneath the tree of the file being edited.
 The results of some evaluation metrics for the current sentence are presented at the bottom of the header.
 Individual words of the edited file, which differ from the gold file are shown with a red border. If the mouse
 hovers over such a word, the corresponding lines from the edited file and the gold file are shown 
@@ -430,8 +431,8 @@ The comparison mode works in the flat view too.
 ![CoNLL-U File Comparison](doc/comparemode.png)
 
 # Known bugs
-* not all user errors are checked 😃: e.g. adding weird or non numerical ids in the CoNLL-U files may crash the server.
-The feature, and misc column fields must contain one or more `|`-separated `name=value` pair per line (or `_`),
+* not all user errors are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.
+The `feature`, and `misc` column fields must contain one or more `|`-separated `name=value` pair per line (or `_`),
 the enhanced dependency field must contain one or more `|`-separated `head:deprel` pair per line (or `_`).
 
 # Todo list
