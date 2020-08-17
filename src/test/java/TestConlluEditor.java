@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.0 as of 19th July 2020
+ @version 2.7.1 as of 17th August 2020
  */
 
 import com.google.gson.Gson;
@@ -285,6 +285,22 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void test18SentSplit() throws IOException {
+        name("split sentences (with enhanced dependencies and empty words");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".17");
+        //String rtc =
+        ce.process("mod sentsplit 11", 16, "editinfo");
+
+        URL ref = this.getClass().getResource("test.sentsplit.conllu");
+        URL res = this.getClass().getResource("test.conllu.17"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
 
     @Test
     public void test21Read() throws IOException {
@@ -592,7 +608,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
-    
+
     @Test
     public void test53deleteEmptyWords_Invald() throws IOException {
         name("delete empty word (error)");
@@ -615,7 +631,7 @@ public class TestConlluEditor {
 
     }
 
-    
+
     @Test
     public void test54deleteWords_Invald() throws IOException {
         name("delete word (error)");
@@ -637,7 +653,7 @@ public class TestConlluEditor {
 
     }
 
-    
+
 //    @Test
 //    public void test41AddExtraColumn() throws IOException, ConllException {
 //        name("adding extra columns");

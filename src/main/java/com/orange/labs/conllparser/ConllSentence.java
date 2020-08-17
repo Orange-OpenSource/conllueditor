@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.0 as of 19th July 2020
+ @version 2.7.1 as of 17th August 2020
  */
 package com.orange.labs.conllparser;
 
@@ -233,7 +233,7 @@ public class ConllSentence {
         }
     }
 
-    // adds a new emptyword, at the position given in emptyword. 
+    // adds a new emptyword, at the position given in emptyword.
     public void addEmptyWord(ConllWord emptyword) {
         emptyword.setTokenType(ConllWord.Tokentype.EMPTY);
         if (emptywords == null) {
@@ -419,22 +419,23 @@ public class ConllSentence {
             newsent.sentid += "-bis";
         }
 
-        // cut words before id from new word
+        // cut emptywords before id from newsent
         Set<Integer> to_delete_from_this = new HashSet<>();
         if (emptywords != null) {
             for (Integer key : emptywords.keySet()) {
-                if (key < id) {
+                if (key < id + 1) { // id is position of word in List, but for emptywords is the real id
                     newsent.emptywords.remove(key);
                 } else {
                     to_delete_from_this.add(key);
                 }
             }
-            // and delete other kesy from this
+            // and delete other keys from this
             for (Integer key : to_delete_from_this) {
                 emptywords.remove(key);
             }
         }
 
+        // delete MWEs if the split goes through it
         to_delete_from_this.clear();
         if (contracted != null) {
             for (Integer key : contracted.keySet()) {
@@ -450,12 +451,38 @@ public class ConllSentence {
             }
         }
 
-        // delete heads and words which are before id from newsent
+        // delete heads from newsent which are before the separation id
         for (ConllWord cw : newsent.getWords()) {
             if (cw.getHead() <= id) {
                 cw.setHead(0);
             }
         }
+        // delete enhanced dependencies heads from newsent which are before the separation id
+        for (ConllWord cw : newsent.getWords()) {
+            Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
+            for (EnhancedDeps ehd : cw.getDeps()) {
+                if (ehd.headid <= id) ehd_to_delete_from_this.add(ehd);
+            }
+            for (EnhancedDeps ehd : ehd_to_delete_from_this) {
+                cw.getDeps().remove(ehd);
+            }
+        }
+
+        if (newsent.emptywords != null) {
+            for (List<ConllWord> ewids : newsent.emptywords.values()) {
+                for (ConllWord ewid : ewids) {
+                    Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
+                    for (EnhancedDeps ehd : ewid.getDeps()) {
+                          if (ehd.headid <= id) ehd_to_delete_from_this.add(ehd);
+                    }
+                    for (EnhancedDeps ehd : ehd_to_delete_from_this) {
+                       ewid.getDeps().remove(ehd);
+                    }
+                }
+            }
+        }
+
+        // delete words which are before id from newsent
         for (int x = 0; x < id; ++x) {
             newsent.getWords().remove(0);
         }
@@ -469,6 +496,32 @@ public class ConllSentence {
         for (ConllWord cw : words) {
             if (cw.getHead() > id) {
                 cw.setHead(0);
+            }
+        }
+
+        // delete enhanced dependencies heads from this which are no longer in this
+        for (ConllWord cw : words) {
+            Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
+            for (EnhancedDeps ehd : cw.getDeps()) {
+                if (ehd.headid > id) ehd_to_delete_from_this.add(ehd);
+            }
+            for (EnhancedDeps ehd : ehd_to_delete_from_this) {
+                cw.getDeps().remove(ehd);
+            }
+        }
+
+        if (emptywords != null) {
+              // delete enhanced dependencies heads from this.emptywords which are no longer in this
+            for (List<ConllWord> ewids : emptywords.values()) {
+                for (ConllWord ewid : ewids) {
+                    Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
+                    for (EnhancedDeps ehd : ewid.getDeps()) {
+                          if (ehd.headid > id) ehd_to_delete_from_this.add(ehd);
+                    }
+                    for (EnhancedDeps ehd : ehd_to_delete_from_this) {
+                       ewid.getDeps().remove(ehd);
+                    }
+                }
             }
         }
 
@@ -1161,7 +1214,7 @@ public class ConllSentence {
          makeTrees(null);
         if (id < words.size()) {
             // make all dependants of word to be removed root
-            for (ConllWord cw : words.get(id - 1).getDependents()) {                
+            for (ConllWord cw : words.get(id - 1).getDependents()) {
                 cw.setHead(0);
             }
 
