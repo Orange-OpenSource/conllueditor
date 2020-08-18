@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.3 as of 21st May 2020
+ @version 2.7.1 as of 17th August 2020
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -183,37 +183,41 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
 
     if (headpos == 0) {
-        //var depx = x; //item.id * hor;
-        svgminy = Math.min(svgminy, -140);
-        var path = document.createElementNS(svgNS, "path");
+        // draw root deprels
         var pathvar = "path_" + headpos + "_" + item.id + "_" + item.deprel;
-        path.setAttribute("id", pathvar);
-        path.setAttribute("stroke", "black");
-        //path.setAttribute("stroke-width", "1");
-        path.setAttribute("opacity", 1);
-        path.setAttribute("fill", "none");
-        path.setAttribute("d", "M " + depx + " " + -140 + " L " + depx + " " + (levelinit - 1));
-        path.setAttribute("style", "marker-end: url(#markerArrow);");
-        path.setAttribute("class", "deprel_root" + grayclass2);
-	path.setAttribute("stroke", "red"); // only needed for svg download
-        svg.appendChild(path);
-
-
-	//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
-
-        var depreltext = document.createElementNS(svgNS, "text");
-        depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
-        depreltext.setAttribute("class", "words deprel" + grayclass);
-        depreltext.setAttribute("fill", "green");
-        //depreltext.setAttribute("font-size", "14");
-
-        depreltext.setAttribute('x', depx);
-        depreltext.setAttribute('y', -120);
-        depreltext.setAttribute("text-anchor", "middle");
-        depreltext.textContent = item.deprel;
-        svg.appendChild(depreltext);
+        makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, levelinit, true);
+//        //var depx = x; //item.id * hor;
+//        svgminy = Math.min(svgminy, -140);
+//        var path = document.createElementNS(svgNS, "path");
+//        var pathvar = "path_" + headpos + "_" + item.id + "_" + item.deprel;
+//        path.setAttribute("id", pathvar);
+//        path.setAttribute("stroke", "black");
+//        //path.setAttribute("stroke-width", "1");
+//        path.setAttribute("opacity", 1);
+//        path.setAttribute("fill", "none");
+//        path.setAttribute("d", "M " + depx + " " + -140 + " L " + depx + " " + (levelinit - 1));
+//        path.setAttribute("style", "marker-end: url(#markerArrow);");
+//        path.setAttribute("class", "deprel_root" + grayclass2);
+//	path.setAttribute("stroke", "red"); // only needed for svg download
+//        svg.appendChild(path);
+//
+//
+//	//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
+//
+//        var depreltext = document.createElementNS(svgNS, "text");
+//        depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
+//        depreltext.setAttribute("class", "words deprel" + grayclass);
+//        depreltext.setAttribute("fill", "green");
+//        //depreltext.setAttribute("font-size", "14");
+//
+//        depreltext.setAttribute('x', depx);
+//        depreltext.setAttribute('y', -120);
+//        depreltext.setAttribute("text-anchor", "middle");
+//        depreltext.textContent = item.deprel;
+//        svg.appendChild(depreltext);
 
     } else {
+        // non-root deprels
         makeDep(svg, item, headpos, item.deprel, depx, sentencelength, levelinit, true, use_deprel_as_type, isgold);
     }
 
@@ -230,20 +234,10 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         mwe.setAttribute("opacity", 1);
         mwe.setAttribute("fill", "none");
         var length = item.mwe.toid - item.mwe.fromid + 1;
-        //svgmaxy+=20;
 
         MWEbar(mwe, item, depx, mwey, sentencelength);
-//        if (sentencelength > 0) {
-//            // mwe.setAttribute("d", "M " + (depx - 5 + hor/2) + " " + (svgmaxy+20) + " l " + (-hor*length + 10) + " " + 0);
-//	    mwe.setAttribute("d", "M " + (depx + 5 - hor * length + hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
-//
-//        } else {
-//	    mwe.setAttribute("d", "M " + (depx + 5 - hor / 2) + " " + (mwey) + " l " + (hor * length - 10) + " " + 0);
-//
-//        }
 
         svg.appendChild(mwe);
-
         // creer le texte pour cette ligne
         var mwetext = document.createElementNS(svgNS, "text");
         mwetext.setAttribute("id", "mwetext" + pathvar);
@@ -274,10 +268,56 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
             ed = item.enhancedheads[i];
             if (ed.position == headpos && !show_basic_in_enhanced)
                 continue;
-
-            makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type, isgold);
+            if (ed.position == -1) {
+                // enhanced dep root deprel
+                makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, level, false);
+            } else {
+                // enhanced deps nonroot deprels
+                makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type, isgold);
+            }
         }
     }
+}
+
+
+function makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, levelinit, above) {
+            //var depx = x; //item.id * hor;
+        svgminy = Math.min(svgminy, -140);
+        var path = document.createElementNS(svgNS, "path");
+        //var pathvar = "path_" + headpos + "_" + item.id + "_" + item.deprel;
+        path.setAttribute("id", pathvar);
+        path.setAttribute("stroke", "black");
+        //path.setAttribute("stroke-width", "1");
+        path.setAttribute("opacity", 1);
+        path.setAttribute("fill", "none");
+        if (above)
+            path.setAttribute("d", "M " + depx + " " + -140 + " L " + depx + " " + (levelinit - 1));
+        else {
+            path.setAttribute("d", "M " + depx + " " + (levelinit+140) + " L " + depx + " " + (levelinit ));
+            svgmaxy = Math.max(svgmaxy, 140+levelinit);
+        }
+        path.setAttribute("style", "marker-end: url(#markerArrow);");
+        path.setAttribute("class", "deprel_root" + grayclass2);
+	path.setAttribute("stroke", "red"); // only needed for svg download
+        svg.appendChild(path);
+
+
+	//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
+
+        var depreltext = document.createElementNS(svgNS, "text");
+        depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
+        depreltext.setAttribute("class", "words deprel" + grayclass);
+        depreltext.setAttribute("fill", "green");
+        //depreltext.setAttribute("font-size", "14");
+
+        depreltext.setAttribute('x', depx);
+        if (above)
+            depreltext.setAttribute('y', -120);
+        else
+            depreltext.setAttribute('y', 120);
+        depreltext.setAttribute("text-anchor", "middle");
+        depreltext.textContent = item.deprel;
+        svg.appendChild(depreltext);
 }
 
 

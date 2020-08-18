@@ -1,5 +1,6 @@
 Version 2.7.1
 - error corrected for sentsplit of sentences with enhanced dependencies and/or empty words
+- display roots of enhanced deps (in flat view)
 - new test
 
 Version 2.7.0

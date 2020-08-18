@@ -942,12 +942,13 @@ public class ConllWord {
         if (!deps.isEmpty()) {
             JsonArray edeps = new JsonArray();
             for (EnhancedDeps ed : deps) {
-                if (ed.headword == null) {
+                if (ed.headid != 0 && ed.headword == null) {
                     continue;
                 }
                 JsonObject edo = new JsonObject();
                 edo.addProperty("id", ed.getFullHeadId());
-                edo.addProperty("position", ed.headword.getPosition());
+                if (ed.headword != null) edo.addProperty("position", ed.headword.getPosition());
+                else edo.addProperty("position", -1);
                 edo.addProperty("deprel", ed.deprel);
                 edeps.add(edo);
             }

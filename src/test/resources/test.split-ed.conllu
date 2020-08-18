@@ -230,25 +230,27 @@
 # sent_id = ellipsis1
 # text = Sam fixed lunch lunchand and Kim dinner
 # sentence 13
-1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	_	_
-2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	_	_
-3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	_	_
+1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
+2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_
+3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	2:obj	_
 4	lunchand	lunchand	NOUN	NN	Number=Sing	2	obj	_	_
 5	and	and	CCONJ	CC	_	6	cc	_	_
 6	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|6.1:nsubj	_
 6.1	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
-7	dinner	dinner	NOUN	NN	Number=Sing	6	orphan	6:orphan|6.1:obj	_
+7	dinner	dinner	NOUN	NN	Number=Sing	6	orphan	6.1:obj	_
 
+# sent_id = ellipsis2
 # text = Mary organised bred and John beer
 # sentence 14
-10	Mary	Mary	PROPN	_	_	20	nsubj	_	_
-20	organised	organise	VERB	_	_	0	root	_	_
-30	bred	bred	NOUN	_	_	20	obj	_	_
+10	Mary	Mary	PROPN	_	_	20	nsubj	20:nsubj	_
+20	organised	organise	VERB	_	_	0	root	0:root	_
+30	bred	bred	NOUN	_	_	20	obj	20:obj	_
 40	and	and	CCONJ	_	_	50	cc	50:cc|50.1:cc	_
 50	John	John	PROPN	_	_	20	conj	20:conj|50.1:nsubj	_
 50.1	organised	_	_	_	_	_	_	20:conj	_
-60	beer	beer	NOUN	_	_	50	orphan	50:orphan|50.1:obj	_
+60	beer	beer	NOUN	_	_	50	orphan	50.1:obj	_
 
+# sent_id = unannotated
 # text = Une exposition au musée du Louvre
 # sentence 15
 10	Une	_	_	_	_	_	_	_	_

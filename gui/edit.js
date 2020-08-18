@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.0 as of 19th July 2020
+ @version 2.7.1 as of 17th August 2020
  */
 
 
@@ -569,7 +569,7 @@ var editword_with_doubleclick = true; // in order to deactivate word-edit with d
 
 // capture delete key
 $(window).on('keydown', function (evt) {
-    console.log("DDAEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+    //console.log("DDAEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
 
     if($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
@@ -603,7 +603,7 @@ $(window).on('keydown', function (evt) {
 
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
-    console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
 
     if($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text

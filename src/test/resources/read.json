@@ -27,6 +27,13 @@
       ],
       "xpos": "VBD",
       "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        }
+      ],
       "deprel": "root",
       "chunk": 0,
       "type": "",
@@ -45,6 +52,13 @@
           ],
           "xpos": "NNP",
           "upos": "PROPN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "nsubj"
+            }
+          ],
           "deprel": "nsubj",
           "chunk": 0,
           "type": ""
@@ -63,6 +77,13 @@
           ],
           "xpos": "NN",
           "upos": "NOUN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "obj"
+            }
+          ],
           "deprel": "obj",
           "chunk": 0,
           "type": ""
@@ -136,11 +157,6 @@
               "xpos": "NN",
               "upos": "NOUN",
               "enhancedheads": [
-                {
-                  "id": "5",
-                  "position": 5,
-                  "deprel": "orphan"
-                },
                 {
                   "id": "5.1",
                   "position": 6,

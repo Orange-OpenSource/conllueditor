@@ -112,6 +112,13 @@
       ],
       "xpos": "VB|PRS|AKT",
       "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        }
+      ],
       "deprel": "root",
       "chunk": 0,
       "type": "",
