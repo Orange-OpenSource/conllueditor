@@ -839,6 +839,24 @@ public class ConllWord {
         }
     }
 
+    /** if there is no enhanced dependency, create one from basic dependency.
+    If it is orphan or this is an empty word use 0:root,
+    */
+    public void initialiseEHDs() {
+        if (deps == null) {
+            deps = new ArrayList<>();
+        } else if (!deps.isEmpty()) return;
+        if (toktype == Tokentype.EMPTY) {
+            deps.add(new EnhancedDeps("0", "root"));
+        } else {
+            if ("orphan".equals(deplabel) || head == 0) {
+                deps.add(new EnhancedDeps("0", "root"));
+            } else if (deplabel != null) {
+                deps.add(new EnhancedDeps(""+head, deplabel));
+            }
+        }
+    }
+
     /**
      * le mots (avec ses dépendants) en json
      *

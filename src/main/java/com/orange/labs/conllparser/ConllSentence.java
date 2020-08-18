@@ -466,6 +466,8 @@ public class ConllSentence {
             for (EnhancedDeps ehd : ehd_to_delete_from_this) {
                 cw.getDeps().remove(ehd);
             }
+            // add an enhanced dep if nothing is left
+            if (hasEnhancedDeps && cw.getDeps().isEmpty()) cw.initialiseEHDs();
         }
 
         if (newsent.emptywords != null) {
@@ -478,6 +480,10 @@ public class ConllSentence {
                     for (EnhancedDeps ehd : ehd_to_delete_from_this) {
                        ewid.getDeps().remove(ehd);
                     }
+
+                    // add an enhanced dep if nothing is left
+                    if (hasEnhancedDeps && ewid.getDeps().isEmpty()) ewid.initialiseEHDs();
+
                 }
             }
         }
@@ -508,6 +514,7 @@ public class ConllSentence {
             for (EnhancedDeps ehd : ehd_to_delete_from_this) {
                 cw.getDeps().remove(ehd);
             }
+            if (hasEnhancedDeps && cw.getDeps().isEmpty()) cw.initialiseEHDs();
         }
 
         if (emptywords != null) {
@@ -521,6 +528,8 @@ public class ConllSentence {
                     for (EnhancedDeps ehd : ehd_to_delete_from_this) {
                        ewid.getDeps().remove(ehd);
                     }
+                    // add an enhanced dep if nothing is left
+                    if (hasEnhancedDeps && ewid.getDeps().isEmpty()) ewid.initialiseEHDs();
                 }
             }
         }

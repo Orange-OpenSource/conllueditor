@@ -268,32 +268,32 @@
 # sentence 16
 1	Om	om	SCONJ	SN	_	3	mark	3:mark	_
 2	du	du	PRON	PN|UTR|SIN|DEF|SUB	Case=Nom|Definite=Def|Gender=Com|Number=Sing|PronType=Prs	3	nsubj	3:nsubj|10.1:nsubj	_
-3	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+3	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	0:root	_
 4	en	en	DET	DT|UTR|SIN|IND	Definite=Ind|Gender=Com|Number=Sing|PronType=Art	6	det	6:det	_
 5	halv	halv	ADJ	JJ|POS|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Com|Number=Sing	4	fixed	4:fixed	_
 6	liter	liter	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	7	nmod	7:nmod	_
 7	mjölk	mjölk	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	3	obj	3:obj	_
 8	för	för	ADP	PP	_	9	case	9:case	_
 9	0:78	0:78	NUM	RG|NOM	Case=Nom|NumType=Card	3	obl	3:obl:för	SpaceAfter=No
-10	,	,	PUNCT	MID	_	0	root	_	_
+10	,	,	PUNCT	MID	_	0	root	0:root	_
 10.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj	_
 
 # sent_id = sv-ud-train-767-bis
 # text = en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.
 # sentence 16
 1	en	en	DET	DT|UTR|SIN|IND	Definite=Ind|Gender=Com|Number=Sing|PronType=Art	2	det	2:det	_
-2	limpa	limpa	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	0	root	_	Enhanced=obj
+2	limpa	limpa	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	0	root	0:root	Enhanced=obj
 3	för	för	ADP	PP	_	4	case	4:case	_
-4	2:57	2:57	NUM	RG|NOM	Case=Nom|NumType=Card	2	orphan	_	Enhanced=obl
+4	2:57	2:57	NUM	RG|NOM	Case=Nom|NumType=Card	2	orphan	0:root	Enhanced=obl
 5	och	och	CCONJ	KN	_	9	cc	5.1:cc	_
-5.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	_	_
+5.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	0:root	_
 6	ett	en	DET	DT|NEU|SIN|IND	Definite=Ind|Gender=Neut|Number=Sing|PronType=Art	8	det	8:det	_
 7	halvt	halv	ADJ	JJ|POS|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Neut|Number=Sing	6	fixed	6:fixed	_
 8	kilo	kilo	NOUN	NN|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Neut|Number=Sing	9	nmod	9:nmod	_
 9	margarin	margarin	NOUN	NN|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Neut|Number=Sing	2	conj	5.1:obj	Enhanced=obj
 10	för	för	ADP	PP	_	11	case	11:case	_
 11	2:87	2:87	NUM	RG|NOM	Case=Nom|NumType=Card	9	orphan	5.1:obl:för	Enhanced=obl
-12	gör	göra	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	_
+12	gör	göra	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	0:root	_
 13	detta	denna	PRON	PN|NEU|SIN|DEF|SUB/OBJ	Definite=Def|Gender=Neut|Number=Sing|PronType=Dem	12	nsubj	12:nsubj	_
 14	sammanlagt	sammanlagd	ADV	AB	_	12	advmod	12:advmod	_
 15	6:22	6:22	NUM	RG|NOM	Case=Nom|NumType=Card	12	nummod	12:nummod	SpaceAfter=No

@@ -281,7 +281,7 @@
                             <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following. If the merged word overlap in any way with a multiword token (MWT), the MWT will be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">insert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new word after word with <i>id</i></td></tr>
                             <tr><td>&bull; <span class="userinputdoc">delete <i>id</i></span></td> <td>delete word with <i>id</i>. Any overlapping MWE will also be deleted</td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">sentsplit <i>id</i></span></td> <td>split current sentence at word id (id will be in the second sentence)</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">sentsplit <i>id</i></span></td> <td>split current sentence at word id (id will be in the second sentence). Dependency and Enhanced Dependency relations between the words before and after the split will be deleted.</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentjoin</span></td> <td>merge current sentence with following</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">compose <i>id length</i></span></td> <td>create a multiword token (MWT).
                                     The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multiword token, click on the multitoken
