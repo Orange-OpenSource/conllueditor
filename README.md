@@ -53,6 +53,8 @@ In order two compile the server, you also need
 * Java jdk >= 8.0
 * maven (tested with >= 3.3.9)
 
+Alternatively, a recent version of Docker can be used to run the docker image (see section [docker](#docker) below)
+
 ### License
 * This software is under the [3-Clause BSD License](LICENSE)
 
@@ -162,6 +164,44 @@ bin/conlluedit.sh treebank.conllu 8888
 ```
 Point your navigator to `http://localhost/conllueditor?port=8888` .
 
+### Using docker
+
+If you prefer a docker image, you can use the following
+
+* get current docker iamge
+``` bash
+docker pull jheinecke/conllueditor:latest
+```
+
+Run the image in a docker container from the directory where your `.conllu`-file (and other files like lists of UPOS, XPOS etc) reside and replace
+* `--user 1000:1000` with your uid and gid (you get the uid on Linux with the `id`-command)
+* `--env filename=<yourfile>.conllu` with the filename you want to edit
+* `</absolute/path/to/datadir>` with the directory where the `.conllu`-file and other files reside
+
+```
+docker run -t --name conllueditor -p 5555:8888 \
+	--user 1000:1000 \
+	-v </absolute/path/to/datadir>:/data \
+	--env filename=<yourfile>.conllu \
+	conllueditor:2.7.0
+```
+
+Other parameters (shown below in section [other options](#other-options)) can be given with
+`--env <optionname>=value` e.g. 
+`--env UPOS=uposfile.txt`,
+`--env UPOS=cpos.ud`,
+`--env XPOS=xpos.txt`,
+`--env deprels=deprels.ud`,
+`--env features=feat_val.ud`, or
+`--env shortcurs=hortcuts.json`,
+. However all files given, **must** reside in the `</absolute/path/to/datadir>` directory.
+
+When finished, stop and remove the docker container:
+
+```
+docker stop conllueditor
+docker rm conllueditor
+```
 
 
 ### Other options
