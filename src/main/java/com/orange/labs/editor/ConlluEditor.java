@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.0 as of 19th July 2020
+ @version 2.7.2 as of 23rd August 2020
  */
 package com.orange.labs.editor;
 
@@ -537,7 +537,7 @@ public class ConlluEditor {
             } else if (command.startsWith("findsentid")) {
                 String[] f = command.trim().split(" +", 3);
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
 
                 // si le deuxième mot est "true" on cherche en arrière
@@ -558,12 +558,12 @@ public class ConlluEditor {
                     }
                 }
 
-                return formatErrMsg("Sentence id not found '" + idAtrouver + "'", currentSentenceId);
+                return formatErrMsg("Sentence id not found «" + idAtrouver + "»", currentSentenceId);
 
             } else if (command.startsWith("findcomment ")) {
                 String[] f = command.trim().split(" +", 3);
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
 
                 // si le deuxième mot est "true" on cherche en arrière
@@ -618,12 +618,12 @@ public class ConlluEditor {
                         return returnTree(currentSentenceId, cs, hl /*, motAtrouver*/);
                     }
                 }
-                return formatErrMsg("Comment not found '" + motAtrouver + "'", currentSentenceId);
+                return formatErrMsg("Comment not found «" + motAtrouver + "»", currentSentenceId);
 
             } else if (command.startsWith("findword ")) {
                 String[] f = command.trim().split(" +", 3);
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
 
                 // si le deuxième mot est "true" on cherche en arrière
@@ -673,13 +673,14 @@ public class ConlluEditor {
                         return returnTree(currentSentenceId, cs, hl /*, motAtrouver*/);
                     }
                 }
-                return formatErrMsg("Word not found '" + motAtrouver + "'", currentSentenceId);
+                return formatErrMsg("Word not found «" + motAtrouver + "»", currentSentenceId);
 
             } else if (command.startsWith("findmulti ")) {
                 // find sequences of words by different criteria:  u:NOUN/l:yn/x:verbnoun
+                // TODO: or find word with multiple criteria u:NOUN;l:power/l:of
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
 
                 // si le deuxième mot est "true" on cherche en arrière
@@ -687,34 +688,41 @@ public class ConlluEditor {
                 String[] elems = f[2].split("/");
 
                 class SearchField {
-                    ConllWord.Fields field;
-                    String value;
+                    List<ConllWord.Fields> fields;
+                    List<String> values;
 
                     public SearchField(String f) {
-                        String [] tmp = f.split(":", 2);
-                        value = tmp[1];
+                        String [] andconditions = f.split("%", 2);
+                        fields = new ArrayList<>();
+                        values = new ArrayList<>();
+                        for (String andcondition : andconditions) {
+                            String [] tmp = andcondition.split(":", 2);
+                            //value = tmp[1];
+                            values.add(tmp[1]);
 
-                        if (tmp[0].startsWith("l")) {
-                            field = ConllWord.Fields.LEMMA;
-                        } else if (tmp[0].startsWith("u")) {
-                            field = ConllWord.Fields.UPOS;
-                        } else if (tmp[0].startsWith("x")) {
-                            field = ConllWord.Fields.XPOS;
-                        } else if (tmp[0].startsWith("d")) {
-                            field = ConllWord.Fields.DEPREL;
-                        } else if (tmp[0].startsWith("e")) {
-                            // enhanced deps
-                            field = ConllWord.Fields.DEPS;
-                        } else /*if (f[0].equals("findxpos")) */ {
-                            field = ConllWord.Fields.FORM;
+                            if (tmp[0].startsWith("l")) {
+                                fields.add(ConllWord.Fields.LEMMA);
+                            } else if (tmp[0].startsWith("u")) {
+                                fields.add(ConllWord.Fields.UPOS);
+                            } else if (tmp[0].startsWith("x")) {
+                                fields.add(ConllWord.Fields.XPOS);
+                            } else if (tmp[0].startsWith("d")) {
+                                fields.add(ConllWord.Fields.DEPREL);
+                            } else if (tmp[0].startsWith("e")) {
+                                // enhanced deps
+                                fields.add(ConllWord.Fields.DEPS);
+                            } else /*if (f[0].equals("findxpos")) */ {
+                                fields.add(ConllWord.Fields.FORM);
+                            }
                         }
                     }
                 }
 
+                // list of expressions to match a sequnce of words
                 List<SearchField>fields = new ArrayList<>();
                 for (String e: elems) {
                     if (!e.contains(":")) {
-                        return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                     }
                     fields.add(new SearchField(e));
                 }
@@ -727,23 +735,23 @@ public class ConlluEditor {
                     Iterator<ConllWord> cwit = cs.getAllWords().iterator();//cs.getWords().iterator();
                     while (cwit.hasNext()) {
                         ConllWord cw = cwit.next();
-                        if (cw.matchesField(fields.get(0).field, fields.get(0).value)) {
+                        if (cw.matchesFields(fields.get(0).fields, fields.get(0).values)) {
                             currentSentenceId = i;
                             int firstid = cw.getId();
                             boolean ok = true;
                             List<ConllWord.Fields>fl = new ArrayList<>();
-                            fl.add(fields.get(0).field);
+                            fl.add(fields.get(0).fields.get(0)); // for highlighting
                             for (int j = 1; j < elems.length; ++j) {
                                 if (!cwit.hasNext()) {
                                     ok = false;
                                     break;
                                 }
                                 cw = cwit.next();
-                                if (!cw.matchesField(fields.get(j).field, fields.get(j).value)) {
+                                if (!cw.matchesFields(fields.get(j).fields, fields.get(j).values)) {
                                     ok = false;
                                     break;
                                 }
-                                fl.add(fields.get(j).field);
+                                fl.add(fields.get(j).fields.get(0));
                             }
                             if (ok) {
                                 // TODO in case of enhanced deps, all ehds of a word are highlighted
@@ -755,7 +763,7 @@ public class ConlluEditor {
                         }
                     }
                 }
-                return formatErrMsg("not found '" + f[2] + "'", currentSentenceId);
+                return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
 
             } else if (command.startsWith("findlemma ")
                     || command.startsWith("findfeat ")
@@ -763,7 +771,7 @@ public class ConlluEditor {
                     || command.startsWith("findxpos ")) {
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
                 ConllWord.Fields field;
                 if (f[0].equals("findlemma")) {
@@ -810,12 +818,12 @@ public class ConlluEditor {
                         }
                     }
                 }
-                return formatErrMsg(field + " not found '" + f[2] + "'", currentSentenceId);
+                return formatErrMsg(field + " not found «" + f[2] + "»", currentSentenceId);
 
             } else if (command.startsWith("finddeprel ")) {
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID syntax '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
 
                 String[] rels = f[2].split("[<>=]");
@@ -884,12 +892,12 @@ public class ConlluEditor {
                         }
                     }
                 }
-                return formatErrMsg("DepRel not found " + f[2], currentSentenceId);
+                return formatErrMsg("DepRel not found «" + f[2] + "»", currentSentenceId);
 
             } else if (command.startsWith("read ")) {
                 String[] f = command.trim().split(" +");
                 if (f.length != 2) {
-                    return formatErrMsg("INVALID command '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command «" + command + "»", currentSentenceId);
 
                 }
                 int sn;
@@ -899,7 +907,7 @@ public class ConlluEditor {
                     sn = Integer.parseInt(f[1]);
                 }
                 if (sn < 0 && sn >= cfile.getSentences().size()) {
-                    return formatErrMsg("NO sentence number '" + command + "'", currentSentenceId);
+                    return formatErrMsg("NO sentence number «" + command + "»", currentSentenceId);
 
                 }
                 if (sn >= 0 && sn < cfile.getSentences().size()) {
@@ -907,7 +915,7 @@ public class ConlluEditor {
                     currentSentenceId = sn;
                     return returnTree(currentSentenceId, csent);
                 } else {
-                    return formatErrMsg("INVALID sentence number '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID sentence number «" + command + "»", currentSentenceId);
                 }
 
             } else if (command.startsWith("mod upos ") // mod upos id val
@@ -925,13 +933,13 @@ public class ConlluEditor {
                 //    "mod upos id newupos" par ex. mod xpos 3 ART"
                 String[] f = command.trim().split(" +", 4); // 4th element may contain blanks
                 if (f.length < 4) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 if ("pos".equals(f[1]) || "extracol".equals(f[1])) {
                     // resplit, since we to expect an UPOS and an XPOS without any blanks
                     f = command.trim().split(" +", 5);
                     if (f.length < 5) {
-                        return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                     }
                 }
 
@@ -943,22 +951,22 @@ public class ConlluEditor {
                         List<ConllWord> ews = csent.getEmptyWords().get(Integer.decode(id[0]));
                         int subid = Integer.parseInt(id[1]);
                         if (subid > ews.size()) {
-                            return formatErrMsg("INVALID subid '" + command + "'", currentSentenceId);
+                            return formatErrMsg("INVALID subid «" + command + "»", currentSentenceId);
                         }
                         modWord = ews.get(subid - 1);*/
                         modWord = csent.getEmptyWord(f[2]);
                         if (modWord == null)
-                             return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                             return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     } else {
                         int id = Integer.parseInt(f[2]);
 
                         if (id < 1 || id > csent.getWords().size()) {
-                            return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                            return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                         }
                         modWord = csent.getWords().get(id - 1);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
 
                 if (history == null) {
@@ -1020,7 +1028,7 @@ public class ConlluEditor {
                 // add composed form: mod compose <id> <composelength>
                 String[] f = command.trim().split(" +");
                 if (f.length < 4) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
                 int id;
@@ -1029,14 +1037,14 @@ public class ConlluEditor {
                     id = Integer.parseInt(f[2]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (id < 1 || id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
                     complen = Integer.parseInt(f[3]);
                     if (id + complen > csent.getWords().size()) {
-                        return formatErrMsg("INVALID complen (to big) '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID MWE length (to big) «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
                 //System.err.println("<" + f[1] + ">");
 
@@ -1059,7 +1067,7 @@ public class ConlluEditor {
             } else if (command.startsWith("mod editmwe")) { // mod editmwe current_start new_end form [MISC column data]
                 String[] f = command.trim().split(" +");
                 if (f.length < 5) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
                 int start;
@@ -1072,16 +1080,16 @@ public class ConlluEditor {
                     start = Integer.parseInt(f[2]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (start < 1 || start > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
                     end = Integer.parseInt(f[3]);
 
                     if ((end > 0 && end < start) || end > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
 
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
                 //System.err.println("<" + f[1] + ">");
 
@@ -1120,17 +1128,17 @@ public class ConlluEditor {
                 String[] f = command.trim().split(" +");
 
                 if (f.length < 3) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 int id;
                 try {
                     id = Integer.parseInt(f[2]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (id < 1 || id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
                 //System.err.println("<" + f[1] + ">");
 
@@ -1147,7 +1155,7 @@ public class ConlluEditor {
                         try {
                              splitpos = Integer.parseInt(f[3]);
                          } catch (NumberFormatException e) {
-                             return formatErrMsg("INVALID splitpos (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                             return formatErrMsg("INVALID splitpos (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                          }
                     }
 
@@ -1170,13 +1178,13 @@ public class ConlluEditor {
                 } else if (f[1].equals("join")) {
                     // System.err.println("JOIN");
                     if (id >= csent.getWords().size()) {
-                        return formatErrMsg("Cannot join last word '" + command + "'", currentSentenceId);
+                        return formatErrMsg("Cannot join last word «" + command + "»", currentSentenceId);
                     }
                     modWord = csent.getWords().get(id - 1);
                     csent.joinWords(id);
                 } else if (f[1].equals("delete")) {
                     if (id >= csent.getWords().size()) {
-                        return formatErrMsg("Cannot delete last word '" + command + "'", currentSentenceId);
+                        return formatErrMsg("Cannot delete last word «" + command + "»", currentSentenceId);
                     }
                     modWord = csent.getWords().get(id - 1);
                     csent.deleteWord(id);
@@ -1194,17 +1202,17 @@ public class ConlluEditor {
                   String[] f = command.trim().split(" +");
 
                 if (f.length < 3) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 int id;
                 try {
                     id = Integer.parseInt(f[2]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (id < 1 || id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
                 //System.err.println("<" + f[1] + ">");
 
@@ -1249,57 +1257,57 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
             } else if (command.startsWith("mod emptydelete ")) {
                 // mod emptydelete id.subid
-                
+
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
-                
-                
+
+
                 String [] g = f[2].split("\\.");
                 if (g.length != 2) {
-                    return formatErrMsg("INVALID empty word id '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID empty word id «" + command + "»", currentSentenceId);
                 }
-                
+
                 int id;
                 int subid;
-                
-                
+
+
                 try {
                     id = Integer.parseInt(g[0]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (id < 1 || id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
-                
+
                 try {
-                    subid = Integer.parseInt(g[1]);                   
+                    subid = Integer.parseInt(g[1]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     ConllWord ew = csent.getEmptyWord(id, subid);
                     if (ew == null) {
-                        return formatErrMsg("Empty word noes not exist '" + command + "'", currentSentenceId);
+                        return formatErrMsg("Empty word noes not exist «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID subid (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID subid (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
-                
+
                 if (history == null) {
                     history = new History(200);
                 }
                 history.add(csent);
-                
+
                 csent.deleteEmptyWord(id, subid);
-              
+
                 try {
                     writeBackup(currentSentenceId, null, editinfo);
                 } catch (IOException ex) {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }
                 return returnTree(currentSentenceId, csent);
-                
+
             } else if (command.startsWith("mod insert ")
                     || command.startsWith("mod emptyinsert ")
                     ) {
@@ -1309,17 +1317,17 @@ public class ConlluEditor {
                 // mod emptyinsert id form [lemma [upos [xpos]]]
                 String[] f = command.trim().split(" +");
                 if (f.length < 4) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 int id;
                 try {
                     id = Integer.parseInt(f[2]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (id < 1 || id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
                 //System.err.println("<" + f[1] + ">");
 
@@ -1341,10 +1349,10 @@ public class ConlluEditor {
                 if ("emptyinsert".equals(f[1])) {
                     newword.setId(id);
                     csent.addEmptyWord(newword);
-                } else {                
+                } else {
                     csent.addWord(newword, id);
                 }
-                
+
                 try {
                     writeBackup(currentSentenceId, newword, editinfo);
                 } catch (IOException ex) {
@@ -1356,7 +1364,7 @@ public class ConlluEditor {
                 String[] f = command.trim().split(" +", 3);
                 String newcomment;
                 if (f.length < 3) {
-                    //return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    //return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                     newcomment = ""; // = delete comment
                 } else {
                     newcomment = f[2];
@@ -1411,11 +1419,11 @@ public class ConlluEditor {
                 String[] f = command.trim().split(" +");
 
                 if (f.length < 5) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
                 if (f[2].equals("add") && f.length < 6) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
                 csent = cfile.getSentences().get(currentSentenceId);
@@ -1425,9 +1433,9 @@ public class ConlluEditor {
                 history.add(csent);
 
                 ConllWord dep = csent.getWord(f[3]);
-                if (dep == null) formatErrMsg("INVALID dep id '" + command + "'", currentSentenceId);
+                if (dep == null) formatErrMsg("INVALID dep id «" + command + "»", currentSentenceId);
                 ConllWord head = csent.getWord(f[4]);
-                if (head == null) formatErrMsg("INVALID head id '" + command + "'", currentSentenceId);
+                if (head == null) formatErrMsg("INVALID head id «" + command + "»", currentSentenceId);
 
                 if ("add".equals(f[2])) {
                     // before we add a new enhanced dep, we delete a potentially
@@ -1438,10 +1446,10 @@ public class ConlluEditor {
                 }
                 else if ("del".equals(f[2])) {
                     boolean rtc = dep.delDeps(f[4]);
-                    if (!rtc) return formatErrMsg("ED does not exist '" + command + "'", currentSentenceId);
+                    if (!rtc) return formatErrMsg("ED does not exist «" + command + "»", currentSentenceId);
                 }
                 else {
-                    return formatErrMsg("INVALID ed command '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID ed command «" + command + "»", currentSentenceId);
                 }
                 try {
                     writeBackup(currentSentenceId, dep, editinfo);
@@ -1462,34 +1470,34 @@ public class ConlluEditor {
                 String[] f = command.trim().split(" +");
 
                 if (f.length < 3) {
-                    return formatErrMsg("INVALID command length '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
 
                 }
                 int dep_id;
                 int newhead_id;
 
                 if (f[1].contains(".") || f[2].contains(".")) {
-                    return formatErrMsg("empty nodes cannot be head/dependant in basic dependencies '" + command + "'", currentSentenceId);
+                    return formatErrMsg("empty nodes cannot be head/dependant in basic dependencies «" + command + "»", currentSentenceId);
                 }
 
                 try {
                     dep_id = Integer.parseInt(f[1]);
                     csent = cfile.getSentences().get(currentSentenceId);
                     if (dep_id < 1 || dep_id > csent.getWords().size()) {
-                        return formatErrMsg("INVALID dependant id '" + command + "'", currentSentenceId);
+                        return formatErrMsg("INVALID dependant id «" + command + "»", currentSentenceId);
                     }
 
                     newhead_id = Integer.parseInt(f[2]);
                     if (newhead_id < 0 || newhead_id > csent.getWords().size()) {
-                        return formatErrMsg("head id must be 0 < headid <= " + csent.getWords().size() + " '" + command + "'", currentSentenceId);
+                        return formatErrMsg("head id must be 0 < headid <= " + csent.getWords().size() + " «" + command + "»", currentSentenceId);
 
                     }
                 } catch (NumberFormatException e) {
-                    return formatErrMsg("INVALID id (not an integer) '" + command + "' " + e.getMessage(), currentSentenceId);
+                    return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
 
                 if (newhead_id == dep_id) {
-                    return formatErrMsg("INVALID head id. Cannot be identical to id '" + command + "'", currentSentenceId);
+                    return formatErrMsg("INVALID head id. Cannot be identical to id «" + command + "»", currentSentenceId);
                 }
 
                 String newdeprel = null;
@@ -1550,7 +1558,7 @@ public class ConlluEditor {
                     try {
                         changesSinceSave = saveafter;
                         String f = writeBackup(currentSentenceId, null, editinfo);
-                        return formatSaveMsg("saved '" + f + "'", currentSentenceId);
+                        return formatSaveMsg("saved «" + f + "»", currentSentenceId);
 
                         //return returnTree(currentSentenceId, csent);
                     } catch (IOException ex) {
@@ -1560,7 +1568,7 @@ public class ConlluEditor {
                     return formatErrMsg("no changes to be saved", currentSentenceId);
                 }
             } else {
-                return formatErrMsg("invalid command '" + command + "'", currentSentenceId);
+                return formatErrMsg("invalid command «" + command + "»", currentSentenceId);
             }
         } catch (ConllException e) {
             return formatErrMsg("CoNLL error: " + e.getMessage(), currentSentenceId);

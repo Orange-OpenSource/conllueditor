@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.1 as of 17th August 2020
+ @version 2.7.2 as of 23rd August 2020
  */
 
 import com.google.gson.Gson;
@@ -381,7 +381,51 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test33FindSentenceId() throws IOException {
+    public void test33FindDeprel() throws IOException {
+        name("finddeprel");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("finddeprel true orphan", 16, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "finddeprel.json");
+
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("finddeprel.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test34FindSequence() throws IOException {
+        name("find sequence");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("findmulti false l:un/u:ADJ", 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "findsequence.json");
+
+
+        FileUtils.writeStringToFile(out, "[" + prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        rtc = ce.process("findmulti false f:et.*%u:DET", 1, "");
+        jelement = JsonParser.parseString(rtc);
+        FileUtils.writeStringToFile(out, "," + prettyprintJSON(jelement) + "]", StandardCharsets.UTF_8, true);
+
+
+        URL ref = this.getClass().getResource("findsequence.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test35FindSentenceId() throws IOException {
         name("findsenteid");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findsentid false c.*-ud", 1, "");
@@ -401,7 +445,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test34FindSentenceIdBadRE() throws IOException {
+    public void test36FindSentenceIdBadRE() throws IOException {
         name("findsenteid (bad RE)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findsentid false c.*[]-ud", 1, "");
@@ -422,7 +466,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test35FindNothing() throws IOException {
+    public void test37FindNothing() throws IOException {
         name("findupos (error)");
         ce.setCallcitcommot(false);
         String rtc = ce.process("findupos false TOTO", 1, "");
@@ -442,7 +486,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test36Undo() throws IOException {
+    public void test38Undo() throws IOException {
         name("modifying UPOS and Lemma, followed by undo");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
@@ -458,7 +502,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test37AddED() throws IOException {
+    public void test39AddED() throws IOException {
         name("adding/deleting enhanced dependency");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".4");
@@ -619,13 +663,13 @@ public class TestConlluEditor {
         //URL ref = this.getClass().getResource("test.deleteempty.conllu");
         //URL res = this.getClass().getResource("test.conllu.15");
 
-        String expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"Empty word noes not exist 'mod emptydelete 5.2'\"}";
+        String expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"Empty word noes not exist «mod emptydelete 5.2»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
         msg = ce.process("mod delete 5.1", 13, "editinfo"); // bad command
 
-        expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"INVALID id (not an integer) 'mod delete 5.1' For input string: \\\"5.1\\\"\"}";
+        expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"INVALID id (not an integer) «mod delete 5.1» For input string: \\\"5.1\\\"\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
@@ -642,12 +686,12 @@ public class TestConlluEditor {
         //URL ref = this.getClass().getResource("test.deleteempty.conllu");
         //URL res = this.getClass().getResource("test.conllu.16");
 
-        String expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID id 'mod delete 11'\"}";
+        String expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID id «mod delete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
         msg = ce.process("mod emptydelete 11", 9, "editinfo"); // bad command
-        expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID empty word id 'mod emptydelete 11'\"}";
+        expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID empty word id «mod emptydelete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 

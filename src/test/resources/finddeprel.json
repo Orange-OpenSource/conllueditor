@@ -1,0 +1,162 @@
+{
+  "sentenceid": 14,
+  "maxsentence": 19,
+  "sentence": "Mary organised bred and John beer ",
+  "length": 7,
+  "sent_id": "ellipsis2",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 2,
+      "id": 2,
+      "form": "organised",
+      "lemma": "organise",
+      "xpos": "_",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        }
+      ],
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 1,
+          "id": 1,
+          "form": "Mary",
+          "lemma": "Mary",
+          "xpos": "_",
+          "upos": "PROPN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "nsubj"
+            }
+          ],
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 3,
+          "archeight": 1,
+          "id": 3,
+          "form": "bred",
+          "lemma": "bred",
+          "xpos": "_",
+          "upos": "NOUN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "obj"
+            }
+          ],
+          "deprel": "obj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 5,
+          "archeight": 2,
+          "id": 5,
+          "form": "John",
+          "lemma": "John",
+          "xpos": "_",
+          "upos": "PROPN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "conj"
+            },
+            {
+              "id": "5.1",
+              "position": 6,
+              "deprel": "nsubj"
+            }
+          ],
+          "deprel": "conj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 1,
+              "id": 4,
+              "form": "and",
+              "lemma": "and",
+              "xpos": "_",
+              "upos": "CCONJ",
+              "enhancedheads": [
+                {
+                  "id": "5",
+                  "position": 5,
+                  "deprel": "cc"
+                },
+                {
+                  "id": "5.1",
+                  "position": 6,
+                  "deprel": "cc"
+                }
+              ],
+              "deprel": "cc",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
+              "archeight": 1,
+              "id": 6,
+              "form": "beer",
+              "lemma": "beer",
+              "xpos": "_",
+              "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "5.1",
+                  "position": 6,
+                  "deprel": "obj"
+                }
+              ],
+              "deprel": "orphan",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        }
+      ],
+      "indexshift": 0
+    },
+    {
+      "position": 6,
+      "id": "5.1",
+      "token": "empty",
+      "form": "organised",
+      "lemma": "_",
+      "xpos": "_",
+      "upos": "_",
+      "enhancedheads": [
+        {
+          "id": "2",
+          "position": 2,
+          "deprel": "conj"
+        }
+      ],
+      "deprel": "_",
+      "chunk": 0,
+      "type": "",
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 14\n",
+  "canUndo": false,
+  "canRedo": false
+}

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.1 as of 17th August 2020
+ @version 2.7.2 as of 23rd August 2020
  */
 package com.orange.labs.conllparser;
 
@@ -1323,6 +1323,27 @@ public class ConllWord {
         return form.matches(regex);
     }
 
+    /** Returns true if the word all conditions in the list
+     *
+     * @param fs field names
+     * @param regexs strings to match
+     * @return true if all fields match
+     */
+    public boolean matchesFields(List<Fields> fs, List<String> regexs) {
+        if (fs == null || regexs == null) return false; // should not be used like this
+        if (fs.size() != regexs.size()) return false;
+        for (int x=0; x<fs.size(); ++x) {
+            if (matchesField(fs.get(x), regexs.get(x)) == false) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Returns true if the Word matches the regex for f
+     * @param f field name
+     * @param regex string to match
+     * @return true if field matches
+     */
     public boolean matchesField(Fields f, String regex) {
         switch (f) {
             case LEMMA:

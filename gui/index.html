@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    @version 2.7.0 as of 19th July 2020
+    @version 2.7.2 as of 23rd August 2020
     -->
 
     <head>
@@ -146,7 +146,7 @@
                 </tr>
                 <tr class="search">
                     <td colspan="6">
-                        <input class="inputfield searchfield" placeholder="find any ([fluxde]:regex)" title="column:regex[/...]" type="text" id="multifield" value="">
+                        <input class="inputfield searchfield" placeholder="find any ([fluxde]:regex)" title="column:regex[%column:regex][/...]" type="text" id="multifield" value="">
                         <span class="contain"><button class="editbuttons mybutton go" id="findmulti">&nbsp;</button></span>
 
                         <input class="inputfield searchfield" placeholder="find comment (string)" title="regex" type="text" id="comment" value="">
@@ -354,15 +354,6 @@
                             <tr><td>&bull; <span class="userinputdoc"><i>ed del dep_id newheadid</i></span> </td>
                                 <td>delete an enhanced dependency</td>
                         </table>
-
-                        <h2>Run a validator</h2>
-                        Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
-                        needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
-                        <br><tt>&nbsp;   script: /path/to/UDtools/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}</tt>
-                        <br>and give this file as option to the server.
-                        When hitting the <span class="buttondoc">validate</span> button or the <span class="keydoc">=</span> key, the validation programme
-                        is run on the current sentence.
-
                         <h2>Searching</h2>
                         Make search forms visible by clicking on <span class="buttondoc">more</span>
                         <ul>
@@ -385,9 +376,12 @@
                                 <span class="userinputdoc">x</span>,
                                 <span class="userinputdoc">d</span>,
                                 <span class="userinputdoc">e</span> (form, lemma, upos, xpos, deprel, enhanced deps)
+                                a <span class="userinputdoc">%</span> can be used to search for a word on more than one field.
                                 <ul>
                                     <li><span class="userinputdoc">l:the/u:ADJ/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
                                         any adjective and the last is <i>mouse</i>
+                                    <li><span class="userinputdoc">l:the/u:ADJ%x:JJR/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
+                                        any adjective have the XPOS <i>JJR</i> and the last is <i>mouse</i>
                                 </ul>
                             <li>
                                 The deprel search field accepts a single or a list of regex,
@@ -403,6 +397,15 @@
                         The search starts with the sentence following the displayed one. Activating the
                         <img class="helptextbutton" style="width: 40px;" src="img/backwards.svg"> button
                         searches towards the beginning of the file. <img class="helptextbutton" style="width: 40px;" src="img/clear.svg"> clears all search fields.
+
+                        <h2>Run a validator</h2>
+                        Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
+                        needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
+                        <br><tt>&nbsp;   script: /path/to/UDtools/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}</tt>
+                        <br>and give this file as option to the server.
+                        When hitting the <span class="buttondoc">validate</span> button or the <span class="keydoc">=</span> key, the validation programme
+                        is run on the current sentence.
+
 
                         <h2>UD Dependency Relations</h2>
 
