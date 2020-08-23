@@ -168,7 +168,7 @@ Point your navigator to `http://localhost/conllueditor?port=8888` .
 
 If you prefer a docker image, you can use the following
 
-* get current docker iamge
+* get current docker image
 ``` bash
 docker pull jheinecke/conllueditor:latest
 ```
@@ -183,7 +183,7 @@ docker run -t --name conllueditor -p 5555:8888 \
 	--user 1000:1000 \
 	-v </absolute/path/to/datadir>:/data \
 	--env filename=<yourfile>.conllu \
-	conllueditor:2.7.0
+	conllueditor:latest
 ```
 
 Other parameters (shown below in section [other options](#other-options)) can be given with
