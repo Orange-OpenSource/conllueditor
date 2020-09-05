@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.2 as of 23rd August 2020
+ @version 2.7.3 as of 5th September 2020
  */
 package com.orange.labs.editor;
 
@@ -1073,7 +1073,7 @@ public class ConlluEditor {
                 int start;
                 int end;
                 String form = f[4];
-                String misc = null;
+                String misc = "_";
                 if (f.length > 5) misc = f[5];
 
                 try {

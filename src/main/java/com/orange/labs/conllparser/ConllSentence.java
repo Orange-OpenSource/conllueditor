@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.1 as of 17th August 2020
+ @version 2.7.3 as of 5th September 2020
  */
 package com.orange.labs.conllparser;
 
@@ -1740,7 +1740,7 @@ public class ConllSentence {
                 mwe = contracted.get(word.getId());
             }
             if (mwe != null) {
-                sb.append(mwe.getForm()).append(word.getSpacesAfter());
+                sb.append(mwe.getForm()).append(mwe.getSpacesAfter());
                 contracted_until = mwe.getSubid();
             } else if (contracted_until == 0 || word.getId() > contracted_until) {
                 sb.append(word.getForm()).append(word.getSpacesAfter());

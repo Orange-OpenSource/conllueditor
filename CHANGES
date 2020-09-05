@@ -1,3 +1,5 @@
+Version 2.7.3
+- bug corrected when inserting new MWE and serializing MWEs with Space(s)After to CoNLL-U
 Version 2.7.2
 - search: find word on multiple criteria
 
