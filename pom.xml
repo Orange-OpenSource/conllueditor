@@ -32,7 +32,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.7.3 as of 5th September 2020
+    version 2.7.3 as of 8th September 2020
     -->
 
     <modelVersion>4.0.0</modelVersion>
@@ -60,10 +60,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>1.11</source>
-                    <target>1.11</target>
+                  <release>11</release>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
