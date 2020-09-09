@@ -19,23 +19,27 @@
     },
     "deplabel": {
         "a": "amod",
+        "b": "advmod",
         "c": "case",
         "d": "det",
+        "f": "fixed",
         "l": "acl",
         "m": "nmod",
         "o": "obj",
         "p": "punct",
+        "r": "acl:relcl",
+        "t": "parataxis",
         "s": "nsubj",
         "u": "nummod",
         "v": "advcl",
         "x": "xcomp",
-	"h": "aux"
+        "h": "aux"
     },
     "xpos": {
         "i": ["impf", "AUX"],
         "j": ["pred", "PART"],
         "k": ["verbnoun", "NOUN"],
-        "f": ["place", "PROPN"],
+        "F": ["place", "PROPN"],
         "g": ["person", "PROPN"]
     }
 }
