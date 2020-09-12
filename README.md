@@ -45,7 +45,7 @@ For more information see section [File Comparison](#file-comparison)
   Safari (tested with version 11.1 on MacOS Sierra)
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
-* popper.min.js 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js), needed by bootstrap
+* popper.min.js and popper.min.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
 * optionally apache or lighttpd
 * on MacOS: `greadlink` (`brew install coreutils`)
 
@@ -93,6 +93,7 @@ Alternatively, a recent version of Docker can be used to run the docker image (s
 ./gui/lib/bootstrap-4.1.3/css/bootstrap-reboot.min.css.map
 ./gui/lib/jquery-3.3.1.min.js
 ./gui/lib/popper.min.js
+./gui/lib/popper.min.js.map
 ./gui/lib/jquery-ui-1.12.1
 ./gui/lib/jquery-ui-1.12.1/jquery-ui.min.css
 ./gui/lib/jquery-ui-1.12.1/LICENSE.txt

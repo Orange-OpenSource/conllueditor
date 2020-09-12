@@ -42,5 +42,6 @@ mkdir bootstrap-4.1.3
 unzip -d bootstrap-4.1.3 bootstrap-4.1.3-dist.zip
 
 getfile https://unpkg.com/popper.js/dist/umd/popper.min.js
+getfile https://unpkg.com/popper.js/dist/umd/popper.min.js.map
 
 

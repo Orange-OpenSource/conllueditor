@@ -1,5 +1,9 @@
+Version 2.7.4
+- Error if edited file is not controlled under git AND there is already a backup-file (.2) in order to avoid overwriting the output of a preceding editing
+
 Version 2.7.3
 - bug corrected when inserting new MWE and serializing MWEs with Space(s)After to CoNLL-U
+
 Version 2.7.2
 - search: find word on multiple criteria
 

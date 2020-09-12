@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.3 as of 5th September 2020
+ @version 2.7.4 as of 12th September 2020
  */
 package com.orange.labs.editor;
 
@@ -103,6 +103,7 @@ public class ConlluEditor {
     ConllFile comparisonFile = null;
 
     private String programmeversion;
+    private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
 
     public enum Raw {
         LATEX, CONLLU, SDPARSE, VALIDATION, SPACY_JSON
@@ -116,6 +117,22 @@ public class ConlluEditor {
         System.err.format("ConlluEditor V %s\n", programmeversion);
         filename = new File(conllfile);
         filename = filename.getAbsoluteFile().toPath().normalize().toFile();
+
+        switch(versionning()) {
+            case 1:
+                // OK, conllfile is git controlled
+                break;
+            case 2:
+            case 3:
+                // file is not git controlled. Check whether conllfile + suffix exist
+                File temp = new File(conllfile + suffix);
+                if (temp.exists()) {
+                    throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
+                }
+                break;
+            default: throw new ConllException(String.format("Will not be able to save edited file '%s'", conllfile));
+        }
+
         init();
         System.out.println("Number of sentences loaded: " + numberOfSentences);
 
@@ -915,7 +932,7 @@ public class ConlluEditor {
                     currentSentenceId = sn;
                     return returnTree(currentSentenceId, csent);
                 } else {
-                    return formatErrMsg("INVALID sentence number «" + command + "»", currentSentenceId);
+                    return formatErrMsg("INVALID sentence number «" + command + "»", currentSentenceId+1);
                 }
 
             } else if (command.startsWith("mod upos ") // mod upos id val
@@ -1587,11 +1604,66 @@ public class ConlluEditor {
         callgitcommit = b;
     }
 
-    private String suffix = ".2";
+
 
     public void setBacksuffix(String s) {
         suffix = s;
     }
+
+    /** check whether the directory of the edited file is under git version control, and if
+     * so whether the edited file is under git control, or not
+     * @return 0, error, 1 if the file is under Git Version control, 2 if the directory is git controlled but the file is not, else 3
+    */
+    // TODO merge with writeBackup()
+    private synchronized int versionning() throws IOException {
+        File dir = filename.getParentFile().toPath().normalize().toFile();
+
+         try {
+            //Git git = Git.open(dir);
+            FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
+            repositoryBuilder.findGitDir(dir);
+            File gitdir = repositoryBuilder.getGitDir();
+            //System.err.println("EEEEEE " + gitdir + " eeee " + dir );
+            if (gitdir != null) {
+                Git git = Git.open(gitdir);
+                Status status = git.status().call();
+
+                // calculer le nom du fichier par rapport du réperoitre .git
+                Path gitdirbase = gitdir.getAbsoluteFile().getParentFile().toPath().normalize();
+                //System.err.println("gitdirbase    " + gitdirbase);
+                //System.err.println("filename      " + filename.toPath().normalize());
+                Path filepathInGit = gitdirbase.relativize(filename.toPath().normalize());
+                //System.err.println("IGNORED " + status.getIgnoredNotInIndex());
+                //System.err.println("filenameInGit " + filepathInGit);
+                Set<String> untracked = status.getUntracked();
+                //System.err.println("UNTRACKED " + untracked);
+//                boolean ignore = false;
+//                for (String pattern : status.getIgnoredNotInIndex()) {
+//
+//                }
+                if (!callgitcommit || untracked.contains(filepathInGit.toString())) {
+                    // untracked file in git controlled directory
+                    System.err.println("Git dir untracked");
+                    return 2;
+                } else {
+                    // file controlled by git
+                    System.err.println("Git OK");
+                    return 1;
+                }
+            } else {
+                // no git in view
+                System.err.println("any");
+                return 3;
+            }
+        } catch (GitAPIException ex) {
+            System.err.println("GIT ERROR: " + ex.getMessage());
+            return 0;
+
+        }
+    }
+
+
+
 
     private synchronized String writeBackup(int currentSentenceId, ConllWord modWord, String editinfo) throws IOException {
         if (changesSinceSave < saveafter) {
@@ -1666,7 +1738,7 @@ public class ConlluEditor {
             System.err.println("GIT ERROR: " + ex.getMessage());
             // } catch (Exception ex) {
             //    ex.printStackTrace();
-            System.err.printf("Directory '%s' is not a git repository\n", dir);
+            //System.err.printf("Directory '%s' is not a git repository\n", dir);
         }
         return null;
     }
