@@ -287,7 +287,22 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test18SentSplit() throws IOException {
+    public void test18MTWwithSpaceAfter() throws IOException {
+        name("create MTW with SpaceAfter=No");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".18");
+        //String rtc =
+        ce.process("mod compose 9 2", 0, "editinfo");
+
+        URL ref = this.getClass().getResource("test.mwt-spaceafter.conllu");
+        URL res = this.getClass().getResource("test.conllu.18"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test19SentSplit() throws IOException {
         name("split sentences (with enhanced dependencies and empty words");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".17");

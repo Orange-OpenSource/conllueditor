@@ -1,6 +1,7 @@
 Version 2.7.5
 - Warning improved
 - bug corrected in MTW creation (delete Space(s)After from MTW member tokens and add value from last memeber token to the MTW token
+- put concatenated forms of created MTW to the FORM column of the MTW
 
 Version 2.7.4
 - Error if edited file is not controlled under git AND there is already a backup-file (.2) in order to avoid overwriting the output of a preceding editing

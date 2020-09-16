@@ -1083,15 +1083,16 @@ public class ConlluEditor {
                 }
                 history.add(csent);
 
-                ConllWord composedWord = new ConllWord(csent.getWords().get(id - 1).getForm(), id, id+complen-1);
                 // delete all Space(s)After in tokens which are now part of the MTW and add the correct SpaceAfter
                 // to the new MTW
                 String spaceAfterVal = null;
                 String spaceAfterKey = null;
+                String composedForm = "";
 
                 for (int pos = id-1; pos < id+complen-1; ++pos) {
                     spaceAfterKey = null;
                     ConllWord cw = csent.getWords().get(pos);
+                    composedForm += cw.getForm();
                     Map<String, Object> misc = cw.getMisc();
                     spaceAfterVal = (String)misc.get("SpaceAfter");
                     if (spaceAfterVal == null) {
@@ -1105,6 +1106,9 @@ public class ConlluEditor {
                         spaceAfterKey = "SpaceAfter";
                     }
                 }
+
+                ConllWord composedWord = new ConllWord(composedForm, //csent.getWords().get(id - 1).getForm(),
+                        id, id+complen-1);
 
                 if (spaceAfterKey != null)
                     composedWord.addMisc(spaceAfterKey, spaceAfterVal);
