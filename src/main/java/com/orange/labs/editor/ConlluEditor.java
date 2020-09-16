@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.4 as of 12th September 2020
+ @version 2.7.5 as of 16th September 2020
  */
 package com.orange.labs.editor;
 
@@ -121,14 +121,27 @@ public class ConlluEditor {
         switch(versionning()) {
             case 1:
                 // OK, conllfile is git controlled
+                System.err.format("+++ edited file '%s' is git controlled, commiting all changes\n", conllfile);
                 break;
             case 2:
-            case 3:
+
                 // file is not git controlled. Check whether conllfile + suffix exist
                 File temp = new File(conllfile + suffix);
                 if (temp.exists()) {
                     throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
                 }
+                System.err.format("+++ edited file '%s' not tracked by git, writing all changes to '%s%s'\n", conllfile, conllfile, suffix);
+                break;
+            case 3:
+                // file is not git controlled. Check whether conllfile + suffix exist
+                temp = new File(conllfile + suffix);
+                if (temp.exists()) {
+                    throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
+                }
+                System.err.format("+++ edited file '%s' not in git controlled directory, writing all changes to '%s%s'\n", conllfile, conllfile, suffix);
+
+
+
                 break;
             default: throw new ConllException(String.format("Will not be able to save edited file '%s'", conllfile));
         }
@@ -1058,7 +1071,7 @@ public class ConlluEditor {
                     }
                     complen = Integer.parseInt(f[3]);
                     if (id + complen > csent.getWords().size()) {
-                        return formatErrMsg("INVALID MWE length (to big) «" + command + "»", currentSentenceId);
+                        return formatErrMsg("INVALID MTW length (to big) «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
                     return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
@@ -1071,6 +1084,30 @@ public class ConlluEditor {
                 history.add(csent);
 
                 ConllWord composedWord = new ConllWord(csent.getWords().get(id - 1).getForm(), id, id+complen-1);
+                // delete all Space(s)After in tokens which are now part of the MTW and add the correct SpaceAfter
+                // to the new MTW
+                String spaceAfterVal = null;
+                String spaceAfterKey = null;
+
+                for (int pos = id-1; pos < id+complen-1; ++pos) {
+                    spaceAfterKey = null;
+                    ConllWord cw = csent.getWords().get(pos);
+                    Map<String, Object> misc = cw.getMisc();
+                    spaceAfterVal = (String)misc.get("SpaceAfter");
+                    if (spaceAfterVal == null) {
+                        spaceAfterVal = (String)misc.get("SpacesAfter");
+                       if (spaceAfterVal != null) {
+                           misc.remove("SpacesAfter");
+                           spaceAfterKey = "SpacesAfter";
+                       }
+                    } else {
+                        misc.remove("SpaceAfter");
+                        spaceAfterKey = "SpaceAfter";
+                    }
+                }
+
+                if (spaceAfterKey != null)
+                    composedWord.addMisc(spaceAfterKey, spaceAfterVal);
                 csent.addWord(composedWord, id);
 
                 try {
@@ -1081,7 +1118,7 @@ public class ConlluEditor {
 
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod editmwe")) { // mod editmwe current_start new_end form [MISC column data]
+            } else if (command.startsWith("mod editmtw") || command.startsWith("mod editmwe")) { // mod editmmtwwe current_start new_end form [MISC column data]
                 String[] f = command.trim().split(" +");
                 if (f.length < 5) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
@@ -1115,7 +1152,7 @@ public class ConlluEditor {
                 }
                 history.add(csent);
 
-                // delete MW token
+                // delete MT word
 
                 if (end == 0) {
                     csent.deleteContracted(start);
@@ -1542,7 +1579,7 @@ public class ConlluEditor {
                     newhead = csent.getWords().get(newhead_id - 1); // 0 : nouvelle tête de la phrase
                     // check whether newhead n'est pas qq part au-dessous du mot courant
                     if (depword.commands(newhead)) {
-                        return formatErrMsg("cannot make " + newhead_id + " head of " + dep_id, currentSentenceId);
+                        return formatErrMsg("cannot make " + newhead_id + " head of " + dep_id + "since " + newhead_id + "is currently a dependent of " + dep_id, currentSentenceId);
                     }
                 }
                 depword.setHeadWord(newhead);
@@ -1869,12 +1906,12 @@ public class ConlluEditor {
                 //ServeurHTTP sh =
                 new ServeurHTTP(Integer.parseInt(args[argindex + 1]), ce, rootdir, debug);
             } else {
-                System.err.println("Error: no port given");
+                System.err.println("*** Error: no port given");
                 help();
                 System.exit(3);
             }
         } catch (ConllException | IOException ex) {
-            System.err.println("Error: " + ex.getMessage());
+            System.err.println("*** Error: " + ex.getMessage());
             System.exit(11);
         }
     }

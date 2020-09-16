@@ -246,7 +246,7 @@
                         <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
                         <br><b>modify the dependency relation</b>: click on the relation label
                         <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: control-click or double-click on the node to modify
-                        <br><b>edit a multi-word token</b>: click on the grey bar spanning the words (to change start token, a new MWT has to be created). Setting the end token to 0 deletes the multiword token. 
+                        <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MTW has to be created). Setting the end token to 0 deletes the multitoken word. 
                         the <span class="userinputdoc">compose <i>id length</i></span> command allows ti add new MW tokens.
                         <br><br>or use a command and hit the <span class="buttondoc">modify</span> button:
 
@@ -278,14 +278,14 @@
                             <tr><td width="440px">&bull; <span class="userinputdoc">split <i>id</i> [<i>splitpos</i>]</span></td> <td>split a word in two
                                     (it will be copied to a new node and attached to the same head). If <i>splitpos</i> the characters of Form and Lemma left of <i>splitpos</i> will
                                     remain in the original word, the rest will be the new word</td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following. If the merged word overlap in any way with a multiword token (MWT), the MWT will be deleted</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following. If the merged word overlap in any way with a multitoken word (MTW), the MTW will be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">insert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new word after word with <i>id</i></td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">delete <i>id</i></span></td> <td>delete word with <i>id</i>. Any overlapping MWE will also be deleted</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">delete <i>id</i></span></td> <td>delete word with <i>id</i>. Any overlapping MTW will also be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentsplit <i>id</i></span></td> <td>split current sentence at word id (id will be in the second sentence). Dependency and Enhanced Dependency relations between the words before and after the split will be deleted.</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentjoin</span></td> <td>merge current sentence with following</td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">compose <i>id length</i></span></td> <td>create a multiword token (MWT).
-                                    The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multiword token, click on the multitoken
-                                    bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multiword token.
+                            <tr><td>&bull; <span class="userinputdoc">compose <i>id length</i></span></td> <td>create a multitoken word (MTW).
+                                    The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multitoken word, click on the multitoken
+                                    bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multitoken word.
                                     </td></tr>
                             <tr><td>&bull; <span class="userinputdoc">emptyinsert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new empty word after word with <i>id</i>.
                                     The new empty word gets the id <i>id.1</i> if it is the first empty word at thihs position.

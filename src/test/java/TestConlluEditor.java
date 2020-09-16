@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.2 as of 23rd August 2020
+ @version 2.7.5 as of 16th September 2020
  */
 
 import com.google.gson.Gson;
@@ -192,8 +192,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test12EditJoinSplitBeforeMWT() throws IOException {
-        name("split/join before a MWT");
+    public void test12EditJoinSplitBeforeMTW() throws IOException {
+        name("split/join before a MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".5");
         ce.process("mod split 2 3", 4, "editinfo");
@@ -239,15 +239,15 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test15CreateMWT() throws IOException {
-        name("create two MWT with three/two words and rename contracted form");
+    public void test15CreateMTW() throws IOException {
+        name("create two MTW with three/two words and rename contracted form");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".8");
         ce.process("mod compose 1 3", 17, "editinfo");
-        ce.process("mod editmwe 1 3 Dáselle", 17, "editinfo");
+        ce.process("mod editmtw 1 3 Dáselle", 17, "editinfo");
 
         ce.process("mod compose 6 2", 17, "editinfo");
-        ce.process("mod editmwe 6 7 ao Gloss=to_him", 17, "editinfo");
+        ce.process("mod editmtw 6 7 ao Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
         URL res = this.getClass().getResource("test.conllu.8"); // modified file
@@ -257,8 +257,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test16JoinOverlapMWTstart() throws IOException {
-        name("join overlapping be first word of a MWT");
+    public void test16JoinOverlapMTWstart() throws IOException {
+        name("join overlapping be first word of a MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".9");
         //String rtc =
@@ -272,8 +272,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test17JoinOverlapMWTend() throws IOException {
-        name("join overlapping be last word of a MWT");
+    public void test17JoinOverlapMTWend() throws IOException {
+        name("join overlapping be last word of a MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".10");
         //String rtc =

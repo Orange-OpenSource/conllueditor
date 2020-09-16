@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.2 as of 23rd August 2020
+ @version 2.7.5 as of 16th September 2020
  */
 package com.orange.labs.conllparser;
 
@@ -198,6 +198,7 @@ public class ConllWord {
             features = new LinkedHashMap<>();
         }
         misc = new LinkedHashMap<>();
+        spacesAfter = " ";
         deps = new ArrayList<>();
     }
 
@@ -214,6 +215,7 @@ public class ConllWord {
         xpostag = EmptyColumn;
         deplabel = EmptyColumn;
         misc = new LinkedHashMap<>();
+        spacesAfter = " ";
     }
 
     private int getColumn(String colname, Map<String, Integer> columndefs) {
@@ -865,7 +867,7 @@ public class ConllWord {
      * @param validdeprels set of valid deprel values
      * @param validfeats  map of valid UPOS:feat=value values
      * @param highlight
-     * @param contracted map of MWEs
+     * @param contracted map of MTWs
      * @param ae collect error types here
      * @return
      */

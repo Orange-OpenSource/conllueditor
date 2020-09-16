@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.3 as of 5th September 2020
+ @version 2.7.5 as of 16th September 2020
  */
 package com.orange.labs.conllparser;
 
@@ -57,7 +57,7 @@ public class ConllSentence {
 
     protected List<ConllWord> words;
     protected Map<Integer, List<ConllWord>> emptywords = null; // main id (before "."): empty nodes
-    protected Map<Integer, ConllWord> contracted = null; // contracted words (MWE) startid (before hyphen): word
+    protected Map<Integer, ConllWord> contracted = null; // contracted words (MTW) startid (before hyphen): word
 
     //private final int shift; // il y a des fichiers conll qui ont des colonnes supplémentaires AVANT la colonne id il faut les ignorer; shift est le nombre des colonnes à gauche à ignorer
     private boolean hasAnnot = false; // au moins une annotation dans la phrase
@@ -435,7 +435,7 @@ public class ConllSentence {
             }
         }
 
-        // delete MWEs if the split goes through it
+        // delete MTWs if the split goes through it
         to_delete_from_this.clear();
         if (contracted != null) {
             for (Integer key : contracted.keySet()) {
@@ -1227,17 +1227,17 @@ public class ConllSentence {
                 cw.setHead(0);
             }
 
-            // delete MWE of which removed word is part
+            // delete MTW of which removed word is part
             if (contracted != null) {
-                Set<ConllWord> mwes = new HashSet<>();
-                for (ConllWord mwe : contracted.values()) {
-                    if (mwe.getId() == id || mwe.getSubid() == id) {
-                        mwes.add(mwe);
+                Set<ConllWord> mtws = new HashSet<>();
+                for (ConllWord mtw : contracted.values()) {
+                    if (mtw.getId() == id || mtw.getSubid() == id) {
+                        mtws.add(mtw);
                     }
                 }
 
-                for (ConllWord mwe : mwes) {
-                    contracted.remove(mwe.getId());
+                for (ConllWord mtw : mtws) {
+                    contracted.remove(mtw.getId());
                 }
             }
 
@@ -1301,19 +1301,19 @@ public class ConllSentence {
             ConllWord current = words.get(id - 1);
             ConllWord other = words.get(id);
 
-            // get all first and last tokens of MWE
-            // we delete a MWE if the joined words are at hte border or overlapping with the MWE
+            // get all first and last tokens of MTW
+            // we delete a MTW if the joined words are at hte border or overlapping with the MTW
             if (contracted != null) {
-                Set<ConllWord> mwes = new HashSet<>();
-                for (ConllWord mwe : contracted.values()) {
-                    if (mwe.getId() == id || mwe.getId() == id + 1
-                            || mwe.getSubid() == id || mwe.getSubid() == id + 1) {
-                        mwes.add(mwe);
+                Set<ConllWord> mtws = new HashSet<>();
+                for (ConllWord mtw : contracted.values()) {
+                    if (mtw.getId() == id || mtw.getId() == id + 1
+                            || mtw.getSubid() == id || mtw.getSubid() == id + 1) {
+                        mtws.add(mtw);
                     }
                 }
 
-                for (ConllWord mwe : mwes) {
-                    contracted.remove(mwe.getId());
+                for (ConllWord mtw : mtws) {
+                    contracted.remove(mtw.getId());
                 }
             }
 
@@ -1735,13 +1735,13 @@ public class ConllSentence {
             if (pos2id != null) {
                 pos2id.put(sb.length(), word.getId());
             }
-            ConllWord mwe = null;
+            ConllWord mtw = null;
             if (contracted != null) {
-                mwe = contracted.get(word.getId());
+                mtw = contracted.get(word.getId());
             }
-            if (mwe != null) {
-                sb.append(mwe.getForm()).append(mwe.getSpacesAfter());
-                contracted_until = mwe.getSubid();
+            if (mtw != null) {
+                sb.append(mtw.getForm()).append(mtw.getSpacesAfter());
+                contracted_until = mtw.getSubid();
             } else if (contracted_until == 0 || word.getId() > contracted_until) {
                 sb.append(word.getForm()).append(word.getSpacesAfter());
             }

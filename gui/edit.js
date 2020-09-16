@@ -1326,7 +1326,7 @@ $(document).ready(function () {
     /* delete clicked MWE form */
     $('#editMWtoken').click(function () {
         misc = $("#currentmwemisc").val(); //.replace(/\n+/, ",");
-        sendmodifs({"cmd": "mod editmwe "
+        sendmodifs({"cmd": "mod editmtw "
                     + $("#currentmwefrom").val()
                     + " " + $("#currentmweto").val()
                     + " " + $("#currentmweform").val()
