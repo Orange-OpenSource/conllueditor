@@ -180,11 +180,11 @@ Run the image in a docker container from the directory where your `.conllu`-file
 * `</absolute/path/to/datadir>` with the directory where the `.conllu`-file and other files reside
 
 ```
-docker run -t --name conllueditor -p 5555:8888 \
+docker run -t --name conllueditor -p 8888:5555 \
 	--user 1000:1000 \
 	-v </absolute/path/to/datadir>:/data \
 	--env filename=<yourfile>.conllu \
-	conllueditor:latest
+	jheinecke/conllueditor:latest
 ```
 
 Other parameters (shown below in section [other options](#other-options)) can be given with
