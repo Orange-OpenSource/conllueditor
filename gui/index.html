@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    @version 2.7.2 as of 23rd August 2020
+    @version 2.8.0 as of 20th September August 2020
     -->
 
     <head>
@@ -71,8 +71,8 @@
         <script src="./dependency-flat.js" type="text/javascript"></script>
         <script src="./table.js" type="text/javascript"></script>
         <script src="./edit.js" type="text/javascript"></script>
-        
-        <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet"> 
+
+        <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
     </head>
 
     <body>
@@ -156,7 +156,7 @@
                         <span class="contain"><button class="editbuttons mybutton go" id="findsentid">&nbsp;</button></span>
 
                         <span class="contain"><button class="mybutton mycheck" title="clear sall earch fields" id="clear">&nbsp;</button></span>
- 
+
                         <button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button>
                         <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced deps</button>
                     </td>
@@ -237,7 +237,7 @@
                         <h2>Navigating</h2>
                         Click <span class="buttondoc">read sentence</span> to load the sentence with the number given in the entry field to the right of the button.
                         The buttons <img class="helptextbutton" src="img/preceding.svg"> and
-                        <img class="helptextbutton" src="img/following.svg"> change to the preceding/next sentence 
+                        <img class="helptextbutton" src="img/following.svg"> change to the preceding/next sentence
                         (also <span class="keydoc">-</span> and <span class="keydoc">+</span> keys),
                         use <img class="helptextbutton" style="width: 30px;" src="img/Start.svg"> and
                         <img class="helptextbutton" style="width: 30px;" src="img/End.svg"> to go to the first/last sentence.
@@ -246,7 +246,7 @@
                         <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
                         <br><b>modify the dependency relation</b>: click on the relation label
                         <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: control-click or double-click on the node to modify
-                        <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MTW has to be created). Setting the end token to 0 deletes the multitoken word. 
+                        <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MTW has to be created). Setting the end token to 0 deletes the multitoken word.
                         the <span class="userinputdoc">compose <i>id length</i></span> command allows ti add new MW tokens.
                         <br><br>or use a command and hit the <span class="buttondoc">modify</span> button:
 
@@ -287,13 +287,19 @@
                                     The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multitoken word, click on the multitoken
                                     bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multitoken word.
                                     </td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">tomwt <i>id form1 form2 [form3 ...]</i></span></td>
+                                <td>Transform an existing word into a MTW. The new MTW keeps the form of the word transformed. All other columns
+                                    are copied to the first memeber word, except the form which is <i>form1</i> from the command line. <i>form2</i>
+                                    etc are used to initialize the form (and lemma) column of the other members of the MTW. All members are initially attached to
+                                    the first member using the <i>fixed</i> depedency relation.
+                                </td></tr>
                             <tr><td>&bull; <span class="userinputdoc">emptyinsert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new empty word after word with <i>id</i>.
                                     The new empty word gets the id <i>id.1</i> if it is the first empty word at thihs position.
                                     If there is already an empty word, the new one will have the id <i>id.2</i> etc.</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">emptydelete <i>id.subid</i></span></td> <td>delete empty word
                                     with id <i>id.subid</i>.</td></tr>
-                            
-                            
+
+
                         </table>
 
                         <p><b>fast editing</b> Some UPOS/deprel can be changed by clicking on the word and than hit a key. UPOS and deprel
@@ -369,7 +375,7 @@
                                     <li>Upos: <span class="userinputdoc">AUX/.*/VERB</span> looks for a sequence of words with upos tags <i>AUX, any, VERB</i>
                                 </ul>
                             <li>The <i>any</i> search fields accepts a /-separated list of <i>searchfield:regex</i> to find a sequence on different criteria.
-                                <i>searchfield</i> can be any of 
+                                <i>searchfield</i> can be any of
                                 <span class="userinputdoc">f</span>,
                                 <span class="userinputdoc">l</span>,
                                 <span class="userinputdoc">u</span>,
@@ -547,7 +553,7 @@
                                         </div></td></tr>
                             <tr><td>misc</td>     <td><div class="ui-widget">
                                         <!--input type="text" id="cmisc" size="60" value=""-->
-                                        <textarea type="text" id="cmisc" rows="3" cols="60"></textarea>
+                                        <textarea type="text" class="classmisc" id="cmisc" rows="3" cols="60"></textarea>
                                     </div></td></tr>
                         </table>
                     </div>
@@ -621,7 +627,7 @@
         </div>
 
         <!-- edit multitoken -->
-         <div class="modal" id="editMWE" tabindex="-1" role="dialog" aria-labelledby="deleteMWE" aria-hidden="true">
+         <div class="modal" id="editMTW" tabindex="-1" role="dialog" aria-labelledby="deleteMTW" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -631,14 +637,14 @@
                         </button>
                     </div>
                     <div class="modal-body" >
-                        <!--span id="qqcurrentmwefrom"></span>-<span id="qqcurrentmweto"></span-->
+                        <!--span id="qqcurrentMTWfrom"></span>-<span id="qqcurrentMTWto"></span-->
                         <table>
-                            <tr><td>multitoken start</td> <td><div class="ui-widget"><input type="text" id="currentmwefrom"  value="" disabled></div></td></tr>
-                            <tr><td>multitoken end</td>   <td><div class="ui-widget"><input type="text" id="currentmweto"    value=""></div></td></tr>
-                            <tr><td>form</td>             <td><div class="ui-widget"><input type="text" id="currentmweform"  value=""></div></td></tr>
+                            <tr><td>multitoken start</td> <td><div class="ui-widget"><input type="text" id="currentMTWfrom"  value="" disabled></div></td></tr>
+                            <tr><td>multitoken end</td>   <td><div class="ui-widget"><input type="text" id="currentMTWto"    value=""></div></td></tr>
+                            <tr><td>form</td>             <td><div class="ui-widget"><input type="text" id="currentMTWform"  value=""></div></td></tr>
                             <tr><td>misc</td>             <td><div class="ui-widget">
-                                        <!--input type="text" id="currentmwemisc"  value=""-->
-                                        <textarea type="text" id="currentmwemisc" rows="4" cols="20"></textarea>
+                                        <!--input type="text" id="currentMTWmisc"  value=""-->
+                                        <textarea type="text" class="classmisc" id="currentMTWmisc" rows="4" cols="20"></textarea>
                                     </div></td></tr>
                         </table>
                     </div>
@@ -668,7 +674,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
+        </div>
 
 
     </body>

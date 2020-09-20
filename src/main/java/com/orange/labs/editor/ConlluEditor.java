@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.5 as of 16th September 2020
+ @version 2.8.0 as of 20th September 2020
  */
 package com.orange.labs.editor;
 
@@ -245,9 +245,11 @@ public class ConlluEditor {
                 comparisonFile = null;
             }
             for (ConllSentence cs : comparisonFile.getSentences()) {
+                cs.normalise();
                 cs.makeTrees(null);
             }
         } catch (IOException | ConllException e) {
+            e.printStackTrace();
             System.err.format("Cannot use comparison file '%s': %s\n", compfilename, e.getMessage());
         }
     }
@@ -1052,6 +1054,82 @@ public class ConlluEditor {
                 } catch (IOException ex) {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }
+                return returnTree(currentSentenceId, csent);
+
+            } else if (command.startsWith("mod tomtw")) {
+                // make a MTW from a word: mod tomtw <id> word1 word2 ...
+                String[] f = command.trim().split(" +");
+                if (f.length < 5) {
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
+                }
+                int id;
+
+                try {
+                    id = Integer.parseInt(f[2]);
+                    csent = cfile.getSentences().get(currentSentenceId);
+                    if (id < 1 || id > csent.getWords().size()) {
+                        return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
+                    }
+                } catch (NumberFormatException e) {
+                    return formatErrMsg("INVALID id (not an integer) «" + f[2] + "» " + e.getMessage(), currentSentenceId);
+                }
+
+
+                if (csent.isPartOfMTW(id)) {
+                    return formatErrMsg("Word " + id + " is part of a MWT already. «" + command + "»", currentSentenceId);
+                }
+
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
+
+                // insert a new MTW before the current word
+                // the current word becomes the first word of the MTW (inheriting all columns except form)
+                ConllWord cw = csent.getWord(id);
+                ConllWord composedWord = new ConllWord(cw.getForm(), id, id+f.length-4);
+
+                //get spaceafterfrom orginal word
+
+                Map<String, Object>misc = cw.getMisc();
+                String sakey = null;
+                String savalue = (String)misc.get("SpaceAfter");
+                if (savalue == null) {
+                    savalue = (String)misc.get("SpacesAfter");
+                    if (savalue != null) {
+                        sakey = "SpacesAfter";
+                    }
+                } else {
+                    sakey = "SpaceAfter";
+                }
+
+                if (sakey != null) {
+                    misc.remove(sakey);
+                    composedWord.addMisc(sakey, savalue);
+                }
+
+
+                cw.setForm(f[3]);
+                cw.setLemma(f[3]);
+
+                for (int x = 4; x < f.length; ++x) {
+                    // add other new words
+                    ConllWord cw2 = new ConllWord(f[x]);
+                    cw2.setLemma(f[x]);
+                    cw2.setHead(cw.getId());
+                    cw2.setDeplabel("fixed");
+                    csent.addWord(cw2, id+x-4);
+
+                }
+
+                csent.addWord(composedWord, id);
+
+                try {
+                    writeBackup(currentSentenceId, composedWord, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod compose")) {

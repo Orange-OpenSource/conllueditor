@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.5 as of 16th September 2020
+ @version 2.8.0 as of 20th September 2020
  */
 
 import com.google.gson.Gson;
@@ -287,7 +287,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test18MTWwithSpaceAfter() throws IOException {
+    public void test180MTWwithSpaceAfter() throws IOException {
         name("create MTW with SpaceAfter=No");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".18");
@@ -301,6 +301,48 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
 
+   @Test
+    public void test181MTWfromWord() throws IOException {
+        name("create MTW from Word");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".181");
+        //String rtc =
+        ce.process("mod misc 5 SpaceAfter=No", 0, "editinfo");
+        ce.process("mod tomtw 5 su uu ur", 0, "editinfo");
+
+        URL ref = this.getClass().getResource("test.split-to-mtw.conllu");
+        URL res = this.getClass().getResource("test.conllu.181"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
+
+  @Test
+    public void test182MTWfromWordError() throws IOException {
+        name("create MTW from word which is already part of an MTW");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".182");
+        //String rtc =
+        String rtc = ce.process("mod tomtw 8 aa bb", 4, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "MTWBadWord.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("MTWBadWord.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+        
+    }
+
+    
     @Test
     public void test19SentSplit() throws IOException {
         name("split sentences (with enhanced dependencies and empty words");

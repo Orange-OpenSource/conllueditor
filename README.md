@@ -15,6 +15,7 @@ The editor provides the following functionalities:
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these
 * edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html) (since version 2.4.0)
+* create multitoken words from existing words or add a MTW to contract two ore more existing words
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
@@ -37,7 +38,7 @@ For more information see section [File Comparison](#file-comparison)
 
 ### Requirements
 
-* Java jre >= 8.0
+* Java jre >= 11.0
 * Firefox (tested with version 60.9 on Windows 10, >= 63 on Linux and 69.0.1 on MacOS Sierra),
   Chromium or Chrome (both tested with version 70 on Linux),
   Edge (tested with version 44.17763.1.0 on Windows 10),
@@ -50,7 +51,7 @@ For more information see section [File Comparison](#file-comparison)
 * on MacOS: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
-* Java jdk >= 8.0
+* Java jdk >= 11.0
 * maven (tested with >= 3.3.9)
 
 Alternatively, a recent version of Docker can be used to run the docker image (see section [docker](#docker) below)
@@ -193,8 +194,9 @@ Other parameters (shown below in section [other options](#other-options)) can be
 `--env UPOS=cpos.ud`,
 `--env XPOS=xpos.txt`,
 `--env deprels=deprels.ud`,
-`--env features=feat_val.ud`, or
-`--env shortcurs=hortcuts.json`,
+`--env features=feat_val.ud`,
+`--env shortcurs=hortcuts.json`, or
+`--env compare=file.conllu`,
 . However all files given, **must** reside in the `</absolute/path/to/datadir>` directory.
 
 When finished, stop and remove the docker container:

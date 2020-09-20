@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.5 as of 16th September 2020
+ @version 2.8.0 as of 20th September 2020
  */
 package com.orange.labs.conllparser;
 
@@ -1219,6 +1219,17 @@ public class ConllSentence {
         return true;
     }
 
+    /** returns true, if the word is part of a MTW */
+    public boolean isPartOfMTW(int id) {
+        if (contracted == null) return false;
+        for (ConllWord mtw : contracted.values()) {
+            if (id >= mtw.getId() &&  id <= mtw.getSubid()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void deleteWord(int id) throws ConllException {
          makeTrees(null);
         if (id < words.size()) {
@@ -1400,7 +1411,9 @@ public class ConllSentence {
             if (w.getHead() > 0) {
                 // mettre W dans la liste des dépendants de sa tête
                 if (w.getHead() > words.size()) {
-                    throw new ConllException("head id is greater than sentence length: " + w.getHead() + " > " + words.size());
+                    String si = sentid;
+                    if (si == null) si = "";
+                    throw new ConllException(sentid+ ": head id is greater than sentence length: " + w.getHead() + " > " + words.size());
                 }
 
                 int dist = Math.abs(w.getId() - w.getHead());
