@@ -46,7 +46,7 @@ For more information see section [File Comparison](#file-comparison)
   Safari (tested with version 11.1 on MacOS Sierra)
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
-* popper.min.js and popper.min.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
+* popper.min.js and popper.min.js.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
 * optionally apache or lighttpd
 * on MacOS: `greadlink` (`brew install coreutils`)
 
