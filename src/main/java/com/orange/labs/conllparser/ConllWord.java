@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.5 as of 16th September 2020
+ @version 2.8.1 as of 25th September 2020
  */
 package com.orange.labs.conllparser;
 
@@ -73,6 +73,7 @@ public class ConllWord {
     Map<String, Object> misc; // 10 value can be string or integer
 
     private String spacesAfter = null;
+    private String spacesBefore = null; // normally only occurs at first word
 
     private ConllWord headWord = null;
     private final List<ConllWord> dependents;// = null; // pour pouvoir afficher les arbres graphiquements (debugage). Cette variable est rempli par ConllSentence.makeTrees()
@@ -153,6 +154,7 @@ public class ConllWord {
         misc = new LinkedHashMap<>(orig.misc);
 
         spacesAfter = orig.spacesAfter;
+        spacesBefore = orig.spacesBefore;
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
 
@@ -199,6 +201,7 @@ public class ConllWord {
         }
         misc = new LinkedHashMap<>();
         spacesAfter = " ";
+        spacesBefore = "";
         deps = new ArrayList<>();
     }
 
@@ -216,6 +219,7 @@ public class ConllWord {
         deplabel = EmptyColumn;
         misc = new LinkedHashMap<>();
         spacesAfter = " ";
+        spacesBefore = "";
     }
 
     private int getColumn(String colname, Map<String, Integer> columndefs) {
@@ -1550,6 +1554,7 @@ public class ConllWord {
 
     public void setMisc(String unparsed_miscstring) {
         spacesAfter = " ";
+        spacesBefore = "";
         misc.clear();
         if (!EmptyColumn.equals(unparsed_miscstring)) {
             String[] fields = unparsed_miscstring.trim().split("[\\|\n]"); // needs \n to split return from the GUI
@@ -1565,6 +1570,7 @@ public class ConllWord {
                         } else {
                             misc.put(kv[0], kv[1]);
                             setSpacesAfter(kv[0], kv[1]);
+                            setSpacesBefore(kv[0], kv[1]);
                         }
                     }
                 } else {
@@ -1575,7 +1581,7 @@ public class ConllWord {
     }
 
     /**
-     * set the spaces afterthe token, return true, if the key was Space(s)After
+     * set the spaces after the token, return true, if the key was Space(s)After
      */
     private boolean setSpacesAfter(String misckey, String miscval) {
         if (misckey.equals("SpaceAfter") && miscval.equals("No")) {
@@ -1588,14 +1594,29 @@ public class ConllWord {
         return false;
     }
 
+        /**
+     * set the spaces before the token, return true, if the key was Space(s)After
+     */
+    private boolean setSpacesBefore(String misckey, String miscval) {
+        if (misckey.equals("SpacesBefore")) {
+            spacesBefore = miscval.replace("\\s", " ").replace("\\t", "\t").replace("\\n", "\n");
+            return true;
+        }
+        return false;
+    }
+    
     public void setMisc(Map<String, Object> misc) {
         this.misc = misc;
         spacesAfter = " ";
+        spacesBefore = "";
+        boolean after = false;
+        boolean before = false;
         for (Map.Entry<String, Object> pair : misc.entrySet()) {
             if (pair.getValue() instanceof String) {
-                boolean rtc = setSpacesAfter(pair.getKey(), (String) pair.getValue());
-                if (rtc) {
-                    break; // spaceafter found
+                if (!after) after = setSpacesAfter(pair.getKey(), (String) pair.getValue());
+                if (!before) before = setSpacesBefore(pair.getKey(), (String) pair.getValue());
+                if (after && before) {
+                    break; // space(s)after and spacesbefore found
                 }
             }
         }
@@ -1618,6 +1639,10 @@ public class ConllWord {
         return spacesAfter;
     }
 
+    public String getSpacesBefore() {
+        return spacesBefore;
+    }
+    
     public ConllWord getHeadWord() {
         return headWord;
     }
