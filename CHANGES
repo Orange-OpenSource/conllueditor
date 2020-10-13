@@ -1,3 +1,7 @@
+Version 2.8.1
+- process SpacesBefore correctly
+- junit 4.12 -> 4.13.1
+
 Version 2.8.0
 - add --compare option to Docker image
 - make MISC autocompletion work when editing MTW
