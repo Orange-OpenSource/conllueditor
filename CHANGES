@@ -1,3 +1,6 @@
+Version 2.8.2
+- help text slightly corrected
+
 Version 2.8.1
 - process SpacesBefore correctly
 - junit 4.12 -> 4.13.1

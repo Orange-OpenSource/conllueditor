@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    @version 2.8.0 as of 20th September August 2020
+    @version 2.8.2 as of 14th December 2020
     -->
 
     <head>
@@ -124,6 +124,7 @@
                 <tr class="search">
                     <td colspan="6">
                         <input class="inputfield searchfield" placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" value="">
+                        <!--textarea style="resize: horizontal;" cols="10" rows="1" class="inputfield searchfield" placeholder="find form (string)" title="string (with or without &quot;)" type="text" id="word" value=""></textarea-->
                         <span class="contain"><button class="editbuttons mybutton go" id="findword">&nbsp;</button></span>
 
                         <input class="inputfield searchfield" placeholder="find lemma (regex/...)" title="regex[/regex/...]" type="text" id="lemma" value="">
@@ -244,11 +245,11 @@
 
                         <h2>Editing</h2>
                         <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
-                        <br><b>modify the dependency relation</b>: click on the relation label
-                        <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: control-click or double-click on the node to modify
+                        <br><b>modify the dependency relation</b>: left-click on the relation label
+                        <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: <span class="keydoc">control</span>-left-click or double-click on the node to modify
                         <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MTW has to be created). Setting the end token to 0 deletes the multitoken word.
-                        the <span class="userinputdoc">compose <i>id length</i></span> command allows ti add new MW tokens.
-                        <br><br>or use a command and hit the <span class="buttondoc">modify</span> button:
+                        the <span class="userinputdoc">compose <i>id length</i></span> command allows to add new MW tokens.
+                        <br><br>or use a command and hit the <span class="buttondoc">modify</span> button (replace the parts in <span class="userinputdoc"><i>italic</i></span> with the the new values):
 
                         <!-- class="helpstyle" ici pour mettre les meme font-size (jquery-ui fait ça différemment -->
                         <table border ="0" class="bhelpstyle">
