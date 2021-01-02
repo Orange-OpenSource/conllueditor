@@ -1,3 +1,9 @@
+Version 2.9.0
+- options --features and --deprels can read official specifications for valid features and deprels 
+  in https://github.com/UniversalDependencies/tools/tree/master/data (features.json and deprels.json)
+- new option --language (to read the feature/deprel definitions for a given language (if not given, use only universal features/deprels)
+- new option --include_unused (use features declared as unusued for given language)
+
 Version 2.8.2
 - help text slightly corrected
 

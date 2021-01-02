@@ -4,8 +4,6 @@ This Software is a tool which facilitates the editing of syntactic relations and
 (http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor
 loads the CoNLL-U file and saves every change to disk (and performs a `git commit` if the file is under git version control).
 
-New in version 2.6.0: table edit mode (in addition to tree and hedge mode)
-
 The editor provides the following functionalities:
 * editing words (forms, lemmas, upos, xpos, features, enhanced dependencies) (fast edit for UPOS and deprel)
 * editing dependency relations
@@ -20,15 +18,15 @@ The editor provides the following functionalities:
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 * prohibits invalid (cyclic) trees
+* Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 
-Since version 2.0.0 the tool can be used as front-end to display the results of dependency parsing in the same way as the editor.
+ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
 * CoNLL-U/LaTeX/SD-Parse format
 
 For more information see section [Parser Front-End](#parser-front-end)
 
-In order to compare two files (e.g. a gold file with a predicted file)
-since version 2.3.0 ConlluEditor provides
+In order to compare two files (e.g. a gold file with a predicted file) ConlluEditor provides
 * a file compare mode
 
 For more information see section [File Comparison](#file-comparison)
@@ -193,6 +191,8 @@ Other parameters (shown below in section [other options](#other-options)) can be
 `--env UPOS=uposfile.txt`,
 `--env UPOS=cpos.ud`,
 `--env XPOS=xpos.txt`,
+`--env language=cy`,
+`--env include_unused=1`,
 `--env deprels=deprels.ud`,
 `--env features=feat_val.ud`,
 `--env shortcurs=hortcuts.json`, or
@@ -210,9 +210,17 @@ docker rm conllueditor
 ### Other options
 * `--UPOS <file>` comma separated list of files containing valid UPOS tags (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS tags
-* `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud)
+* `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud).
+Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/deprels.json)
+together with the option `--language`
 * `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud)
 in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
+Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
+together with the option `--language`
+* `--language <lg code>` use feature and/or deprel definitions in the json files given to the `--features` and `--deprels`
+options. Without `--language` only the universal features and deprels are used.
+* `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
+are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
@@ -302,7 +310,7 @@ delete the enhanced dependency relation.
 Alternatively, enhanced dependencies can be edited manually via the word edit menu.
 
 ## Other annotation
-Since version 2.4.0 a subset of the [CoNLL-U Plus](http://universaldependencies.org/ext-format.html) is supported.
+A subset of the [CoNLL-U Plus](http://universaldependencies.org/ext-format.html) is supported.
 The CoNLL-U Plus file must have the standard 10 CoNLL-U columns and the additional columns defined
 in the first line
 

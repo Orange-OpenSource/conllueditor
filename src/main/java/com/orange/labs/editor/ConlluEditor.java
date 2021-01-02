@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.8.0 as of 20th September 2020
+ @version 2.9.0 as of 30th December 2020
  */
 package com.orange.labs.editor;
 
@@ -36,6 +36,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
@@ -118,7 +119,7 @@ public class ConlluEditor {
         filename = new File(conllfile);
         filename = filename.getAbsoluteFile().toPath().normalize().toFile();
 
-        switch(versionning()) {
+        switch (versionning()) {
             case 1:
                 // OK, conllfile is git controlled
                 System.err.format("+++ edited file '%s' is git controlled, commiting all changes\n", conllfile);
@@ -140,16 +141,15 @@ public class ConlluEditor {
                 }
                 System.err.format("+++ edited file '%s' not in git controlled directory, writing all changes to '%s%s'\n", conllfile, conllfile, suffix);
 
-
-
                 break;
-            default: throw new ConllException(String.format("Will not be able to save edited file '%s'", conllfile));
+            default:
+                throw new ConllException(String.format("Will not be able to save edited file '%s'", conllfile));
         }
 
         init();
         System.out.println("Number of sentences loaded: " + numberOfSentences);
 
-	// get CTRL-C and try two write changes not yet saved (if used with option --saveAfter)
+        // get CTRL-C and try two write changes not yet saved (if used with option --saveAfter)
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
@@ -186,6 +186,9 @@ public class ConlluEditor {
         Set<String> valid = new HashSet<>();
 
         for (String fn : filenames) {
+            if (fn.endsWith(".json")) {
+                continue; // processed elsewhere
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fn), StandardCharsets.UTF_8));
 
             String line;
@@ -200,6 +203,51 @@ public class ConlluEditor {
         return valid;
     }
 
+    private Set<String> readDeprelsJson(List<String> filenames, String lg) throws IOException {
+        // read tools/data/deprels.json
+        Set<String> valid = new HashSet<>();
+        for (String filename : filenames) {
+            if (!filename.endsWith(".json")) {
+                continue;
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
+            JsonObject jfile = JsonParser.parseReader(br).getAsJsonObject();
+            JsonObject deprels = jfile.getAsJsonObject("deprels");
+            if (deprels == null) {
+                return null;
+            }
+          
+            if (lg != null) {
+                JsonObject jlang = deprels.getAsJsonObject(lg);
+                for (String deprelname : jlang.keySet()) {
+                    JsonObject deprel = jlang.getAsJsonObject(deprelname);
+                    int permitted = deprel.get("permitted").getAsInt();
+                    if (permitted == 0) {
+                        continue;
+                    }
+                    valid.add(deprelname);
+                }
+            } else {
+                // read all universal/global deprels from all languages
+                for (String lgcode : deprels.keySet()) {
+                    JsonObject jlang = deprels.getAsJsonObject(lgcode);
+                    for (String deprelname : jlang.keySet()) {
+                        JsonObject deprel = jlang.getAsJsonObject(deprelname);
+                        String type = deprel.get("type").getAsString();
+                        String doc = deprel.get("doc").getAsString();
+                        if (!type.equals("universal") || !doc.equals("global")) {
+                            // we only use universal features                    
+                            continue;
+                        }
+                        valid.add(deprelname);
+                    }
+                }
+            }
+        }
+        //System.err.println(valid);
+        return valid;
+    }
+
     public void setValidUPOS(List<String> filenames) throws IOException {
         validUPOS = readList(filenames);
         System.err.format("%d valid UPOS read from %s\n", validUPOS.size(), filenames.toString());
@@ -210,17 +258,25 @@ public class ConlluEditor {
         System.err.format("%d valid XPOS read from %s\n", validXPOS.size(), filenames.toString());
     }
 
-    public void setValidDeprels(List<String> filenames) throws IOException {
-        validDeprels = readList(filenames);
-        System.err.format("%d valid Deprel read from %s\n", validDeprels.size(), filenames.toString());
+    public void setValidDeprels(List<String> filenames, String lg) throws IOException {
+        // read json file in list
+        validDeprels = readDeprelsJson(filenames, lg);
+        // read the other (text) files
+        validDeprels.addAll(readList(filenames));
+        
+        if (validDeprels != null) {
+            System.err.format("%d valid Deprel read from %s\n", validDeprels.size(), filenames.toString());
+        } else {
+            System.err.format("no Deprel definitions found in %s. Bad file?\n", filenames.toString());
+        }
     }
 
-    public void setValidFeatures(List<String> filenames) throws IOException {
-        validFeatures = new ValidFeatures(filenames);
+    public void setValidFeatures(List<String> filenames, String lg, boolean include_unused) throws IOException {
+        validFeatures = new ValidFeatures(filenames, lg, include_unused);
     }
 
     public void setShortcuts(String filename) throws IOException {
-         BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
 
         Gson gson = new Gson();
         shortcuts = gson.fromJson(bufferedReader, JsonObject.class);
@@ -290,7 +346,7 @@ public class ConlluEditor {
         }
         JsonObject solution = prepare(sentid);
         solution.addProperty("sentence", csent.getSentence());
-        solution.addProperty("length", (csent.getWords().size()+csent.numOfEmptyWords()));
+        solution.addProperty("length", (csent.getWords().size() + csent.numOfEmptyWords()));
 
         if (csent.getSentid() != null) {
             solution.addProperty("sent_id", csent.getSentid());
@@ -322,13 +378,12 @@ public class ConlluEditor {
             for (ConllWord sysw : csent.getWords()) {
                 ConllWord goldw = goldsent.getWord(sysw.getFullId());
                 if (goldw == null) {
-                //    diffmap.add(sysw.getFullId());
-                }
-                else if (!sysw.equals(goldw)) {
+                    //    diffmap.add(sysw.getFullId());
+                } else if (!sysw.equals(goldw)) {
                     JsonObject lines = new JsonObject();
                     // TODO improve: do notcode HTML in json !!
                     lines.addProperty("gold", "<td>" + goldw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
-                    lines.addProperty("edit", "<td>" +  sysw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
+                    lines.addProperty("edit", "<td>" + sysw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
 
                     diffmap.add(sysw.getFullId(), lines);
                 }
@@ -336,11 +391,11 @@ public class ConlluEditor {
             //System.err.println("sssss" + diffs);
             solution.add("differs", diffmap);
 
-            solution.addProperty("Lemma", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.LEMMA)));
-            solution.addProperty("Features", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.FEATS)));
-            solution.addProperty("UPOS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.UPOS)));
-            solution.addProperty("XPOS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.XPOS)));
-            solution.addProperty("LAS", String.format("%.2f", 100*csent.score(goldsent, ConllSentence.Scoretype.LAS)));
+            solution.addProperty("Lemma", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LEMMA)));
+            solution.addProperty("Features", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.FEATS)));
+            solution.addProperty("UPOS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.UPOS)));
+            solution.addProperty("XPOS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.XPOS)));
+            solution.addProperty("LAS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LAS)));
         }
         solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce chapps
 
@@ -411,7 +466,9 @@ public class ConlluEditor {
         return filename.getAbsolutePath();
     }
 
-    /** get raw text; Latex, conllu, sdparse or the output of the validation */
+    /**
+     * get raw text; Latex, conllu, sdparse or the output of the validation
+     */
     public String getraw(Raw raw, int currentSentenceId) {
         JsonObject solution = new JsonObject();
 
@@ -428,7 +485,7 @@ public class ConlluEditor {
                     } else {
                         try {
                             solution.addProperty("raw", validator.validate(csent));
-                        } catch (InterruptedException  | IOException e) {
+                        } catch (InterruptedException | IOException e) {
                             solution.addProperty("raw", "Validator error: " + e.getMessage());
                         }
                     }
@@ -460,7 +517,9 @@ public class ConlluEditor {
         return solution.toString();
     }
 
-    /** get the lists of valid UPOS/XMPOS/deprel/Features as well as other information
+    /**
+     * get the lists of valid UPOS/XMPOS/deprel/Features as well as other
+     * information
      *
      * @return
      */
@@ -671,14 +730,14 @@ public class ConlluEditor {
                         (backwards ? i >= 0 : i < numberOfSentences);
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
-                    Map<Integer, Integer>pos2id = new TreeMap<>();
+                    Map<Integer, Integer> pos2id = new TreeMap<>();
                     String text = cs.getSentence(pos2id);
                     //System.err.println("zzzzz " + pos2id);
                     int wordoffset = text.indexOf(motAtrouver);
 
                     if (wordoffset > -1) {
                         int wordendoffset = wordoffset + motAtrouver.length();
-                         if (motAtrouver.charAt(0) == ' ') {
+                        if (motAtrouver.charAt(0) == ' ') {
                             wordoffset++;
                         }
                         if (motAtrouver.endsWith(" ")) {
@@ -688,8 +747,7 @@ public class ConlluEditor {
                         int firstid = -1;
                         int lastid = -1;
 
-
-                        for(Integer cwstartpos : pos2id.keySet()) {
+                        for (Integer cwstartpos : pos2id.keySet()) {
                             if (cwstartpos <= wordoffset) {
                                 firstid = pos2id.get(cwstartpos);
                             }
@@ -709,7 +767,7 @@ public class ConlluEditor {
 
             } else if (command.startsWith("findmulti ")) {
                 // find sequences of words by different criteria:  u:NOUN/l:yn/x:verbnoun
-                // TODO: or find word with multiple criteria u:NOUN;l:power/l:of
+                // TODO: or find word with multiple criteria u:NOUN%l:power/l:of
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
                     return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
@@ -720,15 +778,16 @@ public class ConlluEditor {
                 String[] elems = f[2].split("/");
 
                 class SearchField {
+
                     List<ConllWord.Fields> fields;
                     List<String> values;
 
                     public SearchField(String f) {
-                        String [] andconditions = f.split("%", 2);
+                        String[] andconditions = f.split("%", 2);
                         fields = new ArrayList<>();
                         values = new ArrayList<>();
                         for (String andcondition : andconditions) {
-                            String [] tmp = andcondition.split(":", 2);
+                            String[] tmp = andcondition.split(":", 2);
                             //value = tmp[1];
                             values.add(tmp[1]);
 
@@ -751,8 +810,8 @@ public class ConlluEditor {
                 }
 
                 // list of expressions to match a sequnce of words
-                List<SearchField>fields = new ArrayList<>();
-                for (String e: elems) {
+                List<SearchField> fields = new ArrayList<>();
+                for (String e : elems) {
                     if (!e.contains(":")) {
                         return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                     }
@@ -771,7 +830,7 @@ public class ConlluEditor {
                             currentSentenceId = i;
                             int firstid = cw.getId();
                             boolean ok = true;
-                            List<ConllWord.Fields>fl = new ArrayList<>();
+                            List<ConllWord.Fields> fl = new ArrayList<>();
                             fl.add(fields.get(0).fields.get(0)); // for highlighting
                             for (int j = 1; j < elems.length; ++j) {
                                 if (!cwit.hasNext()) {
@@ -879,7 +938,7 @@ public class ConlluEditor {
                                 return returnTree(currentSentenceId, cs, hl); //cw.getDeplabel());
                             } else {
                                 // chaine de deprels
-                                Set<Integer>toHighlight = new HashSet<>();
+                                Set<Integer> toHighlight = new HashSet<>();
                                 cs.makeTrees(null);
                                 boolean ok = cw.matchesTree(1, rels, updown, toHighlight);
                                 if (ok) {
@@ -947,7 +1006,7 @@ public class ConlluEditor {
                     currentSentenceId = sn;
                     return returnTree(currentSentenceId, csent);
                 } else {
-                    return formatErrMsg("INVALID sentence number «" + command + "»", currentSentenceId+1);
+                    return formatErrMsg("INVALID sentence number «" + command + "»", currentSentenceId + 1);
                 }
 
             } else if (command.startsWith("mod upos ") // mod upos id val
@@ -987,8 +1046,9 @@ public class ConlluEditor {
                         }
                         modWord = ews.get(subid - 1);*/
                         modWord = csent.getEmptyWord(f[2]);
-                        if (modWord == null)
-                             return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
+                        if (modWord == null) {
+                            return formatErrMsg("INVALID id «" + command + "»", currentSentenceId);
+                        }
                     } else {
                         int id = Integer.parseInt(f[2]);
 
@@ -1042,7 +1102,7 @@ public class ConlluEditor {
                     case "extracol": {
                         // reject invalid column
                         if (!csent.isValidExtraColumn(f[3])) {
-                            return formatErrMsg("Invalid extracolumn for this sentence: " +f[3], currentSentenceId);
+                            return formatErrMsg("Invalid extracolumn for this sentence: " + f[3], currentSentenceId);
                         }
                         modWord.setExtracolumns(f[3], f[4]);
                         break;
@@ -1074,7 +1134,6 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID id (not an integer) «" + f[2] + "» " + e.getMessage(), currentSentenceId);
                 }
 
-
                 if (csent.isPartOfMTW(id)) {
                     return formatErrMsg("Word " + id + " is part of a MWT already. «" + command + "»", currentSentenceId);
                 }
@@ -1087,15 +1146,14 @@ public class ConlluEditor {
                 // insert a new MTW before the current word
                 // the current word becomes the first word of the MTW (inheriting all columns except form)
                 ConllWord cw = csent.getWord(id);
-                ConllWord composedWord = new ConllWord(cw.getForm(), id, id+f.length-4);
+                ConllWord composedWord = new ConllWord(cw.getForm(), id, id + f.length - 4);
 
                 //get spaceafterfrom orginal word
-
-                Map<String, Object>misc = cw.getMisc();
+                Map<String, Object> misc = cw.getMisc();
                 String sakey = null;
-                String savalue = (String)misc.get("SpaceAfter");
+                String savalue = (String) misc.get("SpaceAfter");
                 if (savalue == null) {
-                    savalue = (String)misc.get("SpacesAfter");
+                    savalue = (String) misc.get("SpacesAfter");
                     if (savalue != null) {
                         sakey = "SpacesAfter";
                     }
@@ -1108,7 +1166,6 @@ public class ConlluEditor {
                     composedWord.addMisc(sakey, savalue);
                 }
 
-
                 cw.setForm(f[3]);
                 cw.setLemma(f[3]);
 
@@ -1118,7 +1175,7 @@ public class ConlluEditor {
                     cw2.setLemma(f[x]);
                     cw2.setHead(cw.getId());
                     cw2.setDeplabel("fixed");
-                    csent.addWord(cw2, id+x-4);
+                    csent.addWord(cw2, id + x - 4);
 
                 }
 
@@ -1167,18 +1224,18 @@ public class ConlluEditor {
                 String spaceAfterKey = null;
                 String composedForm = "";
 
-                for (int pos = id-1; pos < id+complen-1; ++pos) {
+                for (int pos = id - 1; pos < id + complen - 1; ++pos) {
                     spaceAfterKey = null;
                     ConllWord cw = csent.getWords().get(pos);
                     composedForm += cw.getForm();
                     Map<String, Object> misc = cw.getMisc();
-                    spaceAfterVal = (String)misc.get("SpaceAfter");
+                    spaceAfterVal = (String) misc.get("SpaceAfter");
                     if (spaceAfterVal == null) {
-                        spaceAfterVal = (String)misc.get("SpacesAfter");
-                       if (spaceAfterVal != null) {
-                           misc.remove("SpacesAfter");
-                           spaceAfterKey = "SpacesAfter";
-                       }
+                        spaceAfterVal = (String) misc.get("SpacesAfter");
+                        if (spaceAfterVal != null) {
+                            misc.remove("SpacesAfter");
+                            spaceAfterKey = "SpacesAfter";
+                        }
                     } else {
                         misc.remove("SpaceAfter");
                         spaceAfterKey = "SpaceAfter";
@@ -1186,10 +1243,11 @@ public class ConlluEditor {
                 }
 
                 ConllWord composedWord = new ConllWord(composedForm, //csent.getWords().get(id - 1).getForm(),
-                        id, id+complen-1);
+                        id, id + complen - 1);
 
-                if (spaceAfterKey != null)
+                if (spaceAfterKey != null) {
                     composedWord.addMisc(spaceAfterKey, spaceAfterVal);
+                }
                 csent.addWord(composedWord, id);
 
                 try {
@@ -1210,7 +1268,9 @@ public class ConlluEditor {
                 int end;
                 String form = f[4];
                 String misc = "_";
-                if (f.length > 5) misc = f[5];
+                if (f.length > 5) {
+                    misc = f[5];
+                }
 
                 try {
                     start = Integer.parseInt(f[2]);
@@ -1235,7 +1295,6 @@ public class ConlluEditor {
                 history.add(csent);
 
                 // delete MT word
-
                 if (end == 0) {
                     csent.deleteContracted(start);
                     return returnTree(currentSentenceId, csent);
@@ -1246,7 +1305,9 @@ public class ConlluEditor {
                     cw.setForm(form);
                     cw.setSubId(end);
                     cw.setId(start);
-                    if (misc != null) cw.setMisc(misc);
+                    if (misc != null) {
+                        cw.setMisc(misc);
+                    }
                 }
 
                 try {
@@ -1259,8 +1320,7 @@ public class ConlluEditor {
 
             } else if (command.startsWith("mod split ")
                     || command.startsWith("mod join ")
-                    || command.startsWith("mod delete ")
-                    ) {
+                    || command.startsWith("mod delete ")) {
                 String[] f = command.trim().split(" +");
 
                 if (f.length < 3) {
@@ -1289,10 +1349,10 @@ public class ConlluEditor {
                     int splitpos = -1;
                     if (f.length > 3) {
                         try {
-                             splitpos = Integer.parseInt(f[3]);
-                         } catch (NumberFormatException e) {
-                             return formatErrMsg("INVALID splitpos (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
-                         }
+                            splitpos = Integer.parseInt(f[3]);
+                        } catch (NumberFormatException e) {
+                            return formatErrMsg("INVALID splitpos (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
+                        }
                     }
 
                     ConllWord curWord = csent.getWords().get(id - 1);
@@ -1335,7 +1395,7 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod sentsplit ")) {
-                  String[] f = command.trim().split(" +");
+                String[] f = command.trim().split(" +");
 
                 if (f.length < 3) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
@@ -1361,7 +1421,7 @@ public class ConlluEditor {
 //                System.out.println(csent);
 //                System.out.println(newsent);
 
-                cfile.getSentences().add(currentSentenceId+1, newsent);
+                cfile.getSentences().add(currentSentenceId + 1, newsent);
                 numberOfSentences++;
                 try {
                     writeBackup(currentSentenceId, null, editinfo);
@@ -1379,11 +1439,11 @@ public class ConlluEditor {
 //                }
 //                history.add(csent);
                 if (currentSentenceId >= cfile.getSentences().size()) {
-                     return formatErrMsg("No next sentence to join", currentSentenceId);
+                    return formatErrMsg("No next sentence to join", currentSentenceId);
                 }
-                ConllSentence nextsent = cfile.getSentences().get(currentSentenceId+1);
+                ConllSentence nextsent = cfile.getSentences().get(currentSentenceId + 1);
                 csent.joinsentence(nextsent);
-                cfile.getSentences().remove(currentSentenceId+1);
+                cfile.getSentences().remove(currentSentenceId + 1);
                 numberOfSentences--;
                 try {
                     writeBackup(currentSentenceId, null, editinfo);
@@ -1399,15 +1459,13 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
-
-                String [] g = f[2].split("\\.");
+                String[] g = f[2].split("\\.");
                 if (g.length != 2) {
                     return formatErrMsg("INVALID empty word id «" + command + "»", currentSentenceId);
                 }
 
                 int id;
                 int subid;
-
 
                 try {
                     id = Integer.parseInt(g[0]);
@@ -1445,8 +1503,7 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod insert ")
-                    || command.startsWith("mod emptyinsert ")
-                    ) {
+                    || command.startsWith("mod emptyinsert ")) {
                 // add new word:
                 // mod insert id form [lemma [upos [xpos]]]
                 // or add new empty word
@@ -1569,22 +1626,27 @@ public class ConlluEditor {
                 history.add(csent);
 
                 ConllWord dep = csent.getWord(f[3]);
-                if (dep == null) formatErrMsg("INVALID dep id «" + command + "»", currentSentenceId);
+                if (dep == null) {
+                    formatErrMsg("INVALID dep id «" + command + "»", currentSentenceId);
+                }
                 ConllWord head = csent.getWord(f[4]);
-                if (head == null) formatErrMsg("INVALID head id «" + command + "»", currentSentenceId);
+                if (head == null) {
+                    formatErrMsg("INVALID head id «" + command + "»", currentSentenceId);
+                }
 
                 if ("add".equals(f[2])) {
                     // before we add a new enhanced dep, we delete a potentially
                     // existing enhn.deprel to the same head
-                    /*boolean rtc = */dep.delDeps(head.getFullId());
+                    /*boolean rtc = */
+                    dep.delDeps(head.getFullId());
                     dep.addDeps(head.getFullId(), f[5]);
                     csent.setHasEnhancedDeps(true);
-                }
-                else if ("del".equals(f[2])) {
+                } else if ("del".equals(f[2])) {
                     boolean rtc = dep.delDeps(f[4]);
-                    if (!rtc) return formatErrMsg("ED does not exist «" + command + "»", currentSentenceId);
-                }
-                else {
+                    if (!rtc) {
+                        return formatErrMsg("ED does not exist «" + command + "»", currentSentenceId);
+                    }
+                } else {
                     return formatErrMsg("INVALID ed command «" + command + "»", currentSentenceId);
                 }
                 try {
@@ -1594,7 +1656,6 @@ public class ConlluEditor {
                 }
 
                 return returnTree(currentSentenceId, csent);
-
 
             } else if (command.startsWith("mod ")) {
                 // we expect
@@ -1723,21 +1784,22 @@ public class ConlluEditor {
         callgitcommit = b;
     }
 
-
-
     public void setBacksuffix(String s) {
         suffix = s;
     }
 
-    /** check whether the directory of the edited file is under git version control, and if
-     * so whether the edited file is under git control, or not
-     * @return 0, error, 1 if the file is under Git Version control, 2 if the directory is git controlled but the file is not, else 3
-    */
+    /**
+     * check whether the directory of the edited file is under git version
+     * control, and if so whether the edited file is under git control, or not
+     *
+     * @return 0, error, 1 if the file is under Git Version control, 2 if the
+     * directory is git controlled but the file is not, else 3
+     */
     // TODO merge with writeBackup()
     private synchronized int versionning() throws IOException {
         File dir = filename.getParentFile().toPath().normalize().toFile();
 
-         try {
+        try {
             //Git git = Git.open(dir);
             FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
             repositoryBuilder.findGitDir(dir);
@@ -1780,9 +1842,6 @@ public class ConlluEditor {
 
         }
     }
-
-
-
 
     private synchronized String writeBackup(int currentSentenceId, ConllWord modWord, String editinfo) throws IOException {
         if (changesSinceSave < saveafter) {
@@ -1891,9 +1950,11 @@ public class ConlluEditor {
         List<String> xposfiles = null;
         List<String> deprelfiles = null;
         List<String> featurefiles = null;
+        String language = null;
         String shortcutfile = null;
         String rootdir = null;
         String validator = null;
+        boolean include_unused = false;
         int debug = 3;
         int saveafter = 0;
         int mode = 0; // noedit: 1, reinit: 2
@@ -1913,6 +1974,13 @@ public class ConlluEditor {
                 String[] fns = args[++a].split(",");
                 featurefiles = Arrays.asList(fns);
                 argindex += 2;
+            } else if (args[a].equals("--language")) {
+                language = args[++a];
+                argindex += 2;
+            } else if (args[a].equals("--include_unused")) {
+                include_unused = true;
+                argindex += 1;
+
             } else if (args[a].equals("--deprels")) {
                 String[] fns = args[++a].split(",");
                 deprelfiles = Arrays.asList(fns);
@@ -1962,10 +2030,10 @@ public class ConlluEditor {
                 ce.setValidXPOS(xposfiles);
             }
             if (deprelfiles != null) {
-                ce.setValidDeprels(deprelfiles);
+                ce.setValidDeprels(deprelfiles, language);
             }
             if (featurefiles != null) {
-                ce.setValidFeatures(featurefiles);
+                ce.setValidFeatures(featurefiles, language, include_unused);
             }
             if (validator != null) {
                 ce.setValidator(validator);

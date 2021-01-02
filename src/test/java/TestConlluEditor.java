@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.8.0 as of 20th September 2020
+ @version 2.9.0 as of 30th December 2020
  */
 
 import com.google.gson.Gson;
@@ -607,7 +607,7 @@ public class TestConlluEditor {
         File file = new File(url.getFile());
         List<String>filenames = new ArrayList<>();
         filenames.add(file.toString());
-        ce.setValidDeprels(filenames);
+        ce.setValidDeprels(filenames, null);
 
         String rtc = ce.process("read 2", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -631,7 +631,7 @@ public class TestConlluEditor {
         File file = new File(url.getFile());
         List<String>filenames = new ArrayList<>();
         filenames.add(file.toString());
-        ce.setValidFeatures(filenames);
+        ce.setValidFeatures(filenames, null, false);
 
         String rtc = ce.process("read 1", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
