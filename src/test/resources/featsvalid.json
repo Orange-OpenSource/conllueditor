@@ -222,8 +222,7 @@
                   "feats": [
                     {
                       "name": "Gender",
-                      "val": "Masc",
-                      "error": "name"
+                      "val": "Masc"
                     },
                     {
                       "name": "Number",
@@ -335,7 +334,7 @@
   ],
   "info": "_",
   "errors": {
-    "invalidFeatures": 20
+    "invalidFeatures": 19
   },
   "comments": "sentence 1\n",
   "canUndo": false,

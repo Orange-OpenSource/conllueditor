@@ -12,7 +12,7 @@ The editor provides the following functionalities:
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these
-* edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html) (since version 2.4.0)
+* edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
 * create multitoken words from existing words or add a MTW to contract two ore more existing words
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
@@ -59,7 +59,9 @@ Alternatively, a recent version of Docker can be used to run the docker image (s
 
 ### Compilation
 
-* `mvn install` (add `-DskipTests` to avoid running the JUnit tests, individual tests can be run by `mvn test -Dtest=TestConlluEditor#<testmethod>`)
+* `mvn install`
+  * if the tests fail after `git pull` try deleting `target/test-classes`. If this does not solve the problem, run `-mvn install DskipTests` to avoid running the JUnit tests and drop me a note
+  * individual tests can be run by `mvn test -Dtest=TestConlluEditor#<testmethod>`)
 * download javascript libraries (bootstrap, popper, jquery and jquery-ui), the script [bin/installJQ.sh](bin/installJQ.sh) will do the job
 * or change the corresponding lines in [gui/index.html](gui/index.html) to load the libraries from a public server:
 
