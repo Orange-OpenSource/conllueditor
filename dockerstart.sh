@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# echo "AAA $*"
+# this script is only needed to launche the server in an docker container
+# outside docker please use bin/conlluedit.sh
 
 filename=$1
 shift
