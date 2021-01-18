@@ -655,7 +655,7 @@ public class ConllSentence {
         if (sentid != null && !sentid.isEmpty()) {
             sb.append("# sent_id = ").append(sentid).append('\n');
         }
-        sb.append("# text = ").append(getSentence().trim()).append('\n');
+        sb.append("# text = ").append(getSentence().replaceAll("\n", " ").trim()).append('\n');
         for (String c : comments) {
             sb.append("# ").append(c).append('\n');
         }
