@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.9.0 as of 30th December 2020
+ @version 2.10.0 as of 30th December 2020
  */
 package com.orange.labs.editor;
 
@@ -99,13 +99,15 @@ public class ConlluEditor {
     History history;
     boolean callgitcommit = true;
     int changesSinceSave = 0;
-    int saveafter = 0; // save after n changes
+    int saveafter = -1; // save after n changes // -1: save when changing sentence
 
     ConllFile comparisonFile = null;
 
     private String programmeversion;
     private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
 
+    private int debug = 1; 
+    
     public enum Raw {
         LATEX, CONLLU, SDPARSE, VALIDATION, SPACY_JSON
     };
@@ -158,7 +160,7 @@ public class ConlluEditor {
                     if (changesSinceSave > 0) {
                         System.err.println("Shutting down ConlluEditor, saving pending " + changesSinceSave + " edits ...");
                         changesSinceSave = saveafter;
-                        String f = writeBackup(0, null, null);
+                        String f = writeBackup(0, null, null, true);
                         System.err.println("Saved " + f);
                     } else {
                         System.err.println("Shutting down ConlluEditor ...");
@@ -173,7 +175,8 @@ public class ConlluEditor {
     }
 
     private void init() throws IOException, ConllException {
-        System.err.println("Loading " + filename);
+        if ((debug & 0x01) == 1)
+            System.err.println("Loading " + filename);
         cfile = new ConllFile(filename, null);
         numberOfSentences = cfile.getSentences().size();
     }
@@ -216,7 +219,7 @@ public class ConlluEditor {
             if (deprels == null) {
                 return null;
             }
-          
+
             if (lg != null) {
                 JsonObject jlang = deprels.getAsJsonObject(lg);
                 for (String deprelname : jlang.keySet()) {
@@ -236,7 +239,7 @@ public class ConlluEditor {
                         String type = deprel.get("type").getAsString();
                         String doc = deprel.get("doc").getAsString();
                         if (!type.equals("universal") || !doc.equals("global")) {
-                            // we only use universal features                    
+                            // we only use universal features
                             continue;
                         }
                         valid.add(deprelname);
@@ -263,7 +266,7 @@ public class ConlluEditor {
         validDeprels = readDeprelsJson(filenames, lg);
         // read the other (text) files
         validDeprels.addAll(readList(filenames));
-        
+
         if (validDeprels != null) {
             System.err.format("%d valid Deprel read from %s\n", validDeprels.size(), filenames.toString());
         } else {
@@ -290,9 +293,16 @@ public class ConlluEditor {
 
     public void setSaveafter(int saveafter) {
         this.saveafter = saveafter;
-        System.err.format("saving file after %d edits\n", saveafter);
+        if (this.saveafter < 0)
+            System.err.format("saving file when current sentence is changed\n");
+        else
+            System.err.format("saving file after %d edits\n", saveafter);
     }
 
+    public void setDebug(int d) {
+        debug = d;
+    }
+    
     public void setComparisonFile(String compfilename) {
         try {
             comparisonFile = new ConllFile(new File(compfilename), null);
@@ -325,7 +335,7 @@ public class ConlluEditor {
 
     private String formatSaveMsg(String msg, int sentid) {
         JsonObject solution = prepare(sentid);
-        solution.addProperty("message", msg);
+        solution.addProperty("ok", msg);
         solution.addProperty("changes", changesSinceSave);
         return solution.toString();
     }
@@ -589,6 +599,76 @@ public class ConlluEditor {
     }
 
     // TODO: write and commit file only when changing sentence: problem with multithread
+    /** Process the commands comming from the JavaScript GUI.
+        @param command command string
+        @param currentSentenceId the id of the current sentence (sent by the GUI
+        @return json representation of the sentence after the command has been applied or error message
+        The command has the following format:
+          nect                       next sentence
+          prec                       preceeding sentence
+          read <num>                 return sentence <num>
+          findsendid "true" <regex>  find sentence with sentid matching regex. if 2nd argument == "true", search backwards
+          findcomment "true" <regex> find sentence with comment matching regex. if 2nd argument == "true", search backwards
+          findword "true" <string>   find string in sentence (may include spaces). if 2nd argument == "true", search backwards
+          findmulti "true" <string>  find sequence of tokens: "l:the/u:NOUN" finds the lemma "the" followed by a token with upos "NOUN3
+                                     "l:fish;u:VERB" finds token with lemma "fish" and upos "VERB"
+          find{lemma|feat|upos|xpos} "true" <regex>
+                                     find sentence with lemma/feat/upos/xpos matching regex
+          finddeprel "true" <string> find a sentence with a deprel or a subtree: "aux" or "det>nsubj"
+          mod <field> <tokenid> <value>
+                                     modifiy token of current sentence
+                                       field: form leamm upos xpos feat deprel enhdpes misc 
+          mod <fields> <tokenid> <value> <value2>
+                                     modifiy token of current sentence (no blanks allowed in <value> or <value2>)
+                                       fields:
+                                         pos (set upos to <value> and xpos to <value2>)
+                                         extracol (set extracolumn named <value> to <value2>)
+          mod tomtw <tokenid> <form1> <form2> [...]
+                                     transform a token into a multiword token, with the tokens given (form1, form2, ...)
+                                     e.g if token 3 is "wanna", 
+                                         3	wanna	wanna VERB	...
+                                     "mod tomtw 2 want to" creates
+                                         3-4	wanna	_	_	...
+                                         3	want	wanna	VERB	...
+                                         4	to	_	_	...
+                                    (tokens 3 and 4 normally have to be further edited)
+          mod compose <tokenid> <length>
+                                     make a MTW from <length> tokens starting with token <tokenid>
+                                     e.g 
+                                         5	do	VERB	...
+                                         6	n't	PART	...
+                                     "mod compose 5 2" produces
+                                         5-6	don't	_	_	...
+                                         5	do	VERB	...
+                                         6	n't	PART	...
+          mod editmtw <starttokenid> <endtokenid> [<MISC data>]
+                                     modify the span of a current MTW (or delete it by setting <endtokenid> to 0
+
+          mod split <tokenid> [<position>]]
+                                     split the token with <tokenid> in two. If <position> split form  (and lemma) at this position, 
+                                     else the new token is simply a copy of the existing one
+          mod join <tokenid>         merge the token <tokenid> with the following
+          mod delete <tokenid>       delete token with <tokenid> (all deprels of the sentence and all subsequent tokenids will be adapted)
+          mod sentsplit <tokenid>    split the current sentence into two sentence, with token <tokenid> being the first token of the new sentence
+          mod sentjoin               merge the current sentence with the following
+          mod insert <tokenid> <form> [<lemma> [<upos> [<xpos>]]]
+                                     insert a new token after the token <tokenid> (new token has id tokenid+1
+          mod emptyinsert <tokenid> <form> [<lemma> [<upos> [<xpos>]]]
+                                     enhanced dependencies: insert a new EMPTY token before the token <tokenid> 
+                                     (new token has id "<tokenid>.1"
+          mod comments <comment>     set the comment fo a sentence (# text, # sent_id, # newpar etc are set automatically!)
+          mod undo                   undo last "mod" command (if we are still in the same sentence)
+          mod redo                   redo last "undone" "mod" command
+          mod ed add <depid> <headid> <deprel> 
+                                     add an enhanced dependency <deprel> from <headid> to <depid>
+          mod ed del <depid> <headid>
+                                     delete enhanced dependency from <headid> to <depid>
+          mod <newheadid> <tokenid> [<deprel>]
+                                     make token <tokenid> a dependant of token <newheadid>. 
+                                     Keep current deprel unless a new <deprel> is provided.
+          save                       save the file either to <filename.conllu>.2 (if <filename.conllu> not git controlled)
+                                     or to <filename.conllu> and execute a "git add" and "git commit"
+    */
     public String process(String command, int currentSentenceId, String editinfo) {
         if (mode == 2) {
             try {
@@ -598,10 +678,21 @@ public class ConlluEditor {
             }
         }
 
-        System.err.println("COMMAND [" + command + "] sid: " + currentSentenceId);
+        if ((debug & 0x01) == 1)
+           System.err.println("COMMAND [" + command + "] sid: " + currentSentenceId);
         try {
             if (!command.startsWith("mod ")) {
+                // we changed the sentence, forget history
                 history = null;
+                
+                if (!command.startsWith("save") && changesSinceSave > 0 && saveafter == -1) {
+                    // save sentence because the changed sentence (if saveafter == -1)
+                    try {
+                        writeBackup(currentSentenceId, null, editinfo, true);
+                    } catch (IOException ex) {
+                        return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                    }
+                }
             } else {
                 if (mode != 0) {
                     return formatErrMsg("NO editing in browse mode", currentSentenceId);
@@ -1751,16 +1842,18 @@ public class ConlluEditor {
                 if (mode != 0) {
                     return formatErrMsg("NO editing in browse mode", currentSentenceId);
                 }
+                //System.err.println("CHANGES " + changesSinceSave);
                 if (changesSinceSave != 0) {
                     try {
-                        changesSinceSave = saveafter;
-                        String f = writeBackup(currentSentenceId, null, editinfo);
+                        changesSinceSave = 0; //saveafter;
+                        String f = writeBackup(currentSentenceId, null, editinfo, true);
                         return formatSaveMsg("saved «" + f + "»", currentSentenceId);
 
                         //return returnTree(currentSentenceId, csent);
                     } catch (IOException ex) {
                         return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                     }
+                  
                 } else {
                     return formatErrMsg("no changes to be saved", currentSentenceId);
                 }
@@ -1844,10 +1937,16 @@ public class ConlluEditor {
     }
 
     private synchronized String writeBackup(int currentSentenceId, ConllWord modWord, String editinfo) throws IOException {
-        if (changesSinceSave < saveafter) {
+        return writeBackup(currentSentenceId, modWord, editinfo, false);
+    }
+    
+    private synchronized String writeBackup(int currentSentenceId, ConllWord modWord, String editinfo, boolean forcesave) throws IOException {
+        if (!forcesave && (saveafter < 0 || changesSinceSave < saveafter)) {
             return null; // no need to save yet
         }
         File dir = filename.getParentFile().toPath().normalize().toFile();
+        if ((debug & 0x01) == 2)
+            System.err.println("Saving file " + filename);
 
         try {
             //Git git = Git.open(dir);
@@ -1892,7 +1991,7 @@ public class ConlluEditor {
                     changesSinceSave = 0;
                     git.add().addFilepattern(filepathInGit.toString()).call();
                     if (modWord == null) {
-                        git.commit().setMessage(String.format("saving %s (%s)", filename, editinfo)).call();
+                        git.commit().setMessage(String.format("saving %s sentence: %d (%s)", filename, currentSentenceId+1, editinfo)).call();
                     } else {
                         //String sentid = "";
                         //if ()
@@ -1929,7 +2028,7 @@ public class ConlluEditor {
         System.err.println("   --features <file>    comma separated list of files with valid [upos:]feature=value pairs");
         System.err.println("   --validator <file>   file with validator configuration");
         System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
-        System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) after each modification");
+        System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) when going to another sentence");
         System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
         System.err.println("   --shortcuts <file>   list of shortcut definition (json)");
         System.err.println("   --noedit             only browsing");
@@ -1955,8 +2054,8 @@ public class ConlluEditor {
         String rootdir = null;
         String validator = null;
         boolean include_unused = false;
-        int debug = 3;
-        int saveafter = 0;
+        int debug = 0x0d;
+        int saveafter = -1;
         int mode = 0; // noedit: 1, reinit: 2
         String comparisonFile = null;
 
@@ -2043,8 +2142,12 @@ public class ConlluEditor {
             }
             if (saveafter != 0) {
                 ce.setSaveafter(saveafter);
+            } else {
+                System.err.println("Invalid value for option --saveAfter");
             }
 
+            ce.setDebug(debug);
+            
             if (comparisonFile != null) {
                 ce.setComparisonFile(comparisonFile);
             }

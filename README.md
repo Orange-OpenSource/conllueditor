@@ -2,7 +2,7 @@
 
 This Software is a tool which facilitates the editing of syntactic relations and morphological features of files in CoNLL-U format
 (http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor
-loads the CoNLL-U file and saves every change to disk (and performs a `git commit` if the file is under git version control).
+loads the CoNLL-U file and saves changes to disk (and performs a `git commit` if the file is under git version control).
 
 The editor provides the following functionalities:
 * editing words (forms, lemmas, upos, xpos, features, enhanced dependencies) (fast edit for UPOS and deprel)
@@ -126,9 +126,12 @@ to get bug corrections/new features, run
 
 ```
 git pull
+rm -rf target/test-classes
 mvn install
 
 ```
+
+
 
 ## Starting the server
 
@@ -226,7 +229,8 @@ are marked as unused. They will only be included to the list of valid features i
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
-* `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. Default value: 0.
+* `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. 
+Default: save when another sentence is chosen.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
 especially if the file is on a network drive.
 * `--relax` accepts some formal errors in the CoNLL-U file and corrects them (empty column instead of `_`, invalid head id set to 0)

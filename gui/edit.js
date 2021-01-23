@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2020, Orange S.A.
+ Copyright (c) 2018-2021, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.8.0 as of 20th September 2020
+ @version 2.10.0 as of 10th January 2021
  */
 
 
@@ -193,7 +193,7 @@ function getServerInfo() {
                 $('.editmode').show();
             }
 
-            if (data.saveafter && data.saveafter > 1) {
+            if (data.saveafter && (data.saveafter > 1 || data.saveafter == -1)) {
                 $('#save').show();
             } else {
                 $('#save').hide();
@@ -1267,19 +1267,28 @@ function sendmodifs(commands) {
         success: function (data) {
             //console.log("zzzz " + JSON.stringify(data));
 
-        	if (data.error != undefined) {
-        		//alert(data.error);
+            if (data.error != undefined) {
+                //alert(data.error);
        	        /* show error message */
        	        $("#errormessagefield").text(data.error);
-        	    $("#errorMessage").modal();
+                $("#errorMessage").modal();
+                if (olddata != undefined) {
+                    formatPhrase(olddata);
+                }
+            } else if (data.ok != undefined) {
+                // save OK
+                
+                $("#errorMsgTitle").text("OK");
+       	        $("#errormessagefield").text(data.ok);
+                $("#errorMessage").modal();
+                if (olddata != undefined) {
+                    formatPhrase(olddata);
+                }
 
-    			if (olddata != undefined) {
-        			formatPhrase(olddata);
-        		}
-        	} else {
-            	formatPhrase(data);
-            	olddata = data;
-        	}
+            } else {
+                formatPhrase(data);
+                olddata = data;
+            }
         },
         error: function (data) {
             //console.log("ERREUR " + data);

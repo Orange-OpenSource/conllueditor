@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
  
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.0.0 as of 5th January 2020
+ @version 2.10.0 as of 10th January 2021
  */
 package com.orange.labs.httpserver;
 
@@ -336,12 +336,12 @@ public class ServeurHTTP {
         public void handle(HttpExchange he) throws IOException {
             InetSocketAddress remoteAddress = he.getRemoteAddress();
             String client;
-            if ((debug & 2) != 0) {
+            if ((debug & 8) != 0) {
                 client = remoteAddress.getHostName();
             } else {
                 client = remoteAddress.toString();
             }
-            if ((debug & 1) != 0) {
+            if ((debug & 4) != 0) {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
                 System.out.println(dateFormat.format(date) + " " + he.getRequestMethod() + " ParseHandler request from " + client);
@@ -492,12 +492,12 @@ public class ServeurHTTP {
 
         @Override
         public void handle(HttpExchange he) throws IOException {
-            if ((debug & 1) != 0) {
+            if ((debug & 4) != 0) {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
                 Date date = new Date();
                 InetSocketAddress remoteAddress = he.getRemoteAddress();
                 String client;
-                if ((debug & 2) != 0) {
+                if ((debug & 8) != 0) {
                     client = remoteAddress.getHostName();
                 } else {
                     client = remoteAddress.toString();
