@@ -1,14 +1,14 @@
 {
     "comment": "this files defines shortcuts to fast edit UPOS, xpos and deprel of the active word. For xpos two values can to be given in a list: XPOS and UPOS)",
     "upos": {
-        "A": "ADV",
+        "AV": "ADV",
         "C": "CCONJ",
         "D": "DET",
-        "E": "PROPN",
+        "P": "PROPN",
         "I": "INTJ",
-        "J": "ADJ",
+        "AJ": "ADJ",
         "N": "NOUN",
-        "P": "ADP",
+        "AP": "ADP",
         "R": "PRON",
         "S": "SCONJ",
         "T": "PART",

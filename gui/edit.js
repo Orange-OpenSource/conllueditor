@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.0 as of 10th January 2021
+ @version 2.10.0 as of 23rd January 2021
  */
 
 
@@ -561,6 +561,7 @@ function getWordLengthsOfTree(item, maxlen) {
 var conllwords = {}; // all words of current sentence
 var mtws = {}; // all multitoke words of current sentence
 var clickedNodes = [];
+var unprecessedkeystrokes = []; // process multi key shortcuts
 var deprels = [];
 var uposs = [];
 var clickCount = 0;
@@ -604,14 +605,17 @@ $(window).on('keydown', function (evt) {
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
     //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
-
+    //console.log("kk", evt.which, unprecessedkeystrokes);
+    
     if($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
+        unprecessedkeystrokes = [];
         return;
     }
 
     if (graphtype == 3) {
         // in table mode, we need all keys to edit the table cells
+        unprecessedkeystrokes = [];
         return;
     }
 
@@ -626,28 +630,34 @@ $(window).on('keypress', function (evt) {
     } else if (clickedNodes.length == 1) {
         // a word is active
         // interpret shortkeys
+        currentkey = String.fromCharCode(evt.which);
+        if (unprecessedkeystrokes.length == 1) {
+            currentkey = unprecessedkeystrokes + currentkey;
+        }
 
-        var newval = shortcutsUPOS[String.fromCharCode(evt.which)];
+        var newval = shortcutsUPOS[currentkey];
         if (newval != undefined) {
             //console.log("UPOS", newval);
             sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
             clickedNodes = [];
             deprels = [];
             uposs = [];
+            unprecessedkeystrokes = [];
             return;
         }
 
-        newval = shortcutsDEPL[String.fromCharCode(evt.which)];
+        newval = shortcutsDEPL[currentkey];
         if (newval != undefined) {
-            console.log("DEPL", newval);
+            //console.log("DEPL", newval);
             sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
             clickedNodes = [];
             deprels = [];
             uposs = [];
+            unprecessedkeystrokes = [];
             return;
         }
 
-        newval = shortcutsXPOS[String.fromCharCode(evt.which)];
+        newval = shortcutsXPOS[currentkey];
         if (newval != undefined) {
             //console.log("XPOS", newval, newval[0]);
             if (newval.length > 1) {
@@ -661,10 +671,21 @@ $(window).on('keypress', function (evt) {
             clickedNodes = [];
             deprels = [];
             uposs = [];
+            unprecessedkeystrokes = [];
             return;
         }
+        
+        // so we got here with a key which is not a shortcut. So maybe it is the first key
+        // of a double-key shortcut?
+        if (unprecessedkeystrokes.length == 0) {
+            unprecessedkeystrokes.push(String.fromCharCode(evt.which));
+        } else {
+            unprecessedkeystrokes = [];
+        }
+        return;
 
     }
+    unprecessedkeystrokes = [];
 })
 
 // hovering on a word which differes from the corresponding word in the --compare file 

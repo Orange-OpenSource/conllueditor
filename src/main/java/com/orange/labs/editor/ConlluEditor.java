@@ -632,12 +632,12 @@ public class ConlluEditor {
                                          3	want	wanna	VERB	...
                                          4	to	_	_	...
                                     (tokens 3 and 4 normally have to be further edited)
-          mod compose <tokenid> <length>
+          mod compose <tokenid> <length> [form]
                                      make a MTW from <length> tokens starting with token <tokenid>
                                      e.g 
                                          5	do	VERB	...
                                          6	n't	PART	...
-                                     "mod compose 5 2" produces
+                                     "mod compose 5 2 don't" produces
                                          5-6	don't	_	_	...
                                          5	do	VERB	...
                                          6	n't	PART	...
@@ -1281,7 +1281,7 @@ public class ConlluEditor {
                 return returnTree(currentSentenceId, csent);
 
             } else if (command.startsWith("mod compose")) {
-                // add composed form: mod compose <id> <composelength>
+                // add composed form: mod compose <id> <composelength> [form]
                 String[] f = command.trim().split(" +");
                 if (f.length < 4) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
@@ -1333,6 +1333,9 @@ public class ConlluEditor {
                     }
                 }
 
+                if (f.length > 4) {
+                    composedForm = f[4];
+                }
                 ConllWord composedWord = new ConllWord(composedForm, //csent.getWords().get(id - 1).getForm(),
                         id, id + complen - 1);
 
@@ -1813,7 +1816,7 @@ public class ConlluEditor {
                     newhead = csent.getWords().get(newhead_id - 1); // 0 : nouvelle tête de la phrase
                     // check whether newhead n'est pas qq part au-dessous du mot courant
                     if (depword.commands(newhead)) {
-                        return formatErrMsg("cannot make " + newhead_id + " head of " + dep_id + "since " + newhead_id + "is currently a dependent of " + dep_id, currentSentenceId);
+                        return formatErrMsg("cannot make " + newhead_id + " head of " + dep_id + " since " + newhead_id + " is currently a dependent of " + dep_id, currentSentenceId);
                     }
                 }
                 depword.setHeadWord(newhead);

@@ -227,7 +227,7 @@ options. Without `--language` only the universal features and deprels are used.
 * `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
 are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
-* `--shortcuts <file>` list of shortcut definition (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
+* `--shortcuts <file>` list of shortcut definitions (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. 
 Default: save when another sentence is chosen.
@@ -373,7 +373,37 @@ will happily delete the `ID` column from the output file, so the `HEAD` column d
 ## Shortcuts
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing: These single letter keys change the UPOS/XPOS/deplabel of
 the active word to the defined value. To activate a word, click once on the word.
-A personalised list (same format as [gui/shortcuts.json](gui/hortcuts.json)) can be used with the `--shortcuts` option. 
+Shortcuts can be single letters or double letters:
+
+```
+{
+    "upos": {
+        "AV": "ADV",
+        "C": "CCONJ",
+        "D": "DET",
+        "P": "PROPN",
+        "I": "INTJ",
+        "AJ": "ADJ",
+        "N": "NOUN",
+        "AP": "ADP",
+        "R": "PRON",
+        "S": "SCONJ",
+        "T": "PART",
+        "U": "NUM",
+        "V": "VERB",
+        "X": "AUX",
+        ".": "PUNCT"
+    },
+    "deplabel": {
+        "a": "amod",
+        "b": "advmod",
+        "c": "case",
+        ....
+    }
+}
+```
+
+A personalised list (same format as [gui/shortcuts.json](gui/shortcuts.json)) can be used with the `--shortcuts` option. 
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
@@ -488,9 +518,9 @@ The comparison mode works in the flat view too.
 ![CoNLL-U File Comparison](doc/comparemode.png)
 
 # Known bugs
-* not all user errors are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.
-The `feature`, and `misc` column fields must contain one or more `|`-separated `name=value` pair per line (or `_`),
-the enhanced dependency field must contain one or more `|`-separated `head:deprel` pair per line (or `_`).
+* not all possible errors which users can make are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.
+The `feature`, and `misc` column fields must contain one or more `|`-separated `name=value` pairs per line (or `_`),
+the enhanced dependency field must contain one or more `|`-separated `head:deprel` pairs per line (or `_`).
 
 # Todo list
 * be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]

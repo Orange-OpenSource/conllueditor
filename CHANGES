@@ -1,6 +1,8 @@
 Version 2.10.0
 - new default for saving: without the option --saveAfter the conllu file is saved whenever a new sentence is chosen (next, prec, ...)
   the old behaviour (save every modification immediately) can be achieved using the topn --saveAfter 1
+- shortcuts can be defined for two keys
+- "mod compose startid length [form]" optional form of the new MTW
 
 Version 2.9.1
 - correction: replace "\n" in MISC:SpacesAfter= by space in "# text = " line
