@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.0 as of 23rd January 2021
+ @version 2.10.1 as of 26th January 2021
  */
 
 
@@ -61,7 +61,7 @@ function choosePort() {
         $("#portinfo").hide();
     }
     URL_BASE = 'http://' + window.location.hostname + ':' + $("#port").val() + '/edit/';
-    
+
     var c = null;
     if (!isIE && !isEdge) {
         var url = new URL(window.location.href);
@@ -124,8 +124,12 @@ function getRaw(what, title) {
     });
 }
 
-var deprellist = [];
-var uposlist = [];
+var deprellist = [ "acl", "acl:relcl", "advcl", "advmod", "amod", "appos", "aux",
+                   "case", "cc", "ccomp", "conj", "cop", "csubj", "dep", "det",
+                   "dislocated", "fixed", "flat", "flat:foreign", "flat:name", "iobj",
+                   "mark", "nmod", "nmod:poss", "nsubj", "nummod", "obj", "obl", "orphan",
+                   "parataxis", "punct", "root", "xcomp"];
+var uposlist = ["ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "NOUN", "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X"];
 var xposlist = [];
 var featlist = [];
 var misclist = ["Gloss=", "LGloss=", "SpaceAfter=No", "SpacesAfter=", "Translit=", "LTranslit=", "Typo=Yes"];
@@ -171,13 +175,18 @@ function getServerInfo() {
             if (data.shortcuts) {
                 //console.log("SHORTCUTS", data.shortcuts);
                 $("#scfilename").html(data.shortcuts.filename);
-                if (data.shortcuts.deplabel)
+                if (data.shortcuts.deplabel) {
                     shortcutsDEPL = data.shortcuts.deplabel;
+                }
                 if (data.shortcuts.upos) {
                     shortcutsUPOS = data.shortcuts.upos;
                 }
-                if (data.shortcuts.xpos)
+                if (data.shortcuts.xpos) {
                     shortcutsXPOS = data.shortcuts.xpos;
+                }
+                if (data.shortcuts.feats) {
+                    shortcutsFEATS = data.shortcuts.feats;
+                }
                 parseShortcuts();
             } else {
                showshortcuts();
@@ -399,10 +408,10 @@ function ToggleShortcutHelp() {
         lastmore = more; // show search again when shortcut help is switched off
         if (more) {
             // we have to switch off the search fields
-            switchSearch(false);            
+            switchSearch(false);
             //more = true;
         }
-    }     
+    }
 }
 
 
@@ -424,6 +433,12 @@ var shortcutsXPOS = {// no point defining language specific xpos here.
     //"W": ["VBZ"] // xpos keeps upos unchanged
 };
 
+var shortcutsFEATS = {
+
+};
+
+
+var longestshortcut = 1; // longest shortcut key (in order to know when to top piling key strokes :-)
 
 /** run gy getServerInfo() when no shortcuts are provided by server.
     Reads defaults from gui/shortcut.json and updates help page.
@@ -435,6 +450,7 @@ function showshortcuts() {
         shortcutsUPOS = json.upos;
         shortcutsXPOS = json.xpos;
         shortcutsDEPL = json.deplabel;
+        shortcutsFEATS = json.feats;
         $("#scfilename").html("gui/shortcuts.json");
         parseShortcuts();
     });
@@ -445,11 +461,13 @@ function parseShortcuts() {
     var sc_uposString = "";
     var sc_xposString = "";
     var sc_deplString = "";
+    var sc_featsString = "";
 
     $("#shortcuttableUPOS").empty(); // clear default values
     $("#shortcuttableUPOS").append("<tr><th>key</th> <th>set UPOS to</th></tr>"); // add header
     $("#uposshortcuts").empty();
     for (var p in shortcutsUPOS) {
+        longestshortcut = Math.max(longestshortcut, p.length);
         $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
         sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
     }
@@ -460,21 +478,36 @@ function parseShortcuts() {
     $("#shortcuttableDEPL").append("<tr><th>key</th> <th>set deplabel to</th></tr>"); // add header
     $("#deplshortcuts").empty();
     for (var p in shortcutsDEPL) {
+         longestshortcut = Math.max(longestshortcut, p.length);
         $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
         sc_deplString += '<span class="sckey">' + p + "=" + shortcutsDEPL[p] + "</span>&nbsp;&nbsp;";
     }
     $("#deplshortcuts").append(sc_deplString);
 
+
     $("#xposshortcuts").empty();
     $("#shortcuttableXPOS").empty();
     $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>set UPOS to</th></tr>"); // add header
     for (var p in shortcutsXPOS) {
+        longestshortcut = Math.max(longestshortcut, p.length);
         $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
                 + shortcutsXPOS[p][0] + "</td> <td>"
                 + shortcutsXPOS[p][1] + "</td></tr>");
         sc_xposString += '<span class="sckey">' + p + "=" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp;&nbsp;";
     }
     $("#xposshortcuts").append(sc_xposString);
+
+
+    $("#shortcuttableFEATS").empty();
+    $("#shortcuttableFEATS").append("<tr><th>key</th> <th>set feature</th></tr>"); // add header
+    $("#featsshortcuts").empty();
+    for (var p in shortcutsFEATS) {
+        longestshortcut = Math.max(longestshortcut, p.length);
+        $("#shortcuttableFEATS").append("<tr><td>" + p + "</td> <td>" + shortcutsFEATS[p] + "</td></tr>");
+        sc_featsString += '<span class="sckey">' + p + "=" + shortcutsFEATS[p] + "</span>&nbsp;&nbsp;";
+    }
+    $("#featsshortcuts").append(sc_featsString);
+
 }
 
 // in order to have word "boxes" as wide as needed, we stock here the width needed for each
@@ -548,7 +581,7 @@ function getAllWordLengths(trees, maxlen) {
 
 /* get word length for all words of a tree */
 function getWordLengthsOfTree(item, maxlen) {
-    maxlen = Math.max(maxlen, getWordLength(item, maxlen));   
+    maxlen = Math.max(maxlen, getWordLength(item, maxlen));
     if (item.children) {
         for (var i = 0; i < item.children.length; i++) {
             maxlen = Math.max(maxlen, getWordLengthsOfTree(item.children[i], maxlen));
@@ -581,7 +614,7 @@ $(window).on('keydown', function (evt) {
         // in table mode, we need all keys to edit the table cells
         return;
     }
-   
+
     // a word is active
     if (clickedNodes.length == 1) {
         if (evt.which == 46) {
@@ -597,16 +630,16 @@ $(window).on('keydown', function (evt) {
             deprels = [];
             uposs = [];
             return;
-        } 
+        }
     }
-   
+
 })
 
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
     //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
     //console.log("kk", evt.which, unprecessedkeystrokes);
-    
+
     if($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         unprecessedkeystrokes = [];
@@ -631,8 +664,8 @@ $(window).on('keypress', function (evt) {
         // a word is active
         // interpret shortkeys
         currentkey = String.fromCharCode(evt.which);
-        if (unprecessedkeystrokes.length == 1) {
-            currentkey = unprecessedkeystrokes + currentkey;
+        if (unprecessedkeystrokes.length < longestshortcut) { //== 1) {
+            currentkey = unprecessedkeystrokes.join("") + currentkey;
         }
 
         var newval = shortcutsUPOS[currentkey];
@@ -657,6 +690,17 @@ $(window).on('keypress', function (evt) {
             return;
         }
 
+        newval = shortcutsFEATS[currentkey];
+        if (newval != undefined) {
+            //console.log("DEPL", newval);
+            sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + newval});
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
+            unprecessedkeystrokes = [];
+            return;
+        }
+
         newval = shortcutsXPOS[currentkey];
         if (newval != undefined) {
             //console.log("XPOS", newval, newval[0]);
@@ -674,10 +718,10 @@ $(window).on('keypress', function (evt) {
             unprecessedkeystrokes = [];
             return;
         }
-        
+
         // so we got here with a key which is not a shortcut. So maybe it is the first key
-        // of a double-key shortcut?
-        if (unprecessedkeystrokes.length == 0) {
+        // of a multi-key shortcut?
+        if (unprecessedkeystrokes.length < longestshortcut) { //(unprecessedkeystrokes.length == 0) {
             unprecessedkeystrokes.push(String.fromCharCode(evt.which));
         } else {
             unprecessedkeystrokes = [];
@@ -688,7 +732,7 @@ $(window).on('keypress', function (evt) {
     unprecessedkeystrokes = [];
 })
 
-// hovering on a word which differes from the corresponding word in the --compare file 
+// hovering on a word which differes from the corresponding word in the --compare file
 // will show the differences
 function ShowCompareErrors(v) {
     //$("#goldword").append('<td class="filename">' + $('#filename').text() + "</td>").append(v.gold);
@@ -734,12 +778,12 @@ function ModifyTree(evt) {
                     wordedit = true;
                 }
             }
-           
+
 //            if (evt.altKey) {
 //                // editing columns > 10
 //                var conllword = conllwords[id[1]];
 //                console.log("zzzz", conllword.col11);
-//            } else 
+//            } else
                 if (evt.ctrlKey || wordedit) {
                 // editing a word (form, lemma, UPOS, XPOS, features, MISC)
                 wordedit = false;
@@ -768,7 +812,7 @@ function ModifyTree(evt) {
                         cell2.innerHTML = '<div class="ui-widget"><textarea type="text" id="ct_' + coltype + '" rows="1" cols="60">' + colval + '</textarea></div>';
                     }
                 }
-                
+
 
                 // get features from json and put them into a list for the edit window
                 // TODO improve edit window
@@ -816,12 +860,12 @@ function ModifyTree(evt) {
                 // open edit window
                 $("#wordEdit").modal();
                 clickedNodes = [];
-               
-                
-              
+
+
+
                 // clean all nodes (delete clocked-status)
                 $(".wordnode").attr("class", "wordnode");
-                
+
                 // add errorclass for words which are different from gold
                 if (incorrectwords.has("" +id[1])) {
                     errorclass = " compareError";
@@ -931,7 +975,7 @@ function ModifyTree(evt) {
             $("#currentMTWfrom").val(id[1]);
             $("#currentMTWto").val(id[2]);
             $("#currentMTWform").val(id[3]);
-            
+
             var mc = "";
 
             if (mtws[id[1]].misc != undefined) {
@@ -958,7 +1002,7 @@ function ModifyTree(evt) {
 
         } else {
             //alert("MT " + target.id + " == " + target);
-            $("#mods").val(""); 
+            $("#mods").val("");
             //$(".wordnode").attr("class", "wordnode");
             unhighlight();
             clickedNodes = [];
@@ -1182,11 +1226,11 @@ function formatPhrase(item) {
                 drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
                 if (item.differs) {
                     //console.log("zz", item.differs);
-                    //for (i = 0; i < item.differs.length; i++) { 
+                    //for (i = 0; i < item.differs.length; i++) {
                     //    incorrectwords.add(item.differs[i]);
                     //}
                     incorrectwords = item.differs;
-                }              
+                }
             }
             drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
         }
@@ -1227,12 +1271,12 @@ function formatPhrase(item) {
 
         // make a table wordid: word to access data easier for editing
         conllwords = {};
-        
+
         for (i = 0; i < item.tree.length; ++i) {
             var head = item.tree[i];
             getConllWords(conllwords, head);
         }
-        
+
         // create similar table for MWE
         mtws = {};
         for (wid in conllwords) {
@@ -1267,7 +1311,7 @@ var olddata = undefined;
  and re diesplay sentence afterwards (with json receivend from server after the modif) */
 function sendmodifs(commands) {
     commands["sentid"] = $("#currentsent").text() - 1;
-    
+
     $.ajax({
         url: URL_BASE,
         type: 'POST',
@@ -1298,7 +1342,7 @@ function sendmodifs(commands) {
                 }
             } else if (data.ok != undefined) {
                 // save OK
-                
+
                 $("#errorMsgTitle").text("OK");
        	        $("#errormessagefield").text(data.ok);
                 $("#errorMessage").modal();
@@ -1366,7 +1410,7 @@ $(document).ready(function () {
 
 
     /* save edited word */
-    $('#saveword').click(function () {       
+    $('#saveword').click(function () {
         conllword = conllwords[$("#cid").text()];
         if (conllword.form != $("#cform").val()) {
             sendmodifs({"cmd": "mod form " + conllword.id + " " + $("#cform").val()});
@@ -1571,10 +1615,10 @@ $(document).ready(function () {
 //            flatgraph = !flatgraph;
 //            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
 //            sendmodifs(datadico);
-//        } else 
+//        } else
 //        if (this.id === "flat3") {
 //            //console.log("zzz", $(this).val());
-//        
+//
 //            if ($(this).val() === "tree") {
 //                //$(this).addClass('active');
 //                $("#bie").show();
@@ -1592,7 +1636,7 @@ $(document).ready(function () {
 //            //flatgraph = !flatgraph;
 //            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
 //            sendmodifs(datadico);
-//        } else 
+//        } else
         if (this.id === "feat2") {
             if (!showfeats) {
                 $(this).addClass('active');
@@ -1708,7 +1752,7 @@ $(document).ready(function () {
         } else if (this.id === "findsentid") {
             inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
         }
-        
+
         else if (this.id === "save") {
             inputtext = "save";
         } else if (this.id === "redo") {
@@ -1818,11 +1862,11 @@ $(document).ready(function () {
     // when hovering on the word rectangle
     $(".wordnode").hover(function(){
         $("#comparediff").append("eeeee");
-        
-    }, 
+
+    },
     function(){
       $("#comparediff").empty();
-        
+
     });
 
     // TODO pour lire la phrase r

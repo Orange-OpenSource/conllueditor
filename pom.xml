@@ -32,7 +32,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.10.0 as of 9th January 2021
+    version 2.10.1 as of 26th January 2021
     -->
 
     <modelVersion>4.0.0</modelVersion>
@@ -64,7 +64,7 @@
                 <configuration>
                   <!--release>11</release-->
                   <source>1.8</source>
-                  <target>1.8</target>   
+                  <target>1.8</target>
                   <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>

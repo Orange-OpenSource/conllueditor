@@ -19,6 +19,7 @@ The editor provides the following functionalities:
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
+* current version: 2.10.1
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -192,7 +193,7 @@ docker run -t --name conllueditor -p 8888:5555 \
 ```
 
 Other parameters (shown below in section [other options](#other-options)) can be given with
-`--env <optionname>=value` e.g. 
+`--env <optionname>=value` e.g.
 `--env UPOS=uposfile.txt`,
 `--env UPOS=cpos.ud`,
 `--env XPOS=xpos.txt`,
@@ -229,7 +230,7 @@ are marked as unused. They will only be included to the list of valid features i
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definitions (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
-* `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button. 
+* `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button.
 Default: save when another sentence is chosen.
 This option can help to speed up the server when editing very large files, since writing the file after each edit takes a while,
 especially if the file is on a network drive.
@@ -256,7 +257,7 @@ it is shown in red.
 
 ![Edit screen (tree graph)](doc/tree.png)
 
-The select button `tree graph` allows to toggle between a dependency tree layout to a more horizontal representation or a tabular view. 
+The select button `tree graph` allows to toggle between a dependency tree layout to a more horizontal representation or a tabular view.
 
 ![Choose view](doc/chooseview.png)
 
@@ -366,14 +367,15 @@ generates
 ...
 ```
 
-No semantic/plausibility check is performed. E.g. 
+No semantic/plausibility check is performed. E.g.
 `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
 will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense anymore.
 
 ## Shortcuts
-ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing: These single letter keys change the UPOS/XPOS/deplabel of
+ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing:
+These single letter keys change the UPOS/XPOS/deplabel/feature of
 the active word to the defined value. To activate a word, click once on the word.
-Shortcuts can be single letters or double letters:
+Shortcuts can be single letters or a sequence of multiple letters:
 
 ```
 {
@@ -394,6 +396,12 @@ Shortcuts can be single letters or double letters:
         "X": "AUX",
         ".": "PUNCT"
     },
+   "feats": {
+       ":ns": "Number=Sing",
+       ":np": "Number=Plur",
+       ":gf": "Gender=Fem",
+       ...
+    },
     "deplabel": {
         "a": "amod",
         "b": "advmod",
@@ -403,7 +411,7 @@ Shortcuts can be single letters or double letters:
 }
 ```
 
-A personalised list (same format as [gui/shortcuts.json](gui/shortcuts.json)) can be used with the `--shortcuts` option. 
+A personalised list (same format as [gui/shortcuts.json](gui/shortcuts.json)) can be used with the `--shortcuts` option.
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
@@ -434,9 +442,9 @@ The GUI uses the following API when editing
 * `curl -F "sentid=2" -F "cmd=mod pos 4 VERB VV"  http://host:port/edit/` set upos of word with id 4 to _VERB_ and xpos to _VV_ in sentence 2
 * `curl -F "sentid=3" -F "cmd=mod extracol 4 SEM:NE B:Person"  http://host:port/edit/` set the non-standard UD column named _SEM:EN_ of word 4 to _B:Person_
 
-`upos` (in the first example) can be replaced with 
-`form`, `lemma`, `xpos`, `head`, `deprel`, `feat`, `misc` -for the latter two the value must be a comma separated list of `Key=Value`. 
-In all cases the new version of the edited sentence is returned (in json). 
+`upos` (in the first example) can be replaced with
+`form`, `lemma`, `xpos`, `head`, `deprel`, `feat`, `misc` -for the latter two the value must be a comma separated list of `Key=Value`.
+In all cases the new version of the edited sentence is returned (in json).
 However if the `sentid` or `id` are invalid, an error messages (in json format) is returned.
 
 For searching, the following API is implemented
@@ -444,7 +452,7 @@ For searching, the following API is implemented
 
 To search backwards use `cmd=findlemma true regex`. Other columns can be found with
 `findupos`, `findxpos`, `finddeprel`, `findfeat`, `findcomment` (searches comments preceding a sentence)
-and `findsentid` (searches `# sent_id`). `findform` can be used for search forms. In difference to the other 
+and `findsentid` (searches `# sent_id`). `findform` can be used for search forms. In difference to the other
 `find`-commands, `findform` searches for strings (no regex) in the sentence (across several words)
 * `curl -F "sentid=2" -F 'cmd=findword false " in the"'  http://host:port/edit/` searches for the string `in the` (including the preceding space)
 
@@ -500,7 +508,7 @@ LaTeX output includes MWE units as well as enhanced dependencies. The `download`
 
 # File Comparison
 
-ConlluEditor permits you to visualise the differences of two CoNLL-U files, as for instance a gold file and 
+ConlluEditor permits you to visualise the differences of two CoNLL-U files, as for instance a gold file and
 the output of a parsing tool. In order use the comparison mode start ConlluEditor with
 an option to indicate the gold file
 
@@ -511,7 +519,7 @@ an option to indicate the gold file
 The dependency tree of the gold file is shown in grey underneath the tree of the file being edited.
 The results of some evaluation metrics for the current sentence are presented at the bottom of the header.
 Individual words of the edited file, which differ from the gold file are shown with a red border. If the mouse
-hovers over such a word, the corresponding lines from the edited file and the gold file are shown 
+hovers over such a word, the corresponding lines from the edited file and the gold file are shown
 underneath the evaluation scores.
 The comparison mode works in the flat view too.
 

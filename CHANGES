@@ -1,6 +1,9 @@
+Version 2.10.1
+- shortcuts can have any length, shortcuts to set Feature=Value pairs
+
 Version 2.10.0
 - new default for saving: without the option --saveAfter the conllu file is saved whenever a new sentence is chosen (next, prec, ...)
-  the old behaviour (save every modification immediately) can be achieved using the topn --saveAfter 1
+  the old behaviour (save every modification immediately) can be achieved using the option --saveAfter 1
 - shortcuts can be defined for two keys
 - "mod compose startid length [form]" optional form of the new MTW
 
@@ -8,7 +11,7 @@ Version 2.9.1
 - correction: replace "\n" in MISC:SpacesAfter= by space in "# text = " line
 
 Version 2.9.0
-- options --features and --deprels can read official specifications for valid features and deprels 
+- options --features and --deprels can read official specifications for valid features and deprels
   in https://github.com/UniversalDependencies/tools/tree/master/data (features.json and deprels.json)
 - new option --language (to read the feature/deprel definitions for a given language (if not given, use only universal features/deprels)
 - new option --include_unused (use features declared as unusued for given language)
@@ -98,7 +101,7 @@ Version 2.2.0
 
 Version 2.1.1
 - clear button for search fields
-- bug correction in "find any" search 
+- bug correction in "find any" search
 
 Version 2.1.0
 - search for sentence id
