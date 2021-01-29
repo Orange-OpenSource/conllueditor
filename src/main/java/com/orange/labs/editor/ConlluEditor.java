@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.0 as of 30th December 2020
+ @version 2.10.1 as of 26th January 2021
  */
 package com.orange.labs.editor;
 
@@ -106,13 +106,17 @@ public class ConlluEditor {
     private String programmeversion;
     private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
 
-    private int debug = 1; 
-    
+    private int debug = 1;
+
     public enum Raw {
         LATEX, CONLLU, SDPARSE, VALIDATION, SPACY_JSON
     };
 
     public ConlluEditor(String conllfile) throws ConllException, IOException {
+         this(conllfile, false);
+    }
+
+    public ConlluEditor(String conllfile, boolean overwrite) throws ConllException, IOException {
         // read properties file created by the maven plugin "properties-maven-plugin" (cf. pom.xml)
         java.util.Properties p = new Properties();
         p.load(ClassLoader.getSystemResourceAsStream("conllueditor.properties"));
@@ -131,7 +135,11 @@ public class ConlluEditor {
                 // file is not git controlled. Check whether conllfile + suffix exist
                 File temp = new File(conllfile + suffix);
                 if (temp.exists()) {
-                    throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
+                    if (overwrite) {
+                        System.err.format("*** ATTENTION option --overwrite: overwriting existing backup file '%s%s'\n", conllfile, suffix);
+                    } else {
+                        throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
+                    }
                 }
                 System.err.format("+++ edited file '%s' not tracked by git, writing all changes to '%s%s'\n", conllfile, conllfile, suffix);
                 break;
@@ -302,7 +310,7 @@ public class ConlluEditor {
     public void setDebug(int d) {
         debug = d;
     }
-    
+
     public void setComparisonFile(String compfilename) {
         try {
             comparisonFile = new ConllFile(new File(compfilename), null);
@@ -617,7 +625,7 @@ public class ConlluEditor {
           finddeprel "true" <string> find a sentence with a deprel or a subtree: "aux" or "det>nsubj"
           mod <field> <tokenid> <value>
                                      modifiy token of current sentence
-                                       field: form leamm upos xpos feat deprel enhdpes misc 
+                                       field: form leamm upos xpos feat deprel enhdpes misc
           mod <fields> <tokenid> <value> <value2>
                                      modifiy token of current sentence (no blanks allowed in <value> or <value2>)
                                        fields:
@@ -625,7 +633,7 @@ public class ConlluEditor {
                                          extracol (set extracolumn named <value> to <value2>)
           mod tomtw <tokenid> <form1> <form2> [...]
                                      transform a token into a multiword token, with the tokens given (form1, form2, ...)
-                                     e.g if token 3 is "wanna", 
+                                     e.g if token 3 is "wanna",
                                          3	wanna	wanna VERB	...
                                      "mod tomtw 2 want to" creates
                                          3-4	wanna	_	_	...
@@ -634,7 +642,7 @@ public class ConlluEditor {
                                     (tokens 3 and 4 normally have to be further edited)
           mod compose <tokenid> <length> [form]
                                      make a MTW from <length> tokens starting with token <tokenid>
-                                     e.g 
+                                     e.g
                                          5	do	VERB	...
                                          6	n't	PART	...
                                      "mod compose 5 2 don't" produces
@@ -645,7 +653,7 @@ public class ConlluEditor {
                                      modify the span of a current MTW (or delete it by setting <endtokenid> to 0
 
           mod split <tokenid> [<position>]]
-                                     split the token with <tokenid> in two. If <position> split form  (and lemma) at this position, 
+                                     split the token with <tokenid> in two. If <position> split form  (and lemma) at this position,
                                      else the new token is simply a copy of the existing one
           mod join <tokenid>         merge the token <tokenid> with the following
           mod delete <tokenid>       delete token with <tokenid> (all deprels of the sentence and all subsequent tokenids will be adapted)
@@ -654,17 +662,17 @@ public class ConlluEditor {
           mod insert <tokenid> <form> [<lemma> [<upos> [<xpos>]]]
                                      insert a new token after the token <tokenid> (new token has id tokenid+1
           mod emptyinsert <tokenid> <form> [<lemma> [<upos> [<xpos>]]]
-                                     enhanced dependencies: insert a new EMPTY token before the token <tokenid> 
+                                     enhanced dependencies: insert a new EMPTY token before the token <tokenid>
                                      (new token has id "<tokenid>.1"
           mod comments <comment>     set the comment fo a sentence (# text, # sent_id, # newpar etc are set automatically!)
           mod undo                   undo last "mod" command (if we are still in the same sentence)
           mod redo                   redo last "undone" "mod" command
-          mod ed add <depid> <headid> <deprel> 
+          mod ed add <depid> <headid> <deprel>
                                      add an enhanced dependency <deprel> from <headid> to <depid>
           mod ed del <depid> <headid>
                                      delete enhanced dependency from <headid> to <depid>
           mod <newheadid> <tokenid> [<deprel>]
-                                     make token <tokenid> a dependant of token <newheadid>. 
+                                     make token <tokenid> a dependant of token <newheadid>.
                                      Keep current deprel unless a new <deprel> is provided.
           save                       save the file either to <filename.conllu>.2 (if <filename.conllu> not git controlled)
                                      or to <filename.conllu> and execute a "git add" and "git commit"
@@ -684,7 +692,7 @@ public class ConlluEditor {
             if (!command.startsWith("mod ")) {
                 // we changed the sentence, forget history
                 history = null;
-                
+
                 if (!command.startsWith("save") && changesSinceSave > 0 && saveafter == -1) {
                     // save sentence because the changed sentence (if saveafter == -1)
                     try {
@@ -1108,6 +1116,7 @@ public class ConlluEditor {
                     || command.startsWith("mod deprel ")
                     || command.startsWith("mod enhdeps ")
                     || command.startsWith("mod feat ")
+                    || command.startsWith("mod addfeat ")
                     || command.startsWith("mod misc ")
                     || command.startsWith("mod extracol ") // mod extracol id colname vals....
                     ) {
@@ -1182,6 +1191,11 @@ public class ConlluEditor {
                         modWord.setFeatures(f[3]);
                         break;
                     }
+                    case "addfeat": {
+                        modWord.addFeature(f[3]);
+                        break;
+                    }
+
                     case "misc": {
                         modWord.setMisc(f[3]);
                         break;
@@ -1856,7 +1870,7 @@ public class ConlluEditor {
                     } catch (IOException ex) {
                         return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                     }
-                  
+
                 } else {
                     return formatErrMsg("no changes to be saved", currentSentenceId);
                 }
@@ -1942,7 +1956,7 @@ public class ConlluEditor {
     private synchronized String writeBackup(int currentSentenceId, ConllWord modWord, String editinfo) throws IOException {
         return writeBackup(currentSentenceId, modWord, editinfo, false);
     }
-    
+
     private synchronized String writeBackup(int currentSentenceId, ConllWord modWord, String editinfo, boolean forcesave) throws IOException {
         if (!forcesave && (saveafter < 0 || changesSinceSave < saveafter)) {
             return null; // no need to save yet
@@ -2035,6 +2049,7 @@ public class ConlluEditor {
         System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
         System.err.println("   --shortcuts <file>   list of shortcut definition (json)");
         System.err.println("   --noedit             only browsing");
+        //System.err.println("   --overwrite         overwrite existing backup file if file ist not git versioned");
         System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
         System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
         System.err.println("   --compare            comparison mode: display a second (gold) tree in gray behind the current tree to see differences");
@@ -2057,6 +2072,7 @@ public class ConlluEditor {
         String rootdir = null;
         String validator = null;
         boolean include_unused = false;
+        boolean overwrite = false;
         int debug = 0x0d;
         int saveafter = -1;
         int mode = 0; // noedit: 1, reinit: 2
@@ -2113,6 +2129,9 @@ public class ConlluEditor {
             } else if (args[a].equals("--reinit")) {
                 mode = 2;
                 argindex += 1;
+            } else if (args[a].equals("--overwrite")) {
+                overwrite = true;
+                argindex += 1;
             } else if (args[a].equals("--compare")) {
                 comparisonFile = args[++a];
                 argindex += 2;
@@ -2124,7 +2143,7 @@ public class ConlluEditor {
         }
 
         try {
-            ConlluEditor ce = new ConlluEditor(args[argindex]);
+            ConlluEditor ce = new ConlluEditor(args[argindex], overwrite);
             if (uposfiles != null) {
                 ce.setValidUPOS(uposfiles);
             }
@@ -2150,7 +2169,7 @@ public class ConlluEditor {
             }
 
             ce.setDebug(debug);
-            
+
             if (comparisonFile != null) {
                 ce.setComparisonFile(comparisonFile);
             }

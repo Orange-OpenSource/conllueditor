@@ -92,7 +92,7 @@ public class TestConlluEditor {
 
         URL url = this.getClass().getResource("test.tex");
 
-        // call process to be sure makeTrees has been  called
+        // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
         ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.LATEX, 13);
@@ -126,7 +126,7 @@ public class TestConlluEditor {
 
         URL url = this.getClass().getResource("test.json");
 
-        // call proces to be sure makeTrees has been  called
+        // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
         ce.process("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13);
@@ -173,6 +173,135 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
     }
+
+    @Test
+    public void test05Mod() throws IOException {
+        name("modifying form, lemma, feat, upos, xpos, deprel and head");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".21");
+        ce.process("mod lemma 9 Lemma", 0, "editinfo");
+        ce.process("mod form 9 Form", 0, "editinfo");
+        ce.process("mod upos 9 X", 0, "editinfo");
+        ce.process("mod xpos 9 test", 0, "editinfo");
+        ce.process("mod feat 9 Num=Sg|Gen=F", 0, "editinfo");
+        ce.process("mod feat 9 NE=Place", 0, "editinfo"); // overwrites previous command
+        ce.process("mod addfeat 9 Other=Val", 0, "editinfo");
+        ce.process("mod deprel 9 dep", 0, "editinfo");
+        ce.process("mod 9 1", 0, "editinfo");
+
+        URL ref = this.getClass().getResource("test.edit.conllu");
+        URL res = this.getClass().getResource("test.conllu.21"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test061InvalidHead() throws IOException {
+        name("setting invalid head (setting head to a dependant node)");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".22");
+
+        // call read to be sure makeTrees has been called on sentence 1
+        //String rtc =
+        ce.process("read 1", 1, "editinfo");
+        String rtc = ce.process("mod 9 12 dep", 1, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "InvalidHead.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("InvalidHead.json");
+
+        Assert.assertEquals(String.format("Find invalid head (below dep)return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test062HeadBeyondLastToken() throws IOException {
+        name("setting invalid head (head id after last token)");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".23");
+
+        // call read to be sure makeTrees has been called on sentence 1
+        //String rtc =
+        ce.process("read 1", 1, "editinfo");
+        String rtc = ce.process("mod 9 22 dep", 1, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "InvalidHeadId.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("InvalidHeadId.json");
+
+        Assert.assertEquals(String.format("Find head id too big return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test063HeadIsDep() throws IOException {
+        name("setting invalid head (head id is the same as Dep Id)");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".24");
+
+        // call read to be sure makeTrees has been called on sentence 1
+        //String rtc =
+        ce.process("read 1", 1, "editinfo");
+        String rtc = ce.process("mod 9 9 dep", 1, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "InvalidHeadsameasDep.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("InvalidHeadsameasDep.json");
+
+        Assert.assertEquals(String.format("Find head == dep return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test064InvaldDepId() throws IOException {
+        name("Dep ID does not exist");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".25");
+
+        // call read to be sure makeTrees has been called on sentence 1
+        //String rtc =
+        ce.process("read 1", 1, "editinfo");
+        String rtc = ce.process("mod 19 9 dep", 1, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "InvalidDep.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("InvalidDep.json");
+
+        Assert.assertEquals(String.format("Find invalid dep return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    // head beyond last token
+    // head == dep
 
     @Test
     public void test11EditJoinSplit() throws IOException {
@@ -339,10 +468,10 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-        
+
     }
 
-    
+
     @Test
     public void test19SentSplit() throws IOException {
         name("split sentences (with enhanced dependencies and empty words");

@@ -1,5 +1,5 @@
 {
-    "comment": "this files defines shortcuts to fast edit UPOS, xpos and deprel of the active word. For xpos two values can to be given in a list: XPOS and UPOS)",
+    "comment": "this files defines shortcuts to fast edit upos, xpos, feats and deprel of the active word. For xpos two values can to be given in a list: XPOS and UPOS). +, -, ? and = have hardwired meanings and cannot be used in shortcuts",
     "upos": {
         "AV": "ADV",
         "C": "CCONJ",

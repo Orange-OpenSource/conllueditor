@@ -1,5 +1,6 @@
 Version 2.10.1
 - shortcuts can have any length, shortcuts to set Feature=Value pairs
+- new tests
 
 Version 2.10.0
 - new default for saving: without the option --saveAfter the conllu file is saved whenever a new sentence is chosen (next, prec, ...)

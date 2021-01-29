@@ -82,7 +82,8 @@
                     <td colspan="1">
                         <span class="sentinfo">filename:</span> <span onmousedown="ToggleSearch();" id="filename">(conllu-filename)</span>
                         <span id="mode"></span>
-                        <span class="editmode" id="changespendingsave"></span>
+                        <span class="sentinfo">&nbsp;&nbsp;changes: </span> <span class="editmode" id="changespendingsave">0</span>
+                        <span class="sentinfo" id="psc">&nbsp;&nbsp;pending shortcuts: </span> <span class="editmode" id="pendingshortcuts"></span>
                     </td>
                     <!--td rowspan="2" width="200" id="logo" title="?" >
                         <svg viewBox="0 0 130 55" transform="scale(1 1) translate(0 0)">
@@ -114,7 +115,7 @@
                         <button class="mycheck mybutton" id="r2l" title="activate for sentennces in Arabic or Hebrew script">right to left</button>
                         <!--button class="mycheck mybutton" id="extracols" title="show contents of columns > 10">extra cols</button-->
 
-                        <button class ="editbuttons mybutton editmode" title="save file befor min edits is reached (option --saveAfter)" id="save">save file on server</button>
+                        <button class ="editbuttons mybutton editmode" title="save file before min edits are reached (option --saveAfter)" id="save">save file on server</button>
                         <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
 
                         <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();" title="hide/show search fields">less</button>
@@ -194,10 +195,10 @@
                         <!-- tables with shortcuts (invoked with key "?" -->
                    <table id="shortcuthelp">
                       <tr><td class="sc">shortcuts</td> <td id="scfilename" class="sc"></td></tr>
-                      <tr><td class="sc">UPOS</td><td id="uposshortcuts"></td></tr>
-                      <tr><td class="sc">XPOS</td><td id="xposshortcuts"></td></tr>
-                      <tr><td class="sc">Deplabel</td><td id="deplshortcuts"></td></tr>
-                      <tr><td class="sc">Features</td><td id="featsshortcuts"></td></tr>
+                      <tr><td class="sc" id="upostr">UPOS</td><td id="uposshortcuts"></td></tr>
+                      <tr><td class="sc" id="xpostr">XPOS</td><td id="xposshortcuts"></td></tr>
+                      <tr><td class="sc" id="depreltr">Deplabel</td><td id="deplshortcuts"></td></tr>
+                      <tr><td class="sc" id="featstr">Features</td><td id="featsshortcuts"></td></tr>
                   </table>
                 </td></tr>
             </table>
