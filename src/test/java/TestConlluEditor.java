@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.9.0 as of 30th December 2020
+ @version 2.10.2 as of 22nd February 2021
  */
 
 import com.google.gson.Gson;
@@ -179,6 +179,7 @@ public class TestConlluEditor {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".21");
+        ce.setSaveafter(1);
         ce.process("mod lemma 9 Lemma", 0, "editinfo");
         ce.process("mod form 9 Form", 0, "editinfo");
         ce.process("mod upos 9 X", 0, "editinfo");
@@ -201,6 +202,7 @@ public class TestConlluEditor {
         name("setting invalid head (setting head to a dependant node)");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".22");
+        ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
@@ -227,6 +229,7 @@ public class TestConlluEditor {
         name("setting invalid head (head id after last token)");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".23");
+        ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
@@ -253,6 +256,7 @@ public class TestConlluEditor {
         name("setting invalid head (head id is the same as Dep Id)");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".24");
+        ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
@@ -279,6 +283,7 @@ public class TestConlluEditor {
         name("Dep ID does not exist");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".25");
+        ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
@@ -307,11 +312,13 @@ public class TestConlluEditor {
     public void test11EditJoinSplit() throws IOException {
         name("modifying lemma, deprel, and split/join");
         ce.setCallcitcommot(false);
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod lemma 3 Oasis", 3, "editinfo");
         /*rtc = */ce.process("mod 1 2 detfalse", 3, "editinfo");
         ce.process("mod split 19", 3, "editinfo");
         ce.process("mod join 5", 3, "editinfo");
+
 
         URL ref = this.getClass().getResource("test.mod.conllu");
         URL res = this.getClass().getResource("test.conllu.2"); // modified file
@@ -325,6 +332,7 @@ public class TestConlluEditor {
         name("split/join before a MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".5");
+        ce.setSaveafter(1);
         ce.process("mod split 2 3", 4, "editinfo");
         ce.process("mod join 5", 4, "editinfo");
 
@@ -340,6 +348,7 @@ public class TestConlluEditor {
         name("split/join before a empty word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".6");
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod split 5 ", 16, "editinfo");
         ce.process("mod join 13", 16, "editinfo");
@@ -356,6 +365,7 @@ public class TestConlluEditor {
         name("split/join before a enhanced deps");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".7");
+        ce.setSaveafter(1);
         ce.process("mod split 4 ", 13, "editinfo");
         ce.process("mod split 3", 13, "editinfo");
         ce.process("mod join 4", 13, "editinfo");
@@ -372,6 +382,7 @@ public class TestConlluEditor {
         name("create two MTW with three/two words and rename contracted form");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".8");
+        ce.setSaveafter(1);
         ce.process("mod compose 1 3", 17, "editinfo");
         ce.process("mod editmtw 1 3 Dáselle", 17, "editinfo");
 
@@ -390,6 +401,7 @@ public class TestConlluEditor {
         name("join overlapping be first word of a MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".9");
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod join 5", 6, "editinfo");
 
@@ -405,6 +417,7 @@ public class TestConlluEditor {
         name("join overlapping be last word of a MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".10");
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod join 6", 6, "editinfo");
 
@@ -420,6 +433,7 @@ public class TestConlluEditor {
         name("create MTW with SpaceAfter=No");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".18");
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod compose 9 2", 0, "editinfo");
 
@@ -435,6 +449,7 @@ public class TestConlluEditor {
         name("create MTW from Word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".181");
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod misc 5 SpaceAfter=No", 0, "editinfo");
         ce.process("mod tomtw 5 su uu ur", 0, "editinfo");
@@ -452,6 +467,7 @@ public class TestConlluEditor {
         name("create MTW from word which is already part of an MTW");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".182");
+        ce.setSaveafter(1);
         //String rtc =
         String rtc = ce.process("mod tomtw 8 aa bb", 4, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -477,6 +493,7 @@ public class TestConlluEditor {
         name("split sentences (with enhanced dependencies and empty words");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".17");
+        ce.setSaveafter(1);
         //String rtc =
         ce.process("mod sentsplit 11", 16, "editinfo");
 
@@ -492,6 +509,8 @@ public class TestConlluEditor {
     public void test21Read() throws IOException {
         name("read sentence");
         ce.setCallcitcommot(false);
+        ce.setSaveafter(1);
+
         String rtc = ce.process("read 13", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -511,6 +530,7 @@ public class TestConlluEditor {
     public void test22ReadSecond() throws IOException {
         name("read a second sentence");
         ce.setCallcitcommot(false);
+        ce.setSaveafter(1);
         String rtc = ce.process("read 16", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -530,6 +550,7 @@ public class TestConlluEditor {
     public void test31FindLemma() throws IOException {
         name("findlemma");
         ce.setCallcitcommot(false);
+        ce.setSaveafter(1);
         String rtc = ce.process("findlemma false fromage/.*/puer", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -550,6 +571,7 @@ public class TestConlluEditor {
     public void test32FindForm() throws IOException {
         name("findword");
         ce.setCallcitcommot(false);
+        ce.setSaveafter(1);
         String rtc = ce.process("findword false \" and \"", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -676,6 +698,7 @@ public class TestConlluEditor {
         name("modifying UPOS and Lemma, followed by undo");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
+        ce.setSaveafter(1);
         ce.process("mod lemma 1 Sammie", 13, "editinfo");
         ce.process("mod upos 2 VERBPAST", 13, "editinfo");
         ce.process("mod undo", 13, "editinfo");
@@ -692,6 +715,7 @@ public class TestConlluEditor {
         name("adding/deleting enhanced dependency");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".4");
+        ce.setSaveafter(1);
         ce.process("mod ed add 7 6 ref", 7, "editinfo");
         ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
         ce.process("mod ed del 1 4", 11, "editinfo");
@@ -783,6 +807,7 @@ public class TestConlluEditor {
         name("delete words");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".11");
+        ce.setSaveafter(1);
         ce.process("mod delete 12", 16, "editinfo");
         ce.process("mod delete 9", 16, "editinfo");
         ce.process("mod delete 10", 16, "editinfo");
@@ -800,6 +825,7 @@ public class TestConlluEditor {
         name("insert empty word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".12");
+        ce.setSaveafter(1);
         ce.process("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
         ce.process("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
 
@@ -829,6 +855,8 @@ public class TestConlluEditor {
         name("delete empty word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".14");
+        ce.setSaveafter(1);
+
 
         ce.process("mod emptydelete 5.1", 13, "editinfo");
         URL ref = this.getClass().getResource("test.deleteempty.conllu");

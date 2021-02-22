@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.0 as of 7th May 2020
+ @version 2.10.2 as of 22nd February 2021
  */
 
 import com.google.gson.JsonElement;
@@ -156,6 +156,8 @@ public class TestConlluPlus {
         name("modifying columns 11 and 12");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".3");
+        ce.setSaveafter(1);
+
         //String rtc = 
         ce.process("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
         //rtc =
@@ -177,6 +179,7 @@ public class TestConlluPlus {
         name("trying to modify columns 11 and 12 with invalid colname");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".4");
+        ce.setSaveafter(1);
 
         String rtc = ce.process("mod extracol 8 ZZSEM:COREF I:COREF9", 0, "editinfo");
         File out = new File(folder, "fileout3.json");

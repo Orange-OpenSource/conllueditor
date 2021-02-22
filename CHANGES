@@ -1,3 +1,6 @@
+Version 2.10.2
+- bug in maven tests corrected (using --saveAfter 1 in tests to have output file written immediately)
+
 Version 2.10.1
 - shortcuts can have any length, shortcuts to set Feature=Value pairs
 - new tests
