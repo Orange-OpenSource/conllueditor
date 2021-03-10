@@ -1,3 +1,6 @@
+Version 2.10.3
+- sort features case insensitive in all cases (even when duplicating a token)
+
 Version 2.10.2
 - bug in maven tests corrected (using --saveAfter 1 in tests to have output file written immediately)
 

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.8.1 as of 25th September 2020
+ @version 2.10.3 as of 11th March 2021
  */
 package com.orange.labs.conllparser;
 
@@ -97,7 +97,7 @@ public class ConllWord {
     //private Map<Integer, LinkedHashSet<String>> namedColumns; // non standardcolums. the index is the column position (11, 12 ...)
     private Map<String, LinkedHashSet<String>> namedColumns; // non standardcolums: name: values
 
-    public static boolean orderfeatures = true; // order morphological features ore keep them as they are in the CoNLL-U data
+    public static boolean orderfeatures = true; // order morphological features or keep them as they are in the CoNLL-U data
 
     private int start = -1; // start offset in the sentence
     private int end = -1; // offset after the last character (not taking into account SpaceAfter !)
@@ -131,7 +131,8 @@ public class ConllWord {
         upostag = orig.getUpostag();
         if (orig.getFeatures() != null) {
             if (orderfeatures) {
-                features = new TreeMap<>(orig.getFeatures());
+                features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+                features.putAll(orig.getFeatures());
             } else {
                 features = new LinkedHashMap<>(orig.getFeatures());
             }
@@ -1604,7 +1605,7 @@ public class ConllWord {
         }
         return false;
     }
-    
+
     public void setMisc(Map<String, Object> misc) {
         this.misc = misc;
         spacesAfter = " ";
@@ -1642,7 +1643,7 @@ public class ConllWord {
     public String getSpacesBefore() {
         return spacesBefore;
     }
-    
+
     public ConllWord getHeadWord() {
         return headWord;
     }
