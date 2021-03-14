@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    @version 2.10.1 as of 26th January 2021
+    @version 2.11.0 as of 14th March 2021
     -->
 
     <head>
@@ -115,10 +115,11 @@
                         <button class="mycheck mybutton" id="r2l" title="activate for sentennces in Arabic or Hebrew script">right to left</button>
                         <!--button class="mycheck mybutton" id="extracols" title="show contents of columns > 10">extra cols</button-->
 
-                        <button class ="editbuttons mybutton editmode" title="save file before min edits are reached (option --saveAfter)" id="save">save file on server</button>
+                        <button class ="editbuttons mybutton editmode" title="save file before min edits are reached (option --saveAfter)" id="save">save changes</button>
                         <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
 
-                        <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();" title="hide/show search fields">less</button>
+                        <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();" title="hide/show search fields">hide search</button>
+                        <button class="mybutton" id="act_subtree" style="width:130" onmousedown="ToggleSubtree();" title="hide/show subtree search">show subtree search</button>
                     </td>
                 </tr>
 
@@ -201,7 +202,30 @@
                       <tr><td class="sc" id="featstr">Features</td><td id="featsshortcuts"></td></tr>
                   </table>
                 </td></tr>
+
+                <tr><td id="subtreesearch">
+                    <textarea rows="4" class="inputfield" title="subtree" type="text" id="editsubtree"># global.columns = ID&#9;FORM&#9;LEMMA&#9;UPOS&#9;XPOS&#9;FEATS&#9;HEAD&#9;DEPREL
+#1&#9;_&#9;_&#9;_&#9;_&#9;_&#9;0&#9;_
+#2&#9;_&#9;_&#9;_&#9;_&#9;_&#9;1&#9;_
+                    </textarea>
+                    <div id="subtrees" style="display:inline-block">
+                        <div>
+                            <span class="contain">
+                                <button class="editbuttons mybutton go" id="findsubtree">&nbsp;</button>
+                            </span>
+                        </div>
+
+                        <div style="margin-top: 20%;">
+                            <input class="inputfield" type="text" id="subtreeroot" placeholder="subtree root id" title="id of the word which should become the root of the subtree subtree" size="2">
+                        </div>
+                        <div>
+                            <button class="editbuttons mybutton" id="createsubtree">import subtree</button>
+                        </div>
+                    </div>
+                </td></tr>
             </table>
+
+
 
             <div id="sentencetext">
                 <span class="sentinfo" id="currentsent">1</span>/<span class="sentinfo" id="total"></span>: <span id="titre"></span>

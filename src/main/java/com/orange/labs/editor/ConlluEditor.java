@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.1 as of 26th January 2021
+ @version 2.11.0 as of 14th March 2021
  */
 package com.orange.labs.editor;
 
@@ -43,6 +43,7 @@ import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
 import com.orange.labs.conllparser.ValidFeatures;
 import com.orange.labs.httpserver.ServeurHTTP;
+import com.orange.labs.search.SubTreeSearch;
 import java.io.BufferedReader;
 
 import java.io.BufferedWriter;
@@ -335,6 +336,13 @@ public class ConlluEditor {
         return solution;
     }
 
+    private String returnSubtree(String subtree, int sentid) {
+        JsonObject solution = prepare(sentid);
+        solution.addProperty("ok", subtree);
+        solution.addProperty("changes", changesSinceSave);
+        return solution.toString();
+    }
+    
     private String formatErrMsg(String msg, int sentid) {
         JsonObject solution = prepare(sentid);
         solution.addProperty("error", msg);
@@ -623,6 +631,8 @@ public class ConlluEditor {
           find{lemma|feat|upos|xpos} "true" <regex>
                                      find sentence with lemma/feat/upos/xpos matching regex
           finddeprel "true" <string> find a sentence with a deprel or a subtree: "aux" or "det>nsubj"
+          findsubtree "true" <string> find a sentence which matches the partial tree (given as CoNLL-U or CoNLL-U plus)
+          createsubtree <tokenid>    create a subtree by taking given id as root
           mod <field> <tokenid> <value>
                                      modifiy token of current sentence
                                        field: form leamm upos xpos feat deprel enhdpes misc
@@ -1009,7 +1019,51 @@ public class ConlluEditor {
                     }
                 }
                 return formatErrMsg(field + " not found «" + f[2] + "»", currentSentenceId);
-
+            } else if (command.startsWith("findsubtree ")) {
+                String[] f = command.trim().split(" +", 3);
+                if (f.length != 3) {
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+                }
+                // si le deuxième mot est "true" on cherche en arrière
+                boolean backwards = f[1].equalsIgnoreCase("true");
+                
+                SubTreeSearch std = new SubTreeSearch(f[2]);
+                
+                for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
+                        (backwards ? i >= 0 : i < numberOfSentences);
+                        i = (backwards ? i - 1 : i + 1)) {
+                    ConllSentence cs = cfile.getSentences().get(i);
+                    //int wid = std.match(cs);
+                    Set<Integer>ids = std.match(cs);
+                    if (!ids.isEmpty())//(wid > -1)
+                            {
+                        currentSentenceId = i;
+                        // TODO highlight
+                        ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, ids);
+                        return returnTree(currentSentenceId, cs, hl);
+                    }
+                }
+                return formatErrMsg("subtree not found «" + f[2] + "»", currentSentenceId);
+               
+            } else if (command.startsWith("createsubtree ")) {
+                String[] f = command.trim().split(" +");
+                if (f.length < 2) {
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+                }
+                ConllSentence cs = cfile.getSentences().get(currentSentenceId);
+                int wid = Integer.parseInt(f[1]);
+                ConllSentence subtree = cs.getSubtree(wid);
+                
+                StringBuilder sb = new StringBuilder();
+                sb.append("# global.columns =");
+                for(String s : cs.getColumndefs().keySet()) {
+                    sb.append(" ").append(s);
+                }
+                sb.append("\n").append(subtree.toString());
+                
+                return returnSubtree(sb.toString(), currentSentenceId);
+                
+                //return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
             } else if (command.startsWith("finddeprel ")) {
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {

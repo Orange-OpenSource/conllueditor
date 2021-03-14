@@ -47,6 +47,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * read and parse CONLL
@@ -1621,6 +1622,7 @@ public class ConllSentence {
             idshl.put(wordid, field);
         }
 
+        // highlight all words from wordid to lastwordid
         public Highlight(ConllWord.Fields field, int wordid, int lastwordid) {
             //this.field = field;
             //ids = new HashSet<>();
@@ -1630,7 +1632,7 @@ public class ConllSentence {
                 idshl.put(id, field);
             }
         }
-
+        
         // highlight a set of words on field
         public Highlight(ConllWord.Fields field, Set<Integer> ids) {
             //this.field = field;
@@ -1827,6 +1829,48 @@ public class ConllSentence {
             }
         }
         return sb.toString();
+    }
+
+    // outputs the word with id and all it is commanding as a ConlluSentence
+    public ConllSentence getSubtree(int id) throws ConllException {
+        if (id < 1 || id > words.size()) {
+            throw new ConllException("ID is not in sentence");
+        }
+        this.makeTrees(null);
+
+        Map<Integer, ConllWord> subtree = new TreeMap<>();
+        ConllWord head = getWord(id);
+
+        subtree.put(head.getId(), head);
+        getSTdeps(head, subtree);
+
+        List<ConllWord>subtreelist = new ArrayList<>();
+        for (ConllWord cw : subtree.values()) {
+            ConllWord clone = new ConllWord(cw);
+            if (cw == head) {
+                clone.setHead(0);
+                clone.setDeplabel("_");
+            }
+            subtreelist.add(clone);
+        }
+
+        ConllSentence newcs = new ConllSentence(subtreelist);
+        newcs.normalise();
+
+        //System.out.println(columndefs.keySet());
+        //System.out.println(newcs);
+
+        return newcs;
+    }
+
+    // recursively get all kids
+    private void getSTdeps(ConllWord head, Map<Integer, ConllWord>st) {
+        //System.out.println("RECURSION " + head.getDependents());
+        for (ConllWord dep : head.getDependents()) {
+            //System.out.println("adding " + dep );
+            st.put(dep.getId(), dep);
+            getSTdeps(dep, st);
+        }
     }
 
     public void setNewpar(String newpar) {

@@ -310,6 +310,53 @@ In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
 tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
+
+
+## Searching
+
+The search fields at the top of the screen can be used to search for forms, lemmas, UPOS, XPOS, deprels (or sequences of these),
+comments and sentences ids.
+
+* The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).   For example
+  * `the` finds next occurrance of _the_, including _them_ or _weather_.
+  * `" the "` finds next occurrance of the definite article _the_.
+  * `some of` finds next occurrance of _some of_ (no quotes necessary, since the search string does not start with a blank). 
+  * The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
+        Upos: `AUX/.*/VERB` looks for a sequence of words with upos tags _AUX_, _any_, _VERB_
+* The any search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e` (form, lemma, upos, xpos, deprel, enhanced deps) a `%` can be used to search for a word on more than one criterium.
+  * `l:the/u:ADJ/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective and the last is _mouse_
+  * `l:the/u:ADJ%x:JJR/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective which has the XPOS JJR and the last word is _mouse_ 
+* The deprel search field accepts a single or a list of regex, separated by `<`, `=` or `>` to search for branches in the dependency tree, for example
+  * `cc<nsubj` finds a word with _cc_ deprel whose head has also a _nsubj_ child.
+  * `case>mark` finds a word with _case_ deprel which has a child with a _mark_ deprel.
+  * `case=det` finds a word with _case_ deprel whose head has a child with a _mark_ deprel.
+Click on the loop symbol to start the search. Activate the backwards symbol, to search backwards
+
+### Matching subtrees
+
+The `show/hide subtree search` key toggles the subtree search window. This allows you to input a tree (using `_` as wildcards and regular expressions).
+Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with
+a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions.
+E.g.
+
+```
+# global.columns = ID	LEMMA	UPOS	FEATS	HEAD	DEPREL
+1	_	AD.*	_	3	_
+2	_	DET	Gender=Fem	3	_
+3	_	NOUN	_	0	_
+```
+
+matches any sentences wich contains a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and 
+a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
+
+![Subtree search](doc/subtreesearch.png)
+
+In order facilitate the edition of the subtree, you can enter the Id of a word in the tree and click
+the `import subtree`? Doing so enters a partial tree of the word the current sentence and all its direct
+and indirect dependents.
+
+![Subtree search](doc/importsubtree.png)
+
 ## Enhanced Dependencies
 Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-annotation])
 in graphic mode can only be edited in flat mode. If the button `edit enhanced dependencies` is activated
@@ -533,6 +580,7 @@ the enhanced dependency field must contain one or more `|`-separated `head:depre
 
 # Todo list
 * be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
+* subtree search: allow subtrees which require the absence of a dependant in the matching sentence
 * better support for empty nodes
 * rewrite ConllWord/ConllSentence classes from scratch
 * use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)

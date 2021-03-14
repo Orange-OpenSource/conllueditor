@@ -546,6 +546,61 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+
+    @Test
+    public void test301FindSubtree() throws IOException {
+        name("findsenteid");
+        ce.setCallcitcommot(false);
+
+        String subtree = "# global.columns = ID	LEMMA	UPOS	FEATS	HEAD	DEPREL\n" +
+                        "1	_	ADP	_	3	_\n" +
+                        "2	_	DET	Gender=Fem	3	_\n" +
+                        "3	_	NOUN	_	0	_\n";
+
+        String rtc = ce.process("findsubtree false "+subtree, 5, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "findsubtree301.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("findsubtree301.json");
+
+        Assert.assertEquals(String.format("Find subtree return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test302FindSubtree() throws IOException {
+        name("findsenteid");
+        ce.setCallcitcommot(false);
+
+        String subtree = "# global.columns = ID	FORM	LEMMA	UPOS	FEATS	HEAD	DEPREL\n" +
+                        "1	en	_	DET	_	3	d.*\n" +
+                        "2	_	_	ADJ	_	1	fixed\n" +
+                        "3	_	_	NOUN	_	4	_\n" +
+                        "4	_	_	NOUN	_	0	_\n";
+
+        String rtc = ce.process("findsubtree false "+subtree, 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "findsubtree302.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("findsubtree302.json");
+
+        Assert.assertEquals(String.format("Find subtree return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
     @Test
     public void test31FindLemma() throws IOException {
         name("findlemma");

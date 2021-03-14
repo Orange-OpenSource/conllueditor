@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.1 as of 26th January 2021
+ @version 2.11.0 as of 14th March 2021
 */
 
 body {
@@ -403,7 +403,8 @@ input {
     background-position: 5px center;
 }
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti, #findsentid, #findfeature {
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment,
+#findmulti, #findsentid, #findfeature, #findsubtree {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;
@@ -536,7 +537,23 @@ text {
     display: none;
     font-size: 80%;
     border: 1px solid;
-} 
+    font-family: Mono; 
+}
+
+#subtreesearch {
+    display: none;
+   
+}
+
+#editsubtree {
+    aaaresize: vertical;
+    width: 80%;
+    vertical-align: top;
+}
+
+#subtree {
+    vertical-align: top;
+}
 
 /* table of shortcut help (invoked with "?" key) */
 .sc {

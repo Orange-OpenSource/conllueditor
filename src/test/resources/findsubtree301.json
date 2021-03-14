@@ -1,0 +1,237 @@
+{
+  "sentenceid": 9,
+  "maxsentence": 19,
+  "sentence": "Il aime bien le Miroir aux Alouettes .",
+  "length": 9,
+  "changes": 0,
+  "tree": [
+    {
+      "position": 2,
+      "id": 2,
+      "form": "aime",
+      "lemma": "aimer",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Person",
+          "val": "3"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        }
+      ],
+      "xpos": "VERB",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 1,
+          "id": 1,
+          "form": "Il",
+          "lemma": "il",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Person",
+              "val": "3"
+            },
+            {
+              "name": "PronType",
+              "val": "Prs"
+            }
+          ],
+          "xpos": "PERS_NOM",
+          "upos": "PRON",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 3,
+          "archeight": 1,
+          "id": 3,
+          "form": "bien",
+          "lemma": "bien",
+          "xpos": "ADV",
+          "upos": "ADV",
+          "deprel": "advmod",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 5,
+          "archeight": 2,
+          "id": 5,
+          "form": "Miroir",
+          "lemma": "miroir",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NOUN",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 1,
+              "id": 4,
+              "form": "le",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "ART",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 8,
+          "archeight": 3,
+          "id": 8,
+          "form": "Alouettes",
+          "lemma": "alouette",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Fem"
+            },
+            {
+              "name": "Number",
+              "val": "Plur"
+            }
+          ],
+          "xpos": "NOUN",
+          "upos": "NOUN",
+          "deprel": "obl",
+          "formhighlight": 1,
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 6,
+              "archeight": 2,
+              "id": 6,
+              "form": "à",
+              "lemma": "à",
+              "mwe": {
+                "fromid": 6,
+                "toid": 7,
+                "form": "aux"
+              },
+              "xpos": "ADP",
+              "upos": "ADP",
+              "deprel": "case",
+              "formhighlight": 1,
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
+              "archeight": 1,
+              "id": 7,
+              "form": "les",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Plur"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "ART",
+              "upos": "DET",
+              "deprel": "det",
+              "formhighlight": 1,
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 9,
+          "archeight": 4,
+          "id": 9,
+          "form": ".",
+          "lemma": ".",
+          "misc": [
+            {
+              "name": "SpaceAfter",
+              "val": "No"
+            }
+          ],
+          "xpos": "PUNCT",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 9\n",
+  "canUndo": false,
+  "canRedo": false
+}

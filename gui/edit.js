@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.1 as of 26th January 2021
+ @version 2.11.0 as of 14th March 2021
  */
 
 
@@ -81,6 +81,35 @@ function choosePort() {
         document.getElementById('port').value = c;
     }
 }
+
+// cf. https://jsfiddle.net/2wAzx/13/
+function enableTab(id) {
+    //console.log("aaaa", id);
+    var el = document.getElementById(id);
+    el.onkeydown = function(e) {
+        if (e.keyCode === 9) { // tab was pressed
+
+            // get caret position/selection
+            var val = this.value,
+                start = this.selectionStart,
+                end = this.selectionEnd;
+
+            // set textarea value to: text before caret + tab + text after caret
+            this.value = val.substring(0, start) + '\t' + val.substring(end);
+
+            // put caret at right position again
+            this.selectionStart = this.selectionEnd = start + 1;
+
+            // prevent the focus lose
+            return false;
+        }
+    };
+}
+
+// Enable the tab character onkeypress (onkeydown) inside textarea...
+// ... for a textarea that has an `id="editsubtree"`
+// with //enableTab("editsubtree");
+// in $(document).ready(function () {
 
 
 function downloadSVG(ident) {
@@ -346,16 +375,36 @@ var lastmore = true;
 function switchSearch(on) {
     if (on) {
         //console.log("SEARCH OPENING");
-        $("#act_search").text("less");
+        $("#act_search").text("hide search");
         $(".search").show();
         $('body').css("margin-top", "280px");
         more = true;
     } else {
         //console.log("SEARCH CLOSING");
-        $("#act_search").text("more");
+        $("#act_search").text("show search");
         $(".search").hide();
         if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         more = false;
+    }
+}
+
+
+function ToggleSubtree() {
+    if (more) {
+        switchSearch(false);
+    
+        $("#act_subtree").text("hide subtree search");
+        $("#subtreesearch").show();
+        $('body').css("margin-top", "300px");
+        more = false;
+    } else {
+        switchSearch(true);
+
+        $("#act_subtree").text("show subtree search");
+        $("#subtreesearch").hide();
+        $('body').css("margin-top", "280px");
+        //if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        more = true;
     }
 }
 
@@ -663,28 +712,36 @@ $(window).on('keypress', function (evt) {
     //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
     //console.log("kk", evt.which, unprocessedkeystrokes);
 
-    if($(".modal").is(":visible")) {
+    if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         unsetPShC();
         return;
     }
 
-    if (graphtype == 3) {
+    if (graphtype == 3 ) {
         // in table mode, we need all keys to edit the table cells
         unsetPShC();
         return;
     }
+    
+    if ($("#subtreesearch").is(":visible") && evt.which !== 33) {
+        // when editing a subtree, we need all keys to edit the table cells
+        unsetPShC();
+        return; 
+    }
 
-    if (evt.which == 63) {
+    if (evt.which == 63) { //"?"
         unsetPShC();
         ToggleShortcutHelp();
-    } else if (evt.which == 43) { // +
+    //} else if (evt.which == 33) { //"!"   
+    //    ToggleSubtree();
+    } else if (evt.which == 43) { // "+"
         unsetPShC();
         sendmodifs({"cmd": "next"});
-    } else if (evt.which == 45) { // -
+    } else if (evt.which == 45) { // "-"
         unsetPShC();
         sendmodifs({"cmd": "prec"});
-    } else if (evt.which == 61) { // = validator
+    } else if (evt.which == 61) { // "=" validator
         unsetPShC();
         $("#valid").click();
     } else if (clickedNodes.length == 1) {
@@ -1331,6 +1388,47 @@ function getConllWords(table, head) {
 }
 
 
+function getSubtree(commands) {
+    commands["sentid"] = $("#currentsent").text() - 1; 
+    
+    $.ajax({
+        url: URL_BASE,
+        type: 'POST',
+        async: false, // wait for HTTP finished before returning
+        data: commands, //{ "cmd" : inputtext },
+        headers: {
+            'Content-type': 'text/plain',
+            //'Content-length': inputtext.length
+        },
+        statusCode: {
+            204: function () {
+                alert('No command given');
+            },
+            400: function () {
+                alert('Bad query: ' + data);
+            }
+        },
+        success: function (data) {
+            //console.log("zzzz " + JSON.stringify(data));
+
+            if (data.error != undefined) {
+                //alert(data.error);
+       	        /* show error message */
+       	        $("#errormessagefield").text(data.error);
+                $("#errorMessage").modal();
+            } else {
+                $("#editsubtree").text(data.ok);
+                //formatPhrase(data);
+                //olddata = data;
+            }
+        },
+        error: function (data) {
+            //console.log("ERREUR " + data);
+            alert("An error occurred (is the ConlluEditor server running?)" + data);
+        }
+    });
+}
+
 var olddata = undefined;
 /* send correct command to ConlluEditor server using ajax http post
  and re diesplay sentence afterwards (with json receivend from server after the modif) */
@@ -1393,6 +1491,9 @@ function sendmodifs(commands) {
 $(document).ready(function () {
     choosePort();
     getServerInfo();
+    // Enable the tab character onkeypress (onkeydown) inside textarea...
+    // ... for a textarea that has an `id="editsubtree"`
+    enableTab("editsubtree");
     $("#sentencetext").hide();
 
     /* start comment edit function */
@@ -1777,6 +1878,13 @@ $(document).ready(function () {
             inputtext = "findmulti " + backwards + " " + $("#multifield").val();
         } else if (this.id === "findsentid") {
             inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
+        } else if (this.id === "findsubtree") {
+            inputtext = "findsubtree " + backwards + " " + $("#editsubtree").val();
+        } else if (this.id === "createsubtree") {
+            inputtext = "createsubtree " + $("#subtreeroot").val();
+            datadico = {"cmd": inputtext};
+            getSubtree(datadico);
+            return;
         }
 
         else if (this.id === "save") {
