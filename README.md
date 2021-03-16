@@ -355,7 +355,20 @@ In order facilitate the edition of the subtree, you can enter the Id of a word i
 the `import subtree`? Doing so enters a partial tree of the word the current sentence and all its direct
 and indirect dependents.
 
-![Subtree search](doc/importsubtree.png)
+![Import subtree from current sentence](doc/importsubtree.png)
+
+If the first line in the subtree window is a valid CoNLL-U Plus column definition,
+the imported subtree contains only the indicated columns. For example, if the subtree window
+contains (as a first line):
+
+```
+# global.columns = ID UPOS HEAD DEPREL
+```
+
+`import subtree` imports
+
+![Import subtree with selected columns](doc/importsubtree-columnsdef.png)
+
 
 ## Enhanced Dependencies
 Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-annotation])

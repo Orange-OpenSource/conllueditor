@@ -41,17 +41,20 @@ import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
+import com.orange.labs.conllparser.ConlluPlusConverter;
 import com.orange.labs.conllparser.ValidFeatures;
 import com.orange.labs.httpserver.ServeurHTTP;
 import com.orange.labs.search.SubTreeSearch;
 import java.io.BufferedReader;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -114,7 +117,7 @@ public class ConlluEditor {
     };
 
     public ConlluEditor(String conllfile) throws ConllException, IOException {
-         this(conllfile, false);
+        this(conllfile, false);
     }
 
     public ConlluEditor(String conllfile, boolean overwrite) throws ConllException, IOException {
@@ -184,8 +187,9 @@ public class ConlluEditor {
     }
 
     private void init() throws IOException, ConllException {
-        if ((debug & 0x01) == 1)
+        if ((debug & 0x01) == 1) {
             System.err.println("Loading " + filename);
+        }
         cfile = new ConllFile(filename, null);
         numberOfSentences = cfile.getSentences().size();
     }
@@ -302,10 +306,11 @@ public class ConlluEditor {
 
     public void setSaveafter(int saveafter) {
         this.saveafter = saveafter;
-        if (this.saveafter < 0)
+        if (this.saveafter < 0) {
             System.err.format("saving file when current sentence is changed\n");
-        else
+        } else {
             System.err.format("saving file after %d edits\n", saveafter);
+        }
     }
 
     public void setDebug(int d) {
@@ -342,7 +347,7 @@ public class ConlluEditor {
         solution.addProperty("changes", changesSinceSave);
         return solution.toString();
     }
-    
+
     private String formatErrMsg(String msg, int sentid) {
         JsonObject solution = prepare(sentid);
         solution.addProperty("error", msg);
@@ -696,8 +701,9 @@ public class ConlluEditor {
             }
         }
 
-        if ((debug & 0x01) == 1)
-           System.err.println("COMMAND [" + command + "] sid: " + currentSentenceId);
+        if ((debug & 0x01) == 1) {
+            System.err.println("COMMAND [" + command + "] sid: " + currentSentenceId);
+        }
         try {
             if (!command.startsWith("mod ")) {
                 // we changed the sentence, forget history
@@ -1026,44 +1032,61 @@ public class ConlluEditor {
                 }
                 // si le deuxième mot est "true" on cherche en arrière
                 boolean backwards = f[1].equalsIgnoreCase("true");
-                
+
                 SubTreeSearch std = new SubTreeSearch(f[2]);
-                
+
                 for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
                         (backwards ? i >= 0 : i < numberOfSentences);
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
-                    //int wid = std.match(cs);
-                    Set<Integer>ids = std.match(cs);
-                    if (!ids.isEmpty())//(wid > -1)
-                            {
+
+                    Set<Integer> ids = std.match(cs);
+                    if (!ids.isEmpty()) {
                         currentSentenceId = i;
-                        // TODO highlight
                         ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, ids);
                         return returnTree(currentSentenceId, cs, hl);
                     }
                 }
                 return formatErrMsg("subtree not found «" + f[2] + "»", currentSentenceId);
-               
+
             } else if (command.startsWith("createsubtree ")) {
-                String[] f = command.trim().split(" +");
+                String[] f = command.trim().split(" +", 3);
                 if (f.length < 2) {
                     return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
+
+                String coldefs = null;
+                if (f.length == 3) {
+                    if (!f[2].startsWith("# global.columns =")
+                            && f[2].startsWith("#global.columns=")) {
+                        return formatErrMsg("INVALID global.columns line «" + command + "»", currentSentenceId);
+                    }
+                    if (!f[2].contains("ID") || !f[2].contains("HEAD")) {
+                        return formatErrMsg("INVALID glocal.columns line, must contain at least ID and HEAD «" + command + "»", currentSentenceId);
+                    }
+                    coldefs = f[2].split("=")[1].strip().replaceAll("\\s+", ",");
+                }
+
                 ConllSentence cs = cfile.getSentences().get(currentSentenceId);
                 int wid = Integer.parseInt(f[1]);
                 ConllSentence subtree = cs.getSubtree(wid);
-                
                 StringBuilder sb = new StringBuilder();
-                sb.append("# global.columns =");
-                for(String s : cs.getColumndefs().keySet()) {
-                    sb.append(" ").append(s);
+
+                if (coldefs != null) {
+                    ConlluPlusConverter cpc = new ConlluPlusConverter(coldefs);
+                    InputStream is = new ByteArrayInputStream(subtree.toString().getBytes(StandardCharsets.UTF_8));
+                    String gg = cpc.convert(is);
+                    sb.append(gg);
                 }
-                sb.append("\n").append(subtree.toString());
-                
+                else {
+                    sb.append("# global.columns = ");
+                    for (String s : cs.getColumndefs().keySet()) {
+                      sb.append(" ").append(s);
+                    }
+                    sb.append("\n").append(subtree.toString());
+                }
                 return returnSubtree(sb.toString(), currentSentenceId);
-                
-                //return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+
             } else if (command.startsWith("finddeprel ")) {
                 String[] f = command.trim().split(" +");
                 if (f.length != 3) {
@@ -2016,8 +2039,9 @@ public class ConlluEditor {
             return null; // no need to save yet
         }
         File dir = filename.getParentFile().toPath().normalize().toFile();
-        if ((debug & 0x01) == 2)
+        if ((debug & 0x01) == 2) {
             System.err.println("Saving file " + filename);
+        }
 
         try {
             //Git git = Git.open(dir);
@@ -2062,7 +2086,7 @@ public class ConlluEditor {
                     changesSinceSave = 0;
                     git.add().addFilepattern(filepathInGit.toString()).call();
                     if (modWord == null) {
-                        git.commit().setMessage(String.format("saving %s sentence: %d (%s)", filename, currentSentenceId+1, editinfo)).call();
+                        git.commit().setMessage(String.format("saving %s sentence: %d (%s)", filename, currentSentenceId + 1, editinfo)).call();
                     } else {
                         //String sentid = "";
                         //if ()

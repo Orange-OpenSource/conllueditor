@@ -57,7 +57,7 @@ public class ConlluPlusConverter {
     private String globalcolumns = "";
 
     public ConlluPlusConverter(String columndef) throws IOException {
-        // get output column order        
+        // get output column order
         if (columndef == null) {
             outputorder = new ArrayList<>();
             outputorder.add("ID");
@@ -73,7 +73,7 @@ public class ConlluPlusConverter {
         } else {
             outputorder = Arrays.asList(columndef.split(","));
             StringBuilder sb = new StringBuilder();
-            
+
             sb.append("# global.columns =");
             for (String col : outputorder) {
                 sb.append(String.format(" %s", col));
@@ -82,7 +82,7 @@ public class ConlluPlusConverter {
             globalcolumns = sb.toString();
         }
     }
-  
+
     public String convert(String infile) throws IOException, ConllException {
         if (infile.equals("-")) {
             //br = new BufferedReader(new InputStreamReader(System.in));
@@ -93,10 +93,10 @@ public class ConlluPlusConverter {
             //br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         }
     }
-  
+
     public String convert(InputStream instream) throws IOException, ConllException {
         BufferedReader br = new BufferedReader(new InputStreamReader(instream, StandardCharsets.UTF_8));
-        
+
         String line;
         int ct = 0;
 
@@ -147,7 +147,7 @@ public class ConlluPlusConverter {
                     lineholder.put(inputorder.get(i), elems[i]);
                 }
                 //System.err.println("ssssss " + elems.length + " " + lineholder);
-                
+
                 // output the current line in the new column format
                 // if a column is not in the input, we put _
                 boolean first = true;
@@ -169,7 +169,7 @@ public class ConlluPlusConverter {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.err.println("outformat: comma separated CoNLL-U column names");
+            System.err.println("outformat: infile [<comma separated CoNLL-U column names>]");
         } else {
             String coldefs = null;
 

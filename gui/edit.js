@@ -392,7 +392,7 @@ function switchSearch(on) {
 function ToggleSubtree() {
     if (more) {
         switchSearch(false);
-    
+
         $("#act_subtree").text("hide subtree search");
         $("#subtreesearch").show();
         $('body').css("margin-top", "300px");
@@ -723,17 +723,17 @@ $(window).on('keypress', function (evt) {
         unsetPShC();
         return;
     }
-    
+
     if ($("#subtreesearch").is(":visible") && evt.which !== 33) {
         // when editing a subtree, we need all keys to edit the table cells
         unsetPShC();
-        return; 
+        return;
     }
 
     if (evt.which == 63) { //"?"
         unsetPShC();
         ToggleShortcutHelp();
-    //} else if (evt.which == 33) { //"!"   
+    //} else if (evt.which == 33) { //"!"
     //    ToggleSubtree();
     } else if (evt.which == 43) { // "+"
         unsetPShC();
@@ -1389,8 +1389,8 @@ function getConllWords(table, head) {
 
 
 function getSubtree(commands) {
-    commands["sentid"] = $("#currentsent").text() - 1; 
-    
+    commands["sentid"] = $("#currentsent").text() - 1;
+
     $.ajax({
         url: URL_BASE,
         type: 'POST',
@@ -1417,7 +1417,7 @@ function getSubtree(commands) {
        	        $("#errormessagefield").text(data.error);
                 $("#errorMessage").modal();
             } else {
-                $("#editsubtree").text(data.ok);
+                $("#editsubtree").val(data.ok);
                 //formatPhrase(data);
                 //olddata = data;
             }
@@ -1881,7 +1881,15 @@ $(document).ready(function () {
         } else if (this.id === "findsubtree") {
             inputtext = "findsubtree " + backwards + " " + $("#editsubtree").val();
         } else if (this.id === "createsubtree") {
+            // get the id of the head of the subtree
             inputtext = "createsubtree " + $("#subtreeroot").val();
+            // get an eventual CoNLL-U Plus column definition
+            var globalcolumns = $("#editsubtree").val().trim().split("\n")[0];
+            if (globalcolumns.startsWith("# global.columns") ||
+                    globalcolumns.startsWith("#global.columns")) {
+                        inputtext += " " + globalcolumns;
+                    }
+            //console.log("AAAA", globalcolumns);
             datadico = {"cmd": inputtext};
             getSubtree(datadico);
             return;

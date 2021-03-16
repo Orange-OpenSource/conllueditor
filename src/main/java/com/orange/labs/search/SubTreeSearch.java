@@ -116,7 +116,7 @@ public class SubTreeSearch {
                     if (debug) {
                         System.out.println("HEAD matches: " + word.toString());
                     }
-                    
+
                     ok = matchDependant(subtree.getHead(), word, matched);
                     if (!ok) {
                         System.out.println("bad dep match");
@@ -138,12 +138,18 @@ public class SubTreeSearch {
             }
         }
         System.out.println("C-MATCHING WORDS " + matched);
-        return matched;    
+        return matched;
         //return -1;
     }
 
+    /**
+     *
+     * @param subtreeWord word from the subtree to be matched on the sentence
+     * @param word word from the sentence
+     * @param matched list of the words id which matched
+     * @return
+     */
     private boolean matchDependant(ConllWord subtreeWord, ConllWord word, Set<Integer>matched) {
-
         boolean ok = true;
          Set<Integer>locallymatched = new HashSet<>();
         for (ConllWord subtreeDep : subtreeWord.getDependents()) {
@@ -161,7 +167,7 @@ public class SubTreeSearch {
                     if (debug) {
                         System.out.println("    words match");
                     }
-                   
+
                     boolean rtc = matchDependant(subtreeDep, wordDep, locallymatched);
                     if (debug) {
                         System.out.println("   subtrees match: " + rtc);
@@ -183,6 +189,10 @@ public class SubTreeSearch {
         return ok;
     }
 
+    /** returns if the subtreeword matches the word. The checked columns
+     * are form, lemma, upos, xpos, features and deprel. The subtree word may
+     * contain regular expressions. A "_" in the subtree word column matches always
+     */
     private boolean matchWord(ConllWord subtree, ConllWord word) {
         if (!subtree.getForm().equals("_")) {
             if (!word.matchesForm(subtree.getForm())) {
@@ -232,7 +242,7 @@ public class SubTreeSearch {
     }
 
     public static void main(String args[]) throws ConllException, IOException {
-        // test sentence and partial tree       
+        // test sentence and partial tree
         String subtree = readLineByLine(args[0]);
         SubTreeSearch std = new SubTreeSearch(subtree);
 
