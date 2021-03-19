@@ -549,7 +549,7 @@ public class TestConlluEditor {
 
     @Test
     public void test301FindSubtree() throws IOException {
-        name("findsenteid");
+        name("findsubtree1");
         ce.setCallcitcommot(false);
 
         String subtree = "# global.columns = ID	LEMMA	UPOS	FEATS	HEAD	DEPREL\n" +
@@ -576,7 +576,7 @@ public class TestConlluEditor {
 
     @Test
     public void test302FindSubtree() throws IOException {
-        name("findsenteid");
+        name("findsubtree2");
         ce.setCallcitcommot(false);
 
         String subtree = "# global.columns = ID	FORM	LEMMA	UPOS	FEATS	HEAD	DEPREL\n" +
@@ -601,6 +601,72 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+    
+    @Test
+    public void test303CreateSubtree() throws IOException {
+        name("createsubtree 10 columns");
+        ce.setCallcitcommot(false);
+        
+        //ce.process("read 0", 1, "");
+        String rtc = ce.process("createsubtree 7", 0, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "createsubtree10cols.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("createsubtree10cols.json");
+
+        Assert.assertEquals(String.format("Create subtree return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test304CreateSubtree() throws IOException {
+        name("createsubtree selected columns");
+        ce.setCallcitcommot(false);
+        
+        String rtc = ce.process("createsubtree 9 # global.columns = ID LEMMA UPOS HEAD DEPREL", 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "createsubtree5cols.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("createsubtree5cols.json");
+
+        Assert.assertEquals(String.format("Create subtree return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+    
+
+    @Test
+    public void test305CreateSubtreeMissingID() throws IOException {
+        name("createsubtree missing ID column");
+        ce.setCallcitcommot(false);
+        
+        String rtc = ce.process("createsubtree 9 # global.columns = LEMMA UPOS HEAD DEPREL", 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "createsubtreeMissingID.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("createsubtreeMissingID.json");
+
+        Assert.assertEquals(String.format("Create subtree return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+    
     @Test
     public void test31FindLemma() throws IOException {
         name("findlemma");

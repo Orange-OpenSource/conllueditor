@@ -1,0 +1,6 @@
+{
+  "sentenceid": 1,
+  "maxsentence": 19,
+  "ok": "# global.columns \u003d ID LEMMA UPOS HEAD DEPREL\n# text \u003d mais leur contenu diffère donc selon les Facultés\n1\tmais\tCCONJ\t4\tcc\n2\tson\tDET\t3\tnmod:poss\n3\tcontenu\tNOUN\t4\tnsubj\n4\tdifférer\tVERB\t0\troot\n5\tdonc\tADV\t4\tadvmod\n6\tselon\tADP\t8\tcase\n7\tle\tDET\t8\tdet\n8\tFacultés\tPROPN\t4\tobl\n\n",
+  "changes": 0
+}
