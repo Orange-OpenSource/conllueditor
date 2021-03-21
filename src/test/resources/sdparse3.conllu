@@ -1,0 +1,17 @@
+# text = POS tags can be attached to ( any part of ) the sentence text .
+1	POS	_	NNP	_	_	2	dep	_	_
+2	tags	_	NNS	_	_	5	nsubjpass	_	_
+3	can	_	MD	_	_	5	aux	_	_
+4	be	_	VB	_	_	5	auxpass	_	_
+5	attached	_	VBN	_	_	0	root	_	_
+6	to	_	TO	_	_	5	prep	_	_
+7	(	_	_	_	_	0	root	_	_
+8	any	_	_	_	_	9	det	_	_
+9	part	_	_	_	_	0	root	_	_
+10	of	_	_	_	_	0	root	_	_
+11	)	_	_	_	_	0	root	_	_
+12	the	_	DT	_	_	14	det	_	_
+13	sentence	_	NN	_	_	14	nn	_	_
+14	text	_	NN	_	_	6	pobj	_	_
+15	.	_	.	_	_	0	root	_	_
+

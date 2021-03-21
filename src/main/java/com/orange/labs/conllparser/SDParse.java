@@ -121,7 +121,6 @@ public class SDParse {
         Map<String, DepRel> deprels = new HashMap<>(); // dep: deprel
         while ((line = br.readLine()) != null) {
             line = line.trim();
-            System.out.println("lll " + line);
             if (line.isEmpty() || line.startsWith("#")) {
                 continue;
             }
@@ -259,133 +258,7 @@ public class SDParse {
         sent = new ConllSentence(cws);
 
     }
-    
-    private void ooparse(InputStream instream) throws IOException, ConllException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(instream, StandardCharsets.UTF_8));
 
-        String line;
-        int ct = 0;
-
-        StringBuilder sb = new StringBuilder();
-        
-        Pattern dep = Pattern.compile("([a-z:_]+)\\s*\\(\\s*([\\S]+)\\s*,\\s*([\\S]+)\\s*\\)");
-        Pattern formpos = Pattern.compile("(\\S+)-(\\d+)");
-        String sentence = null;
-        List<String> words = null;
-        Map<String, Integer>ids = new HashMap<>(); // word: id
-        Map<Integer, String>positions = new HashMap<>(); // pos (1, ...): form
-        Set<String>heads = new HashSet<>(); // all words which are head
-        Map<String, String>deps = new HashMap<>(); // all words which are dep and their head
-        Map<String, DepRel> deprels = new HashMap<>(); // dep: deprel
-        while ((line = br.readLine()) != null) {
-            line = line.trim();
-            if (line.isEmpty() || line.startsWith("#")) {
-                continue;
-            }
-            if (sentence == null) {
-                // first non-comment is the sentence
-                sentence = line;
-                words = Arrays.asList(sentence.split("\\s+"));
-                int i = 1;
-                for (String word : words) {
-                    ids.put(word, i);
-                    positions.put(i++, word);
-                }
-                if (words.isEmpty()) {
-                    throw new ConllException("words in sentence line «" + line + "»");
-                }
-                Matcher m = dep.matcher(line);
-                if (m.matches()) {
-                throw new ConllException("missing full sentence line");
-            }
-                continue;
-            }
-            Matcher m = dep.matcher(line);
-            if (!m.matches()) {
-                throw new ConllException("invalid sd-parse line «" + line + "»");
-            }
-            if (debug) {
-                System.out.println("LINE " + line + ", " + m.groupCount());       
-                for (int i=0; i<=m.groupCount(); ++i) {
-                    System.out.println("  " + i + " " + m.group(i));
-                }
-            }
-                if (m.group(2).equals(m.group(3))) {
-                    throw new ConllException("dep must be different from head «" + line + "»");
-                }
-            
-            heads.add(m.group(2));
-            if (deps.containsKey(m.group(3))) {
-                throw new ConllException("«" + m.group(3) + "» has already a head «" + line + "»");
-            }
-            deps.put(m.group(3), m.group(2));
-            deprels.put(m.group(3), new DepRel(m.group(1), m.group(2), m.group(3)));
-        }
-        if (deprels.isEmpty()) {
-            throw new ConllException("no relations in sd-parse");
-        }
-        
-        
-        if (debug) {
-            System.out.println("HEADS   " + heads);
-            System.out.println("DEPS    " + deps.keySet());
-            System.out.println("DEPRELS " + deprels);
-            System.out.println("WORDS   " + words);
-        }
-        
-        heads.removeAll(deps.keySet());
-        
-        if (debug) {
-            System.out.println("HEAD    " + heads);
-        }
-        
-        if (heads.size() != 1) {
-            throw new ConllException("there must exactly one head in sd-parse");
-        }
- 
-        for (String form : deps.keySet()) {
-            Matcher m = formpos.matcher(form);
-            if (m.matches()) {
-                if (!ids.containsKey(m.group(1))) {
-                    throw new ConllException("Aform «"+form+"» not in sentence (first line)");
-                }
-                if (m.group(1).equals(positions.get(Integer.parseInt(m.group(2))))) {
-                     throw new ConllException("Bform «"+form+"» not in sentence (first line)");
-                }
-            }
-            if (!ids.containsKey(form)) {
-                throw new ConllException("form «"+form+"» not in sentence (first line)");
-            }
-        }
-        
-        List<ConllWord> cws = new ArrayList<>();
-        String head = heads.iterator().next();
-        for (String word : words) {
-            String deprel;
-            int headid;
-            int id = ids.get(word);
-            System.out.format("<%s><%s>\n", head, word);
-            if (word.equals(head)) {
-                deprel = "root";
-                headid = 0;
-            } else {
-                String headword = deps.get(word);
-                deprel = deprels.get(word).deprel;
-                headid = ids.get(headword);
-            }
-            //System.out.format("%d %s %d %s\n", id, word, headid, deprel);
-            ConllWord cw = new ConllWord(word);
-            cw.setId(id);
-            cw.setDeplabel(deprel);
-            cw.setHead(headid);
-            cws.add(cw);
-        }
-        
-        sent = new ConllSentence(cws);
-        
-    }
-    
-    
     public ConllSentence getSentence() {
         return sent;
     }

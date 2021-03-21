@@ -1,0 +1,7 @@
+I can can the can .
+nsubj(can-3, I)
+aux(can-3, can-2)
+det(can-5,the)
+obj(can-3,can-5)
+punct(can-3,.)
+
