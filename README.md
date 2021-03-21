@@ -11,7 +11,8 @@ The editor provides the following functionalities:
 * join/split words (to correct tokenization errors)
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
-* search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these
+* search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these, 
+      searching for subtrees, importing subtrees from current sentence, sd-parse support
 * edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
 * create multitoken words from existing words or add a MTW to contract two ore more existing words
 * git support
@@ -20,7 +21,7 @@ The editor provides the following functionalities:
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 
-Current version: 2.10.3
+Current version: 2.11.0
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -350,6 +351,37 @@ matches any sentences wich contains a `NOUN` which as at least two dependants: A
 a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
 
 ![Subtree search](doc/subtreesearch.png)
+
+The subtree can be entered using the `sd-parse` format
+
+```
+#sdparse
+dans un contexte
+case(contexte, dans)
+det(contexte, un)
+```
+
+![Subtree search](doc/subtreesearch-sdparse.png)
+
+If two words have identical forms, position information must added
+
+```
+#sdparse
+the cat sees the other cat
+nsubj(sees, cat-2)
+obj(sees, cat-6)
+```
+
+
+The `sdparse` format my contain `_` as wildcards (in this case position information is obligatory)
+
+```
+#sdparse
+_ _ _
+case(_-3, _-1)
+det(_-3, _-1)
+```
+![Subtree search](doc/subtreesearch-sdparse-wildcards.png)
 
 In order facilitate the edition of the subtree, you can enter the Id of a word in the tree and click
 the `import subtree`? Doing so enters a partial tree of the word the current sentence and all its direct

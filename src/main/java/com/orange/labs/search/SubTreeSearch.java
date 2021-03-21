@@ -37,6 +37,7 @@ import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
 import com.orange.labs.conllparser.ConlluPlusConverter;
+import com.orange.labs.conllparser.SDParse;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -62,27 +63,33 @@ public class SubTreeSearch {
 
     public SubTreeSearch(String conllusentence) throws ConllException, IOException {
         // read input string/ It must contain a single sentence and have a single root
-        if (conllusentence.startsWith("# global.columns =")) {
-            //conllusentence = conllusentence.replaceAll(" +", "\t");
-            // we convert to the standard 10 column format (since CE cannot deal with missing standard columns)
-            ConlluPlusConverter cpc = new ConlluPlusConverter(null);
-            //System.out.println("BEFORE\n" + conllusentence);
-            InputStream is = new ByteArrayInputStream(conllusentence.getBytes(StandardCharsets.UTF_8));
-            conllusentence = cpc.convert(is);
-            //System.out.println("AFTER\n" + conllusentence);
-        }
-        //conllusentence = conllusentence.replaceAll(" +", "\t");
-        ConllFile cfile = new ConllFile(conllusentence);
-        //if (cfile.getSentences().size() != 1) {
-        //    throw new ConllException("Exactly one subtree allowed");
-        //}
         subtrees = new ArrayList<>();
-        for (ConllSentence subtree : cfile.getSentences()) {
-            subtree.makeTrees(null);
-            if (subtree.getHeads().size() != 1) {
-                throw new ConllException("Subtree has more than one root");
+
+        if (conllusentence.startsWith("# sdparse") || conllusentence.startsWith("#sdparse")) {
+            SDParse sdp = new SDParse(conllusentence);
+            ConllSentence cs = sdp.getSentence();
+            cs.makeTrees(null);
+            subtrees.add(cs);
+        } else {
+            if (conllusentence.startsWith("# global.columns =")) {
+                //conllusentence = conllusentence.replaceAll(" +", "\t");
+                // we convert to the standard 10 column format (since CE cannot deal with missing standard columns)
+                ConlluPlusConverter cpc = new ConlluPlusConverter(null);
+                //System.out.println("BEFORE\n" + conllusentence);
+                InputStream is = new ByteArrayInputStream(conllusentence.getBytes(StandardCharsets.UTF_8));
+                conllusentence = cpc.convert(is);
+                //System.out.println("AFTER\n" + conllusentence);
             }
-            subtrees.add(subtree);
+            //conllusentence = conllusentence.replaceAll(" +", "\t");
+            ConllFile cfile = new ConllFile(conllusentence);
+     
+            for (ConllSentence subtree : cfile.getSentences()) {
+                subtree.makeTrees(null);
+                if (subtree.getHeads().size() != 1) {
+                    throw new ConllException("Subtree has more than one root");
+                }
+                subtrees.add(subtree);
+            }
         }
         if (subtrees.isEmpty()) {
             throw new ConllException("No subtree given");
@@ -104,14 +111,14 @@ public class SubTreeSearch {
         sentence.normalise();
         sentence.makeTrees(null);
 
-        System.out.println("Sentence\n"+sentence);
+        //System.out.println("Sentence\n"+sentence);
 
         Set<Integer>matched = new HashSet<>();
         boolean ok = false;
         for (ConllSentence subtree : subtrees) {
             if (debug) System.out.println("SUBTREE\n" + subtree);
             for (ConllWord word : sentence.getWords()) {
-                if (debug) System.out.println("is word head of subtree " + word);
+                if (debug) System.out.println("is word head of subtree ? " + word);
                 if (matchWord(subtree.getHead(), word)) {
                     if (debug) {
                         System.out.println("HEAD matches: " + word.toString());
@@ -119,25 +126,25 @@ public class SubTreeSearch {
 
                     ok = matchDependant(subtree.getHead(), word, matched);
                     if (!ok) {
-                        System.out.println("bad dep match");
+                         if (debug) System.out.println("bad dep match");
                         matched.clear();
                         //break;
                     }
                 }
                 if (ok) {
                     matched.add(word.getId());
-                    System.out.println("A-MATCHING WORDS " + matched);
+                    //System.out.println("A-MATCHING WORDS " + matched);
                     //return word.getId();
                     return matched;
                 }
             }
             if (ok) { // useful ?
-                System.out.println("B-MATCHING WORDS " + matched);
+                //System.out.println("B-MATCHING WORDS " + matched);
                 ///return 0; // TODO
                 return matched;
             }
         }
-        System.out.println("C-MATCHING WORDS " + matched);
+        //System.out.println("C-MATCHING WORDS " + matched);
         return matched;
         //return -1;
     }
@@ -194,6 +201,7 @@ public class SubTreeSearch {
      * contain regular expressions. A "_" in the subtree word column matches always
      */
     private boolean matchWord(ConllWord subtree, ConllWord word) {
+        //System.out.println("MW " + subtree + ":" + word);
         if (!subtree.getForm().equals("_")) {
             if (!word.matchesForm(subtree.getForm())) {
                 return false;

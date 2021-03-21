@@ -1,5 +1,7 @@
 Version 2.11.0
-- added subtree search (including importing subtrees of a given word)
+- added subtree search (in ConLL-U or sd-parse format)
+- importing subtrees of a given word
+- tests
 
 Version 2.10.3
 - sort features case insensitive in all cases (even when duplicating a token)

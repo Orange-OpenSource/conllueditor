@@ -84,7 +84,7 @@ import java.util.regex.Pattern;
  * @author johannes.heinecke@orange.com
  */
 public class SDParse {
-    private final boolean debug = true;
+    private final boolean debug = false;
     private ConllSentence sent;
     
     public SDParse(String contents) throws IOException, ConllException {
