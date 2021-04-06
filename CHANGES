@@ -1,3 +1,6 @@
+Version 2.11.1
+- shortcut display (key '?') corrected
+
 Version 2.11.0
 - added subtree search (in ConLL-U or sd-parse format)
 - importing subtrees of a given word

@@ -77,3 +77,4 @@ java -Xmx4g -cp /usr/src/ConlluEditor/ConlluEditor.jar \
         $ivalidator $iupos $ixpos $ideprels $ifeats $ilang $iunused $ishortcuts $isaveafter \
         $icompare \
 	${filename}  5555
+

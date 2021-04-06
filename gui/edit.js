@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.11.0 as of 14th March 2021
+ @version 2.11.1 as of 6th April 2021
  */
 
 
@@ -523,7 +523,8 @@ function parseShortcuts() {
         for (var p in shortcutsUPOS) {
             longestshortcut = Math.max(longestshortcut, p.length);
             $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
-            sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
+            //sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
+	    sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp; ";
         }
         $("#upostr").show();
         $("#uposshortcuts").append(sc_uposString);
@@ -537,7 +538,7 @@ function parseShortcuts() {
         for (var p in shortcutsDEPL) {
             longestshortcut = Math.max(longestshortcut, p.length);
             $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
-            sc_deplString += '<span class="sckey">' + p + "=" + shortcutsDEPL[p] + "</span>&nbsp;&nbsp;";
+            sc_deplString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsDEPL[p] + "</span>&nbsp; ";
         }
         $("#depreltr").show();
         $("#deplshortcuts").append(sc_deplString);
@@ -554,7 +555,7 @@ function parseShortcuts() {
             $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
                     + shortcutsXPOS[p][0] + "</td> <td>"
                     + shortcutsXPOS[p][1] + "</td></tr>");
-            sc_xposString += '<span class="sckey">' + p + "=" + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp;&nbsp;";
+            sc_xposString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp; ";
         }
         $("#xpostr").show();
         $("#xposshortcuts").append(sc_xposString);
@@ -569,7 +570,7 @@ function parseShortcuts() {
         for (var p in shortcutsFEATS) {
             longestshortcut = Math.max(longestshortcut, p.length);
             $("#shortcuttableFEATS").append("<tr><td>" + p + "</td> <td>" + shortcutsFEATS[p] + "</td></tr>");
-            sc_featsString += '<span class="sckey">' + p + "=" + shortcutsFEATS[p] + "</span>&nbsp;&nbsp;";
+            sc_featsString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsFEATS[p] + "</span>&nbsp; ";
         }
         $("#featstr").show();
         $("#featsshortcuts").append(sc_featsString);

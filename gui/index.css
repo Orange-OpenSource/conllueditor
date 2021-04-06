@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.11.0 as of 14th March 2021
+ @version 2.11.1 as of 6th April 2021
 */
 
 body {
@@ -537,13 +537,30 @@ text {
     display: none;
     font-size: 80%;
     border: 1px solid;
+    text-align: left;
     font-family: Mono; 
 }
+
 
 #subtreesearch {
     display: none;
    
 }
+
+/* table of shortcut help (invoked with "?" key) */
+.sc {
+    padding-left: 0px;
+}
+
+.sc_help_td {
+	word-wrap: break-word;
+}
+
+
+.sckey {
+    font-weight: bold;
+}
+
 
 #editsubtree {
     aaaresize: vertical;
@@ -555,14 +572,6 @@ text {
     vertical-align: top;
 }
 
-/* table of shortcut help (invoked with "?" key) */
-.sc {
-    padding-left: 0px;
-}
-
-/*.sckey {
-    font-weight: bold;
-} */
 
 
 #compare table  {
