@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.11.1 as of 6th April 2021
+    version 2.11.2 as of 12th April 2021
     -->
 
     <head>
@@ -275,6 +275,7 @@
                         <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
                         <br><b>modify the dependency relation</b>: left-click on the relation label
                         <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: <span class="keydoc">control</span>-left-click or double-click on the node to modify
+                        <br><b>delete the word</b>: hit <span class="keydoc">delete</span>-key. Any overlapping MTW will also be deleted
                         <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MTW has to be created). Setting the end token to 0 deletes the multitoken word.
                         the <span class="userinputdoc">compose <i>id length</i></span> command allows to add new MW tokens.
                         <br><br>or use a command and hit the <span class="buttondoc">modify</span> button (replace the parts in <span class="userinputdoc"><i>italic</i></span> with the the new values):
@@ -331,7 +332,7 @@
 
                         </table>
 
-                        <p><b>fast editing</b> Some UPOS/deprel can be changed by clicking on the word and than hit a key. UPOS and deprel
+                        <p><b>fast editing</b> Some UPOS/deprel can be changed by clicking on the word and than hit a key (sequence). UPOS and deprel
                             can be modified without going into the edit window. The following keys are defined
                         <table>
                           <tr>
@@ -349,7 +350,16 @@
                           </tr>
                         </table>
 
-                        <p>The <tt>delete</tt> deletes the clicked word or empty word.
+			<p>There is a list of predefined shortcuts which cannot be altered:
+			<ul>
+			  <li><span class="keydoc">+</span> go to next sentence
+			  <li><span class="keydoc">-</span> go to preceding sentence
+	                  <li><span class="keydoc">=</span> run validator on current sentence
+			  <li><span class="keydoc">_</span> delete all features of active word
+			  <li><span class="keydoc">delete</span> deletes active word
+			  <li><span class="keydoc">?</span> shows/hides list of shortcuts
+			</ul>
+
 
                         <p>More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
                         load it with the server option <tt>--shortcuts</tt>. Hitting <span class="keydoc">?</span> displays the current

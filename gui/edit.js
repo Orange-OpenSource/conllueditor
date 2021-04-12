@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.11.1 as of 6th April 2021
+ @version 2.11.2 as of 12th April 2021
  */
 
 
@@ -747,6 +747,15 @@ $(window).on('keypress', function (evt) {
         $("#valid").click();
     } else if (clickedNodes.length == 1) {
         // a word is active
+	if (evt.which == 95) { // "_" delete all features
+	    sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
+            clickedNodes = [];
+            deprels = [];
+            uposs = [];
+	    unsetPShC();
+	    return;
+	}
+
         // interpret shortkeys
         currentkey = String.fromCharCode(evt.which);
         if (unprocessedkeystrokes.length < longestshortcut) { //== 1) {

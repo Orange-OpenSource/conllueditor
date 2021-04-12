@@ -8,7 +8,7 @@ The editor provides the following functionalities:
 * editing words (forms, lemmas, upos, xpos, features, enhanced dependencies) (fast edit for UPOS and deprel)
 * editing dependency relations
 * indicates invalid UPOS, XPOS or dependency relations
-* join/split words (to correct tokenization errors)
+* join/split/delete words (to correct tokenization errors)
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
 * search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these, 
@@ -21,7 +21,7 @@ The editor provides the following functionalities:
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 
-Current version: 2.11.0
+Current version: 2.11.2
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -242,7 +242,7 @@ especially if the file is on a network drive.
 
 # Editing
 
-More help on editing can be found by clicking the `help` button.
+More help on editing can be found by clicking the `Help` button.
 
 If the server has been (re)started reload the page in your navigator.
 
@@ -250,6 +250,7 @@ Load the first sentence by clicking on `read sentence`: clicking on a word and t
 An edit window opens to enter the relation a name. Existing relations can be renamed by clicking on their name.
 Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or double click on the word. For more help use the `Help` button.
+To delete a word, click ont it and hit the `delete` key.
 
 The sentence is shown as a dependency tree or as a flat graph (“dependency hedge”), morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
@@ -505,6 +506,15 @@ Shortcuts can be single letters or a sequence of multiple letters:
 ```
 
 A personalised list (same format as [gui/shortcuts.json](gui/shortcuts.json)) can be used with the `--shortcuts` option.
+
+There is a list of predefined shortcuts which cannot be altered:
+
+* `+` go to next sentence
+* `-` go to preceding sentence
+* `=` run validator on current sentence
+* `_` delete all features of active word
+* `delete`-key deletes active word
+* `?` shows/hides list of shortcuts
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
