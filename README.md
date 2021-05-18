@@ -187,7 +187,7 @@ Run the image in a docker container from the directory where your `.conllu`-file
 * `</absolute/path/to/datadir>` with the directory where the `.conllu`-file and other files reside
 
 ```
-docker run -t --name conllueditor -p 8888:5555 \
+docker run --rm -t --name conllueditor -p 8888:5555 \
 	--user 1000:1000 \
 	-v </absolute/path/to/datadir>:/data \
 	--env filename=<yourfile>.conllu \
@@ -207,11 +207,10 @@ Other parameters (shown below in section [other options](#other-options)) can be
 `--env compare=file.conllu`,
 . However all files given, **must** reside in the `</absolute/path/to/datadir>` directory.
 
-When finished, stop and remove the docker container:
+When finished, stop the docker container (it is removed automatically by the `--rm` option given):
 
 ```
 docker stop conllueditor
-docker rm conllueditor
 ```
 
 
