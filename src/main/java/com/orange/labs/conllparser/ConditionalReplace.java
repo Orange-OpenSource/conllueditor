@@ -15,7 +15,22 @@ import org.antlr.v4.runtime.tree.*;
 public class ConditionalReplace {
    public static void main(String argv[]) {
        
-       LexerLexer lexer; // = new LexerLexer(CharStreams.fromString(argv[0]));
+       ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(argv[0]));
+
+	//Then, we instantiate the parser:
+
+	CommonTokenStream tokens = new CommonTokenStream(lexer);
+	ConditionsParser parser = new ConditionsParser(tokens);
+System.err.println("zz " + parser);
+	//ParseTree tree = parser.compilationUnit();
+
+	//And then, the walker and the listener:
+
+	//ParseTreeWalker walker = new ParseTreeWalker();
+	//UppercaseMethodListener listener= new UppercaseMethodListener();
+
+	//Lastly, we tell ANTLR to walk through our sample class:
+	//walker.walk(listener, tree);
     }
     
 }

@@ -1,6 +1,7 @@
-grammar Lexer;
+grammar Conditions;
 
 /* Tokens */
+
 
 UPOS:  'Upos:'[A-Z]+ ;
 LEMMA: 'Lemma:'[^\p{White_Space}]+ ;
