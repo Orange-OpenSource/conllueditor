@@ -32,7 +32,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.11.2 as of 16th April 2021
+    version 2.12.0 as of 5th June 2021
     -->
 
     <modelVersion>4.0.0</modelVersion>
@@ -57,10 +57,15 @@
     </modules -->
     <build>
         <plugins>
-                        <plugin>
+            <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
                 <version>4.9.2</version>
+                <configuration>
+                    <listener>false</listener>
+                    <visitor>true</visitor>
+                </configuration>
+
                 <executions>
                     <execution>
                         <id>antlr</id>

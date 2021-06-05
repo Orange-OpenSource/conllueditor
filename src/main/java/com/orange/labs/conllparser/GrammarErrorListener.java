@@ -29,55 +29,28 @@ are permitted provided that the following conditions are met:
 
  @author Johannes Heinecke
  @version 2.12.0 as of 5th June 2021
-*/
+ */
 
 
-grammar Conditions;
+package com.orange.labs.conllparser;
 
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-prog : expression  EOF # printResult
-    ;
+/**
+ *
+ * @author johannes
+ */
+public class GrammarErrorListener extends BaseErrorListener {
 
-expression
-	: field                            # column
-	| NOT expression                   # nicht
-	| OPEN inner=expression CLOSE      # klammern
-        | left=expression operator=AND right=expression  # und
-	| left=expression operator=OR right=expression   # oder
-        ;
+    public GrammarErrorListener() {
+    }
 
-
-field
-    : UPOS       # checkUpos
-    | LEMMA      # checkLemma
-    | FORM       # checkForm
-    | XPOS       # checkXpos
-    | DEPREL     # checkDeprel
-    | FEAT       # checkFeat
-    | ID         # checkID
-    | MWT        # checkMWT
-    | ISEMPTY    # checkEmpty
-    ;
-
-
-UPOS   : 'Upos:' [A-Z]+ ;
-LEMMA  : 'Lemma:' ~[ \n\t]+ ;
-FORM   : 'Form:' ~[ \n\t]+ ;
-XPOS   : 'Xpos:' ~[ \n\t]+ ;
-DEPREL : 'Deprel:' [a-z]+( ':' [a-z]+)? ;
-FEAT   : 'Feat:' [A-Za-z_]+ '=' [A-Za-z0-9]+ ;
-ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
-MWT    : 'MWT:' [2-9] ; // length of a MWT in tokens
-ISEMPTY: 'Empty' ; // emptyword 
-
-AND   : 'and' | '&&' ;
-OR    : 'or' | '||' ;
-NOT   : '!' | '~' ;
-OPEN  : '(';
-CLOSE : ')';
-
-
-
-// NEWLINE:'\r'? '\n' ;     // return newlines to parser (is end-statement signal)
-WS : [ \t] + -> skip ;
-
+    @Override
+    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
+            throws ParseCancellationException {
+        throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
+    }
+}

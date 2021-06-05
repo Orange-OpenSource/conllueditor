@@ -352,6 +352,42 @@ public class ConllFile {
         return sb.toString();
     }
 
+    /** read rules file
+     *   condition > newvals
+     *   Upos:ADP and Lemma:d.* > Feat:Key=Val, Xpos:prep
+     * @param rulefile
+     * @return number of changes 
+     * @throws FileNotFoundException 
+     */
+    public void conditionalEdit(String rulefile) throws ConllException, IOException {
+        FileInputStream fis = new FileInputStream(rulefile);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+        String line;
+        
+        int changes = 0;
+        while ((line = br.readLine()) != null) {
+            line = line.trim();
+            System.err.format("<%s>\n", line);
+            if (line.isEmpty() || line.charAt(0) == '#') continue;
+            String [] elems = line.split(">", 2);
+            List<String>newvals = Arrays.asList(elems[1].split("[ \\t]+"));
+            int ch = conditionalEdit(elems[0], newvals);
+            System.err.println(ch + " changes for condition: " + elems[0] + " values: " + elems[1]);
+            changes += ch;
+        }
+        System.err.println(changes + " changes");
+    }
+            
+    
+    public int conditionalEdit(String condition, List<String>newvalues) throws ConllException {
+        int changes = 0;
+        for (ConllSentence cs : sentences) {
+            changes += cs.conditionalEdit(condition, newvalues);
+        }
+        return changes;
+    }
+    
+    
     public enum Output {
         TEXT, CONLL, ANN, LATEX
     };
@@ -480,7 +516,7 @@ public class ConllFile {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.out.println("usage: ConllFile [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
+            System.out.println("usage: ConllFile [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
         } else {
             //for (String a : args) System.err.println("arg " + a);
             String filter = null;
@@ -490,6 +526,7 @@ public class ConllFile {
             int last = -1; // = all
             int cvparts = 0;
             String outfileprefix = null;
+            String conditionfile = null;
             Set<String>subphrase_deprels = null;
 
             Output output = Output.TEXT;
@@ -507,6 +544,9 @@ public class ConllFile {
                 } else if (args[a].equals("--tex")) {
                     output = Output.LATEX;
                     argindex++;
+                } else if (args[a].equals("--cedit")) {
+                    conditionfile = args[++a];
+                    argindex += 2;
                 } else if (args[a].equals("--subphrase")) {
                     subphrase_deprels = new HashSet<String>(Arrays.asList(args[++a].split(",")));
                     argindex += 2;
@@ -566,6 +606,7 @@ public class ConllFile {
                             sb.append(line).append('\n');
                         } else {
                             cf = new ConllFile(sb.toString());
+
                             processInput(out, cf, output, filter, shuffle, first, last);
                             out.flush();
                             sb = new StringBuilder();
@@ -589,6 +630,9 @@ public class ConllFile {
                     else if (cvparts > 0) {
                         crossval(cf, cvparts, shuffle, outfileprefix);
                     } else {
+                        if (conditionfile != null) {
+                           cf.conditionalEdit(conditionfile);
+                        }
                         processInput(out, cf, output, filter, shuffle, first, last);
                     }
                 }

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.8.0 as of 20th September 2020
+ @version 2.12.0 as of 5th June 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1912,5 +1912,36 @@ public class ConllSentence {
             start = end + cw.getSpacesAfter().length();
         }
         return start;
+    }
+    
+    /**
+     * change all words of the sentence which match the condition
+     @param condition a condition like (UPOS:NOUN and Lemma:de.*)
+     @param newValues a list of new values FORM:value 
+     */
+    public int conditionalEdit(String condition, List<String>newvalues) throws ConllException {
+        int changes = 0;
+        if (newvalues.isEmpty()) return 0;
+        for (ConllWord cw : words) {
+            if (cw.matchCondition(condition)) {
+                changes++;
+                for (String val : newvalues) {
+                    String [] elems = val.split(":", 2);
+                    if (elems.length == 2) {
+                        switch(elems[0].toLowerCase()) {
+                            case "upos": cw.setUpostag(elems[1]); break;
+                            case "xpos": cw.setXpostag(elems[1]); break;
+                            case "deprel": cw.setDeplabel(elems[1]); break;
+                            case "feat": cw.setFeatures(elems[1]); break;
+                            case "lemma": cw.setLemma(elems[1]); break;
+                            case "form": cw.setForm(elems[1]); break;
+                            default:
+                                throw new ConllException("invalid new value " + val);
+                        }
+                    }
+                }
+            }
+        }
+        return changes;
     }
 }

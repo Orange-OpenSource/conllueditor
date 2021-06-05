@@ -1388,9 +1388,13 @@ public class ConllWord {
     /* matches a longer condition like 
     Upos:VERB && (Lemma:mange || Feat:Person=3)
     */
-    //public boolean matchCondition(String condition) {
-        
-    //}
+    public boolean matchCondition(String condition) throws ConllException {
+        try {
+            return CheckConditions.evaluate(condition, this);
+        } catch (Exception e) {
+            throw new ConllException(e.getMessage());
+        }
+    }
     
     /**
      * @return feature map
