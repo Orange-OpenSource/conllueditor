@@ -1,18 +1,3 @@
-
-import com.orange.labs.conllparser.ConllException;
-import com.orange.labs.conllparser.SDParse;
-import com.orange.labs.editor.ConlluEditor;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-
 /* This library is under the 3-Clause BSD License
 
 Copyright (c) 2021, Orange S.A.
@@ -46,10 +31,19 @@ are permitted provided that the following conditions are met:
  @version 2.11.0 as of 21st March 2021
  */
 
-/**
- *
- * @author johannes.heinecke@orange.com
- */
+import com.orange.labs.conllparser.ConllException;
+import com.orange.labs.conllparser.SDParse;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestConllSentence {
 

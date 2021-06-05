@@ -55,7 +55,7 @@ field
     | DEPREL     # checkDeprel
     | FEAT       # checkFeat
     | ID         # checkID
-    | MWT        # checkMWT
+    | MTW        # checkMTW
     | ISEMPTY    # checkEmpty
     ;
 
@@ -67,7 +67,7 @@ XPOS   : 'Xpos:' ~[ \n\t]+ ;
 DEPREL : 'Deprel:' [a-z]+( ':' [a-z]+)? ;
 FEAT   : 'Feat:' [A-Za-z_]+ '=' [A-Za-z0-9]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
-MWT    : 'MWT:' [2-9] ; // length of a MWT in tokens
+MTW    : 'MTW:' [2-9] ; // length of a MWT in tokens
 ISEMPTY: 'Empty' ; // emptyword 
 
 AND   : 'and' | '&&' ;

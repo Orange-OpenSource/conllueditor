@@ -356,18 +356,18 @@ public class ConllFile {
      *   condition > newvals
      *   Upos:ADP and Lemma:d.* > Feat:Key=Val, Xpos:prep
      * @param rulefile
-     * @return number of changes 
-     * @throws FileNotFoundException 
+     * @return number of changes
+     * @throws FileNotFoundException
      */
     public void conditionalEdit(String rulefile) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(rulefile);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         String line;
-        
+
         int changes = 0;
         while ((line = br.readLine()) != null) {
             line = line.trim();
-            System.err.format("<%s>\n", line);
+            //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
             List<String>newvals = Arrays.asList(elems[1].split("[ \\t]+"));
@@ -377,8 +377,8 @@ public class ConllFile {
         }
         System.err.println(changes + " changes");
     }
-            
-    
+
+
     public int conditionalEdit(String condition, List<String>newvalues) throws ConllException {
         int changes = 0;
         for (ConllSentence cs : sentences) {
@@ -386,8 +386,8 @@ public class ConllFile {
         }
         return changes;
     }
-    
-    
+
+
     public enum Output {
         TEXT, CONLL, ANN, LATEX
     };

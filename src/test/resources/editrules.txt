@@ -1,6 +1,8 @@
 # rules tomodify an entire file
 
-Upos:ADP and Deprel:case > xpos:prep
-Upos:ADP and !Deprel:case > xpos:conj
-Xpos:_ and Upos:VERB and (Feat:Number=Plur or Feat:Number=Sing) > xpos:verbfin 
-Lemma:.*[^A-Za-z,\.]+.* > feat:Chars=NonAscii
+#Upos:ADP and Deprel:case > xpos:prep
+#Upos:ADP and !Deprel:case > xpos:conj
+#Xpos:_ and Upos:VERB and (Feat:Number=Plur or Feat:Number=Sing) > xpos:verbfin
+#Lemma:.*[^A-Za-z,\.]+.* > feat:Chars=NonAscii
+#MTW:2 > Form:MTW2
+Empty > xpos:EMPTY

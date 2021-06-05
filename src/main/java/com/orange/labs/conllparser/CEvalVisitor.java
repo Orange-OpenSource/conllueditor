@@ -41,16 +41,16 @@ package com.orange.labs.conllparser;
  */
 public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     ConllWord cword = null; // all conditions are checked on this word
-    
+
     public CEvalVisitor(ConllWord cword) {
         this.cword = cword;
     }
-    
-    
+
+
     @Override
     public Boolean visitPrintResult(ConditionsParser.PrintResultContext ctx) {
         boolean value = visit(ctx.expression()); // evaluate the expression child
-        return value; 
+        return value;
     }
 
     @Override
@@ -75,8 +75,8 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     }
 
     @Override
-    public Boolean visitCheckMWT(ConditionsParser.CheckMWTContext ctx) {
-        String text = ctx.MWT().getText();
+    public Boolean visitCheckMTW(ConditionsParser.CheckMTWContext ctx) {
+        String text = ctx.MTW().getText();
         int wantedlength = Integer.parseInt(text.substring(4));
         int subid = cword.getSubid();
         if (subid < 2) return false; // not a valid MWT
@@ -89,7 +89,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         boolean rtc = (cword.getTokentype() == ConllWord.Tokentype.EMPTY);
         return rtc;
     }
-    
+
     @Override
     public Boolean visitCheckLemma(ConditionsParser.CheckLemmaContext ctx) {
         String text = ctx.LEMMA().getText();
@@ -111,7 +111,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         boolean rtc = cword.matchesFeatureValue(fv[0], fv[1]);
         return rtc;
     }
-    
+
     @Override
     public Boolean visitCheckDeprel(ConditionsParser.CheckDeprelContext ctx) {
         String text = ctx.DEPREL().getText();
@@ -119,7 +119,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         return rtc;
     }
 
-    
+
     @Override
     public Boolean visitNicht(ConditionsParser.NichtContext ctx) {
         boolean value = visit(ctx.expression()); // evaluate the expr child
@@ -131,22 +131,22 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitKlammern(ConditionsParser.KlammernContext ctx) {
         return visit(ctx.expression()); // return child expr's value
     }
-    
+
     /** expr op=('or') expr */
     @Override
     public Boolean visitUnd(ConditionsParser.UndContext ctx) {
         boolean left = visit(ctx.expression(0));  // get value of left subexpression
         boolean right = visit(ctx.expression(1)); // get value of right subexpression
-        //if ( ctx.op.getType() == ConditionsParser.AND ) 
+        //if ( ctx.op.getType() == ConditionsParser.AND )
         return (left && right);
     }
-    
-    
+
+
     @Override
     public Boolean visitOder(ConditionsParser.OderContext ctx) {
         boolean left = visit(ctx.expression(0));  // get value of left subexpression
         boolean right = visit(ctx.expression(1)); // get value of right subexpression
-        //if ( ctx.op.getType() == ConditionsParser.OR ) 
+        //if ( ctx.op.getType() == ConditionsParser.OR )
         return (left || right);
     }
 }
