@@ -1311,22 +1311,27 @@ public class ConllWord {
     }
 
     public boolean hasUpostag(String regex) {
+        if (upostag == null) return false;
         return upostag.equals(regex);
     }
 
     public boolean matchesXpostag(String regex) {
+        if (xpostag == null) return false;
         return xpostag.matches(regex);
     }
 
     public boolean matchesUpostag(String regex) {
+        if (upostag == null) return false;
         return upostag.matches(regex);
     }
 
     public boolean matchesLemma(String regex) {
+        if (lemma == null) return false;
         return lemma.matches(regex);
     }
 
     public boolean matchesForm(String regex) {
+        if (form == null) return false;
         return form.matches(regex);
     }
 
@@ -1392,6 +1397,7 @@ public class ConllWord {
         try {
             return CheckConditions.evaluate(condition, this);
         } catch (Exception e) {
+            //e.printStackTrace();
             throw new ConllException(e.getMessage());
         }
     }
@@ -1495,7 +1501,7 @@ public class ConllWord {
 
     // check whether features with regex value is present
     public boolean matchesFeatureValue(String name, String valregex) {
-        if (features.isEmpty()) {
+        if (features == null || features.isEmpty()) {
             return false;
         }
         String v = features.get(name);
@@ -1672,10 +1678,12 @@ public class ConllWord {
     }
 
     public boolean hasDeplabel(String s) {
+        if (deplabel == null) return false;
         return deplabel.equals(s);
     }
 
     public boolean matchesDeplabel(String d) {
+        if (deplabel == null) return false;
         return deplabel.matches(d);
     }
 

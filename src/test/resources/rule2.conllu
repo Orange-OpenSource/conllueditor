@@ -312,7 +312,7 @@
 # sent_id = fi_tdt-ud-train.conllu b712.11
 # text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.
 # sentence 18
-0.1	Laitoin	laittaa	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
+0.1	Laitoin	laittaa	VERB	verbfin	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
 1	Sekaan	sekaan	ADV	Adv	_	3	orphan	0.1:advmod	_
 2	1	1	NUM	Num	NumType=Card	3	nummod	3:nummod	_
 3	purkillinen	purkillinen	NOUN	N	Case=Nom|Number=Sing	0	root	0:root|0.1:obj	_

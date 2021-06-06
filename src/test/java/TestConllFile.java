@@ -76,9 +76,16 @@ public class TestConllFile {
         }
     }
 
+
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
         String [] newvals = newval.split(" ");
+        //System.err.println("RRRRR " + rule + " " + Arrays.asList(newvals));
+//        try {
         cf.conditionalEdit(rule, Arrays.asList(newvals));
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//            System.err.println("EEEEEEE " + e.getMessage());
+//        }
 
         File out = new File(folder, filename);
         FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
@@ -92,6 +99,7 @@ public class TestConllFile {
 
     @Test
     public void test01rule1() throws IOException, ConllException {
+        name("rule 1");
         applyRule("Upos:ADP and Deprel:case",  "xpos:prep", "rule1.conllu");
     }
 
@@ -102,7 +110,7 @@ public class TestConllFile {
 
     @Test
     public void test03rule3() throws IOException, ConllException {
-        applyRule("Lemma:.*[^A-Za-z,\\.]+.*", "feat:Chars=NonAscii xpos:NONASCII", "rule3.conllu");
+        applyRule("Lemma:.*[^A-Za-z,\\._:0-9]+.*", "feat:Chars=NonAscii xpos:NONASCII", "rule3.conllu");
     }
 
     @Test
@@ -114,4 +122,16 @@ public class TestConllFile {
     public void test05rule5() throws IOException, ConllException {
         applyRule("Empty", "xpos:EMPTY", "rule5.conllu");
     }
+  
+    
+//    @Test
+//    public void test05badtoken() throws IOException, ConllException { 
+//        String [] newvals = "xpos:det".split(" ");
+//        try {
+//            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals));
+//        } catch (ConllException e) {
+//            System.err.println("eeeeeeeeeeeeeeee " + e.getMessage());
+//        }
+//
+//    }
 }
