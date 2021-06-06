@@ -46,20 +46,15 @@ are permitted provided that the following conditions are met:
  @author Johannes Heinecke
  @version 2.10.2 as of 22nd February 2021
  */
-
-
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestConllFile {
 
     File folder;
     ConllFile cf;
 
-
     private void name(String n) {
         System.out.format("\n***** Testing: %S ****\n", n);
     }
-
 
     @Before
     public void setUp() throws ConllException, IOException {
@@ -76,9 +71,8 @@ public class TestConllFile {
         }
     }
 
-
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
-        String [] newvals = newval.split(" ");
+        String[] newvals = newval.split(" ");
         //System.err.println("RRRRR " + rule + " " + Arrays.asList(newvals));
 //        try {
         cf.conditionalEdit(rule, Arrays.asList(newvals));
@@ -100,12 +94,12 @@ public class TestConllFile {
     @Test
     public void test01rule1() throws IOException, ConllException {
         name("rule 1");
-        applyRule("Upos:ADP and Deprel:case",  "xpos:prep", "rule1.conllu");
+        applyRule("Upos:ADP and Deprel:case", "xpos:prep", "rule1.conllu");
     }
 
     @Test
     public void test02rule2() throws IOException, ConllException {
-        applyRule("Xpos:_ and Upos:VERB and !Xpos:PARTP and (Feat:Number=Plur or Feat:Number=Sing)",  "xpos:verbfin", "rule2.conllu");
+        applyRule("Xpos:_ and Upos:VERB and !Xpos:PARTP and (Feat:Number=Plur or Feat:Number=Sing)", "xpos:verbfin", "rule2.conllu");
     }
 
     @Test
@@ -127,17 +121,65 @@ public class TestConllFile {
     public void test06rule6() throws IOException, ConllException {
         applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:Noun=Plural_or_Masc", "rule6.conllu");
     }
-  
-    
-    
-//    @Test
-//    public void test05badtoken() throws IOException, ConllException { 
-//        String [] newvals = "xpos:det".split(" ");
-//        try {
-//            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals));
-//        } catch (ConllException e) {
-//            System.err.println("eeeeeeeeeeeeeeee " + e.getMessage());
-//        }
-//
-//    }
+
+    @Test
+    public void test05badtoken() throws IOException, ConllException {
+        String[] newvals = "xpos:det".split(" ");
+        try {
+            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals));
+        } catch (ConllException e) {
+            String expected = "line 1:14 token recognition error at: 'Lemma '";
+            Assert.assertEquals(String.format("bad token not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void test06badparenthesis() throws IOException, ConllException {
+        String[] newvals = "xpos:det".split(" ");
+        try {
+            cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals));
+        } catch (ConllException e) {
+            String expected = "line 1:23 extraneous input ')' expecting <EOF>";
+            Assert.assertEquals(String.format("missing left parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void test07badparenthesis() throws IOException, ConllException {
+        String[] newvals = "xpos:det".split(" ");
+        try {
+            cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals));
+        } catch (ConllException e) {
+            String expected = "line 1:24 missing ')' at '<EOF>'";
+            Assert.assertEquals(String.format("missing right parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void test08missingop() throws IOException, ConllException {
+        String[] newvals = "xpos:det".split(" ");
+        try {
+            cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals));
+        } catch (ConllException e) {
+            String expected = "line 1:10 extraneous input 'Xpos:prep' expecting <EOF>";
+            Assert.assertEquals(String.format("missing operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void test09doubleop() throws IOException, ConllException {
+        String[] newvals = "xpos:det".split(" ");
+        try {
+            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals));
+        } catch (ConllException e) {
+            String expected = "line 1:13 extraneous input 'or' expecting {UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, ID, MTW, 'Empty', NOT, '('}";
+            Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+
 }
