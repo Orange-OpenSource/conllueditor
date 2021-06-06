@@ -1,7 +1,7 @@
 {
   "sentenceid": 9,
   "maxsentence": 19,
-  "sentence": "Il aime bien le Miroir aux Alouettes .",
+  "sentence": "Il aime bien le Miroir aux Alouettes. ",
   "length": 9,
   "changes": 0,
   "tree": [
@@ -150,6 +150,12 @@
               "val": "Plur"
             }
           ],
+          "misc": [
+            {
+              "name": "SpaceAfter",
+              "val": "No"
+            }
+          ],
           "xpos": "NOUN",
           "upos": "NOUN",
           "deprel": "obl",
@@ -214,12 +220,6 @@
           "id": 9,
           "form": ".",
           "lemma": ".",
-          "misc": [
-            {
-              "name": "SpaceAfter",
-              "val": "No"
-            }
-          ],
           "xpos": "PUNCT",
           "upos": "PUNCT",
           "deprel": "punct",

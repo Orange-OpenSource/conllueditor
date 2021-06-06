@@ -174,7 +174,7 @@
 5	Angeles	Angeles	PROPN	PROPN	_	4	flat:name	_	SpaceAfter=No
 6	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
-# text = Il aime bien le Miroir MTW2 Alouettes .
+# text = Il aime bien le Miroir MTW2 Alouettes.
 # sentence 9
 1	Il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
 2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
@@ -184,8 +184,8 @@
 6-7	MTW2	_	_	_	_	_	_	_	_
 6	à	à	ADP	ADP	_	8	case	_	_
 7	les	le	DET	ART	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	8	det	_	_
-8	Alouettes	alouette	NOUN	NOUN	Gender=Fem|Number=Plur	2	obl	_	_
-9	.	.	PUNCT	PUNCT	_	2	punct	_	SpaceAfter=No
+8	Alouettes	alouette	NOUN	NOUN	Gender=Fem|Number=Plur	2	obl	_	SpaceAfter=No
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
 # text = Une exposition MTW2 musée MTW2 Louvre et un voyage MTW2 village catalan de Gosol
 # sentence 10
@@ -296,11 +296,11 @@
 26	.	.	PUNCT	MAD	_	22	punct	22:punct	_
 
 # sent_id = gl_ctg-ud-dev.conllu 625
-# text = Dá se lle nova redacción a o punto 2
+# text = Dáselle nova redacción a o punto 2
 # sentence 17
 # used to test adding MWT 1-3 and 6-7
-1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence
-2	se	se	PRON	PP3CN000	_	1	nsubj	_	Treeler=suj
+1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence|SpaceAfter=No
+2	se	se	PRON	PP3CN000	_	1	nsubj	_	Treeler=suj|SpaceAfter=No
 3	lle	lle	PRON	PP3CSD00	_	1	nsubj	_	Treeler=suj
 4	nova	novo	ADJ	AQ0FS0	_	5	amod	_	Treeler=s.a
 5	redacción	redacción	NOUN	NCFS000	_	1	obj	_	Treeler=cd
