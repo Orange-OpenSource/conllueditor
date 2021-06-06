@@ -122,7 +122,13 @@ public class TestConllFile {
     public void test05rule5() throws IOException, ConllException {
         applyRule("Empty", "xpos:EMPTY", "rule5.conllu");
     }
+
+    @Test
+    public void test06rule6() throws IOException, ConllException {
+        applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:Noun=Plural_or_Masc", "rule6.conllu");
+    }
   
+    
     
 //    @Test
 //    public void test05badtoken() throws IOException, ConllException { 

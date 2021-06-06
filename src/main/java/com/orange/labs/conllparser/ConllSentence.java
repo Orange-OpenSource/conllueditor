@@ -1963,13 +1963,19 @@ public class ConllSentence {
                                 cw.setDeplabel(elems[1]);
                                 break;
                             case "feat":
-                                cw.setFeatures(elems[1]);
+                                cw.addFeature(elems[1]);
                                 break;
                             case "lemma":
                                 cw.setLemma(elems[1]);
                                 break;
                             case "form":
                                 cw.setForm(elems[1]);
+                                break;
+                            case "misc":
+                                cw.addMisc(elems[1]);
+                                break;
+                            case "eud":
+                                cw.addDeps(elems[1]);
                                 break;
                             default:
                                 throw new ConllException("invalid new value " + val);
@@ -1996,13 +2002,19 @@ public class ConllSentence {
                                     cw.setDeplabel(elems[1]);
                                     break;
                                 case "feat":
-                                    cw.setFeatures(elems[1]);
+                                    cw.addFeature(elems[1]);
                                     break;
                                 case "lemma":
                                     cw.setLemma(elems[1]);
                                     break;
                                 case "form":
                                     cw.setForm(elems[1]);
+                                    break;
+                                case "misc":
+                                    cw.addMisc(elems[1]);
+                                    break;
+                                case "eud":
+                                    cw.addDeps(elems[1]);
                                     break;
                                 default:
                                     throw new ConllException("invalid new value " + val);
@@ -2032,13 +2044,19 @@ public class ConllSentence {
                                         cw.setDeplabel(elems[1]);
                                         break;
                                     case "feat":
-                                        cw.setFeatures(elems[1]);
+                                        cw.addFeature(elems[1]);
                                         break;
                                     case "lemma":
                                         cw.setLemma(elems[1]);
                                         break;
                                     case "form":
                                         cw.setForm(elems[1]);
+                                        break;
+                                    case "misc":
+                                        cw.addMisc(elems[1]);
+                                        break;
+                                    case "eud":
+                                        cw.addDeps(elems[1]);
                                         break;
                                     default:
                                         throw new ConllException("invalid new value " + val);

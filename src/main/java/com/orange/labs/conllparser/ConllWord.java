@@ -1390,7 +1390,7 @@ public class ConllWord {
         }
     }
 
-    /* matches a longer condition like 
+    /* matches a longer condition like
     Upos:VERB && (Lemma:mange || Feat:Person=3)
     */
     public boolean matchCondition(String condition) throws ConllException {
@@ -1401,7 +1401,7 @@ public class ConllWord {
             throw new ConllException(e.getMessage());
         }
     }
-    
+
     /**
      * @return feature map
      */
@@ -1538,6 +1538,11 @@ public class ConllWord {
         }
     }
 
+    public void addDeps(String unparsed_enhdepsstring) throws ConllException {
+        ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(unparsed_enhdepsstring);
+        deps.add(ehd);
+    }
+
     public void addDeps(String headId, String deprel) throws ConllException {
         ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(headId, deprel);
         deps.add(ehd);
@@ -1553,6 +1558,8 @@ public class ConllWord {
 
         return false;
     }
+
+
 
     public Map<String, Object> getMisc() {
         return misc;
@@ -1638,6 +1645,21 @@ public class ConllWord {
                 }
             }
         }
+    }
+
+    public boolean addMisc(String unparsed_miscstring) {
+        String [] kv = unparsed_miscstring.split("=", 2);
+        boolean prexists = misc.containsKey(kv[0]);
+        if (kv.length != 2) {
+            misc.put(kv[0], null);
+        } else {
+            if (isPosNumeric(kv[1])) {
+                misc.put(kv[0], Long.parseLong(kv[1]));
+            } else {
+                addMisc(kv[0], kv[1]);
+            }
+        }
+        return prexists;
     }
 
     public boolean addMisc(String key, String val) {
