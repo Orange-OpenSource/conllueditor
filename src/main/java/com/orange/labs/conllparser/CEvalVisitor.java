@@ -171,16 +171,35 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     }
 
 
+    /** negation ! or ~ */
     @Override
     public Boolean visitNicht(ConditionsParser.NichtContext ctx) {
         boolean value = visit(ctx.expression()); // evaluate the expr child
         return !value;
     }
 
-       /** '(' expression ')' */
+    /** 'head' '(' expression ')' */
     @Override
     public Boolean visitKopf(ConditionsParser.KopfContext ctx) {
         movements.push(Movement.UP);
+        boolean rtc = visit(ctx.expression()); // return child expr's value
+        movements.pop();
+        return rtc;
+    }
+
+    /** 'prec' '(' expression ')' */
+    @Override
+    public Boolean visitVorher(ConditionsParser.VorherContext ctx) {
+        movements.push(Movement.LEFT);
+        boolean rtc = visit(ctx.expression()); // return child expr's value
+        movements.pop();
+        return rtc;
+    }
+
+    /** 'next' '(' expression ')' */
+    @Override
+    public Boolean visitNachher(ConditionsParser.NachherContext ctx) {
+        movements.push(Movement.RIGHT);
         boolean rtc = visit(ctx.expression()); // return child expr's value
         movements.pop();
         return rtc;

@@ -129,8 +129,25 @@ public class TestConllFile {
 
     @Test
     public void test02headshead() throws IOException, ConllException {
-        applyRule("head(head(Upos:VERB))", "misc:GrandmotherHead=Verbal", "rule8.conllu");
+        applyRule("head(head(Upos:VERB and Feat:Tense=Pres ))", "misc:GrandmotherHead=Verbal", "rule8.conllu");
     }
+
+    @Test
+    public void test02headOfPreceding() throws IOException, ConllException {
+        applyRule("prec(head(Upos:VERB))", "misc:HeadOfPreceding=Verbal", "rule9.conllu");
+    }
+
+    @Test
+    public void test02PrecedingOfHead() throws IOException, ConllException {
+        applyRule("head(prec(Upos:AUX))", "misc:PrecedingOfHead=Aux", "rule10.conllu");
+    }
+
+    @Test
+    public void test02FollowingOfHead() throws IOException, ConllException {
+        applyRule("head(next(Upos:NOUN))", "misc:FollowingOfHead=Noun", "rule11.conllu");
+    }
+
+    
     
     @Test
     public void test11badtoken() throws IOException, ConllException {
@@ -186,7 +203,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals));
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, ID, MTW, 'Empty', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, ID, MTW, 'Empty', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
