@@ -58,11 +58,11 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
      * at the end of the path (since the path demanded is not in this tree), null is returned
      */
     private ConllWord getCW() {
-        System.err.println("FROM " + cword);
+        //System.err.println("FROM " + cword);
         ConllWord pointingTo = cword;
-        System.err.println("eeee " + movements);
+        //System.err.println("movements " + movements);
         for (Movement m : movements) {
-            System.err.println("mov " + m);
+            //System.err.println("mov " + m);
             if (m == Movement.UP) {
                 if (pointingTo.getHeadWord() != null) pointingTo = pointingTo.getHeadWord();
                 else return null;
@@ -76,7 +76,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
                 } else return null; // does not exist
             }
         }
-        System.err.println("TO   " + pointingTo);
+        //System.err.println("TO   " + pointingTo);
         return pointingTo;
     }
 
