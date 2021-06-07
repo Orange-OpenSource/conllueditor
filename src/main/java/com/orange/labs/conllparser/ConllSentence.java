@@ -197,6 +197,7 @@ public class ConllSentence {
             }
 
             ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, columndefs, cline.getKey());
+            w.setMysentence(this);
 
             if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                 hasEnhancedDeps = true;
@@ -248,6 +249,7 @@ public class ConllSentence {
         }
         ew.add(emptyword);
         emptyword.setSubId(ew.size());
+        emptyword.setMysentence(this);
     }
 
     public Map<String, Integer> getColumndefs() {
@@ -645,6 +647,7 @@ public class ConllSentence {
         while (it.hasNext()) {
             ConllWord w = it.next();
             if (w.getHead() == -1) {
+                w.setMysentence(null);
                 it.remove();
             }
         }
@@ -1128,6 +1131,7 @@ public class ConllSentence {
      * @param id
      */
     public void addWord(ConllWord cw, int id) throws ConllException {
+        cw.setMysentence(this);
         if (cw.getTokentype() == ConllWord.Tokentype.CONTRACTED) {
             if (contracted == null) {
                 contracted = new HashMap<>();
@@ -1194,7 +1198,8 @@ public class ConllSentence {
 
     public void deleteContracted(int id) throws ConllException {
         if (contracted != null) {
-            contracted.remove(id);
+            ConllWord removed = contracted.remove(id);
+            removed.setMysentence(null);
             return;
         }
         throw new ConllException("No composed form with id " + id);
@@ -1220,8 +1225,9 @@ public class ConllSentence {
             return false;
         }
 
-        ews.remove(subid - 1);
-
+        ConllWord removed = ews.remove(subid - 1);
+        removed.setMysentence(null);
+            
         if (ews.isEmpty()) {
             emptywords.remove(id);
         } else {
@@ -1269,7 +1275,8 @@ public class ConllSentence {
                 }
 
                 for (ConllWord mtw : mtws) {
-                    contracted.remove(mtw.getId());
+                    ConllWord removed = contracted.remove(mtw.getId());
+                    removed.setMysentence(null);
                 }
             }
 
@@ -1318,7 +1325,8 @@ public class ConllSentence {
                 }
             }
 
-            words.remove(id - 1);
+            ConllWord removed = words.remove(id - 1);
+            removed.setMysentence(null);
             normalise(1);
             makeTrees(null);
         }
@@ -1946,6 +1954,8 @@ public class ConllSentence {
         if (newvalues.isEmpty()) {
             return 0;
         }
+        normalise();
+        makeTrees(null);
         for (ConllWord cw : words) {
             if (cw.matchCondition(condition)) {
                 changes++;

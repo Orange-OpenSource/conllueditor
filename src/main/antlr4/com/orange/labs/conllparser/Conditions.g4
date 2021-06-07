@@ -42,6 +42,9 @@ expression
 	: field                            # column
 	| NOT expression                   # nicht
 	| OPEN inner=expression CLOSE      # klammern
+        | 'head' OPEN expression CLOSE     # kopf
+//        | 'prec' OPEN expression CLOSE     # vorher
+//        | 'next' OPEN expression CLOSE     # nachher
         | left=expression operator=AND right=expression  # und
 	| left=expression operator=OR right=expression   # oder
         ;

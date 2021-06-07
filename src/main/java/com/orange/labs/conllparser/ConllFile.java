@@ -637,6 +637,7 @@ public class ConllFile {
                     }
                 }
             } catch (ConllException e) {
+                e.printStackTrace();
                 System.err.println("Conll Error " + e.getMessage());
                 System.exit(10);
             } catch (IOException e) {

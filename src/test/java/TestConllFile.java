@@ -98,32 +98,42 @@ public class TestConllFile {
     }
 
     @Test
-    public void test02rule2() throws IOException, ConllException {
+    public void test01rule2() throws IOException, ConllException {
         applyRule("Xpos:_ and Upos:VERB and !Xpos:PARTP and (Feat:Number=Plur or Feat:Number=Sing)", "xpos:verbfin", "rule2.conllu");
     }
 
     @Test
-    public void test03rule3() throws IOException, ConllException {
+    public void test01rule3() throws IOException, ConllException {
         applyRule("Lemma:.*[^A-Za-z,\\._:0-9]+.*", "feat:Chars=NonAscii xpos:NONASCII", "rule3.conllu");
     }
 
     @Test
-    public void test04rule4() throws IOException, ConllException {
+    public void test01rule4() throws IOException, ConllException {
         applyRule("MTW:2", "form:MTW2", "rule4.conllu");
     }
 
     @Test
-    public void test05rule5() throws IOException, ConllException {
+    public void test01rule5() throws IOException, ConllException {
         applyRule("Empty", "xpos:EMPTY", "rule5.conllu");
     }
 
     @Test
-    public void test06rule6() throws IOException, ConllException {
+    public void test01rule6() throws IOException, ConllException {
         applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:Noun=Plural_or_Masc", "rule6.conllu");
     }
 
     @Test
-    public void test05badtoken() throws IOException, ConllException {
+    public void test02head() throws IOException, ConllException {
+        applyRule("(head(Upos:VERB) and !Upos:PUNCT)", "misc:Head=Verbal", "rule7.conllu");
+    }
+
+    @Test
+    public void test02headshead() throws IOException, ConllException {
+        applyRule("head(head(Upos:VERB))", "misc:GrandmotherHead=Verbal", "rule8.conllu");
+    }
+    
+    @Test
+    public void test11badtoken() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
             cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals));
@@ -135,7 +145,7 @@ public class TestConllFile {
     }
 
     @Test
-    public void test06badparenthesis() throws IOException, ConllException {
+    public void test12badparenthesis() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals));
@@ -147,7 +157,7 @@ public class TestConllFile {
     }
 
     @Test
-    public void test07badparenthesis() throws IOException, ConllException {
+    public void test13badparenthesis() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
             cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals));
@@ -159,7 +169,7 @@ public class TestConllFile {
     }
 
     @Test
-    public void test08missingop() throws IOException, ConllException {
+    public void test14missingop() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals));
@@ -171,15 +181,27 @@ public class TestConllFile {
     }
 
     @Test
-    public void test09doubleop() throws IOException, ConllException {
+    public void test15doubleop() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals));
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, ID, MTW, 'Empty', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, ID, MTW, 'Empty', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
     }
 
+    @Test
+    public void test16badNeg() throws IOException, ConllException {
+        String[] newvals = "xpos:det".split(" ");
+        try {
+            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals));
+        } catch (ConllException e) {
+            String expected = "line 1:9 mismatched input '!' expecting {<EOF>, AND, OR}";
+            Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+    
 }

@@ -102,6 +102,8 @@ public class ConllWord {
     private int start = -1; // start offset in the sentence
     private int end = -1; // offset after the last character (not taking into account SpaceAfter !)
 
+    private ConllSentence mysentence = null; // pointer to the sentence of which this word is part
+
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
     };
@@ -472,6 +474,16 @@ public class ConllWord {
 
 
     }
+
+    public ConllSentence getMysentence() {
+        return mysentence;
+    }
+
+    public void setMysentence(ConllSentence mysentence) {
+        this.mysentence = mysentence;
+    }
+
+
 
     public boolean isWhquestion() {
         return whquestion;

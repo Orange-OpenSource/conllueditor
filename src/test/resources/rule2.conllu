@@ -125,20 +125,20 @@
 # sent_id = fr-ud-train_00024
 # text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle.
 # sentence 5
-10	Les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	20	det	_	_
-20	experts	expert	NOUN	_	Gender=Masc|Number=Plur	30	nsubj	_	_
-30	sont	être	VERB	verbfin	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
-40	unanimes	unanime	ADJ	_	Gender=Masc|Number=Plur	30	amod	_	_
-50	pour	pour	ADP	_	_	60	mark	_	_
-60	dater	dater	VERB	_	VerbForm=Inf	30	advcl	_	_
-70	ce	ce	DET	_	Gender=Masc|Number=Sing|PronType=Dem	80	det	_	_
-80	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	60	obj	_	_
-90-100	du	_	_	_	_	_	_	_	_
-90	de	de	ADP	_	_	120	case	_	_
-100	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	120	det	_	_
-110	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	120	amod	_	_
-120	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	80	nmod	_	SpaceAfter=No
-130	.	.	PUNCT	_	_	30	punct	_	_
+1	Les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	2	det	_	_
+2	experts	expert	NOUN	_	Gender=Masc|Number=Plur	3	nsubj	_	_
+3	sont	être	VERB	verbfin	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	unanimes	unanime	ADJ	_	Gender=Masc|Number=Plur	3	amod	_	_
+5	pour	pour	ADP	_	_	6	mark	_	_
+6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
+7	ce	ce	DET	_	Gender=Masc|Number=Sing|PronType=Dem	8	det	_	_
+8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
+9-10	du	_	_	_	_	_	_	_	_
+9	de	de	ADP	_	_	12	case	_	_
+10	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	12	det	_	_
+11	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	12	amod	_	_
+12	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	8	nmod	_	SpaceAfter=No
+13	.	.	PUNCT	_	_	3	punct	_	_
 
 # text = ils ont visité le Musée du Louvre.
 # sentence 6
@@ -220,12 +220,12 @@
 
 # text = Sam persuaded Kim to fix dinner
 # sentence 12
-10	Sam	Sam	PROPN	_	_	20	nsubj	_	_
-20	persuaded	persuade	VERB	_	_	0	root	_	_
-30	Kim	Kim	PROPN	_	_	20	obj	20:obj|50:nsubj	_
-40	to	to	ADP	_	_	50	mark	_	_
-50	fix	fix	VERB	_	_	20	xcomp	_	_
-60	dinner	dinner	NOUN	_	_	50	obj	_	_
+1	Sam	Sam	PROPN	_	_	2	nsubj	_	_
+2	persuaded	persuade	VERB	_	_	0	root	_	_
+3	Kim	Kim	PROPN	_	_	2	obj	2:obj|5:nsubj	_
+4	to	to	ADP	_	_	5	mark	_	_
+5	fix	fix	VERB	_	_	2	xcomp	_	_
+6	dinner	dinner	NOUN	_	_	5	obj	_	_
 
 # sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
@@ -241,27 +241,27 @@
 # sent_id = ellipsis2
 # text = Mary organised bred and John beer
 # sentence 14
-10	Mary	Mary	PROPN	_	_	20	nsubj	20:nsubj	_
-20	organised	organise	VERB	_	_	0	root	0:root	_
-30	bred	bred	NOUN	_	_	20	obj	20:obj	_
-40	and	and	CCONJ	_	_	50	cc	50:cc|50.1:cc	_
-50	John	John	PROPN	_	_	20	conj	20:conj|50.1:nsubj	_
-50.1	organised	_	_	_	_	_	_	20:conj	_
-60	beer	beer	NOUN	_	_	50	orphan	50.1:obj	_
+1	Mary	Mary	PROPN	_	_	2	nsubj	2:nsubj	_
+2	organised	organise	VERB	_	_	0	root	0:root	_
+3	bred	bred	NOUN	_	_	2	obj	2:obj	_
+4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
+5	John	John	PROPN	_	_	2	conj	2:conj|5.1:nsubj	_
+5.1	organised	_	_	_	_	_	_	2:conj	_
+6	beer	beer	NOUN	_	_	5	orphan	5.1:obj	_
 
 # sent_id = unannotated
 # text = Une exposition au musée du Louvre
 # sentence 15
-10	Une	_	_	_	_	_	_	_	_
-20	exposition	_	_	_	_	_	_	_	_
-30-40	au	_	_	_	_	_	_	_	_
-30	à	_	_	_	_	_	_	_	_
-40	le	_	_	_	_	_	_	_	_
-50	musée	_	_	_	_	_	_	_	_
-60-70	du	_	_	_	_	_	_	_	_
-60	de	_	_	_	_	_	_	_	_
-70	le	_	_	_	_	_	_	_	_
-80	Louvre	_	_	_	_	_	_	_	_
+1	Une	_	_	_	_	_	_	_	_
+2	exposition	_	_	_	_	_	_	_	_
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
 
 # sent_id = sv-ud-train-767
 # text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.
