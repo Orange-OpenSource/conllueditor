@@ -1,4 +1,4 @@
-# rules tomodify an entire file
+# rules to modify an entire file
 
 #Upos:ADP and Deprel:case > xpos:prep
 #Upos:ADP and !Deprel:case > xpos:conj
@@ -6,5 +6,8 @@
 #Lemma:.*[^A-Za-z,\.]+.* > feat:Chars=NonAscii
 #MTW:2 > Form:MTW2
 #Empty > xpos:EMPTY
-head(head(Upos:VERB)) > xpos:AAAAAAAAAAAAAAAAAAAAAAAa
-#misc:Aaaaa=Bbbbbbbbbbbb
+#head(head(Upos:VERB and Feat:Tense=Past)) > misc:Grandmother=Verbal
+#prec(head(Upos:VERB)) > misc:HeadofPreceding=V
+#head(prec(Upos:VERB)) > misc:PrecedingOfHead=A
+children(Lemma:y) > misc:Has=Art
+

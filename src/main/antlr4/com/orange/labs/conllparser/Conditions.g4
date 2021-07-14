@@ -43,6 +43,7 @@ expression
 	| NOT expression                   # nicht
 	| OPEN inner=expression CLOSE      # klammern
         | 'head' OPEN expression CLOSE     # kopf
+//        | 'children' OPEN expression (',' expression)* CLOSE     # children
         | 'prec' OPEN expression CLOSE     # vorher
         | 'next' OPEN expression CLOSE     # nachher
         | left=expression operator=AND right=expression  # und
@@ -64,9 +65,9 @@ field
 
 
 UPOS   : 'Upos:' [A-Z]+ ;
-LEMMA  : 'Lemma:' ~[ \n\t)]+ ;
-FORM   : 'Form:' ~[ \n\t)]+ ;
-XPOS   : 'Xpos:' ~[ \n\t)]+ ;
+LEMMA  : 'Lemma:' ~[ \n\t)&|]+ ;
+FORM   : 'Form:' ~[ \n\t)&|]+ ;
+XPOS   : 'Xpos:' ~[ \n\t)&|]+ ;
 DEPREL : 'Deprel:' [a-z]+( ':' [a-z]+)? ;
 FEAT   : 'Feat:' [A-Za-z_]+ '=' [A-Za-z0-9]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet

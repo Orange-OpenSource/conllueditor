@@ -46,7 +46,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     ConllWord cword = null; // all conditions are checked on this word
     int level = 0; // -1 head, -2 head's head
     int sequence = 0; // -1 word to the left, 1 word to the right etc
-    enum Movement { UP, LEFT, RIGHT};
+    enum Movement { UP, DOWN, LEFT, RIGHT};
     Stack<Movement>movements;
 
     public CEvalVisitor(ConllWord cword) {
@@ -74,6 +74,8 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
                 if (pointingTo.getId() < cword.getMysentence().size()-1) {
                     pointingTo = cword.getMysentence().getWord(pointingTo.getId()+1);
                 } else return null; // does not exist
+            } else if (m == Movement.DOWN) {
+                
             }
         }
         //System.err.println("TO   " + pointingTo);
@@ -182,16 +184,29 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     @Override
     public Boolean visitKopf(ConditionsParser.KopfContext ctx) {
         movements.push(Movement.UP);
-        boolean rtc = visit(ctx.expression()); // return child expr's value
+        boolean rtc = visit(ctx.expression()); 
         movements.pop();
         return rtc;
     }
 
+//    @Override
+//    public Boolean visitChildren(ConditionsParser.ChildrenContext ctx) {
+//        movements.push(Movement.DOWN);
+//        boolean rtc = true;
+//        for (ConditionsParser.ExpressionContext ectx : ctx.expression()) {
+//            rtc = rtc && visit(ectx); 
+//        }
+//
+//        movements.pop();
+//        return rtc;
+//    }
+
+    
     /** 'prec' '(' expression ')' */
     @Override
     public Boolean visitVorher(ConditionsParser.VorherContext ctx) {
         movements.push(Movement.LEFT);
-        boolean rtc = visit(ctx.expression()); // return child expr's value
+        boolean rtc = visit(ctx.expression()); 
         movements.pop();
         return rtc;
     }
