@@ -147,6 +147,16 @@ public class TestConllFile {
         applyRule("head(next(Upos:NOUN))", "misc:FollowingOfHead=Noun", "rule11.conllu");
     }
 
+    @Test
+    public void test03Child1() throws IOException, ConllException {
+        applyRule("child(Upos:VERB) and child(Upos:DET)", "misc:Deps=VERB+DET", "rule12.conllu");
+    }
+
+    @Test
+    public void test03Child2() throws IOException, ConllException {
+        applyRule("child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)", "misc:Deps=PARTC+DET", "rule13.conllu");
+    }
+
     
     
     @Test
