@@ -1,5 +1,7 @@
 Version 2.12.0
 - Lexer/Grammar based search and replace
+- check for missung root nodes, cycles and invalid head ID's and list errors when starting server
+- new tests
 
 Version 2.11.2
 - help page updated, '_' key deletes features of active word

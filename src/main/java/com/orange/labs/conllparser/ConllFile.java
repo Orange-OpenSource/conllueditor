@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.6.0 as of 20th June 2020
+ @version 2.12.0 as of 14th July 2021
 */
 package com.orange.labs.conllparser;
 
@@ -388,6 +388,27 @@ public class ConllFile {
     }
 
 
+    /** run makeTrees() on every sentence to find strange stuff which prohibits editing:
+     *  - cycles
+     *  - in valid head ids
+     *  - no root node
+     */
+    public void checkTree() {
+        boolean firsterror = false;
+        for (ConllSentence csent : sentences) {
+            try {
+                csent.makeTrees(null);
+            } catch (ConllException e) {
+                if (!firsterror) {
+                    firsterror = true;
+                    System.err.println("*** Formal file error. Correct with text editor:");
+                }
+                System.err.format(" Invalid sentence <%s>:\n\t%s\n", csent.getSentid(), e.getMessage());
+            }
+        }
+        
+    }
+    
     public enum Output {
         TEXT, CONLL, ANN, LATEX
     };

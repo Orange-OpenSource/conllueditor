@@ -32,6 +32,8 @@ are permitted provided that the following conditions are met:
  */
 
 import com.orange.labs.conllparser.ConllException;
+import com.orange.labs.conllparser.ConllFile;
+import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.SDParse;
 import java.io.File;
 import java.io.IOException;
@@ -103,4 +105,29 @@ public class TestConllSentence {
         name("read sd-parse with position indicators and POS");
         parse("sdparse3.txt", "sdparse3.conllu");
     }
+
+
+    @Test
+    public void test10cycles() throws IOException, ConllException {
+        URL url = this.getClass().getResource("badtrees.conllu");
+        File file = new File(url.getFile());
+        ConllFile cf = new ConllFile(file, false, false);
+        StringBuilder sb = new StringBuilder();
+        for (ConllSentence csent : cf.getSentences()) {
+            try {
+                csent.makeTrees(null);
+            } catch (ConllException e) {
+                sb.append(csent.getSentid()).append(": ").append(e.getMessage()).append('\n');
+            }
+        }
+        File out = new File(folder, "tree-errors.txt");
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("tree-errors.txt");
+
+        Assert.assertEquals(String.format("tree errors not detected correctly\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
 }

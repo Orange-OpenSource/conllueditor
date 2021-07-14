@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 5th June 2021
+ @version 2.12.0 as of 14th July 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1227,7 +1227,7 @@ public class ConllSentence {
 
         ConllWord removed = ews.remove(subid - 1);
         removed.setMysentence(null);
-            
+
         if (ews.isEmpty()) {
             emptywords.remove(id);
         } else {
@@ -1396,13 +1396,18 @@ public class ConllSentence {
         return d;
     }
 
+    /** creates the tree structure. In case of an error a ConllException is thrown.
+
+     * @param debug
+     * @throws ConllException
+     */
     public void makeTrees(StringBuilder debug) throws ConllException {
         //parcourir les mots jusqu'à un root,
         // chercher les autres feuilles qui dépendent de cette racine
         // extraire cet arbre partiel
         //PrintStream out = System.out;
         Map<String, ConllWord> table = new HashMap<>(); // All nodes (including empty nodes) and their stringified id
-
+        StringBuilder errs = new StringBuilder();
         headss = new ArrayList<>();
 //        try {
 //            out = new PrintStream(System.out, true, "UTF-8");
@@ -1410,6 +1415,7 @@ public class ConllSentence {
 //        }
         head = null;
         List<ConllWord> tempheads = new ArrayList<>();
+        // clean all old dependents from all words
         for (ConllWord w : words) {
             if (w.getHead() == 0) {
                 tempheads.add(w);
@@ -1441,10 +1447,13 @@ public class ConllSentence {
                 // mettre W dans la liste des dépendants de sa tête
                 if (w.getHead() > words.size()) {
                     String si = sentid;
-                    if (si == null) {
-                        si = "";
-                    }
-                    throw new ConllException(sentid + ": head id is greater than sentence length: " + w.getHead() + " > " + words.size());
+//                    if (si == null) {
+//                        si = "";
+//                    }
+                    //errs.append("head id is greater than sentence length: " + w.getHead() + " > " + words.size() + ". forced to first word");
+                    //w.setHead(0);
+                    throw new ConllException(//sentid +
+                            "Token " + w.getId() + ": head id is greater than sentence length: " + w.getHead() + " > " + words.size());
                 }
 
                 int dist = Math.abs(w.getId() - w.getHead());
@@ -1499,6 +1508,22 @@ public class ConllSentence {
                 }
             }
         }
+
+        if (head == null) {
+            //head = words.get(0);
+            //headss.add(head);
+            //errs.append("no word with head == 0. Forced Node 1 to be root\n");
+            throw new ConllException(//sentid +
+                    "no word with head == 0");
+        }
+
+        // check for cycles
+        for (ConllWord cw : words) {
+            Set<ConllWord> passednodes = new HashSet<>();
+            passednodes.add(cw);
+            cw.checkCycles(passednodes);
+        }
+        //return errs.toString();
     }
 
     /**

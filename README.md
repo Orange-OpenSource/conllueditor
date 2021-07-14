@@ -239,6 +239,12 @@ especially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
+If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of
+the sentence, warnings are writte to screen. Such errors my occur if an automatic pre-annotation tools do not work correctly.
+UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
+In this case please correct the errors using a text editor before loading the file into ConlluEditor.
+
+
 # Editing
 
 More help on editing can be found by clicking the `Help` button.

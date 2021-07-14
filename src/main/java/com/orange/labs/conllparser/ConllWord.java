@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.3 as of 11th March 2021
+ @version 2.12.0 as of 14th July 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1788,6 +1788,21 @@ public class ConllWord {
 
     public List<ConllWord> getDependents() {
         return dependents;
+    }
+
+    /** check whether starting from current word as head whether there is a circular dependency
+     *
+     * @param passednodes nodes already seen
+     * @throws ConllException
+     */
+    protected void checkCycles(Set<ConllWord>passednodes) throws ConllException {
+        for(ConllWord child : dependents) {
+            if (passednodes.contains(child)) {
+                throw new ConllException("token " + child.getId() + " constitutes a cycle");
+            }
+            passednodes.add(child);
+            child.checkCycles(passednodes);
+        }
     }
 
 //    public List<ConllWord> getEnhanceddeps() {
