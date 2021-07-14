@@ -36,5 +36,14 @@ and a feature `VerbForm=Part` and another child with UPOS `DET`. Available funct
 
 Functions can be nested (eventhough `child(head())` does not make sense, does it :-)
 
+`new_values` is a list of key:values to set to the current token. Possible keys
+* `form` (`form:newform`)
+* `lemma`
+* `upos`
+* `xpos`
+* `deprel`
+* `feat`  (`feat:Featname=Value`)
+* `misc`  (`misc:Key=Value`)
+
 If there is interest in the community, I think this format could be integrated in a search and replace function in the ConlluEditor.
 Leave me an issue!
