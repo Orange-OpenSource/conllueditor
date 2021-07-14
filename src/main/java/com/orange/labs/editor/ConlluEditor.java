@@ -161,7 +161,6 @@ public class ConlluEditor {
         }
 
         init();
-        System.out.println("Number of sentences loaded: " + numberOfSentences);
 
         // get CTRL-C and try two write changes not yet saved (if used with option --saveAfter)
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -192,6 +191,14 @@ public class ConlluEditor {
         }
         cfile = new ConllFile(filename, null);
         numberOfSentences = cfile.getSentences().size();
+
+
+        System.out.println("Number of sentences loaded: " + numberOfSentences);
+
+        if (true) {
+            cfile.checkTree();
+        }
+
     }
 
     public void setMode(int m) {
@@ -1955,7 +1962,7 @@ public class ConlluEditor {
                 return formatErrMsg("invalid command «" + command + "»", currentSentenceId);
             }
         } catch (ConllException e) {
-            return formatErrMsg("CoNLL error: " + e.getMessage(), currentSentenceId);
+            return formatErrMsg("CoNLL-U error: " + e.getMessage(), currentSentenceId);
         } catch (PatternSyntaxException e) {
             return formatErrMsg("Bad regular expression: " + e.getMessage(), currentSentenceId);
         } catch (Exception e) {

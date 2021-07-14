@@ -174,7 +174,7 @@
 5	Angeles	Angeles	PROPN	PROPN	_	4	flat:name	_	SpaceAfter=No
 6	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
-# text = Il aime bien le Miroir aux Alouettes .
+# text = Il aime bien le Miroir aux Alouettes.
 # sentence 9
 1	Il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
 2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
@@ -184,8 +184,8 @@
 6-7	aux	_	_	_	_	_	_	_	_
 6	à	à	ADP	ADP	_	8	case	_	_
 7	les	le	DET	ART	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	8	det	_	_
-8	Alouettes	alouette	NOUN	NOUN	Gender=Fem|Number=Plur	2	obl	_	_
-9	.	.	PUNCT	PUNCT	_	2	punct	_	SpaceAfter=No
+8	Alouettes	alouette	NOUN	NOUN	Gender=Fem|Number=Plur	2	obl	_	SpaceAfter=No
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
 # text = Une exposition au musée du Louvre et un voyage au village catalan de Gosol
 # sentence 10

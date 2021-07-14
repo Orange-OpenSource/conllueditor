@@ -1,7 +1,7 @@
 /** This library is under the 3-Clause BSD License
 
 Copyright (c) 2018-2021, Orange S.A.
- 
+
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
@@ -134,11 +134,11 @@ public class ServeurHTTP {
 
         try {
             InetAddress addr = InetAddress.getLocalHost();
-            if ((debug & 2) != 0) {
-                hostname = addr.getHostName();
-            } else {
-                hostname = addr.toString();
-            }
+            //if ((debug & 2) != 0) {
+             hostname = addr.getHostName();
+            //} else {
+            //    hostname = addr.toString();
+            //}
         } catch (UnknownHostException ex) {
             System.err.println("Hostname can not be resolved: " + ex.getMessage());
         }

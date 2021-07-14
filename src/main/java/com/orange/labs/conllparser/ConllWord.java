@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.3 as of 11th March 2021
+ @version 2.12.0 as of 14th July 2021
  */
 package com.orange.labs.conllparser;
 
@@ -101,6 +101,8 @@ public class ConllWord {
 
     private int start = -1; // start offset in the sentence
     private int end = -1; // offset after the last character (not taking into account SpaceAfter !)
+
+    private ConllSentence mysentence = null; // pointer to the sentence of which this word is part
 
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
@@ -472,6 +474,16 @@ public class ConllWord {
 
 
     }
+
+    public ConllSentence getMysentence() {
+        return mysentence;
+    }
+
+    public void setMysentence(ConllSentence mysentence) {
+        this.mysentence = mysentence;
+    }
+
+
 
     public boolean isWhquestion() {
         return whquestion;
@@ -1311,22 +1323,27 @@ public class ConllWord {
     }
 
     public boolean hasUpostag(String regex) {
+        if (upostag == null) return false;
         return upostag.equals(regex);
     }
 
     public boolean matchesXpostag(String regex) {
+        if (xpostag == null) return false;
         return xpostag.matches(regex);
     }
 
     public boolean matchesUpostag(String regex) {
+        if (upostag == null) return false;
         return upostag.matches(regex);
     }
 
     public boolean matchesLemma(String regex) {
+        if (lemma == null) return false;
         return lemma.matches(regex);
     }
 
     public boolean matchesForm(String regex) {
+        if (form == null) return false;
         return form.matches(regex);
     }
 
@@ -1382,6 +1399,18 @@ public class ConllWord {
                 return false;
             default:
                 return false;
+        }
+    }
+
+    /* matches a longer condition like
+    Upos:VERB && (Lemma:mange || Feat:Person=3)
+    */
+    public boolean matchCondition(String condition) throws ConllException {
+        try {
+            return CheckConditions.evaluate(condition, this);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            throw new ConllException(e.getMessage());
         }
     }
 
@@ -1484,7 +1513,7 @@ public class ConllWord {
 
     // check whether features with regex value is present
     public boolean matchesFeatureValue(String name, String valregex) {
-        if (features.isEmpty()) {
+        if (features == null || features.isEmpty()) {
             return false;
         }
         String v = features.get(name);
@@ -1521,6 +1550,11 @@ public class ConllWord {
         }
     }
 
+    public void addDeps(String unparsed_enhdepsstring) throws ConllException {
+        ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(unparsed_enhdepsstring);
+        deps.add(ehd);
+    }
+
     public void addDeps(String headId, String deprel) throws ConllException {
         ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(headId, deprel);
         deps.add(ehd);
@@ -1536,6 +1570,8 @@ public class ConllWord {
 
         return false;
     }
+
+
 
     public Map<String, Object> getMisc() {
         return misc;
@@ -1623,6 +1659,21 @@ public class ConllWord {
         }
     }
 
+    public boolean addMisc(String unparsed_miscstring) {
+        String [] kv = unparsed_miscstring.split("=", 2);
+        boolean prexists = misc.containsKey(kv[0]);
+        if (kv.length != 2) {
+            misc.put(kv[0], null);
+        } else {
+            if (isPosNumeric(kv[1])) {
+                misc.put(kv[0], Long.parseLong(kv[1]));
+            } else {
+                addMisc(kv[0], kv[1]);
+            }
+        }
+        return prexists;
+    }
+
     public boolean addMisc(String key, String val) {
         boolean prexists = misc.containsKey(key);
         misc.put(key, val);
@@ -1661,10 +1712,12 @@ public class ConllWord {
     }
 
     public boolean hasDeplabel(String s) {
+        if (deplabel == null) return false;
         return deplabel.equals(s);
     }
 
     public boolean matchesDeplabel(String d) {
+        if (deplabel == null) return false;
         return deplabel.matches(d);
     }
 
@@ -1735,6 +1788,21 @@ public class ConllWord {
 
     public List<ConllWord> getDependents() {
         return dependents;
+    }
+
+    /** check whether starting from current word as head whether there is a circular dependency
+     *
+     * @param passednodes nodes already seen
+     * @throws ConllException
+     */
+    protected void checkCycles(Set<ConllWord>passednodes) throws ConllException {
+        for(ConllWord child : dependents) {
+            if (passednodes.contains(child)) {
+                throw new ConllException("token " + child.getId() + " constitutes a cycle");
+            }
+            passednodes.add(child);
+            child.checkCycles(passednodes);
+        }
     }
 
 //    public List<ConllWord> getEnhanceddeps() {

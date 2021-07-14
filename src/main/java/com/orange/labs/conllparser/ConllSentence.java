@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.8.0 as of 20th September 2020
+ @version 2.12.0 as of 14th July 2021
  */
 package com.orange.labs.conllparser;
 
@@ -56,7 +56,7 @@ import java.util.TreeMap;
  */
 public class ConllSentence {
 
-    protected List<ConllWord> words;
+    protected List<ConllWord> words; // no empty words and MTW
     protected Map<Integer, List<ConllWord>> emptywords = null; // main id (before "."): empty nodes
     protected Map<Integer, ConllWord> contracted = null; // contracted words (MTW) startid (before hyphen): word
 
@@ -197,6 +197,7 @@ public class ConllSentence {
             }
 
             ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, columndefs, cline.getKey());
+            w.setMysentence(this);
 
             if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                 hasEnhancedDeps = true;
@@ -248,6 +249,7 @@ public class ConllSentence {
         }
         ew.add(emptyword);
         emptyword.setSubId(ew.size());
+        emptyword.setMysentence(this);
     }
 
     public Map<String, Integer> getColumndefs() {
@@ -462,13 +464,17 @@ public class ConllSentence {
         for (ConllWord cw : newsent.getWords()) {
             Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
             for (EnhancedDeps ehd : cw.getDeps()) {
-                if (ehd.headid <= id) ehd_to_delete_from_this.add(ehd);
+                if (ehd.headid <= id) {
+                    ehd_to_delete_from_this.add(ehd);
+                }
             }
             for (EnhancedDeps ehd : ehd_to_delete_from_this) {
                 cw.getDeps().remove(ehd);
             }
             // add an enhanced dep if nothing is left
-            if (hasEnhancedDeps && cw.getDeps().isEmpty()) cw.initialiseEHDs();
+            if (hasEnhancedDeps && cw.getDeps().isEmpty()) {
+                cw.initialiseEHDs();
+            }
         }
 
         if (newsent.emptywords != null) {
@@ -476,14 +482,18 @@ public class ConllSentence {
                 for (ConllWord ewid : ewids) {
                     Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
                     for (EnhancedDeps ehd : ewid.getDeps()) {
-                          if (ehd.headid <= id) ehd_to_delete_from_this.add(ehd);
+                        if (ehd.headid <= id) {
+                            ehd_to_delete_from_this.add(ehd);
+                        }
                     }
                     for (EnhancedDeps ehd : ehd_to_delete_from_this) {
-                       ewid.getDeps().remove(ehd);
+                        ewid.getDeps().remove(ehd);
                     }
 
                     // add an enhanced dep if nothing is left
-                    if (hasEnhancedDeps && ewid.getDeps().isEmpty()) ewid.initialiseEHDs();
+                    if (hasEnhancedDeps && ewid.getDeps().isEmpty()) {
+                        ewid.initialiseEHDs();
+                    }
 
                 }
             }
@@ -510,27 +520,35 @@ public class ConllSentence {
         for (ConllWord cw : words) {
             Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
             for (EnhancedDeps ehd : cw.getDeps()) {
-                if (ehd.headid > id) ehd_to_delete_from_this.add(ehd);
+                if (ehd.headid > id) {
+                    ehd_to_delete_from_this.add(ehd);
+                }
             }
             for (EnhancedDeps ehd : ehd_to_delete_from_this) {
                 cw.getDeps().remove(ehd);
             }
-            if (hasEnhancedDeps && cw.getDeps().isEmpty()) cw.initialiseEHDs();
+            if (hasEnhancedDeps && cw.getDeps().isEmpty()) {
+                cw.initialiseEHDs();
+            }
         }
 
         if (emptywords != null) {
-              // delete enhanced dependencies heads from this.emptywords which are no longer in this
+            // delete enhanced dependencies heads from this.emptywords which are no longer in this
             for (List<ConllWord> ewids : emptywords.values()) {
                 for (ConllWord ewid : ewids) {
                     Set<EnhancedDeps> ehd_to_delete_from_this = new HashSet<>();
                     for (EnhancedDeps ehd : ewid.getDeps()) {
-                          if (ehd.headid > id) ehd_to_delete_from_this.add(ehd);
+                        if (ehd.headid > id) {
+                            ehd_to_delete_from_this.add(ehd);
+                        }
                     }
                     for (EnhancedDeps ehd : ehd_to_delete_from_this) {
-                       ewid.getDeps().remove(ehd);
+                        ewid.getDeps().remove(ehd);
                     }
                     // add an enhanced dep if nothing is left
-                    if (hasEnhancedDeps && ewid.getDeps().isEmpty()) ewid.initialiseEHDs();
+                    if (hasEnhancedDeps && ewid.getDeps().isEmpty()) {
+                        ewid.initialiseEHDs();
+                    }
                 }
             }
         }
@@ -629,6 +647,7 @@ public class ConllSentence {
         while (it.hasNext()) {
             ConllWord w = it.next();
             if (w.getHead() == -1) {
+                w.setMysentence(null);
                 it.remove();
             }
         }
@@ -1112,6 +1131,7 @@ public class ConllSentence {
      * @param id
      */
     public void addWord(ConllWord cw, int id) throws ConllException {
+        cw.setMysentence(this);
         if (cw.getTokentype() == ConllWord.Tokentype.CONTRACTED) {
             if (contracted == null) {
                 contracted = new HashMap<>();
@@ -1178,7 +1198,8 @@ public class ConllSentence {
 
     public void deleteContracted(int id) throws ConllException {
         if (contracted != null) {
-            contracted.remove(id);
+            ConllWord removed = contracted.remove(id);
+            removed.setMysentence(null);
             return;
         }
         throw new ConllException("No composed form with id " + id);
@@ -1204,7 +1225,8 @@ public class ConllSentence {
             return false;
         }
 
-        ews.remove(subid - 1);
+        ConllWord removed = ews.remove(subid - 1);
+        removed.setMysentence(null);
 
         if (ews.isEmpty()) {
             emptywords.remove(id);
@@ -1220,11 +1242,15 @@ public class ConllSentence {
         return true;
     }
 
-    /** returns true, if the word is part of a MTW */
+    /**
+     * returns true, if the word is part of a MTW
+     */
     public boolean isPartOfMTW(int id) {
-        if (contracted == null) return false;
+        if (contracted == null) {
+            return false;
+        }
         for (ConllWord mtw : contracted.values()) {
-            if (id >= mtw.getId() &&  id <= mtw.getSubid()) {
+            if (id >= mtw.getId() && id <= mtw.getSubid()) {
                 return true;
             }
         }
@@ -1232,7 +1258,7 @@ public class ConllSentence {
     }
 
     public void deleteWord(int id) throws ConllException {
-         makeTrees(null);
+        makeTrees(null);
         if (id < words.size()) {
             // make all dependants of word to be removed root
             for (ConllWord cw : words.get(id - 1).getDependents()) {
@@ -1249,7 +1275,8 @@ public class ConllSentence {
                 }
 
                 for (ConllWord mtw : mtws) {
-                    contracted.remove(mtw.getId());
+                    ConllWord removed = contracted.remove(mtw.getId());
+                    removed.setMysentence(null);
                 }
             }
 
@@ -1298,7 +1325,8 @@ public class ConllSentence {
                 }
             }
 
-            words.remove(id - 1);
+            ConllWord removed = words.remove(id - 1);
+            removed.setMysentence(null);
             normalise(1);
             makeTrees(null);
         }
@@ -1368,13 +1396,18 @@ public class ConllSentence {
         return d;
     }
 
+    /** creates the tree structure. In case of an error a ConllException is thrown.
+
+     * @param debug
+     * @throws ConllException
+     */
     public void makeTrees(StringBuilder debug) throws ConllException {
         //parcourir les mots jusqu'à un root,
         // chercher les autres feuilles qui dépendent de cette racine
         // extraire cet arbre partiel
         //PrintStream out = System.out;
         Map<String, ConllWord> table = new HashMap<>(); // All nodes (including empty nodes) and their stringified id
-
+        StringBuilder errs = new StringBuilder();
         headss = new ArrayList<>();
 //        try {
 //            out = new PrintStream(System.out, true, "UTF-8");
@@ -1382,6 +1415,7 @@ public class ConllSentence {
 //        }
         head = null;
         List<ConllWord> tempheads = new ArrayList<>();
+        // clean all old dependents from all words
         for (ConllWord w : words) {
             if (w.getHead() == 0) {
                 tempheads.add(w);
@@ -1413,8 +1447,13 @@ public class ConllSentence {
                 // mettre W dans la liste des dépendants de sa tête
                 if (w.getHead() > words.size()) {
                     String si = sentid;
-                    if (si == null) si = "";
-                    throw new ConllException(sentid+ ": head id is greater than sentence length: " + w.getHead() + " > " + words.size());
+//                    if (si == null) {
+//                        si = "";
+//                    }
+                    //errs.append("head id is greater than sentence length: " + w.getHead() + " > " + words.size() + ". forced to first word");
+                    //w.setHead(0);
+                    throw new ConllException(//sentid +
+                            "Token " + w.getId() + ": head id is greater than sentence length: " + w.getHead() + " > " + words.size());
                 }
 
                 int dist = Math.abs(w.getId() - w.getHead());
@@ -1469,6 +1508,22 @@ public class ConllSentence {
                 }
             }
         }
+
+        if (head == null) {
+            //head = words.get(0);
+            //headss.add(head);
+            //errs.append("no word with head == 0. Forced Node 1 to be root\n");
+            throw new ConllException(//sentid +
+                    "no word with head == 0");
+        }
+
+        // check for cycles
+        for (ConllWord cw : words) {
+            Set<ConllWord> passednodes = new HashSet<>();
+            passednodes.add(cw);
+            cw.checkCycles(passednodes);
+        }
+        //return errs.toString();
     }
 
     /**
@@ -1632,7 +1687,7 @@ public class ConllSentence {
                 idshl.put(id, field);
             }
         }
-        
+
         // highlight a set of words on field
         public Highlight(ConllWord.Fields field, Set<Integer> ids) {
             //this.field = field;
@@ -1844,7 +1899,7 @@ public class ConllSentence {
         subtree.put(head.getId(), head);
         getSTdeps(head, subtree);
 
-        List<ConllWord>subtreelist = new ArrayList<>();
+        List<ConllWord> subtreelist = new ArrayList<>();
         for (ConllWord cw : subtree.values()) {
             ConllWord clone = new ConllWord(cw);
             if (cw == head) {
@@ -1859,12 +1914,11 @@ public class ConllSentence {
 
         //System.out.println(columndefs.keySet());
         //System.out.println(newcs);
-
         return newcs;
     }
 
     // recursively get all kids
-    private void getSTdeps(ConllWord head, Map<Integer, ConllWord>st) {
+    private void getSTdeps(ConllWord head, Map<Integer, ConllWord> st) {
         //System.out.println("RECURSION " + head.getDependents());
         for (ConllWord dep : head.getDependents()) {
             //System.out.println("adding " + dep );
@@ -1912,5 +1966,143 @@ public class ConllSentence {
             start = end + cw.getSpacesAfter().length();
         }
         return start;
+    }
+
+    /**
+     * change all words of the sentence which match the condition
+     *
+     * @param condition a condition like (UPOS:NOUN and Lemma:de.*)
+     * @param newValues a list of new values FORM:value
+     */
+    public int conditionalEdit(String condition, List<String> newvalues) throws ConllException {
+        int changes = 0;
+        if (newvalues.isEmpty()) {
+            return 0;
+        }
+        normalise();
+        makeTrees(null);
+        for (ConllWord cw : words) {
+            if (cw.matchCondition(condition)) {
+                changes++;
+                for (String val : newvalues) {
+                    String[] elems = val.split(":", 2);
+                    if (elems.length == 2) {
+                        switch (elems[0].toLowerCase()) {
+                            case "upos":
+                                cw.setUpostag(elems[1]);
+                                break;
+                            case "xpos":
+                                cw.setXpostag(elems[1]);
+                                break;
+                            case "deprel":
+                                cw.setDeplabel(elems[1]);
+                                break;
+                            case "feat":
+                                cw.addFeature(elems[1]);
+                                break;
+                            case "lemma":
+                                cw.setLemma(elems[1]);
+                                break;
+                            case "form":
+                                cw.setForm(elems[1]);
+                                break;
+                            case "misc":
+                                cw.addMisc(elems[1]);
+                                break;
+                            case "eud":
+                                cw.addDeps(elems[1]);
+                                break;
+                            default:
+                                throw new ConllException("invalid new value " + val);
+                        }
+                    }
+                }
+            }
+        }
+        if (contracted != null) {
+            for (ConllWord cw : contracted.values()) {
+                if (cw.matchCondition(condition)) {
+                    changes++;
+                    for (String val : newvalues) {
+                        String[] elems = val.split(":", 2);
+                        if (elems.length == 2) {
+                            switch (elems[0].toLowerCase()) {
+                                case "upos":
+                                    cw.setUpostag(elems[1]);
+                                    break;
+                                case "xpos":
+                                    cw.setXpostag(elems[1]);
+                                    break;
+                                case "deprel":
+                                    cw.setDeplabel(elems[1]);
+                                    break;
+                                case "feat":
+                                    cw.addFeature(elems[1]);
+                                    break;
+                                case "lemma":
+                                    cw.setLemma(elems[1]);
+                                    break;
+                                case "form":
+                                    cw.setForm(elems[1]);
+                                    break;
+                                case "misc":
+                                    cw.addMisc(elems[1]);
+                                    break;
+                                case "eud":
+                                    cw.addDeps(elems[1]);
+                                    break;
+                                default:
+                                    throw new ConllException("invalid new value " + val);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (emptywords != null) {
+            for (List<ConllWord> cws : emptywords.values()) {
+                for (ConllWord cw : cws) {
+                    if (cw.matchCondition(condition)) {
+                        changes++;
+                        for (String val : newvalues) {
+                            String[] elems = val.split(":", 2);
+                            if (elems.length == 2) {
+                                switch (elems[0].toLowerCase()) {
+                                    case "upos":
+                                        cw.setUpostag(elems[1]);
+                                        break;
+                                    case "xpos":
+                                        cw.setXpostag(elems[1]);
+                                        break;
+                                    case "deprel":
+                                        cw.setDeplabel(elems[1]);
+                                        break;
+                                    case "feat":
+                                        cw.addFeature(elems[1]);
+                                        break;
+                                    case "lemma":
+                                        cw.setLemma(elems[1]);
+                                        break;
+                                    case "form":
+                                        cw.setForm(elems[1]);
+                                        break;
+                                    case "misc":
+                                        cw.addMisc(elems[1]);
+                                        break;
+                                    case "eud":
+                                        cw.addDeps(elems[1]);
+                                        break;
+                                    default:
+                                        throw new ConllException("invalid new value " + val);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return changes;
     }
 }

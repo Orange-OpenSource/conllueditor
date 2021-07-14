@@ -20,8 +20,9 @@ The editor provides the following functionalities:
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
+* mass editing: modify tokens if a (complex) condition is satisfied
 
-Current version: 2.11.2
+Current version: 2.12.0
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -239,6 +240,12 @@ especially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
+If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of
+the sentence, warnings are writte to screen. Such errors my occur if an automatic pre-annotation tools do not work correctly.
+UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
+In this case please correct the errors using a text editor before loading the file into ConlluEditor.
+
+
 # Editing
 
 More help on editing can be found by clicking the `Help` button.
@@ -401,6 +408,10 @@ contains (as a first line):
 
 ![Import subtree with selected columns](doc/importsubtree-columnsdef.png)
 
+## Mass Editing
+
+A simple languages to modify tokens if a (complex condition is met)
+see [Mass Editing](doc/mass_editing.md)
 
 ## Enhanced Dependencies
 Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-annotation])
