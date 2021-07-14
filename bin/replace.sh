@@ -34,6 +34,6 @@ fi
 RULES=$1
 CONLLU=$2
 
-java -Xmx4g -cp $NEWESTJAR com.orange.labs.editor.ConlluFile ${RULES} ${CONLLU}
+java -Xmx4g -cp $NEWESTJAR com.orange.labs.conllparser.ConllFile --conll --cedit ${RULES} ${CONLLU}
 
 

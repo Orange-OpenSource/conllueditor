@@ -9,5 +9,5 @@
 #head(head(Upos:VERB and Feat:Tense=Past)) > misc:Grandmother=Verbal
 #prec(head(Upos:VERB)) > misc:HeadofPreceding=V
 #head(prec(Upos:VERB)) > misc:PrecedingOfHead=A
-children(Lemma:y) > misc:Has=Art
+child(Upos:VERB) and  child(Upos:DET) > misc:Has=Art
 

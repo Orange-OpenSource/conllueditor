@@ -47,14 +47,23 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     int level = 0; // -1 head, -2 head's head
     int sequence = 0; // -1 word to the left, 1 word to the right etc
     enum Movement { UP, DOWN, LEFT, RIGHT};
-    Stack<Movement>movements;
+    Stack<Movement>movements; // keep the directions we walk from current node to node to test
+    Stack<Children>children; // a node may have more than one dependant. Here we have a counter to get through them all
 
     public CEvalVisitor(ConllWord cword) {
         this.cword = cword;
         movements = new Stack<>();
+        children = new Stack<>();
     }
 
-    /** get the correct ConllWord (current word, its head, head's head, preceing or following). If there is no word 
+
+    public class Children {
+        int index = 0; // current dependant to use
+        boolean allSeen = false; // set to true when we have seen all dependants
+    }
+
+
+    /** get the correct ConllWord (current word, its head, head's head, preceing or following). If there is no word
      * at the end of the path (since the path demanded is not in this tree), null is returned
      */
     private ConllWord getCW() {
@@ -65,17 +74,28 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
             //System.err.println("mov " + m);
             if (m == Movement.UP) {
                 if (pointingTo.getHeadWord() != null) pointingTo = pointingTo.getHeadWord();
-                else return null;
+                else return null; // no head (i.e. we are at root)
             } else if (m == Movement.LEFT) {
                 if (pointingTo.getId() > 1) {
                     pointingTo = cword.getMysentence().getWord(pointingTo.getId()-1);
-                } else return null; // does not exist
+                } else return null; // no preceding token
             } else if (m == Movement.RIGHT) {
                 if (pointingTo.getId() < cword.getMysentence().size()-1) {
                     pointingTo = cword.getMysentence().getWord(pointingTo.getId()+1);
-                } else return null; // does not exist
+                } else return null; // no following token
             } else if (m == Movement.DOWN) {
-                
+                if (pointingTo.getDependents() == null || pointingTo.getDependents().isEmpty()) {
+                    children.lastElement().allSeen = true; // we've seen all dependants
+                    return null; // no dependants
+                } else {
+                    if (children.lastElement().index < pointingTo.getDependents().size())
+                        pointingTo = pointingTo.getDependents().get(children.lastElement().index);
+                    else {
+                       // no more dependants
+                       children.lastElement().allSeen = true; // we've seen all dependants
+                       return null;
+                   }
+               }
             }
         }
         //System.err.println("TO   " + pointingTo);
@@ -92,7 +112,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitCheckUpos(ConditionsParser.CheckUposContext ctx) {
         String text = ctx.UPOS().getText();
         ConllWord use = getCW();
-                if (use == null) return false;
+        if (use == null) return false;
         boolean rtc = use.matchesUpostag(text.substring(5));
         return rtc;
     }
@@ -184,29 +204,35 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     @Override
     public Boolean visitKopf(ConditionsParser.KopfContext ctx) {
         movements.push(Movement.UP);
-        boolean rtc = visit(ctx.expression()); 
+        boolean rtc = visit(ctx.expression());
         movements.pop();
         return rtc;
     }
 
-//    @Override
-//    public Boolean visitChildren(ConditionsParser.ChildrenContext ctx) {
-//        movements.push(Movement.DOWN);
-//        boolean rtc = true;
-//        for (ConditionsParser.ExpressionContext ectx : ctx.expression()) {
-//            rtc = rtc && visit(ectx); 
-//        }
-//
-//        movements.pop();
-//        return rtc;
-//    }
 
-    
+    @Override
+    public Boolean visitChild(ConditionsParser.ChildContext ctx) {
+        movements.push(Movement.DOWN);
+        children.push(new Children()); // current node may have more then on dependant, we count the one used and set allSeen to true when we are done
+
+        boolean rtc = false;
+        while(!children.lastElement().allSeen && !rtc) {
+            rtc = visit(ctx.expression());
+            //System.err.println("aaaaaaaa " + rtc + " " + children.lastElement().index + " " + children.lastElement().allSeen);
+            children.lastElement().index++;
+        }
+        movements.pop();
+        children.pop();
+        return rtc;
+    }
+
+
+
     /** 'prec' '(' expression ')' */
     @Override
     public Boolean visitVorher(ConditionsParser.VorherContext ctx) {
         movements.push(Movement.LEFT);
-        boolean rtc = visit(ctx.expression()); 
+        boolean rtc = visit(ctx.expression());
         movements.pop();
         return rtc;
     }
@@ -219,7 +245,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         movements.pop();
         return rtc;
     }
-    
+
    /** '(' expression ')' */
     @Override
     public Boolean visitKlammern(ConditionsParser.KlammernContext ctx) {

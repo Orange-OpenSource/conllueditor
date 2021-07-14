@@ -43,7 +43,7 @@ expression
 	| NOT expression                   # nicht
 	| OPEN inner=expression CLOSE      # klammern
         | 'head' OPEN expression CLOSE     # kopf
-//        | 'children' OPEN expression (',' expression)* CLOSE     # children
+        | 'child' OPEN expression CLOSE    # child
         | 'prec' OPEN expression CLOSE     # vorher
         | 'next' OPEN expression CLOSE     # nachher
         | left=expression operator=AND right=expression  # und
