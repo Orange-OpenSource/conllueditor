@@ -395,7 +395,9 @@ public class ConllFile {
      */
     public void checkTree() {
         boolean firsterror = false;
+        int ct = 0;
         for (ConllSentence csent : sentences) {
+            ct++;
             try {
                 csent.makeTrees(null);
             } catch (ConllException e) {
@@ -403,7 +405,10 @@ public class ConllFile {
                     firsterror = true;
                     System.err.println("*** Formal file error. Correct with text editor:");
                 }
-                System.err.format(" Invalid sentence <%s>:\n\t%s\n", csent.getSentid(), e.getMessage());
+                if (csent.getSentid() != null)
+                    System.err.format(" Invalid sentence %d <%s>:\n\t%s\n", ct, csent.getSentid(), e.getMessage());
+                else
+                    System.err.format(" Invalid sentence %d:\n\t%s\n", ct, e.getMessage());
             }
         }
         
