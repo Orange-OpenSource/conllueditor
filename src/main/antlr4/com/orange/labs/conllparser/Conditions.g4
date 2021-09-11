@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 5th June 2021
+ @version 2.12.1 as of 11th September 2021
 */
 
 
@@ -58,6 +58,7 @@ field
     | XPOS       # checkXpos
     | DEPREL     # checkDeprel
     | FEAT       # checkFeat
+    | MISC       # checkMisc
     | ID         # checkID
     | MTW        # checkMTW
     | ISEMPTY    # checkEmpty
@@ -70,6 +71,7 @@ FORM   : 'Form:' ~[ \n\t)&|]+ ;
 XPOS   : 'Xpos:' ~[ \n\t)&|]+ ;
 DEPREL : 'Deprel:' [a-z]+( ':' [a-z]+)? ;
 FEAT   : 'Feat:' [A-Za-z_]+ '=' [A-Za-z0-9]+ ;
+MISC   : 'Misc:' [A-Za-z_]+ '=' ~[ \n\t)&|]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
 MTW    : 'MTW:' [2-9] ; // length of a MWT in tokens
 ISEMPTY: 'Empty' ; // emptyword 

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 5th June 2021
+ @version 2.12.1 as of 11th September 2021
  */
 
 
@@ -180,6 +180,16 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         ConllWord use = getCW();
         if (use == null) return false;
         boolean rtc = use.matchesFeatureValue(fv[0], fv[1]);
+        return rtc;
+    }
+
+    @Override
+    public Boolean visitCheckMisc(ConditionsParser.CheckMiscContext ctx) {
+        String text = ctx.MISC().getText();
+        String [] fv = text.substring(5).split("=");
+        ConllWord use = getCW();
+        if (use == null) return false;
+        boolean rtc = use.matchesMiscValue(fv[0], fv[1]);
         return rtc;
     }
 

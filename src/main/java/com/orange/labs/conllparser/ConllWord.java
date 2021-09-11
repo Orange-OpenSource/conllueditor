@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 14th July 2021
+ @version 2.12.1 as of 11th September 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1521,8 +1521,25 @@ public class ConllWord {
             return false;
         }
         return (v.matches(valregex));
-
     }
+
+    public boolean matchesMiscValue(String name, String valregex) {
+        if (misc == null || misc.isEmpty()) {
+            return false;
+        }
+        Object v = misc.get(name);
+        if (v == null) {
+            return false;
+        }
+        String val;
+        if (v instanceof String) {
+            val = (String)v;
+        } else {
+            val = String.valueOf((Long)v);
+        }
+        return (val.matches(valregex));
+    }
+
 
     public int getHead() {
         return head;

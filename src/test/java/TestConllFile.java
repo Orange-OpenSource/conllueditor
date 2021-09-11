@@ -44,7 +44,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.2 as of 22nd February 2021
+ @version 2.12.1 as of 11th September 2021
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestConllFile {
@@ -123,6 +123,12 @@ public class TestConllFile {
     }
 
     @Test
+    public void test01rule7() throws IOException, ConllException {
+        applyRule("Misc:SpaceAfter=No and Lemma:.*[aeiou]", "misc:FinalVowel=Yes", "rule6b.conllu");
+    }
+
+
+    @Test
     public void test02head() throws IOException, ConllException {
         applyRule("(head(Upos:VERB) and !Upos:PUNCT)", "misc:Head=Verbal", "rule7.conllu");
     }
@@ -157,8 +163,8 @@ public class TestConllFile {
         applyRule("child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)", "misc:Deps=PARTC+DET", "rule13.conllu");
     }
 
-    
-    
+
+
     @Test
     public void test11badtoken() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
@@ -213,7 +219,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals));
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, ID, MTW, 'Empty', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, 'Empty', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -230,5 +236,5 @@ public class TestConllFile {
                     expected, e.getMessage());
         }
     }
-    
+
 }

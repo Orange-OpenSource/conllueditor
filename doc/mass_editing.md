@@ -23,6 +23,7 @@ Examples:
   * `Form`
   * `Deprel`
   * `Feat` (Featname=Value)
+  * `Misc` (Miscname=Value)
   * `Id`
   * `MTW` (length of the mult-token word)
   * `Empty` (true if the current node is empty)
