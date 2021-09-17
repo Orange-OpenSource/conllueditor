@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.1 as of 11th September 2021
+ @version 2.12.2 as of 17th September 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1405,9 +1405,9 @@ public class ConllWord {
     /* matches a longer condition like
     Upos:VERB && (Lemma:mange || Feat:Person=3)
     */
-    public boolean matchCondition(String condition) throws ConllException {
+    public boolean matchCondition(String condition, Map<String, Set<String>> wordlists) throws ConllException {
         try {
-            return CheckConditions.evaluate(condition, this);
+            return CheckConditions.evaluate(condition, wordlists, this);
         } catch (Exception e) {
             //e.printStackTrace();
             throw new ConllException(e.getMessage());

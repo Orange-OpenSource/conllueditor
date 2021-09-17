@@ -1,3 +1,6 @@
+Version 2.12.2
+- Lemma: and Form: can have filenames as argument
+
 Version 2.12.1
 - added Misc:... to search and replace tool
 

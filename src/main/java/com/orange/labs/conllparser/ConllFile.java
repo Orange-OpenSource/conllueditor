@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 14th July 2021
+ @version 2.12.2 as of 17th September 2021
 */
 package com.orange.labs.conllparser;
 
@@ -50,6 +50,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -364,6 +365,8 @@ public class ConllFile {
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         String line;
 
+        // TODO: store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
+        Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
         int changes = 0;
         while ((line = br.readLine()) != null) {
             line = line.trim();
@@ -371,7 +374,7 @@ public class ConllFile {
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
             List<String>newvals = Arrays.asList(elems[1].split("[ \\t]+"));
-            int ch = conditionalEdit(elems[0], newvals);
+            int ch = conditionalEdit(elems[0], newvals, wordlists);
             System.err.println(ch + " changes for condition: " + elems[0] + " values: " + elems[1]);
             changes += ch;
         }
@@ -379,10 +382,10 @@ public class ConllFile {
     }
 
 
-    public int conditionalEdit(String condition, List<String>newvalues) throws ConllException {
+    public int conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists) throws ConllException {
         int changes = 0;
         for (ConllSentence cs : sentences) {
-            changes += cs.conditionalEdit(condition, newvalues);
+            changes += cs.conditionalEdit(condition, newvalues, wordlists);
         }
         return changes;
     }

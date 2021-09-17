@@ -1,19 +1,3 @@
-
-import com.orange.labs.conllparser.ConllException;
-import com.orange.labs.conllparser.ConllFile;
-import com.orange.labs.editor.ConlluEditor;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-
 /* This library is under the 3-Clause BSD License
 
 Copyright (c) 2018-2021, Orange S.A.
@@ -44,8 +28,23 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.1 as of 11th September 2021
- */
+ @version 2.12.2 as of 17th September 2021
+*/
+
+import com.orange.labs.conllparser.ConllException;
+import com.orange.labs.conllparser.ConllFile;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import org.apache.commons.io.FileUtils;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestConllFile {
 
@@ -75,7 +74,7 @@ public class TestConllFile {
         String[] newvals = newval.split(" ");
         //System.err.println("RRRRR " + rule + " " + Arrays.asList(newvals));
 //        try {
-        cf.conditionalEdit(rule, Arrays.asList(newvals));
+        cf.conditionalEdit(rule, Arrays.asList(newvals), null);
 //        } catch(Exception e) {
 //            e.printStackTrace();
 //            System.err.println("EEEEEEE " + e.getMessage());
@@ -169,7 +168,7 @@ public class TestConllFile {
     public void test11badtoken() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
-            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals));
+            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null);
         } catch (ConllException e) {
             String expected = "line 1:14 token recognition error at: 'Lemma '";
             Assert.assertEquals(String.format("bad token not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -181,7 +180,7 @@ public class TestConllFile {
     public void test12badparenthesis() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
-            cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals));
+            cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals), null);
         } catch (ConllException e) {
             String expected = "line 1:23 extraneous input ')' expecting <EOF>";
             Assert.assertEquals(String.format("missing left parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -193,7 +192,7 @@ public class TestConllFile {
     public void test13badparenthesis() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
-            cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals));
+            cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
             String expected = "line 1:24 missing ')' at '<EOF>'";
             Assert.assertEquals(String.format("missing right parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -205,7 +204,7 @@ public class TestConllFile {
     public void test14missingop() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
-            cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals));
+            cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
             String expected = "line 1:10 extraneous input 'Xpos:prep' expecting <EOF>";
             Assert.assertEquals(String.format("missing operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -217,7 +216,7 @@ public class TestConllFile {
     public void test15doubleop() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
-            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals));
+            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
             String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, 'Empty', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -229,7 +228,7 @@ public class TestConllFile {
     public void test16badNeg() throws IOException, ConllException {
         String[] newvals = "xpos:det".split(" ");
         try {
-            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals));
+            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
             String expected = "line 1:9 mismatched input '!' expecting {<EOF>, AND, OR}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),

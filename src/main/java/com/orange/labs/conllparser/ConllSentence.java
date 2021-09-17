@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 14th July 2021
+ @version 2.12.2 as of 17th September 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1973,8 +1973,9 @@ public class ConllSentence {
      *
      * @param condition a condition like (UPOS:NOUN and Lemma:de.*)
      * @param newValues a list of new values FORM:value
+     * @param wordlists here we put contents of files in conditions like Lemma:#filename.txt
      */
-    public int conditionalEdit(String condition, List<String> newvalues) throws ConllException {
+    public int conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists) throws ConllException {
         int changes = 0;
         if (newvalues.isEmpty()) {
             return 0;
@@ -1982,7 +1983,7 @@ public class ConllSentence {
         normalise();
         makeTrees(null);
         for (ConllWord cw : words) {
-            if (cw.matchCondition(condition)) {
+            if (cw.matchCondition(condition, wordlists)) {
                 changes++;
                 for (String val : newvalues) {
                     String[] elems = val.split(":", 2);
@@ -2021,7 +2022,7 @@ public class ConllSentence {
         }
         if (contracted != null) {
             for (ConllWord cw : contracted.values()) {
-                if (cw.matchCondition(condition)) {
+                if (cw.matchCondition(condition, wordlists)) {
                     changes++;
                     for (String val : newvalues) {
                         String[] elems = val.split(":", 2);
@@ -2063,7 +2064,7 @@ public class ConllSentence {
         if (emptywords != null) {
             for (List<ConllWord> cws : emptywords.values()) {
                 for (ConllWord cw : cws) {
-                    if (cw.matchCondition(condition)) {
+                    if (cw.matchCondition(condition, wordlists)) {
                         changes++;
                         for (String val : newvalues) {
                             String[] elems = val.split(":", 2);

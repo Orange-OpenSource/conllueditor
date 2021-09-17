@@ -27,6 +27,13 @@ Examples:
   * `Id`
   * `MTW` (length of the mult-token word)
   * `Empty` (true if the current node is empty)
+
+ `Lemma` and `Form` can have either a regex as argument or a filename of a file which contains a list of forms or lemmas:
+  * `Lemma:sing.* > misc:Value=Sing`
+  * `Lemma:#mylemmas.txt > misc:Value=Sing` (if the file `mylemmas.txt` does not exist, the condition is false)
+
+
+
 * `head(head(Upos:VERB and Feat:Tense=Past))`: true if the current token has a head who has a head with UPOS `VERB and the feature `Tense=Past`
 * `child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)`: true if the current token has a dependant with UPOS `VERB`
 and a feature `VerbForm=Part` and another child with UPOS `DET`. Available functions:

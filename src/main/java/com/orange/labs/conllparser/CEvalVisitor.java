@@ -28,43 +28,55 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.1 as of 11th September 2021
+ @version 2.12.2 as of 17th September 2021
  */
-
-
 package com.orange.labs.conllparser;
 
-
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
-
 
 /**
  *
  * @author johannes
  */
 public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
+
     ConllWord cword = null; // all conditions are checked on this word
     int level = 0; // -1 head, -2 head's head
     int sequence = 0; // -1 word to the left, 1 word to the right etc
-    enum Movement { UP, DOWN, LEFT, RIGHT};
-    Stack<Movement>movements; // keep the directions we walk from current node to node to test
-    Stack<Children>children; // a node may have more than one dependant. Here we have a counter to get through them all
 
-    public CEvalVisitor(ConllWord cword) {
+    enum Movement {
+        UP, DOWN, LEFT, RIGHT
+    };
+    Stack<Movement> movements; // keep the directions we walk from current node to node to test
+    Stack<Children> children; // a node may have more than one dependant. Here we have a counter to get through them all
+    Map<String, Set<String>> wordlists; // stores lists for Form and Lemma: "filename": (words)
+
+    public CEvalVisitor(ConllWord cword, Map<String, Set<String>> wordlists) {
         this.cword = cword;
         movements = new Stack<>();
         children = new Stack<>();
+        this.wordlists = wordlists;
     }
 
-
     public class Children {
+
         int index = 0; // current dependant to use
         boolean allSeen = false; // set to true when we have seen all dependants
     }
 
-
-    /** get the correct ConllWord (current word, its head, head's head, preceing or following). If there is no word
-     * at the end of the path (since the path demanded is not in this tree), null is returned
+    /**
+     * get the correct ConllWord (current word, its head, head's head, preceing
+     * or following). If there is no word at the end of the path (since the path
+     * demanded is not in this tree), null is returned
      */
     private ConllWord getCW() {
         //System.err.println("FROM " + cword);
@@ -73,29 +85,36 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         for (Movement m : movements) {
             //System.err.println("mov " + m);
             if (m == Movement.UP) {
-                if (pointingTo.getHeadWord() != null) pointingTo = pointingTo.getHeadWord();
-                else return null; // no head (i.e. we are at root)
+                if (pointingTo.getHeadWord() != null) {
+                    pointingTo = pointingTo.getHeadWord();
+                } else {
+                    return null; // no head (i.e. we are at root)
+                }
             } else if (m == Movement.LEFT) {
                 if (pointingTo.getId() > 1) {
-                    pointingTo = cword.getMysentence().getWord(pointingTo.getId()-1);
-                } else return null; // no preceding token
+                    pointingTo = cword.getMysentence().getWord(pointingTo.getId() - 1);
+                } else {
+                    return null; // no preceding token
+                }
             } else if (m == Movement.RIGHT) {
-                if (pointingTo.getId() < cword.getMysentence().size()-1) {
-                    pointingTo = cword.getMysentence().getWord(pointingTo.getId()+1);
-                } else return null; // no following token
+                if (pointingTo.getId() < cword.getMysentence().size() - 1) {
+                    pointingTo = cword.getMysentence().getWord(pointingTo.getId() + 1);
+                } else {
+                    return null; // no following token
+                }
             } else if (m == Movement.DOWN) {
                 if (pointingTo.getDependents() == null || pointingTo.getDependents().isEmpty()) {
                     children.lastElement().allSeen = true; // we've seen all dependants
                     return null; // no dependants
                 } else {
-                    if (children.lastElement().index < pointingTo.getDependents().size())
+                    if (children.lastElement().index < pointingTo.getDependents().size()) {
                         pointingTo = pointingTo.getDependents().get(children.lastElement().index);
-                    else {
-                       // no more dependants
-                       children.lastElement().allSeen = true; // we've seen all dependants
-                       return null;
-                   }
-               }
+                    } else {
+                        // no more dependants
+                        children.lastElement().allSeen = true; // we've seen all dependants
+                        return null;
+                    }
+                }
             }
         }
         //System.err.println("TO   " + pointingTo);
@@ -112,7 +131,9 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitCheckUpos(ConditionsParser.CheckUposContext ctx) {
         String text = ctx.UPOS().getText();
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = use.matchesUpostag(text.substring(5));
         return rtc;
     }
@@ -121,7 +142,9 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitCheckXpos(ConditionsParser.CheckXposContext ctx) {
         String text = ctx.XPOS().getText();
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = use.matchesXpostag(text.substring(5));
         return rtc;
     }
@@ -130,7 +153,9 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitCheckID(ConditionsParser.CheckIDContext ctx) {
         String text = ctx.ID().getText();
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = (use.getId() == Integer.parseInt(text.substring(3)));
         return rtc;
     }
@@ -140,9 +165,13 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         String text = ctx.MTW().getText();
         int wantedlength = Integer.parseInt(text.substring(4));
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         int subid = use.getSubid();
-        if (subid < 2) return false; // not a valid MWT
+        if (subid < 2) {
+            return false; // not a valid MWT
+        }
         int reallength = subid + 1 - use.getId();
         boolean rtc = (reallength == wantedlength);
         return rtc;
@@ -150,35 +179,88 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
 
     public Boolean visitCheckEmpty(ConditionsParser.CheckEmptyContext ctx) {
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = (use.getTokentype() == ConllWord.Tokentype.EMPTY);
         return rtc;
     }
 
+    private Set<String> readWordsFromFile(String filename) {
+        try {
+            FileInputStream fis = new FileInputStream(filename);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+            Set<String> words = new HashSet<>();
+            String line;
+            while ((line = br.readLine()) != null) {
+                words.add(line);
+            }
+            return words;
+        } catch (IOException e) {
+            System.err.format("Cannot open wordlist <%s>: %s\n", filename, e.getMessage());
+            return null;
+        }
+
+    }
+
     @Override
     public Boolean visitCheckLemma(ConditionsParser.CheckLemmaContext ctx) {
-        String text = ctx.LEMMA().getText();
+        String text = ctx.LEMMA().getText().substring(6);
         ConllWord use = getCW();
-        if (use == null) return false;
-        boolean rtc = use.matchesLemma(text.substring(6));
-        return rtc;
+        if (use == null) {
+            return false;
+        }
+
+        if (wordlists != null && text.startsWith("#") && text.length() > 1) {
+            String fn = text.substring(1);
+            if (!wordlists.containsKey(fn)) {
+                wordlists.put(fn, readWordsFromFile(fn));                
+            }
+            Set<String> words = wordlists.get(fn);
+            if (words != null && words.contains(use.getLemma())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            boolean rtc = use.matchesLemma(text);
+            return rtc;
+        }
     }
 
     @Override
     public Boolean visitCheckForm(ConditionsParser.CheckFormContext ctx) {
-        String text = ctx.FORM().getText();
+        String text = ctx.FORM().getText().substring(5);
         ConllWord use = getCW();
-        if (use == null) return false;
-        boolean rtc = use.matchesForm(text.substring(5));
-        return rtc;
+        if (use == null) {
+            return false;
+        }
+
+        if (wordlists != null && text.startsWith("#") && text.length() > 1) {
+            String fn = text.substring(1);
+            if (!wordlists.containsKey(fn)) {
+                wordlists.put(fn, readWordsFromFile(fn));
+            }
+            Set<String> words = wordlists.get(fn);
+            if (words != null && words.contains(use.getForm())) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            boolean rtc = use.matchesForm(text);
+            return rtc;
+        }
     }
 
     @Override
     public Boolean visitCheckFeat(ConditionsParser.CheckFeatContext ctx) {
         String text = ctx.FEAT().getText();
-        String [] fv = text.substring(5).split("=");
+        String[] fv = text.substring(5).split("=");
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = use.matchesFeatureValue(fv[0], fv[1]);
         return rtc;
     }
@@ -186,9 +268,11 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     @Override
     public Boolean visitCheckMisc(ConditionsParser.CheckMiscContext ctx) {
         String text = ctx.MISC().getText();
-        String [] fv = text.substring(5).split("=");
+        String[] fv = text.substring(5).split("=");
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = use.matchesMiscValue(fv[0], fv[1]);
         return rtc;
     }
@@ -197,20 +281,25 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitCheckDeprel(ConditionsParser.CheckDeprelContext ctx) {
         String text = ctx.DEPREL().getText();
         ConllWord use = getCW();
-        if (use == null) return false;
+        if (use == null) {
+            return false;
+        }
         boolean rtc = use.matchesDeplabel(text.substring(7));
         return rtc;
     }
 
-
-    /** negation ! or ~ */
+    /**
+     * negation ! or ~
+     */
     @Override
     public Boolean visitNicht(ConditionsParser.NichtContext ctx) {
         boolean value = visit(ctx.expression()); // evaluate the expr child
         return !value;
     }
 
-    /** 'head' '(' expression ')' */
+    /**
+     * 'head' '(' expression ')'
+     */
     @Override
     public Boolean visitKopf(ConditionsParser.KopfContext ctx) {
         movements.push(Movement.UP);
@@ -219,14 +308,13 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         return rtc;
     }
 
-
     @Override
     public Boolean visitChild(ConditionsParser.ChildContext ctx) {
         movements.push(Movement.DOWN);
         children.push(new Children()); // current node may have more then on dependant, we count the one used and set allSeen to true when we are done
 
         boolean rtc = false;
-        while(!children.lastElement().allSeen && !rtc) {
+        while (!children.lastElement().allSeen && !rtc) {
             rtc = visit(ctx.expression());
             //System.err.println("aaaaaaaa " + rtc + " " + children.lastElement().index + " " + children.lastElement().allSeen);
             children.lastElement().index++;
@@ -236,9 +324,9 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         return rtc;
     }
 
-
-
-    /** 'prec' '(' expression ')' */
+    /**
+     * 'prec' '(' expression ')'
+     */
     @Override
     public Boolean visitVorher(ConditionsParser.VorherContext ctx) {
         movements.push(Movement.LEFT);
@@ -247,7 +335,9 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         return rtc;
     }
 
-    /** 'next' '(' expression ')' */
+    /**
+     * 'next' '(' expression ')'
+     */
     @Override
     public Boolean visitNachher(ConditionsParser.NachherContext ctx) {
         movements.push(Movement.RIGHT);
@@ -256,13 +346,17 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         return rtc;
     }
 
-   /** '(' expression ')' */
+    /**
+     * '(' expression ')'
+     */
     @Override
     public Boolean visitKlammern(ConditionsParser.KlammernContext ctx) {
         return visit(ctx.expression()); // return child expr's value
     }
 
-    /** expr op=('or') expr */
+    /**
+     * expr op=('or') expr
+     */
     @Override
     public Boolean visitUnd(ConditionsParser.UndContext ctx) {
         boolean left = visit(ctx.expression(0));  // get value of left subexpression
@@ -270,7 +364,6 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         //if ( ctx.op.getType() == ConditionsParser.AND )
         return (left && right);
     }
-
 
     @Override
     public Boolean visitOder(ConditionsParser.OderContext ctx) {

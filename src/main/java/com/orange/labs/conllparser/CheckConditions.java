@@ -28,11 +28,13 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 5th June 2021
+ @version 2.12.2 as of 17th SeptemberJune 2021
  */
 
 package com.orange.labs.conllparser;
 
+import java.util.Map;
+import java.util.Set;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
@@ -40,7 +42,7 @@ import org.antlr.v4.runtime.tree.*;
 public class CheckConditions {
 
 
-    public static boolean evaluate(String condition, ConllWord cword) throws Exception {
+    public static boolean evaluate(String condition, Map<String, Set<String>> wordlists, ConllWord cword) throws Exception {
         ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
         lexer.addErrorListener(new GrammarErrorListener());
 
@@ -53,7 +55,7 @@ public class CheckConditions {
         parser.addErrorListener(new GrammarErrorListener());
         ParseTree tree = parser.prog(); // parse
 
-        CEvalVisitor eval = new CEvalVisitor(cword);
+        CEvalVisitor eval = new CEvalVisitor(cword, wordlists);
         boolean rtc = eval.visit(tree);
         //System.err.println("rtc " + rtc);
         return rtc;
@@ -92,7 +94,7 @@ public class CheckConditions {
              cword = new ConllWord(args[1].replaceAll(" +", "\t"), null, null);
         }
         System.err.println(cword);
-        CEvalVisitor eval = new CEvalVisitor(cword);
+        CEvalVisitor eval = new CEvalVisitor(cword, null);
         boolean rtc = eval.visit(tree);
         System.err.println("rtc " + rtc);
         }
