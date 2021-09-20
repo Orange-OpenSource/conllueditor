@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.2 as of 17th September 2021
+ @version 2.12.4 as of 17th September 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1487,6 +1487,11 @@ public class ConllWord {
             }
         }
     }
+
+	// delete a feature with name
+	public void delFeatureWithName(String name) {
+		features.remove(name);
+	}
 
     // add a unparsed feature=value pair */
     public void addFeature(String fval_unparsed) {
