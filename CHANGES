@@ -1,3 +1,6 @@
+Version 2.12.3
+- parser client configuration: accept definition of headers
+
 Version 2.12.2
 - Lemma: and Form: can have filenames as argument
 
