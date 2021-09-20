@@ -22,7 +22,7 @@ Examples:
   * `Lemma`
   * `Form`
   * `Deprel`
-  * `Feat` (Featname=Value)
+  * `Feat` (Featname=Value, an empty value deletes the feature from the word)
   * `Misc` (Miscname=Value)
   * `Id`
   * `MTW` (length of the mult-token word)
