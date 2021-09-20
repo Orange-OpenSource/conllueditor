@@ -141,6 +141,7 @@ function getServerInfo() {
             if (data.url) {
                 parseraddress = data.url;
                 window.document.title = "Parser CoNLL-U FrontEnd: " + data.url;
+                $("#parserurl").text(data.url);
             }
 
             if (data.info) {

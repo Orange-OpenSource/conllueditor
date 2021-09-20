@@ -22,7 +22,7 @@ The editor provides the following functionalities:
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
 
-Current version: 2.12.2
+Current version: 2.12.3
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -580,7 +580,10 @@ First edit the configuration file [src/test/resources/udpipeserver.conf](src/tes
 # configuration to  make a request to a UDPipe server
 
 # the url to send raw text to in order to get a CoNLL-U result (HTTP POST)
-url: http://lindat.mff.cuni.cz/services/udpipe/api/process
+parse: http://lindat.mff.cuni.cz/services/udpipe/api/process
+
+# headers eventually needed for the server to respond correctly
+parseheaders: Accept:application.json, ...
 
 # the URL providing some information on the parser (HTTP GET)
 info: http://lindat.mff.cuni.cz/services/udpipe/api/models

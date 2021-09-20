@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.6.0 as of 20th June 2020
+ @version 2.12.3 as of 20th September 2021
  */
 package com.orange.labs.parserclient;
 
@@ -72,6 +72,7 @@ public class ParserClient {
     private String txt_param;
     private Map<String, String> other;
     private List<String> jsonpath;
+    private Map<String, String>headers; // headers to be sent to the parser API
 
     /* just for testing */
 //    public ParserClient(String url, String txtparam, String otherparams, String jsonpath) {
@@ -124,8 +125,15 @@ public class ParserClient {
             if (elems.length != 2) {
                 System.err.println("Error in line: '" + line + "'");
             } else {
-                if ("url".equals(elems[0].trim())) {
+                if ("parse".equals(elems[0].trim()) || "url".equals(elems[0].trim())) {
                     API = elems[1].trim();
+                } else if ("parseheaders".equals(elems[0].trim())) {
+                    String [] headersstrings = elems[1].trim().split(",");
+                    headers = new HashMap<>();
+                    for (String headerstring : headersstrings) {
+                        String [] fields = headerstring.trim().split(":");
+                        headers.put(fields[0], fields[1]);
+                    }
                 } else if ("info".equals(elems[0].trim())) {
                     info = elems[1].trim();
                 } else if ("txt".equals(elems[0].trim())) {
@@ -160,11 +168,16 @@ public class ParserClient {
     }
 
     public List<ConllSentence> makerequest(String text) throws IOException, ConllException {
-        System.err.println(API + " " + txt_param + " " + other + " " + jsonpath);
+        System.err.println(API + " txt:" + txt_param + " other:" + other + " jsonpath:" + jsonpath);
 
         URL url = new URL(API);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
+        if (headers != null) {
+            for (String header : headers.keySet()) {
+                connection.setRequestProperty(header, headers.get(header));
+            }
+        }
 
         // get other params
         Map<String, String> params = new HashMap<>();

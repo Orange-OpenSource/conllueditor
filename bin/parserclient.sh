@@ -31,7 +31,14 @@ if [ "$1" == "--rootdir" ]; then
     shift
 fi
 
-PROXY="-Dhttp.proxyHost=niceway.rd.francetelecom.fr -Dhttp.proxyPort=3128"
+if [ "$1" == "-r" ]; then
+    ROOTDIR="--rootdir $BASENAME/../gui"
+    shift
+fi
+
+
+
+PROXY="-Dhttp.proxyHost=proxy -Dhttp.proxyPort=8080"
 #PROxY=-Djava.net.useSytemProxies=true
 
 java -cp $NEWESTJAR $PROXY com.orange.labs.parserclient.ParserClient ${ROOTDIR} "$@"
