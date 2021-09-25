@@ -978,6 +978,71 @@ public class ConlluEditor {
                 }
                 return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
 
+            } else if (command.startsWith("findexpression ")) {
+                String[] f = command.trim().split(" +", 3);
+                if (f.length != 3) {
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+                }
+                // si le deuxième mot est "true" on cherche en arrière
+                boolean backwards = f[1].equalsIgnoreCase("true");
+
+                for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
+                        (backwards ? i >= 0 : i < numberOfSentences);
+                        i = (backwards ? i - 1 : i + 1)) {
+                    ConllSentence cs = cfile.getSentences().get(i);
+                    ConllWord cw = cs.conditionalSearch(f[2]);
+                    if (cw != null) {
+                        currentSentenceId = i;
+                        ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.LEMMA, cw.getId(), cw.getId());
+                        return returnTree(currentSentenceId, cs, hl); //cw.getUpostag());
+                    }
+                }
+                return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
+
+            } else if (command.startsWith("replaceexpression ")) {
+                String[] f = command.trim().split(" +", 3);
+                if (f.length != 3) {
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+                }
+                String [] find_replace = f[2].split(" >");
+                if (find_replace.length != 2) {
+                    return formatErrMsg("bINVALID syntax «" + command + "»", currentSentenceId);
+                }
+                String find = find_replace[0].strip();
+                String replace = find_replace[1].strip();
+                if (find.isEmpty()) {
+                     return formatErrMsg("INVALID syntax. Missing search expression «" + command + "»", currentSentenceId);
+                }
+                if (replace.isEmpty()) {
+                     return formatErrMsg("INVALID syntax. Missing replace expression «" + command + "»", currentSentenceId);
+                }
+
+                // si le deuxième mot est "true" on cherche en arrière
+                boolean backwards = f[1].equalsIgnoreCase("true");
+
+                List<String>newvals = Arrays.asList(replace.split("[ \\t]+"));
+
+                for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
+                        (backwards ? i >= 0 : i < numberOfSentences);
+                        i = (backwards ? i - 1 : i + 1)) {
+                    ConllSentence cs = cfile.getSentences().get(i);
+                    if (history == null) {
+                        history = new History(200);
+                    }
+                    history.add(cs);
+
+                    Set<ConllWord> cws = cs.conditionalEdit(find, newvals, null);
+                    if (!cws.isEmpty()) {
+                        currentSentenceId = i;
+                        Set<Integer>ids = new HashSet<>();
+                        for (ConllWord cw : cws) ids.add(cw.getId());
+                        ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.LEMMA, ids);
+                        return returnTree(currentSentenceId, cs, hl); //cw.getUpostag());
+                    }
+                }
+                return formatErrMsg("not found «" + find + "»", currentSentenceId);
+
+
             } else if (command.startsWith("findlemma ")
                     || command.startsWith("findfeat ")
                     || command.startsWith("findupos ")

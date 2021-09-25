@@ -340,11 +340,42 @@ comments and sentences ids.
   * `case=det` finds a word with _case_ deprel whose head has a child with a _mark_ deprel.
 Click on the loop symbol to start the search. Activate the backwards symbol, to search backwards
 
+Other search modes can be chosen by clicking on the `toggle search modes` buttons:
+
+* complex search and search and replace
+* matching subtrees
+* no search (to have less headers on top of the GUI)
+
+### Complex search and search and replace
+
+This opens a search and search-and-display field. The search fields provides a simple language to find 
+sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
+
+For instance
+```
+Upos:NOUN and Deprel:obj and head(Feat:Tense=Pres)
+```
+
+searches for a sentence which contains a word with Upos = NOUN and Deprel = obj  has a head which has the feature `Tense=Pres` (click
+the `search` button
+
+![Complex search](doc/complexsearch.png)
+
+Adding a replace expression (as in [Mass Editing](doc/mass_editing.md))
+```
+Upos:NOUN and Deprel:obj and head(Feat:Tense=Pres)
+```
+
+Replaces all matching tokens in the first sentence where at least a token is matching
+
+![Search and replace](doc/searchandreplace.png)
+
 ### Matching subtrees
 
-The `show/hide subtree search` key toggles the subtree search window. This allows you to input a tree (using `_` as wildcards and regular expressions).
+This mode allows you to input a tree (using `_` as wildcards and regular expressions).
 Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with
 a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions.
+(N.B. in this mode the `?`-key is no longer a hot-key to display shortcuts)
 E.g.
 
 ```
@@ -386,7 +417,7 @@ The `sdparse` format may contain `_` as wildcards (in this case position informa
 #sdparse
 _ _ _
 case(_-3, _-1)
-det(_-3, _-1)
+det(_-3, _-2)
 ```
 ![Subtree search](doc/subtreesearch-sdparse-wildcards.png)
 

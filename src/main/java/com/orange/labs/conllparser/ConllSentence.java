@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2020, Orange S.A.
+Copyright (c) 2018-2021, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.2 as of 17th September 2021
+ @version 2.13.0 as of 18th September 2021
  */
 package com.orange.labs.conllparser;
 
@@ -1968,6 +1968,17 @@ public class ConllSentence {
         return start;
     }
 
+    /** find first word in sentence, which matches the condition */
+    public ConllWord conditionalSearch(String condition) throws ConllException {
+        normalise();
+        makeTrees(null);
+        for (ConllWord cw : words) {
+            if (cw.matchCondition(condition, null)) {
+                return cw;
+            }
+        }
+        return null;
+    }
     /**
      * change all words of the sentence which match the condition
      *
@@ -1975,16 +1986,19 @@ public class ConllSentence {
      * @param newValues a list of new values FORM:value
      * @param wordlists here we put contents of files in conditions like Lemma:#filename.txt
      */
-    public int conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists) throws ConllException {
-        int changes = 0;
+    public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists) throws ConllException {
+        //int changes = 0;
+        Set<ConllWord>matching_cw = new HashSet<>();
         if (newvalues.isEmpty()) {
-            return 0;
+            //return 0;
+            return matching_cw;
         }
         normalise();
         makeTrees(null);
         for (ConllWord cw : words) {
             if (cw.matchCondition(condition, wordlists)) {
-                changes++;
+                //changes++;
+                matching_cw.add(cw);
                 for (String val : newvalues) {
                     String[] elems = val.split(":", 2);
                     if (elems.length == 2) {
@@ -2023,35 +2037,36 @@ public class ConllSentence {
         if (contracted != null) {
             for (ConllWord cw : contracted.values()) {
                 if (cw.matchCondition(condition, wordlists)) {
-                    changes++;
+                    //changes++;
+                    matching_cw.add(cw);
                     for (String val : newvalues) {
                         String[] elems = val.split(":", 2);
                         if (elems.length == 2) {
                             switch (elems[0].toLowerCase()) {
-                                case "upos":
-                                    cw.setUpostag(elems[1]);
-                                    break;
-                                case "xpos":
-                                    cw.setXpostag(elems[1]);
-                                    break;
-                                case "deprel":
-                                    cw.setDeplabel(elems[1]);
-                                    break;
-                                case "feat":
-                                    cw.addFeature(elems[1]);
-                                    break;
-                                case "lemma":
-                                    cw.setLemma(elems[1]);
-                                    break;
+//                                case "upos":
+//                                    cw.setUpostag(elems[1]);
+//                                    break;
+//                                case "xpos":
+//                                    cw.setXpostag(elems[1]);
+//                                    break;
+//                                case "deprel":
+//                                    cw.setDeplabel(elems[1]);
+//                                    break;
+//                                case "feat":
+//                                    cw.addFeature(elems[1]);
+//                                    break;
+//                                case "lemma":
+//                                    cw.setLemma(elems[1]);
+//                                    break;
                                 case "form":
                                     cw.setForm(elems[1]);
                                     break;
                                 case "misc":
                                     cw.addMisc(elems[1]);
                                     break;
-                                case "eud":
-                                    cw.addDeps(elems[1]);
-                                    break;
+//                                case "eud":
+//                                    cw.addDeps(elems[1]);
+//                                    break;
                                 default:
                                     throw new ConllException("invalid new value " + val);
                             }
@@ -2065,7 +2080,8 @@ public class ConllSentence {
             for (List<ConllWord> cws : emptywords.values()) {
                 for (ConllWord cw : cws) {
                     if (cw.matchCondition(condition, wordlists)) {
-                        changes++;
+                        //changes++;
+                        matching_cw.add(cw);
                         for (String val : newvalues) {
                             String[] elems = val.split(":", 2);
                             if (elems.length == 2) {
@@ -2104,6 +2120,7 @@ public class ConllSentence {
             }
         }
 
-        return changes;
+        //return changes;
+        return matching_cw;
     }
 }

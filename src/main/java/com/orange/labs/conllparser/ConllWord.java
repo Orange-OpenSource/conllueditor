@@ -321,6 +321,11 @@ public class ConllWord {
             if (posMISC != -1) {
                 setMisc(elems[posMISC]);
             }
+            lemma = EmptyColumn;
+            upostag = EmptyColumn;
+            xpostag = EmptyColumn;
+            deplabel = EmptyColumn;
+            features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
             deps = new ArrayList<>(); // TODO either keep this or add checks to getDeps() calls
         } else {
             int posLEMMA = getColumn("LEMMA", columndefs);

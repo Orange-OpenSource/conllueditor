@@ -69,9 +69,10 @@ UPOS   : 'Upos:' [A-Z]+ ;
 LEMMA  : 'Lemma:' ~[ \n\t)&|]+ ;
 FORM   : 'Form:' ~[ \n\t)&|]+ ;
 XPOS   : 'Xpos:' ~[ \n\t)&|]+ ;
-DEPREL : 'Deprel:' [a-z]+( ':' [a-z]+)? ;
-FEAT   : 'Feat:' [A-Za-z_]+ '=' [A-Za-z0-9]+ ;
-MISC   : 'Misc:' [A-Za-z_]+ '=' ~[ \n\t)&|]+ ;
+//DEPREL : 'Deprel:' [a-z]+( ':' [a-z]+)? ;
+DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
+FEAT   : 'Feat:' [A-Za-z_]+ [:=] [A-Za-z0-9]+ ;
+MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
 MTW    : 'MTW:' [2-9] ; // length of a MWT in tokens
 ISEMPTY: 'Empty' ; // emptyword 

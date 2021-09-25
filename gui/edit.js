@@ -368,62 +368,96 @@ function getServerInfo() {
 }
 
 
-var more = true;
-var lastmore = true;
+//var more = true;
+var more = 1; // 1 normal search, 2: search and replace, 3: subtree search, 0: hide all
+var lastmore = 1; // to get back to the correct search mode after shortcuts have been displayed
 
 
 function switchSearch(on) {
     if (on) {
         //console.log("SEARCH OPENING");
-        $("#act_search").text("hide search");
+        //$("#act_search").text("hide search");
         $(".search").show();
         $('body').css("margin-top", "280px");
-        more = true;
+        //more = true;
     } else {
         //console.log("SEARCH CLOSING");
-        $("#act_search").text("show search");
+        //$("#act_search").text("show search");
         $(".search").hide();
         if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
-        more = false;
+        //more = false;
     }
 }
 
+function switchSearchReplace(on) {
+    if (on) {
+        //$("#act_subtree").text("hide search & replace");
+        $("#searchandreplace").show();
+        $('body').css("margin-top", "300px");
+    } else {
+        //$("#act_subtree").text("show search & replace");
+        $("#searchandreplace").hide();
+        $('body').css("margin-top", "280px");
+    }
+}
 
-function ToggleSubtree() {
-    if (more) {
-        switchSearch(false);
-
-        $("#act_subtree").text("hide subtree search");
+function switchSubtree(on) {
+    if (on) {
         $("#subtreesearch").show();
         $('body').css("margin-top", "300px");
-        more = false;
     } else {
-        switchSearch(true);
-
-        $("#act_subtree").text("show subtree search");
         $("#subtreesearch").hide();
         $('body').css("margin-top", "280px");
-        //if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
-        more = true;
     }
 }
 
+
 function ToggleSearch() {
-    if (more) {
+    if (more == 1) {
+        // go to mode 2: show S&R
+        more = 2;
         // is on
         switchSearch(false);
-        //more = false;
+        switchSearchReplace(true);
+        switchSubtree(false);
+
+        if (showshortcathelp) {
+            switchSCHelp(false);
+        }
+
+    } else if (more == 2) {
+        // go to mode ": show Subtrees
+        more = 3;
+        // in mode key '?' does not toogle shortcuts
+        switchSearch(false);
+        switchSearchReplace(false);
+        switchSubtree(true);
+
+        if (showshortcathelp) {
+            switchSCHelp(false);
+        }
+
+    } else if (more == 3) {
+        // go to mode 0, hide everything
+        more = 0;
+        switchSearch(false);
+        switchSearchReplace(false);
+        switchSubtree(false);
+
     } else {
-        // is off: switch it on
+        // in mode 0 go to standard mode
+        more = 1;
         switchSearch(true);
-        //more = true;
+        switchSearchReplace(false);
+        switchSubtree(false);
+
         if (showshortcathelp) {
              // switch off
             //ToggleShortcutHelp();
             switchSCHelp(false);
         }
     }
-    console.log("SEARCH", more, lastmore);
+    //console.log("SEARCH", more);
 }
 
 var showshortcathelp = false;
@@ -442,24 +476,20 @@ function switchSCHelp(on) {
 }
 
 function ToggleShortcutHelp() {
+    //console.log("SC", showshortcathelp, more, lastmore);
     if (showshortcathelp) {
         // hide short cut help
         switchSCHelp(false);
-        if (lastmore) {
-            // if before showing the help, the search fields were shown
-            // show them again
-            switchSearch(true);
-            //more = true;
-        }
+        more = lastmore-1; // on mode back
+        if (more < 0) more = 3;
+        ToggleSearch();
+
     } else {
         // show short cut help
         switchSCHelp(true);
         lastmore = more; // show search again when shortcut help is switched off
-        if (more) {
-            // we have to switch off the search fields
-            switchSearch(false);
-            //more = true;
-        }
+        more = 3;
+        ToggleSearch();
     }
 }
 
@@ -1888,6 +1918,10 @@ $(document).ready(function () {
             inputtext = "findmulti " + backwards + " " + $("#multifield").val();
         } else if (this.id === "findsentid") {
             inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
+        } else if (this.id === "searchgo") {
+            inputtext = "findexpression " + backwards + " " + $("#searchexpression").val();
+        } else if (this.id === "replacego") {
+            inputtext = "replaceexpression " + backwards + " " + $("#searchexpression").val() + " > " + $("#replaceexpression").val();
         } else if (this.id === "findsubtree") {
             inputtext = "findsubtree " + backwards + " " + $("#editsubtree").val();
         } else if (this.id === "createsubtree") {

@@ -374,20 +374,21 @@ public class ConllFile {
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
             List<String>newvals = Arrays.asList(elems[1].split("[ \\t]+"));
-            int ch = conditionalEdit(elems[0], newvals, wordlists);
-            System.err.println(ch + " changes for condition: " + elems[0] + " values: " + elems[1]);
-            changes += ch;
+            Set<ConllWord>matching_cw = conditionalEdit(elems[0], newvals, wordlists);
+            System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
+            changes += matching_cw.size();
         }
         System.err.println(changes + " changes");
     }
 
 
-    public int conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists) throws ConllException {
-        int changes = 0;
+    public Set<ConllWord> conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists) throws ConllException {
+        //int changes = 0;
+        Set<ConllWord>matching_cw = new HashSet<>();
         for (ConllSentence cs : sentences) {
-            changes += cs.conditionalEdit(condition, newvalues, wordlists);
+            matching_cw.addAll(cs.conditionalEdit(condition, newvalues, wordlists));
         }
-        return changes;
+        return matching_cw;
     }
 
 

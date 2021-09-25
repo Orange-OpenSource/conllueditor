@@ -72,13 +72,13 @@ public class TestConllFile {
 
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
         String[] newvals = newval.split(" ");
-        //System.err.println("RRRRR " + rule + " " + Arrays.asList(newvals));
-//        try {
+        System.err.println("RRRRR " + rule + " " + Arrays.asList(newvals));
+        try {
         cf.conditionalEdit(rule, Arrays.asList(newvals), null);
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//            System.err.println("EEEEEEE " + e.getMessage());
-//        }
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.err.println("EEEEEEE " + e.getMessage());
+        }
 
         File out = new File(folder, filename);
         FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
@@ -98,16 +98,19 @@ public class TestConllFile {
 
     @Test
     public void test01rule2() throws IOException, ConllException {
+        name("rule 2");
         applyRule("Xpos:_ and Upos:VERB and !Xpos:PARTP and (Feat:Number=Plur or Feat:Number=Sing)", "xpos:verbfin", "rule2.conllu");
     }
 
     @Test
     public void test01rule3() throws IOException, ConllException {
+        name("rule 3");
         applyRule("Lemma:.*[^A-Za-z,\\._:0-9]+.*", "feat:Chars=NonAscii xpos:NONASCII", "rule3.conllu");
     }
 
     @Test
     public void test01rule4() throws IOException, ConllException {
+        name("rule 4");
         applyRule("MTW:2", "form:MTW2", "rule4.conllu");
     }
 

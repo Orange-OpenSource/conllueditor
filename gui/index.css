@@ -544,8 +544,13 @@ text {
 
 #subtreesearch {
     display: none;
+}
+
+#searchandreplace {
+    display: none;
    
 }
+
 
 /* table of shortcut help (invoked with "?" key) */
 .sc {
