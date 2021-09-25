@@ -37,7 +37,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -256,7 +255,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     @Override
     public Boolean visitCheckFeat(ConditionsParser.CheckFeatContext ctx) {
         String text = ctx.FEAT().getText();
-        String[] fv = text.substring(5).split("=");
+        String[] fv = text.substring(5).split("[:=]");
         ConllWord use = getCW();
         if (use == null) {
             return false;
