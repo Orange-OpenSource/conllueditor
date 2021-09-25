@@ -1,5 +1,9 @@
-Version 2.13.0rc
+Version 2.13.0
 - adding a complex search mode (syntax as in mass editing) and search-and-replace
+
+Version 2.12.4
+- mass-editing: allow brackets in feature names like Number[psor]=...
+                delete features if value is empty
 
 Version 2.12.3
 - parser client configuration: accept definition of headers

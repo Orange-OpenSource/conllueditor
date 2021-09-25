@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.2 as of 17th September 2021
+ @version 2.12.4 as of 20th September 2021
 */
 
 import com.orange.labs.conllparser.ConllException;
@@ -129,6 +129,10 @@ public class TestConllFile {
         applyRule("Misc:SpaceAfter=No and Lemma:.*[aeiou]", "misc:FinalVowel=Yes", "rule6b.conllu");
     }
 
+    @Test
+    public void test01rule8() throws IOException, ConllException {
+        applyRule("Upos:NOUN", "feat:Number=", "rule6c.conllu");
+    }
 
     @Test
     public void test02head() throws IOException, ConllException {

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.13.0 as of 18th September 2021
+ @version 2.13.0 as of 25th September 2021
  */
 package com.orange.labs.conllparser;
 
@@ -2013,7 +2013,12 @@ public class ConllSentence {
                                 cw.setDeplabel(elems[1]);
                                 break;
                             case "feat":
-                                cw.addFeature(elems[1]);
+                                String [] key_value = elems[1].split("=", 2);
+								if (key_value[1].isEmpty()) {
+									cw.delFeatureWithName(key_value[0]);
+								} else {
+									cw.addFeature(elems[1]);
+								}
                                 break;
                             case "lemma":
                                 cw.setLemma(elems[1]);
@@ -2096,7 +2101,12 @@ public class ConllSentence {
                                         cw.setDeplabel(elems[1]);
                                         break;
                                     case "feat":
-                                        cw.addFeature(elems[1]);
+										String [] key_value = elems[1].split("=", 2);
+										if (key_value[1].isEmpty()) {
+											cw.delFeatureWithName(key_value[0]);
+										} else {
+											cw.addFeature(elems[1]);
+										}
                                         break;
                                     case "lemma":
                                         cw.setLemma(elems[1]);
