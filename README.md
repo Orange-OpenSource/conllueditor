@@ -22,7 +22,7 @@ The editor provides the following functionalities:
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
 
-Current version: 2.12.4
+Current version: 2.13.0
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -49,7 +49,6 @@ For more information see section [File Comparison](#file-comparison)
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js and popper.min.js.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
-* optionally apache or lighttpd
 * on MacOS: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
@@ -132,9 +131,7 @@ to get bug corrections/new features, run
 git pull
 rm -rf target/test-classes
 mvn install
-
 ```
-
 
 
 ## Starting the server
@@ -143,9 +140,7 @@ On smaller machines, the memory management of the java VM (`-Xmx...` option) may
 `bin/conlluedit.sh`. The current value (`-Xmx4g`) is largely sufficient to load larger treebanks with up to 1,5M tokens.
 
 
-### Stand-alone (preferred)
-
-if you do not have or do not want to install an HTTP server, ConlluEditor comes with a simple HTTP server:
+ConlluEditor comes with a simple HTTP server:
 
 ```bash
 bin/conlluedit.sh --rootdir  /path/to/ConlluEditor/gui treebank.conllu 8888
@@ -159,19 +154,6 @@ bin/conlluedit.sh -r treebank.conllu 8888
 
 Point your navigator  to `http://localhost:8888` .
 
-
-### Using a locally installed Apache our Lighttpd Server
-
-* create a symbolic link from your HTTP-server root to the `gui` directory:
-```bash
-ln -s /path/to/ConlluEditor/gui /var/www/conllueditor
-```
-
-* start the ConlluEditor server with a CoNLL-U file and a port number as arguments:
-```bash
-bin/conlluedit.sh treebank.conllu 8888
-```
-Point your navigator to `http://localhost/conllueditor?port=8888` .
 
 ### Using docker
 
@@ -188,7 +170,8 @@ Run the image in a docker container from the directory where your `.conllu`-file
 * `</absolute/path/to/datadir>` with the directory where the `.conllu`-file and other files reside
 
 ```
-docker run --rm -t --name conllueditor -p 8888:5555 \
+docker run --rm -t -d \
+  --name conllueditor -p 8888:5555 \
 	--user 1000:1000 \
 	-v </absolute/path/to/datadir>:/data \
 	--env filename=<yourfile>.conllu \
@@ -292,7 +275,7 @@ For languages which are written from the right to the left like Arabic or Hebrew
 
 ![Edit screen (Arabic)](doc/tree_R2L.png)
 
-Empty nodes (having `n.1` ids) are shown in a dashed box.
+Empty nodes (having `n.1` ids) are shown in a dashed box:
 
 ![Empty nodes](doc/tree_emptynode.png)
 
@@ -353,22 +336,28 @@ sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
 
 For instance
 ```
-Upos:NOUN and Deprel:obj and head(Feat:Tense=Pres)
+Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)
 ```
 
-searches for a sentence which contains a word with Upos = NOUN and Deprel = obj  has a head which has the feature `Tense=Pres` (click
-the `search` button
+N.B. `Feat:Tense=Pres` or `Feat:Tense:Pres` can be used. However, since `=` is a hotkey to start validation on the current sentence `:` is easier to enter.
+
+searches for a sentence which contains a word with Upos `NOUN`, Deprel `obj` and a head which has the feature `Tense=Pres` (click
+the `search` button)
 
 ![Complex search](doc/complexsearch.png)
 
 Adding a replace expression (as in [Mass Editing](doc/mass_editing.md))
 ```
-Upos:NOUN and Deprel:obj and head(Feat:Tense=Pres)
+Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)
 ```
 
-Replaces all matching tokens in the first sentence where at least a token is matching
+and lick `search & replace`. This replaces all matching tokens in the first sentence where at least one token is matching the search condition:
 
 ![Search and replace](doc/searchandreplace.png)
+
+In order to undo this replacement, click the undo button (
+<img src="gui/img/undo.svg" alt="undo" width="15"/>), to continue
+replacing, click `search & replace` again
 
 ### Matching subtrees
 
