@@ -194,6 +194,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
             while ((line = br.readLine()) != null) {
                 words.add(line);
             }
+            br.close();
             return words;
         } catch (IOException e) {
             System.err.format("Cannot open wordlist <%s>: %s\n", filename, e.getMessage());

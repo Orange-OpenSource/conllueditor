@@ -49,6 +49,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.sql.rowset.serial.SerialRef;
+
 /**
  * read and parse CONLL
  *
@@ -1407,7 +1409,7 @@ public class ConllSentence {
         // extraire cet arbre partiel
         //PrintStream out = System.out;
         Map<String, ConllWord> table = new HashMap<>(); // All nodes (including empty nodes) and their stringified id
-        StringBuilder errs = new StringBuilder();
+        //StringBuilder errs = new StringBuilder();
         headss = new ArrayList<>();
 //        try {
 //            out = new PrintStream(System.out, true, "UTF-8");
@@ -1446,7 +1448,7 @@ public class ConllSentence {
             if (w.getHead() > 0) {
                 // mettre W dans la liste des dépendants de sa tête
                 if (w.getHead() > words.size()) {
-                    String si = sentid;
+                    //String si = sentid;
 //                    if (si == null) {
 //                        si = "";
 //                    }
@@ -2013,11 +2015,15 @@ public class ConllSentence {
                                 cw.setDeplabel(elems[1]);
                                 break;
                             case "feat":
-                                String [] key_value = elems[1].split("=", 2);
+                                String [] key_value = elems[1].split("[:=]", 2);
+                                if (key_value.length != 2) {
+                                    throw new ConllException("invalid new feature, must be Name=[value] <" + elems[1] + ">");
+                                }
+
 								if (key_value[1].isEmpty()) {
 									cw.delFeatureWithName(key_value[0]);
 								} else {
-									cw.addFeature(elems[1]);
+									cw.addFeature(key_value[0], key_value[1]);
 								}
                                 break;
                             case "lemma":
@@ -2027,7 +2033,18 @@ public class ConllSentence {
                                 cw.setForm(elems[1]);
                                 break;
                             case "misc":
-                                cw.addMisc(elems[1]);
+                                //cw.addMisc(elems[1]);
+                                //break;
+                                key_value = elems[1].split("[:=]", 2);
+                                if (key_value.length != 2) {
+                                    throw new ConllException("invalid new misc, must be Name=[value] <" + elems[1] + ">");
+                                }
+
+								if (key_value[1].isEmpty()) {
+									cw.delMiscWithName(key_value[0]);
+								} else {                                    
+									cw.addMisc(key_value[0] + "=" + key_value[1]);
+								}
                                 break;
                             case "eud":
                                 cw.addDeps(elems[1]);
@@ -2067,7 +2084,18 @@ public class ConllSentence {
                                     cw.setForm(elems[1]);
                                     break;
                                 case "misc":
-                                    cw.addMisc(elems[1]);
+                                    //cw.addMisc(elems[1]);
+
+                                    String [] key_value = elems[1].split("[:=]", 2);
+                                    if (key_value.length != 2) {
+                                        throw new ConllException("invalid new misc, must be Name=[value] <" + elems[1] + ">");
+                                    }
+    
+                                    if (key_value[1].isEmpty()) {
+                                        cw.delMiscWithName(key_value[0]);
+                                    } else {                                    
+                                        cw.addMisc(key_value[0] + "=" + key_value[1]);
+                                    }
                                     break;
 //                                case "eud":
 //                                    cw.addDeps(elems[1]);
@@ -2101,12 +2129,16 @@ public class ConllSentence {
                                         cw.setDeplabel(elems[1]);
                                         break;
                                     case "feat":
-										String [] key_value = elems[1].split("=", 2);
-										if (key_value[1].isEmpty()) {
-											cw.delFeatureWithName(key_value[0]);
-										} else {
-											cw.addFeature(elems[1]);
-										}
+							            String [] key_value = elems[1].split("[:=]", 2);
+                                        if (key_value.length != 2) {
+                                            throw new ConllException("invalid new feature, must be Name=[value] <" + elems[1] + ">");
+                                        }
+        
+                                        if (key_value[1].isEmpty()) {
+                                            cw.delFeatureWithName(key_value[0]);
+                                        } else {
+                                            cw.addFeature(key_value[0], key_value[1]);
+                                        }
                                         break;
                                     case "lemma":
                                         cw.setLemma(elems[1]);
@@ -2118,7 +2150,17 @@ public class ConllSentence {
                                         cw.addMisc(elems[1]);
                                         break;
                                     case "eud":
-                                        cw.addDeps(elems[1]);
+                                        //cw.addDeps(elems[1]);
+                                        key_value = elems[1].split("[:=]", 2);
+                                        if (key_value.length != 2) {
+                                            throw new ConllException("invalid new misc, must be Name=[value] <" + elems[1] + ">");
+                                        }
+        
+                                        if (key_value[1].isEmpty()) {
+                                            cw.delFeatureWithName(key_value[0]);
+                                        } else {                                    
+                                            cw.addMisc(key_value[0] + "=" + key_value[1]);
+                                        }
                                         break;
                                     default:
                                         throw new ConllException("invalid new value " + val);

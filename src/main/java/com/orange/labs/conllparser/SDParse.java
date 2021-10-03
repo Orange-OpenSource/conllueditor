@@ -105,9 +105,8 @@ public class SDParse {
      BufferedReader br = new BufferedReader(new InputStreamReader(instream, StandardCharsets.UTF_8));
 
         String line;
-        int ct = 0;
-
-        StringBuilder sb = new StringBuilder();
+        //int ct = 0;
+//        StringBuilder sb = new StringBuilder();
         
         Pattern depre = Pattern.compile("([a-z:_]+)\\s*\\(\\s*([\\S]+?)(-(\\d+))?\\s*,\\s*([\\S]+?)(-(\\d+))?\\s*\\)");
         //Pattern formpos = Pattern.compile("(\\S+)-(\\d+)");
@@ -224,7 +223,7 @@ public class SDParse {
  
         
         List<ConllWord> cws = new ArrayList<>();
-        String head = heads.iterator().next();
+        //String head = heads.iterator().next();
         for (Integer pos : positions.keySet()) {
         //for (String word : words) {
             Word word = positions.get(pos);

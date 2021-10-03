@@ -1504,6 +1504,10 @@ public class ConllWord {
         features.put(name_val[0], name_val.length > 1 ? name_val[1] : "");
     }
 
+    public void addFeature(String name, String val) {
+        features.put(name, val);
+    }
+
     // check whether any fatures are present
     public boolean anyFeatures() {
         return !features.isEmpty();
@@ -1713,6 +1717,11 @@ public class ConllWord {
         misc.put(key, val);
         return prexists;
     }
+
+    // delete a misc with name
+	public void delMiscWithName(String name) {
+		misc.remove(name);
+	}
 
     public String getSpacesAfter() {
         return spacesAfter;

@@ -72,12 +72,10 @@ public class TestConllFile {
 
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
         String[] newvals = newval.split(" ");
-        System.err.println("RRRRR " + rule + " " + Arrays.asList(newvals));
         try {
         cf.conditionalEdit(rule, Arrays.asList(newvals), null);
         } catch(Exception e) {
             e.printStackTrace();
-            System.err.println("EEEEEEE " + e.getMessage());
         }
 
         File out = new File(folder, filename);

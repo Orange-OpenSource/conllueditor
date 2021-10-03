@@ -38,7 +38,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>2.13.0rc</version>
+    <version>2.13.0</version>
     <packaging>jar</packaging>
 
     <properties>

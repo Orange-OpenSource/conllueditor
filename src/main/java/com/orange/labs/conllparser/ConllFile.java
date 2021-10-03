@@ -107,7 +107,7 @@ public class ConllFile {
         parse(inputStream, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
     }
 
-    public ConllFile(File file, Class cs) throws IOException, ConllException {
+    public ConllFile(File file, Class<ConllSentence> cs) throws IOException, ConllException {
         conllsentenceSubclass = cs;
         FileInputStream fis = new FileInputStream(file);
         parse(fis, false, false);
@@ -118,7 +118,7 @@ public class ConllFile {
         this(filecontents, null);
     }
 
-    public ConllFile(String filecontents, Class cs) throws ConllException, IOException {
+    public ConllFile(String filecontents, Class<ConllSentence> cs) throws ConllException, IOException {
         conllsentenceSubclass = cs;
         InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
         parse(inputStream, false, false);
@@ -379,6 +379,7 @@ public class ConllFile {
             changes += matching_cw.size();
         }
         System.err.println(changes + " changes");
+        br.close();
     }
 
 

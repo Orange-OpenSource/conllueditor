@@ -217,8 +217,8 @@ public class ValidFeatures {
                     continue;
                 }
 
-                String type = feature.get("type").getAsString();
-                String doc = feature.get("doc").getAsString();
+                //String type = feature.get("type").getAsString();
+                //String doc = feature.get("doc").getAsString();
 
                 // read universal values
                 Iterator<JsonElement> it = feature.get("uvalues").getAsJsonArray().iterator();
