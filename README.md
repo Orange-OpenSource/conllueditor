@@ -22,7 +22,7 @@ The editor provides the following functionalities:
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
 
-Current version: 2.13.0
+Current version: 2.13.1
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
