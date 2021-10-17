@@ -88,10 +88,16 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         //System.err.println("visitSubstring " + ctx.getText());
         String value = visit(ctx.token()); 
         int start = Integer.parseInt(ctx.NUMBER(0).getText());
-        int end = Integer.parseInt(ctx.NUMBER(1).getText());
-        if (end < start || end>value.length()) return value;
-        //System.err.println("SUBSTR " + value+ " " +  + " " + ctx.NUMBER(1));
-        return value.substring(start,end);
+        if (ctx.NUMBER().size() > 1) {
+            int end = Integer.parseInt(ctx.NUMBER(1).getText());
+            if (end < start || end>value.length()) {
+                return value;
+            }
+            return value.substring(start,end);
+        } else {
+            if (start>value.length()) return value;
+            return value.substring(start);
+        }
     }
     
     @Override

@@ -73,7 +73,7 @@ token
         ;
 
 substring
-        : 'substring' OPEN token ',' NUMBER  ',' NUMBER CLOSE  # substr
+        : 'substring' OPEN token ',' NUMBER  ( ',' NUMBER )? CLOSE  # substr
         ;
 
 head
