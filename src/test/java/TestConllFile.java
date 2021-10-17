@@ -91,87 +91,87 @@ public class TestConllFile {
     @Test
     public void test01rule1() throws IOException, ConllException {
         name("rule 1");
-        applyRule("Upos:ADP and Deprel:case", "xpos:prep", "rule1.conllu");
+        applyRule("Upos:ADP and Deprel:case", "xpos:\"prep\"", "rule1.conllu");
     }
 
     @Test
     public void test01rule2() throws IOException, ConllException {
         name("rule 2");
-        applyRule("Xpos:_ and Upos:VERB and !Xpos:PARTP and (Feat:Number=Plur or Feat:Number=Sing)", "xpos:verbfin", "rule2.conllu");
+        applyRule("Xpos:_ and Upos:VERB and !Xpos:PARTP and (Feat:Number=Plur or Feat:Number=Sing)", "xpos:\"verbfin\"", "rule2.conllu");
     }
 
     @Test
     public void test01rule3() throws IOException, ConllException {
         name("rule 3");
-        applyRule("Lemma:.*[^A-Za-z,\\._:0-9]+.*", "feat:Chars=NonAscii xpos:NONASCII", "rule3.conllu");
+        applyRule("Lemma:.*[^A-Za-z,\\._:0-9]+.*", "feat:\"Chars=NonAscii\" xpos:\"NONASCII\"", "rule3.conllu");
     }
 
     @Test
     public void test01rule4() throws IOException, ConllException {
         name("rule 4");
-        applyRule("MTW:2", "form:MTW2", "rule4.conllu");
+        applyRule("MTW:2", "form:\"MTW2\"", "rule4.conllu");
     }
 
     @Test
     public void test01rule5() throws IOException, ConllException {
-        applyRule("Empty", "xpos:EMPTY", "rule5.conllu");
+        applyRule("Empty", "xpos:\"EMPTY\"", "rule5.conllu");
     }
 
     @Test
     public void test01rule6() throws IOException, ConllException {
-        applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:Noun=Plural_or_Masc", "rule6.conllu");
+        applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:\"Noun=Plural_or_Masc\"", "rule6.conllu");
     }
 
     @Test
     public void test01rule7() throws IOException, ConllException {
-        applyRule("Misc:SpaceAfter=No and Lemma:.*[aeiou]", "misc:FinalVowel=Yes", "rule6b.conllu");
+        applyRule("Misc:SpaceAfter=No and Lemma:.*[aeiou]", "misc:\"FinalVowel=Yes\"", "rule6b.conllu");
     }
 
     @Test
     public void test01rule8() throws IOException, ConllException {
-        applyRule("Upos:NOUN", "feat:Number=", "rule6c.conllu");
+        applyRule("Upos:NOUN", "feat:\"Number=\"", "rule6c.conllu");
     }
 
     @Test
     public void test02head() throws IOException, ConllException {
-        applyRule("(head(Upos:VERB) and !Upos:PUNCT)", "misc:Head=Verbal", "rule7.conllu");
+        applyRule("(head(Upos:VERB) and !Upos:PUNCT)", "misc:\"Head=Verbal\"", "rule7.conllu");
     }
 
     @Test
     public void test02headshead() throws IOException, ConllException {
-        applyRule("head(head(Upos:VERB and Feat:Tense=Pres ))", "misc:GrandmotherHead=Verbal", "rule8.conllu");
+        applyRule("head(head(Upos:VERB and Feat:Tense=Pres ))", "misc:\"GrandmotherHead=Verbal\"", "rule8.conllu");
     }
 
     @Test
     public void test02headOfPreceding() throws IOException, ConllException {
-        applyRule("prec(head(Upos:VERB))", "misc:HeadOfPreceding=Verbal", "rule9.conllu");
+        applyRule("prec(head(Upos:VERB))", "misc:\"HeadOfPreceding=Verbal\"", "rule9.conllu");
     }
 
     @Test
     public void test02PrecedingOfHead() throws IOException, ConllException {
-        applyRule("head(prec(Upos:AUX))", "misc:PrecedingOfHead=Aux", "rule10.conllu");
+        applyRule("head(prec(Upos:AUX))", "misc:\"PrecedingOfHead=Aux\"", "rule10.conllu");
     }
 
     @Test
     public void test02FollowingOfHead() throws IOException, ConllException {
-        applyRule("head(next(Upos:NOUN))", "misc:FollowingOfHead=Noun", "rule11.conllu");
+        applyRule("head(next(Upos:NOUN))", "misc:\"FollowingOfHead=Noun\"", "rule11.conllu");
     }
 
     @Test
     public void test03Child1() throws IOException, ConllException {
-        applyRule("child(Upos:VERB) and child(Upos:DET)", "misc:Deps=VERB+DET", "rule12.conllu");
+        applyRule("child(Upos:VERB) and child(Upos:DET)", "misc:\"Deps=VERB+DET\"", "rule12.conllu");
     }
 
     @Test
     public void test03Child2() throws IOException, ConllException {
-        applyRule("child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)", "misc:Deps=PARTC+DET", "rule13.conllu");
+        applyRule("child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)", "misc:\"Deps=PARTC+DET\"", "rule13.conllu");
     }
 
 
 
     @Test
     public void test11badtoken() throws IOException, ConllException {
-        String[] newvals = "xpos:det".split(" ");
+        String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null);
         } catch (ConllException e) {
@@ -183,7 +183,7 @@ public class TestConllFile {
 
     @Test
     public void test12badparenthesis() throws IOException, ConllException {
-        String[] newvals = "xpos:det".split(" ");
+        String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals), null);
         } catch (ConllException e) {
@@ -195,7 +195,7 @@ public class TestConllFile {
 
     @Test
     public void test13badparenthesis() throws IOException, ConllException {
-        String[] newvals = "xpos:det".split(" ");
+        String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
@@ -207,7 +207,7 @@ public class TestConllFile {
 
     @Test
     public void test14missingop() throws IOException, ConllException {
-        String[] newvals = "xpos:det".split(" ");
+        String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
@@ -219,7 +219,7 @@ public class TestConllFile {
 
     @Test
     public void test15doubleop() throws IOException, ConllException {
-        String[] newvals = "xpos:det".split(" ");
+        String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
@@ -231,7 +231,7 @@ public class TestConllFile {
 
     @Test
     public void test16badNeg() throws IOException, ConllException {
-        String[] newvals = "xpos:det".split(" ");
+        String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {

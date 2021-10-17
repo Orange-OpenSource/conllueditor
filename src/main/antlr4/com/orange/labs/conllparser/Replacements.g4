@@ -84,7 +84,8 @@ head
   
  
 value
-    : '"' CHAR+ '"' # wortohne
+//    : '"' (CHAR+ | NUMBER+)+ '"' # wortohne
+    : CHARS                   # wortohne
     ;
 
 
@@ -96,10 +97,14 @@ CLOSE : ')' ;
 THIS : 'this' ;
 HEADKW : 'head' ;
 COLUMN : 'Form' | 'Lemma' | 'Upos' | 'Xpos' | 'Feat_' [A-Za-z0-9_]+ | 'Deprel' | 'Misc_' [A-Za-z0-9_]+ ;
-//VALUE : '"' ~["]+ '"' ; // does not work
-NUMBER: [0-9]+ ;
-CHAR :  ~["]  ;
 
+NUMBER: [0-9]+ ;
+//CHAR :  ~["]  ;
+CHARS: '"' ~["]+ '"' ;
+
+//fragment NUMBER: [0-9];
+//fragment NON_DIGITS : ~["0-9];
+//CHAR: (NUMBER+ | NON_DIGITS+ (NUMBER+)?);
 
 
 // NEWLINE:'\r'? '\n' ;     // return newlines to parser (is end-statement signal)

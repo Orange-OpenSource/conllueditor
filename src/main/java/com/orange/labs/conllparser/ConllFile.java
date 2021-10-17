@@ -355,7 +355,7 @@ public class ConllFile {
 
     /** read rules file
      *   condition > newvals
-     *   Upos:ADP and Lemma:d.* > Feat:Key=Val, Xpos:prep
+     *   Upos:ADP and Lemma:d.* > Feat:Key="Val", Xpos:"prep"
      * @param rulefile
      * @return number of changes
      * @throws FileNotFoundException

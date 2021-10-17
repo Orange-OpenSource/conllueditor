@@ -1985,7 +1985,7 @@ public class ConllSentence {
      * change all words of the sentence which match the condition
      *
      * @param condition a condition like (UPOS:NOUN and Lemma:de.*)
-     * @param newValues a list of new values FORM:value
+     * @param newValues a list of new values FORM:"value"  (as defined in Replacements.g4)
      * @param wordlists here we put contents of files in conditions like Lemma:#filename.txt
      */
     public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists) throws ConllException {
@@ -2004,20 +2004,21 @@ public class ConllSentence {
                 for (String val : newvalues) {
                     String[] elems = val.split(":", 2);
                     if (elems.length == 2) {
+                        String newvalue = GetReplacement.evaluate(elems[1], cw);
                         switch (elems[0].toLowerCase()) {
                             case "upos":
-                                cw.setUpostag(elems[1]);
+                                cw.setUpostag(newvalue);
                                 break;
                             case "xpos":
-                                cw.setXpostag(elems[1]);
+                                cw.setXpostag(newvalue);
                                 break;
                             case "deprel":
-                                cw.setDeplabel(elems[1]);
+                                cw.setDeplabel(newvalue);
                                 break;
                             case "feat":
-                                String [] key_value = elems[1].split("[:=]", 2);
+                                String [] key_value = newvalue.split("[:=]", 2);
                                 if (key_value.length != 2) {
-                                    throw new ConllException("invalid new feature, must be Name=[value] <" + elems[1] + ">");
+                                    throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
                                 }
 
 								if (key_value[1].isEmpty()) {
@@ -2027,17 +2028,16 @@ public class ConllSentence {
 								}
                                 break;
                             case "lemma":
-                                cw.setLemma(elems[1]);
+                                cw.setLemma(newvalue);
                                 break;
                             case "form":
-                                cw.setForm(elems[1]);
+                                cw.setForm(newvalue);
                                 break;
                             case "misc":
-                                //cw.addMisc(elems[1]);
-                                //break;
-                                key_value = elems[1].split("[:=]", 2);
+
+                                key_value = newvalue.split("[:=]", 2);
                                 if (key_value.length != 2) {
-                                    throw new ConllException("invalid new misc, must be Name=[value] <" + elems[1] + ">");
+                                    throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
                                 }
 
 								if (key_value[1].isEmpty()) {
@@ -2047,7 +2047,7 @@ public class ConllSentence {
 								}
                                 break;
                             case "eud":
-                                cw.addDeps(elems[1]);
+                                cw.addDeps(newvalue);
                                 break;
                             default:
                                 throw new ConllException("invalid new value " + val);
@@ -2064,31 +2064,17 @@ public class ConllSentence {
                     for (String val : newvalues) {
                         String[] elems = val.split(":", 2);
                         if (elems.length == 2) {
+                            String newvalue = GetReplacement.evaluate(elems[1], cw);
                             switch (elems[0].toLowerCase()) {
-//                                case "upos":
-//                                    cw.setUpostag(elems[1]);
-//                                    break;
-//                                case "xpos":
-//                                    cw.setXpostag(elems[1]);
-//                                    break;
-//                                case "deprel":
-//                                    cw.setDeplabel(elems[1]);
-//                                    break;
-//                                case "feat":
-//                                    cw.addFeature(elems[1]);
-//                                    break;
-//                                case "lemma":
-//                                    cw.setLemma(elems[1]);
-//                                    break;
                                 case "form":
-                                    cw.setForm(elems[1]);
+                                    cw.setForm(newvalue);
                                     break;
                                 case "misc":
                                     //cw.addMisc(elems[1]);
 
-                                    String [] key_value = elems[1].split("[:=]", 2);
+                                    String [] key_value = newvalue.split("[:=]", 2);
                                     if (key_value.length != 2) {
-                                        throw new ConllException("invalid new misc, must be Name=[value] <" + elems[1] + ">");
+                                        throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
                                     }
     
                                     if (key_value[1].isEmpty()) {
@@ -2097,9 +2083,7 @@ public class ConllSentence {
                                         cw.addMisc(key_value[0] + "=" + key_value[1]);
                                     }
                                     break;
-//                                case "eud":
-//                                    cw.addDeps(elems[1]);
-//                                    break;
+
                                 default:
                                     throw new ConllException("invalid new value " + val);
                             }
@@ -2117,21 +2101,22 @@ public class ConllSentence {
                         matching_cw.add(cw);
                         for (String val : newvalues) {
                             String[] elems = val.split(":", 2);
+                            String newvalue = GetReplacement.evaluate(elems[1], cw);
                             if (elems.length == 2) {
                                 switch (elems[0].toLowerCase()) {
                                     case "upos":
-                                        cw.setUpostag(elems[1]);
+                                        cw.setUpostag(newvalue);
                                         break;
                                     case "xpos":
-                                        cw.setXpostag(elems[1]);
+                                        cw.setXpostag(newvalue);
                                         break;
                                     case "deprel":
-                                        cw.setDeplabel(elems[1]);
+                                        cw.setDeplabel(newvalue);
                                         break;
                                     case "feat":
-							            String [] key_value = elems[1].split("[:=]", 2);
+					String [] key_value = newvalue.split("[:=]", 2);
                                         if (key_value.length != 2) {
-                                            throw new ConllException("invalid new feature, must be Name=[value] <" + elems[1] + ">");
+                                            throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
                                         }
         
                                         if (key_value[1].isEmpty()) {
@@ -2141,19 +2126,18 @@ public class ConllSentence {
                                         }
                                         break;
                                     case "lemma":
-                                        cw.setLemma(elems[1]);
+                                        cw.setLemma(newvalue);
                                         break;
                                     case "form":
-                                        cw.setForm(elems[1]);
+                                        cw.setForm(newvalue);
                                         break;
                                     case "misc":
-                                        cw.addMisc(elems[1]);
+                                        cw.addMisc(newvalue);
                                         break;
                                     case "eud":
-                                        //cw.addDeps(elems[1]);
-                                        key_value = elems[1].split("[:=]", 2);
+                                        key_value = newvalue.split("[:=]", 2);
                                         if (key_value.length != 2) {
-                                            throw new ConllException("invalid new misc, must be Name=[value] <" + elems[1] + ">");
+                                            throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
                                         }
         
                                         if (key_value[1].isEmpty()) {

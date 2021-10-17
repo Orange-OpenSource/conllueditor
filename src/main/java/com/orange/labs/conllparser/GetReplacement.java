@@ -35,14 +35,12 @@ package com.orange.labs.conllparser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
-public class CheckReplacements {
+public class GetReplacement {
 
-    public static String evaluate(String extraction, Map<String, Set<String>> wordlists, ConllWord cword) throws Exception {
+    public static String evaluate(String extraction, ConllWord cword) { //throws Exception {
         ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
         lexer.addErrorListener(new GrammarErrorListener());
 
@@ -91,6 +89,7 @@ public class CheckReplacements {
             ex.add("head(head(Lemma))");
             ex.add("\"a\" + \"b\" +head(Lemma) + \"z\"");
             ex.add("\"NOUN\"");
+            ex.add("\"Number=Sing\"");
             ex.add("this(Form)");
             ex.add("this(Feat_Definite)+this(Form)");
             ex.add("substring(head(Form),1)");
@@ -123,7 +122,7 @@ public class CheckReplacements {
 
                 REvalVisitor eval = new REvalVisitor(cword, arg);
                 String rtc = eval.visit(tree);
-                System.err.format(":: " + arg + " ===> <%s>\n", rtc);
+                System.err.format(":: " + arg + " ===> '%s'\n", rtc);
             }
         }
 

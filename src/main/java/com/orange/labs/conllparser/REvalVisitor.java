@@ -155,12 +155,14 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
     public String visitWortohne(ReplacementsParser.WortohneContext ctx) {
         //System.err.println("visitWortohne " + ctx.getText());
         String value = ctx.getText(); // evaluate the expression child
-        StringBuilder zeichenkette = new StringBuilder();
-        for (int i = 0; i < ctx.CHAR().size(); ++i) {
-            zeichenkette.append(ctx.CHAR(i));
-        }
+        //StringBuilder zeichenkette = new StringBuilder();
+        //System.err.println("C " + ctx.CHARS() + " " + value);       
+//        for (int i = 0; i < ctx.CHARS().size(); ++i) {
+//            zeichenkette.append(ctx.CHARS(i));
+//        }
         //System.err.println("WORTOHNE " + zeichenkette.toString());
-        return zeichenkette.toString();
+        return value.substring(1, value.length()-1);
+        //return zeichenkette.toString();
     }
 
     @Override
