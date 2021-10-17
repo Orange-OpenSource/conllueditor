@@ -93,6 +93,10 @@ public class CheckReplacements {
             ex.add("\"NOUN\"");
             ex.add("this(Form)");
             ex.add("this(Feat_Definite)+this(Form)");
+            ex.add("substring(head(Form),1)");
+            ex.add("substring(head(head(Feat_Number)),1,3)");
+            ex.add("replace(head(Form),\"u.\",\"aaaa\")");
+
 
             ex.addAll(Arrays.asList(args));
             

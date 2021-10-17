@@ -32,19 +32,17 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.conllparser;
 
-
 //public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
 public class REvalVisitor extends ReplacementsBaseVisitor<String> {
- 
 
     ConllWord cword = null; // all conditions are checked on this word
     ConllWord current = null;
     int level = 0; // -1 head, -2 head's head
     int sequence = 0; // -1 word to the left, 1 word to the right etc
 
- public REvalVisitor(ConllWord cword, String extractexpression) {
-     this.cword = cword;
-     current = cword;
+    public REvalVisitor(ConllWord cword, String extractexpression) {
+        this.cword = cword;
+        current = cword;
     }
 
     public class Children {
@@ -53,7 +51,6 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         boolean allSeen = false; // set to true when we have seen all dependants
     }
 
- 
     @Override
     public String visitPrintResult(ReplacementsParser.PrintResultContext ctx) {
         //System.err.println("visitPrintresult " + ctx.getText());
@@ -65,41 +62,63 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
     public String visitElement(ReplacementsParser.ElementContext ctx) {
         //System.err.println("visitElement " + ctx.getText());
         StringBuilder zeichenkette = new StringBuilder();
-        for (int i = 0; i< ctx.token().size(); ++i) {
+        for (int i = 0; i < ctx.token().size(); ++i) {
             String value = visit(ctx.token(i)); // evaluate the expression child
-            if (value == null) value = ctx.token(i).getText();
+            if (value == null) {
+                value = ctx.token(i).getText();
+            }
             //System.err.println("element " + value);
             zeichenkette.append(value);
         }
         return zeichenkette.toString();
     }
-    
+
+//    @Override
+//    public String visitTeil(ReplacementsParser.TeilContext ctx) {
+//        //System.err.println("visitTeil " + ctx.getText());
+//        String value = visit(ctx.substring()); // evaluate the expression child
+//        //System.err.println("WORT " + value);
+//        return value;
+//    }
 
     @Override
-    public String visitTeil(ReplacementsParser.TeilContext ctx) {
+    public String visitSubstr(ReplacementsParser.SubstrContext ctx) {
+        //System.err.println("visitSubstring " + ctx.getText());
+        String value = visit(ctx.token());
+        int start = Integer.parseInt(ctx.NUMBER(0).getText());
+        if (ctx.NUMBER().size() > 1) {
+            int end = Integer.parseInt(ctx.NUMBER(1).getText());
+            if (end < start || end > value.length()) {
+                return value;
+            }
+            return value.substring(start, end);
+        } else {
+            if (start > value.length()) {
+                return value;
+            }
+            return value.substring(start);
+        }
+    }
+
+    @Override
+    public String visitAendern(ReplacementsParser.AendernContext ctx) {
         //System.err.println("visitTeil " + ctx.getText());
-        String value = visit(ctx.substring()); // evaluate the expression child
+        String value = visit(ctx.replace()); // evaluate the expression child
         //System.err.println("WORT " + value);
         return value;
     }
 
     @Override
-    public String visitSubstr(ReplacementsParser.SubstrContext ctx) {
-        //System.err.println("visitSubstring " + ctx.getText());
-        String value = visit(ctx.token()); 
-        int start = Integer.parseInt(ctx.NUMBER(0).getText());
-        if (ctx.NUMBER().size() > 1) {
-            int end = Integer.parseInt(ctx.NUMBER(1).getText());
-            if (end < start || end>value.length()) {
-                return value;
-            }
-            return value.substring(start,end);
-        } else {
-            if (start>value.length()) return value;
-            return value.substring(start);
-        }
+    public String visitRepl(ReplacementsParser.ReplContext ctx) {
+        String value = visit(ctx.token());
+        String from = visit(ctx.value(0));
+        String to = visit(ctx.value(1));
+        //System.err.println("REPL "+ value  + " " + from + "-->" + to);
+        String res = value.replaceAll(from, to);
+
+        return res;
     }
-    
+
     @Override
     public String visitWort(ReplacementsParser.WortContext ctx) {
         //System.err.println("visitWort " + ctx.getText());
@@ -113,14 +132,13 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         //System.err.println("visitWortohne " + ctx.getText());
         String value = ctx.getText(); // evaluate the expression child
         StringBuilder zeichenkette = new StringBuilder();
-        for (int i = 0; i< ctx.CHAR().size(); ++i) {
+        for (int i = 0; i < ctx.CHAR().size(); ++i) {
             zeichenkette.append(ctx.CHAR(i));
         }
         //System.err.println("WORTOHNE " + zeichenkette.toString());
         return zeichenkette.toString();
     }
-  
-    
+
     @Override
     public String visitSpalte(ReplacementsParser.SpalteContext ctx) {
         //System.err.println("visitSpalte " + ctx.getText());
@@ -129,37 +147,34 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
 
         return getColumn(cword, column);
     }
-    
+
     private String getColumn(ConllWord cword, String column) {
         if ("Form".equals(column)) {
             return cword.getForm();
-        }
-        else if ("Lemma".equals(column)) {
+        } else if ("Lemma".equals(column)) {
             return cword.getLemma();
-        }
-        else if ("Upos".equals(column)) {
+        } else if ("Upos".equals(column)) {
             return cword.getUpostag();
-        }
-        else if ("Xpos".equals(column)) {
+        } else if ("Xpos".equals(column)) {
             return cword.getXpostag();
-        }
-        else if ("Deprel".equals(column)) {
+        } else if ("Deprel".equals(column)) {
             return cword.getDeplabel();
-        }
-        else if (column.startsWith("Feat_")) {
+        } else if (column.startsWith("Feat_")) {
             String val = cword.getFeatures().get(column.substring(5));
-            if (val != null) return val;
+            if (val != null) {
+                return val;
+            }
             return "";
-        }
-        else if (column.startsWith("Misc_")) {
+        } else if (column.startsWith("Misc_")) {
             String val = cword.getFeatures().get(column.substring(5));
-            if (val != null) return val;
+            if (val != null) {
+                return val;
+            }
             return "";
         }
         return column;
     }
-    
-    
+
     @Override
     public String visitKopf(ReplacementsParser.KopfContext ctx) {
         //System.err.println("visitKopf " + ctx.getText());
@@ -168,31 +183,29 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         return rtc;
     }
 
-     // Soemthing is wrong here: head(head()) does not work
-    
+    // Soemthing is wrong here: head(head()) does not work
     @Override
     public String visitKopfkopf(ReplacementsParser.KopfkopfContext ctx) {
         //System.err.println("visitKopfkopf " + ctx.getText());
 
         //System.err.println("KOPFKOPF   " + current);
-        current = current.getHeadWord();                
+        current = current.getHeadWord();
         //System.err.println("  KOPFKOPF " + current);
         String rtc = visit(ctx.inner);
         //System.err.println("          " + rtc);
         return rtc;
     }
-    
+
     @Override
     public String visitKopfspalte(ReplacementsParser.KopfspalteContext ctx) {
         //System.err.println("visitKopfspalte " + ctx.getText());
         String column = ctx.COLUMN().getText();
         ConllWord head = current.getHeadWord();
 
-
-        if (head == null) return "";
+        if (head == null) {
+            return "";
+        }
         return getColumn(head, column);
     }
-    
 
 }
-
