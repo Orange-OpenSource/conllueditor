@@ -47,6 +47,8 @@ e.g.
    ... > Feat_Featname:this(Lemma)      // set the feature Featnamer to the value of Lemma
    ... > Feat_Gender:this(Misc_Special) // set the feature Gender to the value of the Misc Special)
    ... > Misc_Keyname:head(head(Upos))   // set the key "Keyname" of column MISC to the Upos of the head of the head
+   ... > Lemma:substring(this(Form), 1, 3)       // set lemma to the substring (1 - 3) of Form 
+   ... > Lemma:substring(this(Form), 1)       // set lemma to the substring (1 - end) of Form 
 
 The grammer here sees only the part after the first ":"
 
@@ -67,8 +69,12 @@ token
         : THIS OPEN COLUMN CLOSE    # spalte
         | head                      # kopf
         | value                     # wort
+        | substring                 # teil
         ;
 
+substring
+        : 'substring' OPEN token ',' NUMBER  ',' NUMBER CLOSE  # substr
+        ;
 
 head
       : HEADKW OPEN COLUMN CLOSE # kopfspalte
@@ -90,6 +96,7 @@ THIS : 'this' ;
 HEADKW : 'head' ;
 COLUMN : 'Form' | 'Lemma' | 'Upos' | 'Xpos' | 'Feat_' [A-Za-z0-9_]+ | 'Deprel' | 'Misc_' [A-Za-z0-9_]+ ;
 //VALUE : '"' ~["]+ '"' ; // does not work
+NUMBER: [0-9]+ ;
 CHAR :  ~["]  ;
 
 

@@ -74,6 +74,25 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         return zeichenkette.toString();
     }
     
+
+    @Override
+    public String visitTeil(ReplacementsParser.TeilContext ctx) {
+        //System.err.println("visitTeil " + ctx.getText());
+        String value = visit(ctx.substring()); // evaluate the expression child
+        //System.err.println("WORT " + value);
+        return value;
+    }
+
+    @Override
+    public String visitSubstr(ReplacementsParser.SubstrContext ctx) {
+        //System.err.println("visitSubstring " + ctx.getText());
+        String value = visit(ctx.token()); 
+        int start = Integer.parseInt(ctx.NUMBER(0).getText());
+        int end = Integer.parseInt(ctx.NUMBER(1).getText());
+        if (end < start || end>value.length()) return value;
+        //System.err.println("SUBSTR " + value+ " " +  + " " + ctx.NUMBER(1));
+        return value.substring(start,end);
+    }
     
     @Override
     public String visitWort(ReplacementsParser.WortContext ctx) {

@@ -32,6 +32,9 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.conllparser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.antlr.v4.runtime.*;
@@ -83,16 +86,27 @@ public class CheckReplacements {
             //    cword = new ConllWord(args[1].replaceAll(" +", "\t"), null, null);
             //}
 
-            for (String arg : args) {
+            List<String> ex = new ArrayList<>();
+            ex.add("head(head(head(Lemma)))");
+            ex.add("head(head(Lemma))");
+            ex.add("\"a\" + \"b\" +head(Lemma) + \"z\"");
+            ex.add("\"NOUN\"");
+            ex.add("this(Form)");
+            ex.add("this(Feat_Definite)+this(Form)");
+
+            ex.addAll(Arrays.asList(args));
+            
+            for (String arg : ex) {
                 System.err.format("\nparsing <%s>\n", arg);
                 ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(arg));
                 lexer.addErrorListener(new GrammarErrorListener());
 
-            // we can see tokens only once !
-//            for (Token tok : lexer.getAllTokens()) {
-//                System.err.println("token: " + tok + " " + tok.getTokenIndex() + " " + tok.getTokenSource().getSourceName());
-//            }
-//            if (true) continue;
+//                // we can see tokens only once !
+//                for (Token tok : lexer.getAllTokens()) {
+//                    System.err.println("token: " + tok + "\t" + tok.getType());
+//                }
+//                if (true)   continue;
+            
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 ReplacementsParser parser = new ReplacementsParser(tokens);
                 parser.addErrorListener(new GrammarErrorListener());
