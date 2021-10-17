@@ -192,9 +192,9 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
             }
             return "";
         } else if (column.startsWith("Misc_")) {
-            String val = cword.getFeatures().get(column.substring(5));
+            Object val = cword.getMisc().get(column.substring(5));
             if (val != null) {
-                return val;
+                return val.toString();
             }
             return "";
         }

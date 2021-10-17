@@ -285,5 +285,20 @@ public class TestConllFile {
         name("repl 05");
         applyRule("Upos:VERB", "lemma:\"préfix_\"+replace(this(Form),\"[aeiouy]\",\"V\") feat:\"LowerHeadLemma=\"+lower(head(Lemma))", "rule24.conllu");
     }
-    
+
+    @Test
+    public void test20repl06() throws IOException, ConllException {
+        name("repl 06");
+        applyRule("Misc:Enhanced=.*", "xpos:\"TOTO\" feat:\"EUD=\"+this(Misc_Enhanced)", "rule25.conllu");
+    }
+
+    @Test
+    public void test20repl07() throws IOException, ConllException {
+        name("repl 07");
+        applyRule("Upos:VERB", "feat:\"InlfClass=\"+this(Feat_Number) feat:\"Number=\"", "rule26.conllu");
+    }
+
+
+
+//!Empty   > feat=InlfClass:this(Feat_NounClass)   feat:NounClass=
 }

@@ -73,7 +73,7 @@ public class GetReplacement {
             ConllSentence csent = new ConllSentence(
                     "1\tI\tI\tPRON\tPP\tPerson=1\t2\tnsubj\t_\t_\n"
                     + "2\tknew\tknow\tVERB\tvfin\tTense=Past_\t0\troot\t_\t_\n"
-                    + "3\tthe\tthe\tDET\tAD\tDefinite=Yes\t4\tdet\t_\tSpacesAfter=\\t\n"
+                    + "3\tthe\tthe\tDET\tAD\tDefinite=Yes\t4\tdet\t_\tSpacesAfter=\\t|Other=Erthygl\n"
                     + "4\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t5\tnsubj\t_\t_\n"
                     + "5\tstank\tstink\tVERB\tVV\tNumber=Plur|TEnse=Past\t2\tccomp\t_\tSpaceAfter=No", null);
             csent.makeTrees(null);
@@ -103,6 +103,7 @@ public class GetReplacement {
             ex.add("lower(head(Upos))+\"...\"");
             ex.add("cap(head(head(Upos)))");
             ex.add("substring(upper(head(Form)),2,4)");
+            ex.add("this(Misc_Other)");
 
             ex.addAll(Arrays.asList(args));
 
