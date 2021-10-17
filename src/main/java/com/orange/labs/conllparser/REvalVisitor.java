@@ -100,13 +100,13 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         }
     }
 
-    @Override
-    public String visitAendern(ReplacementsParser.AendernContext ctx) {
-        //System.err.println("visitTeil " + ctx.getText());
-        String value = visit(ctx.replace()); // evaluate the expression child
-        //System.err.println("WORT " + value);
-        return value;
-    }
+//    @Override
+//    public String visitAendern(ReplacementsParser.AendernContext ctx) {
+//        //System.err.println("visitTeil " + ctx.getText());
+//        String value = visit(ctx.replace()); // evaluate the expression child
+//        //System.err.println("WORT " + value);
+//        return value;
+//    }
 
     @Override
     public String visitRepl(ReplacementsParser.ReplContext ctx) {
@@ -119,6 +119,30 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         return res;
     }
 
+        @Override
+    public String visitBlock(ReplacementsParser.BlockContext ctx) {
+        String value = visit(ctx.token());
+
+        //System.err.println("REPL "+ value  + " " + from + "-->" + to);
+        String res = value.toUpperCase();
+
+        return res;
+    }
+
+    public String visitKlein(ReplacementsParser.KleinContext ctx) {
+        String value = visit(ctx.token());
+        String res = value.toLowerCase();
+
+        return res;
+    }
+
+    public String visitGross(ReplacementsParser.GrossContext ctx) {
+        String value = visit(ctx.token());
+        String res = value.substring(0, 1).toUpperCase() + value.substring(1).toLowerCase();
+
+        return res;
+    }
+    
     @Override
     public String visitWort(ReplacementsParser.WortContext ctx) {
         //System.err.println("visitWort " + ctx.getText());

@@ -69,23 +69,13 @@ token
         : THIS OPEN COLUMN CLOSE    # spalte
         | head                      # kopf
         | value                     # wort
-//        | substring                 # teil
         | 'substring' OPEN token ',' NUMBER  ( ',' NUMBER )? CLOSE  # substr
-        | replace                   # aendern
-//        | upper                     # block
-//        | lower                     # klein
-//        | cap                       # gross
-//        | 'upper' OPEN token CLOSE  # block
+        | 'replace' OPEN token ',' value ',' value CLOSE            # repl
+        | 'cap' OPEN token CLOSE    # gross
+        | 'upper' OPEN token CLOSE  # block
+        | 'lower' OPEN token CLOSE  # klein
         ;
 
-/*substring
-        : 'substring' OPEN token ',' NUMBER  ( ',' NUMBER )? CLOSE  # substr
-        ;
-*/
-replace 
-        : 'replace' OPEN token ',' value ',' value CLOSE            # repl
-        ;
-        
 
 head
       : HEADKW OPEN COLUMN CLOSE # kopfspalte

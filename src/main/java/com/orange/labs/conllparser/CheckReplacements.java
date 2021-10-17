@@ -96,6 +96,10 @@ public class CheckReplacements {
             ex.add("substring(head(Form),1)");
             ex.add("substring(head(head(Feat_Number)),1,3)");
             ex.add("replace(head(Form),\"u.\",\"aaaa\")");
+            ex.add("replace(replace(head(Form),\"u.\",\"aaaa\"),\"a\",\"B\")");
+            ex.add("upper(head(Form))+\"!!!\"");
+            ex.add("lower(head(Upos))+\"...\"");
+            ex.add("cap(head(head(Upos)))");
 
 
             ex.addAll(Arrays.asList(args));
