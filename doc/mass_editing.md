@@ -30,8 +30,8 @@ Examples:
   * `Empty` (no value, true if the current node is empty)
 
  `Lemma` and `Form` can have either a regex as argument or a filename of a file which contains a list of forms or lemmas:
-  * `Lemma:sing.* > misc:Value=Sing`
-  * `Lemma:#mylemmas.txt > misc:Value=Sing` (if the file `mylemmas.txt` does not exist, the condition is false)
+  * `Lemma:sing.* > misc:"Value=Sing"`
+  * `Lemma:#mylemmas.txt > misc:"Value=Sing"` (if the file `mylemmas.txt` does not exist, the condition is false)
 
 
 In addition to key keys listed above, four functions are available to take the context of the token into account:
@@ -51,12 +51,37 @@ The same language is used for complex search and replace
 
 ## New Values
 
-`new_values` is a list of key:values to set to the current token. Possible keys
-* `form` (`form:newform`)
+`new_values` is a list of key:values to set to the current token. Possible `keys`:
+* `form` 
 * `lemma`
 * `upos`
 * `xpos`
 * `deprel`
-* `feat`  (`feat:Featname=Value` or `feat:Featname:Value`, an empty value like `feat:Number=` deletes the feature from the word)
-* `misc`  (`misc:Key=Value` or `misc:Key:Value`, an empty value deletes the misc from the word)
+* `feat`  
+* `misc` 
 
+`values` is a combination (using ` +`) of strings or functions which give access to other columns of the current word or it's head. Strings must be included
+in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`, `Lemma`, `Xpos`, `Upos`, `Deprel`, `Feat_Featname`, `Misc_miscname`)
+* `this(<column_name>)` value of the given column of the current token
+* `head(<column_name>)` value of the given column of the head of the current token
+* `head(head(<column_name>)` value of the given column of the head's head of the current token
+* `substring(this()/head(), start, end)`  take the substring of the this/head expression from `start` to `end`
+* `substring(this()/head(), start)`  take the substring of the result of the this/head expression from ` start` until the end of the string
+* `upper(this()/head())`  uppercase the result of the this/head expression
+* `lower(this()/head())` lowercase the result of the this/head expression
+* `cap(this()/head())` capitalize (first character uppercase, rest lowercase) the result of the this/head expression
+* `replace(this()/head(), regex, newstring) replaces the `regex` of the result fo the this/head expression by `newstring`
+
+for instance:
+* `Upos:"NOUN"`                      set Upos to `NOUN`
+* `Feat:"Number=Sing"`               adds a feature `Number=Sing`  (Number: deletes the feature)
+* `Lemma:this(Form)`                set lemma to the form of current token
+* `Lemma:this(Misc_Translit)`       set lemma to the key `Translit` of the `Misc` column
+* `Lemma:this(Form)+"er"`           set lemma to the form + "er"
+* `Lemma:"de"+token(Form)`         set lemma to "de" + form
+* `Feat:"Featname"+this(Lemma)`       set the feature Featname to the value of Lemma
+* `Feat:"Gender"+this(Misc_Special)` set the feature Gender to the value of the Misc Special
+* `Misc:"Keyname"+head(head(Upos))`    set the key "Keyname" of `Misc` column  to the Upos of the head of the head
+* `Lemma:substring(this(Form),1,3)`      set lemma to the substring (1 - 3) of the form 
+* `Lemma:substring(this(Form),1)`       set lemma to the substring (1 - end) ofthe form 
+*  `Form:replace(this(Form),"é","e")`  replace all occurrances of `é` in the form by `e`

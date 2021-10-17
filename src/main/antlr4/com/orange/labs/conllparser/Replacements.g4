@@ -38,17 +38,17 @@ are permitted provided that the following conditions are met:
 
 e.g.
 
-   ... > Upos:"NOUN"                     // set Upos to "NOUN"
-   ... > Feat_Number:"Sing"              // adds a feature "Number=Sing"  (Number: deletes the feature)
-   ... > Lemma:this(Form)               // set lemma to the Form
-   ... > Lemma:this(Misc_Translit)      // set lemma to the key Translit from the Misc comumn
-   ... > Lemma:this(Form)+"er"          // set lemma to Form + "er"
-   ... > Lemma:"de" + token(Form)        // set lemma to "de" +  Form
-   ... > Feat:"Featname"+this(Lemma)      // set the feature Featnamer to the value of Lemma
-   ... > Feat:"Gender"+this(Misc_Special) // set the feature Gender to the value of the Misc Special)
+   ... > Upos:"NOUN"                       // set Upos to "NOUN"
+   ... > Feat:"Number=Sing"                // adds a feature "Number=Sing"  (Number: deletes the feature)
+   ... > Lemma:this(Form)                  // set lemma to the Form of current token
+   ... > Lemma:this(Misc_Translit)         // set lemma to the key Translit from the Misc comlmn
+   ... > Lemma:this(Form)+"er"             // set lemma to Form + "er"
+   ... > Lemma:"de" + token(Form)          // set lemma to "de" +  Form
+   ... > Feat:"Featname"+this(Lemma)       // set the feature Featnamer to the value of Lemma
+   ... > Feat:"Gender"+this(Misc_Special)  // set the feature Gender to the value of the Misc Special
    ... > Misc:"Keyname"+head(head(Upos))   // set the key "Keyname" of column MISC to the Upos of the head of the head
-   ... > Lemma:substring(this(Form), 1, 3)       // set lemma to the substring (1 - 3) of Form 
-   ... > Lemma:substring(this(Form), 1)       // set lemma to the substring (1 - end) of Form 
+   ... > Lemma:substring(this(Form), 1, 3) // set lemma to the substring (1 - 3) of Form 
+   ... > Lemma:substring(this(Form), 1)    // set lemma to the substring (1 - end) of Form 
 
 The grammer here sees only the part after the first ":"
 
