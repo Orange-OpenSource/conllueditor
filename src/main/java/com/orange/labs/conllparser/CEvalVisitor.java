@@ -42,10 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-/**
- *
- * @author johannes
- */
+
 public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
 
     ConllWord cword = null; // all conditions are checked on this word

@@ -57,6 +57,6 @@ The same language is used for complex search and replace
 * `upos`
 * `xpos`
 * `deprel`
-* `feat`  (`feat:Featname=Value` or `feat:Featname:Value`, an empty value deletes the feature from the word)
+* `feat`  (`feat:Featname=Value` or `feat:Featname:Value`, an empty value like `feat:Number=` deletes the feature from the word)
 * `misc`  (`misc:Key=Value` or `misc:Key:Value`, an empty value deletes the misc from the word)
 

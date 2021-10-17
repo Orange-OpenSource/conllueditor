@@ -28,59 +28,69 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.4 as of 11th September 2021
+ @version 2.13.1 as of 16th October 2021
 */
 
-// grammar to parse the conditions for complex search (and replace) and mass editing
-grammar Conditions;
+/* grammer for the rules to prepare the new values in search and replace and mass edit
+   ... > column:"value" 
+   ... > column:token(column2)
+   ... > column:head(head(column2))
+
+e.g.
+
+   ... > Upos:"NOUN"                     // set Upos to "NOUN"
+   ... > Feat_Number:"Sing"              // adds a feature "Number=Sing"  (Number: deletes the feature)
+   ... > Lemma:this(Form)               // set lemma to the Form
+   ... > Lemma:this(Misc_Translit)      // set lemma to the key Translit from the Misc comumn
+   ... > Lemma:this(Form)+"er"          // set lemma to Form + "er"
+   ... > Lemma:"de" + token(Form)        // set lemma to "de" +  Form
+   ... > Feat_Featname:this(Lemma)      // set the feature Featnamer to the value of Lemma
+   ... > Feat_Gender:this(Misc_Special) // set the feature Gender to the value of the Misc Special)
+   ... > Misc_Keyname:head(head(Upos))   // set the key "Keyname" of column MISC to the Upos of the head of the head
+
+The grammer here sees only the part after the first ":"
+
+*/
+
+grammar Replacements;
 
 
 prog : expression  EOF # printResult
     ;
 
+
 expression
-	: field                            # column
-	| NOT expression                   # nicht
-	| OPEN inner=expression CLOSE      # klammern
-        | 'head' OPEN expression CLOSE     # kopf
-        | 'child' OPEN expression CLOSE    # child
-        | 'prec' OPEN expression CLOSE     # vorher
-        | 'next' OPEN expression CLOSE     # nachher
-        | left=expression operator=AND right=expression  # und
-	| left=expression operator=OR right=expression   # oder
+        : token ( ' '* '+' ' '* token )*      # element
+        ;
+
+token
+        : THIS OPEN COLUMN CLOSE    # spalte
+        | head                      # kopf
+        | value                     # wort
         ;
 
 
-field
-    : UPOS       # checkUpos
-    | LEMMA      # checkLemma
-    | FORM       # checkForm
-    | XPOS       # checkXpos
-    | DEPREL     # checkDeprel
-    | FEAT       # checkFeat
-    | MISC       # checkMisc
-    | ID         # checkID
-    | MTW        # checkMTW
-    | ISEMPTY    # checkEmpty
+head
+      : HEADKW OPEN COLUMN CLOSE # kopfspalte
+      | HEADKW OPEN inner=head CLOSE   # kopfkopf
+      ;
+  
+ 
+value
+    : '"' CHAR+ '"' # wortohne
     ;
 
 
-UPOS   : 'Upos:' [A-Z]+ ;
-LEMMA  : 'Lemma:' ~[ \n\t)&|]+ ;
-FORM   : 'Form:' ~[ \n\t)&|]+ ;
-XPOS   : 'Xpos:' ~[ \n\t)&|]+ ;
-DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
-FEAT   : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
-MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
-ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
-MTW    : 'MTW:' [2-9] ; // length of a MWT in tokens
-ISEMPTY: 'Empty' ; // emptyword
+// Lexer tules are uppercase
 
-AND   : 'and' | '&&' ;
-OR    : 'or' | '||' ;
-NOT   : '!' | '~' ;
-OPEN  : '(';
-CLOSE : ')';
+QUOTE : '"' ;
+OPEN  : '(' ;
+CLOSE : ')' ;
+THIS : 'this' ;
+HEADKW : 'head' ;
+COLUMN : 'Form' | 'Lemma' | 'Upos' | 'Xpos' | 'Feat_' [A-Za-z0-9_]+ | 'Deprel' | 'Misc_' [A-Za-z0-9_]+ ;
+//VALUE : '"' ~["]+ '"' ; // does not work
+CHAR :  ~["]  ;
 
 
 
