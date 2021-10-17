@@ -40,23 +40,29 @@ import org.antlr.v4.runtime.tree.*;
 
 public class GetReplacement {
 
-    public static String evaluate(String extraction, ConllWord cword) { //throws Exception {
-        ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
-        lexer.addErrorListener(new GrammarErrorListener());
+    public static String evaluate(String extraction, ConllWord cword) throws ConllException { 
+        try {
+            ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
+            lexer.addErrorListener(new GrammarErrorListener());
 
-        // we can see tokens only once !
+            // we can see tokens only once !
 //        for (Token tok : lexer.getAllTokens()) {
 //           System.err.println("token: " + tok);
 //        }
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        ReplacementsParser parser = new ReplacementsParser(tokens);
-        parser.addErrorListener(new GrammarErrorListener());
-        ParseTree tree = parser.prog(); // parse
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            ReplacementsParser parser = new ReplacementsParser(tokens);
+            parser.addErrorListener(new GrammarErrorListener());
+            ParseTree tree = parser.prog(); // parse
 
-        REvalVisitor eval = new REvalVisitor(cword, extraction);
-        String rtc = eval.visit(tree);
-        //System.err.println("rtc " + rtc);
-        return rtc;
+            REvalVisitor eval = new REvalVisitor(cword, extraction);
+            String rtc = eval.visit(tree);
+            //System.err.println("rtc " + rtc);
+            return rtc;
+        } catch (Exception e) {
+            // catch errors from bad replacements
+            //e.printStackTrace();
+            throw new ConllException(e.getMessage());
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -64,18 +70,16 @@ public class GetReplacement {
             System.err.println("Usage: Replacements 'expression' ['expression' ...]");
         } else {
 
-
-            
             ConllSentence csent = new ConllSentence(
-                            "1\tI\tI\tPRON\tPP\tPerson=1\t2\tnsubj\t_\t_\n" +
-                            "2\tknew\tknow\tVERB\tvfin\tTense=Past_\t0\troot\t_\t_\n" +
-                            "3\tthe\tthe\tDET\tAD\tDefinite=Yes\t4\tdet\t_\tSpacesAfter=\\t\n" +
-                            "4\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t5\tnsubj\t_\t_\n" +
-                            "5\tstank\tstink\tVERB\tVV\tNumber=Plur|TEnse=Past\t2\tccomp\t_\tSpaceAfter=No", null);
+                    "1\tI\tI\tPRON\tPP\tPerson=1\t2\tnsubj\t_\t_\n"
+                    + "2\tknew\tknow\tVERB\tvfin\tTense=Past_\t0\troot\t_\t_\n"
+                    + "3\tthe\tthe\tDET\tAD\tDefinite=Yes\t4\tdet\t_\tSpacesAfter=\\t\n"
+                    + "4\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t5\tnsubj\t_\t_\n"
+                    + "5\tstank\tstink\tVERB\tVV\tNumber=Plur|TEnse=Past\t2\tccomp\t_\tSpaceAfter=No", null);
             csent.makeTrees(null);
             System.err.println(csent);
             ConllWord cword = csent.getWord(3);
-            
+
 //            System.out.println(cword);
 //            System.out.println(cword.getHeadWord());
 //            System.out.println(cword.getHeadWord().getHeadWord());
@@ -83,7 +87,6 @@ public class GetReplacement {
             //} else {
             //    cword = new ConllWord(args[1].replaceAll(" +", "\t"), null, null);
             //}
-
             List<String> ex = new ArrayList<>();
             ex.add("head(head(head(Lemma)))");
             ex.add("head(head(Lemma))");
@@ -99,10 +102,10 @@ public class GetReplacement {
             ex.add("upper(head(Form))+\"!!!\"");
             ex.add("lower(head(Upos))+\"...\"");
             ex.add("cap(head(head(Upos)))");
-
+            ex.add("substring(upper(head(Form)),2,4)");
 
             ex.addAll(Arrays.asList(args));
-            
+
             for (String arg : ex) {
                 System.err.format("\nparsing <%s>\n", arg);
                 ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(arg));
@@ -113,7 +116,6 @@ public class GetReplacement {
 //                    System.err.println("token: " + tok + "\t" + tok.getType());
 //                }
 //                if (true)   continue;
-            
                 CommonTokenStream tokens = new CommonTokenStream(lexer);
                 ReplacementsParser parser = new ReplacementsParser(tokens);
                 parser.addErrorListener(new GrammarErrorListener());
@@ -128,4 +130,3 @@ public class GetReplacement {
 
     }
 }
-

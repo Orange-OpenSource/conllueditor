@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.4 as of 20th September 2021
+ @version 2.13.1 as of 17th October 2021
 */
 
 import com.orange.labs.conllparser.ConllException;
@@ -114,56 +114,67 @@ public class TestConllFile {
 
     @Test
     public void test01rule5() throws IOException, ConllException {
+         name("rule 5");
         applyRule("Empty", "xpos:\"EMPTY\"", "rule5.conllu");
     }
 
     @Test
     public void test01rule6() throws IOException, ConllException {
+         name("rule 6");
         applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:\"Noun=Plural_or_Masc\"", "rule6.conllu");
     }
 
     @Test
     public void test01rule7() throws IOException, ConllException {
+         name("rule 7");
         applyRule("Misc:SpaceAfter=No and Lemma:.*[aeiou]", "misc:\"FinalVowel=Yes\"", "rule6b.conllu");
     }
 
     @Test
     public void test01rule8() throws IOException, ConllException {
+         name("rule 8");
         applyRule("Upos:NOUN", "feat:\"Number=\"", "rule6c.conllu");
     }
 
     @Test
     public void test02head() throws IOException, ConllException {
+         name("rule head");
         applyRule("(head(Upos:VERB) and !Upos:PUNCT)", "misc:\"Head=Verbal\"", "rule7.conllu");
     }
 
     @Test
     public void test02headshead() throws IOException, ConllException {
+         name("rule headshead");
         applyRule("head(head(Upos:VERB and Feat:Tense=Pres ))", "misc:\"GrandmotherHead=Verbal\"", "rule8.conllu");
     }
 
     @Test
     public void test02headOfPreceding() throws IOException, ConllException {
+         name("rule headprec");
         applyRule("prec(head(Upos:VERB))", "misc:\"HeadOfPreceding=Verbal\"", "rule9.conllu");
     }
 
     @Test
     public void test02PrecedingOfHead() throws IOException, ConllException {
+         name("rule prec head");
         applyRule("head(prec(Upos:AUX))", "misc:\"PrecedingOfHead=Aux\"", "rule10.conllu");
     }
 
     @Test
     public void test02FollowingOfHead() throws IOException, ConllException {
+         name("rule following of head");
         applyRule("head(next(Upos:NOUN))", "misc:\"FollowingOfHead=Noun\"", "rule11.conllu");
     }
 
     @Test
     public void test03Child1() throws IOException, ConllException {
+         name("rule child1");
         applyRule("child(Upos:VERB) and child(Upos:DET)", "misc:\"Deps=VERB+DET\"", "rule12.conllu");
     }
 
     @Test
     public void test03Child2() throws IOException, ConllException {
+        name("rule child2");
         applyRule("child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)", "misc:\"Deps=PARTC+DET\"", "rule13.conllu");
     }
 
@@ -171,6 +182,7 @@ public class TestConllFile {
 
     @Test
     public void test11badtoken() throws IOException, ConllException {
+        name("test badtoken");
         String[] newvals = "xpos:\"det\"".split(" ");
         try {
             cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null);
@@ -241,4 +253,37 @@ public class TestConllFile {
         }
     }
 
+    
+    /* testing replacement grammar */
+    
+    @Test
+    public void test20repl01() throws IOException, ConllException {
+        name("repl 01");
+        applyRule("Upos:VERB", "xpos:this(Lemma)", "rule20.conllu");
+    }
+
+    @Test
+    public void test20repl02() throws IOException, ConllException {
+        name("repl 02");
+        applyRule("Upos:VERB", "xpos:this(Lemma)+\"INF\" feat:\"Number=\"+this(Form)", "rule21.conllu");
+    }
+
+    @Test
+    public void test20repl03() throws IOException, ConllException {
+        name("repl 03");
+        applyRule("Upos:NOUN", "lemma:upper(this(Lemma)) feat:\"Number=\"+head(Lemma)", "rule22.conllu");
+    }
+
+    @Test
+    public void test20repl04() throws IOException, ConllException {
+        name("repl 04");
+        applyRule("Upos:DET", "xpos:substring(upper(head(head(Form))),2) misc:\"HeadHeadLemma=\"+head(Lemma)", "rule23.conllu");
+    }
+
+    @Test
+    public void test20repl05() throws IOException, ConllException {
+        name("repl 05");
+        applyRule("Upos:VERB", "lemma:\"préfix_\"+replace(this(Form),\"[aeiouy]\",\"V\") feat:\"LowerHeadLemma=\"+lower(head(Lemma))", "rule24.conllu");
+    }
+    
 }

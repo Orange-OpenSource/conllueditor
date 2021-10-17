@@ -44,9 +44,9 @@ e.g.
    ... > Lemma:this(Misc_Translit)      // set lemma to the key Translit from the Misc comumn
    ... > Lemma:this(Form)+"er"          // set lemma to Form + "er"
    ... > Lemma:"de" + token(Form)        // set lemma to "de" +  Form
-   ... > Feat_Featname:this(Lemma)      // set the feature Featnamer to the value of Lemma
-   ... > Feat_Gender:this(Misc_Special) // set the feature Gender to the value of the Misc Special)
-   ... > Misc_Keyname:head(head(Upos))   // set the key "Keyname" of column MISC to the Upos of the head of the head
+   ... > Feat:"Featname"+this(Lemma)      // set the feature Featnamer to the value of Lemma
+   ... > Feat:"Gender"+this(Misc_Special) // set the feature Gender to the value of the Misc Special)
+   ... > Misc:"Keyname"+head(head(Upos))   // set the key "Keyname" of column MISC to the Upos of the head of the head
    ... > Lemma:substring(this(Form), 1, 3)       // set lemma to the substring (1 - 3) of Form 
    ... > Lemma:substring(this(Form), 1)       // set lemma to the substring (1 - end) of Form 
 

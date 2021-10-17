@@ -226,6 +226,7 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
     public String visitKopfspalte(ReplacementsParser.KopfspalteContext ctx) {
         //System.err.println("visitKopfspalte " + ctx.getText());
         String column = ctx.COLUMN().getText();
+        if (current == null) return "";
         ConllWord head = current.getHeadWord();
 
         if (head == null) {

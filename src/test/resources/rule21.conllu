@@ -1,0 +1,328 @@
+# sent_id = fr-ud-dev_00001
+# text = Aviator, un film sur la vie de Howard Hughes.
+# sentence 0
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_
+5	sur	sur	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+8	de	de	ADP	_	_	9	case	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
+11	.	.	PUNCT	_	_	1	punct	_	_
+
+# sent_id = fr-ud-dev_00002
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
+# sentence 1
+1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
+2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
+3	durent	durer	VERB	durerINF	Mood=Ind|Number=durent|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	six	six	NUM	_	_	5	nummod	_	_
+5	ans	an	NOUN	_	Gender=Masc|Number=Plur	3	obj	_	_
+6	mais	mais	CCONJ	_	_	9	cc	_	_
+7	leur	son	DET	_	Gender=Masc|Number=Sing|PronType=Prs	8	nmod:poss	_	_
+8	contenu	contenu	NOUN	_	Gender=Masc|Number=Sing	9	nsubj	_	_
+9	diffère	différer	VERB	différerINF	Mood=Ind|Number=diffère|Person=3|Tense=Pres|VerbForm=Fin	3	conj	_	_
+10	donc	donc	ADV	_	_	9	advmod	_	_
+11	selon	selon	ADP	_	_	13	case	_	_
+12	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	13	det	_	_
+13	Facultés	Facultés	PROPN	_	_	9	obl	_	SpaceAfter=No
+14	.	.	PUNCT	_	_	3	punct	_	_
+
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ?
+# sentence 2
+1	Mais	mais	CCONJ	_	_	3	cc	_	_
+2	comment	comment	ADV	_	_	3	advmod	_	_
+3	faire	faire	VERB	faireINF	Number=faire|VerbForm=Inf	0	root	_	_
+4	dans	dans	ADP	_	_	6	case	_	_
+5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	contexte	contexte	NOUN	_	Gender=Masc|Number=Sing	3	obl	_	_
+7	structurellement	structurellement	ADV	_	_	8	advmod	_	_
+8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
+9	?	?	PUNCT	_	_	3	punct	_	_
+
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques.
+# sentence 3
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	SpaceAfter=No
+2	«	«	PUNCT	_	_	3	punct	_	_
+3	oasis	oasis	NOUN	_	Gender=Fem|Number=Sing	23	nsubj	_	_
+4	de	de	ADP	_	_	5	case	_	_
+5	vie	vie	NOUN	_	Gender=Fem|Number=Sing	3	nmod	_	_
+6	»	»	PUNCT	_	_	3	punct	_	SpaceAfter=No
+7	,	,	PUNCT	_	_	3	punct	_	_
+8	dans	dans	ADP	_	_	10	case	_	_
+9	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	10	det	_	_
+10	milieu	milieu	NOUN	_	Gender=Masc|Number=Sing	23	obl	_	_
+11	où	où	PRON	_	PronType=Rel	12	obl	_	_
+12	règne	régner	VERB	régnerINF	Mood=Ind|Number=règne|Person=3|Tense=Pres|VerbForm=Fin	10	acl:relcl	_	_
+13	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	SpaceAfter=No
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+16	et	et	CCONJ	_	_	18	cc	_	_
+17	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	18	det	_	_
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+20	importante	important	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	SpaceAfter=No
+21	,	,	PUNCT	_	_	23	punct	_	_
+22	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	23	cop	_	_
+23	riche	riche	ADJ	_	Gender=Fem|Number=Sing	0	root	_	_
+24	et	et	CCONJ	_	_	25	cc	_	_
+25	varié	varié	ADJ	_	Gender=Masc|Number=Sing	23	conj	_	_
+26	:	:	PUNCT	_	_	23	punct	_	_
+27	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	28	det	_	_
+28	chercheurs	chercheur	NOUN	_	Gender=Masc|Number=Plur	30	nsubj	_	_
+29	y	y	PRON	_	_	30	advmod	_	_
+30	découvrent	découvrir	VERB	découvrirINF	Mood=Ind|Number=découvrent|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
+31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
+32	nouvelles	nouveau	ADJ	_	Gender=Fem|Number=Plur	33	amod	_	_
+33	espèces	espèce	NOUN	_	Gender=Fem|Number=Plur	30	obj	_	_
+34	de	de	ADP	_	_	35	case	_	_
+35	bivalves	bivalve	NOUN	_	Gender=Masc|Number=Plur	33	nmod	_	SpaceAfter=No
+36	,	,	PUNCT	_	_	38	punct	_	_
+37	de	de	ADP	_	_	38	case	_	_
+38	poissons	poisson	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	SpaceAfter=No
+39	,	,	PUNCT	_	_	41	punct	_	_
+40	de	de	ADP	_	_	41	case	_	_
+41	crustacés	crustacé	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	SpaceAfter=No
+42	,	,	PUNCT	_	_	44	punct	_	_
+43	de	de	ADP	_	_	44	case	_	_
+44	poulpes	poulpe	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	_
+45	dans	dans	ADP	_	_	47	case	_	_
+46	des	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	47	det	_	_
+47	zones	zone	NOUN	_	Gender=Fem|Number=Plur	30	obl	_	_
+48	pensées	penser	VERB	penserINF	Gender=Fem|Number=pensées|Tense=Past|VerbForm=Part	47	acl	_	_
+49	jusqu'	jusque	ADP	_	_	50	case	_	SpaceAfter=No
+50	alors	alors	ADV	_	_	48	advmod	_	_
+51	désertiques	désertique	ADJ	_	Gender=Fem|Number=Plur	48	amod	_	SpaceAfter=No
+52	.	.	PUNCT	_	_	23	punct	_	_
+
+# sent_id = fr-ud-train_00002
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# sentence 4
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
+2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_
+3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
+4	située	situer	VERB	situerINF	Gender=Fem|Number=située|Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=\s\t\s
+5	dans	dans	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	SpaceAfter= 
+7	galerie	galerie	NOUN	_	Gender=Fem|Number=Sing	4	obl	_	_
+8-9	des	_	_	_	_	_	_	_	_
+8	de	de	ADP	_	_	10	case	_	_
+9	les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	10	det	_	_
+10	batailles	bataille	NOUN	_	Gender=Fem|Number=Plur	7	nmod	_	SpaceAfter=No
+11	,	,	PUNCT	_	_	4	punct	_	_
+12	dans	dans	ADP	_	_	14	case	_	_
+13	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	_
+14	château	château	NOUN	_	Gender=Masc|Number=Sing	4	obl	_	_
+15	de	de	ADP	_	_	16	case	_	_
+16	Versailles	Versailles	PROPN	_	_	14	nmod	_	SpaceAfter=No
+17	.	.	PUNCT	_	_	4	punct	_	_
+
+# sent_id = fr-ud-train_00024
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle.
+# sentence 5
+1	Les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	2	det	_	_
+2	experts	expert	NOUN	_	Gender=Masc|Number=Plur	3	nsubj	_	_
+3	sont	être	VERB	êtreINF	Mood=Ind|Number=sont|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	unanimes	unanime	ADJ	_	Gender=Masc|Number=Plur	3	amod	_	_
+5	pour	pour	ADP	_	_	6	mark	_	_
+6	dater	dater	VERB	daterINF	Number=dater|VerbForm=Inf	3	advcl	_	_
+7	ce	ce	DET	_	Gender=Masc|Number=Sing|PronType=Dem	8	det	_	_
+8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
+9-10	du	_	_	_	_	_	_	_	_
+9	de	de	ADP	_	_	12	case	_	_
+10	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	12	det	_	_
+11	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	12	amod	_	_
+12	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	8	nmod	_	SpaceAfter=No
+13	.	.	PUNCT	_	_	3	punct	_	_
+
+# text = ils ont visité le Musée du Louvre.
+# sentence 6
+1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
+2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_
+3	visité	visiter	VERB	visiterINF	Gender=Masc|Number=visité|Tense=Past|VerbForm=Part	0	root	_	_
+4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
+5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	de	ADP	ADP	_	8	case	_	_
+7	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	8	det	_	_
+8	Louvre	Louvre	PROPN	PROPN	_	5	nmod	_	SpaceAfter=No
+9	.	.	PUNCT	PUNCT	_	3	punct	_	_
+
+# text = la souris a mangé le fromage qui pue.
+# sentence 7
+1	la	le	DET	ART	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	_
+2	souris	souris	NOUN	NOUN	Gender=Fem|Number=Sing	4	nsubj	_	_
+3	a	avoir	AUX	AUXA	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
+4	mangé	manger	VERB	mangerINF	Gender=Masc|Number=mangé|Tense=Past|VerbForm=Part	0	root	_	_
+5	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	fromage	fromage	NOUN	NOUN	Gender=Masc|Number=Sing	4	obj	_	_
+7	qui	qui	PRON	REL	PronType=Rel	8	nsubj	_	_
+8	pue	puer	VERB	puerINF	Mood=Ind|Number=pue|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	_	SpaceAfter=No
+9	.	.	PUNCT	PUNCT	_	4	punct	_	_
+
+# text = il habite à Los Angeles.
+# sentence 8
+1	il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
+2	habite	habiter	VERB	habiterINF	Mood=Ind|Number=habite|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	à	à	ADP	ADP	_	4	case	_	_
+4	Los	Los	PROPN	PROPN	_	2	obl	_	_
+5	Angeles	Angeles	PROPN	PROPN	_	4	flat:name	_	SpaceAfter=No
+6	.	.	PUNCT	PUNCT	_	2	punct	_	_
+
+# text = Il aime bien le Miroir aux Alouettes.
+# sentence 9
+1	Il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
+2	aime	aimer	VERB	aimerINF	Mood=Ind|Number=aime|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+3	bien	bien	ADV	ADV	_	2	advmod	_	_
+4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
+5	Miroir	miroir	NOUN	NOUN	Gender=Masc|Number=Sing	2	obj	_	_
+6-7	aux	_	_	_	_	_	_	_	_
+6	à	à	ADP	ADP	_	8	case	_	_
+7	les	le	DET	ART	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	8	det	_	_
+8	Alouettes	alouette	NOUN	NOUN	Gender=Fem|Number=Plur	2	obl	_	SpaceAfter=No
+9	.	.	PUNCT	PUNCT	_	2	punct	_	_
+
+# text = Une exposition au musée du Louvre et un voyage au village catalan de Gosol
+# sentence 10
+1	Une	_	_	_	_	_	_	_	_
+2	exposition	_	_	_	_	_	_	_	_
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
+9	et	_	_	_	_	_	_	_	_
+10	un	_	_	_	_	_	_	_	_
+11	voyage	_	_	_	_	_	_	_	_
+12-13	au	_	_	_	_	_	_	_	_
+12	à	_	_	_	_	_	_	_	_
+13	le	_	_	_	_	_	_	_	_
+14	village	_	_	_	_	_	_	_	_
+15	catalan	_	_	_	_	_	_	_	_
+16	de	_	_	_	_	_	_	_	_
+17	Gosol	_	_	_	_	_	_	_	_
+
+# text = Sam bought and prepared dinner
+# sentence 11
+1	Sam	Sam	PROPN	_	_	2	nsubj	2:nsubj|4:nsubj	_
+2	bought	buy	VERB	buyINF	Number=bought	0	root	_	_
+3	and	and	CCONJ	_	_	4	cc	_	_
+4	prepared	prepare	VERB	prepareINF	Number=prepared	2	conj	_	_
+5	dinner	dinner	NOUN	_	_	2	obj	2:obj|4:obj	_
+
+# text = Sam persuaded Kim to fix dinner
+# sentence 12
+1	Sam	Sam	PROPN	_	_	2	nsubj	_	_
+2	persuaded	persuade	VERB	persuadeINF	Number=persuaded	0	root	_	_
+3	Kim	Kim	PROPN	_	_	2	obj	2:obj|5:nsubj	_
+4	to	to	ADP	_	_	5	mark	_	_
+5	fix	fix	VERB	fixINF	Number=fix	2	xcomp	_	_
+6	dinner	dinner	NOUN	_	_	5	obj	_	_
+
+# sent_id = ellipsis1
+# text = Sam fixed lunch and Kim dinner
+# sentence 13
+1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
+2	fixed	fix	VERB	fixINF	Mood=Ind|Number=fixed|Tense=Past|VerbForm=Fin	0	root	0:root	_
+3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	2:obj	_
+4	and	and	CCONJ	CC	_	5	cc	5:cc|5.1:cc	_
+5	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|5.1:nsubj	_
+5.1	fixed	fix	VERB	fixINF	Mood=Ind|Number=fixed|Tense=Past|VerbForm=Fin	_	_	2:conj	_
+6	dinner	dinner	NOUN	NN	Number=Sing	5	orphan	5.1:obj	_
+
+# sent_id = ellipsis2
+# text = Mary organised bred and John beer
+# sentence 14
+1	Mary	Mary	PROPN	_	_	2	nsubj	2:nsubj	_
+2	organised	organise	VERB	organiseINF	Number=organised	0	root	0:root	_
+3	bred	bred	NOUN	_	_	2	obj	2:obj	_
+4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
+5	John	John	PROPN	_	_	2	conj	2:conj|5.1:nsubj	_
+5.1	organised	_	_	_	_	_	_	2:conj	_
+6	beer	beer	NOUN	_	_	5	orphan	5.1:obj	_
+
+# sent_id = unannotated
+# text = Une exposition au musée du Louvre
+# sentence 15
+1	Une	_	_	_	_	_	_	_	_
+2	exposition	_	_	_	_	_	_	_	_
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
+
+# sent_id = sv-ud-train-767
+# text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.
+# sentence 16
+1	Om	om	SCONJ	SN	_	3	mark	3:mark	_
+2	du	du	PRON	PN|UTR|SIN|DEF|SUB	Case=Nom|Definite=Def|Gender=Com|Number=Sing|PronType=Prs	3	nsubj	3:nsubj|10.1:nsubj|15.1:nsubj	_
+3	köper	köpa	VERB	köpaINF	Mood=Ind|Number=köper|Tense=Pres|VerbForm=Fin|Voice=Act	22	advcl	22:advcl:om	_
+4	en	en	DET	DT|UTR|SIN|IND	Definite=Ind|Gender=Com|Number=Sing|PronType=Art	6	det	6:det	_
+5	halv	halv	ADJ	JJ|POS|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Com|Number=Sing	4	fixed	4:fixed	_
+6	liter	liter	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	7	nmod	7:nmod	_
+7	mjölk	mjölk	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	3	obj	3:obj	_
+8	för	för	ADP	PP	_	9	case	9:case	_
+9	0:78	0:78	NUM	RG|NOM	Case=Nom|NumType=Card	3	obl	3:obl:för	SpaceAfter=No
+10	,	,	PUNCT	MID	_	12	punct	12:punct	_
+10.1	köper	köpa	VERB	köpaINF	Mood=Ind|Number=köper|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj|22:advcl:om	_
+11	en	en	DET	DT|UTR|SIN|IND	Definite=Ind|Gender=Com|Number=Sing|PronType=Art	12	det	12:det	_
+12	limpa	limpa	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	3	conj	10.1:obj	Enhanced=obj
+13	för	för	ADP	PP	_	14	case	14:case	_
+14	2:57	2:57	NUM	RG|NOM	Case=Nom|NumType=Card	12	orphan	10.1:obl:för	Enhanced=obl
+15	och	och	CCONJ	KN	_	19	cc	15.1:cc	_
+15.1	köper	köpa	VERB	köpaINF	Mood=Ind|Number=köper|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj:och	_
+16	ett	en	DET	DT|NEU|SIN|IND	Definite=Ind|Gender=Neut|Number=Sing|PronType=Art	18	det	18:det	_
+17	halvt	halv	ADJ	JJ|POS|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Neut|Number=Sing	16	fixed	16:fixed	_
+18	kilo	kilo	NOUN	NN|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Neut|Number=Sing	19	nmod	19:nmod	_
+19	margarin	margarin	NOUN	NN|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Neut|Number=Sing	12	conj	15.1:obj	Enhanced=obj
+20	för	för	ADP	PP	_	21	case	21:case	_
+21	2:87	2:87	NUM	RG|NOM	Case=Nom|NumType=Card	19	orphan	15.1:obl:för	Enhanced=obl
+22	gör	göra	VERB	göraINF	Mood=Ind|Number=gör|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	0:root	_
+23	detta	denna	PRON	PN|NEU|SIN|DEF|SUB/OBJ	Definite=Def|Gender=Neut|Number=Sing|PronType=Dem	22	nsubj	22:nsubj	_
+24	sammanlagt	sammanlagd	ADV	AB	_	22	advmod	22:advmod	_
+25	6:22	6:22	NUM	RG|NOM	Case=Nom|NumType=Card	22	nummod	22:nummod	SpaceAfter=No
+26	.	.	PUNCT	MAD	_	22	punct	22:punct	_
+
+# sent_id = gl_ctg-ud-dev.conllu 625
+# text = Dáselle nova redacción a o punto 2
+# sentence 17
+# used to test adding MWT 1-3 and 6-7
+1	Dá	dar	VERB	darINF	Number=Dá	0	root	_	Treeler=sentence|SpaceAfter=No
+2	se	se	PRON	PP3CN000	_	1	nsubj	_	Treeler=suj|SpaceAfter=No
+3	lle	lle	PRON	PP3CSD00	_	1	nsubj	_	Treeler=suj
+4	nova	novo	ADJ	AQ0FS0	_	5	amod	_	Treeler=s.a
+5	redacción	redacción	NOUN	NCFS000	_	1	obj	_	Treeler=cd
+6	a	a	ADP	SPS00	_	1	iobj	_	Treeler=ci
+7	o	o	DET	DA0MS0	_	8	det	_	Treeler=spec
+8	punto	punto	NOUN	NCMS000	_	6	nmod	_	ToDo=nmod|Treeler=sn
+9	2	2	NUM	Z	_	8	nmod	_	Treeler=sn
+
+# sent_id = fi_tdt-ud-train.conllu b712.11
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.
+# sentence 18
+0.1	Laitoin	laittaa	VERB	laittaaINF	Mood=Ind|Number=Laitoin|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
+1	Sekaan	sekaan	ADV	Adv	_	3	orphan	0.1:advmod	_
+2	1	1	NUM	Num	NumType=Card	3	nummod	3:nummod	_
+3	purkillinen	purkillinen	NOUN	N	Case=Nom|Number=Sing	0	root	0:root|0.1:obj	_
+4	kermaviiliä	kerma#viili	NOUN	N	Case=Par|Number=Sing	3	nmod	3:nmod:par	_
+5	ja	ja	CCONJ	C	_	8	cc	8:cc	_
+6	ja	ja	CCONJ	C	_	8	cc	8:cc	_
+7	sitten	sitten	ADV	Adv	_	8	advmod	8:advmod	_
+8	jaoin	jakaa	VERB	jakaaINF	Mood=Ind|Number=jaoin|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_
+9	perustahnan	perus#tahna	NOUN	N	Case=Gen|Number=Sing	8	obj	8:obj	_
+10	4	4	NUM	Num	NumType=Card	11	nummod	11:nummod	_
+11	lautaselle	lautanen	NOUN	N	Case=All|Number=Sing	8	obl	8:obl:all	SpaceAfter=No
+12	.	.	PUNCT	Punct	_	3	punct	0.1:punct|3:punct	_
+
