@@ -49,7 +49,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.sql.rowset.serial.SerialRef;
 
 /**
  * read and parse CONLL

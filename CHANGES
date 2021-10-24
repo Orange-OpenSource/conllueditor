@@ -1,5 +1,6 @@
 Version 2.13.1
 - adding grammar for replacements (and changed format for search and replace)
+- correction with subclass issue
 
 Version 2.13.0
 - adding a complex search mode (syntax as in mass editing) and search-and-replace
