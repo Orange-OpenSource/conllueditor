@@ -2042,7 +2042,7 @@ public class ConllSentence {
 
 								if (key_value[1].isEmpty()) {
 									cw.delMiscWithName(key_value[0]);
-								} else {                                    
+								} else {
 									cw.addMisc(key_value[0] + "=" + key_value[1]);
 								}
                                 break;
@@ -2076,10 +2076,10 @@ public class ConllSentence {
                                     if (key_value.length != 2) {
                                         throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
                                     }
-    
+
                                     if (key_value[1].isEmpty()) {
                                         cw.delMiscWithName(key_value[0]);
-                                    } else {                                    
+                                    } else {
                                         cw.addMisc(key_value[0] + "=" + key_value[1]);
                                     }
                                     break;
@@ -2118,7 +2118,7 @@ public class ConllSentence {
                                         if (key_value.length != 2) {
                                             throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
                                         }
-        
+
                                         if (key_value[1].isEmpty()) {
                                             cw.delFeatureWithName(key_value[0]);
                                         } else {
@@ -2139,10 +2139,10 @@ public class ConllSentence {
                                         if (key_value.length != 2) {
                                             throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
                                         }
-        
+
                                         if (key_value[1].isEmpty()) {
                                             cw.delFeatureWithName(key_value[0]);
-                                        } else {                                    
+                                        } else {
                                             cw.addMisc(key_value[0] + "=" + key_value[1]);
                                         }
                                         break;

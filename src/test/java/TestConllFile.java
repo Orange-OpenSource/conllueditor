@@ -253,9 +253,9 @@ public class TestConllFile {
         }
     }
 
-    
+
     /* testing replacement grammar */
-    
+
     @Test
     public void test20repl01() throws IOException, ConllException {
         name("repl 01");

@@ -40,7 +40,7 @@ import org.antlr.v4.runtime.tree.*;
 
 public class GetReplacement {
 
-    public static String evaluate(String extraction, ConllWord cword) throws ConllException { 
+    public static String evaluate(String extraction, ConllWord cword) throws ConllException {
         try {
             ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
             lexer.addErrorListener(new GrammarErrorListener());
@@ -121,7 +121,7 @@ public class GetReplacement {
                 ReplacementsParser parser = new ReplacementsParser(tokens);
                 parser.addErrorListener(new GrammarErrorListener());
 
-                ParseTree tree = parser.prog(); // parse           
+                ParseTree tree = parser.prog(); // parse
 
                 REvalVisitor eval = new REvalVisitor(cword, arg);
                 String rtc = eval.visit(tree);

@@ -1006,7 +1006,7 @@ public class ConlluEditor {
                 }
                 String [] find_replace = f[2].split(" >");
                 if (find_replace.length != 2) {
-                    return formatErrMsg("bINVALID syntax «" + command + "»", currentSentenceId);
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
                 String find = find_replace[0].strip();
                 String replace = find_replace[1].strip();

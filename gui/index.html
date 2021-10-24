@@ -207,12 +207,12 @@
                     <div>
                     <input class="inputfield" placeholder="Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)" title="find expression" size="70" type="text" id="searchexpression" value="">
                      <button class="editbuttons mybutton" id="searchgo">search</button>
-                    
+
                         </div>
                         <div>
                     <input class="inputfield" placeholder="Lemma:this(Form)+&quot;er&quot;   Misc:&quot;Keyname&quot;+replace(head(head(Upos)),&quot;é&quot;,&quot;e&quot;)" title="replace expression" size="70" type="text" id="replaceexpression" value="">
                     <button class="editbuttons mybutton" id="replacego">search & replace</button>
-                        </div> 
+                        </div>
                 </td></tr>
 
                 <tr><td id="subtreesearch">
@@ -418,7 +418,7 @@
 
                         <h2>Searching</h2>
                         There are three search modes (toggle with <span class="buttondoc">toggle search modes</span>)
-                        
+
                         <h3>Simple search</h3>
                         <ul>
                             <li>The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).
@@ -464,7 +464,7 @@
 
                         <h3>Complex search</h3>
                         enter a search condition <span class="userinputdoc">expression</span> where <span class="userinputdoc">expression</span>
-                        is a set of <span class="userinputdoc">key:values</span>, operators like <span class="userinputdoc">and</span>, 
+                        is a set of <span class="userinputdoc">key:values</span>, operators like <span class="userinputdoc">and</span>,
                         <span class="userinputdoc">or</span> or <span class="userinputdoc">:</span> (<span class="userinputdoc">not</span>) and parentheses:<p>
 
                         <span class="userinputdoc">Upos:ADP and !Deprel:case</span>: searches for a token which has <i>ADP</i> as UPOS
@@ -490,8 +490,8 @@
                             <li>  <span class="userinputdoc">prec()</span> preceding token</li>
                             <li>  <span class="userinputdoc">next()</span> following token</li>
                         </ul>
-                        
-                        For example: 
+
+                        For example:
                         <ul>
                             <li> <span class="userinputdoc">head(head(Upos:VERB and Feat:Tense=Past))</span> true if the current token has a head who has a head with UPOS <i>VERB</i> and the feature <i>Tense=Past</i></li>
                             <li> <span class="userinputdoc">child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)</span>: true if the current token has a dependant with UPOS <i>VERB</i>
@@ -502,7 +502,7 @@
 
                         <h3>Search and replace</h3>
 
-                        Fill in a search condition and a key:newvalues list, i.e.  is a list of <i>key:values to</i> set to the current token. 
+                        Fill in a search condition and a key:newvalues list, i.e.  is a list of <i>key:values to</i> set to the current token.
                         If you click <span class="buttondoc">search &amp; replace</span>, in the first sentence which has at least a token which matches
                         the condition, all matching tokens are modified, following the key:newvalues list:
                         <ul>
@@ -789,7 +789,7 @@
             </div>
         </div>
 
-        
+
     </body>
 </html>
 

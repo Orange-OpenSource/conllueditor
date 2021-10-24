@@ -2,17 +2,17 @@
 
 Copyright (c) 2018-2021, Orange S.A.
 
-Redistribution and use in source and binary forms, with or without modification, 
+Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
   1. Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
 
-  2. Redistributions in binary form must reproduce the above copyright notice, 
+  2. Redistributions in binary form must reproduce the above copyright notice,
      this list of conditions and the following disclaimer in the documentation
      and/or other materials provided with the distribution.
 
-  3. Neither the name of the copyright holder nor the names of its contributors 
+  3. Neither the name of the copyright holder nor the names of its contributors
      may be used to endorse or promote products derived from this software without
      specific prior written permission.
 
@@ -35,16 +35,16 @@ body {
     margin-top: 280px; /* header height + top offset */
     height: 100%;
     text-align: justify;
-    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans; 
+    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans;
     overflow: scroll;
-    
+
 }
 
 tt {
     font-family: Courier, FreeMono, Mono;
 }
 
-h1  { 
+h1  {
     color:#ff6600;
 }
 
@@ -102,8 +102,8 @@ h3 {
         color-stop(1, rgba(255,255,255, 0))
         );
     */
-    background-image: linear-gradient(rgba(247,220,180, 1), 
-        rgba(251,235,212, 1), 
+    background-image: linear-gradient(rgba(247,220,180, 1),
+        rgba(251,235,212, 1),
         rgba(254,246,233, 1),
         rgba(255,255,255, 0));
 }
@@ -189,7 +189,7 @@ img.helptextbutton {
     /* top right bottom left */
     qqpadding: 5px 5px 5px 5px;
     border: 1px solid #959595;
-    height: 30px;  
+    height: 30px;
     vertical-align: middle;
 
     -webkit-border-radius: 5px;
@@ -246,7 +246,7 @@ input {
     padding: 0;
     margin: 0;
     white-space: nowrap;
-  
+
     /* default widths */
     width: 10em;
     min-width: 2em;
@@ -307,7 +307,7 @@ input {
         color-stop(1, rgb(255,255,255))
         );
     position: relative;
-    sstop: 6px; 
+    sstop: 6px;
     sspadding: 0px 0px 0px 0px;
 }
 
@@ -331,7 +331,7 @@ input {
     background: url('img/undo.svg');
     background-size: 20px 20px !important;
     background-repeat:no-repeat !important;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 5px center !important;
 }
@@ -344,7 +344,7 @@ input {
     background: url('img/redo.svg');
     background-size: 20px 20px !important;
     background-repeat:no-repeat !important;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 5px center !important;
 }
@@ -354,10 +354,10 @@ input {
 }
 
 #first {
-    background: url('img/Start.svg'); 
+    background: url('img/Start.svg');
     background-size: 16px 16px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 7px center;
 }
@@ -366,7 +366,7 @@ input {
     background: url('img/End.svg');
     background-size: 16px 16px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 7px center;
 }
@@ -375,7 +375,7 @@ input {
     background: url('img/preceding.svg');
     background-size: auto 16px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 8px center;
 }
@@ -384,7 +384,7 @@ input {
     background: url('img/following.svg');
     background-size: auto 16px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 10px center;
 }
@@ -393,7 +393,7 @@ input {
     background: url('img/backwards.svg');
     background-size: auto 16px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 45px;
     background-position: 5px center;
 }
@@ -402,7 +402,7 @@ input {
     background: url('img/clear.svg');
     background-size: auto 16px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 37px;
     background-position: 5px center;
 }
@@ -412,7 +412,7 @@ input {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;
-    height: 30px;  
+    height: 30px;
     width: 30px;
     background-position: 5px center;
 }
@@ -487,7 +487,7 @@ input {
 }
 
 .latex {
-    font-family: Serif;    
+    font-family: Serif;
 }
 
 /* A and E of LATEX spellt in upper case */
@@ -514,8 +514,8 @@ input {
 }
 
 .modal-header {
-    background-image: linear-gradient(rgba(255,153,51, 1), 
-      /*  rgba(251,235,212, 1), 
+    background-image: linear-gradient(rgba(255,153,51, 1),
+      /*  rgba(251,235,212, 1),
         rgba(254,246,233, 1),*/
         rgba(255,255,255, 0));
 }
@@ -542,7 +542,7 @@ text {
     font-size: 80%;
     border: 1px solid;
     text-align: left;
-    font-family: Mono; 
+    font-family: Mono;
 }
 
 
@@ -552,7 +552,7 @@ text {
 
 #searchandreplace {
     display: none;
-   
+
 }
 
 
@@ -627,7 +627,7 @@ text {
     appearance: none;
 
     background: transparent url('img/select.svg');
-    background-size: auto .8em; 
+    background-size: auto .8em;
     background-position: right .3em top 50%;
     background-repeat:no-repeat;
 }
