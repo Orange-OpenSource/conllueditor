@@ -108,6 +108,11 @@ public class ConlluEditor {
     ConllFile comparisonFile = null;
 
     private String programmeversion;
+    private String gitcommitidfull;
+    private String gitcommitidabbrev;
+    private String gitbuildtime;
+    private boolean gitdirty = false;
+    private String gitbranch;
     private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
 
     private int debug = 1;
@@ -125,7 +130,18 @@ public class ConlluEditor {
         java.util.Properties p = new Properties();
         p.load(ClassLoader.getSystemResourceAsStream("conllueditor.properties"));
         programmeversion = p.getProperty("version");
-        System.err.format("ConlluEditor V %s\n", programmeversion);
+
+        p.load(ClassLoader.getSystemResourceAsStream("git.properties"));
+        gitcommitidfull = p.getProperty("git.commit.id.full");
+        gitcommitidabbrev = p.getProperty("git.commit.id.abbrev");
+        gitbuildtime = p.getProperty("git.build.time");
+        gitdirty = "true".equalsIgnoreCase(p.getProperty("git.dirty"));
+        gitbranch = p.getProperty("git.branch");
+
+        StringBuilder sb = new StringBuilder();
+        if (!"master".equals(gitbranch)) sb.append(", branche: ").append(gitbranch);
+        if (gitdirty) sb.append(", this branch contains uncommited modifications!");
+        System.err.format("ConlluEditor V %s (commit %s%s)\n", programmeversion, gitcommitidabbrev, sb.toString());
         filename = new File(conllfile);
         filename = filename.getAbsoluteFile().toPath().normalize().toFile();
 
@@ -616,6 +632,9 @@ public class ConlluEditor {
 
         solution.addProperty("filename", filename.getAbsolutePath());
         solution.addProperty("version", programmeversion);
+        solution.addProperty("git.commit.id", gitcommitidabbrev);
+        solution.addProperty("git.branche", gitbranch);
+        solution.addProperty("git.dirty", gitdirty);
         solution.addProperty("reinit", mode);
         solution.addProperty("saveafter", saveafter);
         JsonArray coldefs = new JsonArray();
