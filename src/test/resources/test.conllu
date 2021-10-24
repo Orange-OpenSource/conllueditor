@@ -79,7 +79,7 @@
 30	découvrent	découvrir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
 31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
 32	nouvelles	nouveau	ADJ	_	Gender=Fem|Number=Plur	33	amod	_	_
-33	espèces	espèce	NOUN	NOUNxpos	Gender=Fem|Number=Plur|Special=Present	30	obj	_	_
+33	espèces	espèce	NOUN	_	Gender=Fem|Number=Plur	30	obj	_	_
 34	de	de	ADP	_	_	35	case	_	_
 35	bivalves	bivalve	NOUN	_	Gender=Masc|Number=Plur	33	nmod	_	SpaceAfter=No
 36	,	,	PUNCT	_	_	38	punct	_	_

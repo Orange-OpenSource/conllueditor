@@ -11,7 +11,7 @@ The editor provides the following functionalities:
 * join/split/delete words (to correct tokenization errors)
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
-* search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these, 
+* search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these,
       searching for subtrees, importing subtrees from current sentence, sd-parse support
 * edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
 * create multitoken words from existing words or add a MTW to contract two ore more existing words
@@ -22,7 +22,7 @@ The editor provides the following functionalities:
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
 
-Current version: 2.13.0
+Current version: 2.13.1
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -311,12 +311,12 @@ comments and sentences ids.
 * The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).   For example
   * `the` finds next occurrance of _the_, including _them_ or _weather_.
   * `" the "` finds next occurrance of the definite article _the_.
-  * `some of` finds next occurrance of _some of_ (no quotes necessary, since the search string does not start with a blank). 
+  * `some of` finds next occurrance of _some of_ (no quotes necessary, since the search string does not start with a blank).
   * The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
         Upos: `AUX/.*/VERB` looks for a sequence of words with upos tags _AUX_, _any_, _VERB_
 * The any search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e` (form, lemma, upos, xpos, deprel, enhanced deps) a `%` can be used to search for a word on more than one criterium.
   * `l:the/u:ADJ/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective and the last is _mouse_
-  * `l:the/u:ADJ%x:JJR/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective which has the XPOS JJR and the last word is _mouse_ 
+  * `l:the/u:ADJ%x:JJR/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective which has the XPOS JJR and the last word is _mouse_
 * The deprel search field accepts a single or a list of regex, separated by `<`, `=` or `>` to search for branches in the dependency tree, for example
   * `cc<nsubj` finds a word with _cc_ deprel whose head has also a _nsubj_ child.
   * `case>mark` finds a word with _case_ deprel which has a child with a _mark_ deprel.
@@ -331,7 +331,7 @@ Other search modes can be chosen by clicking on the `toggle search modes` button
 
 ### Complex search and search and replace
 
-This opens a search and search-and-display field. The search fields provides a simple language to find 
+This opens a search and search-and-display field. The search fields provides a simple language to find
 sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
 
 For instance
@@ -374,7 +374,7 @@ E.g.
 3	_	NOUN	_	0	_
 ```
 
-matches any sentences wich contains a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and 
+matches any sentences wich contains a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and
 a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
 
 ![Subtree search](doc/subtreesearch.png)
