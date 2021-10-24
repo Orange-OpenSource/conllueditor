@@ -54,7 +54,7 @@ For more information check the [formal grammar for conditions](conditions/README
 
 ## New Values
 
-`new_values` is a list of key:values to set to the current token. Possible `keys`:
+`new_values` is a whitespace separated list of key:values to set to the current token. Possible `keys`:
 * `form` 
 * `lemma`
 * `upos`
@@ -87,7 +87,11 @@ for instance:
 * `Misc:"Keyname"+head(head(Upos))`    set the key "Keyname" of `Misc` column  to the Upos of the head of the head
 * `Lemma:substring(this(Form),1,3)`      set lemma to the substring (1 - 3) of the form 
 * `Lemma:substring(this(Form),1)`       set lemma to the substring (1 - end) ofthe form 
-*  `Form:replace(this(Form),"é","e")`  replace all occurrances of `é` in the form by `e`
+* `Form:replace(this(Form),"é","e")`  replace all occurrances of `é` in the form by `e`
+
+N.B. **no white spaces allowed in a value expression!** 
+therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are invalid, 
+use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` etc.
 
 For more information check the [formal grammar for replacements](replacements/README.md) (the part after the first `:`).
 

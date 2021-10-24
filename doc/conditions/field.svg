@@ -1,44 +1,47 @@
-<svg class="railroad-diagram" height="332" viewBox="0 0 199.5 332" width="199.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg class="railroad-diagram" height="352" viewBox="0 0 206.5 352" width="206.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g transform="translate(.5 .5)">
 <style>/* <![CDATA[ */
 
 	svg.railroad-diagram {
-		background-color: rgba(255,255,0, 0);
+		background-color: rgba(255, 255, 255, 0); /* transparent white*/
 	}
 	svg.railroad-diagram path {
 		stroke-width:3;
 		stroke:black;
-		fill:rgba(0,0,0,0);
+		fill: rgba(0,0,0,0);
 	}
 	svg.railroad-diagram text {
-		eeefont:bold 14px sans; 
+		/* font:bold 14px sans; */
 		font-family: sans;
 		text-anchor:middle;
-                fill: black; /* color of text */
+    	fill: black; /* color of text */
 	}
-	svg.railroad-diagram .labelname {
+	svg.railroad-diagram .labelname{
 		font-family: sans;
 		text-anchor:middle;
 		stroke-width: 0
-                fill: red; /* color of text */
+        fill: red; /* color of text */
 	}
 
 	svg.railroad-diagram text.label{
 		text-anchor:start;
 	}
+
 	svg.railroad-diagram text.comment{
-		eeefont:italic 12px monospace;
+		/* font:italic 12px monospace;*/
 		font-family: sans;
 		font-style: italic;
 	}
-        svg.railroad-diagram .nterm { /* defines non-terminals */
+
+    svg.railroad-diagram .nterm { /* defines non-terminals */
 		stroke-width:3;
-		stroke:black; /* used for outline AND font, so without it the text looks OK but not the form...*/
+		stroke:black;
 		fill: rgb(181,232,247);
 	}
-        svg.railroad-diagram .term { /* defines terminals */
+
+    svg.railroad-diagram .term { /* defines terminals */
 		stroke-width:3;
-		stroke:black; /* used for outline AND font, so without it the text looks OK but not the form...*/
+		stroke:black;
 		fill: rgb(217,194,240);
 	}
 
@@ -50,25 +53,25 @@
 
 /* ]]> */
 </style><g>
-<path d="M20 21v20m10 -20v20m-10 -10h20"></path></g><g>
-<path d="M40 31h0.0"></path><path d="M159.5 31h0.0"></path><path d="M40.0 31h20"></path><g>
-<path d="M60.0 31h12.75"></path><path d="M126.75 31h12.75"></path><g class="terminal ">
-<path d="M72.75 31h0.0"></path><path d="M126.75 31h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="72.75" y="20"></rect><text x="99.75" y="35">UPOS</text></g></g><path d="M139.5 31h20"></path><path d="M40.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 61h8.5"></path><path d="M131.0 61h8.5"></path><g class="terminal ">
-<path d="M68.5 61h0.0"></path><path d="M131.0 61h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="62.5" x="68.5" y="50"></rect><text x="99.75" y="65">LEMMA</text></g></g><path d="M139.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 91h12.75"></path><path d="M126.75 91h12.75"></path><g class="terminal ">
-<path d="M72.75 91h0.0"></path><path d="M126.75 91h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="72.75" y="80"></rect><text x="99.75" y="95">FORM</text></g></g><path d="M139.5 91a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v70a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 121h12.75"></path><path d="M126.75 121h12.75"></path><g class="terminal ">
-<path d="M72.75 121h0.0"></path><path d="M126.75 121h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="72.75" y="110"></rect><text x="99.75" y="125">XPOS</text></g></g><path d="M139.5 121a10 10 0 0 0 10 -10v-70a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v100a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 151h4.25"></path><path d="M135.25 151h4.25"></path><g class="terminal ">
-<path d="M64.25 151h0.0"></path><path d="M135.25 151h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="71.0" x="64.25" y="140"></rect><text x="99.75" y="155">DEPREL</text></g></g><path d="M139.5 151a10 10 0 0 0 10 -10v-100a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v130a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 181h12.75"></path><path d="M126.75 181h12.75"></path><g class="terminal ">
-<path d="M72.75 181h0.0"></path><path d="M126.75 181h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="72.75" y="170"></rect><text x="99.75" y="185">FEAT</text></g></g><path d="M139.5 181a10 10 0 0 0 10 -10v-130a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v160a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 211h12.75"></path><path d="M126.75 211h12.75"></path><g class="terminal ">
-<path d="M72.75 211h0.0"></path><path d="M126.75 211h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="72.75" y="200"></rect><text x="99.75" y="215">MISC</text></g></g><path d="M139.5 211a10 10 0 0 0 10 -10v-160a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v190a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 241h21.25"></path><path d="M118.25 241h21.25"></path><g class="terminal ">
-<path d="M81.25 241h0.0"></path><path d="M118.25 241h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="37.0" x="81.25" y="230"></rect><text x="99.75" y="245">ID</text></g></g><path d="M139.5 241a10 10 0 0 0 10 -10v-190a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v220a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 271h17.0"></path><path d="M122.5 271h17.0"></path><g class="terminal ">
-<path d="M77.0 271h0.0"></path><path d="M122.5 271h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="45.5" x="77.0" y="260"></rect><text x="99.75" y="275">MTW</text></g></g><path d="M139.5 271a10 10 0 0 0 10 -10v-220a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v250a10 10 0 0 0 10 10"></path><g>
-<path d="M60.0 301h0.0"></path><path d="M139.5 301h0.0"></path><g class="terminal ">
-<path d="M60.0 301h0.0"></path><path d="M139.5 301h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="79.5" x="60.0" y="290"></rect><text x="99.75" y="305">ISEMPTY</text></g></g><path d="M139.5 301a10 10 0 0 0 10 -10v-250a10 10 0 0 1 10 -10"></path></g><path d="M 159.5 31 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
+<path d="M20 22v20m10 -20v20m-10 -10h20"></path></g><g>
+<path d="M40 32h0.0"></path><path d="M166.5 32h0.0"></path><path d="M40.0 32h20"></path><g>
+<path d="M60.0 32h14.25"></path><path d="M132.25 32h14.25"></path><g class="terminal ">
+<path d="M74.25 32h0.0"></path><path d="M132.25 32h0.0"></path><rect class="term" height="24" width="58.0" x="74.25" y="21"></rect><text x="103.25" y="37">UPOS</text></g></g><path d="M146.5 32h20"></path><path d="M40.0 32a10 10 0 0 1 10 10v12a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 64h9.5"></path><path d="M137.0 64h9.5"></path><g class="terminal ">
+<path d="M69.5 64h0.0"></path><path d="M137.0 64h0.0"></path><rect class="term" height="24" width="67.5" x="69.5" y="53"></rect><text x="103.25" y="69">LEMMA</text></g></g><path d="M146.5 64a10 10 0 0 0 10 -10v-12a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v44a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 96h14.25"></path><path d="M132.25 96h14.25"></path><g class="terminal ">
+<path d="M74.25 96h0.0"></path><path d="M132.25 96h0.0"></path><rect class="term" height="24" width="58.0" x="74.25" y="85"></rect><text x="103.25" y="101">FORM</text></g></g><path d="M146.5 96a10 10 0 0 0 10 -10v-44a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v76a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 128h14.25"></path><path d="M132.25 128h14.25"></path><g class="terminal ">
+<path d="M74.25 128h0.0"></path><path d="M132.25 128h0.0"></path><rect class="term" height="24" width="58.0" x="74.25" y="117"></rect><text x="103.25" y="133">XPOS</text></g></g><path d="M146.5 128a10 10 0 0 0 10 -10v-76a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v108a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 160h4.75"></path><path d="M141.75 160h4.75"></path><g class="terminal ">
+<path d="M64.75 160h0.0"></path><path d="M141.75 160h0.0"></path><rect class="term" height="24" width="77.0" x="64.75" y="149"></rect><text x="103.25" y="165">DEPREL</text></g></g><path d="M146.5 160a10 10 0 0 0 10 -10v-108a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v140a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 192h14.25"></path><path d="M132.25 192h14.25"></path><g class="terminal ">
+<path d="M74.25 192h0.0"></path><path d="M132.25 192h0.0"></path><rect class="term" height="24" width="58.0" x="74.25" y="181"></rect><text x="103.25" y="197">FEAT</text></g></g><path d="M146.5 192a10 10 0 0 0 10 -10v-140a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v172a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 224h14.25"></path><path d="M132.25 224h14.25"></path><g class="terminal ">
+<path d="M74.25 224h0.0"></path><path d="M132.25 224h0.0"></path><rect class="term" height="24" width="58.0" x="74.25" y="213"></rect><text x="103.25" y="229">MISC</text></g></g><path d="M146.5 224a10 10 0 0 0 10 -10v-172a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v204a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 256h23.75"></path><path d="M122.75 256h23.75"></path><g class="terminal ">
+<path d="M83.75 256h0.0"></path><path d="M122.75 256h0.0"></path><rect class="term" height="24" width="39.0" x="83.75" y="245"></rect><text x="103.25" y="261">ID</text></g></g><path d="M146.5 256a10 10 0 0 0 10 -10v-204a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v236a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 288h19.0"></path><path d="M127.5 288h19.0"></path><g class="terminal ">
+<path d="M79.0 288h0.0"></path><path d="M127.5 288h0.0"></path><rect class="term" height="24" width="48.5" x="79.0" y="277"></rect><text x="103.25" y="293">MTW</text></g></g><path d="M146.5 288a10 10 0 0 0 10 -10v-236a10 10 0 0 1 10 -10"></path><path d="M40.0 32a10 10 0 0 1 10 10v268a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 320h0.0"></path><path d="M146.5 320h0.0"></path><g class="terminal ">
+<path d="M60.0 320h0.0"></path><path d="M146.5 320h0.0"></path><rect class="term" height="24" width="86.5" x="60.0" y="309"></rect><text x="103.25" y="325">ISEMPTY</text></g></g><path d="M146.5 320a10 10 0 0 0 10 -10v-268a10 10 0 0 1 10 -10"></path></g><path d="M 166.5 32 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>

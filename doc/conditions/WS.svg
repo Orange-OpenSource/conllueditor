@@ -1,44 +1,47 @@
-<svg class="railroad-diagram" height="71" viewBox="0 0 194.0 71" width="194.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg class="railroad-diagram" height="72" viewBox="0 0 198.0 72" width="198.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g transform="translate(.5 .5)">
 <style>/* <![CDATA[ */
 
 	svg.railroad-diagram {
-		background-color: rgba(255,255,0, 0);
+		background-color: rgba(255, 255, 255, 0); /* transparent white*/
 	}
 	svg.railroad-diagram path {
 		stroke-width:3;
 		stroke:black;
-		fill:rgba(0,0,0,0);
+		fill: rgba(0,0,0,0);
 	}
 	svg.railroad-diagram text {
-		eeefont:bold 14px sans; 
+		/* font:bold 14px sans; */
 		font-family: sans;
 		text-anchor:middle;
-                fill: black; /* color of text */
+    	fill: black; /* color of text */
 	}
-	svg.railroad-diagram .labelname {
+	svg.railroad-diagram .labelname{
 		font-family: sans;
 		text-anchor:middle;
 		stroke-width: 0
-                fill: red; /* color of text */
+        fill: red; /* color of text */
 	}
 
 	svg.railroad-diagram text.label{
 		text-anchor:start;
 	}
+
 	svg.railroad-diagram text.comment{
-		eeefont:italic 12px monospace;
+		/* font:italic 12px monospace;*/
 		font-family: sans;
 		font-style: italic;
 	}
-        svg.railroad-diagram .nterm { /* defines non-terminals */
+
+    svg.railroad-diagram .nterm { /* defines non-terminals */
 		stroke-width:3;
-		stroke:black; /* used for outline AND font, so without it the text looks OK but not the form...*/
+		stroke:black;
 		fill: rgb(181,232,247);
 	}
-        svg.railroad-diagram .term { /* defines terminals */
+
+    svg.railroad-diagram .term { /* defines terminals */
 		stroke-width:3;
-		stroke:black; /* used for outline AND font, so without it the text looks OK but not the form...*/
+		stroke:black;
 		fill: rgb(217,194,240);
 	}
 
@@ -50,9 +53,9 @@
 
 /* ]]> */
 </style><g>
-<path d="M20 21v20m10 -20v20m-10 -10h20"></path></g><g>
-<path d="M40 31h0.0"></path><path d="M154.0 31h0.0"></path><path d="M40.0 31h20"></path><g>
-<path d="M60.0 31h0.0"></path><path d="M134.0 31h0.0"></path><g>
-<path d="M60.0 31h0.0"></path><path d="M134.0 31h0.0"></path><path d="M60.0 31h10"></path><g class="terminal ">
-<path d="M70.0 31h0.0"></path><path d="M124.0 31h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="70.0" y="20"></rect><text x="97.0" y="35">&#91; 	&#93;</text></g><path d="M124.0 31h10"></path><path d="M70.0 31a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10"></path><g>
-<path d="M70.0 51h54.0"></path></g><path d="M124.0 51a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10"></path></g></g><path d="M134.0 31h20"></path></g><path d="M 154.0 31 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
+<path d="M20 22v20m10 -20v20m-10 -10h20"></path></g><g>
+<path d="M40 32h0.0"></path><path d="M158.0 32h0.0"></path><path d="M40.0 32h20"></path><g>
+<path d="M60.0 32h0.0"></path><path d="M138.0 32h0.0"></path><g>
+<path d="M60.0 32h0.0"></path><path d="M138.0 32h0.0"></path><path d="M60.0 32h10"></path><g class="terminal ">
+<path d="M70.0 32h0.0"></path><path d="M128.0 32h0.0"></path><rect class="term" height="24" width="58.0" x="70.0" y="21"></rect><text x="99.0" y="37">&#91;␣\t&#93;</text></g><path d="M128.0 32h10"></path><path d="M70.0 32a10 10 0 0 0 -10 10v0a10 10 0 0 0 10 10"></path><g>
+<path d="M70.0 52h58.0"></path></g><path d="M128.0 52a10 10 0 0 0 10 -10v0a10 10 0 0 0 -10 -10"></path></g></g><path d="M138.0 32h20"></path></g><path d="M 158.0 32 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>

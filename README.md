@@ -346,12 +346,12 @@ the `search` button)
 
 ![Complex search](doc/complexsearch.png)
 
-Adding a replace expression (as in [Mass Editing](doc/mass_editing.md))
+Adding a replace expression (as in [Mass Editing](doc/mass_editing.md)) loke
 ```
-Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)
+xpos:this(Upos)+"xpos" Feat:"Special:Present"
 ```
 
-and lick `search & replace`. This replaces all matching tokens in the first sentence where at least one token is matching the search condition:
+and click `search & replace`. This replaces all matching tokens in the first sentence where at least one token is matching the search condition:
 
 ![Search and replace](doc/searchandreplace.png)
 
