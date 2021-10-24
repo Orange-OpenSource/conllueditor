@@ -565,7 +565,7 @@ The validation button will launch the validator on the current sentence.
 
 # Server API (used by the GUI)
 * `curl -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentence of a file is `read 0`, `sentid` is only used only for editing commands but must be present)
-* `curl 'http://host:port/edit/validlists'` get lists of valid upos/xpos/deprels, filename and version name
+* `curl 'http://host:port/edit/validlists' | jq .` get lists of valid upos/xpos/deprels, filename and version name
 * `curl 'http://host:port/edit/getconllu?sentid=10'` get sentence 10 in CoNLL-U format
 * `curl 'http://host:port/edit/getlatex?sentid=10'` get sentence 10 in LaTeX format (to use
   with the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) or   [doc/deptree.sty](doc/deptree.sty) packages)
