@@ -1,0 +1,64 @@
+<svg class="railroad-diagram" height="92" viewBox="0 0 438.5 92" width="438.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g transform="translate(.5 .5)">
+<style>/* <![CDATA[ */
+
+	svg.railroad-diagram {
+		background-color: rgba(255,255,0, 0);
+	}
+	svg.railroad-diagram path {
+		stroke-width:3;
+		stroke:black;
+		fill:rgba(0,0,0,0);
+	}
+	svg.railroad-diagram text {
+		eeefont:bold 14px sans; 
+		font-family: sans;
+		text-anchor:middle;
+                fill: black; /* color of text */
+	}
+	svg.railroad-diagram .labelname {
+		font-family: sans;
+		text-anchor:middle;
+		stroke-width: 0
+                fill: red; /* color of text */
+	}
+
+	svg.railroad-diagram text.label{
+		text-anchor:start;
+	}
+	svg.railroad-diagram text.comment{
+		eeefont:italic 12px monospace;
+		font-family: sans;
+		font-style: italic;
+	}
+        svg.railroad-diagram .nterm { /* defines non-terminals */
+		stroke-width:3;
+		stroke:black; /* used for outline AND font, so without it the text looks OK but not the form...*/
+		fill: rgb(181,232,247);
+	}
+        svg.railroad-diagram .term { /* defines terminals */
+		stroke-width:3;
+		stroke:black; /* used for outline AND font, so without it the text looks OK but not the form...*/
+		fill: rgb(217,194,240);
+	}
+
+	svg.railroad-diagram rect.group-box {
+		stroke: gray;
+		stroke-dasharray: 10 5;
+		fill: none;
+	}
+
+/* ]]> */
+</style><g>
+<path d="M20 21v20m10 -20v20m-10 -10h20"></path></g><g>
+<path d="M40 31h0.0"></path><path d="M398.5 31h0.0"></path><path d="M40.0 31h20"></path><g>
+<path d="M60.0 31h0.0"></path><path d="M378.5 31h0.0"></path><g class="terminal ">
+<path d="M60.0 31h0.0"></path><path d="M131.0 31h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="71.0" x="60.0" y="20"></rect><text x="95.5" y="35">HEADKW</text></g><path d="M131.0 31h10"></path><path d="M141.0 31h10"></path><g class="terminal ">
+<path d="M151.0 31h0.0"></path><path d="M205.0 31h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="151.0" y="20"></rect><text x="178.0" y="35">OPEN</text></g><path d="M205.0 31h10"></path><path d="M215.0 31h10"></path><g class="terminal ">
+<path d="M225.0 31h0.0"></path><path d="M296.0 31h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="71.0" x="225.0" y="20"></rect><text x="260.5" y="35">COLUMN</text></g><path d="M296.0 31h10"></path><path d="M306.0 31h10"></path><g class="terminal ">
+<path d="M316.0 31h0.0"></path><path d="M378.5 31h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="62.5" x="316.0" y="20"></rect><text x="347.25" y="35">CLOSE</text></g></g><path d="M378.5 31h20"></path><path d="M40.0 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 61h8.5"></path><path d="M370.0 61h8.5"></path><g class="terminal ">
+<path d="M68.5 61h0.0"></path><path d="M139.5 61h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="71.0" x="68.5" y="50"></rect><text x="104.0" y="65">HEADKW</text></g><path d="M139.5 61h10"></path><path d="M149.5 61h10"></path><g class="terminal ">
+<path d="M159.5 61h0.0"></path><path d="M213.5 61h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="54.0" x="159.5" y="50"></rect><text x="186.5" y="65">OPEN</text></g><path d="M213.5 61h10"></path><path d="M223.5 61h10"></path><g class="non-terminal ">
+<path d="M233.5 61h0.0"></path><path d="M287.5 61h0.0"></path><rect class="nterm" height="22" width="54.0" x="233.5" y="50"></rect><text x="260.5" y="65">head</text></g><path d="M287.5 61h10"></path><path d="M297.5 61h10"></path><g class="terminal ">
+<path d="M307.5 61h0.0"></path><path d="M370.0 61h0.0"></path><rect class="term" height="22" rx="10" ry="10" width="62.5" x="307.5" y="50"></rect><text x="338.75" y="65">CLOSE</text></g></g><path d="M378.5 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path></g><path d="M 398.5 31 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>

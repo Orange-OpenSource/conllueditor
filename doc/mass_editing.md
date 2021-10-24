@@ -49,6 +49,9 @@ Functions can be nested (eventhough `child(head())` does not make sense, does it
 
 The same language is used for complex search and replace
 
+For more information check the [formal grammar for conditions](conditions/README.md).
+
+
 ## New Values
 
 `new_values` is a list of key:values to set to the current token. Possible `keys`:
@@ -85,3 +88,6 @@ for instance:
 * `Lemma:substring(this(Form),1,3)`      set lemma to the substring (1 - 3) of the form 
 * `Lemma:substring(this(Form),1)`       set lemma to the substring (1 - end) ofthe form 
 *  `Form:replace(this(Form),"é","e")`  replace all occurrances of `é` in the form by `e`
+
+For more information check the [formal grammar for replacements](replacements/README.md) (the part after the first `:`).
+
