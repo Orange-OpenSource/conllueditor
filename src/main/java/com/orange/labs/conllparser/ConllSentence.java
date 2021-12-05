@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.13.0 as of 25th September 2021
+ @version 2.14.0 as of 5th December 2021
  */
 package com.orange.labs.conllparser;
 
@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -75,6 +77,8 @@ public class ConllSentence {
     private String newpar = null;
     private String newdoc = null;
     private String sentid = null;
+    private String translit = null;
+    private Map<String, String>translations = null; // lg: text
     private String text = null; // # text = ... (only to detect errors, when editing (TODO). For the output we regenerate this from the words
     private int maxdist = 0; // maximal distance between a word and its head (calculated by mameTrees())
 
@@ -163,6 +167,11 @@ public class ConllSentence {
         newdoc = orig.newdoc;
         newpar = orig.newpar;
         sentid = orig.sentid;
+        translit = orig.translit;
+        if (orig.translations != null) {
+            translations = new HashMap<>();
+            translations.putAll(orig.translations);
+        }
         columndefs = orig.columndefs;
     }
 
@@ -173,18 +182,37 @@ public class ConllSentence {
         hasEnhancedDeps = false;
         //Set<Annotation> lastAnnots = null;
         List<String> lastnonstandardinfo = null;
-
+        Pattern translationFields = Pattern.compile("^# text_([a-z]{2,3}) *= *(.*)$");
+                
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             String line = cline.getValue();
             if (line.startsWith("#")) {
                 if (line.startsWith("# newpar")) {
                     newpar = line.substring(8).trim();
+                    if (newpar.startsWith("id =")) {
+                        newpar = newpar.substring(4).strip();
+                    }
                 } else if (line.startsWith("# newdoc")) {
                     newdoc = line.substring(8).trim();
+                    if (newdoc.startsWith("id =")) {
+                        newdoc = newdoc.substring(4).strip();
+                    }
                 } else if (line.startsWith("# sent_id = ")) {
                     sentid = line.substring(12).trim();
                 } else if (line.startsWith("# text = ")) {
                     text = line.substring(9).trim();
+                } else if (line.startsWith("# translit = ")) {
+                    translit = line.substring(13).trim();
+                } else if (line.startsWith("# text_")) {
+                    if (translations == null) {
+                        translations = new HashMap<>();
+                    }
+                    Matcher m = translationFields.matcher(line);
+                    if (m.matches()) {
+                        translations.put(m.group(1), m.group(2));
+                    } else {
+                        System.err.format("WARNING: ignoring invalid '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
+                    }
                 } else {
                     comments.add(line.substring(1).trim());
                 }
@@ -234,6 +262,7 @@ public class ConllSentence {
                 contracted.put(w.getId(), w);
             }
         }
+        
     }
 
     // adds a new emptyword, at the position given in emptyword.
@@ -667,20 +696,38 @@ public class ConllSentence {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (newdoc != null && !newdoc.isEmpty()) {
-            sb.append("# newdoc ").append(newdoc).append('\n');
+        if (newdoc != null) {
+            if (!newdoc.isEmpty()) {
+                sb.append("# newdoc id = ").append(newdoc).append('\n');
+            } else {
+                sb.append("# newdoc\n");
+            }
         }
-        if (newpar != null && !newpar.isEmpty()) {
-            sb.append("# newpar ").append(newpar).append('\n');
+        if (newpar != null) {
+            if (!newpar.isEmpty()) {
+                sb.append("# newpar id = ").append(newpar).append('\n');
+            } else {
+                sb.append("# newpar\n");
+            }
         }
         if (sentid != null && !sentid.isEmpty()) {
             sb.append("# sent_id = ").append(sentid).append('\n');
         }
         sb.append("# text = ").append(getSentence().replaceAll("\n", " ").trim()).append('\n');
+
+        if (translit != null && !translit.isEmpty()) {
+            sb.append("# translit = ").append(translit).append('\n');
+        }
+
+        if (translations != null) {
+            for (String lg : translations.keySet()) {
+                sb.append("# text_").append(lg).append(" = ").append(translations.get(lg)).append('\n');
+            }
+        }
+
         for (String c : comments) {
             sb.append("# ").append(c).append('\n');
         }
-
         // output 0.1 empty words, if present
         if (emptywords != null) {
             List<ConllWord> ews = emptywords.get(0);
@@ -1939,19 +1986,54 @@ public class ConllSentence {
     public void setSentid(String sentid) {
         this.sentid = sentid;
     }
-
-    public String isNewpar() {
+    public void setTranslit(String translit) {
+        this.translit = translit;
+    }
+    
+    public String getNewpar() {
         return newpar;
     }
 
-    public String isNewdoc() {
+    public String getNewdoc() {
         return newdoc;
     }
 
     public String getSentid() {
         return sentid;
     }
+    
+    public String getTranslit() {
+        return translit;
+    }
+    
+    public Map<String, String> getTranslations() {
+        return translations;
+    }
 
+    /** translations: \n separated lines with "iso: translated text" */
+    public boolean setTranslations(String translations) {
+        if (translations.trim().isEmpty()) {
+            return true;
+        }
+        String [] tt = translations.trim().split("\n");
+        int errors = 0;
+        if (this.translations == null) {
+            this.translations = new HashMap<>();
+        }  else {
+            this.translations.clear();
+        }
+        for (String translation : tt) {
+            String [] elems = translation.split(":", 2);
+            if (elems.length == 2) {  
+                this.translations.put(elems[0].trim(), elems[1].trim());
+            } else {
+                errors++;
+            }
+        }
+        if (errors > 0) return false;
+        return true;
+    }
+    
     /**
      * calculate start and end offset for each word. contracted word as well.
      * Parts of contracted words copy the values form the MTW

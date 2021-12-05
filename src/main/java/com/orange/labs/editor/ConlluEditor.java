@@ -28,13 +28,14 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.11.0 as of 14th March 2021
+ @version 2.14.0 as of 5th December 2021
  */
 package com.orange.labs.editor;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orange.labs.conllparser.ConllException;
@@ -405,6 +406,41 @@ public class ConlluEditor {
         if (csent.getSentid() != null) {
             solution.addProperty("sent_id", csent.getSentid());
         }
+        if (csent.getNewpar() != null) {
+            solution.addProperty("newpar", csent.getNewpar());
+        }
+        if (csent.getNewdoc() != null) {
+            solution.addProperty("newdoc", csent.getNewdoc());
+        }
+
+        if (csent.getTranslit() != null) {
+            solution.addProperty("translit", csent.getTranslit());
+        } else {
+            boolean missingtranslit = false;
+            JsonArray translits = new JsonArray();
+            for (ConllWord cw : csent.getWords()) {          
+                if (cw.getMisc().containsKey("Translit")) {
+                    translits.add((String)cw.getMisc().get("Translit"));
+                } else {
+                    missingtranslit = true;
+                }
+            }
+            if (translits.size() > 0) {
+                solution.add("translit_words", translits);
+                solution.addProperty("translit_missing", missingtranslit);
+            }
+        }
+
+        if (csent.getTranslations() != null) {
+            JsonObject t = new JsonObject();
+            for (String key : csent.getTranslations().keySet()) {
+                //solution.addProperty("text_" + key , csent.getTranslations().get(key));
+                t.addProperty(key, csent.getTranslations().get(key));
+            }
+            
+            solution.add("translations", t);
+        }
+        
         solution.addProperty("changes", changesSinceSave);
         //solution.addProperty("latex", csent.getLaTeX());
         ConllSentence.AnnotationErrors ae = new ConllSentence.AnnotationErrors();
@@ -705,6 +741,13 @@ public class ConlluEditor {
           mod emptyinsert <tokenid> <form> [<lemma> [<upos> [<xpos>]]]
                                      enhanced dependencies: insert a new EMPTY token before the token <tokenid>
                                      (new token has id "<tokenid>.1"
+          mod editmetadata <json>    modify sentence metadata, needs an json object like 
+                                     { "newdoc":"document id",
+                                       "newpar":"paragraph id",
+                                       "sent_id":"sentence id",
+                                       "translit":"transliteration",
+                                       "translations":"de: German translation\nen: English translation ..."
+                                      }
           mod comments <comment>     set the comment fo a sentence (# text, # sent_id, # newpar etc are set automatically!)
           mod undo                   undo last "mod" command (if we are still in the same sentence)
           mod redo                   redo last "undone" "mod" command
@@ -1828,7 +1871,48 @@ public class ConlluEditor {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }
                 return returnTree(currentSentenceId, csent);
+            } else if (command.startsWith("mod editmetadata ")) {
+                String[] f = command.trim().split(" +", 3);
 
+                if (f.length < 3) {
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
+                }
+
+                if (history == null) {
+                    history = new History(200);
+                }
+                csent = cfile.getSentences().get(currentSentenceId);
+                history.add(csent);
+                
+                JsonElement jelement = JsonParser.parseString(f[2]);
+                JsonObject jo = jelement.getAsJsonObject();
+                if (jo.has("newdoc")) {
+                    String newdoc = jo.get("newdoc").getAsString().trim();
+                    if (!newdoc.isEmpty()) {
+                        csent.setNewdoc(newdoc);
+                    }
+                }
+                if (jo.has("newpar")) {
+                    String newdoc = jo.get("newpar").getAsString().trim();
+                    if (!newdoc.isEmpty()) {
+                        csent.setNewpar(newdoc);
+                    }
+                }
+                if (jo.has("translit")) {
+                    String newdoc = jo.get("translit").getAsString().trim();
+                    if (!newdoc.isEmpty()) {
+                        csent.setTranslit(newdoc);
+                    }
+                }
+                 if (jo.has("translations")) {
+                    String t = jo.get("translations").getAsString().trim();
+                    boolean rtc = csent.setTranslations(t);
+                    if (!rtc) {
+                        return formatErrMsg("Bad format in translations box: ''" + t, currentSentenceId);
+                    }
+                 }
+                
+                return returnTree(currentSentenceId, csent);
             } else if (command.startsWith("mod comments ")) {
                 String[] f = command.trim().split(" +", 3);
                 String newcomment;

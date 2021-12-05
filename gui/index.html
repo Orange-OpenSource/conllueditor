@@ -189,6 +189,7 @@
                         <button class ="onlyWithTree mybutton" id="conllu">CoNLL-U</button>
                         <button class ="onlyWithTree mybutton" id="sdparse">SD-Parse</button>
                         <button class ="onlyWithTree mybutton" id="json">JSON (Spacy)</button>
+                        <button class ="onlyWithTree mybutton" id="editmetadata">edit metadata</button>
                     </td>
                 </tr>
 
@@ -789,6 +790,41 @@
             </div>
         </div>
 
+        
+        
+        <!-- edit sentence metadata -->
+        <div class="modal" id="metadataEdit" tabindex="-1" role="dialog" aria-labelledby="metadataEditLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="metadataEditLabel">Edit sentence metadata</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <table id="metadataedittable">
+
+
+                            <tr><td>newdoc</td>     <td><div class="ui-widget"><input type="text" id="cnewdoc"  size="60" value=""></div></td></tr>
+                            <tr><td>newpar</td>     <td><div class="ui-widget"><input type="text" id="cnewpar"  size="60" value=""></div></td></tr>
+                            <tr><td>sent_id</td>    <td><div class="ui-widget"><input type="text" id="csent_id" size="60" value=""></div></td></tr>
+                            <tr><td>translit</td>   <td><div class="ui-widget"><input type="text" id="ctranslit"  size="60" value=""></div></td>
+                                <td><button type="button" id="inittranslist" class="mybutton">init</button></td>
+                            </tr>
+                            <tr><td>translations</td> <td><div class="ui-widget">
+                                        <!--input type="text" id="cfeats" size="50" value="" -->
+                                        <textarea type="text" id="ctranslations" rows="5" cols="60"></textarea>
+                                    </div></td></tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="savemetadata" class="mybutton">Save changes</button>
+                        <button type="button" class="mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </body>
 </html>

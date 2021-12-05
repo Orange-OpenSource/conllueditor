@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.2 as of 22nd February 2021
+ @version 2.14.0 as of 5th December 2021
  */
 
 import com.google.gson.Gson;
@@ -505,6 +505,49 @@ public class TestConlluEditor {
     }
 
 
+    @Test
+    public void test201EditMetaData() throws IOException {
+        name("modify sentence metadata");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".201");
+        ce.setSaveafter(1);
+        //String rtc =
+        ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en: a translation\"}", 0, "editinfo");
+
+        URL ref = this.getClass().getResource("test.editmetadata.conllu");
+        URL res = this.getClass().getResource("test.conllu.201"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+    }
+    
+    @Test
+    public void test202EditMetaDataError() throws IOException {
+        name("modify sentence metadata");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".201");
+        ce.setSaveafter(1);
+        //String rtc =
+        String rtc = ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en a translation\"}", 0, "editinfo");
+
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "InvalidTranslationBox.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("InvalidTranslationBox.json");
+        
+        Assert.assertEquals(String.format("Invalid translation box\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+        FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+ 
+    }
+    
+    
     @Test
     public void test21Read() throws IOException {
         name("read sentence");

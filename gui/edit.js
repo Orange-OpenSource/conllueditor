@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.13.1 as of 24th October 2021
+ @version 2.14.0 as of 5th December 2021
  */
 
 
@@ -1261,6 +1261,30 @@ function formatPhrase(item) {
         $("#commentfield").empty();
         $("#errors").empty();
 
+        // metadata edit
+        $("#csent_id").val("");
+        $("#cnewdoc").val("");
+        $("#cnewpar").val("");
+        $("#ctranslit").val("");
+        $("#ctranslations").val("");
+        // add new info to metadat edit
+        $("#csent_id").val(item.sent_id);
+        if (item.newdoc)
+            $("#cnewdoc").val(item.newdoc);
+        if (item.newpar)
+            $("#cnewpar").val(item.newpar);
+        if (item.translit)
+            $("#ctranslit").val(item.translit);
+        
+
+        if (item.translations) {
+            var text = "";
+            for (lg in item.translations) {
+                text += lg + ": " + item.translations[lg] + "\n";
+            }
+            $("#ctranslations").val(text);
+        }
+        
         // display sentence text
         $("#sentid").val(item.sentenceid + 1);
         $("#currentsent").append(item.sentenceid + 1);
@@ -1269,6 +1293,8 @@ function formatPhrase(item) {
         }
         $("#total").append(item.maxsentence);
         $("#titre").append(item.sentence);
+        
+        
         if (item.errors != undefined) {
             if (item.errors.heads)
                 $("#errors").append("|" + item.errors.heads + " roots");
@@ -1563,6 +1589,28 @@ $(document).ready(function () {
         $('#commentEdit').modal('hide');
     });
 
+
+    /* edit sent-id, text_LG, etc */
+    $("#editmetadata").click(function () {
+        $("#metadataEdit").modal();
+    });
+
+    $('#savemetadata').click(function () {
+        object = { "newdoc": $("#cnewdoc").val(),
+                   "newpar": $("#cnewpar").val(),
+                   "sent_id": $("#csent_id").val(),
+                   "translit": $("#ctranslit").val(),
+                   "translations": $("#ctranslations").val(),
+               }
+        sendmodifs({"cmd": "mod editmetadata " + JSON.stringify(object)});
+        $("#metadataEdit").modal("hide");
+    });
+
+    $("#inittranslist").click(function () {
+        // TODO: add MISC:Translits here
+        $("#ctranslit").val("toto");
+        
+    });
 
     /* delete clicked MTW form */
     $('#editMWtoken').click(function () {

@@ -1,3 +1,6 @@
+Version 2.14.0
+- add/edit sentence metadata (senti_id, newdoc, newpar, transliteration, translations
+
 Version 2.13.1
 - adding grammar for replacements (and changed format for search and replace)
 - correction with subclass issue
