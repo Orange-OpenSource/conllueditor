@@ -547,7 +547,6 @@ function parseShortcuts() {
     $("#shortcuttableUPOS").empty(); // clear default values
     $("#uposshortcuts").empty();
     $("#upostr").hide();
-    console.log("rrr ", Object.keys(shortcutsUPOS).length );
     if (Object.keys(shortcutsUPOS).length > 0) {
         $("#shortcuttableUPOS").append("<tr><th>key</th> <th>set UPOS to</th></tr>"); // add header
         for (var p in shortcutsUPOS) {
@@ -1176,6 +1175,10 @@ var backwards = false;
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var editing_enhanced = false;
 
+// transliterations from words
+var translit_words = [];
+var missingtranslits = false;
+
 // position of highlighted things (search result)
 var highlightX = 0;
 var highlightY = 0;
@@ -1276,7 +1279,10 @@ function formatPhrase(item) {
         if (item.translit)
             $("#ctranslit").val(item.translit);
         
-
+        if (item.translit_words) {
+            translit_words = item.translit_words;
+            missingtranslits = item.translit_missing;
+        }
         if (item.translations) {
             var text = "";
             for (lg in item.translations) {
@@ -1564,7 +1570,6 @@ $(document).ready(function () {
 
     /* start comment edit function */
     $("#commentfield").click(function () {
-        //alert("rrr "+ $("#commentfield").text());
         $("#commenttext").val($("#commentfield").text());
         //$("#commentedit").dialog("open");
         $("#commentEdit").modal()
@@ -1572,7 +1577,6 @@ $(document).ready(function () {
 
 
     $("#editcommentbutton").click(function () {
-        //alert("rrr "+ $("#commentfield").text());
         $("#commenttext").val($("#commentfield").text());
         //$("#commentedit").dialog("open");
         $("#commentEdit").modal()
@@ -1606,9 +1610,9 @@ $(document).ready(function () {
         $("#metadataEdit").modal("hide");
     });
 
-    $("#inittranslist").click(function () {
-        // TODO: add MISC:Translits here
-        $("#ctranslit").val("toto");
+    $("#inittranslit").click(function () {
+        //console.log("IIII ", translit_words.join(" "));
+        $("#ctranslit").val(translit_words.join(" "));
         
     });
 
@@ -1710,7 +1714,6 @@ $(document).ready(function () {
 
     // add/modify basic dep relation
     $('#savedeprel').click(function () {
-        //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdep").text()];
 
         if (conllword.deprel != $("#cdeprel").val()) {
@@ -1721,7 +1724,6 @@ $(document).ready(function () {
 
     // add/modify enhanced dep relation
     $('#savedeprelen').click(function () {
-        //console.log("rrrr " + JSON.stringify(this));
         conllword = conllwords[$("#cdepen").text()];
         if (/*flatgraph*/ graphtype == 2 && editing_enhanced) {
             //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val())

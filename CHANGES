@@ -1,5 +1,6 @@
 Version 2.14.0
-- add/edit sentence metadata (senti_id, newdoc, newpar, transliteration, translations
+- add/edit sentence metadata (sent_id, newdoc, newpar, transliteration, translations)
+- button to initialise sentence metadata "translit" from MISC:Translit field if present
 
 Version 2.13.1
 - adding grammar for replacements (and changed format for search and replace)

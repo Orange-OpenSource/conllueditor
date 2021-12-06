@@ -523,9 +523,9 @@ public class TestConlluEditor {
     
     @Test
     public void test202EditMetaDataError() throws IOException {
-        name("modify sentence metadata");
+        name("modify sentence metadata error");
         ce.setCallcitcommot(false);
-        ce.setBacksuffix(".201");
+        ce.setBacksuffix(".202");
         ce.setSaveafter(1);
         //String rtc =
         String rtc = ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en a translation\"}", 0, "editinfo");

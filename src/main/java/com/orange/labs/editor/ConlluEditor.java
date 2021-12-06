@@ -415,21 +415,23 @@ public class ConlluEditor {
 
         if (csent.getTranslit() != null) {
             solution.addProperty("translit", csent.getTranslit());
-        } else {
-            boolean missingtranslit = false;
-            JsonArray translits = new JsonArray();
-            for (ConllWord cw : csent.getWords()) {          
-                if (cw.getMisc().containsKey("Translit")) {
-                    translits.add((String)cw.getMisc().get("Translit"));
-                } else {
-                    missingtranslit = true;
-                }
-            }
-            if (translits.size() > 0) {
-                solution.add("translit_words", translits);
-                solution.addProperty("translit_missing", missingtranslit);
+        }
+
+        // potential transliteration: concatenating the Misc:Translit values of all words
+        boolean missingtranslit = false;
+        JsonArray translits = new JsonArray();
+        for (ConllWord cw : csent.getWords()) {
+            if (cw.getMisc().containsKey("Translit")) {
+                translits.add("" + cw.getMisc().get("Translit"));
+            } else {
+                missingtranslit = true;
             }
         }
+        if (translits.size() > 0) {
+            solution.add("translit_words", translits);
+            solution.addProperty("translit_missing", missingtranslit);
+        }
+
 
         if (csent.getTranslations() != null) {
             JsonObject t = new JsonObject();
@@ -437,10 +439,10 @@ public class ConlluEditor {
                 //solution.addProperty("text_" + key , csent.getTranslations().get(key));
                 t.addProperty(key, csent.getTranslations().get(key));
             }
-            
+
             solution.add("translations", t);
         }
-        
+
         solution.addProperty("changes", changesSinceSave);
         //solution.addProperty("latex", csent.getLaTeX());
         ConllSentence.AnnotationErrors ae = new ConllSentence.AnnotationErrors();
@@ -741,7 +743,7 @@ public class ConlluEditor {
           mod emptyinsert <tokenid> <form> [<lemma> [<upos> [<xpos>]]]
                                      enhanced dependencies: insert a new EMPTY token before the token <tokenid>
                                      (new token has id "<tokenid>.1"
-          mod editmetadata <json>    modify sentence metadata, needs an json object like 
+          mod editmetadata <json>    modify sentence metadata, needs an json object like
                                      { "newdoc":"document id",
                                        "newpar":"paragraph id",
                                        "sent_id":"sentence id",
@@ -1883,26 +1885,26 @@ public class ConlluEditor {
                 }
                 csent = cfile.getSentences().get(currentSentenceId);
                 history.add(csent);
-                
+
                 JsonElement jelement = JsonParser.parseString(f[2]);
                 JsonObject jo = jelement.getAsJsonObject();
                 if (jo.has("newdoc")) {
                     String newdoc = jo.get("newdoc").getAsString().trim();
-                    if (!newdoc.isEmpty()) {
+                    //if (!newdoc.isEmpty()) {
                         csent.setNewdoc(newdoc);
-                    }
+                    //}
                 }
                 if (jo.has("newpar")) {
                     String newdoc = jo.get("newpar").getAsString().trim();
-                    if (!newdoc.isEmpty()) {
+                    //if (!newdoc.isEmpty()) {
                         csent.setNewpar(newdoc);
-                    }
+                    //}
                 }
                 if (jo.has("translit")) {
                     String newdoc = jo.get("translit").getAsString().trim();
-                    if (!newdoc.isEmpty()) {
+                    //if (!newdoc.isEmpty()) {
                         csent.setTranslit(newdoc);
-                    }
+                    //}
                 }
                  if (jo.has("translations")) {
                     String t = jo.get("translations").getAsString().trim();
@@ -1911,7 +1913,7 @@ public class ConlluEditor {
                         return formatErrMsg("Bad format in translations box: ''" + t, currentSentenceId);
                     }
                  }
-                
+
                 return returnTree(currentSentenceId, csent);
             } else if (command.startsWith("mod comments ")) {
                 String[] f = command.trim().split(" +", 3);
