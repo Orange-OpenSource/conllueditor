@@ -21,6 +21,7 @@ The editor provides the following functionalities:
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
+* sentence metadata editing
 
 Current version: 2.14.0
 
@@ -432,6 +433,16 @@ contains (as a first line):
 
 A simple languages to modify tokens if a (complex condition is met)
 see [Mass Editing](doc/mass_editing.md)
+
+## Metadata editing
+
+The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph, as well as its sentence id, translations (mostly into English) or transliterations.
+Clicking on `edit metadata` opens the Metadata dialogue.
+For translations, the translations must be prefixed with the language code as shown in the screen shot.
+If the words of the current sentence, contains transliteration information (MISC column, Translit field),
+the sentence transliteration can be initialized by clicking on `init`
+
+![Metadata edit](doc/metadataedit.png)
 
 ## Enhanced Dependencies
 Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-annotation])
