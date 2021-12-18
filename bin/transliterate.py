@@ -48,8 +48,13 @@ class Transliterator:
         self.data = json.load(defp)
 
         if not language in self.data:
-            print("unknown languate/alphabet")
+            print("unknown language/alphabet")
         else:
+            if isinstance(self.data[language], str):
+                pointer = self.data[language][1:]
+                if not pointer in self.data:
+                    print("%s: pointing to unknown language/alphabet" % pointer)
+                language = pointer
             replacements = self.data[language].items()
             self.newreplacements = []            
             for k,v in replacements:

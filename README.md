@@ -22,6 +22,7 @@ The editor provides the following functionalities:
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
 * sentence metadata editing
+* adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 
 Current version: 2.14.0
 
@@ -671,6 +672,52 @@ underneath the evaluation scores.
 The comparison mode works in the flat view too.
 
 ![CoNLL-U File Comparison](doc/comparemode.png)
+
+
+# Transliteration
+
+The MISC columns provides a key `Translit=` for a transliteration of the word form into tha roman alphabet (including diacritics). The python script [bin/transliterate.py](bin/transliterate.py) will read any CoNLL-U file and add a `Tranlist=<value>` field to the MISC column if not already present. The transliteration rules are specified in [bin/translit.json](bin/translit.json).
+
+usage:
+
+```
+transliterate.py [-h] [--outfile OUTFILE] --infile INFILE --language LANGUAGE [--raw] [--overwrite] [--sentence]
+```
+
+arguments:
+
+ * `-h`, `--help`            show this help message and exit
+ * `--outfile OUTFILE`, `-o OUTFILE`  output file
+ * `--infile INFILE`, `-i INFILE`           input file
+ * `--language LANGUAGE`, `-l LANGUAGE`       input file
+ * `--raw`                 raw text, transliterate everything
+ * `--overwrite`           overwrite existing transliteration in MISC:Translit and in # translit
+ * `--sentence`            add sentence transliteration by concatening forms
+
+
+For the time being the following alphabets/languages are covered
+* gk: Gurmukhi
+* si: Singhalese
+* ml: Malayalam
+* kn: Kannada
+* te: Telugu
+* ta: Tamil
+* am: Amharic
+* iu: Inuktitut
+* yi: Yiddish (Missing vowel signs are note transliterated)
+* hy: Armenian
+* ka: Georgian (Mkhedruli)
+* hi: Devanagari (Hindi)
+* gu: Gujarati
+* ja: Japanese (Only Katakana and Hiragana)
+* ar: Arabic (Modern Standard Arabic, unvocalized forms are transliterated without vowels)
+* arc: Aramaic (unvocalized forms are transliterated without vowels)
+* ru: Russian (also processes cyrillic letters for Serbian, and Caucasian languages (like Chechen, Ingush, Avar)
+* bg: Bulgarian
+
+Other alphabets with a straight forward transliteration can be added easily added (please send me you updated translit.json file!).
+In some cases the transliteration can be erroneous, since this script does not take into account complex context depending transliterations. It is thought as a help for an initial version to be manually validated
+
 
 # Known bugs
 * not all possible errors which users can make are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.

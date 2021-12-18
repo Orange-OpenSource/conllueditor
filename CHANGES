@@ -1,6 +1,7 @@
 Version 2.14.0
 - add/edit sentence metadata (sent_id, newdoc, newpar, transliteration, translations)
 - button to initialise sentence metadata "translit" from MISC:Translit field if present
+- script to add an initial version of Form transliteration (MISC:Translit)
 
 Version 2.13.1
 - adding grammar for replacements (and changed format for search and replace)
