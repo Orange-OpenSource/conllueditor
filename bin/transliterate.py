@@ -43,17 +43,25 @@ import re
 import collections
 
 class Transliterator:
-    def __init__(self, language):
-        defp = open(os.path.dirname(__file__) + "/translit.json")
+    def __init__(self, datafile, language):
+        if datafile:
+            defp = open(datafile)
+        else:
+            defp = open(os.path.dirname(__file__) + "/translit.json")
         self.data = json.load(defp)
 
         if not language in self.data:
             print("unknown language/alphabet")
+            print("available languages/alphabets")
+            for lg in self.data:
+                print("\t", lg)
+            raise Exception("unknown language")
         else:
             if isinstance(self.data[language], str):
                 pointer = self.data[language][1:]
                 if not pointer in self.data:
                     print("%s: pointing to unknown language/alphabet" % pointer)
+                    raise Exception("unknown language")
                 language = pointer
             replacements = self.data[language].items()
             self.newreplacements = []            
@@ -68,9 +76,10 @@ class Transliterator:
 
 
 class RWconllu:
-    def __init__(self, language, conllufile, outfile,
-                 overwrite=False, sentence=False):
-        self.tl = Transliterator(language)
+    def __init__(self, datafile, language, conllufile, outfile,
+                 overwrite=False, sentence=False,
+                 forms=True, lemmas=False):
+        self.tl = Transliterator(datafile, language)
         ifp = open(conllufile)
 
         if outfile:
@@ -113,6 +122,7 @@ class RWconllu:
                         words.append(line)
                     else:
                         form = cols[1]
+                        lemma = cols[2]
                         allforms.append(form)
                         miscs = self.getmiscs(cols[9])
 
@@ -126,15 +136,27 @@ class RWconllu:
                         else:
                             allforms.append(" ")
 
-                        if "Translit" in miscs:
-                            if overwrite:
+                        if forms:
+                            if "Translit" in miscs:
+                                if overwrite:
+                                    tl = self.tl.transliterate(form + " ")
+                                    miscs["Translit"] = "%s" % tl.rstrip()
+                                    cols[9] = self.misc2str(miscs)
+                            else:
                                 tl = self.tl.transliterate(form + " ")
                                 miscs["Translit"] = "%s" % tl.rstrip()
                                 cols[9] = self.misc2str(miscs)
-                        else:
-                            tl = self.tl.transliterate(form + " ")
-                            miscs["Translit"] = "%s" % tl.rstrip()
-                            cols[9] = self.misc2str(miscs)
+
+                        if lemmas:
+                            if "LTranslit" in miscs:
+                                if overwrite:
+                                    tl = self.tl.transliterate(lemma + " ")
+                                    miscs["LTranslit"] = "%s" % tl.rstrip()
+                                    cols[9] = self.misc2str(miscs)
+                            else:
+                                tl = self.tl.transliterate(lemma + " ")
+                                miscs["LTranslit"] = "%s" % tl.rstrip()
+                                cols[9] = self.misc2str(miscs)
 
                         words.append("\t".join(cols))
         # last block
@@ -166,7 +188,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--outfile", "-o", default=None, type=str, help="output file")
     parser.add_argument("--infile", "-i", default=None, required=True, type=str, help="input file")
+    parser.add_argument("--data", "-d", default=None, required=None, type=str, help="data file (default translit.json)")
     parser.add_argument("--language", "-l", default=None, required=True, type=str, help="input file")
+    parser.add_argument("--lemmas", default=False, action="store_true", help="transliterate lemmas")
+    parser.add_argument("--noforms", default=False, action="store_true", help="do not transliterate forms")
     parser.add_argument("--raw", default=False, action="store_true", help="raw text, transliterate everything")
     parser.add_argument("--overwrite", default=False, action="store_true", help="overwrite existing transliteration in MISC:Translit and in # translit")
     parser.add_argument("--sentence", default=False, action="store_true", help="add sentence transliteration by concatening forms")
@@ -175,18 +200,24 @@ if __name__ == "__main__":
         parser.print_help()
     else:
         args = parser.parse_args()
-        
-        tl = Transliterator(args.language)
 
-        if args.raw:
-            ifp = open(args.infile)
-            if args.outfile:
-                ofp = open(args.outfile, "w")
+        if True: #try:
+            tl = Transliterator(args.data,
+                                args.language)
+
+            if args.raw:
+                ifp = open(args.infile)
+                if args.outfile:
+                    ofp = open(args.outfile, "w")
+                else:
+                    ofp = sys.stdout
+                for line in ifp:
+                    print(tl.transliterate(line), end="")
+
             else:
-                ofp = sys.stdout
-            for line in ifp:
-                print(tl.transliterate(line), end="")
-
-        else:
-            rw = RWconllu(args.language, args.infile, args.outfile,
-                          overwrite=args.overwrite, sentence=args.sentence)
+                rw = RWconllu(args.data,
+                              args.language, args.infile, args.outfile,
+                              overwrite=args.overwrite, sentence=args.sentence,
+                              forms=not args.noforms, lemmas=args.lemmas)
+#        except Exception as e:
+#            print("Error:" ,e)

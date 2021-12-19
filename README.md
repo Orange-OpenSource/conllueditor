@@ -690,6 +690,8 @@ arguments:
  * `--outfile OUTFILE`, `-o OUTFILE`  output file
  * `--infile INFILE`, `-i INFILE`           input file
  * `--language LANGUAGE`, `-l LANGUAGE`       input file
+ * `--lemmas`              transliterate lemmas too (into MISC:LTranslit)
+ * `--noforms`             do not transliterate forms
  * `--raw`                 raw text, transliterate everything
  * `--overwrite`           overwrite existing transliteration in MISC:Translit and in # translit
  * `--sentence`            add sentence transliteration by concatening forms
@@ -709,6 +711,7 @@ For the time being the following alphabets/languages are covered
 * ka: Georgian (Mkhedruli)
 * hi: Devanagari (Hindi)
 * gu: Gujarati
+* bn: Bengali (and to a certain extend Assamese and other languages using the Bengali Alphabet)
 * ja: Japanese (Only Katakana and Hiragana)
 * ar: Arabic (Modern Standard Arabic, unvocalized forms are transliterated without vowels)
 * arc: Aramaic (unvocalized forms are transliterated without vowels)
