@@ -689,7 +689,7 @@ arguments:
  * `-h`, `--help`            show this help message and exit
  * `--outfile OUTFILE`, `-o OUTFILE`  output file
  * `--infile INFILE`, `-i INFILE`           input file
- * `--language LANGUAGE`, `-l LANGUAGE`       input file
+ * `--language LANGUAGE`, `-l LANGUAGE`       language/script
  * `--lemmas`              transliterate lemmas too (into MISC:LTranslit)
  * `--noforms`             do not transliterate forms
  * `--raw`                 raw text, transliterate everything
@@ -697,7 +697,7 @@ arguments:
  * `--sentence`            add sentence transliteration by concatening forms
 
 
-For the time being the following alphabets/languages are covered
+For the time being the following scripts/languages are covered
 * gk: Gurmukhi
 * si: Singhalese
 * ml: Malayalam
@@ -712,6 +712,7 @@ For the time being the following alphabets/languages are covered
 * hi: Devanagari (Hindi)
 * gu: Gujarati
 * bn: Bengali (and to a certain extend Assamese and other languages using the Bengali Alphabet)
+* th: Thai (ISO 11940 based)
 * ja: Japanese (Only Katakana and Hiragana)
 * ar: Arabic (Modern Standard Arabic, unvocalized forms are transliterated without vowels)
 * arc: Aramaic (unvocalized forms are transliterated without vowels)

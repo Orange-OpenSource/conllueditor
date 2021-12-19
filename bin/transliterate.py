@@ -189,7 +189,7 @@ if __name__ == "__main__":
     parser.add_argument("--outfile", "-o", default=None, type=str, help="output file")
     parser.add_argument("--infile", "-i", default=None, required=True, type=str, help="input file")
     parser.add_argument("--data", "-d", default=None, required=None, type=str, help="data file (default translit.json)")
-    parser.add_argument("--language", "-l", default=None, required=True, type=str, help="input file")
+    parser.add_argument("--language", "-l", default=None, required=True, type=str, help="script/language to transliterate")
     parser.add_argument("--lemmas", default=False, action="store_true", help="transliterate lemmas")
     parser.add_argument("--noforms", default=False, action="store_true", help="do not transliterate forms")
     parser.add_argument("--raw", default=False, action="store_true", help="raw text, transliterate everything")
