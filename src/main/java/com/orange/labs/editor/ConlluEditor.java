@@ -109,9 +109,9 @@ public class ConlluEditor {
     ConllFile comparisonFile = null;
 
     private String programmeversion;
-    private String gitcommitidfull;
+    //private String gitcommitidfull;
     private String gitcommitidabbrev;
-    private String gitbuildtime;
+    private String gitcommittime;
     private boolean gitdirty = false;
     private String gitbranch;
     private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
@@ -133,9 +133,9 @@ public class ConlluEditor {
         programmeversion = p.getProperty("version");
 
         p.load(ClassLoader.getSystemResourceAsStream("git.properties"));
-        gitcommitidfull = p.getProperty("git.commit.id.full");
+        //gitcommitidfull = p.getProperty("git.commit.id.full");
         gitcommitidabbrev = p.getProperty("git.commit.id.abbrev");
-        gitbuildtime = p.getProperty("git.build.time");
+        gitcommittime = p.getProperty("git.commit.time");
         gitdirty = "true".equalsIgnoreCase(p.getProperty("git.dirty"));
         gitbranch = p.getProperty("git.branch");
 
