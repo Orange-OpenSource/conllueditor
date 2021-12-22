@@ -266,7 +266,7 @@ public class ConllWord {
         String[] elems = conllline.split("\t");
 
         if ((columndefs != null && elems.length < columndefs.size()) || elems.length < 10) { //if (elems.length < 8) {
-        //if (elems.length < columndefs.size()) { //if (elems.length < 8) {
+            //if (elems.length < columndefs.size()) { //if (elems.length < 8) {
             throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'");
         }
         //System.out.println("L:"+conllline);
@@ -310,7 +310,9 @@ public class ConllWord {
 
         if (toktype == Tokentype.CONTRACTED) {
             int columndefssize = 10;
-            if (columndefs != null) columndefssize = columndefs.size();
+            if (columndefs != null) {
+                columndefssize = columndefs.size();
+            }
             for (int x = 2; x < /*9*/ columndefssize - 1; ++x) {
                 if (!elems[x].equals(EmptyColumn)) {
                     throw new ConllException("Contracted word must not have columns filled after position 2");
@@ -458,8 +460,8 @@ public class ConllWord {
                 setMisc(elems[posMISC]);
             }
         }
-            /* process non-standard colums*/
-            if (columndefs != null)
+        /* process non-standard colums*/
+        if (columndefs != null) {
             for (String col : columndefs.keySet()) {
                 if (!ConllFile.conllustandard.contains(col)) {
                     if (namedColumns == null) {
@@ -468,7 +470,8 @@ public class ConllWord {
                     namedColumns.put(col, new LinkedHashSet<String>(Arrays.asList(elems[columndefs.get(col)].split("\\|"))));
                 }
             }
-            /*
+        }
+        /*
             if (elems.length > 10) {
                 namedColumns = new TreeMap<>();
                 int j = 11;
@@ -476,7 +479,6 @@ public class ConllWord {
                     namedColumns.put(j++, new LinkedHashSet(Arrays.asList(elems[i].split("\\|"))));
                 }
             } */
-
 
     }
 
@@ -487,8 +489,6 @@ public class ConllWord {
     public void setMysentence(ConllSentence mysentence) {
         this.mysentence = mysentence;
     }
-
-
 
     public boolean isWhquestion() {
         return whquestion;
@@ -863,20 +863,23 @@ public class ConllWord {
         }
     }
 
-    /** if there is no enhanced dependency, create one from basic dependency.
-    If it is orphan or this is an empty word use 0:root,
-    */
+    /**
+     * if there is no enhanced dependency, create one from basic dependency. If
+     * it is orphan or this is an empty word use 0:root,
+     */
     public void initialiseEHDs() {
         if (deps == null) {
             deps = new ArrayList<>();
-        } else if (!deps.isEmpty()) return;
+        } else if (!deps.isEmpty()) {
+            return;
+        }
         if (toktype == Tokentype.EMPTY) {
             deps.add(new EnhancedDeps("0", "root"));
         } else {
             if ("orphan".equals(deplabel) || head == 0) {
                 deps.add(new EnhancedDeps("0", "root"));
             } else if (deplabel != null) {
-                deps.add(new EnhancedDeps(""+head, deplabel));
+                deps.add(new EnhancedDeps("" + head, deplabel));
             }
         }
     }
@@ -887,7 +890,7 @@ public class ConllWord {
      * @param validupos set of valid UPOS values
      * @param validxpos set of valid XPOS values
      * @param validdeprels set of valid deprel values
-     * @param validfeats  map of valid UPOS:feat=value values
+     * @param validfeats map of valid UPOS:feat=value values
      * @param highlight
      * @param contracted map of MTWs
      * @param ae collect error types here
@@ -989,8 +992,11 @@ public class ConllWord {
                 }
                 JsonObject edo = new JsonObject();
                 edo.addProperty("id", ed.getFullHeadId());
-                if (ed.headword != null) edo.addProperty("position", ed.headword.getPosition());
-                else edo.addProperty("position", -1);
+                if (ed.headword != null) {
+                    edo.addProperty("position", ed.headword.getPosition());
+                } else {
+                    edo.addProperty("position", -1);
+                }
                 edo.addProperty("deprel", ed.deprel);
                 edeps.add(edo);
             }
@@ -1183,13 +1189,13 @@ public class ConllWord {
 //        }
 //        annot.add(a);
 //    }
-
     /**
-    Add an extra column with a value.
-    If the extra column does not yet exist, it is added. if a is "_" it is deleted
-    @param name
-    @param a
-    */
+     * Add an extra column with a value. If the extra column does not yet exist,
+     * it is added. if a is "_" it is deleted
+     *
+     * @param name
+     * @param a
+     */
     public synchronized void addExtracolumn(String name, String a) {
         if (namedColumns != null) {
             LinkedHashSet<String> current = namedColumns.get(name);
@@ -1328,47 +1334,65 @@ public class ConllWord {
     }
 
     public boolean hasUpostag(String regex) {
-        if (upostag == null) return false;
+        if (upostag == null) {
+            return false;
+        }
         return upostag.equals(regex);
     }
 
     public boolean matchesXpostag(String regex) {
-        if (xpostag == null) return false;
+        if (xpostag == null) {
+            return false;
+        }
         return xpostag.matches(regex);
     }
 
     public boolean matchesUpostag(String regex) {
-        if (upostag == null) return false;
+        if (upostag == null) {
+            return false;
+        }
         return upostag.matches(regex);
     }
 
     public boolean matchesLemma(String regex) {
-        if (lemma == null) return false;
+        if (lemma == null) {
+            return false;
+        }
         return lemma.matches(regex);
     }
 
     public boolean matchesForm(String regex) {
-        if (form == null) return false;
+        if (form == null) {
+            return false;
+        }
         return form.matches(regex);
     }
 
-    /** Returns true if the word all conditions in the list
+    /**
+     * Returns true if the word all conditions in the list
      *
      * @param fs field names
      * @param regexs strings to match
      * @return true if all fields match
      */
     public boolean matchesFields(List<Fields> fs, List<String> regexs) {
-        if (fs == null || regexs == null) return false; // should not be used like this
-        if (fs.size() != regexs.size()) return false;
-        for (int x=0; x<fs.size(); ++x) {
-            if (matchesField(fs.get(x), regexs.get(x)) == false) return false;
+        if (fs == null || regexs == null) {
+            return false; // should not be used like this
+        }
+        if (fs.size() != regexs.size()) {
+            return false;
+        }
+        for (int x = 0; x < fs.size(); ++x) {
+            if (matchesField(fs.get(x), regexs.get(x)) == false) {
+                return false;
+            }
         }
         return true;
     }
 
     /**
      * Returns true if the Word matches the regex for f
+     *
      * @param f field name
      * @param regex string to match
      * @return true if field matches
@@ -1394,11 +1418,13 @@ public class ConllWord {
                     return false;
                 }
             case DEPS:
-                if (deps == null) return false;
+                if (deps == null) {
+                    return false;
+                }
 
                 for (EnhancedDeps ehd : deps) {
-                    if(ehd.deprel.matches(regex)) {
-                       return true;
+                    if (ehd.deprel.matches(regex)) {
+                        return true;
                     }
                 }
                 return false;
@@ -1409,7 +1435,7 @@ public class ConllWord {
 
     /* matches a longer condition like
     Upos:VERB && (Lemma:mange || Feat:Person=3)
-    */
+     */
     public boolean matchCondition(String condition, Map<String, Set<String>> wordlists) throws ConllException {
         try {
             return CheckConditions.evaluate(condition, wordlists, this);
@@ -1443,8 +1469,7 @@ public class ConllWord {
                 if (rtc == 1) {
                     jfeat.addProperty("error", "name");
                     ae.features++;
-                }
-                else if (rtc == 2) {
+                } else if (rtc == 2) {
                     jfeat.addProperty("error", "value");
                     ae.features++;
                 }
@@ -1493,10 +1518,10 @@ public class ConllWord {
         }
     }
 
-	// delete a feature with name
-	public void delFeatureWithName(String name) {
-		features.remove(name);
-	}
+    // delete a feature with name
+    public void delFeatureWithName(String name) {
+        features.remove(name);
+    }
 
     // add a unparsed feature=value pair */
     public void addFeature(String fval_unparsed) {
@@ -1547,13 +1572,12 @@ public class ConllWord {
         }
         String val;
         if (v instanceof String) {
-            val = (String)v;
+            val = (String) v;
         } else {
-            val = String.valueOf((Long)v);
+            val = String.valueOf((Long) v);
         }
         return (val.matches(valregex));
     }
-
 
     public int getHead() {
         return head;
@@ -1573,10 +1597,12 @@ public class ConllWord {
 
     public void setDeps(String unparsed_enhdepsstring) throws ConllException {
         deps.clear();
-        if (unparsed_enhdepsstring.length() > 1) {
-            for (String ed : unparsed_enhdepsstring.split("[\\|,\n]")) {
-                ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(ed);
-                deps.add(ehd);
+        if (!"_".equals(unparsed_enhdepsstring)) {
+            if (unparsed_enhdepsstring.length() > 1) {
+                for (String ed : unparsed_enhdepsstring.split("[\\|,\n]")) {
+                    ConllWord.EnhancedDeps ehd = new ConllWord.EnhancedDeps(ed);
+                    deps.add(ehd);
+                }
             }
         }
     }
@@ -1601,8 +1627,6 @@ public class ConllWord {
 
         return false;
     }
-
-
 
     public Map<String, Object> getMisc() {
         return misc;
@@ -1662,8 +1686,9 @@ public class ConllWord {
         return false;
     }
 
-        /**
-     * set the spaces before the token, return true, if the key was Space(s)After
+    /**
+     * set the spaces before the token, return true, if the key was
+     * Space(s)After
      */
     private boolean setSpacesBefore(String misckey, String miscval) {
         if (misckey.equals("SpacesBefore")) {
@@ -1681,8 +1706,12 @@ public class ConllWord {
         boolean before = false;
         for (Map.Entry<String, Object> pair : misc.entrySet()) {
             if (pair.getValue() instanceof String) {
-                if (!after) after = setSpacesAfter(pair.getKey(), (String) pair.getValue());
-                if (!before) before = setSpacesBefore(pair.getKey(), (String) pair.getValue());
+                if (!after) {
+                    after = setSpacesAfter(pair.getKey(), (String) pair.getValue());
+                }
+                if (!before) {
+                    before = setSpacesBefore(pair.getKey(), (String) pair.getValue());
+                }
                 if (after && before) {
                     break; // space(s)after and spacesbefore found
                 }
@@ -1691,7 +1720,7 @@ public class ConllWord {
     }
 
     public boolean addMisc(String unparsed_miscstring) {
-        String [] kv = unparsed_miscstring.split("=", 2);
+        String[] kv = unparsed_miscstring.split("=", 2);
         boolean prexists = misc.containsKey(kv[0]);
         if (kv.length != 2) {
             misc.put(kv[0], null);
@@ -1719,9 +1748,9 @@ public class ConllWord {
     }
 
     // delete a misc with name
-	public void delMiscWithName(String name) {
-		misc.remove(name);
-	}
+    public void delMiscWithName(String name) {
+        misc.remove(name);
+    }
 
     public String getSpacesAfter() {
         return spacesAfter;
@@ -1748,12 +1777,16 @@ public class ConllWord {
     }
 
     public boolean hasDeplabel(String s) {
-        if (deplabel == null) return false;
+        if (deplabel == null) {
+            return false;
+        }
         return deplabel.equals(s);
     }
 
     public boolean matchesDeplabel(String d) {
-        if (deplabel == null) return false;
+        if (deplabel == null) {
+            return false;
+        }
         return deplabel.matches(d);
     }
 
@@ -1826,13 +1859,15 @@ public class ConllWord {
         return dependents;
     }
 
-    /** check whether starting from current word as head whether there is a circular dependency
+    /**
+     * check whether starting from current word as head whether there is a
+     * circular dependency
      *
      * @param passednodes nodes already seen
      * @throws ConllException
      */
-    protected void checkCycles(Set<ConllWord>passednodes) throws ConllException {
-        for(ConllWord child : dependents) {
+    protected void checkCycles(Set<ConllWord> passednodes) throws ConllException {
+        for (ConllWord child : dependents) {
             if (passednodes.contains(child)) {
                 throw new ConllException("token " + child.getId() + " constitutes a cycle");
             }
@@ -1950,7 +1985,7 @@ public class ConllWord {
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn);
-                   // .append("\t").append(getMiscStr());
+            // .append("\t").append(getMiscStr());
 
         } else {
             sb.append("\t").append(lemma);
@@ -1999,20 +2034,19 @@ public class ConllWord {
                 sb.append('\t').append(EmptyColumn);
             }
         }
-            sb.append("\t").append(getMiscStr());
+        sb.append("\t").append(getMiscStr());
 
-
-            if (namedColumns != null && !namedColumns.isEmpty()) {
-                for (String col : namedColumns.keySet()) {
-                    LinkedHashSet<String> extra = namedColumns.get(col);
-                    String value = "_";
-                    if (!extra.isEmpty()) {
-                         value = String.join("|", extra);
-                    }
-                    sb.append('\t').append(value);
+        if (namedColumns != null && !namedColumns.isEmpty()) {
+            for (String col : namedColumns.keySet()) {
+                LinkedHashSet<String> extra = namedColumns.get(col);
+                String value = "_";
+                if (!extra.isEmpty()) {
+                    value = String.join("|", extra);
                 }
+                sb.append('\t').append(value);
+            }
 
-                // TODO, do not sopt at column 20, but stop at highest
+            // TODO, do not sopt at column 20, but stop at highest
 //                Integer last = (Integer) ((TreeMap) namedColumns).lastKey();
 //                //System.err.println("zzzzzzzzzzzzzzzzz " + last);
 //                for (int i = 11; i <= last; ++i) {
@@ -2023,7 +2057,7 @@ public class ConllWord {
 //                    }
 //                    sb.append('\t').append(value);
 //                }
-            }
+        }
 
         return sb.toString();
     }

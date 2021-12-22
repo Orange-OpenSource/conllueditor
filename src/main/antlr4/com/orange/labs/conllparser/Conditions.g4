@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.4 as of 11th September 2021
+ @version 2.14.1 as of 22nd December 2021
 */
 
 // grammar to parse the conditions for complex search (and replace) and mass editing
@@ -62,6 +62,7 @@ field
     | ID         # checkID
     | MTW        # checkMTW
     | ISEMPTY    # checkEmpty
+    | ISMWT      # checkIsMWT
     ;
 
 
@@ -73,8 +74,9 @@ DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
 FEAT   : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
 MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
-MTW    : 'MTW:' [2-9] ; // length of a MWT in tokens
-ISEMPTY: 'Empty' ; // emptyword
+MTW    : 'MWT:' [2-9] ; // length of a MWT in tokens
+ISEMPTY: 'IsEmpty' ; // emptyword
+ISMWT  : 'IsMWT' ; // multi word tokenemptyword
 
 AND   : 'and' | '&&' ;
 OR    : 'or' | '||' ;

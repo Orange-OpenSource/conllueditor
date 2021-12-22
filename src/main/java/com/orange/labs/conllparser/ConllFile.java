@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2020, Orange S.A.
+ Copyright (c) 2018-2021, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.2 as of 17th September 2021
+ @version 2.14.1 as of 20th December 2021
 */
 package com.orange.labs.conllparser;
 
@@ -373,7 +373,7 @@ public class ConllFile {
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
-            List<String>newvals = Arrays.asList(elems[1].split("[ \\t]+"));
+            List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
             Set<ConllWord>matching_cw = conditionalEdit(elems[0], newvals, wordlists);
             System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
             changes += matching_cw.size();

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.0 as of 5th December 2021
+ @version 2.14.1 as of 20th December 2021
  */
 package com.orange.labs.conllparser;
 
@@ -50,7 +50,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 /**
  * read and parse CONLL
@@ -78,7 +77,7 @@ public class ConllSentence {
     private String newdoc = null;
     private String sentid = null;
     private String translit = null;
-    private Map<String, String>translations = null; // lg: text
+    private Map<String, String> translations = null; // lg: text
     private String text = null; // # text = ... (only to detect errors, when editing (TODO). For the output we regenerate this from the words
     private int maxdist = 0; // maximal distance between a word and its head (calculated by mameTrees())
 
@@ -183,7 +182,7 @@ public class ConllSentence {
         //Set<Annotation> lastAnnots = null;
         List<String> lastnonstandardinfo = null;
         Pattern translationFields = Pattern.compile("^# text_([a-z]{2,3}) *= *(.*)$");
-                
+
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             String line = cline.getValue();
             if (line.startsWith("#")) {
@@ -262,7 +261,7 @@ public class ConllSentence {
                 contracted.put(w.getId(), w);
             }
         }
-        
+
     }
 
     // adds a new emptyword, at the position given in emptyword.
@@ -1444,8 +1443,10 @@ public class ConllSentence {
         return d;
     }
 
-    /** creates the tree structure. In case of an error a ConllException is thrown.
-
+    /**
+     * creates the tree structure. In case of an error a ConllException is
+     * thrown.
+     *
      * @param debug
      * @throws ConllException
      */
@@ -1986,10 +1987,11 @@ public class ConllSentence {
     public void setSentid(String sentid) {
         this.sentid = sentid;
     }
+
     public void setTranslit(String translit) {
         this.translit = translit;
     }
-    
+
     public String getNewpar() {
         return newpar;
     }
@@ -2001,39 +2003,43 @@ public class ConllSentence {
     public String getSentid() {
         return sentid;
     }
-    
+
     public String getTranslit() {
         return translit;
     }
-    
+
     public Map<String, String> getTranslations() {
         return translations;
     }
 
-    /** translations: \n separated lines with "iso: translated text" */
+    /**
+     * translations: \n separated lines with "iso: translated text"
+     */
     public boolean setTranslations(String translations) {
         if (translations.trim().isEmpty()) {
             return true;
         }
-        String [] tt = translations.trim().split("\n");
+        String[] tt = translations.trim().split("\n");
         int errors = 0;
         if (this.translations == null) {
             this.translations = new HashMap<>();
-        }  else {
+        } else {
             this.translations.clear();
         }
         for (String translation : tt) {
-            String [] elems = translation.split(":", 2);
-            if (elems.length == 2) {  
+            String[] elems = translation.split(":", 2);
+            if (elems.length == 2) {
                 this.translations.put(elems[0].trim(), elems[1].trim());
             } else {
                 errors++;
             }
         }
-        if (errors > 0) return false;
+        if (errors > 0) {
+            return false;
+        }
         return true;
     }
-    
+
     /**
      * calculate start and end offset for each word. contracted word as well.
      * Parts of contracted words copy the values form the MTW
@@ -2051,7 +2057,9 @@ public class ConllSentence {
         return start;
     }
 
-    /** find first word in sentence, which matches the condition */
+    /**
+     * find first word in sentence, which matches the condition
+     */
     public ConllWord conditionalSearch(String condition) throws ConllException {
         normalise();
         makeTrees(null);
@@ -2062,16 +2070,19 @@ public class ConllSentence {
         }
         return null;
     }
+
     /**
      * change all words of the sentence which match the condition
      *
      * @param condition a condition like (UPOS:NOUN and Lemma:de.*)
-     * @param newValues a list of new values FORM:"value"  (as defined in Replacements.g4)
-     * @param wordlists here we put contents of files in conditions like Lemma:#filename.txt
+     * @param newValues a list of new values FORM:"value" (as defined in
+     * Replacements.g4)
+     * @param wordlists here we put contents of files in conditions like
+     * Lemma:#filename.txt
      */
     public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists) throws ConllException {
         //int changes = 0;
-        Set<ConllWord>matching_cw = new HashSet<>();
+        Set<ConllWord> matching_cw = new HashSet<>();
         if (newvalues.isEmpty()) {
             //return 0;
             return matching_cw;
@@ -2097,16 +2108,20 @@ public class ConllSentence {
                                 cw.setDeplabel(newvalue);
                                 break;
                             case "feat":
-                                String [] key_value = newvalue.split("[:=]", 2);
-                                if (key_value.length != 2) {
-                                    throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
-                                }
+                                if ("_".equals(newvalue)) {
+                                    cw.setFeatures("_");
+                                } else {
+                                    String[] key_value = newvalue.split("[:=]", 2);
+                                    if (key_value.length != 2) {
+                                        throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
+                                    }
 
-								if (key_value[1].isEmpty()) {
-									cw.delFeatureWithName(key_value[0]);
-								} else {
-									cw.addFeature(key_value[0], key_value[1]);
-								}
+                                    if (key_value[1].isEmpty()) {
+                                        cw.delFeatureWithName(key_value[0]);
+                                    } else {
+                                        cw.addFeature(key_value[0], key_value[1]);
+                                    }
+                                }
                                 break;
                             case "lemma":
                                 cw.setLemma(newvalue);
@@ -2115,20 +2130,39 @@ public class ConllSentence {
                                 cw.setForm(newvalue);
                                 break;
                             case "misc":
+                                if ("_".equals(newvalue)) {
+                                    cw.setMisc("_");
+                                } else {
+                                    String[] key_value = newvalue.split("[:=]", 2);
+                                    if (key_value.length != 2) {
+                                        throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
+                                    }
 
-                                key_value = newvalue.split("[:=]", 2);
-                                if (key_value.length != 2) {
-                                    throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
+                                    if (key_value[1].isEmpty()) {
+                                        cw.delMiscWithName(key_value[0]);
+                                    } else {
+                                        cw.addMisc(key_value[0] + "=" + key_value[1]);
+                                    }
                                 }
-
-								if (key_value[1].isEmpty()) {
-									cw.delMiscWithName(key_value[0]);
-								} else {
-									cw.addMisc(key_value[0] + "=" + key_value[1]);
-								}
                                 break;
                             case "eud":
-                                cw.addDeps(newvalue);
+                                if ("_".equals(newvalue)) {
+                                    cw.setDeps("_");
+                                    hasEnhancedDeps = false;
+                                } else {
+                                    String[] head_dep = newvalue.split(":", 2);
+                                    System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
+                                    if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {                                        
+                                        throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
+                                    }
+                                    int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
+                                    if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead > words.size()) {
+                                        eudhead = 0;
+                                        System.err.println("bad EUD head in sentence " + getSentid() + " word " + cw.getId());
+                                    }
+                                    cw.addDeps("" + eudhead, head_dep[1]);
+                                    hasEnhancedDeps = true;
+                                }
                                 break;
                             default:
                                 throw new ConllException("invalid new value " + val);
@@ -2153,7 +2187,7 @@ public class ConllSentence {
                                 case "misc":
                                     //cw.addMisc(elems[1]);
 
-                                    String [] key_value = newvalue.split("[:=]", 2);
+                                    String[] key_value = newvalue.split("[:=]", 2);
                                     if (key_value.length != 2) {
                                         throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
                                     }
@@ -2166,7 +2200,8 @@ public class ConllSentence {
                                     break;
 
                                 default:
-                                    throw new ConllException("invalid new value " + val);
+                                    //throw new ConllException("invalid new value " + val);
+                                    System.err.println("Multitoken words cannot have " + elems[0] + "-value. Ignored");
                             }
                         }
                     }
@@ -2183,6 +2218,7 @@ public class ConllSentence {
                         for (String val : newvalues) {
                             String[] elems = val.split(":", 2);
                             String newvalue = GetReplacement.evaluate(elems[1], cw);
+
                             if (elems.length == 2) {
                                 switch (elems[0].toLowerCase()) {
                                     case "upos":
@@ -2195,7 +2231,7 @@ public class ConllSentence {
                                         cw.setDeplabel(newvalue);
                                         break;
                                     case "feat":
-					String [] key_value = newvalue.split("[:=]", 2);
+                                        String[] key_value = newvalue.split("[:=]", 2);
                                         if (key_value.length != 2) {
                                             throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
                                         }
@@ -2212,13 +2248,27 @@ public class ConllSentence {
                                     case "form":
                                         cw.setForm(newvalue);
                                         break;
-                                    case "misc":
-                                        cw.addMisc(newvalue);
-                                        break;
                                     case "eud":
+                                        if ("_".equals(newvalue)) {
+                                            cw.setDeps("_");
+                                            hasEnhancedDeps = false;
+                                        } else {
+                                            String[] head_dep = newvalue.split(":", 2);
+                                            if (head_dep.length != 2 || !head_dep[0].matches("-?\\d+")) {
+                                                throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
+                                            }
+                                            int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
+                                            if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead > words.size()) {
+                                                eudhead = 0;
+                                                System.err.println("bad EUD head in sentence " + getSentid() + " word " + cw.getId());
+                                            }
+                                            cw.addDeps("" + eudhead, head_dep[1]);
+                                            hasEnhancedDeps = true;
+                                        }
+                                    case "misc":
                                         key_value = newvalue.split("[:=]", 2);
                                         if (key_value.length != 2) {
-                                            throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
+                                            throw new ConllException("invalid new Misc, must be Name=[value] <" + newvalue + ">");
                                         }
 
                                         if (key_value[1].isEmpty()) {

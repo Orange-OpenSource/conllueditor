@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.2 as of 17th September 2021
+ @version 2.14.1 as of 22nd December 2021
  */
 package com.orange.labs.conllparser;
 
@@ -179,6 +179,15 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
             return false;
         }
         boolean rtc = (use.getTokentype() == ConllWord.Tokentype.EMPTY);
+        return rtc;
+    }
+
+    public Boolean visitCheckIsMWT(ConditionsParser.CheckIsMWTContext ctx) {
+        ConllWord use = getCW();
+        if (use == null) {
+            return false;
+        }
+        boolean rtc = (use.getTokentype() == ConllWord.Tokentype.CONTRACTED);
         return rtc;
     }
 

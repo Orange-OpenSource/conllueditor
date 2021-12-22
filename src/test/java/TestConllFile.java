@@ -109,15 +109,22 @@ public class TestConllFile {
     @Test
     public void test01rule4() throws IOException, ConllException {
         name("rule 4");
-        applyRule("MTW:2", "form:\"MTW2\"", "rule4.conllu");
+        applyRule("MWT:2", "form:\"MTW2\"", "rule4.conllu");
     }
 
     @Test
     public void test01rule5() throws IOException, ConllException {
          name("rule 5");
-        applyRule("Empty", "xpos:\"EMPTY\"", "rule5.conllu");
+        applyRule("IsEmpty", "xpos:\"EMPTY\"", "rule5.conllu");
     }
 
+    @Test
+    public void test01rule5b() throws IOException, ConllException {
+         name("rule 5b");
+        applyRule("IsMWT", "MISC:\"MWT=Yes\"", "rule5b.conllu");
+    }
+
+    
     @Test
     public void test01rule6() throws IOException, ConllException {
          name("rule 6");
@@ -235,7 +242,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, 'Empty', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, 'IsEmpty', 'IsMWT', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
