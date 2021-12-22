@@ -698,20 +698,21 @@ arguments:
 
 
 For the time being the following scripts/languages are covered
-* gk: Gurmukhi
-* si: Singhalese
-* ml: Malayalam
-* kn: Kannada
-* te: Telugu
-* ta: Tamil
-* am: Amharic
+* gk: Gurmukhi script
+* si: Singhalese script
+* ml: Malayalam script
+* kn: Kannada script
+* te: Telugu script
+* ta: Tamil script
+* am: Amharic script
 * iu: Inuktitut
-* yi: Yiddish (Missing vowel signs are note transliterated)
-* hy: Armenian
-* ka: Georgian (Mkhedruli)
+* yi: Hebrew/Yiddish (Missing vowel signs are note transliterated)
+* hy: Armenian script
+* ka: Georgian script (Mkhedruli)
 * hi: Devanagari (Hindi)
-* gu: Gujarati
-* bn: Bengali (and to a certain extend Assamese and other languages using the Bengali Alphabet)
+* gu: Gujarati script
+* bn: Bengali script (and to a certain extend Assamese and other languages using the Bengali Alphabet)
+* or: Odia script
 * th: Thai (ISO 11940 based)
 * ja: Japanese (Only Katakana and Hiragana)
 * ar: Arabic (Modern Standard Arabic, unvocalized forms are transliterated without vowels)
