@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -73,7 +75,7 @@ public class TestConllFile {
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
         String[] newvals = newval.split(" ");
         try {
-        cf.conditionalEdit(rule, Arrays.asList(newvals), null);
+            cf.conditionalEdit(rule, Arrays.asList(newvals), null);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -87,6 +89,28 @@ public class TestConllFile {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
+
+    private void applyRules(String [] rule, String [] newval, String filename) throws IOException, ConllException {
+        for (int x=0; x<rule.length; ++x) {
+            String[] newvals = newval[x].split(" ");
+            try {
+                cf.conditionalEdit(rule[x], Arrays.asList(newvals), null);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        File out = new File(folder, filename);
+        FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource(filename);
+
+        Assert.assertEquals(String.format("Rule '%s' badly used\n ref: %s\n res: %s\n", rule, ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
 
     @Test
     public void test01rule1() throws IOException, ConllException {
@@ -124,7 +148,7 @@ public class TestConllFile {
         applyRule("IsMWT", "MISC:\"MWT=Yes\"", "rule5b.conllu");
     }
 
-    
+
     @Test
     public void test01rule6() throws IOException, ConllException {
          name("rule 6");
@@ -142,6 +166,26 @@ public class TestConllFile {
          name("rule 8");
         applyRule("Upos:NOUN", "feat:\"Number=\"", "rule6c.conllu");
     }
+
+    @Test
+    public void test01rule9() throws IOException, ConllException {
+        name("rule 9");
+        //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
+        String [] rules = {"RelHeadId:-2", "RelHeadId:2",
+                           "AbsHeadId:9",
+                           "RelEUD:-4:obj", "RelEUD:*:nsubj"};
+        String [] newvals = {"Misc:\"RelHead=-2\"", "Misc:\"RelHead=2\"",
+                             "Misc:\"AbsHead=9\"",
+                             "Misc:\"RelEUD=-4_obj\"", "Misc:\"RelEUD=*_nsubj\""};
+        applyRules(rules,
+                   newvals,
+                   "rule01-9.conllu");
+
+
+
+    }
+
+
 
     @Test
     public void test02head() throws IOException, ConllException {
@@ -242,7 +286,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null);
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, 'IsEmpty', 'IsMWT', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, ABSHEADID, RELHEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }

@@ -23,11 +23,18 @@ Examples:
   * `Lemma:` (Values: string of any character except whitespaces, `)` and `&`)
   * `Form:` (Values: string of any character except whitespaces, `)` and `&`)
   * `Deprel:` (Values: `[a-z]+`, optionally followed by `:` and  a string of  any character except whitespaces, `)` and `&`)
+  * `AbsHeadId:` (Values: Integer)
+  * `RelHeadId:` (Values: `[+-][0-9]+`, true if the head of the current token is _n_ tokens before or after the current token
+  * `AbsEUD:` (Values: Integer, `:`, deprel, if EudHead is `*` any head position is accepted)
+  * `RelEUD:` (Values: `[+-][0-9]+` `:`, deprel, if EudHead is `*` any head position is accepted))
   * `Feat:` (Values: FeatureName=Value or FeatureName:Value. The Featurename must match `[A-Za-z_\[\]]+`, the Value `[A-Za-z0-9]+`)
   * `Misc:` (Values: MiscName=Value or MiscName:Value. MiscName must match `[A-Za-z_]+`, the Value can be any string without  whitespaces, `)` and `&`)
   * `Id:` (Values: integer)
-  * `MTW:` (Values: length of the mult-token word `[2-9]`)
-  * `Empty` (no value, true if the current node is empty)
+  * `MWT:` (Values: length of the multi-word token `[2-9]`)
+  * `IsEmpty` (no value, true if the current node is empty)
+  * `IsMWT` (no value, true if the current node is empty)
+
+`AbsEUD` and `RelEUD` cannot deal (yet) with empty word ids (`n.m`)
 
  `Lemma` and `Form` can have either a regex as argument or a filename of a file which contains a list of forms or lemmas:
   * `Lemma:sing.* > misc:"Value=Sing"`
@@ -55,13 +62,14 @@ For more information check the [formal grammar for conditions](conditions/README
 ## New Values
 
 `new_values` is a whitespace separated list of key:values to set to the current token. Possible `keys`:
-* `form` 
-* `lemma`
-* `upos`
-* `xpos`
-* `deprel`
-* `feat`  
-* `misc` 
+* `Form` 
+* `Lemma`
+* `Upos`
+* `Xpos`
+* `Deprel`
+* `Feat`
+* `Eud`
+* `Misc` 
 
 `values` is a combination (using ` +`) of strings or functions which give access to other columns of the current word or it's head. Strings must be included
 in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`, `Lemma`, `Xpos`, `Upos`, `Deprel`, `Feat_Featname`, `Misc_miscname`)
@@ -77,6 +85,9 @@ in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`,
 
 for instance:
 * `Upos:"NOUN"`                      set Upos to `NOUN`
+* `Eud:"n:dep"                       add a enhanced UD relation using the current id + n (n must be a negative or positive integer without 0 (if resulting head id is out of the sentence or n == 0, 0 is taken)
+TODO * `Head:"n"                        set head to current ud + n (n must be a negative or positive integer (if resulting head id is out of the sentence or if n == 0 , 0 is taken)
+
 * `Feat:"Number=Sing"`               adds a feature `Number=Sing`  (Number: deletes the feature)
 * `Lemma:this(Form)`                set lemma to the form of current token
 * `Lemma:this(Misc_Translit)`       set lemma to the key `Translit` of the `Misc` column
@@ -92,6 +103,8 @@ for instance:
 N.B. **no white spaces allowed in a value expression!** 
 therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are invalid, 
 use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` etc.
+
+In order to empty a column, just set it to `"_"`: `Feat:"_"`, `Xpos:"_"` etc.
 
 For more information check the [formal grammar for replacements](replacements/README.md) (the part after the first `:`).
 

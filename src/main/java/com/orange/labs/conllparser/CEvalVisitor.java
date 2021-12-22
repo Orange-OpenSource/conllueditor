@@ -32,6 +32,7 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.conllparser;
 
+import com.orange.labs.conllparser.ConllWord.EnhancedDeps;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -157,6 +158,93 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     }
 
     @Override
+    public Boolean visitCheckAbsHeadID(ConditionsParser.CheckAbsHeadIDContext ctx) {
+        String text = ctx.ABSHEADID().getText();
+        ConllWord use = getCW();
+        if (use == null) {
+            return false;
+        }
+        boolean rtc = (use.getHead() == Integer.parseInt(text.substring(10)));
+        return rtc;
+    }
+
+    @Override
+    public Boolean visitCheckRelHeadID(ConditionsParser.CheckRelHeadIDContext ctx) {
+        String text = ctx.RELHEADID().getText();
+        ConllWord use = getCW();
+        if (use == null) {
+            return false;
+        }
+        int relhead = Integer.parseInt(text.substring(10));
+        boolean rtc = (use.getHead() == use.getId() + relhead );
+        return rtc;
+    }
+
+
+    @Override
+    public Boolean visitCheckAbsEUD(ConditionsParser.CheckAbsEUDContext ctx) {
+        String text = ctx.ABSEUD().getText();
+        ConllWord use = getCW();
+        if (use == null) {
+            return false;
+        }
+
+        if (use.getDeps().isEmpty()) return false;
+
+        String [] elems = text.split(":", 3);
+        int eudhead;
+        if ("*".equals(elems[1])) {
+            eudhead = -1; // any value allowed
+        } else {
+            eudhead = Integer.parseInt(elems[1]);
+        }
+        String euddeprel = elems[2];
+
+        for (EnhancedDeps ehd : use.getDeps()) {
+            if ((eudhead == -1 || ehd.headid == eudhead)
+                    && ehd.deprel.equals(euddeprel)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Boolean visitCheckRelEUD(ConditionsParser.CheckRelEUDContext ctx) {
+        String text = ctx.RELEUD().getText();
+
+         ConllWord use = getCW();
+        if (use == null) {
+            return false;
+        }
+
+        if (use.getDeps().isEmpty()) return false;
+
+        String [] elems = text.split(":", 3);
+        int eudhead = 0;
+        boolean anyheadid = false;
+        if ("*".equals(elems[1])) {
+            anyheadid = true; // any value allowed
+        } else {
+            eudhead = Integer.parseInt(elems[1]);
+        }
+
+        String euddeprel = elems[2];
+        for (EnhancedDeps ehd : use.getDeps()) {
+            System.err.println("aaaa " + use);
+            System.err.println(ehd.headid + " " + use.getId() + " " + eudhead);
+            if ((anyheadid || ehd.headid == use.getId() + eudhead)
+                    && ehd.deprel.equals(euddeprel)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    @Override
     public Boolean visitCheckMTW(ConditionsParser.CheckMTWContext ctx) {
         String text = ctx.MTW().getText();
         int wantedlength = Integer.parseInt(text.substring(4));
@@ -220,7 +308,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         if (wordlists != null && text.startsWith("#") && text.length() > 1) {
             String fn = text.substring(1);
             if (!wordlists.containsKey(fn)) {
-                wordlists.put(fn, readWordsFromFile(fn));                
+                wordlists.put(fn, readWordsFromFile(fn));
             }
             Set<String> words = wordlists.get(fn);
             if (words != null && words.contains(use.getLemma())) {

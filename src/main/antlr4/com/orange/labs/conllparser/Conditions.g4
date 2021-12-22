@@ -60,6 +60,10 @@ field
     | FEAT       # checkFeat
     | MISC       # checkMisc
     | ID         # checkID
+    | ABSHEADID  # checkAbsHeadID
+    | RELHEADID  # checkRelHeadID
+    | ABSEUD     # checkAbsEUD
+    | RELEUD     # checkRelEUD
     | MTW        # checkMTW
     | ISEMPTY    # checkEmpty
     | ISMWT      # checkIsMWT
@@ -75,6 +79,10 @@ FEAT   : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
 MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
 MTW    : 'MWT:' [2-9] ; // length of a MWT in tokens
+ABSHEADID : 'AbsHeadId:' [0-9]+ ;
+RELHEADID : 'RelHeadId:' [+-]?[0-9]+ ;
+RELEUD    : 'RelEUD:' ([+-]?[0-9]+|'*') [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
+ABSEUD    : 'AbsEUD:' ([0-9]+|'*') [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
 ISEMPTY: 'IsEmpty' ; // emptyword
 ISMWT  : 'IsMWT' ; // multi word tokenemptyword
 
