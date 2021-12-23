@@ -382,6 +382,7 @@ public class ConllFile {
                 System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
                 changes += matching_cw.size();
             } catch (ConllException e) {
+                //e.printStackTrace();
                 throw new ConllException("Line " + ct + ": " + e.getMessage());
             }
         }

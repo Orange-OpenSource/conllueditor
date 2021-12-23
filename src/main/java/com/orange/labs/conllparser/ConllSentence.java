@@ -2856,13 +2856,13 @@ public class ConllSentence {
                             }
                         }
                         break;
-                    case "eud":
+                    case "releud":
                         if ("_".equals(newvalue)) {
                             cw.setDeps("_");
                             hasEnhancedDeps = false;
                         } else {
                             String[] head_dep = newvalue.split(":", 2);
-                            System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
+                            //System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
                             if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {
                                 throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
                             }
@@ -2875,11 +2875,30 @@ public class ConllSentence {
                             hasEnhancedDeps = true;
                         }
                         break;
+                    case "abseud":
+                        if ("_".equals(newvalue)) {
+                            cw.setDeps("_");
+                            hasEnhancedDeps = false;
+                        } else {
+                            String[] head_dep = newvalue.split(":", 2);
+                            //System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
+                            if (head_dep.length != 2 || !head_dep[0].matches("[0-9]+")) {
+                                throw new ConllException("invalid new EUD, must be absolute_head:deprel <" + newvalue + ">");
+                            }
+                            int eudhead = Integer.parseInt(head_dep[0]);
+                            if (eudhead > words.size()) {
+                                eudhead = 0;
+                                System.err.println("bad absolute EUD head in sentence " + getSentid() + " word " + cw.getId());
+                            }
+                            cw.addDeps("" + eudhead, head_dep[1]);
+                            hasEnhancedDeps = true;
+                        }
+                        break;
                     default:
-                        throw new ConllException("invalid new value " + val);
+                        throw new ConllException("invalid receiving column <" + elems[0] + ">");
                 }
             } else {
-                throw new ConllException("invalid new value " + val);
+                throw new ConllException("invalid newvalue specification, must be recevinig_column:newvalue <" + val + ">");
             }
         }
     }

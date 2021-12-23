@@ -177,7 +177,7 @@ public class TestConllFile {
 
     @Test
     public void test01rule9() throws IOException, ConllException {
-        name("rule 9");
+        name("rule 01-9: test condtions for heads/euds");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
         String [] rules = {"RelHeadId:-2", "RelHeadId:2", // test conditions Heads
                            "AbsHeadId:9",
@@ -186,7 +186,8 @@ public class TestConllFile {
         String [] newvals = {"Misc:\"RelHead=-2\"", "Misc:\"RelHead=2\"",
                              "Misc:\"AbsHead=9\"",
                              "Misc:\"RelEUD=-4_obj\"", "Misc:\"RelEUD=*_nsubj\"",
-                             "Misc:\"AbsEUD=3_conj\""};
+                             "Misc:\"AbsEUD=3_conj\"",
+        };
         applyRules(rules,
                    newvals,
                    "rule01-9.conllu");
@@ -194,10 +195,17 @@ public class TestConllFile {
 
     @Test
     public void test01rule10() throws IOException, ConllException {
-        name("rule 9");
+        name("rule 01-10: test replacements for heads/euds");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
-        String [] rules = {"Upos:DET", "Upos:NOUN", "Upos:ADJ"};
-        String [] newvals = {"RelHeadId:\"-2\"", "AbsHeadId:\"4\"", "AbsHeadId:head(HeadId)"};
+        String [] rules = {"Upos:DET",
+                           "Upos:NOUN",
+                           "Upos:ADJ",
+                           "Deprel:nsubj"};
+        String [] newvals = {"RelHeadId:\"-2\" Misc:\"RelHead=-2\"",
+                             "AbsHeadId:\"4\" Misc:\"AbsHead=4\"",
+                             "AbsHeadId:head(HeadId) Misc:\"AbsHead=Head_HeadId\"",
+                             "AbsEud:head(HeadId)+\":\"+head(Deprel) Misc:\"EUD=Head_headid\""
+                           };
         applyRules(rules,
                    newvals,
                    "rule01-10.conllu");
