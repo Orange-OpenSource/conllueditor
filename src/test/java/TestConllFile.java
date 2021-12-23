@@ -97,7 +97,7 @@ public class TestConllFile {
     private void applyRules(String [] rule, String [] newval, String filename) throws IOException, ConllException {
         StringBuilder warnings = new StringBuilder();
         for (int x=0; x<rule.length; ++x) {
-            String[] newvals = newval[x].split(" ");  
+            String[] newvals = newval[x].split(" ");
             try {
                 cf.conditionalEdit(rule[x], Arrays.asList(newvals), null, warnings);
             } catch(Exception e) {
@@ -181,10 +181,12 @@ public class TestConllFile {
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
         String [] rules = {"RelHeadId:-2", "RelHeadId:2", // test conditions Heads
                            "AbsHeadId:9",
-                           "RelEUD:-4:obj", "RelEUD:*:nsubj"};
+                           "RelEUD:-4:obj", "RelEUD:*:nsubj",
+                           "AbsEUD:3:conj"};
         String [] newvals = {"Misc:\"RelHead=-2\"", "Misc:\"RelHead=2\"",
                              "Misc:\"AbsHead=9\"",
-                             "Misc:\"RelEUD=-4_obj\"", "Misc:\"RelEUD=*_nsubj\""};
+                             "Misc:\"RelEUD=-4_obj\"", "Misc:\"RelEUD=*_nsubj\"",
+                             "Misc:\"AbsEUD=3_conj\""};
         applyRules(rules,
                    newvals,
                    "rule01-9.conllu");

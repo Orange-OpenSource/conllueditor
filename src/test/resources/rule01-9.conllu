@@ -276,7 +276,7 @@
 8	för	för	ADP	PP	_	9	case	9:case	AbsHead=9
 9	0:78	0:78	NUM	RG|NOM	Case=Nom|NumType=Card	3	obl	3:obl:för	SpaceAfter=No
 10	,	,	PUNCT	MID	_	12	punct	12:punct	RelHead=2
-10.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj|22:advcl:om	_
+10.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj|22:advcl:om	AbsEUD=3_conj
 11	en	en	DET	DT|UTR|SIN|IND	Definite=Ind|Gender=Com|Number=Sing|PronType=Art	12	det	12:det	_
 12	limpa	limpa	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	3	conj	10.1:obj	Enhanced=obj
 13	för	för	ADP	PP	_	14	case	14:case	_
@@ -320,7 +320,7 @@
 5	ja	ja	CCONJ	C	_	8	cc	8:cc	_
 6	ja	ja	CCONJ	C	_	8	cc	8:cc	RelHead=2
 7	sitten	sitten	ADV	Adv	_	8	advmod	8:advmod	_
-8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_
+8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	AbsEUD=3_conj
 9	perustahnan	perus#tahna	NOUN	N	Case=Gen|Number=Sing	8	obj	8:obj	_
 10	4	4	NUM	Num	NumType=Card	11	nummod	11:nummod	_
 11	lautaselle	lautanen	NOUN	N	Case=All|Number=Sing	8	obl	8:obl:all	SpaceAfter=No
