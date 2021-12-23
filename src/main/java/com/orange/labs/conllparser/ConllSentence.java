@@ -2095,7 +2095,7 @@ public class ConllSentence {
 //                                try {
 //                                    int abshead = Integer.parseInt(newvalue);
 //                                    if (abshead < 0) {
-//                                        throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                        throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                    }
 //                                    if (abshead > words.size()) {
 //                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
@@ -2111,7 +2111,7 @@ public class ConllSentence {
 //                                    }
 //                                    cw.setHead(abshead);
 //                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                    throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                }
 //                                break;
 //                            case "relheadid":
@@ -2119,7 +2119,7 @@ public class ConllSentence {
 //                                    //System.err.println("ppppp " + newvalue);
 //                                    int relhead = Integer.parseInt(newvalue);
 //                                    if (relhead == 0) {
-//                                         throw new ConllException("invalid relative head id, must be a negative or positive inteter but no 0 <" + newvalue + ">");
+//                                         throw new ConllException("invalid relative head id, must be a negative or positive integer but no 0 <" + newvalue + ">");
 //                                    }
 //                                    int abshead = cw.getId() + relhead;
 //                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
@@ -2224,7 +2224,7 @@ public class ConllSentence {
 //                                try {
 //                                    int abshead = Integer.parseInt(newvalue);
 //                                    if (abshead < 0) {
-//                                        throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                        throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                    }
 //                                    if (abshead > words.size()) {
 //                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
@@ -2240,7 +2240,7 @@ public class ConllSentence {
 //                                    }
 //                                    cw.setHead(abshead);
 //                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                    throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                }
 //                                break;
 //                            case "relheadid":
@@ -2248,7 +2248,7 @@ public class ConllSentence {
 //                                    //System.err.println("ppppp " + newvalue);
 //                                    int relhead = Integer.parseInt(newvalue);
 //                                    if (relhead == 0) {
-//                                         throw new ConllException("invalid relative head id, must be a negative or positive inteter but no 0 <" + newvalue + ">");
+//                                         throw new ConllException("invalid relative head id, must be a negative or positive integer but no 0 <" + newvalue + ">");
 //                                    }
 //                                    int abshead = cw.getId() + relhead;
 //                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
@@ -2372,7 +2372,7 @@ public class ConllSentence {
 //                                try {
 //                                    int abshead = Integer.parseInt(newvalue);
 //                                    if (abshead < 0) {
-//                                        throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                        throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                    }
 //                                    if (abshead > words.size()) {
 //                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
@@ -2403,7 +2403,7 @@ public class ConllSentence {
 //                                try {
 //                                    int abshead = Integer.parseInt(newvalue);
 //                                    if (abshead < 0) {
-//                                        throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                        throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                    }
 //                                    if (abshead > words.size()) {
 //                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
@@ -2419,7 +2419,7 @@ public class ConllSentence {
 //                                    }
 //                                    cw.setHead(abshead);
 //                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                    throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                }
 //                                break;
 //                            case "relheadid":
@@ -2427,7 +2427,7 @@ public class ConllSentence {
 //                                    //System.err.println("ppppp " + newvalue);
 //                                    int relhead = Integer.parseInt(newvalue);
 //                                    if (relhead == 0) {
-//                                         throw new ConllException("invalid relative head id, must be a negative or positive inteter but no 0 <" + newvalue + ">");
+//                                         throw new ConllException("invalid relative head id, must be a negative or positive integer but no 0 <" + newvalue + ">");
 //                                    }
 //                                    int abshead = cw.getId() + relhead;
 //                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
@@ -2518,7 +2518,7 @@ public class ConllSentence {
 //                }       }
 //                                    cw.setHead(abshead);
 //                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+//                                    throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
 //                                }
 //                                break;
 //                            case "relheadid":
@@ -2526,7 +2526,7 @@ public class ConllSentence {
 //                                    //System.err.println("ppppp " + newvalue);
 //                                    int relhead = Integer.parseInt(newvalue);
 //                                    if (relhead == 0) {
-//                                         throw new ConllException("invalid relative head id, must be a negative or positive inteter but no 0 <" + newvalue + ">");
+//                                         throw new ConllException("invalid relative head id, must be a negative or positive integer but no 0 <" + newvalue + ">");
 //                                    }
 //                                    int abshead = cw.getId() + relhead;
 //                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
@@ -2765,7 +2765,7 @@ public class ConllSentence {
                         try {
                             int abshead = Integer.parseInt(newvalue);
                             if (abshead < 0) {
-                                throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+                                throw new ConllException("bad absolute head id, must be positive integer or 0 <" + newvalue + ">");
                             }
                             if (abshead > words.size()) {
                                 warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
@@ -2781,7 +2781,7 @@ public class ConllSentence {
                             }
                             cw.setHead(abshead);
                         } catch (NumberFormatException e) {
-                            throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+                            throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
                         }
                         break;
                     case "relheadid":
@@ -2789,7 +2789,7 @@ public class ConllSentence {
                             //System.err.println("ppppp " + newvalue);
                             int relhead = Integer.parseInt(newvalue);
                             if (relhead == 0) {
-                                throw new ConllException("invalid relative head id, must be a negative or positive inteter but no 0 <" + newvalue + ">");
+                                throw new ConllException("bad relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
                             }
                             int abshead = cw.getId() + relhead;
                             //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
@@ -2811,7 +2811,7 @@ public class ConllSentence {
                             }
                             cw.setHead(abshead);
                         } catch (NumberFormatException e) {
-                            throw new ConllException("invalid relative head id, must be a negative or positive integer but not 0 <" + newvalue + ">");
+                            throw new ConllException("invalid relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
                         }
                         break;
                     case "feat":
