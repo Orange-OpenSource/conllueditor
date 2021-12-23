@@ -74,14 +74,18 @@ public class TestConllFile {
 
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
         String[] newvals = newval.split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit(rule, Arrays.asList(newvals), null);
+            cf.conditionalEdit(rule, Arrays.asList(newvals), null, warnings);
         } catch(Exception e) {
             e.printStackTrace();
         }
 
         File out = new File(folder, filename);
         FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
+        if (warnings.length() > 0) {
+            FileUtils.writeStringToFile(out, warnings.toString(), StandardCharsets.UTF_8, true);
+        }
 
         URL ref = this.getClass().getResource(filename);
 
@@ -91,10 +95,11 @@ public class TestConllFile {
     }
 
     private void applyRules(String [] rule, String [] newval, String filename) throws IOException, ConllException {
+        StringBuilder warnings = new StringBuilder();
         for (int x=0; x<rule.length; ++x) {
-            String[] newvals = newval[x].split(" ");
+            String[] newvals = newval[x].split(" ");  
             try {
-                cf.conditionalEdit(rule[x], Arrays.asList(newvals), null);
+                cf.conditionalEdit(rule[x], Arrays.asList(newvals), null, warnings);
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -102,6 +107,9 @@ public class TestConllFile {
 
         File out = new File(folder, filename);
         FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
+        if (warnings.length() > 0) {
+            FileUtils.writeStringToFile(out, warnings.toString(), StandardCharsets.UTF_8, true);
+        }
 
         URL ref = this.getClass().getResource(filename);
 
@@ -171,7 +179,7 @@ public class TestConllFile {
     public void test01rule9() throws IOException, ConllException {
         name("rule 9");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
-        String [] rules = {"RelHeadId:-2", "RelHeadId:2",
+        String [] rules = {"RelHeadId:-2", "RelHeadId:2", // test conditions Heads
                            "AbsHeadId:9",
                            "RelEUD:-4:obj", "RelEUD:*:nsubj"};
         String [] newvals = {"Misc:\"RelHead=-2\"", "Misc:\"RelHead=2\"",
@@ -180,11 +188,18 @@ public class TestConllFile {
         applyRules(rules,
                    newvals,
                    "rule01-9.conllu");
-
-
-
     }
 
+    @Test
+    public void test01rule10() throws IOException, ConllException {
+        name("rule 9");
+        //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
+        String [] rules = {"Upos:DET", "Upos:NOUN"};
+        String [] newvals = {"RelHeadId:\"-2\"", "AbsHeadId:\"4\""};
+        applyRules(rules,
+                   newvals,
+                   "rule01-10.conllu");
+    }
 
 
     @Test
@@ -235,8 +250,9 @@ public class TestConllFile {
     public void test11badtoken() throws IOException, ConllException {
         name("test badtoken");
         String[] newvals = "xpos:\"det\"".split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null);
+            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "line 1:14 token recognition error at: 'Lemma '";
             Assert.assertEquals(String.format("bad token not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -247,8 +263,9 @@ public class TestConllFile {
     @Test
     public void test12badparenthesis() throws IOException, ConllException {
         String[] newvals = "xpos:\"det\"".split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals), null);
+            cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "line 1:23 extraneous input ')' expecting <EOF>";
             Assert.assertEquals(String.format("missing left parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -259,8 +276,9 @@ public class TestConllFile {
     @Test
     public void test13badparenthesis() throws IOException, ConllException {
         String[] newvals = "xpos:\"det\"".split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals), null);
+            cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "line 1:24 missing ')' at '<EOF>'";
             Assert.assertEquals(String.format("missing right parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -271,8 +289,9 @@ public class TestConllFile {
     @Test
     public void test14missingop() throws IOException, ConllException {
         String[] newvals = "xpos:\"det\"".split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals), null);
+            cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "line 1:10 extraneous input 'Xpos:prep' expecting <EOF>";
             Assert.assertEquals(String.format("missing operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -283,8 +302,9 @@ public class TestConllFile {
     @Test
     public void test15doubleop() throws IOException, ConllException {
         String[] newvals = "xpos:\"det\"".split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null);
+            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, ABSHEADID, RELHEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -295,8 +315,9 @@ public class TestConllFile {
     @Test
     public void test16badNeg() throws IOException, ConllException {
         String[] newvals = "xpos:\"det\"".split(" ");
+        StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals), null);
+            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "line 1:9 mismatched input '!' expecting {<EOF>, AND, OR}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),

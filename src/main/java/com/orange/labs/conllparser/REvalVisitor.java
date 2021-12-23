@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.13.1 as of 16th October 2021
+ @version 2.14.1 as of 22nd December 2021
  */
 package com.orange.labs.conllparser;
 

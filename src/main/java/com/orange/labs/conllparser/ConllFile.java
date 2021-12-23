@@ -368,27 +368,39 @@ public class ConllFile {
         // TODO: store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
         Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
         int changes = 0;
+        int ct = 0;
+        StringBuilder warnings = new StringBuilder();
         while ((line = br.readLine()) != null) {
+            ct++;
             line = line.trim();
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
             List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
-            Set<ConllWord>matching_cw = conditionalEdit(elems[0], newvals, wordlists);
-            System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
-            changes += matching_cw.size();
+            try {
+                Set<ConllWord>matching_cw = conditionalEdit(elems[0], newvals, wordlists, warnings);
+                System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
+                changes += matching_cw.size();
+            } catch (ConllException e) {
+                throw new ConllException("Line " + ct + ": " + e.getMessage());
+            }
+        }
+        if (warnings.length() > 0) {
+            System.err.println(warnings.toString());
         }
         System.err.println(changes + " changes");
         br.close();
     }
 
 
-    public Set<ConllWord> conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists) throws ConllException {
+    public Set<ConllWord> conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord>matching_cw = new HashSet<>();
         for (ConllSentence cs : sentences) {
-            matching_cw.addAll(cs.conditionalEdit(condition, newvalues, wordlists));
+            matching_cw.addAll(cs.conditionalEdit(condition, newvalues, wordlists, warnings));
         }
+
+        System.err.println();
         return matching_cw;
     }
 
@@ -547,12 +559,13 @@ public class ConllFile {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.out.println("usage: ConllFile [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
+            System.out.println("usage: ConllFile [--debug] [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
         } else {
             //for (String a : args) System.err.println("arg " + a);
             String filter = null;
 
             boolean shuffle = false;
+            boolean debug = false;
             int first = 1;
             int last = -1; // = all
             int cvparts = 0;
@@ -574,6 +587,9 @@ public class ConllFile {
                     argindex++;
                 } else if (args[a].equals("--tex")) {
                     output = Output.LATEX;
+                    argindex++;
+                } else if (args[a].equals("--debug")) {
+                    debug = true;
                     argindex++;
                 } else if (args[a].equals("--cedit")) {
                     conditionfile = args[++a];
@@ -668,11 +684,12 @@ public class ConllFile {
                     }
                 }
             } catch (ConllException e) {
-                e.printStackTrace();
-                System.err.println("Conll Error " + e.getMessage());
+                if (debug) e.printStackTrace();
+                System.err.println("Conll Error: " + e.getMessage());
                 System.exit(10);
             } catch (IOException e) {
-                System.err.println("IO Error " + e.getMessage());
+                if (debug) e.printStackTrace();
+                System.err.println("IO Error: " + e.getMessage());
                 System.exit(1);
             }
 

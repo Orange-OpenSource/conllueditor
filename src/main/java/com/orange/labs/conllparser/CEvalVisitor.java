@@ -232,8 +232,6 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
 
         String euddeprel = elems[2];
         for (EnhancedDeps ehd : use.getDeps()) {
-            System.err.println("aaaa " + use);
-            System.err.println(ehd.headid + " " + use.getId() + " " + eudhead);
             if ((anyheadid || ehd.headid == use.getId() + eudhead)
                     && ehd.deprel.equals(euddeprel)) {
                 return true;

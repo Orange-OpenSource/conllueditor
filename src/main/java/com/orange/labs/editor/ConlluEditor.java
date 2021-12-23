@@ -489,7 +489,7 @@ public class ConlluEditor {
             solution.addProperty("XPOS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.XPOS)));
             solution.addProperty("LAS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LAS)));
         }
-        solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce chapps
+        solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce champs
 
         // returning number of errors
         boolean anyerrors = false;
@@ -1095,7 +1095,9 @@ public class ConlluEditor {
                     }
                     history.add(cs);
 
-                    Set<ConllWord> cws = cs.conditionalEdit(find, newvals, null);
+                    StringBuilder warnings = new StringBuilder();
+                    Set<ConllWord> cws = cs.conditionalEdit(find, newvals, null, warnings);
+                    // TODO display warnings in GUI!
                     if (!cws.isEmpty()) {
                         currentSentenceId = i;
                         Set<Integer>ids = new HashSet<>();

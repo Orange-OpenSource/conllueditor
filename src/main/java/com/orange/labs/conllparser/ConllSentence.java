@@ -2080,7 +2080,7 @@ public class ConllSentence {
      * @param wordlists here we put contents of files in conditions like
      * Lemma:#filename.txt
      */
-    public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists) throws ConllException {
+    public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord> matching_cw = new HashSet<>();
         if (newvalues.isEmpty()) {
@@ -2106,6 +2106,59 @@ public class ConllSentence {
                                 break;
                             case "deprel":
                                 cw.setDeplabel(newvalue);
+                                break;
+                            case "absheadid":
+                                try {
+                                    int abshead = Integer.parseInt(newvalue);
+                                    if (abshead < 0) {
+                                        throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+                                    }
+                                    if (abshead > words.size()) {
+                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
+                                        break;
+                                    }
+                                    if (abshead == cw.getId()) {
+                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " == word id").append('\n');
+                                        break;
+                                    }
+                                    if (abshead != 0 && cw.commands(getWord(abshead))) {
+                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " depends from current word").append('\n');
+                                        break;
+                                    }
+                                    cw.setHead(abshead);
+                                } catch(NumberFormatException e) {
+                                    throw new ConllException("invalid absolute head id, must be positive inteter or 0 <" + newvalue + ">");
+                                }
+                                break;
+                            case "relheadid":
+                                try {
+                                    //System.err.println("ppppp " + newvalue);
+                                    int relhead = Integer.parseInt(newvalue);
+                                    if (relhead == 0) {
+                                         throw new ConllException("invalid relative head id, must be a negative or positive inteter but no 0 <" + newvalue + ">");
+                                    }
+                                    int abshead = cw.getId() + relhead;
+                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
+                                    if (abshead < 1) {
+                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
+                                        break;
+                                    }
+                                    if (abshead > words.size()) {
+                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
+                                        break;
+                                    }
+                                    if (abshead == cw.getId()) {
+                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
+                                        break;
+                                    }
+                                    if (cw.commands(getWord(abshead))) {
+                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
+                                        break;
+                                    }
+                                    cw.setHead(abshead);
+                                } catch(NumberFormatException e) {
+                                    throw new ConllException("invalid relative head id, must be a negative or positive integer but not 0 <" + newvalue + ">");
+                                }
                                 break;
                             case "feat":
                                 if ("_".equals(newvalue)) {
@@ -2152,7 +2205,7 @@ public class ConllSentence {
                                 } else {
                                     String[] head_dep = newvalue.split(":", 2);
                                     System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
-                                    if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {                                        
+                                    if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {
                                         throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
                                     }
                                     int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
@@ -2167,6 +2220,8 @@ public class ConllSentence {
                             default:
                                 throw new ConllException("invalid new value " + val);
                         }
+                    } else {
+                        throw new ConllException("invalid new value " + val);
                     }
                 }
             }
