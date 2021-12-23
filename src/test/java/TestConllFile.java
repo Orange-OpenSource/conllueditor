@@ -196,8 +196,8 @@ public class TestConllFile {
     public void test01rule10() throws IOException, ConllException {
         name("rule 9");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
-        String [] rules = {"Upos:DET", "Upos:NOUN"};
-        String [] newvals = {"RelHeadId:\"-2\"", "AbsHeadId:\"4\""};
+        String [] rules = {"Upos:DET", "Upos:NOUN", "Upos:ADJ"};
+        String [] newvals = {"RelHeadId:\"-2\"", "AbsHeadId:\"4\"", "AbsHeadId:head(HeadId)"};
         applyRules(rules,
                    newvals,
                    "rule01-10.conllu");

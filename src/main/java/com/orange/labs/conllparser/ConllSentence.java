@@ -2762,6 +2762,10 @@ public class ConllSentence {
                         cw.setDeplabel(newvalue);
                         break;
                     case "absheadid":
+                        if (newvalue.isEmpty()) {
+                            warnings.append("Warning: No value found for " + elems[0] + " in sentence " + sentid + ", word " + cw.getFullId()).append('\n');
+                            break;
+                        }
                         try {
                             int abshead = Integer.parseInt(newvalue);
                             if (abshead < 0) {

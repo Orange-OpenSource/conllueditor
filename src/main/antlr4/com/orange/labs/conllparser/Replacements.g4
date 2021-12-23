@@ -96,7 +96,7 @@ OPEN  : '(' ;
 CLOSE : ')' ;
 THIS : 'this' ;
 HEADKW : 'head' ;
-COLUMN : 'Form' | 'Lemma' | 'Upos' | 'Xpos' | 'Feat_' [A-Za-z0-9_]+ | 'Deprel' | 'Misc_' ~[")]+ ;
+COLUMN : 'Form' | 'Lemma' | 'Upos' | 'Xpos' | 'Feat_' [A-Za-z0-9_]+ | 'Deprel' | 'Misc_' ~[")]+ | 'HeadId';
 
 NUMBER: [0-9]+ ;
 //CHAR :  ~["]  ;

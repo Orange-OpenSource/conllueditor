@@ -185,6 +185,9 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
             return cword.getXpostag();
         } else if ("Deprel".equals(column)) {
             return cword.getDeplabel();
+        } else if ("HeadId".equals(column)) {
+            return "" + cword.getHead();
+
         } else if (column.startsWith("Feat_")) {
             String val = cword.getFeatures().get(column.substring(5));
             if (val != null) {
@@ -230,6 +233,7 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
         ConllWord head = current.getHeadWord();
 
         if (head == null) {
+            // no head, no column value
             return "";
         }
         return getColumn(head, column);

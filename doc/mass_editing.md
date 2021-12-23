@@ -67,6 +67,7 @@ For more information check the [formal grammar for conditions](conditions/README
 * `Upos`
 * `Xpos`
 * `Deprel`
+* `AbsHeadId`/`RelHeadId`
 * `Feat`
 * `Eud`
 * `Misc` 
@@ -83,11 +84,22 @@ in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`,
 * `cap(this()/head())` capitalize (first character uppercase, rest lowercase) the result of the this/head expression
 * `replace(this()/head(), regex, newstring) replaces the `regex` of the result fo the this/head expression by `newstring`
 
+`column_name` can be:
+* `Form`
+* `Lemma`
+* `Upos`
+* `Xpos`
+* `Feat_<FeatureName>`
+* `Deprel`
+* `Misc_<KeyName>`
+* `HeadId`
+
 for instance:
 * `Upos:"NOUN"`                      set Upos to `NOUN`
-* `Eud:"n:dep"                       add a enhanced UD relation using the current id + n (n must be a negative or positive integer without 0 (if resulting head id is out of the sentence or n == 0, 0 is taken)
-TODO * `Head:"n"                        set head to current ud + n (n must be a negative or positive integer (if resulting head id is out of the sentence or if n == 0 , 0 is taken)
-
+* `RelEud:"n:dep"                       add a enhanced UD relation using the current id + n (n must be a negative or positive integer without 0 (if resulting head id is out of the sentence or n == 0, 0 is taken)
+* `RelHeadId:"n"                       set head to current ud + n (n must be a negative or positive integer, but no 0)
+* `AbsHeadId:"n"                       set head to n (n must be 0 or a positive integer)
+* `AbsHeadId:head(Headid)                       set head to the headid of head node
 * `Feat:"Number=Sing"`               adds a feature `Number=Sing`  (Number: deletes the feature)
 * `Lemma:this(Form)`                set lemma to the form of current token
 * `Lemma:this(Misc_Translit)`       set lemma to the key `Translit` of the `Misc` column
@@ -105,6 +117,8 @@ therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are in
 use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` etc.
 
 In order to empty a column, just set it to `"_"`: `Feat:"_"`, `Xpos:"_"` etc.
+
+
 
 For more information check the [formal grammar for replacements](replacements/README.md) (the part after the first `:`).
 
