@@ -96,7 +96,8 @@ in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`,
 
 for instance:
 * `Upos:"NOUN"`                      set Upos to `NOUN`
-* `RelEud:"n:dep"                       add a enhanced UD relation using the current id + n (n must be a negative or positive integer without 0 (if resulting head id is out of the sentence or n == 0, 0 is taken)
+* `RelEud:"2:dep"                  add a enhanced UD relation "dep" using the current id + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence or n == 0, 0 is taken)
+* `AbsEud:head(HeadId)+":"+head(Deprel)` set EUD to head and deprel of the headword
 * `RelHeadId:"n"                       set head to current ud + n (n must be a negative or positive integer, but no 0)
 * `AbsHeadId:"n"                       set head to n (n must be 0 or a positive integer)
 * `AbsHeadId:head(Headid)                       set head to the headid of head node

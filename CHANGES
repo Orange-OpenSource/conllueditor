@@ -1,3 +1,11 @@
+Version 2.14.1
+- mass editing
+  - error corrected
+  - condition Empty renamed in IsEmpty, new conditions IsMWT, AbsHeadID, RelHeadID, AbsEUD, RelEUD
+  - new changeable colums: Head, EUD
+  - new columns to get data from: HeadId
+  - new tests
+
 Version 2.14.0
 - add/edit sentence metadata (sent_id, newdoc, newpar, transliteration, translations)
 - button to initialise sentence metadata "translit" from MISC:Translit field if present

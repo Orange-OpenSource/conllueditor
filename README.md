@@ -67,6 +67,9 @@ Alternatively, a recent version of Docker can be used to run the docker image (s
 * `mvn install`
   * if the tests fail after `git pull` try deleting `target/test-classes`. If this does not solve the problem, run `-mvn install DskipTests` to avoid running the JUnit tests and drop me a note
   * individual tests can be run by `mvn test -Dtest=TestConlluEditor#<testmethod>`)
+  * redirect stderr in order to see only maven messages:
+    * `mvn install 2> stderr_output.txt`
+    * `mvn test -Dtest=TestConlluEditor#<testmethod>  2> stderr_output.txt`
 * download javascript libraries (bootstrap, popper, jquery and jquery-ui), the script [bin/installJQ.sh](bin/installJQ.sh) will do the job
 * or change the corresponding lines in [gui/index.html](gui/index.html) to load the libraries from a public server:
 
