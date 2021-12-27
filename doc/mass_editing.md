@@ -3,18 +3,18 @@
 Using a simple language, tokens of a `.conllu`-file can be edited if a condition is met
 
 ```
-bin/replace.sh  rules.txt input.conllu > output.conllu
+bin/replace.sh rules.txt input.conllu [--nostrict] > output.conllu
 ```
 
 The rule file as line per rule
 
 ```
-expression > new_values
+condition > new_values
 ```
 
-## Expression 
-_expression_ is a condition, and if true the _new values_ are set to the token which satisfies the condition. 
-The _expression_ is a set of `key:values`, operators like `and`, `or`  or `!` (not) and parentheses:
+## Condition 
+`condition` is a logical expression which is evaluated for each word, and if true the _new values_ are set to the token which satisfies the condition. 
+The `condition` is a set of `key:values`, operators like `and`, `or`  or `!` (not) and parentheses. The condition may contain whitespaces:
 
 Examples: 
 * `Upos:ADP and !Deprel:case`: true if the current token has `ADP`  as UPOS and its deprel is not `case`. Available keys:
@@ -23,10 +23,8 @@ Examples:
   * `Lemma:` (Values: string of any character except whitespaces, `)` and `&`)
   * `Form:` (Values: string of any character except whitespaces, `)` and `&`)
   * `Deprel:` (Values: `[a-z]+`, optionally followed by `:` and  a string of  any character except whitespaces, `)` and `&`)
-  * `AbsHeadId:` (Values: Integer)
-  * `RelHeadId:` (Values: `[+-][0-9]+`, true if the head of the current token is _n_ tokens before or after the current token
-  * `AbsEUD:` (Values: Integer, `:`, deprel, if EudHead is `*` any head position is accepted)
-  * `RelEUD:` (Values: `[+-][0-9]+` `:`, deprel, if EudHead is `*` any head position is accepted))
+  * `HeadId:` (Values: `[+-][0-9]+` (relative from current head) or `[0-9]+` (absolute head id), true if the head of the current token matches
+  * `EUD:` (Values: `[+-][0-9]+` `:`, deprel, if EudHeadId is `*` any head position is accepted, without `-` or `+` the EudHead is interpreted as an absolute value))
   * `Feat:` (Values: FeatureName=Value or FeatureName:Value. The Featurename must match `[A-Za-z_\[\]]+`, the Value `[A-Za-z0-9]+`)
   * `Misc:` (Values: MiscName=Value or MiscName:Value. MiscName must match `[A-Za-z_]+`, the Value can be any string without  whitespaces, `)` and `&`)
   * `Id:` (Values: integer)
@@ -34,7 +32,9 @@ Examples:
   * `IsEmpty` (no value, true if the current node is empty)
   * `IsMWT` (no value, true if the current node is empty)
 
-`AbsEUD` and `RelEUD` cannot deal (yet) with empty word ids (`n.m`)
+`Form:`, `Lemma:` and `Xpos:` can contain simple regular expression (only the character ')' cannot be used
+
+`EUD` cannot deal (yet) with empty word ids (`n.m`)
 
  `Lemma` and `Form` can have either a regex as argument or a filename of a file which contains a list of forms or lemmas:
   * `Lemma:sing.* > misc:"Value=Sing"`
@@ -61,19 +61,35 @@ For more information check the [formal grammar for conditions](conditions/README
 
 ## New Values
 
-`new_values` is a whitespace separated list of key:values to set to the current token. Possible `keys`:
+`new_values` is a whitespace separated list of `targeted_colum:value` which modify the tokens matched the condition.
+
+The `targeted_column` indicates which column of the word a new value is assigned to:
+Possible `keys`:
 * `Form` 
 * `Lemma`
 * `Upos`
 * `Xpos`
 * `Deprel`
-* `AbsHeadId`/`RelHeadId`
+* `HeadId`
 * `Feat`
 * `Eud`
 * `Misc` 
+(the `Id` column cannot be changed).
 
-`values` is a combination (using ` +`) of strings or functions which give access to other columns of the current word or it's head. Strings must be included
-in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`, `Lemma`, `Xpos`, `Upos`, `Deprel`, `Feat_Featname`, `Misc_miscname`)
+`value` is a combination (using ` +`) of strings or functions which give access to other columns of the current word or it's head. Strings must be included
+in double quotes `"NOUN"`.
+
+`column_name` to retrieve a value from can be:
+* `Form`
+* `Lemma`
+* `Upos`
+* `Xpos`
+* `Feat_<FeatureName>`
+* `Deprel`
+* `Misc_<KeyName>`
+* `HeadId`
+
+Available functions are:
 * `this(<column_name>)` value of the given column of the current token
 * `head(<column_name>)` value of the given column of the head of the current token
 * `head(head(<column_name>)` value of the given column of the head's head of the current token
@@ -84,23 +100,17 @@ in double quotes `"NOUN"`, available functions are (`column_name` can be `Form`,
 * `cap(this()/head())` capitalize (first character uppercase, rest lowercase) the result of the this/head expression
 * `replace(this()/head(), regex, newstring) replaces the `regex` of the result fo the this/head expression by `newstring`
 
-`column_name` can be:
-* `Form`
-* `Lemma`
-* `Upos`
-* `Xpos`
-* `Feat_<FeatureName>`
-* `Deprel`
-* `Misc_<KeyName>`
-* `HeadId`
+If a token has a head 0, it's deprel will always be `root` unless the option `--nostrict` is used with `replace.sh`
 
-for instance:
+## Examples
+
 * `Upos:"NOUN"`                      set Upos to `NOUN`
-* `RelEud:"2:dep"                  add a enhanced UD relation "dep" using the current id + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence or n == 0, 0 is taken)
-* `AbsEud:head(HeadId)+":"+head(Deprel)` set EUD to head and deprel of the headword
-* `RelHeadId:"n"                       set head to current ud + n (n must be a negative or positive integer, but no 0)
-* `AbsHeadId:"n"                       set head to n (n must be 0 or a positive integer)
-* `AbsHeadId:head(Headid)                       set head to the headid of head node
+* `Eud:"+2:dep"                    add a enhanced UD relation "dep" using the current id + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence, the head id is not modified)
+* `Eud:head(HeadId)+":"+head(Deprel)` set EUD to head and deprel of the headword
+* `HeadId:"+2"                      set head to current ud + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence, the head id is not modified)
+* `HeadId:"-1"                      set head to current ud - 1
+* `HeadId:"5"                       set head to 5 (n must be 0 or a positive integer)
+* `HeadId:head(Headid)              set head to the headid of head node
 * `Feat:"Number=Sing"`               adds a feature `Number=Sing`  (Number: deletes the feature)
 * `Lemma:this(Form)`                set lemma to the form of current token
 * `Lemma:this(Misc_Translit)`       set lemma to the key `Translit` of the `Misc` column
@@ -115,7 +125,7 @@ for instance:
 
 N.B. **no white spaces allowed in a value expression!** 
 therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are invalid, 
-use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` etc.
+use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` instead.
 
 In order to empty a column, just set it to `"_"`: `Feat:"_"`, `Xpos:"_"` etc.
 

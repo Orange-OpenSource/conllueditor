@@ -37,8 +37,20 @@ ANTLR4 Grammar: [Conditions.g4](../../src/main/antlr4/com/orange/labs/conllparse
 ## MTW
 ![rule MTW](MTW.svg)
 
+## HEADID
+![rule HEADID](HEADID.svg)
+
+## RELEUD
+![rule RELEUD](RELEUD.svg)
+
+## ABSEUD
+![rule ABSEUD](ABSEUD.svg)
+
 ## ISEMPTY
 ![rule ISEMPTY](ISEMPTY.svg)
+
+## ISMWT
+![rule ISMWT](ISMWT.svg)
 
 ## AND
 ![rule AND](AND.svg)

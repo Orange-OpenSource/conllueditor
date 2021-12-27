@@ -1,4 +1,4 @@
-<svg class="railroad-diagram" height="64" viewBox="0 0 197.0 64" width="197.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg class="railroad-diagram" height="64" viewBox="0 0 206.5 64" width="206.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g transform="translate(.5 .5)">
 <style>/* <![CDATA[ */
 
@@ -54,6 +54,6 @@
 /* ]]> */
 </style><g>
 <path d="M20 22v20m10 -20v20m-10 -10h20"></path></g><g>
-<path d="M40 32h0.0"></path><path d="M157.0 32h0.0"></path><path d="M40.0 32h20"></path><g>
-<path d="M60.0 32h0.0"></path><path d="M137.0 32h0.0"></path><g class="terminal ">
-<path d="M60.0 32h0.0"></path><path d="M137.0 32h0.0"></path><rect class="term" height="24" width="77.0" x="60.0" y="21"></rect><text x="98.5" y="37">'this'</text></g></g><path d="M137.0 32h20"></path></g><path d="M 157.0 32 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
+<path d="M40 32h0.0"></path><path d="M166.5 32h0.0"></path><path d="M40.0 32h20"></path><g>
+<path d="M60.0 32h0.0"></path><path d="M146.5 32h0.0"></path><g class="terminal ">
+<path d="M60.0 32h0.0"></path><path d="M146.5 32h0.0"></path><rect class="term" height="24" width="86.5" x="60.0" y="21"></rect><text x="103.25" y="37">'IsMWT'</text></g></g><path d="M146.5 32h20"></path></g><path d="M 166.5 32 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
