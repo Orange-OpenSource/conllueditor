@@ -127,7 +127,7 @@ N.B. **no white spaces allowed in a value expression!**
 therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are invalid, 
 use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` instead.
 
-In order to empty a column, just set it to `"_"`: `Feat:"_"`, `Xpos:"_"` etc.
+In order to empty a column, just set it to `"_"`: `Feat:"_"`, `Xpos:"_"`, `Eud:"_"` etc.
 
 
 
