@@ -27,13 +27,13 @@ else
 fi
 
 if [ "$2" == "" ]; then
-	echo "usage $0 conditions conllufile"
+	echo "usage $0 conditions conllufile [--nostrict]"
 	exit 1
 fi
 
 RULES=$1
 CONLLU=$2
 
-java -Xmx4g -cp $NEWESTJAR com.orange.labs.conllparser.ConllFile --conll --cedit ${RULES} ${CONLLU}
+java -Xmx4g -cp $NEWESTJAR com.orange.labs.conllparser.ConllFile --conll --cedit ${RULES} $3 ${CONLLU}
 
 

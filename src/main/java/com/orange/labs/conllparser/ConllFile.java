@@ -429,9 +429,9 @@ public class ConllFile {
                     System.err.format(" Invalid sentence %d:\n\t%s\n", ct, e.getMessage());
             }
         }
-        
+
     }
-    
+
     public enum Output {
         TEXT, CONLL, ANN, LATEX
     };
@@ -445,6 +445,8 @@ public class ConllFile {
      * @param cf the ConllFile object containing at least one sentence
      * @param output the output format
      * @param filter if not null, output only sentences with a XPOS/UPOS
+     * @param shuffle
+     * @param strict if false, allow words with head 0 have a deprel different from "root"
      * matching the filter
      * @throws ConllException
      */
@@ -453,6 +455,7 @@ public class ConllFile {
             Output output,
             String filter,
             boolean shuffle,
+            boolean strict,
             int first, int last) throws ConllException {
 
         if (output == Output.ANN) {
@@ -508,7 +511,7 @@ public class ConllFile {
                 } else {
                     switch (output) {
                         case CONLL:
-                            out.print(cs);
+                            out.print(cs.toString(strict));
                             break;
                         case LATEX:
                             out.println(cs.getLaTeX());
@@ -560,13 +563,15 @@ public class ConllFile {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.out.println("usage: ConllFile [--debug] [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
+            System.out.println("usage: ConllFile [--debug] [--nostrict] [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
         } else {
             //for (String a : args) System.err.println("arg " + a);
             String filter = null;
 
             boolean shuffle = false;
             boolean debug = false;
+            boolean strict = true;
+
             int first = 1;
             int last = -1; // = all
             int cvparts = 0;
@@ -591,6 +596,9 @@ public class ConllFile {
                     argindex++;
                 } else if (args[a].equals("--debug")) {
                     debug = true;
+                    argindex++;
+                } else if (args[a].equals("--nostrict")) {
+                    strict = false;
                     argindex++;
                 } else if (args[a].equals("--cedit")) {
                     conditionfile = args[++a];
@@ -655,14 +663,14 @@ public class ConllFile {
                         } else {
                             cf = new ConllFile(sb.toString());
 
-                            processInput(out, cf, output, filter, shuffle, first, last);
+                            processInput(out, cf, output, filter, shuffle, strict, first, last);
                             out.flush();
                             sb = new StringBuilder();
                         }
                     }
                     if (sb.length() != 0) {
                         cf = new ConllFile(sb.toString());
-                        processInput(out, cf, output, filter, shuffle, first, last);
+                        processInput(out, cf, output, filter, shuffle, strict, first, last);
                     }
 
                 } else {
@@ -681,7 +689,7 @@ public class ConllFile {
                         if (conditionfile != null) {
                            cf.conditionalEdit(conditionfile);
                         }
-                        processInput(out, cf, output, filter, shuffle, first, last);
+                        processInput(out, cf, output, filter, shuffle, strict, first, last);
                     }
                 }
             } catch (ConllException e) {
