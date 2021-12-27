@@ -157,30 +157,55 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         return rtc;
     }
 
+//    @Override
+//    public Boolean visitCheckAbsHeadID(ConditionsParser.CheckAbsHeadIDContext ctx) {
+//        String text = ctx.ABSHEADID().getText();
+//        ConllWord use = getCW();
+//        if (use == null) {
+//            return false;
+//        }
+//        boolean rtc = (use.getHead() == Integer.parseInt(text.substring(10)));
+//        return rtc;
+//    }
+//
+//    @Override
+//    public Boolean visitCheckRelHeadID(ConditionsParser.CheckRelHeadIDContext ctx) {
+//        String text = ctx.RELHEADID().getText();
+//        ConllWord use = getCW();
+//        if (use == null) {
+//            return false;
+//        }
+//        int relhead = Integer.parseInt(text.substring(10));
+//        boolean rtc = (use.getHead() == use.getId() + relhead );
+//        return rtc;
+//    }
+
     @Override
-    public Boolean visitCheckAbsHeadID(ConditionsParser.CheckAbsHeadIDContext ctx) {
-        String text = ctx.ABSHEADID().getText();
+    public Boolean visitCheckHeadID(ConditionsParser.CheckHeadIDContext ctx) {
+        String text = ctx.HEADID().getText();
         ConllWord use = getCW();
         if (use == null) {
             return false;
         }
-        boolean rtc = (use.getHead() == Integer.parseInt(text.substring(10)));
-        return rtc;
-    }
-
-    @Override
-    public Boolean visitCheckRelHeadID(ConditionsParser.CheckRelHeadIDContext ctx) {
-        String text = ctx.RELHEADID().getText();
-        ConllWord use = getCW();
-        if (use == null) {
-            return false;
+        boolean rtc;
+        text = text.substring(7); // cut "HeadId:"
+        //System.err.println("yyyyyyyyyyyyyyyyyyyyy " + text);
+        //System.err.println("ssss " + use);
+        if (text.charAt(0) == '+' || text.charAt(0) == '-') {
+            // relative head
+            int relhead = Integer.parseInt(text);
+            //System.err.println("zzz rel " + relhead + " " + use.getId() + " " + use.getHead());
+            rtc = (use.getHead() == use.getId() + relhead );
+        } else {
+            // absolute head
+            //int abshead = Integer.parseInt(text);
+            //System.err.println("zzz abs " + abshead + " " + use.getId() + " " + use.getHead());
+            rtc = (use.getHead() == Integer.parseInt(text));
         }
-        int relhead = Integer.parseInt(text.substring(10));
-        boolean rtc = (use.getHead() == use.getId() + relhead );
         return rtc;
     }
 
-
+    
     @Override
     public Boolean visitCheckAbsEUD(ConditionsParser.CheckAbsEUDContext ctx) {
         String text = ctx.ABSEUD().getText();

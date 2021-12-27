@@ -1955,7 +1955,7 @@ public class ConllWord {
 
     @Override
     public String toString() {
-        return toString(true);
+        return toString(true, true);
     }
 
     public class SortIgnoreCase implements Comparator<String> {
@@ -1967,6 +1967,10 @@ public class ConllWord {
     }
 
     public String toString(boolean withEnhancedDeps) {
+         return toString(withEnhancedDeps, true);
+    }
+
+    public String toString(boolean withEnhancedDeps, boolean strict) {
         StringBuilder sb = new StringBuilder();
 //        if (nextToStringcomplete && prefixed != null) {
 //            for (String c : prefixed) {
@@ -2009,7 +2013,7 @@ public class ConllWord {
                 sb.append('\t').append(EmptyColumn).append('\t').append(EmptyColumn);
             } else {
                 sb.append("\t").append(head);
-                if (head == 0) {
+                if (head == 0 && strict) {
                     deplabel = "root";
                 }
                 sb.append("\t").append(deplabel);

@@ -179,13 +179,17 @@ public class TestConllFile {
     public void test01rule9() throws IOException, ConllException {
         name("rule 01-9: test condtions for heads/euds");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
-        String [] rules = {"RelHeadId:-2", "RelHeadId:2", // test conditions Heads
-                           "AbsHeadId:9",
-                           "RelEUD:-4:obj", "RelEUD:*:nsubj",
-                           "AbsEUD:3:conj"};
-        String [] newvals = {"Misc:\"RelHead=-2\"", "Misc:\"RelHead=2\"",
+        String [] rules = {"HeadId:-2",
+                           "HeadId:+2",
+                           "HeadId:9",
+                           "EUD:-4:obj",
+                           "EUD:*:nsubj",
+                           "EUD:3:conj"};
+        String [] newvals = {"Misc:\"RelHead=-2\"",
+                             "Misc:\"RelHead=2\"",
                              "Misc:\"AbsHead=9\"",
-                             "Misc:\"RelEUD=-4_obj\"", "Misc:\"RelEUD=*_nsubj\"",
+                             "Misc:\"RelEUD=-4_obj\"",
+                             "Misc:\"RelEUD=*_nsubj\"",
                              "Misc:\"AbsEUD=3_conj\"",
         };
         applyRules(rules,
@@ -200,11 +204,15 @@ public class TestConllFile {
         String [] rules = {"Upos:DET",
                            "Upos:NOUN",
                            "Upos:ADJ",
-                           "Deprel:nsubj"};
-        String [] newvals = {"RelHeadId:\"-2\" Misc:\"RelHead=-2\"",
-                             "AbsHeadId:\"4\" Misc:\"AbsHead=4\"",
-                             "AbsHeadId:head(HeadId) Misc:\"AbsHead=Head_HeadId\"",
-                             "AbsEud:head(HeadId)+\":\"+head(Deprel) Misc:\"EUD=Head_headid\""
+                           "Deprel:nsubj",
+                           "Upos:PROPN",
+                           "Upos:ADV"};
+        String [] newvals = {"HeadId:\"-2\" Misc:\"Head=-2\"",
+                             "HeadId:\"4\" Misc:\"Head=4\"",
+                             "HeadId:head(HeadId) Misc:\"Head=Head_HeadId\"",
+                             "Eud:head(HeadId)+\":\"+head(Deprel) Misc:\"EUD=Head_headid\"",
+                             "HeadId:\"+2\" Misc:\"Head=+2\"",
+                             "Eud:\"-1:before\" Misc:\"EUD=Head-1\""
                            };
         applyRules(rules,
                    newvals,
@@ -316,7 +324,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, ABSHEADID, RELHEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, HEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -337,55 +345,30 @@ public class TestConllFile {
 
 
     @Test
-    public void test1711badAbsHeadId() throws IOException, ConllException {
-        String[] newvals = "AbsHeadId:\"-1\"".split(" ");
-        StringBuilder warnings = new StringBuilder();
-        try {
-            cf.conditionalEdit("Upos:NOUN", Arrays.asList(newvals), null, warnings);
-        } catch (ConllException e) {
-            String expected = "bad absolute head id, must be positive integer or 0 <-1>";
-            Assert.assertEquals(String.format("band AbsHeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
-                    expected, e.getMessage());
-        }
-    }
-
-    @Test
-    public void test1712badAbsHeadId() throws IOException, ConllException {
-        String[] newvals = "AbsHeadId:\"titi\"".split(" ");
+    public void test171badAbsHeadId() throws IOException, ConllException {
+        String[] newvals = "HeadId:\"titi\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
             cf.conditionalEdit("Upos:NOUN", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
             String expected = "invalid absolute head id, must be positive integer or 0 <titi>";
-            Assert.assertEquals(String.format("band AbsHeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+            Assert.assertEquals(String.format("band absolute HeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
     }
 
-    @Test
-    public void test1721badRelHeadId() throws IOException, ConllException {
-        String[] newvals = "RelHeadId:\"0\"".split(" ");
-        StringBuilder warnings = new StringBuilder();
-        try {
-            cf.conditionalEdit("Upos:NOUN", Arrays.asList(newvals), null, warnings);
-        } catch (ConllException e) {
-            String expected = "bad relative head id, must be a negative or positive integer excluding 0 <0>";
-            Assert.assertEquals(String.format("band AbsHeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
-                    expected, e.getMessage());
-        }
-    }
-    @Test
-    public void test1722badRelHeadId() throws IOException, ConllException {
-        String[] newvals = "RelHeadId:\"toto\"".split(" ");
-        StringBuilder warnings = new StringBuilder();
-        try {
-            cf.conditionalEdit("Upos:NOUN", Arrays.asList(newvals), null, warnings);
-        } catch (ConllException e) {
-            String expected = "invalid relative head id, must be a negative or positive integer excluding 0 <toto>";
-            Assert.assertEquals(String.format("band AbsHeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
-                    expected, e.getMessage());
-        }
-    }
+//    @Test
+//    public void test172badRelHeadId() throws IOException, ConllException {
+//        String[] newvals = "HeadId:\"+0\"".split(" ");
+//        StringBuilder warnings = new StringBuilder();
+//        try {
+//            cf.conditionalEdit("Upos:NOUN", Arrays.asList(newvals), null, warnings);
+//        } catch (ConllException e) {
+//            String expected = "bad relative head id, must be a negative or positive integer excluding 0 <+0>";
+//            Assert.assertEquals(String.format("band relative HeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+//                    expected, e.getMessage());
+//        }
+//    }
 
     /* testing replacement grammar */
 

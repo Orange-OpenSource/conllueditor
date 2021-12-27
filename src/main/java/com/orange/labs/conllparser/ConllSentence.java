@@ -694,6 +694,13 @@ public class ConllSentence {
      */
     @Override
     public String toString() {
+        return toString(true);
+    }
+
+    /*
+     @param strict: if false allow a token with head 0 have a deprel different than "root"
+    */
+    public String toString(boolean strict) {
         StringBuilder sb = new StringBuilder();
         if (newdoc != null) {
             if (!newdoc.isEmpty()) {
@@ -732,7 +739,7 @@ public class ConllSentence {
             List<ConllWord> ews = emptywords.get(0);
             if (ews != null) {
                 for (ConllWord ew : ews) {
-                    sb.append(ew.toString(hasEnhancedDeps/* withpartialhead*/)).append("\n");
+                    sb.append(ew.toString(hasEnhancedDeps)).append("\n");
                 }
             }
         }
@@ -750,7 +757,7 @@ public class ConllSentence {
                 }
             }
 
-            sb.append(word.toString(hasEnhancedDeps/*withpartialhead*/)).append("\n");
+            sb.append(word.toString(hasEnhancedDeps, strict)).append("\n");
             if (emptywords != null) {
                 List<ConllWord> ews = emptywords.get(word.getId());
                 if (ews != null) {
@@ -2077,268 +2084,147 @@ public class ConllSentence {
      * @param condition a condition like (UPOS:NOUN and Lemma:de.*)
      * @param newValues a list of new values FORM:"value" (as defined in
      * Replacements.g4)
-     * @param wordlists here we for (String val : newvalues) {
-//                    String[] elems = val.split(":", 2);
-//                    if (elems.length == 2) {
-//                        String newvalue = GetReplacement.evaluate(elems[1], cw);
-//                        switch (elems[0].toLowerCase()) {
-//                            case "upos":
-//                                cw.setUpostag(newvalue);
-//                                break;
-//                            case "xpos":
-//                                cw.setXpostag(newvalue);
-//                                break;
-//                            case "deprel":
-//                                cw.setDeplabel(newvalue);
-//                                break;
-//                            case "absheadid":
-//                                try {
-//                                    int abshead = Integer.parseInt(newvalue);
-//                                    if (abshead < 0) {
-//                                        throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
-//                                    }
-//                                    if (abshead > words.size()) {
-//                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead == cw.getId()) {
-//                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " == word id").append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead != 0 && cw.commands(getWord(abshead))) {
-//                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " depends from current word").append('\n');
-//                                        break;
-//                                    }
-//                                    cw.setHead(abshead);
-//                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
-//                                }
-//                                break;
-//                            case "relheadid":
-//                                try {
-//                                    //System.err.println("ppppp " + newvalue);
-//                                    int relhead = Integer.parseInt(newvalue);
-//                                    if (relhead == 0) {
-//                                         throw new ConllException("invalid relative head id, must be a negative or positive integer but no 0 <" + newvalue + ">");
-//                                    }
-//                                    int abshead = cw.getId() + relhead;
-//                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
-//                                    if (abshead < 1) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead > words.size()) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead == cw.getId()) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
-//                                        break;
-//                                    }
-//                                    if (cw.commands(getWord(abshead))) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
-//                                        break;
-//                                    }
-//                                    cw.setHead(abshead);
-//                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid relative head id, must be a negative or positive integer but not 0 <" + newvalue + ">");
-//                                }
-//                                break;
-//                            case "feat":
-//                                if ("_".equals(newvalue)) {
-//                                    cw.setFeatures("_");
-//                                } else {
-//                                    String[] key_value = newvalue.split("[:=]", 2);
-//                                    if (key_value.length != 2) {
-//                                        throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
-//                                    }
-//
-//                                    if (key_value[1].isEmpty()) {
-//                                        cw.delFeatureWithName(key_value[0]);
-//                                    } else {
-//                                        cw.addFeature(key_value[0], key_value[1]);
-//                                    }
-//                                }
-//                                break;
-//                            case "lemma":
-//                                cw.setLemma(newvalue);
-//                                break;
-//                            case "form":
-//                                cw.setForm(newvalue);
-//                                break;
-//                            case "misc":
-//                                if ("_".equals(newvalue)) {
-//                                    cw.setMisc("_");
-//                                } else {
-//                                    String[] key_value = newvalue.split("[:=]", 2);
-//                                    if (key_value.length != 2) {
-//                                        throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
-//                                    }
-//
-//                                    if (key_value[1].isEmpty()) {
-//                                        cw.delMiscWithName(key_value[0]);
-//                                    } else {
-//                                        cw.addMisc(key_value[0] + "=" + key_value[1]);
-//                                    }
-//                                }
-//                                break;
-//                            case "eud":
-//                                if ("_".equals(newvalue)) {
-//                                    cw.setDeps("_");
-//                                    hasEnhancedDeps = false;
-//                                } else {
-//                                    String[] head_dep = newvalue.split(":", 2);
-//                                    System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
-//                                    if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {
-//                                        throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
-//                                    }
-//                                    int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
-//                                    if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead > words.size()) {
-//                                        eudhead = 0;
-//                                        System.err.println("bad EUD head in sentence " + getSentid() + " word " + cw.getId());
-//                                    }
-//                                    cw.addDeps("" + eudhead, head_dep[1]);
-//                                    hasEnhancedDeps = true;
-//                                }
-//                                break;
-//                            default:
-//                                throw new ConllException("invalid new value " + val);
-//                        }
-//                    } else {
-//                        throw new ConllException("invalid new value " + val);
-//                    }for (String val : newvalues) {
-//                    String[] elems = val.split(":", 2);
-//                    if (elems.length == 2) {
-//                        String newvalue = GetReplacement.evaluate(elems[1], cw);
-//                        switch (elems[0].toLowerCase()) {
-//                            case "upos":
-//                                cw.setUpostag(newvalue);
-//                                break;
-//                            case "xpos":
-//                                cw.setXpostag(newvalue);
-//                                break;
-//                            case "deprel":
-//                                cw.setDeplabel(newvalue);
-//                                break;
-//                            case "absheadid":
-//                                try {
-//                                    int abshead = Integer.parseInt(newvalue);
-//                                    if (abshead < 0) {
-//                                        throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
-//                                    }
-//                                    if (abshead > words.size()) {
-//                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead == cw.getId()) {
-//                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " == word id").append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead != 0 && cw.commands(getWord(abshead))) {
-//                                        warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " depends from current word").append('\n');
-//                                        break;
-//                                    }
-//                                    cw.setHead(abshead);
-//                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
-//                                }
-//                                break;
-//                            case "relheadid":
-//                                try {
-//                                    //System.err.println("ppppp " + newvalue);
-//                                    int relhead = Integer.parseInt(newvalue);
-//                                    if (relhead == 0) {
-//                                         throw new ConllException("invalid relative head id, must be a negative or positive integer but no 0 <" + newvalue + ">");
-//                                    }
-//                                    int abshead = cw.getId() + relhead;
-//                                    //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
-//                                    if (abshead < 1) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead > words.size()) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
-//                                        break;
-//                                    }
-//                                    if (abshead == cw.getId()) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
-//                                        break;
-//                                    }
-//                                    if (cw.commands(getWord(abshead))) {
-//                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
-//                                        break;
-//                                    }
-//                                    cw.setHead(abshead);
-//                                } catch(NumberFormatException e) {
-//                                    throw new ConllException("invalid relative head id, must be a negative or positive integer but not 0 <" + newvalue + ">");
-//                                }
-//                                break;
-//                            case "feat":
-//                                if ("_".equals(newvalue)) {
-//                                    cw.setFeatures("_");
-//                                } else {
-//                                    String[] key_value = newvalue.split("[:=]", 2);
-//                                    if (key_value.length != 2) {
-//                                        throw new ConllException("invalid new feature, must be Name=[value] <" + newvalue + ">");
-//                                    }
-//
-//                                    if (key_value[1].isEmpty()) {
-//                                        cw.delFeatureWithName(key_value[0]);
-//                                    } else {
-//                                        cw.addFeature(key_value[0], key_value[1]);
-//                                    }
-//                                }
-//                                break;
-//                            case "lemma":
-//                                cw.setLemma(newvalue);
-//                                break;
-//                            case "form":
-//                                cw.setForm(newvalue);
-//                                break;
-//                            case "misc":
-//                                if ("_".equals(newvalue)) {
-//                                    cw.setMisc("_");
-//                                } else {
-//                                    String[] key_value = newvalue.split("[:=]", 2);
-//                                    if (key_value.length != 2) {
-//                                        throw new ConllException("invalid new misc, must be Name=[value] <" + newvalue + ">");
-//                                    }
-//
-//                                    if (key_value[1].isEmpty()) {
-//                                        cw.delMiscWithName(key_value[0]);
-//                                    } else {
-//                                        cw.addMisc(key_value[0] + "=" + key_value[1]);
-//                                    }
-//                                }
-//                                break;
-//                            case "eud":
-//                                if ("_".equals(newvalue)) {
-//                                    cw.setDeps("_");
-//                                    hasEnhancedDeps = false;
-//                                } else {
-//                                    String[] head_dep = newvalue.split(":", 2);
-//                                    System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
-//                                    if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {
-//                                        throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
-//                                    }
-//                                    int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
-//                                    if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead > words.size()) {
-//                                        eudhead = 0;
-//                                        System.err.println("bad EUD head in sentence " + getSentid() + " word " + cw.getId());
-//                                    }
-//                                    cw.addDeps("" + eudhead, head_dep[1]);
-//                                    hasEnhancedDeps = true;
-//                                }
-//                                break;
-//                            default:
-//                                throw new ConllException("invalid new value " + val);
-//                        }
-//                    } else {
-//                        throw new ConllException("invalid new value " + val);
-//                    }
-//                }
-//                }put contents of files in conditions like
-     * Lemma:#filename.txt
+     * @param wordlists here we for (String val : newvalues) { // String[] elems
+     * = val.split(":", 2); // if (elems.length == 2) { // String newvalue =
+     * GetReplacement.evaluate(elems[1], cw); // switch (elems[0].toLowerCase())
+     * { // case "upos": // cw.setUpostag(newvalue); // break; // case "xpos":
+     * // cw.setXpostag(newvalue); // break; // case "deprel": //
+     * cw.setDeplabel(newvalue); // break; // case "absheadid": // try { // int
+     * abshead = Integer.parseInt(newvalue); // if (abshead < 0) { // throw new
+     * ConllException("invalid absolute head id, must be positive integer or 0
+     * <" + newvalue + ">"); // } // if (abshead > words.size()) { //
+     * warnings.append("Warning: Cannot set absolute head id in sentence " +
+     * sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence
+     * length " + words.size()).append('\n'); // break; // } // if (abshead ==
+     * cw.getId()) { // warnings.append("Warning: Cannot set absolute head id in
+     * sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " ==
+     * word id").append('\n'); // break; // } // if (abshead != 0 &&
+     * cw.commands(getWord(abshead))) { // warnings.append("Warning: Cannot set
+     * absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ":
+     * " + abshead + " depends from current word").append('\n'); // break; // }
+     * // cw.setHead(abshead); // } catch(NumberFormatException e) { // throw
+     * new ConllException("invalid absolute head id, must be positive integer or
+     * 0 <" + newvalue + ">"); // } // break; // case "relheadid": // try { //
+     * //System.err.println("ppppp " + newvalue); // int relhead =
+     * Integer.parseInt(newvalue); // if (relhead == 0) { // throw new
+     * ConllException("invalid relative head id, must be a negative or positive
+     * integer but no 0 <" + newvalue + ">"); // } // int abshead = cw.getId() +
+     * relhead; // //System.err.println("qqqqqq " + cw.getId() + " " + relhead +
+     * " " + abshead); // if (abshead < 1) {
+     * //                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
+     * //                                        break;
+     * //                                    }
+     * //                                    if (abshead > words.size()) { // warnings.append("Warning: Cannot set
+     * relative head id in sentence " + sentid + ", word " + cw.getFullId() + ":
+     * absolute head " + abshead + " > sentence length " +
+     * words.size()).append('\n'); // break; // } // if (abshead == cw.getId())
+     * { // warnings.append("Warning: Cannot set relative head id in sentence "
+     * + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + "
+     * == word id").append('\n'); // break; // } // if
+     * (cw.commands(getWord(abshead))) { // warnings.append("Warning: Cannot set
+     * relative head id in sentence " + sentid + ", word " + cw.getFullId() + ":
+     * absolute head " + abshead + " depends from current word").append('\n');
+     * // break; // } // cw.setHead(abshead); // } catch(NumberFormatException
+     * e) { // throw new ConllException("invalid relative head id, must be a
+     * negative or positive integer but not 0 <" + newvalue + ">"); // } //
+     * break; // case "feat": // if ("_".equals(newvalue)) { //
+     * cw.setFeatures("_"); // } else { // String[] key_value =
+     * newvalue.split("[:=]", 2); // if (key_value.length != 2) { // throw new
+     * ConllException("invalid new feature, must be Name=[value]
+     * <" + newvalue + ">"); // } // // if (key_value[1].isEmpty()) { //
+     * cw.delFeatureWithName(key_value[0]); // } else { //
+     * cw.addFeature(key_value[0], key_value[1]); // } // } // break; // case
+     * "lemma": // cw.setLemma(newvalue); // break; // case "form": //
+     * cw.setForm(newvalue); // break; // case "misc": // if
+     * ("_".equals(newvalue)) { // cw.setMisc("_"); // } else { // String[]
+     * key_value = newvalue.split("[:=]", 2); // if (key_value.length != 2) { //
+     * throw new ConllException("invalid new misc, must be Name=[value]
+     * <" + newvalue + ">"); // } // // if (key_value[1].isEmpty()) { //
+     * cw.delMiscWithName(key_value[0]); // } else { // cw.addMisc(key_value[0]
+     * + "=" + key_value[1]); // } // } // break; // case "eud": // if
+     * ("_".equals(newvalue)) { // cw.setDeps("_"); // hasEnhancedDeps = false;
+     * // } else { // String[] head_dep = newvalue.split(":", 2); //
+     * System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]); // if
+     * (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) { // throw new
+     * ConllException("invalid new EUD, must be relative_head:deprel
+     * <" + newvalue + ">"); // } // int eudhead = cw.getId() +
+     * Integer.parseInt(head_dep[0]); // if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead
+     * > words.size()) { // eudhead = 0; // System.err.println("bad EUD head in
+     * sentence " + getSentid() + " word " + cw.getId()); // } // cw.addDeps(""
+     * + eudhead, head_dep[1]); // hasEnhancedDeps = true; // } // break; //
+     * default: // throw new ConllException("invalid new value " + val); // } //
+     * } else { // throw new ConllException("invalid new value " + val); // }for
+     * (String val : newvalues) { // String[] elems = val.split(":", 2); // if
+     * (elems.length == 2) { // String newvalue =
+     * GetReplacement.evaluate(elems[1], cw); // switch (elems[0].toLowerCase())
+     * { // case "upos": // cw.setUpostag(newvalue); // break; // case "xpos":
+     * // cw.setXpostag(newvalue); // break; // case "deprel": //
+     * cw.setDeplabel(newvalue); // break; // case "absheadid": // try { // int
+     * abshead = Integer.parseInt(newvalue); // if (abshead < 0) { // throw new
+     * ConllException("invalid absolute head id, must be positive integer or 0
+     * <" + newvalue + ">"); // } // if (abshead > words.size()) { //
+     * warnings.append("Warning: Cannot set absolute head id in sentence " +
+     * sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence
+     * length " + words.size()).append('\n'); // break; // } // if (abshead ==
+     * cw.getId()) { // warnings.append("Warning: Cannot set absolute head id in
+     * sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " ==
+     * word id").append('\n'); // break; // } // if (abshead != 0 &&
+     * cw.commands(getWord(abshead))) { // warnings.append("Warning: Cannot set
+     * absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ":
+     * " + abshead + " depends from current word").append('\n'); // break; // }
+     * // cw.setHead(abshead); // } catch(NumberFormatException e) { // throw
+     * new ConllException("invalid absolute head id, must be positive integer or
+     * 0 <" + newvalue + ">"); // } // break; // case "relheadid": // try { //
+     * //System.err.println("ppppp " + newvalue); // int relhead =
+     * Integer.parseInt(newvalue); // if (relhead == 0) { // throw new
+     * ConllException("invalid relative head id, must be a negative or positive
+     * integer but no 0 <" + newvalue + ">"); // } // int abshead = cw.getId() +
+     * relhead; // //System.err.println("qqqqqq " + cw.getId() + " " + relhead +
+     * " " + abshead); // if (abshead < 1) {
+     * //                                        warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
+     * //                                        break;
+     * //                                    }
+     * //                                    if (abshead > words.size()) { // warnings.append("Warning: Cannot set
+     * relative head id in sentence " + sentid + ", word " + cw.getFullId() + ":
+     * absolute head " + abshead + " > sentence length " +
+     * words.size()).append('\n'); // break; // } // if (abshead == cw.getId())
+     * { // warnings.append("Warning: Cannot set relative head id in sentence "
+     * + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + "
+     * == word id").append('\n'); // break; // } // if
+     * (cw.commands(getWord(abshead))) { // warnings.append("Warning: Cannot set
+     * relative head id in sentence " + sentid + ", word " + cw.getFullId() + ":
+     * absolute head " + abshead + " depends from current word").append('\n');
+     * // break; // } // cw.setHead(abshead); // } catch(NumberFormatException
+     * e) { // throw new ConllException("invalid relative head id, must be a
+     * negative or positive integer but not 0 <" + newvalue + ">"); // } //
+     * break; // case "feat": // if ("_".equals(newvalue)) { //
+     * cw.setFeatures("_"); // } else { // String[] key_value =
+     * newvalue.split("[:=]", 2); // if (key_value.length != 2) { // throw new
+     * ConllException("invalid new feature, must be Name=[value]
+     * <" + newvalue + ">"); // } // // if (key_value[1].isEmpty()) { //
+     * cw.delFeatureWithName(key_value[0]); // } else { //
+     * cw.addFeature(key_value[0], key_value[1]); // } // } // break; // case
+     * "lemma": // cw.setLemma(newvalue); // break; // case "form": //
+     * cw.setForm(newvalue); // break; // case "misc": // if
+     * ("_".equals(newvalue)) { // cw.setMisc("_"); // } else { // String[]
+     * key_value = newvalue.split("[:=]", 2); // if (key_value.length != 2) { //
+     * throw new ConllException("invalid new misc, must be Name=[value]
+     * <" + newvalue + ">"); // } // // if (key_value[1].isEmpty()) { //
+     * cw.delMiscWithName(key_value[0]); // } else { // cw.addMisc(key_value[0]
+     * + "=" + key_value[1]); // } // } // break; // case "eud": // if
+     * ("_".equals(newvalue)) { // cw.setDeps("_"); // hasEnhancedDeps = false;
+     * // } else { // String[] head_dep = newvalue.split(":", 2); //
+     * System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]); // if
+     * (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) { // throw new
+     * ConllException("invalid new EUD, must be relative_head:deprel
+     * <" + newvalue + ">"); // } // int eudhead = cw.getId() +
+     * Integer.parseInt(head_dep[0]); // if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead
+     * > words.size()) { // eudhead = 0; // System.err.println("bad EUD head in
+     * sentence " + getSentid() + " word " + cw.getId()); // } // cw.addDeps(""
+     * + eudhead, head_dep[1]); // hasEnhancedDeps = true; // } // break; //
+     * default: // throw new ConllException("invalid new value " + val); // } //
+     * } else { // throw new ConllException("invalid new value " + val); // } //
+     * } // }put contents of files in conditions like Lemma:#filename.txt
      */
     public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
@@ -2738,7 +2624,6 @@ public class ConllSentence {
         return matching_cw;
     }
 
-
     /**
      * apply a list of changes "column:value". Needed for the application of
      * rules in mass edit mode
@@ -2761,63 +2646,125 @@ public class ConllSentence {
                     case "deprel":
                         cw.setDeplabel(newvalue);
                         break;
-                    case "absheadid":
+                    case "headid":
                         if (newvalue.isEmpty()) {
                             warnings.append("Warning: No value found for " + elems[0] + " in sentence " + sentid + ", word " + cw.getFullId()).append('\n');
                             break;
                         }
-                        try {
-                            int abshead = Integer.parseInt(newvalue);
-                            if (abshead < 0) {
-                                throw new ConllException("bad absolute head id, must be positive integer or 0 <" + newvalue + ">");
+                        boolean absid = true;
+                        if (newvalue.charAt(0) == '+' || newvalue.charAt(0) == '-') {
+                            absid = false;
+                        }
+
+
+                        if (absid) {
+                            try {
+                                int numval = Integer.parseInt(newvalue);
+                                if (numval > words.size()) {
+                                    warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + numval + " > sentence length " + words.size()).append('\n');
+                                    break;
+                                }
+                                if (numval == cw.getId()) {
+                                    warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + numval + " == word id").append('\n');
+                                    break;
+                                }
+                                if (numval != 0 && cw.commands(getWord(numval))) {
+                                    warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + numval + " depends from current word").append('\n');
+                                    break;
+                                }
+                                cw.setHead(numval);
+                            } catch (NumberFormatException e) {
+                                throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
                             }
-                            if (abshead > words.size()) {
-                                warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
-                                break;
+                        } else {
+                            try {
+                                //System.err.println("ppppp " + newvalue);
+                                int numval = Integer.parseInt(newvalue);
+                                //if (numval == 0) {
+                                //    throw new ConllException("bad relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
+                                //}
+                                int abshead = cw.getId() + numval;
+                                //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
+                                if (abshead < 1) {
+                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
+                                    break;
+                                }
+                                if (abshead > words.size()) {
+                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
+                                    break;
+                                }
+                                if (abshead == cw.getId()) {
+                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
+                                    break;
+                                }
+                                if (cw.commands(getWord(abshead))) {
+                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
+                                    break;
+                                }
+                                cw.setHead(abshead);
+                            } catch (NumberFormatException e) {
+                                throw new ConllException("invalid relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
                             }
-                            if (abshead == cw.getId()) {
-                                warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " == word id").append('\n');
-                                break;
-                            }
-                            if (abshead != 0 && cw.commands(getWord(abshead))) {
-                                warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " depends from current word").append('\n');
-                                break;
-                            }
-                            cw.setHead(abshead);
-                        } catch (NumberFormatException e) {
-                            throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
                         }
                         break;
-                    case "relheadid":
-                        try {
-                            //System.err.println("ppppp " + newvalue);
-                            int relhead = Integer.parseInt(newvalue);
-                            if (relhead == 0) {
-                                throw new ConllException("bad relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
-                            }
-                            int abshead = cw.getId() + relhead;
-                            //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
-                            if (abshead < 1) {
-                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
-                                break;
-                            }
-                            if (abshead > words.size()) {
-                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
-                                break;
-                            }
-                            if (abshead == cw.getId()) {
-                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
-                                break;
-                            }
-                            if (cw.commands(getWord(abshead))) {
-                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
-                                break;
-                            }
-                            cw.setHead(abshead);
-                        } catch (NumberFormatException e) {
-                            throw new ConllException("invalid relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
-                        }
-                        break;
+
+//                    case "absheadid":
+//                        if (newvalue.isEmpty()) {
+//                            warnings.append("Warning: No value found for " + elems[0] + " in sentence " + sentid + ", word " + cw.getFullId()).append('\n');
+//                            break;
+//                        }
+//                        try {
+//                            int abshead = Integer.parseInt(newvalue);
+//                            if (abshead < 0) {
+//                                throw new ConllException("bad absolute head id, must be positive integer or 0 <" + newvalue + ">");
+//                            }
+//                            if (abshead > words.size()) {
+//                                warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " > sentence length " + words.size()).append('\n');
+//                                break;
+//                            }
+//                            if (abshead == cw.getId()) {
+//                                warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " == word id").append('\n');
+//                                break;
+//                            }
+//                            if (abshead != 0 && cw.commands(getWord(abshead))) {
+//                                warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + abshead + " depends from current word").append('\n');
+//                                break;
+//                            }
+//                            cw.setHead(abshead);
+//                        } catch (NumberFormatException e) {
+//                            throw new ConllException("invalid absolute head id, must be positive integer or 0 <" + newvalue + ">");
+//                        }
+//                        break;
+//                    case "relheadid":
+//                        try {
+//                            //System.err.println("ppppp " + newvalue);
+//                            int relhead = Integer.parseInt(newvalue);
+//                            if (relhead == 0) {
+//                                throw new ConllException("bad relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
+//                            }
+//                            int abshead = cw.getId() + relhead;
+//                            //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
+//                            if (abshead < 1) {
+//                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
+//                                break;
+//                            }
+//                            if (abshead > words.size()) {
+//                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
+//                                break;
+//                            }
+//                            if (abshead == cw.getId()) {
+//                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
+//                                break;
+//                            }
+//                            if (cw.commands(getWord(abshead))) {
+//                                warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
+//                                break;
+//                            }
+//                            cw.setHead(abshead);
+//                        } catch (NumberFormatException e) {
+//                            throw new ConllException("invalid relative head id, must be a negative or positive integer excluding 0 <" + newvalue + ">");
+//                        }
+//                        break;
                     case "feat":
                         if ("_".equals(newvalue)) {
                             cw.setFeatures("_");
@@ -2856,44 +2803,78 @@ public class ConllSentence {
                             }
                         }
                         break;
-                    case "releud":
+                    case "eud":
+                                          //  case "releud":
                         if ("_".equals(newvalue)) {
                             cw.setDeps("_");
                             hasEnhancedDeps = false;
                         } else {
                             String[] head_dep = newvalue.split(":", 2);
-                            //System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
-                            if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {
-                                throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
+                            if (head_dep.length != 2) {
+                                throw new ConllException("invalid new EUD, must be headId:deprel <" + newvalue + ">");
                             }
-                            int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
-                            if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead > words.size()) {
-                                eudhead = 0;
-                                System.err.println("bad EUD head in sentence " + getSentid() + " word " + cw.getId());
-                            }
-                            cw.addDeps("" + eudhead, head_dep[1]);
-                            hasEnhancedDeps = true;
-                        }
-                        break;
-                    case "abseud":
-                        if ("_".equals(newvalue)) {
-                            cw.setDeps("_");
-                            hasEnhancedDeps = false;
-                        } else {
-                            String[] head_dep = newvalue.split(":", 2);
-                            //System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
-                            if (head_dep.length != 2 || !head_dep[0].matches("[0-9]+")) {
+                            if (head_dep[0].matches("[+-][0-9]+")) {
+                                // relative head
+                                int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
+                                if (eudhead < 0 || eudhead > words.size()) {
+                                    warnings.append("bad EUD head in sentence " + getSentid() + " word " + cw.getId()).append('\n');
+                                    break;
+                                }
+                                cw.addDeps("" + eudhead, head_dep[1]);
+                                hasEnhancedDeps = true;
+                            } else if (head_dep[0].matches("[0-9]+")) {
+                                int eudhead = Integer.parseInt(head_dep[0]);
+                                if (eudhead > words.size()) {
+                                    warnings.append("bad absolute EUD head in sentence " + getSentid() + " word " + cw.getId()).append('\n');
+                                    break;
+                                }
+                                cw.addDeps("" + eudhead, head_dep[1]);
+                                hasEnhancedDeps = true;
+                            } else {
                                 throw new ConllException("invalid new EUD, must be absolute_head:deprel <" + newvalue + ">");
                             }
-                            int eudhead = Integer.parseInt(head_dep[0]);
-                            if (eudhead > words.size()) {
-                                eudhead = 0;
-                                System.err.println("bad absolute EUD head in sentence " + getSentid() + " word " + cw.getId());
-                            }
-                            cw.addDeps("" + eudhead, head_dep[1]);
-                            hasEnhancedDeps = true;
                         }
+
                         break;
+
+//                    case "releud":
+//                        if ("_".equals(newvalue)) {
+//                            cw.setDeps("_");
+//                            hasEnhancedDeps = false;
+//                        } else {
+//                            String[] head_dep = newvalue.split(":", 2);
+//                            //System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
+//                            if (head_dep.length != 2 || !head_dep[0].matches("-?[0-9]+")) {
+//                                throw new ConllException("invalid new EUD, must be relative_head:deprel <" + newvalue + ">");
+//                            }
+//                            int eudhead = cw.getId() + Integer.parseInt(head_dep[0]);
+//                            if ("0".equals(head_dep[0]) || eudhead < 0 || eudhead > words.size()) {
+//                                eudhead = 0;
+//                                System.err.println("bad EUD head in sentence " + getSentid() + " word " + cw.getId());
+//                            }
+//                            cw.addDeps("" + eudhead, head_dep[1]);
+//                            hasEnhancedDeps = true;
+//                        }
+//                        break;
+//                    case "abseud":
+//                        if ("_".equals(newvalue)) {
+//                            cw.setDeps("_");
+//                            hasEnhancedDeps = false;
+//                        } else {
+//                            String[] head_dep = newvalue.split(":", 2);
+//                            //System.err.println("head_dep " + head_dep[0] + " " + head_dep[1]);
+//                            if (head_dep.length != 2 || !head_dep[0].matches("[0-9]+")) {
+//                                throw new ConllException("invalid new EUD, must be absolute_head:deprel <" + newvalue + ">");
+//                            }
+//                            int eudhead = Integer.parseInt(head_dep[0]);
+//                            if (eudhead > words.size()) {
+//                                eudhead = 0;
+//                                System.err.println("bad absolute EUD head in sentence " + getSentid() + " word " + cw.getId());
+//                            }
+//                            cw.addDeps("" + eudhead, head_dep[1]);
+//                            hasEnhancedDeps = true;
+//                        }
+//                        break;
                     default:
                         throw new ConllException("invalid receiving column <" + elems[0] + ">");
                 }
@@ -2902,6 +2883,5 @@ public class ConllSentence {
             }
         }
     }
-
 
 }
