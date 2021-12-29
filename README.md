@@ -717,6 +717,7 @@ For the time being the following scripts/languages are covered
 * bn: Bengali script (and to a certain extend Assamese and other languages using the Bengali Alphabet)
 * or: Odia script
 * th: Thai (ISO 11940 based)
+* my: Burmese script
 * ja: Japanese (Only Katakana and Hiragana)
 * ar: Arabic (Modern Standard Arabic, unvocalized forms are transliterated without vowels)
 * arc: Aramaic (unvocalized forms are transliterated without vowels)
