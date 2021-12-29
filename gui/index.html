@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.13.0 as of 18th September 2021
+    version 2.14.2 as of 29th December 2021
     -->
 
     <head>
@@ -481,7 +481,8 @@
                             <li> <span class="userinputdoc">Misc</span> (Values: MiscName=Value or MiscName:Value. MiscName must match <span class="userinputdoc">[A-Za-z_]+</span>, the Value can be any string without  whitespaces, ')' and '&amp;')</li>
                             <li> <span class="userinputdoc">Id</span> (Values: integer)</li>
                             <li> <span class="userinputdoc">MTW</span> (Values: length of the mult-token word <span class="userinputdoc">[2-9]</span>)</li>
-                            <li> <span class="userinputdoc">Empty</span> (no value, true if the current node is empty)</li>
+                            <li> <span class="userinputdoc">IsEmpty</span> (no value, true if the current node is empty)</li>
+                            <li> <span class="userinputdoc">IsMTW</span> (no value, true if the current node is a multi token word)</li>
                         </ul>
 
                         In addition to key keys listed above, four functions are available to take the context of the token into account:
@@ -657,6 +658,7 @@
                             <tr><td>Lemma</td>    <td><div class="ui-widget"><input type="text" id="clemma" size="60" value=""></div></td></tr>
                             <tr><td>upos</td>     <td><div class="ui-widget"><input type="text" id="cupos"  size="60" value=""></div></td></tr>
                             <tr><td>xpos</td>     <td><div class="ui-widget"><input type="text" id="cxpos"  size="60" value=""></div></td></tr>
+                            <tr><td>deprel</td>   <td><div class="ui-widget"><input type="text" id="cdeprel2"  size="60" value=""></div></td></tr>
                             <tr><td>features</td> <td><div class="ui-widget">
                                         <!--input type="text" id="cfeats" size="50" value="" -->
                                         <textarea type="text" id="cfeats" rows="5" cols="60"></textarea>

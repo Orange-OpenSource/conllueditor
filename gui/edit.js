@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.0 as of 5th December 2021
+ @version 2.14.2 as of 29th December 2021
  */
 
 
@@ -262,7 +262,12 @@ function getServerInfo() {
                     position: {my: "left top", at: "left bottom"}
                 });
             });
-
+            $(function () {
+                $("#cdeprel2").autocomplete({
+                    source: deprellist,
+                    position: {my: "left top", at: "left bottom"}
+                });
+            });
 
             // inspired by https://jsfiddle.net/Twisty/yfdjyq79/
             $(function () {
@@ -919,6 +924,7 @@ function ModifyTree(evt) {
                 $("#clemma").val(conllword.lemma);
                 $("#cupos").val(conllword.upos);
                 $("#cxpos").val(conllword.xpos);
+                $("#cdeprel2").val(conllword.deprel);
                 extracols = [];
                 // delete eventually remaining table rows for extra columns
                 var ecs = document.getElementsByClassName("extracoltr");
@@ -1643,7 +1649,9 @@ $(document).ready(function () {
         if (conllword.xpos != $("#cxpos").val()) {
             sendmodifs({"cmd": "mod xpos " + conllword.id + " " + $("#cxpos").val()});
         }
-
+        if (conllword.deprel != $("#cdeprel2").val()) {
+            sendmodifs({"cmd": "mod deprel " + conllword.id + " " + $("#cdeprel2").val()});
+        }
         for (i = 0; i < extracols.length; i++) {
            //curval = document.getElementById("ct_" + extracols[i]).textContent.replace("[ \n]+", "\|");
            curval = document.getElementById("ct_" + extracols[i]).value.replace(/[ \n]+/, "\|");
