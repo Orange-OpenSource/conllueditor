@@ -24,7 +24,7 @@ The editor provides the following functionalities:
 * sentence metadata editing
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 
-Current version: 2.14.0
+Current version: 2.14.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
