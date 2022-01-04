@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.14.3
+* updated versions of dependencies in `pom.xml` to latest version available
+
 ## Version 2.14.2
 * possibility to modify `deprel` also in the word edit menu
 
