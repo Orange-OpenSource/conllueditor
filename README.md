@@ -290,6 +290,8 @@ if the button `show basic in enhanced` is active, all enhanced dependency relati
 
 ![Empty nodes](doc/graph_emptynode.png)
 
+see section [Enhanced Dependencies](#enhanced-dependencies) for more information
+
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
@@ -306,7 +308,18 @@ In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
 tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
+### Commands to be used with `modify` button:
 
+* `split id [splitpos]` 	split a word in two (it will be copied to a new node and attached to the same head). If `splitpos` is given, the characters of Form and Lemma left of splitpos will remain in the original word, the rest will be the new word
+* `join id` 	merge word with id with the following. If the merged word overlap in any way with a multitoken word (MTW), the MTW will be deleted
+* `insert id form [lemma [upos [xpos]]]` 	add a new word after word with id
+* `delete id` 	delete word with id. Any overlapping MTW will also be deleted
+* `sentsplit id` 	split current sentence at word id (id will be in the second sentence). Dependency and Enhanced Dependency relations between the words before and after the split will be deleted.
+* `sentjoin` 	merge current sentence with following
+* `compose id length` 	create a multitoken word (MTW). The inserted `n-m` line will contain the form of the word with `id`. In order to edit or delete a multitoken word, click on the multitoken bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multitoken word.
+* `tomtw id form1 form2 [form3 ...]` 	Transform an existing word into a MTW. The new MTW keeps the form of the word transformed. All other columns are copied to the first member word, except the form which is `form1` from the command line. `form2` etc are used to initialize the form (and lemma) column of the other members of the MTW. All members are initially attached to the first member using the fixed depedency relation.
+* `emptyinsert id form [lemma [upos [xpos]]]` 	add a new empty word after word with `id`. The new empty word gets the id `id.1`, if it is the first empty word at thihs position. If there is already an empty word, the new one will have the id `id.2` etc.
+* `emptydelete id.subid` 	delete empty word with id `id.subid`.
 
 ## Searching
 
@@ -454,6 +467,7 @@ in graphic mode can only be edited in flat mode. If the button `edit enhanced de
 clicking on words creates enhanced dependency relations. Click on the dependency label to modify it or to
 delete the enhanced dependency relation.
 Alternatively, enhanced dependencies can be edited manually via the word edit menu.
+
 
 ## Other annotation
 A subset of the [CoNLL-U Plus](http://universaldependencies.org/ext-format.html) is supported.
