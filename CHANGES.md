@@ -1,4 +1,6 @@
 # Changes
+## Version 2.15.0
+* added a script to find similar or identical sentences in a single or multiple CoNLL-U files
 
 ## Version 2.14.3
 * updated versions of dependencies in `pom.xml` to latest version available

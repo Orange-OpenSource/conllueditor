@@ -169,13 +169,13 @@ public class Analyser implements Runnable {
             }
         }
     }
-     
+
     // inspired by https://github.com/crwohlfeil/damerau-levenshtein
     /**
      * calculate the levenshtein-damerau distance between two lists of objects (characters or strings)
-     * @param source 
+     * @param source
      * @param target
-     * @return 
+     * @return
      */
     private int calculateDistance(List<? extends Object> source, List<? extends Object> target) {
         //if (source == null || target == null) {
