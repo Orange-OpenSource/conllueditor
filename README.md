@@ -23,8 +23,9 @@ The editor provides the following functionalities:
 * mass editing: modify tokens if a (complex) condition is satisfied
 * sentence metadata editing
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
+* finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.14.3 (see [change history](CHANGES.md))
+Current version: 2.15.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -741,6 +742,28 @@ For the time being the following scripts/languages are covered
 Other alphabets with a straight forward transliteration can be added easily added (please send me you updated translit.json file!).
 In some cases the transliteration can be erroneous, since this script does not take into account complex context depending transliterations. It is thought as a help for an initial version to be manually validated
 
+# Find similar Sentences
+
+When editing large treebanks it is likely that verys similar or even identical sentences are in the train/validation or test corpora
+There is a tool which helps to identify these sentences
+
+```
+./bin/findsimilar.sh number-of-threads <distances>  conllu-files ...
+```
+
+`distances` is a `:` separated list for the maximal permitted Levenshtein-Damerau edit distance, under which to sentences are regarded as being similar.
+There is one value per CoNLL-U column (Form, Lemma, Upos, Xpos, Features, Deprel).
+Missing columns at the end can be omitted. If the value is -1 no similarity is checked. For instance
+
+* `1` show pairs of sentences which are either identical or have a Levenshtein-Damerau distance of <= 1
+* `0:1` show pairs of sentences with identical forms or maximally one different lemma
+* `-1:-1:1` show pairs of sentences which have a Levenshtein distance of 2 or less on Upos
+
+For Form the Levenshtein distance is calculated on characters, whereas for all other columns, the Levenshtein distance
+is calculate on a token basis.
+
+Since every sentence will be compared once with every other sentence, 
+this will take some time for CoNLL-U files wich many sentences and only a single threads and maximal distances != 0
 
 # Known bugs
 * not all possible errors which users can make are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.
