@@ -213,24 +213,31 @@ public class Analyser implements Runnable {
     private void identical(String column, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
         System.out.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
         System.out.format("# %s\n", s1.sent);
-        if (column.equals("LEMMA")) {
-            System.out.format("# %s\n", s1.lemmas);
-        } else if (column.equals("UPOS")) {
-            System.out.format("# %s\n", s1.uposs);
-        }
+        printColumn(column, s1);
     }
 
     private void similar(String column, int dist, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
         System.out.format("%s similar %d\t%s\t%s\n", column, dist, s1.id, s2.id);
         System.out.format("# %s\n", s1.sent);
+        printColumn(column, s1);
         System.out.format("# %s\n", s2.sent);
+        printColumn(column, s2);
+    }
+
+
+    private void printColumn(String column, ConlluComparator.Signatures sig) {
         if (column.equals("LEMMA")) {
-            System.out.format("# %s\n", s1.lemmas);
-            System.out.format("# %s\n", s2.lemmas);
+            System.out.format("# Lemmas %s\n", String.join("\t", sig.lemmas));
         } else if (column.equals("UPOS")) {
-            System.out.format("# %s\n", s1.uposs);
-            System.out.format("# %s\n", s2.uposs);
+            System.out.format("# Upos %s\n", String.join("\t", sig.uposs));
+        } else if (column.equals("XPOS")) {
+            System.out.format("# Xpos %s\n", String.join("\t", sig.xposs));
+        } else if (column.equals("FEATS")) {
+            System.out.format("# Feats %s\n", String.join("\t", sig.feats));
+        } else if (column.equals("DEPREL")) {
+            System.out.format("# Deprel %s\n", String.join("\t", sig.deprels));
         }
     }
+
 
 }

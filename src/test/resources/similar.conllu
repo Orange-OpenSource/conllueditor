@@ -1,0 +1,56 @@
+# sent_id = fr-ud-dev_00001
+# text = Aviator, un film sur la vie de Howard Hughes.
+# sentence 0
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+2	,	,	PUNCT	_	_	1	punct	_	_
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	filM	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_
+5	sur	sur	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+8	de	de	ADP	_	_	9	case	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
+11	.	.	PUNCT	_	_	1	punct	_	_
+
+# sent_id = fr-ud-dev_00001
+# text = Aviator, un film sur la vie de Howard Hughes.
+# sentence 1
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+2	,	,	SYM	_	_	1	punct	_	_
+3	une	le	DET	_	Definite=Indi|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos:n	_	_
+5	sur	sur	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+8	de	de	ADP	_	_	9	case	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
+11	.	.	PUNCT	_	_	1	punct	_	_
+
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ?
+# sentence 2
+1	Mais	mais	CCONJ	_	_	3	cc	_	_
+2	comment	comment	ADV	_	_	3	advmod	_	_
+3	faire	faire	VERB	_	VerbForm=Inf	0	root	_	_
+4	dans	dans	ADP	_	_	6	case	_	_
+5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	contexte	contexte	NOUN	_	Gender=Masc|Number=Sing	3	obl	_	_
+7	structurellement	structurellement	ADV	_	_	8	advmod	_	_
+8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
+9	?	?	PUNCT	_	_	3	punct	_	_
+
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ?
+# sentence 3
+1	Mais	mais	SCONJ	_	_	3	cc	_	_
+2	comment	comment	ADV	_	_	3	advmod	_	_
+3	fair	faire	VERB	_	VerbForm=Inf	0	root	_	_
+4	dans	DANS	ADP	_	_	6	case	_	_
+5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	context	contexte	NOUN	_	Gender=Masc|Number=Sing	3	obl:1	_	_
+7	structurellement	structurellement	ADV	_	_	8	advmod:2	_	_
+8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
+9	?	??	SYM	_	_	3	punct	_	_
+

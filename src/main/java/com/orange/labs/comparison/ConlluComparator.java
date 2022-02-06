@@ -97,7 +97,7 @@ public class ConlluComparator {
     public void analyse(int form, int lemma, int upos, int xpos, int feats, int deprel) throws InterruptedException {
         List<String> keys = Arrays.asList(csents.keySet().toArray(new String[0]));
         int comps = 0;
-        for(int x = 1;  x< keys.size()-1; ++x) comps += x;
+        for(int x = 1;  x< keys.size(); ++x) comps += x;
         System.err.println(comps + " comparisons needed");
         List<Thread> thrs = new ArrayList<>();
 
@@ -145,9 +145,9 @@ public class ConlluComparator {
                 //forms.add(cw.getForm());
                 if (cw.getTokentype() != ConllWord.Tokentype.CONTRACTED) {
                     lemmas.add(cw.getLemma());
-                    uposs.add(cw.getLemma());
-                    xposs.add(cw.getLemma());
-                    deprels.add(cw.getLemma());
+                    uposs.add(cw.getUpostag());
+                    xposs.add(cw.getXpostag());
+                    deprels.add(cw.getDeplabel());
                     feats.add(cw.getFeaturesStr());
                 }
             }
