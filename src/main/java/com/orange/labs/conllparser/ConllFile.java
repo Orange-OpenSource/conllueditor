@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.1 as of 20th December 2021
+ @version 2.15.0 as of 5th February 2021
 */
 package com.orange.labs.conllparser;
 
@@ -74,6 +74,7 @@ public class ConllFile {
     // standard columns for conllu which can be edited graphically (more or less)
     // conllup columns are edited as text only
     static Set<String> conllustandard =  new LinkedHashSet<>(Arrays.asList("ID", "FORM", "LEMMA", "UPOS", "XPOS", "FEATS", "HEAD", "DEPREL", "DEPS", "MISC"));
+    File file;
 
     /**
      * open CoNLL-U File and read its contents
@@ -87,6 +88,7 @@ public class ConllFile {
      * @throws com.orange.labs.nlp.conllparser.ConllWord.ConllWordException
      */
     public ConllFile(File file, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws IOException, ConllException {
+        this.file = file;
         FileInputStream fis = new FileInputStream(file);
         parse(fis, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
         fis.close();
@@ -103,11 +105,13 @@ public class ConllFile {
      * @throws IOException
      */
     public ConllFile(String filecontents, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
+        this.file = new File("__contents__");
         InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
         parse(inputStream, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
     }
 
     public ConllFile(File file, Class<? extends ConllSentence> cs) throws IOException, ConllException {
+        this.file = file;
         conllsentenceSubclass = cs;
         FileInputStream fis = new FileInputStream(file);
         parse(fis, false, false);
@@ -119,13 +123,14 @@ public class ConllFile {
     }
 
     public ConllFile(String filecontents, Class<? extends ConllSentence> cs) throws ConllException, IOException {
+        this.file = new File("__contents__");
         conllsentenceSubclass = cs;
         InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
         parse(inputStream, false, false);
     }
 
     public ConllFile(InputStream inputStream) throws ConllException, IOException {
-
+        this.file = new File("__stream__");
         //InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
         parse(inputStream, false, false);
     }
@@ -432,6 +437,10 @@ public class ConllFile {
 
     }
 
+    public File getFile() {
+        return file;
+    }
+    
     public enum Output {
         TEXT, CONLL, ANN, LATEX
     };
