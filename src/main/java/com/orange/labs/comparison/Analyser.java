@@ -76,11 +76,11 @@ public class Analyser implements Runnable {
             ConlluComparator.Signatures cursent = csents.get(keys.get(i));
             for (int j = i + 1; j < len; ++j) {
                 if (j % totalthreads != modulo) {
-                    continue; // do only one sentence out of module
+                    continue; // do only one sentence out of totalthreads in this thread
                 }
                 //System.err.println("comparing " + i + " " + j);
                 ConlluComparator.Signatures othersent = csents.get(keys.get(j));
-                // compare
+
                 if (form == 0) {
                     boolean rtc = cursent.sent.equals(othersent.sent);
                     if (rtc) {
@@ -102,7 +102,6 @@ public class Analyser implements Runnable {
                     }
                 } else if (lemma > 0) {
                     int dist = calculateDistance(cursent.lemmas, othersent.lemmas);
-                    //System.err.println("ZZZZZ " + dist + "\n" + cursent.lemmas + "\n"+ othersent.lemmas);
                     if (dist == 0) {
                         identical("LEMMA", cursent, othersent);
                     } else if (dist <= lemma) {
@@ -117,7 +116,6 @@ public class Analyser implements Runnable {
                     }
                 } else if (upos > 0) {
                     int dist = calculateDistance(cursent.uposs, othersent.uposs);
-                    //System.err.println("ZZZZZ " + dist + "\n" + cursent.lemmas + "\n"+ othersent.lemmas);
                     if (dist == 0) {
                         identical("UPOS", cursent, othersent);
                     } else if (dist <= upos) {
@@ -213,28 +211,26 @@ public class Analyser implements Runnable {
 
 
     private void identical(String column, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
-        System.err.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
-        System.err.format("# %s\n", s1.sent);
+        System.out.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
+        System.out.format("# %s\n", s1.sent);
         if (column.equals("LEMMA")) {
-            System.err.format("# %s\n", s1.lemmas);
+            System.out.format("# %s\n", s1.lemmas);
         } else if (column.equals("UPOS")) {
-            System.err.format("# %s\n", s1.uposs);
+            System.out.format("# %s\n", s1.uposs);
         }
-
     }
 
     private void similar(String column, int dist, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
-        System.err.format("%s similar %d\t%s\t%s\n", column, dist, s1.id, s2.id);
-        System.err.format("# %s\n", s1.sent);
-        System.err.format("# %s\n", s2.sent);
+        System.out.format("%s similar %d\t%s\t%s\n", column, dist, s1.id, s2.id);
+        System.out.format("# %s\n", s1.sent);
+        System.out.format("# %s\n", s2.sent);
         if (column.equals("LEMMA")) {
-            System.err.format("# %s\n", s1.lemmas);
-            System.err.format("# %s\n", s2.lemmas);
+            System.out.format("# %s\n", s1.lemmas);
+            System.out.format("# %s\n", s2.lemmas);
         } else if (column.equals("UPOS")) {
-            System.err.format("# %s\n", s1.uposs);
-            System.err.format("# %s\n", s2.uposs);
+            System.out.format("# %s\n", s1.uposs);
+            System.out.format("# %s\n", s2.uposs);
         }
-
     }
 
 }

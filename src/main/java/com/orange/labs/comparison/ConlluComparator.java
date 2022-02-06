@@ -89,14 +89,16 @@ public class ConlluComparator {
 
     /**
      * finds identical/similar sentences. comparing all sentences with all
-     * others; $\sum_{i=0}^{i=n} i$ comparisons needed
+     * others; $\sum_{i=1}^{i=n-1} i$ comparisons needed
      *
      * @param form: 0: identical, >0 maximal Levenshtein-Damerau distance on entire sentence (charater level)
      * @param lemma: 0: identical, >0 maximal Levenshtein-Damerau distance on lemmas (token level)
      */
     public void analyse(int form, int lemma, int upos, int xpos, int feats, int deprel) throws InterruptedException {
         List<String> keys = Arrays.asList(csents.keySet().toArray(new String[0]));
-
+        int comps = 0;
+        for(int x = 1;  x< keys.size()-1; ++x) comps += x;
+        System.err.println(comps + " comparisons needed");
         List<Thread> thrs = new ArrayList<>();
 
         for (int th = 0; th < numberOfThreads; ++th) {
