@@ -99,7 +99,7 @@ public class ConlluComparator {
      */
     public void analyse(int form, int lemma, int upos, int xpos, int feats, int deprel) throws InterruptedException {
         List<String> keys = Arrays.asList(csents.keySet().toArray(new String[0]));
-        int comps = 0;
+        long comps = 0;
         for(int x = 1;  x< keys.size(); ++x) comps += x;
         System.err.println(comps + " comparisons needed");
         List<Thread> thrs = new ArrayList<>();
@@ -137,7 +137,7 @@ public class ConlluComparator {
         }
         // output identical sentences
         for (String sentence : identical.keySet()) {
-            System.out.format("FORM\t0\t%s\t%s\n", sentence, String.join("\t", identical.get(sentence)));
+            System.out.format("FORM\t0\t%s\t%d\t%s\n", sentence, identical.get(sentence).size(), String.join("\t", identical.get(sentence)));
         }
         for (String [] sim: similar) {
             System.out.println(String.join("\t", sim));

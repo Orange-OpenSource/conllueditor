@@ -32,6 +32,7 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.comparison;
 
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -97,7 +98,7 @@ public class Analyser implements Runnable {
                         identical("FORM", cursent, othersent);
                     }
                 } else if (form > 0) {
-                    int dist = calculateDistance(cursent.sentence, othersent.sentence);
+                    int dist = calculateDistance(cursent.sentence, othersent.sentence, form);
                     if (dist == 0) {
                         identical("FORM", cursent, othersent);
                     } else  if (dist <= form) {
@@ -111,7 +112,7 @@ public class Analyser implements Runnable {
                         identical("LEMMA", cursent, othersent);
                     }
                 } else if (lemma > 0) {
-                    int dist = calculateDistance(cursent.lemmas, othersent.lemmas);
+                    int dist = calculateDistance(cursent.lemmas, othersent.lemmas, lemma);
                     if (dist == 0) {
                         identical("LEMMA", cursent, othersent);
                     } else if (dist <= lemma) {
@@ -125,7 +126,7 @@ public class Analyser implements Runnable {
                         identical("UPOS", cursent, othersent);
                     }
                 } else if (upos > 0) {
-                    int dist = calculateDistance(cursent.uposs, othersent.uposs);
+                    int dist = calculateDistance(cursent.uposs, othersent.uposs, upos);
                     if (dist == 0) {
                         identical("UPOS", cursent, othersent);
                     } else if (dist <= upos) {
@@ -139,7 +140,7 @@ public class Analyser implements Runnable {
                         identical("XPOS", cursent, othersent);
                     }
                 } else if (xpos > 0) {
-                    int dist = calculateDistance(cursent.xposs, othersent.xposs);
+                    int dist = calculateDistance(cursent.xposs, othersent.xposs, xpos);
                     if (dist == 0) {
                         identical("XPOS", cursent, othersent);
                     } else if (dist <= xpos) {
@@ -153,7 +154,7 @@ public class Analyser implements Runnable {
                         identical("FEATS", cursent, othersent);
                     }
                 } else if (feats > 0) {
-                    int dist = calculateDistance(cursent.feats, othersent.feats);
+                    int dist = calculateDistance(cursent.feats, othersent.feats, feats);
                     if (dist == 0) {
                         identical("FEATS", cursent, othersent);
                     } else if (dist <= feats) {
@@ -167,7 +168,7 @@ public class Analyser implements Runnable {
                         identical("DEPREL", cursent, othersent);
                     }
                 } else if (deprel > 0) {
-                    int dist = calculateDistance(cursent.deprels, othersent.deprels);
+                    int dist = calculateDistance(cursent.deprels, othersent.deprels, deprel);
                     if (dist == 0) {
                         identical("DEPREL", cursent, othersent);
                     } else if (dist <= deprel) {
@@ -182,16 +183,20 @@ public class Analyser implements Runnable {
     // inspired by https://github.com/crwohlfeil/damerau-levenshtein
     /**
      * calculate the levenshtein-damerau distance between two lists of objects (characters or strings)
+     * levenstein_distance(a,b) >= |len(a) - len(b)|
      * @param source
      * @param target
      * @return
      */
-    private int calculateDistance(List<? extends Object> source, List<? extends Object> target) {
+    private int calculateDistance(List<? extends Object> source, List<? extends Object> target, int maxdist) {
         //if (source == null || target == null) {
         //    throw new IllegalArgumentException("Parameter must not be null");
         //}
         int sourceLength = source.size();
         int targetLength = target.size();
+        // if the length of the two sentences differs more than maxdist, we stop here
+        if (abs(sourceLength - targetLength) > maxdist) return abs(sourceLength - targetLength);
+
         if (sourceLength == 0) {
             return targetLength;
         }
