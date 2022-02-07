@@ -43,6 +43,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**
@@ -81,7 +83,8 @@ public class ConlluComparator {
         for (ConllFile cf : cdocs) {
             for (ConllSentence csent : cf.getSentences()) {
                 ct += 1;
-                String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
+                //String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
+                String id = String.format("%s#%s", cf.getFile(), csent.getSentid());
                 csents.put(id, new Signatures(csent, id));
             }
         }
@@ -100,20 +103,55 @@ public class ConlluComparator {
         for(int x = 1;  x< keys.size(); ++x) comps += x;
         System.err.println(comps + " comparisons needed");
         List<Thread> thrs = new ArrayList<>();
+        List<Analyser>analysers = new ArrayList<>();
 
         for (int th = 0; th < numberOfThreads; ++th) {
             Analyser a = new Analyser(th, numberOfThreads, keys, csents, form, lemma, upos, xpos, feats, deprel);
             Thread thr = new Thread(a);
             thr.start();
             thrs.add(thr);
+            analysers.add(a);
         }
 
         for(Thread thr : thrs) {
             thr.join();
         }
 
+        Map<String, Set<String>>identical = new LinkedHashMap<>(); // sentence: [ids]
+        List<String []>similar = new ArrayList<>();
+        // aggregate identical
+        for(Analyser a : analysers) {
+            for (String [] elems : a.getResults()) {
+                if (elems[0].equals("FORM") && elems[1].equals("0")) {
+                    Set<String>ids = identical.get(elems[4]);
+                    if (ids == null) {
+                        ids = new LinkedHashSet<>();
+                        identical.put(elems[4], ids);
+                    }
+                    ids.add(elems[2]);
+                    ids.add(elems[3]);
+                } else {
+                    similar.add(elems);
+                }
+            }
+        }
+        // output identical sentences
+        for (String sentence : identical.keySet()) {
+            System.out.format("FORM\t0\t%s\t%s\n", sentence, String.join("\t", identical.get(sentence)));
+        }
+        for (String [] sim: similar) {
+            System.out.println(String.join("\t", sim));
+        }
+    }
+    /** comparison results */
+    class Result {
+        public String id;
+        public int dist;
+        public String col;
     }
 
+
+    /** preprocess the sentences to speed up the comparison */
     class Signatures {
 
         public ConllSentence cs;
@@ -136,7 +174,7 @@ public class ConlluComparator {
             xposs = new ArrayList<>();
             deprels = new ArrayList<>();
             feats = new ArrayList<>();
-            sent = cs.getSentence();
+            sent = cs.getSentence().strip();
             sentence = new ArrayList<>();
             for (char c : sent.toCharArray()) {
                 sentence.add(c);

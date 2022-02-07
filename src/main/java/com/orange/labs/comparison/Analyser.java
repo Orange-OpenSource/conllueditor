@@ -32,6 +32,8 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.comparison;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +53,9 @@ public class Analyser implements Runnable {
     private int feats;
     private int deprel;
     Map<String, ConlluComparator.Signatures> csents; // unique id (filename#id#number): sentence
+    //Map<String, List<ConlluComparator.Result>> results; // store similar sentences: {id1: [(id2,dit)]}
+    List<String []> results; // store similar sentences: "column <TAB> dist <TAB> id1 <TAB> id2"
+    private boolean aggregate; // collect results and return
 
     public Analyser(int modulo, int totalthreads, List<String> keys, Map<String, ConlluComparator.Signatures> csents,
             int form, int lemma, int upos, int xpos, int feats, int deprel) {
@@ -66,13 +71,18 @@ public class Analyser implements Runnable {
         this.xpos = xpos;
         this.feats = feats;
         this.deprel = deprel;
-
+        aggregate = true;
+        if (aggregate) {
+            results = new ArrayList<>();
+        }
     }
 
     @Override
     public void run() {
         for (int i = 0; i < len; ++i) {
-            //System.err.println(modulo + ": Checking " + i);
+            if (modulo == 0 && i % 7 == 0) {
+                System.err.format("Checking %d/%d\r", i, len);
+            }
             ConlluComparator.Signatures cursent = csents.get(keys.get(i));
             for (int j = i + 1; j < len; ++j) {
                 if (j % totalthreads != modulo) {
@@ -90,7 +100,7 @@ public class Analyser implements Runnable {
                     int dist = calculateDistance(cursent.sentence, othersent.sentence);
                     if (dist == 0) {
                         identical("FORM", cursent, othersent);
-                    } else if (dist <= form) {
+                    } else  if (dist <= form) {
                         similar("FORM", dist, cursent, othersent);
                     }
                 }
@@ -166,6 +176,7 @@ public class Analyser implements Runnable {
                 }
             }
         }
+        if (modulo == 0) System.err.println();
     }
 
     // inspired by https://github.com/crwohlfeil/damerau-levenshtein
@@ -209,19 +220,34 @@ public class Analyser implements Runnable {
         return dist[sourceLength][targetLength];
     }
 
+    public List<String []> getResults() {
+        return results;
+    }
 
     private void identical(String column, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
+        if (aggregate) {
+            //results.add(String.format("%s\t0\t%s\t%s\t%s", column, s1.id, s2.id, s1.sent));
+            String [] e = { column, "0", s1.id, s2.id, s1.sent};
+            results.add(e);
+        } else {
         System.out.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
         System.out.format("# %s\n", s1.sent);
         printColumn(column, s1);
+        }
     }
 
     private void similar(String column, int dist, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
-        System.out.format("%s similar %d\t%s\t%s\n", column, dist, s1.id, s2.id);
-        System.out.format("# %s\n", s1.sent);
-        printColumn(column, s1);
-        System.out.format("# %s\n", s2.sent);
-        printColumn(column, s2);
+        if (aggregate) {
+            //results.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", column, dist, s1.id, s2.id, s1.sent, s2.sent));
+            String [] e = {column, ""+dist, s1.id, s2.id, s1.sent, s2.sent};
+            results.add(e);
+        } else {
+            System.out.format("%s similar %d\t%s\t%s\n", column, dist, s1.id, s2.id);
+            System.out.format("# %s\n", s1.sent);
+            printColumn(column, s1);
+            System.out.format("# %s\n", s2.sent);
+            printColumn(column, s2);
+        }
     }
 
 
