@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -58,6 +59,7 @@ public class ConlluComparator {
 
     private Map<String, Signatures> csents; // unique id (filename#id#number): sentence
     private int numberOfThreads;
+    Map<Integer, Integer>sentencelengths;  // sentencelength: number of sentences
 
     public ConlluComparator(List<? extends Object> objects, int numberOfThreads) throws ConllException, IOException {
         //public ConlluComparator(List<String> objects) throws ConllException, IOException {
@@ -79,6 +81,7 @@ public class ConlluComparator {
 
         this.numberOfThreads = numberOfThreads;
         csents = new LinkedHashMap<>();
+        sentencelengths = new TreeMap<>(); // sentencelength: number of sentences
         int ct = 0;
         for (ConllFile cf : cdocs) {
             for (ConllSentence csent : cf.getSentences()) {
@@ -86,8 +89,17 @@ public class ConlluComparator {
                 //String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
                 String id = String.format("%s#%s", cf.getFile(), csent.getSentid());
                 csents.put(id, new Signatures(csent, id));
+                int tokens = csent.getAllWords().size();
+                Integer occ = sentencelengths.get(tokens);
+                if (occ == null) {
+                    sentencelengths.put(tokens, 1);
+                } else {
+                     sentencelengths.put(tokens, occ+1);
+                }
+                
             }
         }
+        
     }
 
     /**
@@ -120,6 +132,8 @@ public class ConlluComparator {
         Map<String, Set<String>>identical = new LinkedHashMap<>(); // sentence: [ids]
         List<String []>similar = new ArrayList<>();
         // aggregate identical
+
+
         for(Analyser a : analysers) {
             for (String [] elems : a.getResults()) {
                 if (elems[0].equals("FORM") && elems[1].equals("0")) {
@@ -135,6 +149,22 @@ public class ConlluComparator {
                 }
             }
         }
+
+
+
+        System.out.println("# sentence lenghts");
+        for (int slen : sentencelengths.keySet()) {
+            System.out.format("#  %3d tokens: %4d sentences\n", slen, sentencelengths.get(slen));
+        }
+
+        if (form >= 0) {
+            int identical_form = 0;
+            for (String sentence : identical.keySet()) {
+                identical_form += identical.get(sentence).size();
+            }
+            System.out.format("# identical sentences (Form) %d/%d  %.1f%%\n", identical_form, keys.size(), (100.0*identical_form/keys.size()));
+        }
+
         // output identical sentences
         for (String sentence : identical.keySet()) {
             System.out.format("FORM\t0\t%s\t%d\t%s\n", sentence, identical.get(sentence).size(), String.join("\t", identical.get(sentence)));

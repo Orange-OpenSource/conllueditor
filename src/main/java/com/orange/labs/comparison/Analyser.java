@@ -34,7 +34,6 @@ package com.orange.labs.comparison;
 
 import static java.lang.Math.abs;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ public class Analyser implements Runnable {
     private int modulo; // current thread number
     private int totalthreads; // number of threads used (here we process one out of totalthread
     private List<String> keys;
-    private int len;
+    private int len; // number of sentences
     private int form;
     private int lemma;
     private int upos;
@@ -177,7 +176,9 @@ public class Analyser implements Runnable {
                 }
             }
         }
-        if (modulo == 0) System.err.println();
+        if (modulo == 0) {
+            System.err.format("Checked %d      \n", len);
+        }
     }
 
     // inspired by https://github.com/crwohlfeil/damerau-levenshtein
@@ -228,16 +229,17 @@ public class Analyser implements Runnable {
     public List<String []> getResults() {
         return results;
     }
-
+    
+    
     private void identical(String column, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
         if (aggregate) {
             //results.add(String.format("%s\t0\t%s\t%s\t%s", column, s1.id, s2.id, s1.sent));
             String [] e = { column, "0", s1.id, s2.id, s1.sent};
             results.add(e);
         } else {
-        System.out.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
-        System.out.format("# %s\n", s1.sent);
-        printColumn(column, s1);
+            System.out.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
+            System.out.format("# %s\n", s1.sent);
+            printColumn(column, s1);
         }
     }
 
