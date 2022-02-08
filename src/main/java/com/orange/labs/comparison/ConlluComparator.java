@@ -152,7 +152,7 @@ public class ConlluComparator {
 
 
 
-        System.out.println("# sentence lenghts");
+        System.out.println("# sentence lengths");
         for (int slen : sentencelengths.keySet()) {
             System.out.format("#  %3d tokens: %4d sentences\n", slen, sentencelengths.get(slen));
         }

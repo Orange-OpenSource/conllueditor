@@ -288,8 +288,8 @@
                         <b>make a dependency</b>: click first on the dependent and then on its new head. Clicking twice on a node makes it root
                         <br><b>modify the dependency relation</b>: left-click on the relation label
                         <br><b>modify the word (form, lemma, upos, xpos, ...)</b>: <span class="keydoc">control</span>-left-click or double-click on the node to modify
-                        <br><b>delete the word</b>: hit <span class="keydoc">delete</span>-key. Any overlapping MTW will also be deleted
-                        <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MTW has to be created). Setting the end token to 0 deletes the multitoken word.
+                        <br><b>delete the word</b>: hit <span class="keydoc">delete</span>-key. Any overlapping MWT will also be deleted
+                        <br><b>edit a multi-token word</b>: click on the grey bar spanning the words (to change start token, a new MWT has to be created). Setting the end token to 0 deletes the multiword token.
                         the <span class="userinputdoc">compose <i>id length</i></span> command allows to add new MW tokens.
                         <br><br>or use a command and hit the <span class="buttondoc">modify</span> button (replace the parts in <span class="userinputdoc"><i>italic</i></span> with the the new values):
 
@@ -321,19 +321,19 @@
                             <tr><td width="440px">&bull; <span class="userinputdoc">split <i>id</i> [<i>splitpos</i>]</span></td> <td>split a word in two
                                     (it will be copied to a new node and attached to the same head). If <i>splitpos</i> is given the characters of Form and Lemma left of <i>splitpos</i> will
                                     remain in the original word, the rest will be the new word</td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following. If the merged word overlap in any way with a multitoken word (MTW), the MTW will be deleted</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">join <i>id</i></span></td> <td>merge word with <i>id</i> with the following. If the merged word overlap in any way with a multiword token (MWT), the MWT will be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">insert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new word after word with <i>id</i></td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">delete <i>id</i></span></td> <td>delete word with <i>id</i>. Any overlapping MTW will also be deleted</td></tr>
+                            <tr><td>&bull; <span class="userinputdoc">delete <i>id</i></span></td> <td>delete word with <i>id</i>. Any overlapping MWT will also be deleted</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentsplit <i>id</i></span></td> <td>split current sentence at word id (id will be in the second sentence). Dependency and Enhanced Dependency relations between the words before and after the split will be deleted.</td></tr>
                             <tr><td>&bull; <span class="userinputdoc">sentjoin</span></td> <td>merge current sentence with following</td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">compose <i>id length</i></span></td> <td>create a multitoken word (MTW).
-                                    The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multitoken word, click on the multitoken
-                                    bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multitoken word.
+                            <tr><td>&bull; <span class="userinputdoc">compose <i>id length</i></span></td> <td>create a multiword token (MWT).
+                                    The inserted <i>n-m</i> line will contain the form of the word with <i>id</i>. In order to edit or delete a multiword token, click on the multiword token
+                                    bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multiword token.
                                     </td></tr>
-                            <tr><td>&bull; <span class="userinputdoc">tomtw <i>id form1 form2 [form3 ...]</i></span></td>
-                                <td>Transform an existing word into a MTW. The new MTW keeps the form of the word transformed. All other columns
+                            <tr><td>&bull; <span class="userinputdoc">tomwt <i>id form1 form2 [form3 ...]</i></span></td>
+                                <td>Transform an existing word into a MWT. The new MWT keeps the form of the word transformed. All other columns
                                     are copied to the first member word, except the form which is <i>form1</i> from the command line. <i>form2</i>
-                                    etc are used to initialize the form (and lemma) column of the other members of the MTW. All members are initially attached to
+                                    etc are used to initialize the form (and lemma) column of the other members of the MWT. All members are initially attached to
                                     the first member using the <i>fixed</i> depedency relation.
                                 </td></tr>
                             <tr><td>&bull; <span class="userinputdoc">emptyinsert <i>id form [lemma [upos [xpos]]]</i></span></td> <td>add a new empty word after word with <i>id</i>.
@@ -480,9 +480,9 @@
                             <li> <span class="userinputdoc">Feat</span> (Values: FeatureName=Value or FeatureName:Value. The Featurename must match <span class="userinputdoc">[A-Za-z_\[\]]+</span>, the Value must match <span class="userinputdoc">[A-Za-z0-9]+</span>)</li>
                             <li> <span class="userinputdoc">Misc</span> (Values: MiscName=Value or MiscName:Value. MiscName must match <span class="userinputdoc">[A-Za-z_]+</span>, the Value can be any string without  whitespaces, ')' and '&amp;')</li>
                             <li> <span class="userinputdoc">Id</span> (Values: integer)</li>
-                            <li> <span class="userinputdoc">MTW</span> (Values: length of the mult-token word <span class="userinputdoc">[2-9]</span>)</li>
+                            <li> <span class="userinputdoc">MWT</span> (Values: length of the mult-token word <span class="userinputdoc">[2-9]</span>)</li>
                             <li> <span class="userinputdoc">IsEmpty</span> (no value, true if the current node is empty)</li>
-                            <li> <span class="userinputdoc">IsMTW</span> (no value, true if the current node is a multi token word)</li>
+                            <li> <span class="userinputdoc">IsMWT</span> (no value, true if the current node is a multi token word)</li>
                         </ul>
 
                         In addition to key keys listed above, four functions are available to take the context of the token into account:
@@ -742,25 +742,25 @@
             </div>
         </div>
 
-        <!-- edit multitoken -->
-         <div class="modal" id="editMTW" tabindex="-1" role="dialog" aria-labelledby="deleteMTW" aria-hidden="true">
+        <!-- edit multiword token -->
+         <div class="modal" id="editMWT" tabindex="-1" role="dialog" aria-labelledby="deleteMWT" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="showDeleteMWE">Edit Multitoken Form</h5>
+                        <h5 class="modal-title" id="showDeleteMWE">Edit Multiword Token</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" >
-                        <!--span id="qqcurrentMTWfrom"></span>-<span id="qqcurrentMTWto"></span-->
+                        <!--span id="qqcurrentMWTfrom"></span>-<span id="qqcurrentMWTto"></span-->
                         <table>
-                            <tr><td>multitoken start</td> <td><div class="ui-widget"><input type="text" id="currentMTWfrom"  value="" disabled></div></td></tr>
-                            <tr><td>multitoken end</td>   <td><div class="ui-widget"><input type="text" id="currentMTWto"    value=""></div></td></tr>
-                            <tr><td>form</td>             <td><div class="ui-widget"><input type="text" id="currentMTWform"  value=""></div></td></tr>
+                            <tr><td>multiword token start</td> <td><div class="ui-widget"><input type="text" id="currentMWTfrom"  value="" disabled></div></td></tr>
+                            <tr><td>multiword token end</td>   <td><div class="ui-widget"><input type="text" id="currentMWTto"    value=""></div></td></tr>
+                            <tr><td>form</td>             <td><div class="ui-widget"><input type="text" id="currentMWTform"  value=""></div></td></tr>
                             <tr><td>misc</td>             <td><div class="ui-widget">
-                                        <!--input type="text" id="currentMTWmisc"  value=""-->
-                                        <textarea type="text" class="classmisc" id="currentMTWmisc" rows="4" cols="20"></textarea>
+                                        <!--input type="text" id="currentMWTmisc"  value=""-->
+                                        <textarea type="text" class="classmisc" id="currentMWTmisc" rows="4" cols="20"></textarea>
                                     </div></td></tr>
                         </table>
                     </div>

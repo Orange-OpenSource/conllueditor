@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.1 as of 22nd December 2021
+ @version 2.15.1 as of 8th February 2022
  */
 package com.orange.labs.conllparser;
 
@@ -242,8 +242,8 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
 
 
     @Override
-    public Boolean visitCheckMTW(ConditionsParser.CheckMTWContext ctx) {
-        String text = ctx.MTW().getText();
+    public Boolean visitCheckMWT(ConditionsParser.CheckMWTContext ctx) {
+        String text = ctx.MWT().getText();
         int wantedlength = Integer.parseInt(text.substring(4));
         ConllWord use = getCW();
         if (use == null) {

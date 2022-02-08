@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.13.1 as of 17th October 2021
+ @version 2.15.1 as of 8th February 2022
 */
 
 import com.orange.labs.conllparser.ConllException;
@@ -38,8 +38,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -141,7 +139,7 @@ public class TestConllFile {
     @Test
     public void test01rule4() throws IOException, ConllException {
         name("rule 4");
-        applyRule("MWT:2", "form:\"MTW2\"", "rule4.conllu");
+        applyRule("MWT:2", "form:\"MWT2\"", "rule4.conllu");
     }
 
     @Test
@@ -324,7 +322,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MTW, HEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '('}";
+            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MWT, HEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '('}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }

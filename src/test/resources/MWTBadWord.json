@@ -1,0 +1,5 @@
+{
+  "sentenceid": 4,
+  "maxsentence": 19,
+  "error": "Word 8 is part of a MWT already. «mod tomwt 8 aa bb»"
+}

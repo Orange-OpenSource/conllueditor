@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.0 as of 5th December 2021
+ @version 2.15.1 as of 8th February 2022
  */
 
 import com.google.gson.Gson;
@@ -328,8 +328,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test12EditJoinSplitBeforeMTW() throws IOException {
-        name("split/join before a MTW");
+    public void test12EditJoinSplitBeforeMWT() throws IOException {
+        name("split/join before a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".5");
         ce.setSaveafter(1);
@@ -378,16 +378,16 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test15CreateMTW() throws IOException {
-        name("create two MTW with three/two words and rename contracted form");
+    public void test15CreateMWT() throws IOException {
+        name("create two MWT with three/two words and rename contracted form");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".8");
         ce.setSaveafter(1);
         ce.process("mod compose 1 3", 17, "editinfo");
-        ce.process("mod editmtw 1 3 Dáselle", 17, "editinfo");
+        ce.process("mod editmwt 1 3 Dáselle", 17, "editinfo");
 
         ce.process("mod compose 6 2", 17, "editinfo");
-        ce.process("mod editmtw 6 7 ao Gloss=to_him", 17, "editinfo");
+        ce.process("mod editmwt 6 7 ao Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
         URL res = this.getClass().getResource("test.conllu.8"); // modified file
@@ -397,8 +397,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test16JoinOverlapMTWstart() throws IOException {
-        name("join overlapping be first word of a MTW");
+    public void test16JoinOverlapMWTstart() throws IOException {
+        name("join overlapping be first word of a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".9");
         ce.setSaveafter(1);
@@ -413,8 +413,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test17JoinOverlapMTWend() throws IOException {
-        name("join overlapping be last word of a MTW");
+    public void test17JoinOverlapMWTend() throws IOException {
+        name("join overlapping be last word of a MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".10");
         ce.setSaveafter(1);
@@ -429,8 +429,8 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test180MTWwithSpaceAfter() throws IOException {
-        name("create MTW with SpaceAfter=No");
+    public void test180MWTwithSpaceAfter() throws IOException {
+        name("create MWT with SpaceAfter=No");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".18");
         ce.setSaveafter(1);
@@ -445,16 +445,16 @@ public class TestConlluEditor {
     }
 
    @Test
-    public void test181MTWfromWord() throws IOException {
-        name("create MTW from Word");
+    public void test181MWTfromWord() throws IOException {
+        name("create MWT from Word");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".181");
         ce.setSaveafter(1);
         //String rtc =
         ce.process("mod misc 5 SpaceAfter=No", 0, "editinfo");
-        ce.process("mod tomtw 5 su uu ur", 0, "editinfo");
+        ce.process("mod tomwt 5 su uu ur", 0, "editinfo");
 
-        URL ref = this.getClass().getResource("test.split-to-mtw.conllu");
+        URL ref = this.getClass().getResource("test.split-to-mwt.conllu");
         URL res = this.getClass().getResource("test.conllu.181"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
@@ -463,23 +463,23 @@ public class TestConlluEditor {
 
 
   @Test
-    public void test182MTWfromWordError() throws IOException {
-        name("create MTW from word which is already part of an MTW");
+    public void test182MWTfromWordError() throws IOException {
+        name("create MWT from word which is already part of an MWT");
         ce.setCallcitcommot(false);
         ce.setBacksuffix(".182");
         ce.setSaveafter(1);
         //String rtc =
-        String rtc = ce.process("mod tomtw 8 aa bb", 4, "editinfo");
+        String rtc = ce.process("mod tomwt 8 aa bb", 4, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
-        File out = new File(folder, "MTWBadWord.json");
+        File out = new File(folder, "MWTBadWord.json");
 
         //System.err.println(prettyprintJSON(jelement));
         // delete CR (\r) otherwise this tests fails on Windows...
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
 
-        URL ref = this.getClass().getResource("MTWBadWord.json");
+        URL ref = this.getClass().getResource("MWTBadWord.json");
 
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),

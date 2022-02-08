@@ -14,7 +14,7 @@ The editor provides the following functionalities:
 * search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these,
       searching for subtrees, importing subtrees from current sentence, sd-parse support
 * edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
-* create multitoken words from existing words or add a MTW to contract two ore more existing words
+* create multiword tokens from existing words or add a MWT to contract two ore more existing words
 * git support
 * export of dependency graphs as svg or LaTeX (for the [tikz-dependency](https://ctan.org/pkg/tikz-dependency) package or
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.15.0 (see [change history](CHANGES.md))
+Current version: 2.15.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -312,13 +312,13 @@ tree/graph to open a dialogue which allows to edit or delete the token (i.e. the
 ### Commands to be used with `modify` button:
 
 * `split id [splitpos]` 	split a word in two (it will be copied to a new node and attached to the same head). If `splitpos` is given, the characters of Form and Lemma left of splitpos will remain in the original word, the rest will be the new word
-* `join id` 	merge word with id with the following. If the merged word overlap in any way with a multitoken word (MTW), the MTW will be deleted
+* `join id` 	merge word with id with the following. If the merged word overlap in any way with a multiword token (MWT), the existing MWT will be deleted
 * `insert id form [lemma [upos [xpos]]]` 	add a new word after word with id
-* `delete id` 	delete word with id. Any overlapping MTW will also be deleted
+* `delete id` 	delete word with id. Any overlapping MWT will also be deleted
 * `sentsplit id` 	split current sentence at word id (id will be in the second sentence). Dependency and Enhanced Dependency relations between the words before and after the split will be deleted.
 * `sentjoin` 	merge current sentence with following
-* `compose id length` 	create a multitoken word (MTW). The inserted `n-m` line will contain the form of the word with `id`. In order to edit or delete a multitoken word, click on the multitoken bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multitoken word.
-* `tomtw id form1 form2 [form3 ...]` 	Transform an existing word into a MTW. The new MTW keeps the form of the word transformed. All other columns are copied to the first member word, except the form which is `form1` from the command line. `form2` etc are used to initialize the form (and lemma) column of the other members of the MTW. All members are initially attached to the first member using the fixed depedency relation.
+* `compose id length` 	create a multiword token (MWT). The inserted `n-m` line will contain the form of the word with `id`. In order to edit or delete a multiword token, click on the multiword bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multiword token.
+* `tomwt id form1 form2 [form3 ...]` 	Transform an existing word into a MWT. The new MWT keeps the form of the word transformed. All other columns are copied to the first member word, except the form which is `form1` from the command line. `form2` etc are used to initialize the form (and lemma) column of the other members of the MWT. All members are initially attached to the first member using the fixed depedency relation.
 * `emptyinsert id form [lemma [upos [xpos]]]` 	add a new empty word after word with `id`. The new empty word gets the id `id.1`, if it is the first empty word at thihs position. If there is already an empty word, the new one will have the id `id.2` etc.
 * `emptydelete id.subid` 	delete empty word with id `id.subid`.
 

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.4 as of 17th September 2021
+ @version 2.15.1 as of 8th February 2022
  */
 package com.orange.labs.conllparser;
 
@@ -892,7 +892,7 @@ public class ConllWord {
      * @param validdeprels set of valid deprel values
      * @param validfeats map of valid UPOS:feat=value values
      * @param highlight
-     * @param contracted map of MTWs
+     * @param contracted map of MWTs
      * @param ae collect error types here
      * @return
      */

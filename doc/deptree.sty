@@ -8,14 +8,14 @@
 \def\@deprelcolor{black} % line
 \def\@depreltextcolor{black} % text
 \def\@deprellabelcolor{gray} % frame
-\def\@mtwlabelcolor{black!7} % frame
+\def\@mwtlabelcolor{black!7} % frame
 \def\@deprelbgcolor{black!5}
 \def\@depreltextfont{\footnotesize} 
 \def\@wordfont{}
 \def\@wordcolor{black}
 \def\@bottomwordfont{\small} 
 \def\@posfont{} 
-\def\@mtwfont{\scriptsize} 
+\def\@mwtfont{\scriptsize} 
 % define styles for arrows, words and dep labels
 \tikzstyle{dottedline} = [draw, dashed, color=gray]
 \tikzstyle{line} = [draw, very thick, color=\@deprelcolor, -latex']
@@ -69,8 +69,8 @@
                   rounded corners]
 
 \tikzstyle{wglabel} = [draw=black,
-                       font=\@mtwfont,
-                       fill=\@mtwlabelcolor,
+                       font=\@mwtfont,
+                       fill=\@mwtlabelcolor,
                        rounded corners]
 
 
@@ -85,8 +85,8 @@
 \def\setwordcolor#1{\def\@wordcolor{#1}}
 \def\setbottomwordfont#1{\def\@bottomwordfont{#1}}
 \def\setposfont#1{\def\@posfont{#1}}
-\def\setmtwfont#1{\def\@mtwfont{#1}}
-\def\setmtwlabelcolor#1{\def\@mtwlabelcolor{#1}}
+\def\setmwtfont#1{\def\@mwtfont{#1}}
+\def\setmwtlabelcolor#1{\def\@mwtlabelcolor{#1}}
 
 \def\@bottom{0}
 \def\setbottom#1{\def\@bottom{#1}}

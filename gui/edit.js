@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2021, Orange S.A.
+ Copyright (c) 2018-2022, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.2 as of 29th December 2021
+ @version 2.15.1 as of 8th February 2022
  */
 
 
@@ -319,7 +319,7 @@ function getServerInfo() {
                 function extractLast(term) {
                     return split(term).pop();
                 }
-                // use class here to make MISC-autocompletion work in editMTW and wordedit
+                // use class here to make MISC-autocompletion work in editMWT and wordedit
                 $(".classmisc") //$("#cmisc")
                 .on("keydown", function(event) {
                     if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
@@ -693,7 +693,7 @@ function getWordLengthsOfTree(item, maxlen) {
 }
 
 var conllwords = {}; // all words of current sentence
-var mtws = {}; // all multitoke words of current sentence
+var mwts = {}; // all multiword tokens of current sentence
 var clickedNodes = [];
 var unprocessedkeystrokes = []; // process multi key shortcuts
 var deprels = [];
@@ -1103,25 +1103,25 @@ function ModifyTree(evt) {
             $("#enhdeprelEdit").modal();
         } else if (id[0] == "mwe") {
             //alert("MT MWE: " + id + " " + target);
-            $("#currentMTWfrom").val(id[1]);
-            $("#currentMTWto").val(id[2]);
-            $("#currentMTWform").val(id[3]);
+            $("#currentMWTfrom").val(id[1]);
+            $("#currentMWTto").val(id[2]);
+            $("#currentMWTform").val(id[3]);
 
             var mc = "";
 
-            if (mtws[id[1]].misc != undefined) {
-                    for (e = 0; e < mtws[id[1]].misc.length; ++e) {
-                        var mch = mtws[id[1]].misc[e];
+            if (mwts[id[1]].misc != undefined) {
+                    for (e = 0; e < mwts[id[1]].misc.length; ++e) {
+                        var mch = mwts[id[1]].misc[e];
                         if (e > 0)
                             mc += "#"; //\n";
                         mc += mch.name + "=" + mch.val;
                     }
                 } else
                     mc = "_";
-            $("#currentMTWmisc").val(mc)
+            $("#currentMWTmisc").val(mc)
 
 
-            $("#editMTW").modal();
+            $("#editMWT").modal();
 
             $("#mods").val("");
 
@@ -1438,11 +1438,11 @@ function formatPhrase(item) {
         }
 
         // create similar table for MWE
-        mtws = {};
+        mwts = {};
         for (wid in conllwords) {
             cw = conllwords[wid];
             if (cw.mwe != undefined) {
-                mtws[wid] = cw.mwe;
+                mwts[wid] = cw.mwe;
             }
         }
     }
@@ -1622,15 +1622,15 @@ $(document).ready(function () {
         
     });
 
-    /* delete clicked MTW form */
+    /* delete clicked MWT form */
     $('#editMWtoken').click(function () {
-        misc = $("#currentMTWmisc").val(); //.replace(/\n+/, ",");
-        sendmodifs({"cmd": "mod editmtw "
-                    + $("#currentMTWfrom").val()
-                    + " " + $("#currentMTWto").val()
-                    + " " + $("#currentMTWform").val()
+        misc = $("#currentMWTmisc").val(); //.replace(/\n+/, ",");
+        sendmodifs({"cmd": "mod editmwt "
+                    + $("#currentMWTfrom").val()
+                    + " " + $("#currentMWTto").val()
+                    + " " + $("#currentMWTform").val()
                     + " " + misc});
-        $('#editMTW').modal('hide');
+        $('#editMWT').modal('hide');
     });
 
 

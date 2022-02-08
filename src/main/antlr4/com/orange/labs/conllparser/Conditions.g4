@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.1 as of 22nd December 2021
+ @version 2.15.1 as of 8th February 2022
 */
 
 // grammar to parse the conditions for complex search (and replace) and mass editing
@@ -64,7 +64,7 @@ field
     | ABSEUD     # checkAbsEUD
     | RELEUD     # checkRelEUD
 //    | EUD     # checkEUD
-    | MTW        # checkMTW
+    | MWT        # checkMWT
     | ISEMPTY    # checkEmpty
     | ISMWT      # checkIsMWT
     ;
@@ -78,7 +78,7 @@ DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
 FEAT   : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
 MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
-MTW    : 'MWT:' [2-9] ; // length of a MWT in tokens
+MWT    : 'MWT:' [2-9] ; // length of a MWT in tokens
 HEADID : 'HeadId:' [+-]?[0-9]+ ;
 RELEUD    : 'EUD:' ([+-][0-9]+) [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
 ABSEUD    : 'EUD:' ([0-9]+|'*') [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;

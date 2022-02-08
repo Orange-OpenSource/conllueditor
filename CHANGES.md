@@ -1,4 +1,7 @@
 # Changes
+## Version 2.15.1
+* corrected confusion: ConlluEditor deals with MWT (multiword tokens) and not with MTWs...
+
 ## Version 2.15.0
 * added a script to find similar or identical sentences in a single or multiple CoNLL-U files
 
@@ -72,7 +75,7 @@
 * new default for saving: without the option `--saveAfter` the conllu file is saved whenever a new sentence is chosen (next, prec, ...)
   the old behaviour (save every modification immediately) can be achieved using the option `--saveAfter 1`
 * shortcuts can be defined for two keys
-* `mod compose startid length [form]` optional form of the new MTW
+* `mod compose startid length [form]` optional form of the new MWT
 
 ## Version 2.9.1
 * correction: replace `\n` in `MISC:SpacesAfter=` by space in `# text = ` metadata line
@@ -92,20 +95,20 @@
 
 ## Version 2.8.0
 * add `--compare` option to Docker image
-* make `MISC` autocompletion work when editing MTW
-* new command to transform existing word in MTW
+* make `MISC` autocompletion work when editing MWT
+* new command to transform existing word in MWT
 * new tests
 
 ## Version 2.7.5
 * Warning improved
-* bug corrected in MTW creation (delete Space(s)After from MTW member tokens and add value from last memeber token to the MTW token
-* put concatenated forms of created MTW to the FORM column of the MTW
+* bug corrected in MWT creation (delete Space(s)After from MWT member tokens and add value from last memeber token to the MWT token
+* put concatenated forms of created MWT to the FORM column of the MWT
 
 ## Version 2.7.4
 * Error if edited file is not controlled under git AND there is already a backup-file (.2) in order to avoid overwriting the output of a preceding editing
 
 ## Version 2.7.3
-* bug corrected when inserting new MTW and serializing MTWs with Space(s)After to CoNLL-U
+* bug corrected when inserting new MWT and serializing MWTs with Space(s)After to CoNLL-U
 
 ## Version 2.7.2
 * search: find word on multiple criteria
@@ -137,7 +140,7 @@
 
 ## Version 2.4.3
 * multi word token larger, bug for variable size corrected
-* fixing issue #7 (if two words overlapping with a MTW are joined, the MTW will be deleted)
+* fixing issue #7 (if two words overlapping with a MWT are joined, the MWT will be deleted)
 * fixing issue #6 (joining/splitting sentences sets correctly `# text =` metadata)
 * new tests, tests updates
 

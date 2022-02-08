@@ -58,9 +58,9 @@ import java.util.regex.Pattern;
  */
 public class ConllSentence {
 
-    protected List<ConllWord> words; // no empty words and MTW
+    protected List<ConllWord> words; // no empty words and MWT
     protected Map<Integer, List<ConllWord>> emptywords = null; // main id (before "."): empty nodes
-    protected Map<Integer, ConllWord> contracted = null; // contracted words (MTW) startid (before hyphen): word
+    protected Map<Integer, ConllWord> contracted = null; // contracted words (MWT) startid (before hyphen): word
 
     //private final int shift; // il y a des fichiers conll qui ont des colonnes supplémentaires AVANT la colonne id il faut les ignorer; shift est le nombre des colonnes à gauche à ignorer
     private boolean hasAnnot = false; // au moins une annotation dans la phrase
@@ -467,7 +467,7 @@ public class ConllSentence {
             }
         }
 
-        // delete MTWs if the split goes through it
+        // delete MWTs if the split goes through it
         to_delete_from_this.clear();
         if (contracted != null) {
             for (Integer key : contracted.keySet()) {
@@ -1029,7 +1029,7 @@ public class ConllSentence {
 
             if (contracted != null) {
                 for (ConllWord cc : contracted.values()) {
-                    sb.append("\\mtw{")
+                    sb.append("\\mwt{")
                             .append(position.get(Integer.toString(cc.getId()))).append("}{")
                             .append(position.get(Integer.toString(cc.getSubid()))).append("}{")
                             .append(cc.getForm()).append("}\n");
@@ -1297,14 +1297,14 @@ public class ConllSentence {
     }
 
     /**
-     * returns true, if the word is part of a MTW
+     * returns true, if the word is part of a MWT
      */
-    public boolean isPartOfMTW(int id) {
+    public boolean isPartOfMWT(int id) {
         if (contracted == null) {
             return false;
         }
-        for (ConllWord mtw : contracted.values()) {
-            if (id >= mtw.getId() && id <= mtw.getSubid()) {
+        for (ConllWord mwt : contracted.values()) {
+            if (id >= mwt.getId() && id <= mwt.getSubid()) {
                 return true;
             }
         }
@@ -1319,17 +1319,17 @@ public class ConllSentence {
                 cw.setHead(0);
             }
 
-            // delete MTW of which removed word is part
+            // delete MWT of which removed word is part
             if (contracted != null) {
-                Set<ConllWord> mtws = new HashSet<>();
-                for (ConllWord mtw : contracted.values()) {
-                    if (mtw.getId() == id || mtw.getSubid() == id) {
-                        mtws.add(mtw);
+                Set<ConllWord> mwts = new HashSet<>();
+                for (ConllWord mwt : contracted.values()) {
+                    if (mwt.getId() == id || mwt.getSubid() == id) {
+                        mwts.add(mwt);
                     }
                 }
 
-                for (ConllWord mtw : mtws) {
-                    ConllWord removed = contracted.remove(mtw.getId());
+                for (ConllWord mwt : mwts) {
+                    ConllWord removed = contracted.remove(mwt.getId());
                     removed.setMysentence(null);
                 }
             }
@@ -1395,19 +1395,19 @@ public class ConllSentence {
             ConllWord current = words.get(id - 1);
             ConllWord other = words.get(id);
 
-            // get all first and last tokens of MTW
-            // we delete a MTW if the joined words are at hte border or overlapping with the MTW
+            // get all first and last tokens of MWT
+            // we delete a MWT if the joined words are at hte border or overlapping with the MWT
             if (contracted != null) {
-                Set<ConllWord> mtws = new HashSet<>();
-                for (ConllWord mtw : contracted.values()) {
-                    if (mtw.getId() == id || mtw.getId() == id + 1
-                            || mtw.getSubid() == id || mtw.getSubid() == id + 1) {
-                        mtws.add(mtw);
+                Set<ConllWord> mwts = new HashSet<>();
+                for (ConllWord mwt : contracted.values()) {
+                    if (mwt.getId() == id || mwt.getId() == id + 1
+                            || mwt.getSubid() == id || mwt.getSubid() == id + 1) {
+                        mwts.add(mwt);
                     }
                 }
 
-                for (ConllWord mtw : mtws) {
-                    contracted.remove(mtw.getId());
+                for (ConllWord mwt : mwts) {
+                    contracted.remove(mwt.getId());
                 }
             }
 
@@ -1861,13 +1861,13 @@ public class ConllSentence {
             if (pos2id != null) {
                 pos2id.put(sb.length(), word.getId());
             }
-            ConllWord mtw = null;
+            ConllWord mwt = null;
             if (contracted != null) {
-                mtw = contracted.get(word.getId());
+                mwt = contracted.get(word.getId());
             }
-            if (mtw != null) {
-                sb.append(mtw.getForm()).append(mtw.getSpacesAfter());
-                contracted_until = mtw.getSubid();
+            if (mwt != null) {
+                sb.append(mwt.getForm()).append(mwt.getSpacesAfter());
+                contracted_until = mwt.getSubid();
             } else if (contracted_until == 0 || word.getId() > contracted_until) {
                 sb.append(word.getForm()).append(word.getSpacesAfter());
             }
@@ -2049,7 +2049,7 @@ public class ConllSentence {
 
     /**
      * calculate start and end offset for each word. contracted word as well.
-     * Parts of contracted words copy the values form the MTW
+     * Parts of contracted words copy the values form the MWT
      *
      * @param start offset of first word
      * @param return the offset after the last word (including SpaceAfter)

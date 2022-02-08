@@ -710,17 +710,17 @@ public class ConlluEditor {
                                        fields:
                                          pos (set upos to <value> and xpos to <value2>)
                                          extracol (set extracolumn named <value> to <value2>)
-          mod tomtw <tokenid> <form1> <form2> [...]
+          mod tomwt <tokenid> <form1> <form2> [...]
                                      transform a token into a multiword token, with the tokens given (form1, form2, ...)
                                      e.g if token 3 is "wanna",
                                          3	wanna	wanna VERB	...
-                                     "mod tomtw 2 want to" creates
+                                     "mod tomwt 2 want to" creates
                                          3-4	wanna	_	_	...
                                          3	want	wanna	VERB	...
                                          4	to	_	_	...
                                     (tokens 3 and 4 normally have to be further edited)
           mod compose <tokenid> <length> [form]
-                                     make a MTW from <length> tokens starting with token <tokenid>
+                                     make a MWT from <length> tokens starting with token <tokenid>
                                      e.g
                                          5	do	VERB	...
                                          6	n't	PART	...
@@ -728,8 +728,8 @@ public class ConlluEditor {
                                          5-6	don't	_	_	...
                                          5	do	VERB	...
                                          6	n't	PART	...
-          mod editmtw <starttokenid> <endtokenid> [<MISC data>]
-                                     modify the span of a current MTW (or delete it by setting <endtokenid> to 0
+          mod editmwt <starttokenid> <endtokenid> [<MISC data>]
+                                     modify the span of a current MWT (or delete it by setting <endtokenid> to 0
 
           mod split <tokenid> [<position>]]
                                      split the token with <tokenid> in two. If <position> split form  (and lemma) at this position,
@@ -1436,8 +1436,8 @@ public class ConlluEditor {
                 }
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod tomtw")) {
-                // make a MTW from a word: mod tomtw <id> word1 word2 ...
+            } else if (command.startsWith("mod tomwt")) {
+                // make a MWT from a word: mod tomwt <id> word1 word2 ...
                 String[] f = command.trim().split(" +");
                 if (f.length < 5) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
@@ -1454,7 +1454,7 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID id (not an integer) «" + f[2] + "» " + e.getMessage(), currentSentenceId);
                 }
 
-                if (csent.isPartOfMTW(id)) {
+                if (csent.isPartOfMWT(id)) {
                     return formatErrMsg("Word " + id + " is part of a MWT already. «" + command + "»", currentSentenceId);
                 }
 
@@ -1463,8 +1463,8 @@ public class ConlluEditor {
                 }
                 history.add(csent);
 
-                // insert a new MTW before the current word
-                // the current word becomes the first word of the MTW (inheriting all columns except form)
+                // insert a new MWT before the current word
+                // the current word becomes the first word of the MWT (inheriting all columns except form)
                 ConllWord cw = csent.getWord(id);
                 ConllWord composedWord = new ConllWord(cw.getForm(), id, id + f.length - 4);
 
@@ -1526,7 +1526,7 @@ public class ConlluEditor {
                     }
                     complen = Integer.parseInt(f[3]);
                     if (id + complen > csent.getWords().size()) {
-                        return formatErrMsg("INVALID MTW length (to big) «" + command + "»", currentSentenceId);
+                        return formatErrMsg("INVALID MWT length (to big) «" + command + "»", currentSentenceId);
                     }
                 } catch (NumberFormatException e) {
                     return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
@@ -1538,8 +1538,8 @@ public class ConlluEditor {
                 }
                 history.add(csent);
 
-                // delete all Space(s)After in tokens which are now part of the MTW and add the correct SpaceAfter
-                // to the new MTW
+                // delete all Space(s)After in tokens which are now part of the MWT and add the correct SpaceAfter
+                // to the new MWT
                 String spaceAfterVal = null;
                 String spaceAfterKey = null;
                 String composedForm = "";
@@ -1581,7 +1581,7 @@ public class ConlluEditor {
 
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod editmtw") || command.startsWith("mod editmwe")) { // mod editmmtwwe current_start new_end form [MISC column data]
+            } else if (command.startsWith("mod editmwt") || command.startsWith("mod editmwe")) { // mod editmwt current_start new_end form [MISC column data]
                 String[] f = command.trim().split(" +");
                 if (f.length < 5) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
