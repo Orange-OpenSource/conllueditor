@@ -181,7 +181,7 @@ public class ConllSentence {
         hasEnhancedDeps = false;
         //Set<Annotation> lastAnnots = null;
         List<String> lastnonstandardinfo = null;
-        Pattern translationFields = Pattern.compile("^# text_([a-z]{2,3}) *= *(.*)$");
+        Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
 
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             String line = cline.getValue();
