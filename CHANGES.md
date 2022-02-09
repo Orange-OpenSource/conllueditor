@@ -1,4 +1,9 @@
 # Changes
+
+## Version 2.15.2
+* use commons-cli to parse command-line options for ConlluEditor and ConlluComparator
+* new tests
+
 ## Version 2.15.1
 * corrected confusion: ConlluEditor deals with MWT (multiword tokens) and not with MTWs...
 

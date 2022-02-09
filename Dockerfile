@@ -1,9 +1,9 @@
 FROM openjdk:8-alpine
 
-# docker build -t jheinecke/conllueditor:2.14.1 .
+# docker build -t jheinecke/conllueditor:2.15.2 .
 # docker build -t jheinecke/conllueditor:latest .
 # docker run -t --rm --name conllueditor -p 5555:5555 --user 1000:1000  -v </absolute/path/to/datadir>:/data  --env filename=tt.conllu jheinecke/conllueditor:latest
-# docker push jheinecke/conllueditor:2.14.1
+# docker push jheinecke/conllueditor:2.15.2
 # docker push jheinecke/conllueditor:latest
 
 # docker exec -it conllueditor /bin/sh

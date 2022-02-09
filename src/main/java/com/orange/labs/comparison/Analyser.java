@@ -45,19 +45,26 @@ public class Analyser implements Runnable {
     private int modulo; // current thread number
     private int totalthreads; // number of threads used (here we process one out of totalthread
     private List<String> keys;
+    Map<String, ConlluComparator.Signatures> csents; // unique id (filename#id#number): sentence
+    // group 2
+    private List<String> keys2;
+    Map<String, ConlluComparator.Signatures> csents2; // unique id (filename#id#number): sentence
     private int len; // number of sentences
+    private int len2; // number of sentences
     private int form;
     private int lemma;
     private int upos;
     private int xpos;
     private int feats;
     private int deprel;
-    Map<String, ConlluComparator.Signatures> csents; // unique id (filename#id#number): sentence
+
     //Map<String, List<ConlluComparator.Result>> results; // store similar sentences: {id1: [(id2,dit)]}
     List<String []> results; // store similar sentences: "column <TAB> dist <TAB> id1 <TAB> id2"
     private boolean aggregate; // collect results and return
 
-    public Analyser(int modulo, int totalthreads, List<String> keys, Map<String, ConlluComparator.Signatures> csents,
+    public Analyser(int modulo, int totalthreads,
+            List<String> keys, Map<String, ConlluComparator.Signatures> csents,
+            List<String> keys2, Map<String, ConlluComparator.Signatures> csents2,
             int form, int lemma, int upos, int xpos, int feats, int deprel) {
         System.err.println("Create Analyser " + modulo);
         this.modulo = modulo;
@@ -65,6 +72,9 @@ public class Analyser implements Runnable {
         this.keys = keys;
         this.len = keys.size();
         this.csents = csents;
+        this.keys2 = keys2;
+        this.len2 = keys2.size();
+        this.csents2 = csents2;
         this.form = form;
         this.lemma = lemma;
         this.upos = upos;
@@ -84,12 +94,21 @@ public class Analyser implements Runnable {
                 System.err.format("Checking %d/%d\r", i, len);
             }
             ConlluComparator.Signatures cursent = csents.get(keys.get(i));
-            for (int j = i + 1; j < len; ++j) {
+            //for (int j = i + 1; j < len2; ++j) {
+            int start;
+            if (csents == csents2) {
+                // only group1, only compare sentencen i with sentences i+1 ... n
+                start = i + 1;
+            } else {
+                // two groups compare all sentences from group1 with all sentences from group2
+                start = 0;
+            }
+            for (int j = start; j < len2; ++j) {
                 if (j % totalthreads != modulo) {
                     continue; // do only one sentence out of totalthreads in this thread
                 }
                 //System.err.println("comparing " + i + " " + j);
-                ConlluComparator.Signatures othersent = csents.get(keys.get(j));
+                ConlluComparator.Signatures othersent = csents2.get(keys2.get(j));
 
                 if (form == 0) {
                     boolean rtc = cursent.sent.equals(othersent.sent);
@@ -229,12 +248,12 @@ public class Analyser implements Runnable {
     public List<String []> getResults() {
         return results;
     }
-    
-    
+
+
     private void identical(String column, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
         if (aggregate) {
             //results.add(String.format("%s\t0\t%s\t%s\t%s", column, s1.id, s2.id, s1.sent));
-            String [] e = { column, "0", s1.id, s2.id, s1.sent};
+            String [] e = { column, "0", s1.id, s2.id, s1.getColumnAsString(column)};
             results.add(e);
         } else {
             System.out.format("%s identical\t%s\t%s\n", column, s1.id, s2.id);
@@ -246,7 +265,7 @@ public class Analyser implements Runnable {
     private void similar(String column, int dist, ConlluComparator.Signatures s1, ConlluComparator.Signatures s2) {
         if (aggregate) {
             //results.add(String.format("%s\t%d\t%s\t%s\t%s\t%s", column, dist, s1.id, s2.id, s1.sent, s2.sent));
-            String [] e = {column, ""+dist, s1.id, s2.id, s1.sent, s2.sent};
+            String [] e = {column, ""+dist, s1.id, s2.id, s1.getColumnAsString(column), s2.getColumnAsString(column)};
             results.add(e);
         } else {
             System.out.format("%s similar %d\t%s\t%s\n", column, dist, s1.id, s2.id);

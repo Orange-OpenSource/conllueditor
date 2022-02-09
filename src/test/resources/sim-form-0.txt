@@ -1,0 +1,4 @@
+# sentence lengths (group1)
+#    9 tokens:    2 sentences
+#   11 tokens:    2 sentences
+# identical sentences (Form) 0/4  0,0%

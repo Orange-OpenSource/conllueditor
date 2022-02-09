@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.15.1 (see [change history](CHANGES.md))
+Current version: 2.15.2 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -745,25 +745,36 @@ In some cases the transliteration can be erroneous, since this script does not t
 # Find similar Sentences
 
 When editing large treebanks it is likely that verys similar or even identical sentences are in the train/validation or test corpora
-There is a tool which helps to identify these sentences
+There is a tool which helps to identify these sentences.
+
+The following command shows all sentences which appear more than once in any of the given files
+```
+./bin/findsimilar.sh options --group1 file1.conllu file2.conllu ...
+```
+To find overlapping sentences which are in a test-corpus and in dev- or train-corpus, use
 
 ```
-./bin/findsimilar.sh number-of-threads <distances>  conllu-files ...
+./bin/findsimilar.sh options --group1 cy_ccg-ud-dev.conllu cy_ccg-ud-train.conllu --group2 cy_ccg-ud-test.conllu
 ```
 
-`distances` is a `:` separated list for the maximal permitted Levenshtein-Damerau edit distance, under which to sentences are regarded as being similar.
-There is one value per CoNLL-U column (Form, Lemma, Upos, Xpos, Features, Deprel).
-Missing columns at the end can be omitted. If the value is -1 no similarity is checked. For instance
+options:
+* `--group1 <files>`   first group of conllu files. If `--group2` is absent, all identical/similar sentences in all given files are shown
+* `--group2 <files>`   second group of conllu files. If present only sentences overlapping in any file of group1 and in any file of
+                       group2 are shown
+* `--deprel <int>`     maximal Levenshtein-Damerau distance for deprel (token level)
+* `--form <int>`       maximal Levenshtein-Damerau distance for forms (character level, default value 0)
+* `--feats <int>`      maximal Levenshtein-Damerau distance for feats (token level, default: do not check)
+* `--lemma <int>`      maximal Levenshtein-Damerau distance for lemmas (token level, default: do not check)
+* `--upos <int>`       maximal Levenshtein-Damerau distance for upos (token level, default: do not check)
+* `--xpos <int>`       maximal Levenshtein-Damerau distance for xpos (token level, default: do not check)
+* `--threads <int>`    number of threads to use
 
-* `1` show pairs of sentences which are either identical or have a Levenshtein-Damerau distance of <= 1
-* `0:1` show pairs of sentences with identical forms or maximally one different lemma
-* `-1:-1:1` show pairs of sentences which have a Levenshtein distance of 2 or less on Upos
 
 For Form the Levenshtein distance is calculated on characters, whereas for all other columns, the Levenshtein distance
 is calculate on a token basis.
 
 Since every sentence will be compared once with every other sentence, 
-this will take some time for CoNLL-U files wich many sentences and only a single threads and maximal distances != 0
+this will take some time for CoNLL-U files wich many sentences and only a single thread and maximal distances != 0
 
 # Known bugs
 * not all possible errors which users can make are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.

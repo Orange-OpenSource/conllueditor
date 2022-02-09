@@ -13,7 +13,7 @@
 10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
 11	.	.	PUNCT	_	_	1	punct	_	_
 
-# sent_id = fr-ud-dev_00001
+# sent_id = fr-ud-dev_00001-mod1
 # text = Aviator, un film sur la vie de Howard Hughes.
 # sentence 1
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
@@ -28,7 +28,7 @@
 10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
 11	.	.	PUNCT	_	_	1	punct	_	_
 
-# sent_id = fr-ud-dev_00003
+# sent_id = fr-ud-dev_00003_mod2
 # text = Mais comment faire dans un contexte structurellement raciste ?
 # sentence 2
 1	Mais	mais	CCONJ	_	_	3	cc	_	_
@@ -41,7 +41,7 @@
 8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
 9	?	?	PUNCT	_	_	3	punct	_	_
 
-# sent_id = fr-ud-dev_00003
+# sent_id = fr-ud-dev_00003_mod3
 # text = Mais comment faire dans un contexte structurellement raciste ?
 # sentence 3
 1	Mais	mais	SCONJ	_	_	3	cc	_	_

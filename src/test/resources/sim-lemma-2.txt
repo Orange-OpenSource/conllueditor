@@ -1,0 +1,5 @@
+# sentence lengths (group1)
+#    9 tokens:    2 sentences
+#   11 tokens:    2 sentences
+LEMMA	2	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001-mod1	Aviator|,|un|filM|sur|le|vie|de|Howard|Hughes|.	Aviator|,|le|film|sur|le|vie|de|Howard|Hughes|.
+LEMMA	2	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00003_mod2	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00003_mod3	mais|comment|faire|dans|un|contexte|structurellement|raciste|?	mais|comment|faire|DANS|un|contexte|structurellement|raciste|??

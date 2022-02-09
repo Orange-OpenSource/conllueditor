@@ -73,6 +73,13 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -2294,157 +2301,334 @@ public class ConlluEditor {
         return null;
     }
 
-    static void help() {
-        System.err.println("usage: edit.sh [options] conllfile port");
-        System.err.println("   --UPOS <files>       comma separated list of files with valid UPOS");
-        System.err.println("   --XPOS <files>       comma separated list of files with valid UPOS");
-        System.err.println("   --deprels <file>     comma separated list of files with valid deprels");
-        System.err.println("   --features <file>    comma separated list of files with valid [upos:]feature=value pairs");
-        System.err.println("   --validator <file>   file with validator configuration");
-        System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
-        System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) when going to another sentence");
-        System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
-        System.err.println("   --shortcuts <file>   list of shortcut definition (json)");
-        System.err.println("   --noedit             only browsing");
-        //System.err.println("   --overwrite         overwrite existing backup file if file ist not git versioned");
-        System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
-        System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
-        System.err.println("   --compare            comparison mode: display a second (gold) tree in gray behind the current tree to see differences");
-    }
-
     public static void main(String[] args) {
-        if (args.length < 2) {
-            // reinit will reread the whole file at each action (to take into account external modification)
-            // as a consequence, editing is not possible
-            help();
-            System.exit(1);
-        }
+        Options options = new Options();
+        Option upos = Option.builder("u").longOpt("UPOS")
+                .argName("files")
+                .hasArg()
+                .desc("comma separated list of files with valid UPOS")
+                .build();
+        options.addOption(upos);
+        Option xpos = Option.builder("x").longOpt("XPOS")
+                .argName("files")
+                .hasArg()
+                .desc("comma separated list of files with valid XPOS")
+                .build();
+        options.addOption(xpos);
+        Option deprels = Option.builder("d").longOpt("deprels")
+                .argName("files")
+                .hasArg()
+                .desc("comma separated list of files with valid deprels or data/deprels.json from https://github.com/UniversalDependencies/tools.git (the latter requires --language)")
+                .build();
+        options.addOption(deprels);
+        Option features = Option.builder("f").longOpt("features")
+                .argName("files")
+                .hasArg()
+                .desc("comma separated list of files with valid [upos:]feature=value pairs or data/feats.json from https://github.com/UniversalDependencies/tools.git (the latter requires --language)")
+                .build();
+        options.addOption(features);
 
-        List<String> uposfiles = null;
-        List<String> xposfiles = null;
-        List<String> deprelfiles = null;
-        List<String> featurefiles = null;
-        String language = null;
-        String shortcutfile = null;
-        String rootdir = null;
-        String validator = null;
-        boolean include_unused = false;
-        boolean overwrite = false;
-        int debug = 0x0d;
-        int saveafter = -1;
-        int mode = 0; // noedit: 1, reinit: 2
-        String comparisonFile = null;
+        Option language = Option.builder("l").longOpt("language")
+                .argName("file")
+                .hasArg()
+                .desc("language (needed to read data/deprels.json or data/feats.json)")
+                .build();
+        options.addOption(language);
 
-        int argindex = 0;
-        for (int a = 0; a < args.length - 1; ++a) {
-            if (args[a].equals("--UPOS")) {
-                String[] fns = args[++a].split(",");
-                uposfiles = Arrays.asList(fns);
-                argindex += 2;
-            } else if (args[a].equals("--XPOS")) {
-                String[] fns = args[++a].split(",");
-                xposfiles = Arrays.asList(fns);
-                argindex += 2;
-            } else if (args[a].equals("--features")) {
-                String[] fns = args[++a].split(",");
-                featurefiles = Arrays.asList(fns);
-                argindex += 2;
-            } else if (args[a].equals("--language")) {
-                language = args[++a];
-                argindex += 2;
-            } else if (args[a].equals("--include_unused")) {
-                include_unused = true;
-                argindex += 1;
+        Option validator = Option.builder("v").longOpt("validator")
+                .argName("file")
+                .hasArg()
+                .desc("file with validator configuration")
+                .build();
+        options.addOption(validator);
 
-            } else if (args[a].equals("--deprels")) {
-                String[] fns = args[++a].split(",");
-                deprelfiles = Arrays.asList(fns);
-                argindex += 2;
-            } else if (args[a].equals("--shortcuts")) {
-                shortcutfile = args[++a];
-                argindex += 2;
-            } else if (args[a].equals("--validator")) {
-                validator = args[++a];
-                argindex += 2;
-            } else if (args[a].equals("--rootdir")) {
-                rootdir = args[++a];
-                argindex += 2;
-            } else if (args[a].equals("--saveAfter")) {
-                saveafter = Integer.parseInt(args[++a]);
-                argindex += 2;
-            } else if (args[a].equals("--verb")) {
-                debug = Integer.parseInt(args[++a], 16);
-                argindex += 2;
-            } else if (args[a].equals("--noedit")) {
-                if (mode == 0) {
-                    mode = 1;
-                }
-                argindex += 1;
-            } else if (args[a].equals("--relax")) {
-                ConllWord.RELAXED = true;
-                argindex += 1;
-            } else if (args[a].equals("--reinit")) {
-                mode = 2;
-                argindex += 1;
-            } else if (args[a].equals("--overwrite")) {
-                overwrite = true;
-                argindex += 1;
-            } else if (args[a].equals("--compare")) {
-                comparisonFile = args[++a];
-                argindex += 2;
-            } else if (args[a].startsWith("-")) {
-                System.err.println("Invalid option " + args[a]);
-                help();
-                System.exit(2);
-            }
-        }
+        Option rootdir = Option.builder("r").longOpt("rootdir")
+                .argName("dir")
+                .hasArg()
+                .desc("root of fileserver (must include index.html and edit.js etc. for ConlluEditor)")
+                .build();
+        options.addOption(rootdir);
+
+
+        Option shortcuts = Option.builder("s").longOpt("shortcuts")
+                .argName("file")
+                .hasArg()
+                .desc("list of shortcut definition (json)")
+                .build();
+        options.addOption(shortcuts);
+
+        Option saveAfter = Option.builder("S").longOpt("saveAfter")
+                .argName("int")
+                .hasArg()
+                .desc("saves edited file after n changes (default save (commit) when going to another sentence")
+                .build();
+        options.addOption(saveAfter);
+
+        Option verbosity = Option.builder("v").longOpt("verb")
+                .argName("hex")
+                .hasArg()
+                .desc("specifiy verbosity (hexnumber, interpreted as bitmap)")
+                .build();
+        options.addOption(verbosity);
+
+        Option noedit = Option.builder().longOpt("noedit")
+                .desc("inhibit editing, only display sentences")
+                .build();
+        options.addOption(noedit);
+
+        Option relax = Option.builder().longOpt("relax")
+                .desc("correct some formal errors in CoNLL-U more or less silently")
+                .build();
+        options.addOption(relax);
+
+        Option reinit = Option.builder().longOpt("reinit")
+                .desc("only browsing, reload file after each sentence (to read changes if the file is changed by other means)")
+                .build();
+        options.addOption(reinit);
+
+        Option overwrite = Option.builder().longOpt("overwrite")
+                .desc("force overwriting of existing file (unless git-controlled)")
+                .build();
+        options.addOption(overwrite);
+
+        Option include_unused = Option.builder().longOpt("include_unused")
+                .desc("include unused features from data/feats.json")
+                .build();
+        options.addOption(include_unused);
+
+        Option compare = Option.builder("c").longOpt("compare")
+                .argName("file")
+                .hasArg()
+                .desc("comparison mode: display a second (gold) tree in gray behind the current tree to see differences")
+                .build();
+        options.addOption(compare);
+
+        CommandLineParser parser = new DefaultParser();
 
         try {
-            ConlluEditor ce = new ConlluEditor(args[argindex], overwrite);
-            if (uposfiles != null) {
-                ce.setValidUPOS(uposfiles);
-            }
-            if (xposfiles != null) {
-                ce.setValidXPOS(xposfiles);
-            }
-            if (deprelfiles != null) {
-                ce.setValidDeprels(deprelfiles, language);
-            }
-            if (featurefiles != null) {
-                ce.setValidFeatures(featurefiles, language, include_unused);
-            }
-            if (validator != null) {
-                ce.setValidator(validator);
-            }
-            if (shortcutfile != null) {
-                ce.setShortcuts(shortcutfile);
-            }
-            if (saveafter != 0) {
-                ce.setSaveafter(saveafter);
-            } else {
-                System.err.println("Invalid value for option --saveAfter");
+            // parse the command line arguments
+            CommandLine line = parser.parse(options, args);
+            if (line.getArgList().size() != 2) {
+                throw new ParseException("missing CoNLL-U-filename and/or port number");
             }
 
+            ConlluEditor ce = new ConlluEditor(line.getArgList().get(0), line.hasOption(overwrite));
+
+            if (line.hasOption(upos)) {
+                ce.setValidUPOS(Arrays.asList(line.getOptionValue(upos).split(",")));
+            }
+            if (line.hasOption(xpos)) {
+                ce.setValidXPOS(Arrays.asList(line.getOptionValue(xpos).split(",")));
+            }
+            if (line.hasOption(deprels)) {
+                ce.setValidDeprels(Arrays.asList(line.getOptionValue(deprels).split(",")), line.getOptionValue(language));
+            }
+            if (line.hasOption(features)) {
+                ce.setValidFeatures(Arrays.asList(line.getOptionValue(features).split(",")), line.getOptionValue(language), line.hasOption(include_unused));
+            }
+
+            if (line.hasOption(validator)) {
+                ce.setValidator(line.getOptionValue(validator));
+            }
+
+            if (line.hasOption(shortcuts)) {
+                ce.setShortcuts(line.getOptionValue(shortcuts));
+            }
+
+            String savea = line.getOptionValue(saveAfter);
+
+            if (savea != null && Integer.parseInt(savea) > 0) {
+                ce.setSaveafter(Integer.parseInt(savea));
+            } else {
+                System.err.println("Invalid value for option --saveAfter. Must be positive integer");
+            }
+
+
+            int debug = 0x0d;
+            if (line.hasOption(verbosity)) {
+                debug = Integer.parseInt(line.getOptionValue(verbosity), 16);
+            }
             ce.setDebug(debug);
 
-            if (comparisonFile != null) {
-                ce.setComparisonFile(comparisonFile);
+
+            if (line.hasOption(compare)) {
+                ce.setComparisonFile(line.getOptionValue(compare));
             }
 
-            if (args.length > argindex + 1) {
-                if (mode > 0) {
-                    ce.setMode(mode);
-                }
-                //ServeurHTTP sh =
-                new ServeurHTTP(Integer.parseInt(args[argindex + 1]), ce, rootdir, debug);
-            } else {
-                System.err.println("*** Error: no port given");
-                help();
-                System.exit(3);
+            int mode = 0; // noedit: 1, reinit: 2
+            if (line.hasOption(noedit)) mode = 1;
+            if (line.hasOption(reinit)) mode = 2;
+            if (mode > 0) {
+                ce.setMode(mode);
             }
+
+            int port = Integer.parseInt(line.getArgList().get(1));
+            // ServeurHTTP sh = 
+            new ServeurHTTP(port, ce, line.getOptionValue(rootdir), debug);
+        } catch (ParseException e) {
+            // oops, something went wrong
+            //System.err.println("Command line error: " + exp.getMessage());
+            HelpFormatter formatter = new HelpFormatter();
+            formatter.setWidth(90);
+            formatter.printHelp("ConlluEditor [options] CoNLL-U-file port", e.getMessage(), options, null);
+            System.exit(1);
         } catch (ConllException | IOException ex) {
             System.err.println("*** Error: " + ex.getMessage());
             System.exit(11);
         }
     }
+
+//    static void help() {
+//        System.err.println("usage: edit.sh [options] conllfile port");
+//        System.err.println("   --UPOS <files>       comma separated list of files with valid UPOS");
+//        System.err.println("   --XPOS <files>       comma separated list of files with valid UPOS");
+//        System.err.println("   --deprels <files>    comma separated list of files with valid deprels or data/deprels.json from https://github.com/UniversalDependencies/tools.git (the latter requires --language)");
+//        System.err.println("   --features <files>   comma separated list of files with valid [upos:]feature=value pairs or data/feats.json from https://github.com/UniversalDependencies/tools.git) (the latter requires --language)");
+//        System.err.println("   --validator <file>   file with validator configuration");
+//        System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
+//        System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) when going to another sentence");
+//        System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
+//        System.err.println("   --shortcuts <file>   list of shortcut definition (json)");
+//        System.err.println("   --noedit             only browsing");
+//        //System.err.println("   --overwrite         overwrite existing backup file if file ist not git versioned");
+//        System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
+//        System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
+//        System.err.println("   --compare <file>     comparison mode: display a second (gold) tree in gray behind the current tree to see differences");
+//    }
+//
+//    public static void oomain(String[] args) {
+//        if (args.length < 2) {
+//            // reinit will reread the whole file at each action (to take into account external modification)
+//            // as a consequence, editing is not possible
+//            help();
+//            System.exit(1);
+//        }
+//
+//        List<String> uposfiles = null;
+//        List<String> xposfiles = null;
+//        List<String> deprelfiles = null;
+//        List<String> featurefiles = null;
+//        String language = null;
+//        String shortcutfile = null;
+//        String rootdir = null;
+//        String validator = null;
+//        boolean include_unused = false;
+//        boolean overwrite = false;
+//        int debug = 0x0d;
+//        int saveafter = -1;
+//        int mode = 0; // noedit: 1, reinit: 2
+//        String comparisonFile = null;
+//
+//        int argindex = 0;
+//        for (int a = 0; a < args.length - 1; ++a) {
+//            if (args[a].equals("--UPOS")) {
+//                String[] fns = args[++a].split(",");
+//                uposfiles = Arrays.asList(fns);
+//                argindex += 2;
+//            } else if (args[a].equals("--XPOS")) {
+//                String[] fns = args[++a].split(",");
+//                xposfiles = Arrays.asList(fns);
+//                argindex += 2;
+//            } else if (args[a].equals("--features")) {
+//                String[] fns = args[++a].split(",");
+//                featurefiles = Arrays.asList(fns);
+//                argindex += 2;
+//            } else if (args[a].equals("--language")) {
+//                language = args[++a];
+//                argindex += 2;
+//            } else if (args[a].equals("--include_unused")) {
+//                include_unused = true;
+//                argindex += 1;
+//
+//            } else if (args[a].equals("--deprels")) {
+//                String[] fns = args[++a].split(",");
+//                deprelfiles = Arrays.asList(fns);
+//                argindex += 2;
+//            } else if (args[a].equals("--shortcuts")) {
+//                shortcutfile = args[++a];
+//                argindex += 2;
+//            } else if (args[a].equals("--validator")) {
+//                validator = args[++a];
+//                argindex += 2;
+//            } else if (args[a].equals("--rootdir")) {
+//                rootdir = args[++a];
+//                argindex += 2;
+//            } else if (args[a].equals("--saveAfter")) {
+//                saveafter = Integer.parseInt(args[++a]);
+//                argindex += 2;
+//            } else if (args[a].equals("--verb")) {
+//                debug = Integer.parseInt(args[++a], 16);
+//                argindex += 2;
+//            } else if (args[a].equals("--noedit")) {
+//                if (mode == 0) {
+//                    mode = 1;
+//                }
+//                argindex += 1;
+//            } else if (args[a].equals("--relax")) {
+//                ConllWord.RELAXED = true;
+//                argindex += 1;
+//            } else if (args[a].equals("--reinit")) {
+//                mode = 2;
+//                argindex += 1;
+//            } else if (args[a].equals("--overwrite")) {
+//                overwrite = true;
+//                argindex += 1;
+//            } else if (args[a].equals("--compare")) {
+//                comparisonFile = args[++a];
+//                argindex += 2;
+//            } else if (args[a].startsWith("-")) {
+//                System.err.println("Invalid option " + args[a]);
+//                help();
+//                System.exit(2);
+//            }
+//        }
+//
+//        try {
+//            ConlluEditor ce = new ConlluEditor(args[argindex], overwrite);
+//            if (uposfiles != null) {
+//                ce.setValidUPOS(uposfiles);
+//            }
+//            if (xposfiles != null) {
+//                ce.setValidXPOS(xposfiles);
+//            }
+//            if (deprelfiles != null) {
+//                ce.setValidDeprels(deprelfiles, language);
+//            }
+//            if (featurefiles != null) {
+//                ce.setValidFeatures(featurefiles, language, include_unused);
+//            }
+//            if (validator != null) {
+//                ce.setValidator(validator);
+//            }
+//            if (shortcutfile != null) {
+//                ce.setShortcuts(shortcutfile);
+//            }
+//            if (saveafter != 0) {
+//                ce.setSaveafter(saveafter);
+//            } else {
+//                System.err.println("Invalid value for option --saveAfter");
+//            }
+//
+//            ce.setDebug(debug);
+//
+//            if (comparisonFile != null) {
+//                ce.setComparisonFile(comparisonFile);
+//            }
+//
+//            if (args.length > argindex + 1) {
+//                if (mode > 0) {
+//                    ce.setMode(mode);
+//                }
+//                //ServeurHTTP sh =
+//                new ServeurHTTP(Integer.parseInt(args[argindex + 1]), ce, rootdir, debug);
+//            } else {
+//                System.err.println("*** Error: no port given");
+//                help();
+//                System.exit(3);
+//            }
+//        } catch (ConllException | IOException ex) {
+//            System.err.println("*** Error: " + ex.getMessage());
+//            System.exit(11);
+//        }
+//    }
 }

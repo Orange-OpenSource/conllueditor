@@ -1,0 +1,8 @@
+# sentence lengths (group1)
+#    9 tokens:    2 sentences
+#   11 tokens:    2 sentences
+# sentence lengths (group2)
+#   11 tokens:    1 sentences
+# identical sentences (Form) 2/4  50,0%
+FORM	0	Aviator, un film sur la vie de Howard Hughes.	2	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar2.conllu#fr-ud-dev_00001
+FORM	1	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001-mod1	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar2.conllu#fr-ud-dev_00001	Aviator, une film sur la vie de Howard Hughes.	Aviator, un film sur la vie de Howard Hughes.
