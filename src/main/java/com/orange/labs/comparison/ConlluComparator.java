@@ -123,7 +123,9 @@ public class ConlluComparator {
             for (ConllSentence csent : cf.getSentences()) {
                 //ct += 1;
                 //String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
-                String id = String.format("%s#%s", cf.getFile(), csent.getSentid());
+                String [] elems = cf.getFile().toString().split(File.separator);
+                String basename = elems[elems.length-1];
+                String id = String.format("%s#%s", basename, csent.getSentid());
                 csents.put(id, new Signatures(csent, id));
                 int tokens = csent.getAllWords().size();
                 Integer occ = sentencelengths.get(tokens);
@@ -142,8 +144,10 @@ public class ConlluComparator {
             for (ConllFile cf : cdocs2) {
                 for (ConllSentence csent : cf.getSentences()) {
                     //ct += 1;
+                    String [] elems = cf.getFile().toString().split(File.separator);
+                    String basename = elems[elems.length-1];
                     //String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
-                    String id = String.format("%s#%s", cf.getFile(), csent.getSentid());
+                    String id = String.format("%s#%s", basename, csent.getSentid());
                     csents2.put(id, new Signatures(csent, id));
                     int tokens = csent.getAllWords().size();
                     Integer occ = sentencelengths2.get(tokens);

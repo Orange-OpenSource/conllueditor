@@ -2,6 +2,6 @@
 #    9 tokens:    2 sentences
 #   11 tokens:    2 sentences
 # identical sentences (Form) 0/4  0,0%
-FORM	1	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001-mod1	Aviator, un film sur la vie de Howard Hughes.	Aviator, une film sur la vie de Howard Hughes.
-UPOS	1	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00001-mod1	PROPN|PUNCT|DET|NOUN|ADP|DET|NOUN|ADP|PROPN|PROPN|PUNCT	PROPN|SYM|DET|NOUN|ADP|DET|NOUN|ADP|PROPN|PROPN|PUNCT
-UPOS	2	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00003_mod2	/home/johannes/rhaglenni/java/conlleditor/conllueditor/target/test-classes/similar.conllu#fr-ud-dev_00003_mod3	CCONJ|ADV|VERB|ADP|DET|NOUN|ADV|ADJ|PUNCT	SCONJ|ADV|VERB|ADP|DET|NOUN|ADV|ADJ|SYM
+FORM	1	similar.conllu#fr-ud-dev_00001	similar.conllu#fr-ud-dev_00001-mod1	Aviator, un film sur la vie de Howard Hughes.	Aviator, une film sur la vie de Howard Hughes.
+UPOS	1	similar.conllu#fr-ud-dev_00001	similar.conllu#fr-ud-dev_00001-mod1	PROPN|PUNCT|DET|NOUN|ADP|DET|NOUN|ADP|PROPN|PROPN|PUNCT	PROPN|SYM|DET|NOUN|ADP|DET|NOUN|ADP|PROPN|PROPN|PUNCT
+UPOS	2	similar.conllu#fr-ud-dev_00003_mod2	similar.conllu#fr-ud-dev_00003_mod3	CCONJ|ADV|VERB|ADP|DET|NOUN|ADV|ADJ|PUNCT	SCONJ|ADV|VERB|ADP|DET|NOUN|ADV|ADJ|SYM

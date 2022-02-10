@@ -1,8 +1,6 @@
 
 import com.orange.labs.comparison.ConlluComparator;
 import com.orange.labs.conllparser.ConllException;
-import com.orange.labs.conllparser.ConllFile;
-import com.orange.labs.editor.ConlluEditor;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

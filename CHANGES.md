@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.15.3
+* test corrected
+
 ## Version 2.15.2
 * use commons-cli to parse command-line options for ConlluEditor and ConlluComparator
 * new tests
