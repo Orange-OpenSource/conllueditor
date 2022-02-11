@@ -90,7 +90,7 @@ public class TestConlluComparator {
         //g1.add(infile);
         ConlluComparator cc = new ConlluComparator(g1, null, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(0, -1, -1, -1, -1, -1);
+        String res = cc.analyse(0, -1, -1, -1, -1, -1, false);
 
         File out = new File(folder, "sim-form-0.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
@@ -107,7 +107,7 @@ public class TestConlluComparator {
         //g1.add(infile);
         ConlluComparator cc = new ConlluComparator(g1, null, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(1, -1, -1, -1, -1, -1);
+        String res = cc.analyse(1, -1, -1, -1, -1, -1, false);
 
         File out = new File(folder, "sim-form-1.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
@@ -124,7 +124,7 @@ public class TestConlluComparator {
         //g1.add(infile);
         ConlluComparator cc = new ConlluComparator(g1, null, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(2, -1, -1, -1, -1, -1);
+        String res = cc.analyse(2, -1, -1, -1, -1, -1, false);
 
         File out = new File(folder, "sim-form-2.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
@@ -141,7 +141,7 @@ public class TestConlluComparator {
         //g1.add(infile);
         ConlluComparator cc = new ConlluComparator(g1, null, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(-1, 2, -1, -1, -1, -1);
+        String res = cc.analyse(-1, 2, -1, -1, -1, -1, false);
 
         File out = new File(folder, "sim-lemma-2.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
@@ -158,7 +158,7 @@ public class TestConlluComparator {
         //g1.add(infile);
         ConlluComparator cc = new ConlluComparator(g1, null, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(1, -1, 2, -1, -1, -1);
+        String res = cc.analyse(1, -1, 2, -1, -1, -1, false);
 
         File out = new File(folder, "sim-form-0-upos-2.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
@@ -176,7 +176,7 @@ public class TestConlluComparator {
 
         ConlluComparator cc = new ConlluComparator(g1, g2, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(0, -1, -1, -1, -1, -1);
+        String res = cc.analyse(0, -1, -1, -1, -1, -1, false);
         File out = new File(folder, "sim2-form-0.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
         URL inurl = this.getClass().getResource("sim2-form-0.txt");
@@ -191,10 +191,26 @@ public class TestConlluComparator {
 
         ConlluComparator cc = new ConlluComparator(g1, g2, 2);
         //cc.analyse(forms, lemmas, upos, xpos, feats, deprels);
-        String res = cc.analyse(2, -1, -1, -1, -1, -1);
+        String res = cc.analyse(2, -1, -1, -1, -1, -1, false);
         File out = new File(folder, "sim2-form-2.txt");
         FileUtils.writeStringToFile(out, res, StandardCharsets.UTF_8, false);
         URL inurl = this.getClass().getResource("sim2-form-2.txt");
+        Assert.assertEquals(String.format("CoNLL-U comparison\n ref: %s\n res: %s\n", inurl.toString(), out.toString()),
+        FileUtils.readFileToString(new File(inurl.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test02TwoForm2json() throws ConllException, IOException, InterruptedException {
+        name("Compare sentences in two groups: Form 2, json output");
+
+        ConlluComparator cc = new ConlluComparator(g1, g2, 2);
+        //cc.analyse(forms, lemmas, upos, xpos, feats, deprels, json);
+        String res = cc.analyse(2, -1, -1, -1, -1, -1, true);
+        File out = new File(folder, "sim2-form-2.json");
+        FileUtils.writeStringToFile(out, res + "\n", StandardCharsets.UTF_8, false);
+        URL inurl = this.getClass().getResource("sim2-form-2.json");
         Assert.assertEquals(String.format("CoNLL-U comparison\n ref: %s\n res: %s\n", inurl.toString(), out.toString()),
         FileUtils.readFileToString(new File(inurl.getFile()), StandardCharsets.UTF_8),
         FileUtils.readFileToString(out, StandardCharsets.UTF_8));

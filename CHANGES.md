@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.15.4
+* optional json output for ConlluComporator
+
 ## Version 2.15.3
 * test corrected
 
@@ -8,7 +11,7 @@
 * new tests
 
 ## Version 2.15.1
-* corrected confusion: ConlluEditor deals with MWT (multiword tokens) and not with MTWs...
+* corrected confusion: ConlluEditor deals with **MWT** (multiword tokens) and not with _MTW_s...
 
 ## Version 2.15.0
 * added a script to find similar or identical sentences in a single or multiple CoNLL-U files

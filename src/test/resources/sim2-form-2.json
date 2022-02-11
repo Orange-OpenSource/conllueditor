@@ -1,0 +1,18 @@
+{
+  "similar.conllu#fr-ud-dev_00001": {
+    "text": "Aviator, un film sur la vie de Howard Hughes.",
+    "FORM": {
+      "0": {
+        "similar2.conllu#fr-ud-dev_00001": ""
+      }
+    }
+  },
+  "similar.conllu#fr-ud-dev_00001-mod1": {
+    "text": "Aviator, une film sur la vie de Howard Hughes.",
+    "FORM": {
+      "1": {
+        "similar2.conllu#fr-ud-dev_00001": "Aviator, un film sur la vie de Howard Hughes."
+      }
+    }
+  }
+}

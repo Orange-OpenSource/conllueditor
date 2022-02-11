@@ -32,6 +32,10 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.comparison;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
@@ -123,8 +127,8 @@ public class ConlluComparator {
             for (ConllSentence csent : cf.getSentences()) {
                 //ct += 1;
                 //String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
-                String [] elems = cf.getFile().toString().split(File.separator);
-                String basename = elems[elems.length-1];
+                String[] elems = cf.getFile().toString().split(File.separator);
+                String basename = elems[elems.length - 1];
                 String id = String.format("%s#%s", basename, csent.getSentid());
                 csents.put(id, new Signatures(csent, id));
                 int tokens = csent.getAllWords().size();
@@ -144,8 +148,8 @@ public class ConlluComparator {
             for (ConllFile cf : cdocs2) {
                 for (ConllSentence csent : cf.getSentences()) {
                     //ct += 1;
-                    String [] elems = cf.getFile().toString().split(File.separator);
-                    String basename = elems[elems.length-1];
+                    String[] elems = cf.getFile().toString().split(File.separator);
+                    String basename = elems[elems.length - 1];
                     //String id = String.format("%s#%s#%d", cf.getFile(), csent.getSentid(), ct);
                     String id = String.format("%s#%s", basename, csent.getSentid());
                     csents2.put(id, new Signatures(csent, id));
@@ -175,7 +179,7 @@ public class ConlluComparator {
      * @param lemma: 0: identical, >0 maximal Levenshtein-Damerau distance on
      * lemmas (token level)
      */
-    public String analyse(int form, int lemma, int upos, int xpos, int feats, int deprel) throws InterruptedException {
+    public String analyse(int form, int lemma, int upos, int xpos, int feats, int deprel, boolean json) throws InterruptedException {
         List<String> keys = Arrays.asList(csents.keySet().toArray(new String[0]));
         List<String> keys2 = Arrays.asList(csents2.keySet().toArray(new String[0]));
         long comps = 0;
@@ -188,8 +192,8 @@ public class ConlluComparator {
 
         for (int th = 0; th < numberOfThreads; ++th) {
             Analyser a = new Analyser(th, numberOfThreads,
-                                      keys, csents, keys2, csents2,
-                                      form, lemma, upos, xpos, feats, deprel);
+                    keys, csents, keys2, csents2,
+                    form, lemma, upos, xpos, feats, deprel);
             Thread thr = new Thread(a);
             thr.start();
             thrs.add(thr);
@@ -200,53 +204,139 @@ public class ConlluComparator {
             thr.join();
         }
 
-        Map<String, Set<String>> identical = new LinkedHashMap<>(); // sentence: [ids]
-        List<String[]> similar = new ArrayList<>();
-        // aggregate identical
+        StringBuilder out = new StringBuilder();
 
-        for (Analyser a : analysers) {
-            for (String[] elems : a.getResults()) {
-                if (elems[0].equals("FORM") && elems[1].equals("0")) {
-                    Set<String> ids = identical.get(elems[4]);
-                    if (ids == null) {
-                        ids = new LinkedHashSet<>();
-                        identical.put(elems[4], ids);
+        if (json) {
+            JsonObject main = new JsonObject();
+            for (Analyser a : analysers) {
+                for (String[] elems : a.getResults()) {
+                    JsonObject sentobject;
+
+                    if (main.has(elems[2])) {
+                        sentobject = main.getAsJsonObject(elems[2]);
+                    } else {
+                        sentobject = new JsonObject();
+                        main.add(elems[2], sentobject);
                     }
-                    ids.add(elems[2]);
-                    ids.add(elems[3]);
-                } else {
-                    similar.add(elems);
+
+                    if (!elems[0].equals("FORM")) {
+                        String col = elems[0].toLowerCase();
+                        if (!sentobject.has(col)) {
+                            JsonArray fields = new JsonArray();
+                            String fieldSep = "\\|";
+                            if ("FEATS".equals(elems[0])) {
+                                fieldSep = ",";
+                            }
+                            for (String e : elems[4].split(fieldSep)) {
+                                fields.add(e);
+                            }
+                            sentobject.add(col, fields);
+                        }
+                    } else {
+                        sentobject.addProperty("text", elems[4]);
+                    }
+
+                    JsonObject colobject;
+                    if (!sentobject.has(elems[0])) {
+                        colobject = new JsonObject();
+                        sentobject.add(elems[0], colobject);
+                    } else {
+                        colobject = sentobject.getAsJsonObject(elems[0]);
+                    }
+                    if (colobject.has(elems[1])) {
+                        if ("0".equals(elems[1])) {
+                            colobject.getAsJsonObject(elems[1]).addProperty(elems[3], "");
+                        } else {
+                            if ("FORM".equals(elems[0])) {
+                                colobject.getAsJsonObject(elems[1]).addProperty(elems[3], elems[5]);
+                            } else {
+                                JsonArray fields = new JsonArray();
+                                String fieldSep = "\\|";
+                                if ("FEATS".equals(elems[0])) {
+                                    fieldSep = ",";
+                                }
+                                for (String e : elems[5].split(fieldSep)) {
+                                    fields.add(e);
+                                }
+                                colobject.getAsJsonObject(elems[1]).add(elems[3], fields);
+                            }
+                        }
+                    } else {
+                        JsonObject idlist = new JsonObject();
+                        if ("0".equals(elems[1])) {
+                            idlist.addProperty(elems[3], "");
+                        } else {
+                            if ("FORM".equals(elems[0])) {
+                                idlist.addProperty(elems[3], elems[5]);
+                            } else {
+                                JsonArray fields = new JsonArray();
+                                String fieldSep = "\\|";
+                                if ("FEATS".equals(elems[0])) {
+                                    fieldSep = ",";
+                                }
+                                for (String e : elems[5].split(fieldSep)) {
+                                    fields.add(e);
+                                }
+                                idlist.add(elems[3], fields);
+                            }
+                        }
+                        colobject.add(elems[1], idlist);
+                    }
                 }
             }
-        }
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.toJson(main);
+            //return main.toString();
+        } else {
+            // text (TSV) output
+            Map<String, Set<String>> identical = new LinkedHashMap<>(); // sentence: [ids]
+            List<String[]> similar = new ArrayList<>();
+            // aggregate identical
 
-        StringBuilder out = new StringBuilder();
-        out.append("# sentence lengths (group1)\n");
-        for (int slen : sentencelengths.keySet()) {
-            out.append(String.format("#  %3d tokens: %4d sentences\n", slen, sentencelengths.get(slen)));
-        }
-        if (sentencelengths != sentencelengths2) {
-            out.append("# sentence lengths (group2)\n");
-            for (int slen : sentencelengths2.keySet()) {
-                out.append(String.format("#  %3d tokens: %4d sentences\n", slen, sentencelengths2.get(slen)));
+            for (Analyser a : analysers) {
+                for (String[] elems : a.getResults()) {
+                    if (elems[0].equals("FORM") && elems[1].equals("0")) {
+                        Set<String> ids = identical.get(elems[4]);
+                        if (ids == null) {
+                            ids = new LinkedHashSet<>();
+                            identical.put(elems[4], ids);
+                        }
+                        ids.add(elems[2]);
+                        ids.add(elems[3]);
+                    } else {
+                        similar.add(elems);
+                    }
+                }
             }
-        }
 
-        if (form >= 0) {
-            int identical_form = 0;
+            out.append("# sentence lengths (group1)\n");
+            for (int slen : sentencelengths.keySet()) {
+                out.append(String.format("#  %3d tokens: %4d sentences\n", slen, sentencelengths.get(slen)));
+            }
+            if (sentencelengths != sentencelengths2) {
+                out.append("# sentence lengths (group2)\n");
+                for (int slen : sentencelengths2.keySet()) {
+                    out.append(String.format("#  %3d tokens: %4d sentences\n", slen, sentencelengths2.get(slen)));
+                }
+            }
+
+            if (form >= 0) {
+                int identical_form = 0;
+                for (String sentence : identical.keySet()) {
+                    identical_form += identical.get(sentence).size();
+                }
+                out.append(String.format("# identical sentences (Form) %d/%d  %.1f%%\n", identical_form, keys.size(), (100.0 * identical_form / keys.size())));
+            }
+
+            // output identical sentences
             for (String sentence : identical.keySet()) {
-                identical_form += identical.get(sentence).size();
+                out.append(String.format("FORM\t0\t%s\t%d\t%s\n", sentence, identical.get(sentence).size(), String.join("\t", identical.get(sentence))));
             }
-            out.append(String.format("# identical sentences (Form) %d/%d  %.1f%%\n", identical_form, keys.size(), (100.0 * identical_form / keys.size())));
+            for (String[] sim : similar) {
+                out.append(String.join("\t", sim)).append('\n');
+            }
         }
 
-        // output identical sentences
-        for (String sentence : identical.keySet()) {
-            out.append(String.format("FORM\t0\t%s\t%d\t%s\n", sentence, identical.get(sentence).size(), String.join("\t", identical.get(sentence))));
-        }
-        for (String[] sim : similar) {
-            out.append(String.join("\t", sim)).append('\n');
-        }
         return out.toString();
     }
 
@@ -303,23 +393,22 @@ public class ConlluComparator {
         }
 
         public String getColumnAsString(String col) {
-              if ("FORM".equals(col)) {
-                  return sent;
-              } else if ("LEMMA".equals(col)) {
-                  return String.join("|", lemmas);
-              } else if ("UPOS".equals(col)) {
-                  return String.join("|", uposs);
-              } else if ("XPOS".equals(col)) {
-                  return String.join("|", xposs);
-              } else if ("DEPREL".equals(col)) {
-                  return String.join("|", deprels);
-              } else if ("FEATS".equals(col)) {
-                  return String.join(",", feats);
-              }
-              return "";
+            if ("FORM".equals(col)) {
+                return sent;
+            } else if ("LEMMA".equals(col)) {
+                return String.join("|", lemmas);
+            } else if ("UPOS".equals(col)) {
+                return String.join("|", uposs);
+            } else if ("XPOS".equals(col)) {
+                return String.join("|", xposs);
+            } else if ("DEPREL".equals(col)) {
+                return String.join("|", deprels);
+            } else if ("FEATS".equals(col)) {
+                return String.join(",", feats);
+            }
+            return "";
         }
     }
-
 
     public static void main(String args[]) throws ConllException {
         Options options = new Options();
@@ -388,6 +477,11 @@ public class ConlluComparator {
                 .build();
         options.addOption(threads);
 
+        Option jsonoutput = Option.builder("j")
+                .desc("output results in json")
+                .build();
+        options.addOption(jsonoutput);
+
         CommandLineParser parser = new DefaultParser();
 
         try {
@@ -403,15 +497,14 @@ public class ConlluComparator {
 
             int threadnum = Integer.parseInt(line.getOptionValue(threads, "2"));
 
-            List<String>g1 = new ArrayList<>(Arrays.asList(line.getOptionValues(group1)));
-            List<String>g2 = null;
+            List<String> g1 = new ArrayList<>(Arrays.asList(line.getOptionValues(group1)));
+            List<String> g2 = null;
             if (line.getOptionValues(group2) != null) {
-                g2 =  new ArrayList<>(Arrays.asList(line.getOptionValues(group2)));
+                g2 = new ArrayList<>(Arrays.asList(line.getOptionValues(group2)));
             }
 
             ConlluComparator cc = new ConlluComparator(g1, g2, threadnum);
-
-            System.out.println(cc.analyse(forms, lemmas, upos, xpos, feats, deprels));
+            System.out.println(cc.analyse(forms, lemmas, upos, xpos, feats, deprels, line.hasOption(jsonoutput)));
         } catch (ParseException e) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(90);
@@ -421,47 +514,4 @@ public class ConlluComparator {
             System.err.println("Error: " + ex.getMessage());
         }
     }
-
-//    public static void oomain(String args[]) {
-//        if (args.length > 2) {
-//            try {
-//                int numberOfThreads = Integer.parseInt(args[0]);
-//                String[] maxdist = args[1].split(":");
-//                int forms = Integer.parseInt(maxdist[0]);
-//                int lemmas = -1;
-//                int upos = -1;
-//                int xpos = -1;
-//                int feats = -1;
-//                int deprels = -1;
-//                if (maxdist.length > 1) {
-//                    lemmas = Integer.parseInt(maxdist[1]);
-//                    if (maxdist.length > 2) {
-//                        upos = Integer.parseInt(maxdist[2]);
-//                        if (maxdist.length > 3) {
-//                            xpos = Integer.parseInt(maxdist[3]);
-//                            if (maxdist.length > 4) {
-//                                feats = Integer.parseInt(maxdist[4]);
-//                                if (maxdist.length > 5) {
-//                                    deprels = Integer.parseInt(maxdist[5]);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//                List<String> argl = new ArrayList<>(Arrays.asList(args));
-//                argl.remove(0);
-//                argl.remove(0);
-//                ConlluComparator cc = new ConlluComparator(argl, null, numberOfThreads);
-//
-//                System.out.println(cc.analyse(forms, lemmas, upos, xpos, feats, deprels));
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//                System.err.println("ERROR: " + ex.getMessage());
-//
-//            }
-//        } else {
-//            System.err.println("usage: ConlluComparator numberOfThreads forms:lemma:upos:xpos:feats:deprel  conllu-files");
-//        }
-//    }
-
 }

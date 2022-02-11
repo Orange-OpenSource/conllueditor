@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.15.3 (see [change history](CHANGES.md))
+Current version: 2.15.4 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -761,13 +761,14 @@ options:
 * `--group1 <files>`   first group of conllu files. If `--group2` is absent, all identical/similar sentences in all given files are shown
 * `--group2 <files>`   second group of conllu files. If present only sentences overlapping in any file of group1 and in any file of
                        group2 are shown
-* `--deprel <int>`     maximal Levenshtein-Damerau distance for deprel (token level)
-* `--form <int>`       maximal Levenshtein-Damerau distance for forms (character level, default value 0)
+* `--form <int>`       maximal Levenshtein-Damerau distance for forms (character level, default value 0, deactivate with -1)
+* `--deprel <int>`     maximal Levenshtein-Damerau distance for deprel (token level, default: do not check)
 * `--feats <int>`      maximal Levenshtein-Damerau distance for feats (token level, default: do not check)
 * `--lemma <int>`      maximal Levenshtein-Damerau distance for lemmas (token level, default: do not check)
 * `--upos <int>`       maximal Levenshtein-Damerau distance for upos (token level, default: do not check)
 * `--xpos <int>`       maximal Levenshtein-Damerau distance for xpos (token level, default: do not check)
 * `--threads <int>`    number of threads to use
+* `--json` json output
 
 
 For Form the Levenshtein distance is calculated on characters, whereas for all other columns, the Levenshtein distance
@@ -795,7 +796,7 @@ the enhanced dependency field must contain one or more `|`-separated `head:depre
 ```
 @inproceedings{heinecke2019,
   author = {Heinecke, Johannes},
-  title = {{ConlluEditor: a fully graphical editor for Universal dependencies treebank files}},
+  title = {{ConlluEditor: a fully graphical editor for Universal Dependencies treebank files}},
   year = {2019},
   booktitle = {{Universal Dependencies Workshop 2019}},
   address = {Paris},
