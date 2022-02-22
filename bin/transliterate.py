@@ -55,7 +55,7 @@ class Transliterator:
             print("available languages/alphabets")
             for lg in self.data:
                 print("\t", lg)
-            raise Exception("unknown language")
+            raise Exception("unknown language <%s>" % language)
         else:
             if isinstance(self.data[language], str):
                 pointer = self.data[language][1:]
@@ -90,7 +90,7 @@ class RWconllu:
         allforms = []
         comments = collections.OrderedDict()
         words = []
-        for line in ifp:            
+        for i,line in enumerate(ifp):
             line = line.rstrip()
             if not line:
                 if sentence:
@@ -118,13 +118,17 @@ class RWconllu:
                         comments[elems[0].strip()] = elems[1].strip()
                 else:
                     cols = line.split("\t")
+                    if len(cols) < 10:
+                        self.errmsg(i, "invalid CoNLL-U length of %d" % len(cols))
+                        continue
+                    #print("LL", line)
                     if "-" in cols[0]:
                         words.append(line)
                     else:
                         form = cols[1]
                         lemma = cols[2]
                         allforms.append(form)
-                        miscs = self.getmiscs(cols[9])
+                        miscs = self.getmiscs(cols[9], i)
 
                         if "SpaceAfter" in miscs: # =No
                             # no spaces
@@ -172,16 +176,23 @@ class RWconllu:
             m.append("%s=%s" % (k,v))
         return "|".join(m)
     
-    def getmiscs(self, misccol):
+    def getmiscs(self, misccol, i):
         if misccol == "_":
             return {}
         else:
             elems = misccol.split("|")
             m = collections.OrderedDict()
             for elem in elems:
-                k,v = elem.split("=", 1)
-                m[k] = v
+                if not "=" in elem:
+                    self.errmsg(i, "MISC key without value: <%s>" % elem)
+                    m[elem] = None
+                else:
+                    k,v = elem.split("=", 1)
+                    m[k] = v
             return m
+
+    def errmsg(self, linenr, msg):
+        print("%5d: %s" % (linenr, msg), file=sys.stderr)
 
 if __name__ == "__main__":
     import argparse
@@ -201,7 +212,7 @@ if __name__ == "__main__":
     else:
         args = parser.parse_args()
 
-        if True: #try:
+        try:
             tl = Transliterator(args.data,
                                 args.language)
 
@@ -219,5 +230,8 @@ if __name__ == "__main__":
                               args.language, args.infile, args.outfile,
                               overwrite=args.overwrite, sentence=args.sentence,
                               forms=not args.noforms, lemmas=args.lemmas)
-#        except Exception as e:
-#            print("Error:" ,e)
+        except Exception as e:
+            import traceback
+            traceback.print_tb(sys.exc_info()[2])
+
+            print("Error:" , e, file=sys.stderr)
