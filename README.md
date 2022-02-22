@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.15.4 (see [change history](CHANGES.md))
+Current version: 2.16.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -193,7 +193,7 @@ Other parameters (shown below in section [other options](#other-options)) can be
 `--env include_unused=1`,
 `--env deprels=deprels.ud`,
 `--env features=feat_val.ud`,
-`--env shortcurs=hortcuts.json`, or
+`--env shortcuts=hortcuts.json`, or
 `--env compare=file.conllu`,
 . However all files given, **must** reside in the `</absolute/path/to/datadir>` directory.
 
@@ -575,6 +575,7 @@ There is a list of predefined shortcuts which cannot be altered:
 * `_` delete all features of active word
 * `delete`-key deletes active word
 * `?` shows/hides list of shortcuts
+* `&` followed by two digits. Shift the syntax tree so that the token with the given ID is centered in the visible part of the tree.
 
 # Multiuser/save/git
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.

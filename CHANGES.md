@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.16.0
+* make `transliterate.py` more robust against invalid CoNLL-U files
+* shortcuts to scroll the tree that a given token is visible in the current viewport
+
 ## Version 2.15.4
 * optional json output for ConlluComporator
 

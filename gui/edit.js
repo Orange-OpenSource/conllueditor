@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.15.1 as of 8th February 2022
+ @version 2.16.0 as of 22nd February 2022
  */
 
 
@@ -696,6 +696,8 @@ var conllwords = {}; // all words of current sentence
 var mwts = {}; // all multiword tokens of current sentence
 var clickedNodes = [];
 var unprocessedkeystrokes = []; // process multi key shortcuts
+var jumptotokendigits = []; // process keys to get the number of the token to jump to
+var token_to_be_focussed = -1; // set to 0 if "&" is hit, the following two digits focuss the token, if any of the following keys is not a digit, we quit the loop
 var deprels = [];
 var uposs = [];
 var clickCount = 0;
@@ -718,7 +720,7 @@ $(window).on('keydown', function (evt) {
 
     // a word is active
     if (clickedNodes.length == 1) {
-        if (evt.which == 46) {
+        if (evt.which == 46) { // '.'
             //console.log("UPOS", newval);
             if (clickedNodes[0].indexOf(".") !== -1) {
                 // delete empty word
@@ -738,9 +740,36 @@ $(window).on('keydown', function (evt) {
 
 function unsetPShC() {
     unprocessedkeystrokes = [];
+    jumptotokendigits = [];
     $("#pendingshortcuts").empty();
     $("#psc").hide();
 }
+
+
+// inpsired by https://stackoverflow.com/questions/123999/how-can-i-tell-if-a-dom-element-is-visible-in-the-current-viewport
+function isElementInViewport (el) {
+
+    // Special bonus for those using jQuery
+    //if (typeof jQuery === "function" && el instanceof jQuery) {
+    //    el = el[0];
+    //}
+    
+   
+    //console.log("EL", el[0]);
+    var rect = el[0].getBoundingClientRect();
+    el[0].scrollIntoView(true);
+    //console.log("rrr", rect);
+    // return the coordinates
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+    );
+}
+
+
+
 
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 $(window).on('keypress', function (evt) {
@@ -765,10 +794,36 @@ $(window).on('keypress', function (evt) {
         return;
     }
 
-    if (evt.which == 63) { //"?"
+    // inputting a token number to center in viewport
+    if (token_to_be_focussed > -1) {
+       if (evt.which >= 48 && evt.which <= 57) { // 0 - 9
+           if (token_to_be_focussed == 0) {
+              jumptotokendigits.push(String.fromCharCode(evt.which));
+              $("#pendingshortcuts").text("&" + jumptotokendigits.join(""));
+              token_to_be_focussed++;
+              return;
+           } else if (token_to_be_focussed == 1) {
+              jumptotokendigits.push(String.fromCharCode(evt.which));
+           //} else {
+              // we have seen two digits
+              var tokid = "#id1_" + parseInt(jumptotokendigits.join(""));
+              $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
+              token_to_be_focussed = -1;
+              unsetPShC();
+           }
+
+       } else {
+          // no integer, stop this and to not center token in viewport
+          token_to_be_focussed = -1;
+          unsetPShC();
+       }
+    }
+
+    // hardwired keys
+    else if (evt.which == 63) { // "?"
         unsetPShC();
         ToggleShortcutHelp();
-    //} else if (evt.which == 33) { //"!"
+    //} else if (evt.which == 33) { // "!"
     //    ToggleSubtree();
     } else if (evt.which == 43) { // "+"
         unsetPShC();
@@ -779,6 +834,15 @@ $(window).on('keypress', function (evt) {
     } else if (evt.which == 61) { // "=" validator
         unsetPShC();
         $("#valid").click();
+
+    } else if (evt.which == 38) { // "&" followed by three digits: put word with ID into viewport
+        unsetPShC();
+        // move viewport to make token visible
+        token_to_be_focussed = 0;
+        $("#pendingshortcuts").text("&");
+        $("#psc").show();
+        return;
+
     } else if (clickedNodes.length == 1) {
         // a word is active
 	if (evt.which == 95) { // "_" delete all features
@@ -852,6 +916,7 @@ $(window).on('keypress', function (evt) {
             unprocessedkeystrokes.push(String.fromCharCode(evt.which));
             $("#pendingshortcuts").text(unprocessedkeystrokes.join(""));
             $("#psc").show();
+        } else if (token_to_be_focussed >= 0) {
         } else {
             unsetPShC();
         }
