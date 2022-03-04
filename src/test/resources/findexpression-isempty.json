@@ -1,0 +1,394 @@
+{
+  "sentenceid": 18,
+  "maxsentence": 19,
+  "sentence": "Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. ",
+  "length": 13,
+  "sent_id": "fi_tdt-ud-train.conllu b712.11",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 1,
+      "id": "0.1",
+      "token": "empty",
+      "form": "Laitoin",
+      "lemma": "laittaa",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Person",
+          "val": "1"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        },
+        {
+          "name": "Voice",
+          "val": "Act"
+        }
+      ],
+      "xpos": "_",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        }
+      ],
+      "deprel": "_",
+      "lemmahighlight": 1,
+      "chunk": 0,
+      "type": "",
+      "indexshift": 0
+    },
+    {
+      "position": 4,
+      "id": 3,
+      "form": "purkillinen",
+      "lemma": "purkillinen",
+      "feats": [
+        {
+          "name": "Case",
+          "val": "Nom"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        }
+      ],
+      "xpos": "N",
+      "upos": "NOUN",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        },
+        {
+          "id": "0.1",
+          "position": 1,
+          "deprel": "obj"
+        }
+      ],
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 2,
+          "archeight": 2,
+          "id": 1,
+          "form": "Sekaan",
+          "lemma": "sekaan",
+          "xpos": "Adv",
+          "upos": "ADV",
+          "enhancedheads": [
+            {
+              "id": "0.1",
+              "position": 1,
+              "deprel": "advmod"
+            }
+          ],
+          "deprel": "orphan",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 3,
+          "archeight": 1,
+          "id": 2,
+          "form": "1",
+          "lemma": "1",
+          "feats": [
+            {
+              "name": "NumType",
+              "val": "Card"
+            }
+          ],
+          "xpos": "Num",
+          "upos": "NUM",
+          "enhancedheads": [
+            {
+              "id": "3",
+              "position": 4,
+              "deprel": "nummod"
+            }
+          ],
+          "deprel": "nummod",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 5,
+          "archeight": 1,
+          "id": 4,
+          "form": "kermaviiliä",
+          "lemma": "kerma#viili",
+          "feats": [
+            {
+              "name": "Case",
+              "val": "Par"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "N",
+          "upos": "NOUN",
+          "enhancedheads": [
+            {
+              "id": "3",
+              "position": 4,
+              "deprel": "nmod:par"
+            }
+          ],
+          "deprel": "nmod",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 9,
+          "archeight": 4,
+          "id": 8,
+          "form": "jaoin",
+          "lemma": "jakaa",
+          "feats": [
+            {
+              "name": "Mood",
+              "val": "Ind"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Person",
+              "val": "1"
+            },
+            {
+              "name": "Tense",
+              "val": "Past"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Fin"
+            },
+            {
+              "name": "Voice",
+              "val": "Act"
+            }
+          ],
+          "xpos": "V",
+          "upos": "VERB",
+          "enhancedheads": [
+            {
+              "id": "0.1",
+              "position": 1,
+              "deprel": "conj"
+            },
+            {
+              "id": "3",
+              "position": 4,
+              "deprel": "conj"
+            }
+          ],
+          "deprel": "conj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 6,
+              "archeight": 3,
+              "id": 5,
+              "form": "ja",
+              "lemma": "ja",
+              "xpos": "C",
+              "upos": "CCONJ",
+              "enhancedheads": [
+                {
+                  "id": "8",
+                  "position": 9,
+                  "deprel": "cc"
+                }
+              ],
+              "deprel": "cc",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
+              "archeight": 2,
+              "id": 6,
+              "form": "ja",
+              "lemma": "ja",
+              "xpos": "C",
+              "upos": "CCONJ",
+              "enhancedheads": [
+                {
+                  "id": "8",
+                  "position": 9,
+                  "deprel": "cc"
+                }
+              ],
+              "deprel": "cc",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 8,
+              "archeight": 1,
+              "id": 7,
+              "form": "sitten",
+              "lemma": "sitten",
+              "xpos": "Adv",
+              "upos": "ADV",
+              "enhancedheads": [
+                {
+                  "id": "8",
+                  "position": 9,
+                  "deprel": "advmod"
+                }
+              ],
+              "deprel": "advmod",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 10,
+              "archeight": 1,
+              "id": 9,
+              "form": "perustahnan",
+              "lemma": "perus#tahna",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Gen"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "N",
+              "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "8",
+                  "position": 9,
+                  "deprel": "obj"
+                }
+              ],
+              "deprel": "obj",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 12,
+              "archeight": 2,
+              "id": 11,
+              "form": "lautaselle",
+              "lemma": "lautanen",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "All"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "N",
+              "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "8",
+                  "position": 9,
+                  "deprel": "obl:all"
+                }
+              ],
+              "deprel": "obl",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 11,
+                  "archeight": 1,
+                  "id": 10,
+                  "form": "4",
+                  "lemma": "4",
+                  "feats": [
+                    {
+                      "name": "NumType",
+                      "val": "Card"
+                    }
+                  ],
+                  "xpos": "Num",
+                  "upos": "NUM",
+                  "enhancedheads": [
+                    {
+                      "id": "11",
+                      "position": 12,
+                      "deprel": "nummod"
+                    }
+                  ],
+                  "deprel": "nummod",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 13,
+          "archeight": 5,
+          "id": 12,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "Punct",
+          "upos": "PUNCT",
+          "enhancedheads": [
+            {
+              "id": "0.1",
+              "position": 1,
+              "deprel": "punct"
+            },
+            {
+              "id": "3",
+              "position": 4,
+              "deprel": "punct"
+            }
+          ],
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 18\n",
+  "canUndo": false,
+  "canRedo": false
+}

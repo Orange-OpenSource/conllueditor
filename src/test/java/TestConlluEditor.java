@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.15.1 as of 8th February 2022
+ @version 2.16.1 as of 4th March 2022
  */
 
 import com.google.gson.Gson;
@@ -892,6 +892,63 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
 
+    @Test
+    public void test400FindExpressionForm() throws IOException {
+        name("findexpression Form");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("findexpression false Form:règne", 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "findexpression-form.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("findexpression-form.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test401FindExpressionMWT() throws IOException {
+        name("findexpression IsEmpty");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("findexpression false IsMWT", 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "findexpression-ismwt.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("findexpression-ismwt.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+        @Test
+    public void test402FindExpressionIsEmpty() throws IOException {
+        name("findexpression IsEmpty");
+        ce.setCallcitcommot(false);
+        String rtc = ce.process("findexpression false IsEmpty and Lemma:laittaa", 1, "");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "findexpression-isempty.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("findexpression-isempty.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+    
     @Test
     public void test41validUPOS() throws IOException {
         name("testing valid UPOS");
