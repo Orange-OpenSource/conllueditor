@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.1 as of 20th December 2021
+ @version 2.16.1 as of 4th March 2022
  */
 package com.orange.labs.conllparser;
 
@@ -2073,6 +2073,22 @@ public class ConllSentence {
         for (ConllWord cw : words) {
             if (cw.matchCondition(condition, null)) {
                 return cw;
+            }
+        }
+        if (emptywords != null) {
+            for (List<ConllWord> cws : emptywords.values()) {
+                for (ConllWord cw : cws) {
+                    if (cw.matchCondition(condition, null)) {
+                        return cw;
+                    }
+                }
+            }
+        }
+        if (contracted != null) {
+            for (ConllWord cw : contracted.values()) {
+                if (cw.matchCondition(condition, null)) {
+                    return cw;
+                }
             }
         }
         return null;
