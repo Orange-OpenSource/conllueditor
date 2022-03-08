@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM openjdk:17-alpine
 
 # docker build -t jheinecke/conllueditor:2.16.1 .
 # docker build -t jheinecke/conllueditor:latest .
