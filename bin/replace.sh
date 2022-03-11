@@ -19,12 +19,12 @@ esac
 TARGETDIR=$BASENAME/../target
 
 
-if [[ "$1" =~  ^[4].[0-9]+$ ]]; then
-    NEWESTJAR=$TARGETDIR/ConlluEditor-$1-jar-with-dependencies.jar
-    shift
-else
+#if [[ "$1" =~  ^[4].[0-9]+$ ]]; then
+#    NEWESTJAR=$TARGETDIR/ConlluEditor-$1-jar-with-dependencies.jar
+#    shift
+#else
     NEWESTJAR=$(ls -tr $TARGETDIR/ConlluEditor-* | grep with-dep | tail -1)
-fi
+#fi
 
 if [ "$2" == "" ]; then
 	echo "usage $0 conditions conllufile [--nostrict]"
