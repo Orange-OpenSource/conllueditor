@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.16.2
+* in totally empty features/misc field in editor is replaced with `_`
+* test extended and new test
+
 ## Version 2.16.1
 * `IsMWT` and `IsEmpty` in complex search fixed (issue #16)
 * new tests

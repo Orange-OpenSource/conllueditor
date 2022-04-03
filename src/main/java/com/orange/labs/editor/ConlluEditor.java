@@ -1345,7 +1345,10 @@ public class ConlluEditor {
                 // on attend
                 //    "mod upos id newupos" par ex. mod xpos 3 ART"
                 String[] f = command.trim().split(" +", 4); // 4th element may contain blanks
-                if (f.length < 4) {
+                if (f.length < 3) {
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
+                }
+                if (f.length < 4 && !f[1].equals("feat") && !f[1].equals("misc")) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 if ("pos".equals(f[1]) || "extracol".equals(f[1])) {
@@ -1410,7 +1413,11 @@ public class ConlluEditor {
                         modWord.setDeplabel(f[3]);
                         break;
                     case "feat": {
-                        modWord.setFeatures(f[3]);
+                        if (f.length < 4) {
+                            modWord.setFeatures(ConllWord.EmptyColumn);
+                        } else {
+                            modWord.setFeatures(f[3]);
+                        }
                         break;
                     }
                     case "addfeat": {
@@ -1419,7 +1426,11 @@ public class ConlluEditor {
                     }
 
                     case "misc": {
-                        modWord.setMisc(f[3]);
+                        if (f.length < 4) {
+                            modWord.setMisc(ConllWord.EmptyColumn);
+                        } else {
+                            modWord.setMisc(f[3]);
+                        }
                         break;
                     }
                     case "enhdeps": {

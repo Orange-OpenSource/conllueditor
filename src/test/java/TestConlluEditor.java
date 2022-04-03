@@ -190,6 +190,9 @@ public class TestConlluEditor {
         ce.process("mod deprel 9 dep", 0, "editinfo");
         ce.process("mod 9 1", 0, "editinfo");
 
+        ce.process("mod feat 2", 1, "editinfo"); // delete all features
+        ce.process("mod misc 13", 1, "editinfo"); // delete all misc
+
         URL ref = this.getClass().getResource("test.edit.conllu");
         URL res = this.getClass().getResource("test.conllu.21"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
@@ -301,6 +304,69 @@ public class TestConlluEditor {
         URL ref = this.getClass().getResource("InvalidDep.json");
 
         Assert.assertEquals(String.format("Find invalid dep return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+
+        @Test
+    public void test065BadMod() throws IOException {
+        name("setting invalid mod sequence (missing 4th element)");
+        ce.setCallcitcommot(false);
+        ce.setBacksuffix(".26");
+        ce.setSaveafter(1);
+
+        // call read to be sure makeTrees has been called on sentence 1
+        //String rtc =
+        ce.process("read 1", 1, "editinfo");
+
+        StringBuilder sb = new StringBuilder();
+        String rtc = ce.process("mod lemma 9", 1, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+        // delete CR (\r) otherwise this tests fails on Windows...
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod form 8", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod upos 1", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod xpos 1", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod pos 5", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod deprel 3", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod feat", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+        rtc = ce.process("mod misc", 1, "editinfo");
+        jelement = JsonParser.parseString(rtc);
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "missing_new_value.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        //FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("missing_new_value.json");
+
+        Assert.assertEquals(String.format("Find invalid head (below dep)return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
@@ -520,7 +586,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
     }
-    
+
     @Test
     public void test202EditMetaDataError() throws IOException {
         name("modify sentence metadata error");
@@ -540,14 +606,14 @@ public class TestConlluEditor {
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
 
         URL ref = this.getClass().getResource("InvalidTranslationBox.json");
-        
+
         Assert.assertEquals(String.format("Invalid translation box\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
         FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
         FileUtils.readFileToString(out, StandardCharsets.UTF_8));
- 
+
     }
-    
-    
+
+
     @Test
     public void test21Read() throws IOException {
         name("read sentence");
@@ -644,12 +710,12 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
-    
+
     @Test
     public void test303CreateSubtree() throws IOException {
         name("createsubtree 10 columns");
         ce.setCallcitcommot(false);
-        
+
         //ce.process("read 0", 1, "");
         String rtc = ce.process("createsubtree 7", 0, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -671,7 +737,7 @@ public class TestConlluEditor {
     public void test304CreateSubtree() throws IOException {
         name("createsubtree selected columns");
         ce.setCallcitcommot(false);
-        
+
         String rtc = ce.process("createsubtree 9 # global.columns = ID LEMMA UPOS HEAD DEPREL", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -687,13 +753,13 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
-    
+
 
     @Test
     public void test305CreateSubtreeMissingID() throws IOException {
         name("createsubtree missing ID column");
         ce.setCallcitcommot(false);
-        
+
         String rtc = ce.process("createsubtree 9 # global.columns = LEMMA UPOS HEAD DEPREL", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -709,7 +775,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
-    
+
     @Test
     public void test31FindLemma() throws IOException {
         name("findlemma");
@@ -948,7 +1014,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
-    
+
     @Test
     public void test41validUPOS() throws IOException {
         name("testing valid UPOS");
