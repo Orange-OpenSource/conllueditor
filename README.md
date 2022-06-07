@@ -66,7 +66,7 @@ Alternatively, a recent version of Docker can be used to run the docker image (s
 ### Compilation
 
 * `mvn install`
-  * if the tests fail after `git pull` try deleting `target/test-classes` and `testoutput`. If this does not solve the problem, run `-mvn install DskipTests` to avoid running the JUnit tests and drop me a note
+  * if the tests fail after `git pull` try deleting `target/test-classes` and `testoutput`. If this does not solve the problem, run `mvn install DskipTests` to avoid running the JUnit tests and drop me a note
   * individual tests can be run by `mvn test -Dtest=TestConlluEditor#<testmethod>`)
   * redirect stderr in order to see only maven messages:
     * `mvn install 2> stderr_output.txt`
