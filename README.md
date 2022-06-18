@@ -65,7 +65,7 @@ Alternatively, a recent version of Docker can be used to run the docker image (s
 #### Github Release
 
 To avoid compilation, you can download the latest release, unzip the conllueditor-a.b.c.zip into a directory and start the server
-as described belos
+as described below.
 
 ### License
 * This software is under the [3-Clause BSD License](LICENSE)
