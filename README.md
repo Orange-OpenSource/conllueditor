@@ -58,7 +58,14 @@ In order two compile the server, you also need
 * Java jdk >= 11.0
 * maven (tested with >= 3.3.9)
 
+#### Docker
+
 Alternatively, a recent version of Docker can be used to run the docker image (see section [docker](#docker) below)
+
+#### Github Release
+
+To avoid compilation, you can download the [release](/releases/latest), unzip the conllueditor-a.b.c.zip into a directory and start the server
+as described belos
 
 ### License
 * This software is under the [3-Clause BSD License](LICENSE)
