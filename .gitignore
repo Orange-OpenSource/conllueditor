@@ -16,3 +16,5 @@ JHE.txt
 .settings
 .antlr/
 NOTES-jhe.md
+release.md
+bin/make-release.sh
