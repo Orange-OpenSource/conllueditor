@@ -28,10 +28,12 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.15.0 as of 5th February 2021
+ @version 2.17.0 as of 4th July 2021
 */
 package com.orange.labs.conllparser;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -58,6 +60,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Ouvrir un fichier CONLL
@@ -445,6 +448,72 @@ public class ConllFile {
         TEXT, CONLL, ANN, LATEX
     };
 
+    public JsonObject getFilestats() {
+        JsonObject jdoc = new JsonObject();
+        jdoc.addProperty("filename", file.getAbsolutePath());
+        jdoc.addProperty("sentences", sentences.size());
+        // tokens means "surface tokens", e.g. Spanish "vámonos" counts as one token
+        // words means "syntactic words", e.g. Spanish "vámonos" is split to two words, "vamos" and "nos"
+        // fused is the number of tokens that are split to two or more syntactic words
+
+        int syntactic_words = 0; // = all standard tokens
+        int mwts = 0;
+        int emptywords = 0;
+        int surface_words = 0; // standard tokens - MWT length + 1
+        
+        Map<String, Integer>uposs = new TreeMap<>();
+        Map<String, Integer>deprels = new TreeMap<>();
+        
+        
+        for (ConllSentence csent : sentences) {
+            syntactic_words += csent.getWords().size();
+            for (ConllWord cw : csent.getWords()) {
+                if (uposs.containsKey(cw.getUpostag())) {
+                    uposs.put(cw.getUpostag(), uposs.get(cw.getUpostag())+1);
+                } else {
+                    uposs.put(cw.getUpostag(), 1);
+                }
+               
+                if (deprels.containsKey(cw.getDeplabel())) {
+                    deprels.put(cw.getDeplabel(), deprels.get(cw.getDeplabel())+1);
+                } else {
+                    deprels.put(cw.getDeplabel(), 1);
+                }
+            }
+            
+            int mwttokens = 0;
+            Map<Integer, ConllWord> mwtmap = csent.getContractedWords();
+            if (mwtmap != null) {
+                mwts += mwtmap.size();
+         
+                for (ConllWord mwt : mwtmap.values()) {
+                    mwttokens += mwt.getSubid()-mwt.getId();
+                }
+            }
+            surface_words = syntactic_words - mwttokens;
+            if (csent.getEmptyWords() != null) {
+                emptywords += csent.getEmptyWords().size();
+            }
+        }
+        
+        jdoc.addProperty("syntactic_words", syntactic_words);
+        jdoc.addProperty("mwts", mwts);
+        jdoc.addProperty("emptywords", emptywords);
+        jdoc.addProperty("surface_words", surface_words);
+        JsonObject u = new JsonObject();
+        for (String k: uposs.keySet()) {
+            u.addProperty(k, uposs.get(k));
+        }
+        jdoc.add("UPOSs", u);
+        
+        u = new JsonObject();
+        for (String k: deprels.keySet()) {
+            u.addProperty(k, deprels.get(k));
+        }
+        jdoc.add("Deprels", u);
+        return jdoc;
+    }
+    
     /**
      * process the contents of a CoNLL file
      *

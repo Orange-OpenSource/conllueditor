@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.14.0 as of 5th December 2021
+ @version 2.17.0 as of 4th July 2022
  */
 package com.orange.labs.editor;
 
@@ -682,6 +682,7 @@ public class ConlluEditor {
         solution.addProperty("git.dirty", gitdirty);
         solution.addProperty("reinit", mode);
         solution.addProperty("saveafter", saveafter);
+        solution.add("stats", cfile.getFilestats());
         JsonArray coldefs = new JsonArray();
         for (String cd : cfile.getColDefs().keySet()) {
             coldefs.add(cd);

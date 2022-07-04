@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.16.0 as of 22nd February 2022
+ @version 2.17.0 as of 4th July 2022
  */
 
 
@@ -165,6 +165,12 @@ var misclist = ["Gloss=", "LGloss=", "SpaceAfter=No", "SpacesAfter=", "Translit=
 var incorrectwords = {};
 var conllucolumns = [];
 
+
+
+function filestats() {
+      $("#fileStats").modal()
+}
+
 /** get information from ConlluEditor server:
  name of edited file
  lists of valid UPOS, XPOS, deprel
@@ -220,6 +226,25 @@ function getServerInfo() {
             } else {
                showshortcuts();
             }
+
+            data.stats;
+            $("#stats_filename").append(data.stats.filename);
+            $("#stats_sent").append(data.stats.sentences);
+            $("#stats_syntwords").append(data.stats.syntactic_words);
+            $("#stats_surfwords").append(data.stats.surface_words);
+            $("#stats_mwts").append(data.stats.mwts);
+            $("#stats_emptywords").append(data.stats.emptywords);
+            for (var p in data.stats.UPOSs) {
+                var percentage = data.stats.UPOSs[p]*100/data.stats.syntactic_words;
+                $("#stats_upos").append("<tr><td>" + p + '</td><td align="right">' + data.stats.UPOSs[p]
+                        + '</td><td align="right">' + percentage.toFixed(2) + "%</td></tr>");
+            }
+            for (var p in data.stats.Deprels) {
+                var percentage = data.stats.Deprels[p]*100/data.stats.syntactic_words;
+                $("#stats_deprel").append("<tr><td>" + p + '</td><td align="right">' + data.stats.Deprels[p]
+                        + '</td><td align="right">' + percentage.toFixed(2) + "%</td></tr>");
+            }
+
 
             $('#filename').empty();
             $('#filename').append(data.filename);
@@ -753,8 +778,8 @@ function isElementInViewport (el) {
     //if (typeof jQuery === "function" && el instanceof jQuery) {
     //    el = el[0];
     //}
-    
-   
+
+
     //console.log("EL", el[0]);
     var rect = el[0].getBoundingClientRect();
     el[0].scrollIntoView(true);
@@ -1349,7 +1374,7 @@ function formatPhrase(item) {
             $("#cnewpar").val(item.newpar);
         if (item.translit)
             $("#ctranslit").val(item.translit);
-        
+
         if (item.translit_words) {
             translit_words = item.translit_words;
             missingtranslits = item.translit_missing;
@@ -1361,7 +1386,7 @@ function formatPhrase(item) {
             }
             $("#ctranslations").val(text);
         }
-        
+
         // display sentence text
         $("#sentid").val(item.sentenceid + 1);
         $("#currentsent").append(item.sentenceid + 1);
@@ -1370,8 +1395,8 @@ function formatPhrase(item) {
         }
         $("#total").append(item.maxsentence);
         $("#titre").append(item.sentence);
-        
-        
+
+
         if (item.errors != undefined) {
             if (item.errors.heads)
                 $("#errors").append("|" + item.errors.heads + " roots");
@@ -1684,7 +1709,7 @@ $(document).ready(function () {
     $("#inittranslit").click(function () {
         //console.log("IIII ", translit_words.join(" "));
         $("#ctranslit").val(translit_words.join(" "));
-        
+
     });
 
     /* delete clicked MWT form */

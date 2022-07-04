@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.15.0 as of 22nd February 2022
+    version 2.17.0 as of 4th July 2022
     -->
 
     <head>
@@ -80,7 +80,7 @@
             <table border="0" cellpadding="0" cellspacing="10">
                 <tr>
                     <td colspan="1">
-                        <span class="sentinfo">filename:</span> <span onmousedown="ToggleSearch();" id="filename">(conllu-filename)</span>
+                        <span class="sentinfo">filename:</span> <span onmousedown="filestats();" id="filename">(conllu-filename)</span>
                         <span id="mode"></span>
                         <span class="sentinfo">&nbsp;&nbsp;changes: </span> <span class="editmode" id="changespendingsave">0</span>
                         <span class="sentinfo" id="psc">&nbsp;&nbsp;pending shortcuts: </span> <span class="editmode" id="pendingshortcuts"></span>
@@ -829,6 +829,38 @@
             </div>
         </div>
 
+        
+        
+        <!-- show file stats -->
+        <div class="modal" id="fileStats" tabindex="-1" role="dialog" aria-labelledby="fileStatsLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="fileStatsLabel">File Statistics</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" >
+                        <table>
+                            <tr><td>File name:</td>  <td><span id="stats_filename"></span></td> </tr>
+                            <tr><td>Number of sentences:</td>  <td><span id="stats_sent"></span></td> </tr>
+                            <tr><td>Syntactic words:</td>  <td><span id="stats_syntwords"></span></td> </tr>
+                            <tr><td>Surface words:</td>  <td><span id="stats_surfwords"></span></td> </tr>
+                            <tr><td>Multiword tokens:</td>  <td><span id="stats_mwts"></span></td> </tr>
+                            <tr><td>Empty words:</td>  <td><span id="stats_emptywords"></span></td> </tr>
+                            <tr><td>UPOS:</td>  <td><table id="stats_upos"></table></td> </tr>
+                            <tr><td>Deprels:</td>  <td><table id="stats_deprel"></table></td> </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">                      
+                        <button type="button" class="mybutton" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
     </body>
 </html>
 

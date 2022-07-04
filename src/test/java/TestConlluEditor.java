@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.16.1 as of 4th March 2022
+ @version 2.17.0 as of 4th July 2022
  */
 
 import com.google.gson.Gson;
@@ -322,39 +322,40 @@ public class TestConlluEditor {
         ce.process("read 1", 1, "editinfo");
 
         StringBuilder sb = new StringBuilder();
+        sb.append("[\n");
         String rtc = ce.process("mod lemma 9", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
         // delete CR (\r) otherwise this tests fails on Windows...
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod form 8", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod upos 1", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod xpos 1", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod pos 5", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod deprel 3", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod feat", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
         rtc = ce.process("mod misc", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
-        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append('\n');
-
+        sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append("\n");
+        sb.append("]\n");
 
         //File out = folder.newFile("findform.json");
         File out = new File(folder, "missing_new_value.json");

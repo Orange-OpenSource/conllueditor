@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.17.0
+* show CoNLL-U file statistics (sentences, tokens, words, MWTs, UPOS, deprels)
+
 ## Version 2.16.2
 * in totally empty features/misc field in editor is replaced with `_`
 * test extended and new test

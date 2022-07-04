@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.16.2 (see [change history](CHANGES.md))
+Current version: 2.17.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -302,9 +302,9 @@ if the button `show basic in enhanced` is active, all enhanced dependency relati
 
 see section [Enhanced Dependencies](#enhanced-dependencies) for more information
 
-
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
+A click on the filename on the top of the screens opens a windows with some file statistics.
 
 In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new
 word to the right of `<wordid>`. This new word can then be edit, with a CTRL-click.

@@ -1,40 +1,42 @@
+[
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod lemma 9»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod form 8»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod upos 1»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod xpos 1»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod pos 5»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod deprel 3»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod feat»"
-}
+},
 {
   "sentenceid": 1,
   "maxsentence": 19,
   "error": "INVALID command length «mod misc»"
 }
+]
