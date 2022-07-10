@@ -28,12 +28,11 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.0 as of 4th July 2022
+ @version 2.17.1 as of 9th July 2022
  */
 
 
 var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
-
 /* test with curl
  curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://localhost:8888/edit/
 
@@ -86,13 +85,13 @@ function choosePort() {
 function enableTab(id) {
     //console.log("aaaa", id);
     var el = document.getElementById(id);
-    el.onkeydown = function(e) {
+    el.onkeydown = function (e) {
         if (e.keyCode === 9) { // tab was pressed
 
             // get caret position/selection
             var val = this.value,
-                start = this.selectionStart,
-                end = this.selectionEnd;
+                    start = this.selectionStart,
+                    end = this.selectionEnd;
 
             // set textarea value to: text before caret + tab + text after caret
             this.value = val.substring(0, start) + '\t' + val.substring(end);
@@ -153,11 +152,11 @@ function getRaw(what, title) {
     });
 }
 
-var deprellist = [ "acl", "acl:relcl", "advcl", "advmod", "amod", "appos", "aux",
-                   "case", "cc", "ccomp", "conj", "cop", "csubj", "dep", "det",
-                   "dislocated", "fixed", "flat", "flat:foreign", "flat:name", "iobj",
-                   "mark", "nmod", "nmod:poss", "nsubj", "nummod", "obj", "obl", "orphan",
-                   "parataxis", "punct", "root", "xcomp"];
+var deprellist = ["acl", "acl:relcl", "advcl", "advmod", "amod", "appos", "aux",
+    "case", "cc", "ccomp", "conj", "cop", "csubj", "dep", "det",
+    "dislocated", "fixed", "flat", "flat:foreign", "flat:name", "iobj",
+    "mark", "nmod", "nmod:poss", "nsubj", "nummod", "obj", "obl", "orphan",
+    "parataxis", "punct", "root", "xcomp"];
 var uposlist = ["ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "NOUN", "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X"];
 var xposlist = [];
 var featlist = [];
@@ -168,7 +167,61 @@ var conllucolumns = [];
 
 
 function filestats() {
-      $("#fileStats").modal()
+    getServerInfo(); // get lates stats from server
+    $("#fileStats").modal()
+}
+
+function makeItemFreqPercent_table(appendto, data, total) {
+    var upostbl = document.createElement("table");
+    upostbl.className = "sortable";
+    upostbl.id = "UPT";
+    appendto.append(upostbl);
+
+    var thead = document.createElement("thead");
+    upostbl.append(thead);
+    var headerrow = document.createElement("tr");
+    //$("#stats_upos").append(headerrow);
+    //upostbl.append(headerrow);
+    thead.append(headerrow);
+    headerrow.className = "tableheader";
+
+    var hdcell = document.createElement('th');
+    headerrow.append(hdcell);
+    hdcell.innerHTML = "UPOS";
+
+    hdcell = document.createElement('th');
+    headerrow.append(hdcell);
+    hdcell.innerHTML = "frequency";
+
+    hdcell = document.createElement('th');
+    headerrow.append(hdcell);
+    hdcell.innerHTML = "%";
+
+    var tbody = document.createElement("tbody");
+    upostbl.append(tbody);
+    for (var p in data) {
+        var percentage = data[p] * 100 / total;
+        var stdrow = document.createElement("tr");
+        //upostbl.append(stdrow);
+        tbody.append(stdrow);
+        //$("#stats_upos").append(stdrow);
+        stdrow.className = "everyotherrow";
+
+        var cell = document.createElement('td');
+        stdrow.append(cell);
+        cell.innerHTML = p;
+
+        cell = document.createElement('td');
+        stdrow.append(cell);
+        cell.innerHTML = data[p]
+        cell.setAttribute('style', 'text-align: right;');
+
+        cell = document.createElement('td');
+        stdrow.append(cell);
+        cell.innerHTML = percentage.toFixed(2);
+        cell.setAttribute('style', 'text-align: right;');
+    }
+    sorttable.makeSortable(upostbl);
 }
 
 /** get information from ConlluEditor server:
@@ -206,7 +259,7 @@ function getServerInfo() {
             if (data.validFeatures)
                 featlist = data.validFeatures;
             if (data.columns)
-            	conllucolumns = data.columns;
+                conllucolumns = data.columns;
             if (data.shortcuts) {
                 //console.log("SHORTCUTS", data.shortcuts);
                 $("#scfilename").html(data.shortcuts.filename);
@@ -224,28 +277,68 @@ function getServerInfo() {
                 }
                 parseShortcuts();
             } else {
-               showshortcuts();
+                showshortcuts();
             }
 
             data.stats;
+            $(".stats").empty();
             $("#stats_filename").append(data.stats.filename);
             $("#stats_sent").append(data.stats.sentences);
             $("#stats_syntwords").append(data.stats.syntactic_words);
             $("#stats_surfwords").append(data.stats.surface_words);
             $("#stats_mwts").append(data.stats.mwts);
             $("#stats_emptywords").append(data.stats.emptywords);
+
+            makeItemFreqPercent_table($("#stats_upos"), data.stats.UPOSs, data.stats.syntactic_words);
+
+            makeItemFreqPercent_table($("#stats_deprel"), data.stats.Deprels, data.stats.syntactic_words);
+
+            var fvustbl = document.createElement("table");
+            fvustbl.className = "sortable";
+            $("#stats_feats").append(fvustbl);
+
+            var thead = document.createElement("thead");
+            fvustbl.append(thead);
+            var headerrow = document.createElement("tr");
+            thead.append(headerrow);
+            headerrow.className = "tableheader";
+
+            var hdcell = document.createElement('th');
+            headerrow.append(hdcell);
+            hdcell.innerHTML = "feature-value";
+
             for (var p in data.stats.UPOSs) {
-                var percentage = data.stats.UPOSs[p]*100/data.stats.syntactic_words;
-                $("#stats_upos").append("<tr><td>" + p + '</td><td align="right">' + data.stats.UPOSs[p]
-                        + '</td><td align="right">' + percentage.toFixed(2) + "%</td></tr>");
-            }
-            for (var p in data.stats.Deprels) {
-                var percentage = data.stats.Deprels[p]*100/data.stats.syntactic_words;
-                $("#stats_deprel").append("<tr><td>" + p + '</td><td align="right">' + data.stats.Deprels[p]
-                        + '</td><td align="right">' + percentage.toFixed(2) + "%</td></tr>");
+                var hdcell = document.createElement('th');
+                headerrow.append(hdcell);
+                hdcell.innerHTML = p;
             }
 
+            var tbody = document.createElement("tbody");
+            fvustbl.append(tbody);
 
+            for (var fv in data.stats.Features) {
+                var stdrow = document.createElement("tr");
+                tbody.append(stdrow);
+                stdrow.className = "everyotherrow";
+
+                var cell = document.createElement('th');
+                stdrow.append(cell);
+                cell.innerHTML = fv;
+
+                for (var upos in data.stats.UPOSs) {
+
+                    var uposfreq = data.stats.Features[fv][upos];
+                    var cell = document.createElement('td');
+                    stdrow.append(cell);
+                    if (uposfreq != undefined) {
+                        //featsline += '<td align="right">' + uposfreq + "</td>";
+                         cell.innerHTML = uposfreq;
+                    }
+                }
+            }
+            sorttable.makeSortable(fvustbl);
+
+            
             $('#filename').empty();
             $('#filename').append(data.filename);
             if (data.reinit) {
@@ -297,7 +390,7 @@ function getServerInfo() {
             // inspired by https://jsfiddle.net/Twisty/yfdjyq79/
             $(function () {
                 function split(val) {
-                     return val.split("\n");
+                    return val.split("\n");
                 }
 
                 function extractLast(term) {
@@ -305,40 +398,40 @@ function getServerInfo() {
                 }
 
                 $("#cfeats")
-                .on("keydown", function(event) {
-                    if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                        event.preventDefault();
-                    }
-                })
-                .autocomplete({
-                        minLength: 1, // min length to type before autocomplete kicks in
-                        source: function(request, response) {
-                            // delegate back to autocomplete, but extract the last term
-                            //console.log("aaa", request, response);
-                            response($.ui.autocomplete.filter(featlist, extractLast(request.term)));
-                        },
-                        focus: function() {
-                            // prevent value inserted on focus
-                            return false;
-                        },
-                        select: function(event, ui) {
-                            //console.log("bbb", this.value);
-                            var terms = split(this.value);
-                            // remove the current input
-                            terms.pop();
-                            // add the selected item
-                            terms.push(ui.item.value);
-                            // add placeholder to get the comma-and-space at the end
-                            terms.push("");
-                            this.value = terms.join("\r\n");
-                            return false;
-                        }
-                });
+                        .on("keydown", function (event) {
+                            if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
+                                event.preventDefault();
+                            }
+                        })
+                        .autocomplete({
+                            minLength: 1, // min length to type before autocomplete kicks in
+                            source: function (request, response) {
+                                // delegate back to autocomplete, but extract the last term
+                                //console.log("aaa", request, response);
+                                response($.ui.autocomplete.filter(featlist, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                // prevent value inserted on focus
+                                return false;
+                            },
+                            select: function (event, ui) {
+                                //console.log("bbb", this.value);
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join("\r\n");
+                                return false;
+                            }
+                        });
             });
 
             $(function () {
                 function split(val) {
-                     return val.split("\n");
+                    return val.split("\n");
                 }
 
                 function extractLast(term) {
@@ -346,36 +439,36 @@ function getServerInfo() {
                 }
                 // use class here to make MISC-autocompletion work in editMWT and wordedit
                 $(".classmisc") //$("#cmisc")
-                .on("keydown", function(event) {
-                    if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                        event.preventDefault();
-                    }
-                })
-                .autocomplete({
-                        minLength: 1, // min length to type before autocomplete kicks in
-                        position: {my: "left top", at: "left bottom-25%"},
-                        source: function(request, response) {
-                            // delegate back to autocomplete, but extract the last term
-                            //console.log("aaa", request, response);
-                            response($.ui.autocomplete.filter(misclist, extractLast(request.term)));
-                        },
-                        focus: function() {
-                            // prevent value inserted on focus
-                            return false;
-                        },
-                        select: function(event, ui) {
-                            //console.log("bbb", this.value);
-                            var terms = split(this.value);
-                            // remove the current input
-                            terms.pop();
-                            // add the selected item
-                            terms.push(ui.item.value);
-                            // add placeholder to get the comma-and-space at the end
-                            terms.push("");
-                            this.value = terms.join("");
-                            return false;
-                        }
-                });
+                        .on("keydown", function (event) {
+                            if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
+                                event.preventDefault();
+                            }
+                        })
+                        .autocomplete({
+                            minLength: 1, // min length to type before autocomplete kicks in
+                            position: {my: "left top", at: "left bottom-25%"},
+                            source: function (request, response) {
+                                // delegate back to autocomplete, but extract the last term
+                                //console.log("aaa", request, response);
+                                response($.ui.autocomplete.filter(misclist, extractLast(request.term)));
+                            },
+                            focus: function () {
+                                // prevent value inserted on focus
+                                return false;
+                            },
+                            select: function (event, ui) {
+                                //console.log("bbb", this.value);
+                                var terms = split(this.value);
+                                // remove the current input
+                                terms.pop();
+                                // add the selected item
+                                terms.push(ui.item.value);
+                                // add placeholder to get the comma-and-space at the end
+                                terms.push("");
+                                this.value = terms.join("");
+                                return false;
+                            }
+                        });
             });
 
         },
@@ -414,7 +507,8 @@ function switchSearch(on) {
         //console.log("SEARCH CLOSING");
         //$("#act_search").text("show search");
         $(".search").hide();
-        if (!showshortcathelp) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        if (!showshortcathelp)
+            $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         //more = false;
     }
 }
@@ -482,7 +576,7 @@ function ToggleSearch() {
         switchSubtree(false);
 
         if (showshortcathelp) {
-             // switch off
+            // switch off
             //ToggleShortcutHelp();
             switchSCHelp(false);
         }
@@ -500,7 +594,8 @@ function switchSCHelp(on) {
         showshortcathelp = true;
     } else {
         $("#shortcuthelp").hide();
-        if (!more) $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+        if (!more)
+            $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         showshortcathelp = false;
     }
 }
@@ -510,8 +605,9 @@ function ToggleShortcutHelp() {
     if (showshortcathelp) {
         // hide short cut help
         switchSCHelp(false);
-        more = lastmore-1; // on mode back
-        if (more < 0) more = 3;
+        more = lastmore - 1; // on mode back
+        if (more < 0)
+            more = 3;
         ToggleSearch();
 
     } else {
@@ -528,7 +624,7 @@ function ToggleShortcutHelp() {
 var shortcutsUPOS = {
     /*   "N": "NOUN",
      "A": "ADV",
-    ...*/
+     ...*/
 };
 
 var shortcutsDEPL = {
@@ -550,7 +646,7 @@ var shortcutsFEATS = {
 var longestshortcut = 1; // longest shortcut key (in order to know when to top piling key strokes :-)
 
 /** run gy getServerInfo() when no shortcuts are provided by server.
-    Reads defaults from gui/shortcut.json and updates help page.
+ Reads defaults from gui/shortcut.json and updates help page.
  */
 function showshortcuts() {
     //console.log("load DEFAULT shortcuts");
@@ -583,7 +679,7 @@ function parseShortcuts() {
             longestshortcut = Math.max(longestshortcut, p.length);
             $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
             //sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
-	    sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp; ";
+            sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp; ";
         }
         $("#upostr").show();
         $("#uposshortcuts").append(sc_uposString);
@@ -660,8 +756,8 @@ function getWordLength(cword) {
     if (showfeats && cword.feats != undefined) { // display misc column info if active
         for (var f in cword.feats) {
             //console.log("ggg", cword.feats[f].val, wlen, 2*ctx.measureText(cword.feats[f].val).width);
-            wlen = Math.max(wlen, 2*ctx.measureText(cword.feats[f].name).width);
-            wlen = Math.max(wlen, 2*ctx.measureText(cword.feats[f].val).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.feats[f].name).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.feats[f].val).width);
             //console.log("hhh", wlen);
         }
     }
@@ -670,8 +766,8 @@ function getWordLength(cword) {
     if (showmisc && cword.misc != undefined) { // display misc column info if active
         for (var f in cword.misc) {
             //console.log("ggg", cword.misc[f].val, wlen, 2*ctx.measureText(cword.misc[f].val).width);
-            wlen = Math.max(wlen, 2*ctx.measureText(cword.misc[f].name).width);
-            wlen = Math.max(wlen, 2*ctx.measureText(cword.misc[f].val).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.misc[f].name).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.misc[f].val).width);
             //console.log("hhh", wlen);
         }
     }
@@ -696,7 +792,7 @@ function getAllWordLengths(trees, maxlen) {
     var pos = Object.keys(wordlengths); //.sort();
     var last = 0;
     for (var i = 0; i < pos.length; ++i) {
-        wordpositions[pos[i]] = last + wordlengths[pos[i]]/2;
+        wordpositions[pos[i]] = last + wordlengths[pos[i]] / 2;
         last += wordlengths[pos[i]] + hordist;
         rightmostwordpos = Math.max(last, rightmostwordpos);
         //console.log("aa2", i, ids[i], last);
@@ -733,7 +829,7 @@ var editword_with_doubleclick = true; // in order to deactivate word-edit with d
 $(window).on('keydown', function (evt) {
     //console.log("DDAEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
 
-    if($(".modal").is(":visible")) {
+    if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         return;
     }
@@ -772,7 +868,7 @@ function unsetPShC() {
 
 
 // inpsired by https://stackoverflow.com/questions/123999/how-can-i-tell-if-a-dom-element-is-visible-in-the-current-viewport
-function isElementInViewport (el) {
+function isElementInViewport(el) {
 
     // Special bonus for those using jQuery
     //if (typeof jQuery === "function" && el instanceof jQuery) {
@@ -786,11 +882,11 @@ function isElementInViewport (el) {
     //console.log("rrr", rect);
     // return the coordinates
     return (
-        rect.top >= 0 &&
-        rect.left >= 0 &&
-        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
-        rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
-    );
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /* or $(window).height() */
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth) /* or $(window).width() */
+            );
 }
 
 
@@ -807,7 +903,7 @@ $(window).on('keypress', function (evt) {
         return;
     }
 
-    if (graphtype == 3 ) {
+    if (graphtype == 3) {
         // in table mode, we need all keys to edit the table cells
         unsetPShC();
         return;
@@ -821,35 +917,35 @@ $(window).on('keypress', function (evt) {
 
     // inputting a token number to center in viewport
     if (token_to_be_focussed > -1) {
-       if (evt.which >= 48 && evt.which <= 57) { // 0 - 9
-           if (token_to_be_focussed == 0) {
-              jumptotokendigits.push(String.fromCharCode(evt.which));
-              $("#pendingshortcuts").text("&" + jumptotokendigits.join(""));
-              token_to_be_focussed++;
-              return;
-           } else if (token_to_be_focussed == 1) {
-              jumptotokendigits.push(String.fromCharCode(evt.which));
-           //} else {
-              // we have seen two digits
-              var tokid = "#id1_" + parseInt(jumptotokendigits.join(""));
-              $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
-              token_to_be_focussed = -1;
-              unsetPShC();
-           }
+        if (evt.which >= 48 && evt.which <= 57) { // 0 - 9
+            if (token_to_be_focussed == 0) {
+                jumptotokendigits.push(String.fromCharCode(evt.which));
+                $("#pendingshortcuts").text("&" + jumptotokendigits.join(""));
+                token_to_be_focussed++;
+                return;
+            } else if (token_to_be_focussed == 1) {
+                jumptotokendigits.push(String.fromCharCode(evt.which));
+                //} else {
+                // we have seen two digits
+                var tokid = "#id1_" + parseInt(jumptotokendigits.join(""));
+                $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
+                token_to_be_focussed = -1;
+                unsetPShC();
+            }
 
-       } else {
-          // no integer, stop this and to not center token in viewport
-          token_to_be_focussed = -1;
-          unsetPShC();
-       }
+        } else {
+            // no integer, stop this and to not center token in viewport
+            token_to_be_focussed = -1;
+            unsetPShC();
+        }
     }
 
     // hardwired keys
     else if (evt.which == 63) { // "?"
         unsetPShC();
         ToggleShortcutHelp();
-    //} else if (evt.which == 33) { // "!"
-    //    ToggleSubtree();
+        //} else if (evt.which == 33) { // "!"
+        //    ToggleSubtree();
     } else if (evt.which == 43) { // "+"
         unsetPShC();
         sendmodifs({"cmd": "next"});
@@ -870,14 +966,14 @@ $(window).on('keypress', function (evt) {
 
     } else if (clickedNodes.length == 1) {
         // a word is active
-	if (evt.which == 95) { // "_" delete all features
-	    sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
+        if (evt.which == 95) { // "_" delete all features
+            sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
             clickedNodes = [];
             deprels = [];
             uposs = [];
-	    unsetPShC();
-	    return;
-	}
+            unsetPShC();
+            return;
+        }
 
         // interpret shortkeys
         currentkey = String.fromCharCode(evt.which);
@@ -937,7 +1033,7 @@ $(window).on('keypress', function (evt) {
 
         // so we got here with a key which is not a shortcut. So maybe it is the first key
         // of a multi-key shortcut?
-        if (unprocessedkeystrokes.length < longestshortcut-1) { //(unprocessedkeystrokes.length == 0) {
+        if (unprocessedkeystrokes.length < longestshortcut - 1) { //(unprocessedkeystrokes.length == 0) {
             unprocessedkeystrokes.push(String.fromCharCode(evt.which));
             $("#pendingshortcuts").text(unprocessedkeystrokes.join(""));
             $("#psc").show();
@@ -1004,7 +1100,7 @@ function ModifyTree(evt) {
 //                var conllword = conllwords[id[1]];
 //                console.log("zzzz", conllword.col11);
 //            } else
-                if (evt.ctrlKey || wordedit) {
+            if (evt.ctrlKey || wordedit) {
                 // editing a word (form, lemma, UPOS, XPOS, features, MISC)
                 wordedit = false;
                 //if (evt.shiftKey) {
@@ -1088,7 +1184,7 @@ function ModifyTree(evt) {
                 $(".wordnode").attr("class", "wordnode");
 
                 // add errorclass for words which are different from gold
-                if (incorrectwords.has("" +id[1])) {
+                if (incorrectwords.has("" + id[1])) {
                     errorclass = " compareError";
                     $('#' + target.id).attr("class", "wordnode compareError");
                 }
@@ -1200,14 +1296,14 @@ function ModifyTree(evt) {
             var mc = "";
 
             if (mwts[id[1]].misc != undefined) {
-                    for (e = 0; e < mwts[id[1]].misc.length; ++e) {
-                        var mch = mwts[id[1]].misc[e];
-                        if (e > 0)
-                            mc += "#"; //\n";
-                        mc += mch.name + "=" + mch.val;
-                    }
-                } else
-                    mc = "_";
+                for (e = 0; e < mwts[id[1]].misc.length; ++e) {
+                    var mch = mwts[id[1]].misc[e];
+                    if (e > 0)
+                        mc += "#"; //\n";
+                    mc += mch.name + "=" + mch.val;
+                }
+            } else
+                mc = "_";
             $("#currentMWTmisc").val(mc)
 
 
@@ -1234,13 +1330,13 @@ function ModifyTree(evt) {
         $("#mods").val("");
         unhighlight();
         /*$(".wordnode").each(function( index ) {
-            // get all word rectangles, and delete highlighting (boxhighlight) class but keep compareError class (in case of compare mode)
-            var currentclasses = $(this).attr("class");
-            currentclasses = currentclasses.replace("boxhighlight", "");
-              console.log( index + "A::: " + $(this).attr("class") );
-            $(this).attr("class", currentclasses)
-            console.log( index + "B::: " + $(this).attr("class") );
-        });*/
+         // get all word rectangles, and delete highlighting (boxhighlight) class but keep compareError class (in case of compare mode)
+         var currentclasses = $(this).attr("class");
+         currentclasses = currentclasses.replace("boxhighlight", "");
+         console.log( index + "A::: " + $(this).attr("class") );
+         $(this).attr("class", currentclasses)
+         console.log( index + "B::: " + $(this).attr("class") );
+         });*/
         //$(".wordnode").attr("class", "wordnode");
 
         clickedNodes = [];
@@ -1252,7 +1348,7 @@ function ModifyTree(evt) {
 
 function unhighlight() {
     // delete boxhighlight class from all word rectangles
-    $(".wordnode").each(function( index ) {
+    $(".wordnode").each(function (index) {
         // get all word rectangles, and delete highlighting (boxhighlight) class but keep compareError class (in case of compare mode)
         var currentclasses = $(this).attr("class");
         currentclasses = currentclasses.replace("boxhighlight", "");
@@ -1286,7 +1382,7 @@ var highlightY = 0;
 function formatPhrase(item) {
     //console.log("eee " + item.message);
     if (autoadaptwidth) {
-        var maxlen =  getAllWordLengths(item, 0);
+        var maxlen = getAllWordLengths(item, 0);
         //console.log("MAXLEN " + maxlen);
     }
 
@@ -1430,7 +1526,8 @@ function formatPhrase(item) {
                 document.getElementById("titre").style.color = "#101010";
         } else
             document.getElementById("titre").style.color = "#101010";
-        if (graphtype != 3) $("#arbre").append(svg);
+        if (graphtype != 3)
+            $("#arbre").append(svg);
         var use_deprel_as_type = true;
         var sentencelength = 0;
         //if ($("#right2left").is(":checked")) {
@@ -1441,7 +1538,7 @@ function formatPhrase(item) {
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
         if (graphtype == 2 /*flatgraph*/) {
-             if (item.comparisontree) {
+            if (item.comparisontree) {
                 // we display the gold tree (given with --compare) in gray underneath the edited tree
                 $("#scores").empty();
                 $("#scores").append("(evaluation Lemma: " + item.Lemma);
@@ -1581,8 +1678,8 @@ function getSubtree(commands) {
 
             if (data.error != undefined) {
                 //alert(data.error);
-       	        /* show error message */
-       	        $("#errormessagefield").text(data.error);
+                /* show error message */
+                $("#errormessagefield").text(data.error);
                 $("#errorMessage").modal();
             } else {
                 $("#editsubtree").val(data.ok);
@@ -1625,8 +1722,8 @@ function sendmodifs(commands) {
 
             if (data.error != undefined) {
                 //alert(data.error);
-       	        /* show error message */
-       	        $("#errormessagefield").text(data.error);
+                /* show error message */
+                $("#errormessagefield").text(data.error);
                 $("#errorMessage").modal();
                 if (olddata != undefined) {
                     formatPhrase(olddata);
@@ -1634,7 +1731,7 @@ function sendmodifs(commands) {
             } else if (data.ok != undefined) {
                 // save file on server OK
                 $("#errorMsgTitle").text("OK");
-       	        $("#errormessagefield").text(data.ok);
+                $("#errormessagefield").text(data.ok);
                 $("#errorMessage").modal();
                 if (olddata != undefined) {
                     olddata.changes = 0;
@@ -1696,12 +1793,12 @@ $(document).ready(function () {
     });
 
     $('#savemetadata').click(function () {
-        object = { "newdoc": $("#cnewdoc").val(),
-                   "newpar": $("#cnewpar").val(),
-                   "sent_id": $("#csent_id").val(),
-                   "translit": $("#ctranslit").val(),
-                   "translations": $("#ctranslations").val(),
-               }
+        object = {"newdoc": $("#cnewdoc").val(),
+            "newpar": $("#cnewpar").val(),
+            "sent_id": $("#csent_id").val(),
+            "translit": $("#ctranslit").val(),
+            "translations": $("#ctranslations").val(),
+        }
         sendmodifs({"cmd": "mod editmetadata " + JSON.stringify(object)});
         $("#metadataEdit").modal("hide");
     });
@@ -1743,14 +1840,14 @@ $(document).ready(function () {
             sendmodifs({"cmd": "mod deprel " + conllword.id + " " + $("#cdeprel2").val()});
         }
         for (i = 0; i < extracols.length; i++) {
-           //curval = document.getElementById("ct_" + extracols[i]).textContent.replace("[ \n]+", "\|");
-           curval = document.getElementById("ct_" + extracols[i]).value.replace(/[ \n]+/, "\|");
-           origval = conllword.nonstandard[extracols[i]];
-           //console.log("DDDDD", curval, origval);
+            //curval = document.getElementById("ct_" + extracols[i]).textContent.replace("[ \n]+", "\|");
+            curval = document.getElementById("ct_" + extracols[i]).value.replace(/[ \n]+/, "\|");
+            origval = conllword.nonstandard[extracols[i]];
+            //console.log("DDDDD", curval, origval);
 
-           if (curval != origval) {
-               sendmodifs({"cmd": "mod extracol " + conllword.id + " " + extracols[i] + " " + curval});
-           }
+            if (curval != origval) {
+                sendmodifs({"cmd": "mod extracol " + conllword.id + " " + extracols[i] + " " + curval});
+            }
         }
 
         // delete table rows for additional columns
@@ -2058,7 +2155,7 @@ $(document).ready(function () {
             inputtext = "findxpos " + backwards + " " + $("#xpos").val();
         } else if (this.id === "finddeprel") {
             inputtext = "finddeprel " + backwards + " " + $("#deprel").val();
-       } else if (this.id === "findfeature") {
+        } else if (this.id === "findfeature") {
             inputtext = "findfeat " + backwards + " " + $("#featureval").val();
         } else if (this.id === "findcomment") {
             inputtext = "findcomment " + backwards + " " + $("#comment").val();
@@ -2079,15 +2176,13 @@ $(document).ready(function () {
             var globalcolumns = $("#editsubtree").val().trim().split("\n")[0];
             if (globalcolumns.startsWith("# global.columns") ||
                     globalcolumns.startsWith("#global.columns")) {
-                        inputtext += " " + globalcolumns;
-                    }
+                inputtext += " " + globalcolumns;
+            }
             //console.log("AAAA", globalcolumns);
             datadico = {"cmd": inputtext};
             getSubtree(datadico);
             return;
-        }
-
-        else if (this.id === "save") {
+        } else if (this.id === "save") {
             inputtext = "save";
         } else if (this.id === "redo") {
             var inputtext = "mod redo";
@@ -2194,14 +2289,14 @@ $(document).ready(function () {
 
     // displays differences between word from goldfile (--compare) and editied file
     // when hovering on the word rectangle
-    $(".wordnode").hover(function(){
+    $(".wordnode").hover(function () {
         $("#comparediff").append("eeeee");
 
     },
-    function(){
-      $("#comparediff").empty();
+            function () {
+                $("#comparediff").empty();
 
-    });
+            });
 
     // TODO pour lire la phrase r
     //unction relirePhraseCourante() {

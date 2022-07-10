@@ -28,11 +28,10 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.0 as of 4th July 2021
+ @version 2.17.1 as of 9th July 2021
 */
 package com.orange.labs.conllparser;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -443,7 +442,7 @@ public class ConllFile {
     public File getFile() {
         return file;
     }
-    
+
     public enum Output {
         TEXT, CONLL, ANN, LATEX
     };
@@ -460,11 +459,13 @@ public class ConllFile {
         int mwts = 0;
         int emptywords = 0;
         int surface_words = 0; // standard tokens - MWT length + 1
-        
+
         Map<String, Integer>uposs = new TreeMap<>();
         Map<String, Integer>deprels = new TreeMap<>();
-        
-        
+
+        Map<String, Map<String, Integer>> feats = new TreeMap<>(); // F=Val: Upos: freq
+
+
         for (ConllSentence csent : sentences) {
             syntactic_words += csent.getWords().size();
             for (ConllWord cw : csent.getWords()) {
@@ -473,19 +474,35 @@ public class ConllFile {
                 } else {
                     uposs.put(cw.getUpostag(), 1);
                 }
-               
+
                 if (deprels.containsKey(cw.getDeplabel())) {
                     deprels.put(cw.getDeplabel(), deprels.get(cw.getDeplabel())+1);
                 } else {
                     deprels.put(cw.getDeplabel(), 1);
                 }
+
+                for (String feat : cw.getFeatures().keySet()) {
+                    String featval = feat + "=" + cw.getFeatures().get(feat);
+                    Map <String, Integer> featatuposfreq = null;
+                    if (!feats.containsKey(featval)) {
+                        featatuposfreq = new TreeMap<>();
+                        feats.put(featval, featatuposfreq);
+                    } else {
+                        featatuposfreq = feats.get(featval);
+                    }
+                    if (featatuposfreq.containsKey(cw.getUpostag())) {
+                        featatuposfreq.put(cw.getUpostag(), featatuposfreq.get(cw.getUpostag())+1);
+                    } else {
+                        featatuposfreq.put(cw.getUpostag(), 1);
+                    }
+                }
             }
-            
+
             int mwttokens = 0;
             Map<Integer, ConllWord> mwtmap = csent.getContractedWords();
             if (mwtmap != null) {
                 mwts += mwtmap.size();
-         
+
                 for (ConllWord mwt : mwtmap.values()) {
                     mwttokens += mwt.getSubid()-mwt.getId();
                 }
@@ -495,7 +512,7 @@ public class ConllFile {
                 emptywords += csent.getEmptyWords().size();
             }
         }
-        
+
         jdoc.addProperty("syntactic_words", syntactic_words);
         jdoc.addProperty("mwts", mwts);
         jdoc.addProperty("emptywords", emptywords);
@@ -505,15 +522,26 @@ public class ConllFile {
             u.addProperty(k, uposs.get(k));
         }
         jdoc.add("UPOSs", u);
-        
+
         u = new JsonObject();
         for (String k: deprels.keySet()) {
             u.addProperty(k, deprels.get(k));
         }
         jdoc.add("Deprels", u);
+
+        //System.err.println("qqqq\n" + feats);
+        JsonObject fvu = new JsonObject();
+        for (String fv : feats.keySet()) {
+            u = new JsonObject();
+            for (String upos: feats.get(fv).keySet()) {
+                u.addProperty(upos, feats.get(fv).get(upos));
+            }
+            fvu.add(fv, u);
+        }
+        jdoc.add("Features", fvu);
         return jdoc;
     }
-    
+
     /**
      * process the contents of a CoNLL file
      *
@@ -641,7 +669,7 @@ public class ConllFile {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.out.println("usage: ConllFile [--debug] [--nostrict] [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] file.conll|-");
+            System.out.println("usage: ConllFile [--debug] [--nostrict] [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] [--stats] file.conll|-");
         } else {
             //for (String a : args) System.err.println("arg " + a);
             String filter = null;
@@ -649,6 +677,7 @@ public class ConllFile {
             boolean shuffle = false;
             boolean debug = false;
             boolean strict = true;
+            boolean stats = false;
 
             int first = 1;
             int last = -1; // = all
@@ -675,8 +704,11 @@ public class ConllFile {
                 } else if (args[a].equals("--debug")) {
                     debug = true;
                     argindex++;
-                } else if (args[a].equals("--nostrict")) {
-                    strict = false;
+                } else if (args[a].equals("--debug")) {
+                    debug = true;
+                    argindex++;
+                } else if (args[a].equals("--stats")) {
+                    stats = true;
                     argindex++;
                 } else if (args[a].equals("--cedit")) {
                     conditionfile = args[++a];
@@ -753,7 +785,10 @@ public class ConllFile {
 
                 } else {
                     cf = new ConllFile(new File(args[argindex]), false, false);
-                    if (subphrase_deprels != null) {
+                    if (stats) {
+                        System.out.println(cf.getFilestats());
+                    }
+                    else if (subphrase_deprels != null) {
                         for (ConllSentence cs : cf.sentences) {
                             String s = cs.getSubTreeAsText(subphrase_deprels);
                             if (!s.isEmpty()) {

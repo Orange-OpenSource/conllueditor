@@ -75,7 +75,7 @@ function drawTable(parent, trees) {
         for (var i = 0; i < conllucolumns.length; ++i) {
             var hdcell = document.createElement('th');
             headerrow.append(hdcell);
-            hdcell.innerHTML = conllucolumns[i]
+            hdcell.innerHTML = conllucolumns[i];
             //hdcell.className = "tdid";
         }
         tbl.append(headerrow);

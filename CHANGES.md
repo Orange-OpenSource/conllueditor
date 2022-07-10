@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.17.1
+* add feature/values in statistics, update numbers if file was edited
+
 ## Version 2.17.0
 * show CoNLL-U file statistics (sentences, tokens, words, MWTs, UPOS, deprels)
 
