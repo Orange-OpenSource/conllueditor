@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.17.1 as of 9th July 2022
+    version 2.17.2 as of 15th July 2022
     -->
 
     <head>
@@ -513,16 +513,21 @@
                         If you click <span class="buttondoc">search &amp; replace</span>, in the first sentence which has at least a token which matches
                         the condition, all matching tokens are modified, following the key:newvalues list:
                         <ul>
-                        <li> <span class="userinputdoc">form</span> (<span class="userinputdoc">form:newform</span>) </li>
-                        <li> <span class="userinputdoc">lemma</span></li>
-                        <li> <span class="userinputdoc">upos</span></li>
-                        <li> <span class="userinputdoc">xpos</span></li>
-                        <li> <span class="userinputdoc">deprel</span></li>
-                        <li> <span class="userinputdoc">feat</span> (<span class="userinputdoc">feat:Featname:Value</span>, an empty value deletes the feature from the word)</li>
-                        <li> <span class="userinputdoc">misc</span>  (<span class="userinputdoc">misc:Key:Value</span>, an empty value deletes the misc from the word)</li>
+                        <li> <span class="userinputdoc">Form</span> (<span class="userinputdoc">Form:"newform"</span>) </li>
+                        <li> <span class="userinputdoc">Lemma</span> (e.g. <span class="userinputdoc">Lemma:"Word"</span>) </li>
+                        <li> <span class="userinputdoc">Upos</span> (e.g. <span class="userinputdoc">Upos:"Noun"</span>) </li>
+                        <li> <span class="userinputdoc">Xpos</span> (e.g. <span class="userinputdoc">Xpos:"N_SG"</span>) </li>
+                        <li> <span class="userinputdoc">Deprel</span> (e.g. <span class="userinputdoc">Deprel:"nsubj"</span>) </li>
+                        <li> <span class="userinputdoc">Feat</span> (<span class="userinputdoc">Feat:"Featname:Value"</span>, an empty value deletes the feature from the word)</li>
+                        <li> <span class="userinputdoc">Misc</span>  (<span class="userinputdoc">Misc:"Key:Value"</span>, an empty value deletes the misc from the word)</li>
                         </ul>
-
-
+                        The functions <span class="userinputdoc">head()</span> and <span class="userinputdoc">this()</span> can be used to copy values from 
+                        other tokens/columns to the indeicated column, e.g.:
+                        <ul>
+                            <li> <span class="userinputdoc">Eud:head(HeadId)+":"+head(Deprel)</span> set EUD to head and deprel of the headword
+                            <li> <span class="userinputdoc">Lemma:this(Form)</span> set lemma to the form of current token
+                        </ul>
+                        (for more examples, see <a href="https://github.com/Orange-OpenSource/conllueditor/blob/master/doc/mass_editing.md">Mass editing</a>)
 
                         <h2>Run a validator</h2>
                         Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all

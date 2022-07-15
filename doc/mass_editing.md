@@ -104,13 +104,13 @@ If a token has a head 0, it's deprel will always be `root` unless the option `--
 
 ## Examples
 
-* `Upos:"NOUN"`                      set Upos to `NOUN`
-* `Eud:"+2:dep"                    add a enhanced UD relation "dep" using the current id + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence, the head id is not modified)
+* `Upos:"NOUN"`                       set Upos to `NOUN`
+* `Eud:"+2:dep"`                      add a enhanced UD relation "dep" using the current id + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence, the head id is not modified)
 * `Eud:head(HeadId)+":"+head(Deprel)` set EUD to head and deprel of the headword
-* `HeadId:"+2"                      set head to current ud + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence, the head id is not modified)
-* `HeadId:"-1"                      set head to current ud - 1
-* `HeadId:"5"                       set head to 5 (n must be 0 or a positive integer)
-* `HeadId:head(Headid)              set head to the headid of head node
+* `HeadId:"+2"`                      set head to current ud + 2 (must be a negative or positive integer without 0 (if resulting head id is out of the sentence, the head id is not modified)
+* `HeadId:"-1"`                      set head to current ud - 1
+* `HeadId:"5"`                       set head to 5 (n must be 0 or a positive integer)
+* `HeadId:head(Headid)`              set head to the headid of head node
 * `Feat:"Number=Sing"`               adds a feature `Number=Sing`  (Number: deletes the feature)
 * `Lemma:this(Form)`                set lemma to the form of current token
 * `Lemma:this(Misc_Translit)`       set lemma to the key `Translit` of the `Misc` column

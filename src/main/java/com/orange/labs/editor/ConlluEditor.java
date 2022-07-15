@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.0 as of 4th July 2022
+ @version 2.17.2 as of 15th July 2022
  */
 package com.orange.labs.editor;
 
@@ -710,6 +710,7 @@ public class ConlluEditor {
           finddeprel "true" <string> find a sentence with a deprel or a subtree: "aux" or "det>nsubj"
           findsubtree "true" <string> find a sentence which matches the partial tree (given as CoNLL-U or CoNLL-U plus)
           createsubtree <tokenid>    create a subtree by taking given id as root
+          replaceexpression "false" <conditions> > <replacements>
           mod <field> <tokenid> <value>
                                      modifiy token of current sentence
                                        field: form leamm upos xpos feat deprel enhdpes misc
@@ -1072,6 +1073,9 @@ public class ConlluEditor {
                 return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
 
             } else if (command.startsWith("replaceexpression ")) {
+                if (mode != 0) {
+                    return formatErrMsg("NO editing in browse mode", currentSentenceId);
+                }
                 String[] f = command.trim().split(" +", 3);
                 if (f.length != 3) {
                     return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
@@ -1111,6 +1115,14 @@ public class ConlluEditor {
                         Set<Integer>ids = new HashSet<>();
                         for (ConllWord cw : cws) ids.add(cw.getId());
                         ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.LEMMA, ids);
+
+                        changesSinceSave += 1;
+                        try {
+                            writeBackup(currentSentenceId, null, editinfo);
+                        } catch (IOException ex) {
+                            return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                        }
+
                         return returnTree(currentSentenceId, cs, hl); //cw.getUpostag());
                     }
                 }
