@@ -304,7 +304,10 @@ see section [Enhanced Dependencies](#enhanced-dependencies) for more information
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
-A click on the filename on the top of the screens opens a windows with some file statistics.
+A click on the filename on the top of the screens opens a windows with some file
+statistics:
+
+![Empty nodes](doc/stats.png)
 
 In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new
 word to the right of `<wordid>`. This new word can then be edit, with a CTRL-click.
