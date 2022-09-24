@@ -171,7 +171,7 @@ function filestats() {
     $("#fileStats").modal()
 }
 
-function makeItemFreqPercent_table(appendto, data, total) {
+function makeItemFreqPercent_table(appendto, data, total, what) {
     var upostbl = document.createElement("table");
     upostbl.className = "sortable";
     upostbl.id = "UPT";
@@ -187,7 +187,7 @@ function makeItemFreqPercent_table(appendto, data, total) {
 
     var hdcell = document.createElement('th');
     headerrow.append(hdcell);
-    hdcell.innerHTML = "UPOS";
+    hdcell.innerHTML = what; //"UPOS";
 
     hdcell = document.createElement('th');
     headerrow.append(hdcell);
@@ -289,9 +289,9 @@ function getServerInfo() {
             $("#stats_mwts").append(data.stats.mwts);
             $("#stats_emptywords").append(data.stats.emptywords);
 
-            makeItemFreqPercent_table($("#stats_upos"), data.stats.UPOSs, data.stats.syntactic_words);
+            makeItemFreqPercent_table($("#stats_upos"), data.stats.UPOSs, data.stats.syntactic_words, "UPOS");
 
-            makeItemFreqPercent_table($("#stats_deprel"), data.stats.Deprels, data.stats.syntactic_words);
+            makeItemFreqPercent_table($("#stats_deprel"), data.stats.Deprels, data.stats.syntactic_words, "Deprel");
 
             var fvustbl = document.createElement("table");
             fvustbl.className = "sortable";

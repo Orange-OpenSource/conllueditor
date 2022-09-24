@@ -136,7 +136,7 @@ as described below.
 ./gui/lib/jquery-ui-1.12.1/jquery-ui.min.js
 ```
 
-### Update
+### Update ConlluEditor
 
 to get bug corrections/new features, run
 
@@ -256,6 +256,9 @@ Clicking twice on a word deletes its eventual dependency relation and makes it r
 To edit form, lemma etc. CTRL-click or double click on the word. For more help use the `Help` button.
 To delete a word, click ont it and hit the `delete` key.
 
+
+## Display modes
+
 The sentence is shown as a dependency tree or as a flat graph (“dependency hedge”), morphological features can be shown or hidden with the `features` button,
 information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
@@ -277,6 +280,9 @@ The table view is still *experimental*, all green fields can be edited:
 
 ![Edit screen (flat graph)](doc/table.png)
 
+
+## Editing words and dependency relations
+
 Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server,
 autocompleting is proposed
 
@@ -290,6 +296,8 @@ For languages which are written from the right to the left like Arabic or Hebrew
 
 ![Edit screen (Arabic)](doc/tree_R2L.png)
 
+## Empty Nodes
+
 Empty nodes (having `n.1` ids) are shown in a dashed box:
 
 ![Empty nodes](doc/tree_emptynode.png)
@@ -300,14 +308,10 @@ if the button `show basic in enhanced` is active, all enhanced dependency relati
 
 ![Empty nodes](doc/graph_emptynode.png)
 
-see section [Enhanced Dependencies](#enhanced-dependencies) for more information
+See section [Enhanced Dependencies](#enhanced-dependencies) for more information
 
-The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
-LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
-A click on the filename on the top of the screens opens a windows with some file
-statistics:
 
-![Empty nodes](doc/stats.png)
+## Split or merge adjacent words (editing tokenisation)
 
 In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new
 word to the right of `<wordid>`. This new word can then be edit, with a CTRL-click.
@@ -321,7 +325,7 @@ In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
 tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
-### Commands to be used with `modify` button:
+## Commands to be used with `modify` button:
 
 * `split id [splitpos]` 	split a word in two (it will be copied to a new node and attached to the same head). If `splitpos` is given, the characters of Form and Lemma left of splitpos will remain in the original word, the rest will be the new word
 * `join id` 	merge word with id with the following. If the merged word overlap in any way with a multiword token (MWT), the existing MWT will be deleted
@@ -334,7 +338,17 @@ tree/graph to open a dialogue which allows to edit or delete the token (i.e. the
 * `emptyinsert id form [lemma [upos [xpos]]]` 	add a new empty word after word with `id`. The new empty word gets the id `id.1`, if it is the first empty word at thihs position. If there is already an empty word, the new one will have the id `id.2` etc.
 * `emptydelete id.subid` 	delete empty word with id `id.subid`.
 
-## Searching
+
+## Show CoNLL-U, LaTeX and SD-parse format and file statistics
+
+The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
+LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
+A click on the filename on the top of the screens opens a windows with some file
+statistics:
+
+![Empty nodes](doc/stats.png)
+
+# Searching
 
 The search fields at the top of the screen can be used to search for forms, lemmas, UPOS, XPOS, deprels (or sequences of these),
 comments and sentences ids.
@@ -360,7 +374,7 @@ Other search modes can be chosen by clicking on the `toggle search modes` button
 * matching subtrees
 * no search (to have less headers on top of the GUI)
 
-### Complex search and search and replace
+## Complex search and search and replace
 
 This opens a search and search-and-display field. The search fields provides a simple language to find
 sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
@@ -390,7 +404,7 @@ In order to undo this replacement, click the undo button (
 <img src="gui/img/undo.svg" alt="undo" width="15"/>), to continue
 replacing, click `search & replace` again
 
-### Matching subtrees
+## Matching subtrees
 
 This mode allows you to input a tree (using `_` as wildcards and regular expressions).
 Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with
@@ -459,7 +473,7 @@ contains (as a first line):
 
 ![Import subtree with selected columns](doc/importsubtree-columnsdef.png)
 
-## Mass Editing
+# Mass Editing
 
 A simple languages to modify tokens if a (complex condition is met)
 see [Mass Editing](doc/mass_editing.md)
@@ -537,7 +551,9 @@ No semantic/plausibility check is performed. E.g.
 `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
 will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense anymore.
 
-## Shortcuts
+
+# Shortcuts
+
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing:
 These single letter keys change the UPOS/XPOS/deplabel/feature of
 the active word to the defined value. To activate a word, click once on the word.
@@ -590,6 +606,7 @@ There is a list of predefined shortcuts which cannot be altered:
 * `&` followed by two digits. Shift the syntax tree so that the token with the given ID is centered in the visible part of the tree.
 
 # Multiuser/save/git
+
 The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
 To be on the safe side, start a server for every annotator on a different port/machine.
 After each modification the edited file is saved:
@@ -597,6 +614,7 @@ After each modification the edited file is saved:
 * if not, it is saved under a different filename (adding `.2`) in the same directory, the original file is not modified.
 
 # Validation
+
 The ConlluEditor is able to load run a validation script on the current sentence. The programme and its arguments
 must be configured in a text file
 ```
