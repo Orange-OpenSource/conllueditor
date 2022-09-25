@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.17.3
+* more file statistics, doc updated
+
 ## Version 2.17.2
 * search&replace save problem corrected, doc updated
 

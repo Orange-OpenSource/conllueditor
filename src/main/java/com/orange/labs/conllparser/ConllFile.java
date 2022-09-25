@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2021, Orange S.A.
+ Copyright (c) 2018-2022, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.1 as of 9th July 2021
+ @version 2.17.3 as of 25th September 2022
 */
 package com.orange.labs.conllparser;
 
@@ -462,8 +462,9 @@ public class ConllFile {
 
         Map<String, Integer>uposs = new TreeMap<>();
         Map<String, Integer>deprels = new TreeMap<>();
+        Map<String, Map<String, Integer>> deprels_upos = new TreeMap<>(); // deprel: Upos: freq
 
-        Map<String, Map<String, Integer>> feats = new TreeMap<>(); // F=Val: Upos: freq
+        Map<String, Map<String, Integer>> feats_upos = new TreeMap<>(); // F=Val: Upos: freq
 
 
         for (ConllSentence csent : sentences) {
@@ -481,14 +482,28 @@ public class ConllFile {
                     deprels.put(cw.getDeplabel(), 1);
                 }
 
+                Map <String, Integer> deprel_at_upos_freq = null;
+                if (!deprels_upos.containsKey(cw.getDeplabel())) {
+                    deprel_at_upos_freq = new TreeMap<>();
+                    deprels_upos.put(cw.getDeplabel(), deprel_at_upos_freq);
+                } else {
+                    deprel_at_upos_freq = deprels_upos.get(cw.getDeplabel());
+                }
+                if (deprel_at_upos_freq.containsKey(cw.getUpostag())) {
+                    deprel_at_upos_freq.put(cw.getUpostag(), deprel_at_upos_freq.get(cw.getUpostag())+1);
+                } else {
+                    deprel_at_upos_freq.put(cw.getUpostag(), 1);
+                }
+
+
                 for (String feat : cw.getFeatures().keySet()) {
                     String featval = feat + "=" + cw.getFeatures().get(feat);
                     Map <String, Integer> featatuposfreq = null;
-                    if (!feats.containsKey(featval)) {
+                    if (!feats_upos.containsKey(featval)) {
                         featatuposfreq = new TreeMap<>();
-                        feats.put(featval, featatuposfreq);
+                        feats_upos.put(featval, featatuposfreq);
                     } else {
-                        featatuposfreq = feats.get(featval);
+                        featatuposfreq = feats_upos.get(featval);
                     }
                     if (featatuposfreq.containsKey(cw.getUpostag())) {
                         featatuposfreq.put(cw.getUpostag(), featatuposfreq.get(cw.getUpostag())+1);
@@ -529,12 +544,22 @@ public class ConllFile {
         }
         jdoc.add("Deprels", u);
 
+        JsonObject du = new JsonObject();
+        for (String d : deprels_upos.keySet()) {
+            u = new JsonObject();
+            for (String upos: deprels_upos.get(d).keySet()) {
+                u.addProperty(upos, deprels_upos.get(d).get(upos));
+            }
+            du.add(d, u);
+        }
+        jdoc.add("Deprels_UPOS", du);
+
         //System.err.println("qqqq\n" + feats);
         JsonObject fvu = new JsonObject();
-        for (String fv : feats.keySet()) {
+        for (String fv : feats_upos.keySet()) {
             u = new JsonObject();
-            for (String upos: feats.get(fv).keySet()) {
-                u.addProperty(upos, feats.get(fv).get(upos));
+            for (String upos: feats_upos.get(fv).keySet()) {
+                u.addProperty(upos, feats_upos.get(fv).get(upos));
             }
             fvu.add(fv, u);
         }

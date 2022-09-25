@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.1 as of 9th July 2022
+ @version 2.17.3 as of 25th September 2022
  */
 
 
@@ -196,6 +196,7 @@ function makeItemFreqPercent_table(appendto, data, total, what) {
     hdcell = document.createElement('th');
     headerrow.append(hdcell);
     hdcell.innerHTML = "%";
+    hdcell.setAttribute('style', 'text-align: right;');
 
     var tbody = document.createElement("tbody");
     upostbl.append(tbody);
@@ -289,10 +290,60 @@ function getServerInfo() {
             $("#stats_mwts").append(data.stats.mwts);
             $("#stats_emptywords").append(data.stats.emptywords);
 
+            // stats for UPOS
             makeItemFreqPercent_table($("#stats_upos"), data.stats.UPOSs, data.stats.syntactic_words, "UPOS");
-
+            // stats for Deprels
             makeItemFreqPercent_table($("#stats_deprel"), data.stats.Deprels, data.stats.syntactic_words, "Deprel");
 
+            // stats for deprels per UPOS
+            var drustbl = document.createElement("table");
+            drustbl.className = "sortable";
+            $("#stats_deprel_upos").append(drustbl);
+
+            var thead = document.createElement("thead");
+            drustbl.append(thead);
+            var headerrow = document.createElement("tr");
+            thead.append(headerrow);
+            headerrow.className = "tableheader";
+
+            var hdcell = document.createElement('th');
+            headerrow.append(hdcell);
+            hdcell.innerHTML = "Deprel";
+
+            for (var p in data.stats.UPOSs) {
+                var hdcell = document.createElement('th');
+                headerrow.append(hdcell);
+                hdcell.innerHTML = p;
+            }
+            
+            var tbody = document.createElement("tbody");
+            drustbl.append(tbody);
+
+            for (var dr in data.stats.Deprels_UPOS) {
+                var stdrow = document.createElement("tr");
+                tbody.append(stdrow);
+                stdrow.className = "everyotherrow";
+
+                var cell = document.createElement('th');
+                stdrow.append(cell);
+                cell.innerHTML = dr;
+
+                for (var upos in data.stats.UPOSs) {
+                    var uposfreq = data.stats.Deprels_UPOS[dr][upos];
+                    var cell = document.createElement('td');
+                    stdrow.append(cell);
+                    if (uposfreq != undefined) {
+                        //featsline += '<td align="right">' + uposfreq + "</td>";
+                         cell.innerHTML = uposfreq;
+                         cell.setAttribute('style', 'text-align: right;');
+                    }
+                }
+            }
+            sorttable.makeSortable(drustbl);
+
+
+
+            // stats for features per UPOS
             var fvustbl = document.createElement("table");
             fvustbl.className = "sortable";
             $("#stats_feats").append(fvustbl);
@@ -332,11 +383,16 @@ function getServerInfo() {
                     stdrow.append(cell);
                     if (uposfreq != undefined) {
                         //featsline += '<td align="right">' + uposfreq + "</td>";
-                         cell.innerHTML = uposfreq;
+                        cell.innerHTML = uposfreq;
+                        cell.setAttribute('style', 'text-align: right;');
                     }
                 }
             }
             sorttable.makeSortable(fvustbl);
+
+
+
+
 
             
             $('#filename').empty();
