@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.17.4
+* bug correction in complex search: child(child(...))
+
 ## Version 2.17.3
 * more file statistics, doc updated
 

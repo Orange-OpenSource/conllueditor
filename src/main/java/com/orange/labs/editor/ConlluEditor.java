@@ -2487,7 +2487,7 @@ public class ConlluEditor {
             }
 
             int port = Integer.parseInt(line.getArgList().get(1));
-            // ServeurHTTP sh = 
+            // ServeurHTTP sh =
             new ServeurHTTP(port, ce, line.getOptionValue(rootdir), debug);
         } catch (ParseException e) {
             // oops, something went wrong

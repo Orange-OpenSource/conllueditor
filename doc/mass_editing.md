@@ -12,11 +12,11 @@ The rule file as line per rule
 condition > new_values
 ```
 
-## Condition 
-`condition` is a logical expression which is evaluated for each word, and if true the _new values_ are set to the token which satisfies the condition. 
+## Condition
+`condition` is a logical expression which is evaluated for each word, and if true the _new values_ are set to the token which satisfies the condition.
 The `condition` is a set of `key:values`, operators like `and`, `or`  or `!` (not) and parentheses. The condition may contain whitespaces:
 
-Examples: 
+Examples:
 * `Upos:ADP and !Deprel:case`: true if the current token has `ADP`  as UPOS and its deprel is not `case`. Available keys:
   * `Upos:` (Values: `[A-Z]+`)
   * `Xpos:` (Values: string of any character except whitespaces, `)` and `&`)
@@ -50,7 +50,8 @@ In addition to key keys listed above, four functions are available to take the c
 For example:
 * `head(head(Upos:VERB and Feat:Tense=Past))`: true if the current token has a head who has a head with UPOS `VERB and the feature `Tense=Past`
 * `child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)`: true if the current token has a dependant with UPOS `VERB`
-and a feature `VerbForm=Part` and another child with UPOS `DET`. 
+and a feature `VerbForm=Part` and another child with UPOS `DET`.
+* `head(next(Upos:NOUN))`: true if the current token has a head which is followed by a token with UPOS `NOUN`
 
 Functions can be nested (eventhough `child(head())` does not make sense, does it :-)
 
@@ -65,7 +66,7 @@ For more information check the [formal grammar for conditions](conditions/README
 
 The `targeted_column` indicates which column of the word a new value is assigned to:
 Possible `keys`:
-* `Form` 
+* `Form`
 * `Lemma`
 * `Upos`
 * `Xpos`
@@ -73,7 +74,7 @@ Possible `keys`:
 * `HeadId`
 * `Feat`
 * `Eud`
-* `Misc` 
+* `Misc`
 (the `Id` column cannot be changed).
 
 `value` is a combination (using ` +`) of strings or functions which give access to other columns of the current word or it's head. Strings must be included
@@ -119,12 +120,12 @@ If a token has a head 0, it's deprel will always be `root` unless the option `--
 * `Feat:"Featname"+this(Lemma)`       set the feature Featname to the value of Lemma
 * `Feat:"Gender"+this(Misc_Special)` set the feature Gender to the value of the Misc Special
 * `Misc:"Keyname"+head(head(Upos))`    set the key "Keyname" of `Misc` column  to the Upos of the head of the head
-* `Lemma:substring(this(Form),1,3)`      set lemma to the substring (1 - 3) of the form 
-* `Lemma:substring(this(Form),1)`       set lemma to the substring (1 - end) ofthe form 
+* `Lemma:substring(this(Form),1,3)`      set lemma to the substring (1 - 3) of the form
+* `Lemma:substring(this(Form),1)`       set lemma to the substring (1 - end) ofthe form
 * `Form:replace(this(Form),"é","e")`  replace all occurrances of `é` in the form by `e`
 
-N.B. **no white spaces allowed in a value expression!** 
-therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are invalid, 
+N.B. **no white spaces allowed in a value expression!**
+therefore `Lemma:substring(this(Form), 1, 3)` or Lemma:this(Form) + "er"` are invalid,
 use `Lemma:substring(this(Form),1,3)` or Lemma:this(Form)+"er"` instead.
 
 In order to empty a column, just set it to `"_"`: `Feat:"_"`, `Xpos:"_"`, `Eud:"_"` etc.

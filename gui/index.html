@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.17.3 as of 25th September 2022
+    version 2.17.4 as of 3rd October 2022
     -->
 
     <head>
@@ -503,6 +503,7 @@
                             <li> <span class="userinputdoc">head(head(Upos:VERB and Feat:Tense=Past))</span> true if the current token has a head who has a head with UPOS <i>VERB</i> and the feature <i>Tense=Past</i></li>
                             <li> <span class="userinputdoc">child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)</span>: true if the current token has a dependant with UPOS <i>VERB</i>
                         and a feature <i>VerbForm=Part</i> and another child with UPOS <i>DET</i>. </li>
+                            <li> <span class="userinputdoc">head(next(Upos:NOUN))</span>: true if the current token has a head which is followed by a token with UPOS <i>NOUN</i></li>
                         </ul>
 
                         Functions can be nested (eventhough <span class="userinputdoc">child(head())</span> does not make sense, does it :-)

@@ -214,7 +214,7 @@
 # sentence 11
 1	Sam	Sam	PROPN	_	_	2	nsubj	2:nsubj|4:nsubj	_
 2	bought	buy	VERB	_	_	0	root	_	_
-3	and	and	CCONJ	_	_	4	cc	_	_
+3	and	and	CCONJ	_	_	4	cc	_	FollowingOfHead=Noun
 4	prepared	prepare	VERB	_	_	2	conj	_	_
 5	dinner	dinner	NOUN	_	_	2	obj	2:obj|4:obj	_
 
@@ -223,9 +223,9 @@
 1	Sam	Sam	PROPN	_	_	2	nsubj	_	_
 2	persuaded	persuade	VERB	_	_	0	root	_	_
 3	Kim	Kim	PROPN	_	_	2	obj	2:obj|5:nsubj	_
-4	to	to	ADP	_	_	5	mark	_	_
+4	to	to	ADP	_	_	5	mark	_	FollowingOfHead=Noun
 5	fix	fix	VERB	_	_	2	xcomp	_	_
-6	dinner	dinner	NOUN	_	_	5	obj	_	_
+6	dinner	dinner	NOUN	_	_	5	obj	_	FollowingOfHead=Noun
 
 # sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
@@ -233,10 +233,10 @@
 1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	FollowingOfHead=Noun
 2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_
 3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	2:obj	FollowingOfHead=Noun
-4	and	and	CCONJ	CC	_	5	cc	5:cc|5.1:cc	_
+4	and	and	CCONJ	CC	_	5	cc	5:cc|5.1:cc	FollowingOfHead=Noun
 5	Kim	Kim	PROPN	NNP	Number=Sing	2	conj	2:conj|5.1:nsubj	FollowingOfHead=Noun
 5.1	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
-6	dinner	dinner	NOUN	NN	Number=Sing	5	orphan	5.1:obj	_
+6	dinner	dinner	NOUN	NN	Number=Sing	5	orphan	5.1:obj	FollowingOfHead=Noun
 
 # sent_id = ellipsis2
 # text = Mary organised bred and John beer
@@ -244,10 +244,10 @@
 1	Mary	Mary	PROPN	_	_	2	nsubj	2:nsubj	FollowingOfHead=Noun
 2	organised	organise	VERB	_	_	0	root	0:root	_
 3	bred	bred	NOUN	_	_	2	obj	2:obj	FollowingOfHead=Noun
-4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
+4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	FollowingOfHead=Noun
 5	John	John	PROPN	_	_	2	conj	2:conj|5.1:nsubj	FollowingOfHead=Noun
 5.1	organised	_	_	_	_	_	_	2:conj	_
-6	beer	beer	NOUN	_	_	5	orphan	5.1:obj	_
+6	beer	beer	NOUN	_	_	5	orphan	5.1:obj	FollowingOfHead=Noun
 
 # sent_id = unannotated
 # text = Une exposition au musée du Louvre
