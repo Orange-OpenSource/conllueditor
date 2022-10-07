@@ -228,7 +228,7 @@ options. Without `--language` only the universal features and deprels are used.
 * `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
 are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
-* `--shortcuts <file>` list of shortcut definitions (format, cf. [gui/shortcuts.json](gui/hortcuts.json))
+* `--shortcuts <file>` list of shortcut definitions (see section [shortcuts](#shortcuts) below, format, cf. [gui/shortcuts.json](gui/hortcuts.json))
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button.
 Default: save when another sentence is chosen.
@@ -567,7 +567,7 @@ Shortcuts can be single letters or a sequence of multiple letters:
         "D": "DET",
         "P": "PROPN",
         "I": "INTJ",
-        "AJ": "ADJ",
+        "A": "ADJ",
         "N": "NOUN",
         "AP": "ADP",
         "R": "PRON",
@@ -586,12 +586,15 @@ Shortcuts can be single letters or a sequence of multiple letters:
     },
     "deplabel": {
         "a": "amod",
-        "b": "advmod",
+        "av": "advmod",
         "c": "case",
         ....
     }
 }
 ```
+There is a timeout, so multi-letter shortcuts must be typed with maximally 700ms intervals. This makes it possible to
+define shortcuts with different length and an identical sequence at the beginning
+(like above `A` and `AV`).
 
 A personalised list (same format as [gui/shortcuts.json](gui/shortcuts.json)) can be used with the `--shortcuts` option.
 
@@ -603,7 +606,7 @@ There is a list of predefined shortcuts which cannot be altered:
 * `_` delete all features of active word
 * `delete`-key deletes active word
 * `?` shows/hides list of shortcuts
-* `&` followed by two digits. Shift the syntax tree so that the token with the given ID is centered in the visible part of the tree.
+* `&` followed by _n_ digits: Shift view on the syntax tree so that the token with the given ID is centered in the visible part of the tree.
 
 # Multiuser/save/git
 

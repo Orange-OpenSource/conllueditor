@@ -872,9 +872,9 @@ function getWordLengthsOfTree(item, maxlen) {
 var conllwords = {}; // all words of current sentence
 var mwts = {}; // all multiword tokens of current sentence
 var clickedNodes = [];
-var unprocessedkeystrokes = []; // process multi key shortcuts
-var jumptotokendigits = []; // process keys to get the number of the token to jump to
-var token_to_be_focussed = -1; // set to 0 if "&" is hit, the following two digits focuss the token, if any of the following keys is not a digit, we quit the loop
+//var unprocessedkeystrokes = []; // process multi key shortcuts
+//var jumptotokendigits = []; // process keys to get the number of the token to jump to
+//var token_to_be_focussed = -1; // set to 0 if "&" is hit, the following two digits focuss the token, if any of the following keys is not a digit, we quit the loop
 var deprels = [];
 var uposs = [];
 var clickCount = 0;
@@ -916,8 +916,8 @@ $(window).on('keydown', function (evt) {
 })
 
 function unsetPShC() {
-    unprocessedkeystrokes = [];
-    jumptotokendigits = [];
+    //unprocessedkeystrokes = [];
+    //jumptotokendigits = [];
     $("#pendingshortcuts").empty();
     $("#psc").hide();
 }
@@ -985,15 +985,6 @@ $(window).on('keypress', function (evt) {
     } else if (evt.which == 61) { // "=" validator
         unsetPShC();
         $("#valid").click();
-
-    } else if (evt.which == 38) { // "&" followed by three digits: put word with ID into viewport
-        // TODO
-        unsetPShC();
-        // move viewport to make token visible
-        token_to_be_focussed = 0;
-        $("#pendingshortcuts").text("&");
-        $("#psc").show();
-        return;
     } else  if (evt.which == 95) { // "_" delete all features
         sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
         unsetPShC();
@@ -1065,171 +1056,191 @@ $(window).on('keypress', function (evt) {
                 return;
             }
 
-        
+            if (shortcutseq[0] == "&") {
+                var gotonode = parseInt(shortcutseq.substring(1), 10);
+                if (gotonode > 0) {
+                    console.log("EZEZE", gotonode);
+                    var tokid = "#id1_" + gotonode;
+                    try {
+                        $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
+                    } catch (TypeError) {
+                        console.log("Invalid node number (above mex token length)", gotonode);
+                    }
+                } else {
+                    console.log("Invalid node number", hortcutseq.substring(1));
+                }
+                shortcutseq = "";
+                deprels = [];
+                uposs = [];
+                clickedNodes = [];
+                unsetPShC();
+                return;
+            }
     
         
             shortcutseq = "";
-        }, 500);
+
+        }, 700);
     }
 });
 
 // OLD
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
-$(window).on('keypressQQQ', function (evt) {
-    return; 
-    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
-    //console.log("kk", evt.which, unprocessedkeystrokes);
-
-    if ($(".modal").is(":visible")) {
-        // if a model is open, we do not want to catch keypress events, since we are editing text
-        unsetPShC();
-        return;
-    }
-
-    if (graphtype == 3) {
-        // in table mode, we need all keys to edit the table cells
-        unsetPShC();
-        return;
-    }
-
-    if ($("#subtreesearch").is(":visible") && evt.which !== 33) {
-        // when editing a subtree, we need all keys to edit the table cells
-        unsetPShC();
-        return;
-    }
-
-    // inputting a token number to center in viewport
-    if (token_to_be_focussed > -1) {
-        if (evt.which >= 48 && evt.which <= 57) { // 0 - 9
-            if (token_to_be_focussed == 0) {
-                jumptotokendigits.push(String.fromCharCode(evt.which));
-                $("#pendingshortcuts").text("&" + jumptotokendigits.join(""));
-                token_to_be_focussed++;
-                return;
-            } else if (token_to_be_focussed == 1) {
-                jumptotokendigits.push(String.fromCharCode(evt.which));
-                //} else {
-                // we have seen two digits
-                var tokid = "#id1_" + parseInt(jumptotokendigits.join(""));
-                $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
-                token_to_be_focussed = -1;
-                unsetPShC();
-            }
-
-        } else {
-            // no integer, stop this and to not center token in viewport
-            token_to_be_focussed = -1;
-            unsetPShC();
-        }
-    }
-
-    // hardwired keys
-    else if (evt.which == 63) { // "?"
-        unsetPShC();
-        ToggleShortcutHelp();
-        //} else if (evt.which == 33) { // "!"
-        //    ToggleSubtree();
-    } else if (evt.which == 43) { // "+"
-        unsetPShC();
-        sendmodifs({"cmd": "next"});
-    } else if (evt.which == 45) { // "-"
-        unsetPShC();
-        sendmodifs({"cmd": "prec"});
-    } else if (evt.which == 61) { // "=" validator
-        unsetPShC();
-        $("#valid").click();
-
-    } else if (evt.which == 38) { // "&" followed by three digits: put word with ID into viewport
-        unsetPShC();
-        // move viewport to make token visible
-        token_to_be_focussed = 0;
-        $("#pendingshortcuts").text("&");
-        $("#psc").show();
-        return;
-
-    } else if (clickedNodes.length == 1) {
-        // a word is active
-        if (evt.which == 95) { // "_" delete all features
-            sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
-            clickedNodes = [];
-            deprels = [];
-            uposs = [];
-            unsetPShC();
-            return;
-        }
-
-        // interpret shortkeys
-        currentkey = String.fromCharCode(evt.which);
-        if (unprocessedkeystrokes.length < longestshortcut) { //== 1) {
-            currentkey = unprocessedkeystrokes.join("") + currentkey;
-        }
-
-        var newval = shortcutsUPOS[currentkey];
-        if (newval != undefined) {
-            //console.log("UPOS", newval);
-            sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
-            clickedNodes = [];
-            deprels = [];
-            uposs = [];
-            unsetPShC();
-            return;
-        }
-
-        newval = shortcutsDEPL[currentkey];
-        if (newval != undefined) {
-            //console.log("DEPL", newval);
-            sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
-            clickedNodes = [];
-            deprels = [];
-            uposs = [];
-            unsetPShC();
-            return;
-        }
-
-        newval = shortcutsFEATS[currentkey];
-        if (newval != undefined) {
-            sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
-            clickedNodes = [];
-            deprels = [];
-            uposs = [];
-            unsetPShC();
-            return;
-        }
-
-        newval = shortcutsXPOS[currentkey];
-        if (newval != undefined) {
-            //console.log("XPOS", newval, newval[0]);
-            if (newval.length > 1) {
-                // change UPOS and XPOS
-                sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
-            } else {
-                // change only XPOS
-                sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
-            }
-
-            clickedNodes = [];
-            deprels = [];
-            uposs = [];
-            unsetPShC();
-            return;
-        }
-
-        // so we got here with a key which is not a shortcut. So maybe it is the first key
-        // of a multi-key shortcut?
-        if (unprocessedkeystrokes.length < longestshortcut - 1) { //(unprocessedkeystrokes.length == 0) {
-            unprocessedkeystrokes.push(String.fromCharCode(evt.which));
-            $("#pendingshortcuts").text(unprocessedkeystrokes.join(""));
-            $("#psc").show();
-        } else if (token_to_be_focussed >= 0) {
-        } else {
-            unsetPShC();
-        }
-        return;
-
-    }
-    unprocessedkeystrokes = [];
-    $("#pendingshortcuts").empty();
-})
+//$(window).on('keypressQQQ', function (evt) {
+//    return; 
+//    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
+//    //console.log("kk", evt.which, unprocessedkeystrokes);
+//
+//    if ($(".modal").is(":visible")) {
+//        // if a model is open, we do not want to catch keypress events, since we are editing text
+//        unsetPShC();
+//        return;
+//    }
+//
+//    if (graphtype == 3) {
+//        // in table mode, we need all keys to edit the table cells
+//        unsetPShC();
+//        return;
+//    }
+//
+//    if ($("#subtreesearch").is(":visible") && evt.which !== 33) {
+//        // when editing a subtree, we need all keys to edit the table cells
+//        unsetPShC();
+//        return;
+//    }
+//
+//    // inputting a token number to center in viewport
+//    if (token_to_be_focussed > -1) {
+//        if (evt.which >= 48 && evt.which <= 57) { // 0 - 9
+//            if (token_to_be_focussed == 0) {
+//                jumptotokendigits.push(String.fromCharCode(evt.which));
+//                $("#pendingshortcuts").text("&" + jumptotokendigits.join(""));
+//                token_to_be_focussed++;
+//                return;
+//            } else if (token_to_be_focussed == 1) {
+//                jumptotokendigits.push(String.fromCharCode(evt.which));
+//                //} else {
+//                // we have seen two digits
+//                var tokid = "#id1_" + parseInt(jumptotokendigits.join(""));
+//                $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
+//                token_to_be_focussed = -1;
+//                unsetPShC();
+//            }
+//
+//        } else {
+//            // no integer, stop this and to not center token in viewport
+//            token_to_be_focussed = -1;
+//            unsetPShC();
+//        }
+//    }
+//
+//    // hardwired keys
+//    else if (evt.which == 63) { // "?"
+//        unsetPShC();
+//        ToggleShortcutHelp();
+//        //} else if (evt.which == 33) { // "!"
+//        //    ToggleSubtree();
+//    } else if (evt.which == 43) { // "+"
+//        unsetPShC();
+//        sendmodifs({"cmd": "next"});
+//    } else if (evt.which == 45) { // "-"
+//        unsetPShC();
+//        sendmodifs({"cmd": "prec"});
+//    } else if (evt.which == 61) { // "=" validator
+//        unsetPShC();
+//        $("#valid").click();
+//
+//    } else if (evt.which == 38) { // "&" followed by three digits: put word with ID into viewport
+//        unsetPShC();
+//        // move viewport to make token visible
+//        token_to_be_focussed = 0;
+//        $("#pendingshortcuts").text("&");
+//        $("#psc").show();
+//        return;
+//
+//    } else if (clickedNodes.length == 1) {
+//        // a word is active
+//        if (evt.which == 95) { // "_" delete all features
+//            sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
+//            clickedNodes = [];
+//            deprels = [];
+//            uposs = [];
+//            unsetPShC();
+//            return;
+//        }
+//
+//        // interpret shortkeys
+//        currentkey = String.fromCharCode(evt.which);
+//        if (unprocessedkeystrokes.length < longestshortcut) { //== 1) {
+//            currentkey = unprocessedkeystrokes.join("") + currentkey;
+//        }
+//
+//        var newval = shortcutsUPOS[currentkey];
+//        if (newval != undefined) {
+//            //console.log("UPOS", newval);
+//            sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
+//            clickedNodes = [];
+//            deprels = [];
+//            uposs = [];
+//            unsetPShC();
+//            return;
+//        }
+//
+//        newval = shortcutsDEPL[currentkey];
+//        if (newval != undefined) {
+//            //console.log("DEPL", newval);
+//            sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
+//            clickedNodes = [];
+//            deprels = [];
+//            uposs = [];
+//            unsetPShC();
+//            return;
+//        }
+//
+//        newval = shortcutsFEATS[currentkey];
+//        if (newval != undefined) {
+//            sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
+//            clickedNodes = [];
+//            deprels = [];
+//            uposs = [];
+//            unsetPShC();
+//            return;
+//        }
+//
+//        newval = shortcutsXPOS[currentkey];
+//        if (newval != undefined) {
+//            //console.log("XPOS", newval, newval[0]);
+//            if (newval.length > 1) {
+//                // change UPOS and XPOS
+//                sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
+//            } else {
+//                // change only XPOS
+//                sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
+//            }
+//
+//            clickedNodes = [];
+//            deprels = [];
+//            uposs = [];
+//            unsetPShC();
+//            return;
+//        }
+//
+//        // so we got here with a key which is not a shortcut. So maybe it is the first key
+//        // of a multi-key shortcut?
+//        if (unprocessedkeystrokes.length < longestshortcut - 1) { //(unprocessedkeystrokes.length == 0) {
+//            unprocessedkeystrokes.push(String.fromCharCode(evt.which));
+//            $("#pendingshortcuts").text(unprocessedkeystrokes.join(""));
+//            $("#psc").show();
+//        } else if (token_to_be_focussed >= 0) {
+//        } else {
+//            unsetPShC();
+//        }
+//        return;
+//
+//    }
+//    unprocessedkeystrokes = [];
+//    $("#pendingshortcuts").empty();
+//});
 
 // hovering on a word which differes from the corresponding word in the --compare file
 // will show the differences
