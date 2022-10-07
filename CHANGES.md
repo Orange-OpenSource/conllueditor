@@ -1,6 +1,7 @@
 # Changes
 
 ## Version 2.17.4
+* shortcuts sequence must be taped with max 300ms between keys. This permits having short and long shortcuts (e.g. A, and AV)
 * bug correction in complex search: child(child(...))
 
 ## Version 2.17.3
