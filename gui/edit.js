@@ -997,6 +997,7 @@ $(window).on('keypress', function (evt) {
         // if it has been less than <MILLISECONDS>
         clearTimeout(timeout);
         shortcutseq += String.fromCharCode(evt.which);
+        $("#pendingshortcuts").text(shortcutseq);
         // Make a new timeout set to go off in 1000ms (1 second)
         timeout = setTimeout(function () {
             // process sequence
@@ -1079,6 +1080,7 @@ $(window).on('keypress', function (evt) {
     
         
             shortcutseq = "";
+            unsetPShC();
 
         }, 700);
     }
