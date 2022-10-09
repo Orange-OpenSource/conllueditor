@@ -952,6 +952,7 @@ let timeout = null;
 var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
+    //console.log("yyyy", evt, shortcutseq);
     if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         unsetPShC();
@@ -1057,7 +1058,7 @@ $(window).on('keypress', function (evt) {
                 return;
             }
 
-            if (shortcutseq[0] == "&") {
+            if (shortcutseq[0] == "&" && shortcutseq.length > 1) {
                 var gotonode = parseInt(shortcutseq.substring(1), 10);
                 if (gotonode > 0) {
                     console.log("EZEZE", gotonode);
@@ -1068,19 +1069,19 @@ $(window).on('keypress', function (evt) {
                         console.log("Invalid node number (above mex token length)", gotonode);
                     }
                 } else {
-                    console.log("Invalid node number", hortcutseq.substring(1));
+                    console.log("Invalid node number", shortcutseq.substring(1));
                 }
                 shortcutseq = "";
-                deprels = [];
-                uposs = [];
-                clickedNodes = [];
+                //deprels = [];
+                //uposs = [];
+                //clickedNodes = [];
                 unsetPShC();
                 return;
             }
-    
-        
+
             shortcutseq = "";
             unsetPShC();
+            return;
 
         }, 700);
     }
