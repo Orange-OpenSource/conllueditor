@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.17.4 (see [change history](CHANGES.md))
+Current version: 2.17.5 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -229,6 +229,7 @@ options. Without `--language` only the universal features and deprels are used.
 are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definitions (see section [shortcuts](#shortcuts) below, format, cf. [gui/shortcuts.json](gui/hortcuts.json))
+* `--shortcutTimeout <milliseconds>` maximal tile allowed between to keys of a shortcut sequence
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button.
 Default: save when another sentence is chosen.
@@ -592,7 +593,7 @@ Shortcuts can be single letters or a sequence of multiple letters:
     }
 }
 ```
-There is a timeout, so multi-letter shortcuts must be typed with maximally 700ms intervals. This makes it possible to
+There is a timeout, so multi-letter shortcuts must be typed with maximally 700ms intervals (change this value with the `--shortcutTimeout <milliseconds>` option). This makes it possible to
 define shortcuts with different length and an identical sequence at the beginning
 (like above `A` and `AV`).
 

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.2 as of 15th July 2022
+ @version 2.17.5 as of 17th October 2022
  */
 package com.orange.labs.editor;
 
@@ -112,6 +112,7 @@ public class ConlluEditor {
     boolean callgitcommit = true;
     int changesSinceSave = 0;
     int saveafter = -1; // save after n changes // -1: save when changing sentence
+    int shortcuttimeout = 700; // GUI waits for 700ms, before decing that shortcut is complete
 
     ConllFile comparisonFile = null;
 
@@ -342,6 +343,10 @@ public class ConlluEditor {
         } else {
             System.err.format("saving file after %d edits\n", saveafter);
         }
+    }
+
+    public void setShortcutTimeout(int timeout) {
+        this.shortcuttimeout = timeout;
     }
 
     public void setDebug(int d) {
@@ -682,6 +687,7 @@ public class ConlluEditor {
         solution.addProperty("git.dirty", gitdirty);
         solution.addProperty("reinit", mode);
         solution.addProperty("saveafter", saveafter);
+        solution.addProperty("shortcuttimeout", shortcuttimeout);
         solution.add("stats", cfile.getFilestats());
         JsonArray coldefs = new JsonArray();
         for (String cd : cfile.getColDefs().keySet()) {
@@ -2388,6 +2394,13 @@ public class ConlluEditor {
                 .build();
         options.addOption(saveAfter);
 
+        Option shortcuttimeout = Option.builder("T").longOpt("shortcutTimeout")
+                .argName("milliseconds")
+                .hasArg()
+                .desc("sets the maximal time the GUI waits before it accepts the shortcut")
+                .build();
+        options.addOption(shortcuttimeout);
+
         Option verbosity = Option.builder("v").longOpt("verb")
                 .argName("hex")
                 .hasArg()
@@ -2467,6 +2480,13 @@ public class ConlluEditor {
                 System.err.println("Invalid value for option --saveAfter. Must be positive integer");
             }
 
+            String scto = line.getOptionValue(shortcuttimeout);
+            if (scto != null && Integer.parseInt(scto) > 0) {
+                ce.setShortcutTimeout(Integer.parseInt(scto));
+            } else {
+                System.err.println("Invalid value for option --shortcutTimeout. Must be positive integer");
+            }
+            
 
             int debug = 0x0d;
             if (line.hasOption(verbosity)) {

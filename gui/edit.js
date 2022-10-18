@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.4 as of 5th October 2022
+ @version 2.17.5 as of 17th October 2022
  */
 
 
@@ -164,10 +164,11 @@ var misclist = ["Gloss=", "LGloss=", "SpaceAfter=No", "SpacesAfter=", "Translit=
 var incorrectwords = {};
 var conllucolumns = [];
 
+var shortcuttimeout = 700; // msecs to wait before a shortcut is considered complete
 
 
 function filestats() {
-    getServerInfo(); // get lates stats from server
+    getServerInfo(); // get latest stats from server
     $("#fileStats").modal()
 }
 
@@ -261,6 +262,8 @@ function getServerInfo() {
                 featlist = data.validFeatures;
             if (data.columns)
                 conllucolumns = data.columns;
+            if (data.shortcuttimeout)
+                shortcuttimeout = data.shortcuttimeout
             if (data.shortcuts) {
                 //console.log("SHORTCUTS", data.shortcuts);
                 $("#scfilename").html(data.shortcuts.filename);
@@ -701,7 +704,7 @@ var shortcutsFEATS = {
 
 var longestshortcut = 1; // longest shortcut key (in order to know when to top piling key strokes :-)
 
-/** run gy getServerInfo() when no shortcuts are provided by server.
+/** run by getServerInfo() when no shortcuts are provided by server.
  Reads defaults from gui/shortcut.json and updates help page.
  */
 function showshortcuts() {
@@ -952,7 +955,7 @@ let timeout = null;
 var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
-    //console.log("yyyy", evt, shortcutseq);
+    //console.log("yyyy", evt, shortcutseq, shortcuttimeout);
     if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         unsetPShC();
@@ -990,7 +993,9 @@ $(window).on('keypress', function (evt) {
         sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
         unsetPShC();
         return;
-        
+    } else if (clickedNodes.length == 0) {
+        unsetPShC();
+        return;
     } else {
 
         // Clear the timeout if it has already been set.
@@ -1083,7 +1088,7 @@ $(window).on('keypress', function (evt) {
             unsetPShC();
             return;
 
-        }, 700);
+        }, shortcuttimeout); //700);
     }
 });
 
