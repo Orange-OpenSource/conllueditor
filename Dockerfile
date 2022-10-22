@@ -1,9 +1,9 @@
 FROM openjdk:17-alpine
 
-# docker build -t jheinecke/conllueditor:2.17.4 .
+# docker build -t jheinecke/conllueditor:2.17.5 .
 # docker build -t jheinecke/conllueditor:latest .
 # docker run -t --rm --name conllueditor -p 5555:5555 --user 1000:1000  -v </absolute/path/to/datadir>:/data  --env filename=tt.conllu jheinecke/conllueditor:latest
-# docker push jheinecke/conllueditor:2.17.4
+# docker push jheinecke/conllueditor:2.17.5
 # docker push jheinecke/conllueditor:latest
 
 # docker exec -it conllueditor /bin/sh
@@ -15,7 +15,7 @@ FROM openjdk:17-alpine
 RUN apk update && apk add  --no-cache bash
 
 WORKDIR /usr/src/ConlluEditor
-COPY target/ConlluEditor-2.17.4-jar-with-dependencies.jar ./ConlluEditor.jar
+COPY target/ConlluEditor-2.17.5-jar-with-dependencies.jar ./ConlluEditor.jar
 
 COPY gui .
 COPY dockerstart.sh .
