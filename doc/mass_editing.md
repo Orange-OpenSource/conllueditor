@@ -22,7 +22,7 @@ Examples:
   * `Xpos:` (Values: string of any character except whitespaces, `)` and `&`)
   * `Lemma:` (Values: string of any character except whitespaces, `)` and `&`)
   * `Form:` (Values: string of any character except whitespaces, `)` and `&`)
-  * `Deprel:` (Values: `[a-z]+`, optionally followed by `:` and  a string of  any character except whitespaces, `)` and `&`)
+  * `Deprel:` (Values: string of any character except whitespaces, `)` and `&`, optionally followed by `:` and  a string of  any character except whitespaces, `)` and `&`)
   * `HeadId:` (Values: `[+-][0-9]+` (relative from current head) or `[0-9]+` (absolute head id), true if the head of the current token matches
   * `EUD:` (Values: `[+-][0-9]+` `:`, deprel, if EudHeadId is `*` any head position is accepted, without `-` or `+` the EudHead is interpreted as an absolute value))
   * `Feat:` (Values: FeatureName=Value or FeatureName:Value. The Featurename must match `[A-Za-z_\[\]]+`, the Value `[A-Za-z0-9]+`)

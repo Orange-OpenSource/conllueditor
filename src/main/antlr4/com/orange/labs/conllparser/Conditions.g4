@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.15.1 as of 8th February 2022
+ @version 2.17.6 as of 26th October 2022
 */
 
 // grammar to parse the conditions for complex search (and replace) and mass editing
@@ -74,7 +74,8 @@ UPOS   : 'Upos:' [A-Z]+ ;
 LEMMA  : 'Lemma:' ~[ \n\t)&|]+ ;
 FORM   : 'Form:' ~[ \n\t)&|]+ ;
 XPOS   : 'Xpos:' ~[ \n\t)&|]+ ;
-DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
+//DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
+DEPREL : 'Deprel:' ~[ \n\t)&|]+( ':' ~[ \n\t)&|]+)? ;
 FEAT   : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
 MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
 ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
