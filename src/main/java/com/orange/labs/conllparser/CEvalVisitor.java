@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.4 as of 3rd October 2022
+ @version 2.17.6 as of 27th October 2022
  */
 package com.orange.labs.conllparser;
 
@@ -45,7 +45,6 @@ import java.util.Stack;
 
 
 public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
-
     ConllWord cword = null; // all conditions are checked on this word
     ConllWord pointedWord = null; // child/head etc are followed here
     int level = 0; // -1 head, -2 head's head
@@ -514,4 +513,22 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         //if ( ctx.op.getType() == ConditionsParser.OR )
         return (left || right);
     }
+
+
+
+
+    // $Deprel:$head(Deprel)
+    // $Feat:Gender:$head(Feat:Gender)
+    @Override
+    public Boolean visitValcompare(ConditionsParser.ValcompareContext ctx) {
+        CGetVisitor getvisitor = new CGetVisitor(cword, wordlists);
+       
+        String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
+        String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
+        //System.err.println("COMPARE " + left + " " + right);
+        if (left == null || right == null) return false;
+        return (left.equals(right));
+        //return true;
+    }
+
 }

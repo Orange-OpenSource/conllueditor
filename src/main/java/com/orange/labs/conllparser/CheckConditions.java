@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.2 as of 17th September 2021
+ @version 2.17.6 as of 27th October 2022
  */
 
 package com.orange.labs.conllparser;
@@ -67,17 +67,20 @@ public class CheckConditions {
  
     public static void main(String[] args) throws Exception {
         if (args.length == 0)  {
-            System.err.println("Usage: Condition '<condition>' '<conllu word>'");
+            System.err.println("Usage: Condition '<condition>' '<conllu word (spaces instead of tabs)>'");
         } else {
       
             
         ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
-         lexer.addErrorListener(new GrammarErrorListener());
+        lexer.addErrorListener(new GrammarErrorListener());
 
-        // we can see tokens only once !
-//        for (Token tok : lexer.getAllTokens()) {
-//           System.err.println("token: " + tok);
-//        }
+        // we can see parsed tokens only once !
+
+        for (Token tok : lexer.getAllTokens()) {
+            System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+            lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
+            lexer.addErrorListener(new GrammarErrorListener());    
+        }
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ConditionsParser parser = new ConditionsParser(tokens);
         parser.addErrorListener(new GrammarErrorListener());
@@ -86,14 +89,20 @@ public class CheckConditions {
         
         ParseTree tree = parser.prog(); // parse
         
-        ConllWord cword;
+        //ConllWord cword;
+        ConllSentence csent;
         if (args.length == 1) {
-             cword = new ConllWord("1\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t3\tnsubj\t_\tSpaceAfter=No", null, null);
-          
+            //cword = new ConllWord("1\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t2\tnsubj\t_\tSpaceAfter=No", null, null);
+            csent = new ConllSentence("1\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t2\tnsubj\t_\t_\n" +
+                                      "2\tsleep\tsleep\tVERB\tVS\tNumber=Plur|Person=3\t0\troot\t_\tSpaceAfter=No", null);
+
+
         } else {
-             cword = new ConllWord(args[1].replaceAll(" +", "\t"), null, null);
+             csent = new ConllSentence(args[1].replaceAll(" +", "\t"), null);
         }
-        System.err.println(cword);
+        csent.makeTrees(null);
+        ConllWord cword = csent.getWord(1);
+        System.err.println(csent);
         CEvalVisitor eval = new CEvalVisitor(cword, null);
         boolean rtc = eval.visit(tree);
         System.err.println("rtc " + rtc);

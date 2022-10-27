@@ -39,16 +39,25 @@ prog : expression  EOF # printResult
     ;
 
 expression
-	: field                            # column
+	: field                            # fieldname
 	| NOT expression                   # nicht
 	| OPEN inner=expression CLOSE      # klammern
-        | 'head' OPEN expression CLOSE     # kopf
-        | 'child' OPEN expression CLOSE    # child
-        | 'prec' OPEN expression CLOSE     # vorher
-        | 'next' OPEN expression CLOSE     # nachher
-        | left=expression operator=AND right=expression  # und
-	| left=expression operator=OR right=expression   # oder
-        ;
+    | 'head' OPEN expression CLOSE     # kopf
+    | 'child' OPEN expression CLOSE    # child
+    | 'prec' OPEN expression CLOSE     # vorher
+    | 'next' OPEN expression CLOSE     # nachher
+    | left=expression operator=AND right=expression  # und
+    | left=expression operator=OR right=expression   # oder
+
+    | AT columnname EQUALS AT columnname        # valcompare
+    
+    ;
+
+columnname
+    : CUPOS                       # valueUpos
+    | CDEPREL                     # valueDeprel
+    | 'head' OPEN columnname CLOSE     # getkopf
+    ;
 
 
 field
@@ -68,6 +77,7 @@ field
     | ISEMPTY    # checkEmpty
     | ISMWT      # checkIsMWT
     ;
+
 
 
 UPOS   : 'Upos:' [A-Z]+ ;
@@ -92,7 +102,11 @@ OR    : 'or' | '||' ;
 NOT   : '!' | '~' ;
 OPEN  : '(';
 CLOSE : ')';
+AT    : '@';
+EQUALS : '=';
 
+CUPOS : 'Upos' ;
+CDEPREL : 'Deprel' ;
 
 
 // NEWLINE:'\r'? '\n' ;     // return newlines to parser (is end-statement signal)
