@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.6 as of 27th October 2022
+ @version 2.18.0 as of 27th October 2022
  */
 
 package com.orange.labs.conllparser;
@@ -42,14 +42,19 @@ import org.antlr.v4.runtime.tree.*;
 public class CheckConditions {
 
 
-    public static boolean evaluate(String condition, Map<String, Set<String>> wordlists, ConllWord cword) throws Exception {
+    public static boolean evaluate(String condition, Map<String, Set<String>> wordlists, ConllWord cword, boolean debug) throws Exception {
         ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
         lexer.addErrorListener(new GrammarErrorListener());
 
-        // we can see tokens only once !
-//        for (Token tok : lexer.getAllTokens()) {
-//           System.err.println("token: " + tok);
-//        }
+        if (debug) {
+            // we can see parsed tokens only once !
+            for (Token tok : lexer.getAllTokens()) {
+               System.err.println("token: " + tok);
+            }
+            lexer = new ConditionsLexer(CharStreams.fromString(condition));
+            lexer.addErrorListener(new GrammarErrorListener());    
+
+        }
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ConditionsParser parser = new ConditionsParser(tokens);
         parser.addErrorListener(new GrammarErrorListener());
@@ -74,10 +79,11 @@ public class CheckConditions {
         ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
         lexer.addErrorListener(new GrammarErrorListener());
 
-        // we can see parsed tokens only once !
-
-        for (Token tok : lexer.getAllTokens()) {
-            System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+        if (true) {
+            // we can see parsed tokens only once !
+            for (Token tok : lexer.getAllTokens()) {
+                System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+            }
             lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
             lexer.addErrorListener(new GrammarErrorListener());    
         }
@@ -94,7 +100,7 @@ public class CheckConditions {
         if (args.length == 1) {
             //cword = new ConllWord("1\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t2\tnsubj\t_\tSpaceAfter=No", null, null);
             csent = new ConllSentence("1\trules\trule\tNOUN\tNNS\tNumber=Plur|Gender=Neut\t2\tnsubj\t_\t_\n" +
-                                      "2\tsleep\tsleep\tVERB\tVS\tNumber=Plur|Person=3\t0\troot\t_\tSpaceAfter=No", null);
+                                      "2\tsleep\tsleep\tVERB\tNOUN\tNumber=Plur|Person=3\t0\troot\t_\tSpaceAfter=No", null);
 
 
         } else {
@@ -102,6 +108,7 @@ public class CheckConditions {
         }
         csent.makeTrees(null);
         ConllWord cword = csent.getWord(1);
+        ConllWord cword2 = csent.getWord(2);
         System.err.println(csent);
         CEvalVisitor eval = new CEvalVisitor(cword, null);
         boolean rtc = eval.visit(tree);

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.6 as of 27th October 2022
+ @version 2.18.0 as of 27th October 2022
  */
 package com.orange.labs.conllparser;
 
@@ -41,7 +41,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
+import java.util.List;
 
 
 public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
@@ -50,31 +50,15 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     int level = 0; // -1 head, -2 head's head
     int sequence = 0; // -1 word to the left, 1 word to the right etc
 
-//    enum Movement {
-//        UP, DOWN, LEFT, RIGHT
-//    };
-//    Stack<Movement> movements; // keep the directions we walk from current node to node to test
-//    //Stack<Children> children; // a node may have more than one dependant. Here we have a counter to get through them all
-//    Stack<Children> children;
+
     Map<String, Set<String>> wordlists; // stores lists for Form and Lemma: "filename": (words)
 
     public CEvalVisitor(ConllWord cword, Map<String, Set<String>> wordlists) {
         this.cword = cword;
         pointedWord =cword;
-//        movements = new Stack<>();
-//        children = new Stack<>();
         this.wordlists = wordlists;
     }
 
-//    public class Children {
-//
-//        int index = 0; // current dependant to use
-//        boolean allSeen = false; // set to true when we have seen all dependants
-//
-//        public String toString() {
-//            return "CH:" + index + " " + allSeen;
-//        }
-//    }
 
     /**
      * get the correct ConllWord (current word, its head, head's head, preceing
@@ -83,60 +67,6 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
      */
     private ConllWord getCW() {
         return pointedWord;
-
-//        System.err.println("FROM " + cword);
-//        ConllWord pointingTo = cword;
-//        System.err.println("movements " + movements);
-//        System.err.println("CHILDREN" );
-//        for (Children ch : children) {
-//            System.err.println("   " + ch);
-//        }
-//        int childrenindex = -1;
-//        for (Movement m : movements) {
-//            childrenindex++;
-//            System.err.println("mov " + m + " ci " + childrenindex);
-//            if (m == Movement.UP) {
-//                if (pointingTo.getHeadWord() != null) {
-//                    pointingTo = pointingTo.getHeadWord();
-//                } else {
-//                    return null; // no head (i.e. we are at root)
-//                }
-//            } else if (m == Movement.LEFT) {
-//                if (pointingTo.getId() > 1) {
-//                    pointingTo = cword.getMysentence().getWord(pointingTo.getId() - 1);
-//                } else {for (Children ch : children) {
-//            System.err.println("   " + ch);
-//        }
-//                    return null; // no preceding token
-//                }
-//            } else if (m == Movement.RIGHT) {
-//                if (pointingTo.getId() < cword.getMysentence().size() - 1) {
-//                    pointingTo = cword.getMysentence().getWord(pointingTo.getId() + 1);
-//                } else {
-//                    return null; // no following token
-//                }
-//            } else if (m == Movement.DOWN) {
-//                Children currentchild = children.get(childrenindex);
-//                //Children currentchild = children.lastElement()
-//                if (pointingTo.getDependents() == null || pointingTo.getDependents().isEmpty()) {
-//                    currentchild.allSeen = true; // we've seen all dependants
-//                    System.err.println("D AAA " + currentchild);
-//                    return null; // no dependants
-//                } else {
-//                    if (currentchild.index < pointingTo.getDependents().size()) {
-//                        pointingTo = pointingTo.getDependents().get(currentchild.index);
-//                        System.err.println("D CAN GO ON " +  currentchild + " TO " + pointingTo);
-//                    } else {
-//                        // no more dependants
-//                        currentchild.allSeen = true; // we've seen all dependants
-//                        System.err.println("D CCC " + currentchild);
-//                        return null;
-//                    }
-//                }
-//            }
-//        }
-//        System.err.println("TO   " + pointingTo);
-//        return pointingTo;
     }
 
     @Override
@@ -429,18 +359,20 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
 
     @Override
     public Boolean visitChild(ConditionsParser.ChildContext ctx) {
-        //System.err.println("\nVISITCHILD " + ctx.getText());
-        //movements.push(Movement.DOWN);
-        //children.push(new Children()); // current node may have more then one dependant, we count the one used and set allSeen to true when we are done
-        //System.err.println("level " + children.size());
+
         ConllWord before = pointedWord;
         boolean rtc = false;
         for(ConllWord cw : pointedWord.getDependents()) {
+            //System.err.println("--HEAD " + pointedWord);
+            //System.err.println("--DOWN VISITCHILD " + cw);
+
             pointedWord = cw;
             rtc = visit(ctx.expression());
-            if (rtc) break;
+            if (rtc) {
+                //System.err.println("--NO MORE KIDS FOR " + pointedWord);
+                break;
+            }
         }
-        //System.err.println("UP VISITCHILD " + children);
         pointedWord = before;
         return rtc;
     }
@@ -450,9 +382,6 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
      */
     @Override
     public Boolean visitVorher(ConditionsParser.VorherContext ctx) {
-        //movements.push(Movement.LEFT);
-        //boolean rtc = visit(ctx.expression());
-        //movements.pop();
         int currentid = pointedWord.getId();
         if (currentid == 1) return false;
 
@@ -469,9 +398,6 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
      */
     @Override
     public Boolean visitNachher(ConditionsParser.NachherContext ctx) {
-        //movements.push(Movement.RIGHT);
-        //boolean rtc = visit(ctx.expression()); // return child expr's value
-        //movements.pop();
         int currentid = pointedWord.getId();
         int size = pointedWord.getMysentence().getAllWords().size();
         int lastid = pointedWord.getMysentence().getAllWords().get(size-1).getId();
@@ -523,12 +449,23 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitValcompare(ConditionsParser.ValcompareContext ctx) {
         CGetVisitor getvisitor = new CGetVisitor(cword, wordlists);
        
-        String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
-        String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
+        System.err.println("GET VALUES FOR COMPARISON");
+        //String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
+        //String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
         //System.err.println("COMPARE " + left + " " + right);
+        //if (left == null || right == null) return false;
+        //return (left.equals(right));
+        List<String> left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
+        List<String> right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
+        System.err.println("COMPARE LIST " + left + " " + right);
         if (left == null || right == null) return false;
-        return (left.equals(right));
-        //return true;
+        for (String l : left) {
+            for (String r : right) {
+                System.err.println("  COMPARE  " + l + " " + r);
+                if (r.equals(l)) return true;
+            }
+        }
+        return false;
     }
 
 }

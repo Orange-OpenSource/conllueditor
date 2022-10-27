@@ -28,16 +28,18 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.6 as of 27th October 2022
+ @version 2.18.0 as of 27th October 2022
  */
 package com.orange.labs.conllparser;
 
 //import com.orange.labs.conllparser.ConllWord.EnhancedDeps;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /* vistor for the getters in the conditions, which return strings and not booleans */
-public class CGetVisitor extends ConditionsBaseVisitor<String> {
+public class CGetVisitor extends ConditionsBaseVisitor<List<String>> {
     ConllWord cword = null; // all conditions are checked on this word
     ConllWord pointedWord = null; // child/head etc are followed here
     int level = 0; // -1 head, -2 head's head
@@ -59,9 +61,9 @@ public class CGetVisitor extends ConditionsBaseVisitor<String> {
         return pointedWord;
     }
 
-    // $head(...)
+    // head(@...)
     @Override
-    public String visitGetkopf(ConditionsParser.GetkopfContext ctx) {
+    public List<String> visitGetkopf(ConditionsParser.GetkopfContext ctx) {
         ConllWord before = pointedWord;
         //System.err.println("AAAA " + pointedWord);
         if (pointedWord.getHeadWord() != null) {
@@ -71,35 +73,135 @@ public class CGetVisitor extends ConditionsBaseVisitor<String> {
             return null;
         }
         //System.err.println("CCCC " + ctx.columnname().getText());
-        String value = visit(ctx.columnname());
+        List<String> value = visit(ctx.columnname());
 
         pointedWord = before;
         return value;
     }
 
-    // $Upos
+    // next(@...)
     @Override
-    public String visitValueUpos(ConditionsParser.ValueUposContext ctx) {
+    public List<String> visitGetnachher(ConditionsParser.GetnachherContext ctx) {
+
+        int currentid = pointedWord.getId();
+        int size = pointedWord.getMysentence().getAllWords().size();
+        int lastid = pointedWord.getMysentence().getAllWords().get(size-1).getId();
+
+        if (currentid == lastid) return null;
+        ConllWord before = pointedWord;
+        pointedWord = pointedWord.getMysentence().getWord(currentid+1);
+        //System.err.println("AAAAAA " + currentid + " " + size + " " + lastid);
+        //System.err.println("BBBBBB " + before);
+        //System.err.println("CCCCCC " + pointedWord);
+    
+        List<String> value = visit(ctx.columnname());
+ 
+        pointedWord = before;
+        return value;
+    }
+
+
+   /**
+     * prec(@...)
+     */
+    @Override
+    public List<String> visitGetvorher(ConditionsParser.GetvorherContext ctx) {
+        int currentid = pointedWord.getId();
+        if (currentid == 1) return null;
+
+        ConllWord before = pointedWord;
+
+        pointedWord = pointedWord.getMysentence().getWord(currentid-1);
+        List<String> value = visit(ctx.columnname());
+        System.err.println("PREC VALUE " + value);
+        pointedWord = before;
+        return value;
+    }
+
+
+    @Override
+    public List<String> visitGetchild(ConditionsParser.GetchildContext ctx) {
+        ConllWord before = pointedWord;
+        List<String> rtc = new ArrayList<>();
+        for(ConllWord cw : pointedWord.getDependents()) {
+            System.err.println("==HEAD " + pointedWord);
+            System.err.println("==DOWN VISITCHILD " + cw);
+            pointedWord = cw;
+            rtc.addAll(visit(ctx.columnname()));
+        }
+        
+        pointedWord = before;
+        System.err.println("==RETURN " + rtc + " :: " + pointedWord);
+        return rtc;
+    }
+
+    // @Upos
+    @Override
+    public List<String> visitValueUpos(ConditionsParser.ValueUposContext ctx) {
         // String text = ctx.UPOS().getText();
         ConllWord use = getCW();
         //System.err.println("UPOSVALUE " + use);
         if (use == null) {
             return null;
         }
-
-        return use.getUpostag();
+        List<String> values = new ArrayList<>();
+        values.add(use.getUpostag());
+        return values;
+        //return use.getUpostag();
     }
+
+    // @Xpos
+    @Override
+    public List<String> visitValueXpos(ConditionsParser.ValueXposContext ctx) {
+        // String text = ctx.XPOS().getText();
+        ConllWord use = getCW();
+        //System.err.println("XPOSVALUE " + use);
+        if (use == null) {
+            return null;
+        }
+        List<String> values = new ArrayList<>();
+        values.add(use.getXpostag());
+        return values;
+        //return use.getXpostag();
+    }
+
+    // @Feat
+    @Override
+    public List<String> visitValueFeat(ConditionsParser.ValueFeatContext ctx) {
+        ConllWord use = getCW();
+        //System.err.println("FEATVALUE " + use);
+        if (use == null) {
+            return null;
+        }
+   
+        String text = ctx.getText();
+        //System.err.println("FEAT " + text);
+        String featurename = text.split(":")[1];
+        if (featurename.isEmpty()) return null;
+
+        String fval = use.getFeatures().get(featurename);
+        if (fval != null) {
+            List<String> values = new ArrayList<>();
+            values.add(use.getFeatures().get(featurename));
+            return values;
+        }
+        return null;
+    }
+
 
     // $Deprel
     @Override
-    public String visitValueDeprel(ConditionsParser.ValueDeprelContext ctx) {
+    public List<String> visitValueDeprel(ConditionsParser.ValueDeprelContext ctx) {
         ConllWord use = getCW();
         //System.err.println("DEPRELVALUE " + use);
         if (use == null) {
             return null;
         }
 
-        return use.getDeplabel();
+        List<String> values = new ArrayList<>();
+        values.add(use.getDeplabel());
+        return values;
+        //return use.getDeplabel();
     }
 
 }

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.6 as of 26th October 2022
+ @version 2.18.0 as of 26th October 2022
 */
 
 // grammar to parse the conditions for complex search (and replace) and mass editing
@@ -49,14 +49,19 @@ expression
     | left=expression operator=AND right=expression  # und
     | left=expression operator=OR right=expression   # oder
 
-    | AT columnname EQUALS AT columnname        # valcompare
+    | columnname EQUALS columnname     # valcompare
     
     ;
 
 columnname
     : CUPOS                       # valueUpos
+    | CXPOS                       # valueXpos
     | CDEPREL                     # valueDeprel
-    | 'head' OPEN columnname CLOSE     # getkopf
+    | CFEAT                       # valueFeat
+    | 'head' OPEN columnname CLOSE   # getkopf
+    | 'prec' OPEN columnname CLOSE   # getvorher
+    | 'next' OPEN columnname CLOSE   # getnachher
+    | 'child' OPEN columnname CLOSE  # getchild
     ;
 
 
@@ -72,7 +77,6 @@ field
     | HEADID     # checkHeadID
     | ABSEUD     # checkAbsEUD
     | RELEUD     # checkRelEUD
-//    | EUD     # checkEUD
     | MWT        # checkMWT
     | ISEMPTY    # checkEmpty
     | ISMWT      # checkIsMWT
@@ -80,34 +84,35 @@ field
 
 
 
-UPOS   : 'Upos:' [A-Z]+ ;
-LEMMA  : 'Lemma:' ~[ \n\t)&|]+ ;
-FORM   : 'Form:' ~[ \n\t)&|]+ ;
-XPOS   : 'Xpos:' ~[ \n\t)&|]+ ;
+UPOS      : 'Upos:' [A-Z]+ ;
+LEMMA     : 'Lemma:' ~[ \n\t)&|]+ ;
+FORM      : 'Form:' ~[ \n\t)&|]+ ;
+XPOS      : 'Xpos:' ~[ \n\t)&|]+ ;
 //DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
-DEPREL : 'Deprel:' ~[ \n\t)&|]+( ':' ~[ \n\t)&|]+)? ;
-FEAT   : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
-MISC   : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
-ID     : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
-MWT    : 'MWT:' [2-9] ; // length of a MWT in tokens
-HEADID : 'HeadId:' [+-]?[0-9]+ ;
+DEPREL    : 'Deprel:' ~[ \n\t)&|]+( ':' ~[ \n\t)&|]+)? ;
+FEAT      : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
+MISC      : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
+ID        : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
+MWT       : 'MWT:' [2-9] ; // length of a MWT in tokens
+HEADID    : 'HeadId:' [+-]?[0-9]+ ;
 RELEUD    : 'EUD:' ([+-][0-9]+) [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
 ABSEUD    : 'EUD:' ([0-9]+|'*') [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
 
-ISEMPTY: 'IsEmpty' ; // emptyword
-ISMWT  : 'IsMWT' ; // multi word tokenemptyword
+ISEMPTY   : 'IsEmpty' ; // emptyword
+ISMWT     : 'IsMWT' ; // multi word tokenemptyword
 
-AND   : 'and' | '&&' ;
-OR    : 'or' | '||' ;
-NOT   : '!' | '~' ;
-OPEN  : '(';
-CLOSE : ')';
-AT    : '@';
+AND    : 'and' | '&&' ;
+OR     : 'or' | '||' ;
+NOT    : '!' | '~' ;
+OPEN   : '(';
+CLOSE  : ')';
+AT     : '@';
 EQUALS : '=';
 
-CUPOS : 'Upos' ;
-CDEPREL : 'Deprel' ;
-
+CUPOS   : '@Upos' ;
+CXPOS   : '@Xpos' ;
+CDEPREL : '@Deprel' ;
+CFEAT   : '@Feat:' [A-Za-z_[\]]+; // 'Feat:' + Feature-name (returns feature value)
 
 // NEWLINE:'\r'? '\n' ;     // return newlines to parser (is end-statement signal)
 WS : [ \t] + -> skip ;
