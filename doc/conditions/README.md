@@ -7,6 +7,9 @@ ANTLR4 Grammar: [Conditions.g4](../../src/main/antlr4/com/orange/labs/conllparse
 ## expression
 ![rule expression](expression.svg)
 
+## columnname
+![rule columnname](columnname.svg)
+
 ## field
 ![rule field](field.svg)
 
@@ -34,8 +37,8 @@ ANTLR4 Grammar: [Conditions.g4](../../src/main/antlr4/com/orange/labs/conllparse
 ## ID
 ![rule ID](ID.svg)
 
-## MTW
-![rule MTW](MTW.svg)
+## MWT
+![rule MWT](MWT.svg)
 
 ## HEADID
 ![rule HEADID](HEADID.svg)
@@ -66,6 +69,24 @@ ANTLR4 Grammar: [Conditions.g4](../../src/main/antlr4/com/orange/labs/conllparse
 
 ## CLOSE
 ![rule CLOSE](CLOSE.svg)
+
+## AT
+![rule AT](AT.svg)
+
+## EQUALS
+![rule EQUALS](EQUALS.svg)
+
+## CUPOS
+![rule CUPOS](CUPOS.svg)
+
+## CXPOS
+![rule CXPOS](CXPOS.svg)
+
+## CDEPREL
+![rule CDEPREL](CDEPREL.svg)
+
+## CFEAT
+![rule CFEAT](CFEAT.svg)
 
 ## WS
 ![rule WS](WS.svg)

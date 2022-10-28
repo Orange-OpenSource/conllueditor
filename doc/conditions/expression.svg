@@ -1,4 +1,4 @@
-<svg class="railroad-diagram" height="318" viewBox="0 0 507.0 318" width="507.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg class="railroad-diagram" height="350" viewBox="0 0 507.0 350" width="507.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g transform="translate(.5 .5)">
 <style>/* <![CDATA[ */
 
@@ -91,4 +91,8 @@
 <path d="M60.0 286h39.0"></path><path d="M408.0 286h39.0"></path><g class="non-terminal ">
 <path d="M99.0 286h0.0"></path><path d="M214.0 286h0.0"></path><rect class="nterm" height="22" rx="10" ry="10" width="115.0" x="99.0" y="275"></rect><text x="156.5" y="290">expression</text></g><path d="M214.0 286h10"></path><path d="M224.0 286h10"></path><g class="terminal ">
 <path d="M234.0 286h0.0"></path><path d="M273.0 286h0.0"></path><rect class="term" height="24" width="39.0" x="234.0" y="275"></rect><text x="253.5" y="291">OR</text></g><path d="M273.0 286h10"></path><path d="M283.0 286h10"></path><g class="non-terminal ">
-<path d="M293.0 286h0.0"></path><path d="M408.0 286h0.0"></path><rect class="nterm" height="22" rx="10" ry="10" width="115.0" x="293.0" y="275"></rect><text x="350.5" y="290">expression</text></g></g><path d="M447.0 286a10 10 0 0 0 10 -10v-235a10 10 0 0 1 10 -10"></path></g><path d="M 467.0 31 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
+<path d="M293.0 286h0.0"></path><path d="M408.0 286h0.0"></path><rect class="nterm" height="22" rx="10" ry="10" width="115.0" x="293.0" y="275"></rect><text x="350.5" y="290">expression</text></g></g><path d="M447.0 286a10 10 0 0 0 10 -10v-235a10 10 0 0 1 10 -10"></path><path d="M40.0 31a10 10 0 0 1 10 10v267a10 10 0 0 0 10 10"></path><g>
+<path d="M60.0 318h20.0"></path><path d="M427.0 318h20.0"></path><g class="non-terminal ">
+<path d="M80.0 318h0.0"></path><path d="M195.0 318h0.0"></path><rect class="nterm" height="22" rx="10" ry="10" width="115.0" x="80.0" y="307"></rect><text x="137.5" y="322">columnname</text></g><path d="M195.0 318h10"></path><path d="M205.0 318h10"></path><g class="terminal ">
+<path d="M215.0 318h0.0"></path><path d="M292.0 318h0.0"></path><rect class="term" height="24" width="77.0" x="215.0" y="307"></rect><text x="253.5" y="323">EQUALS</text></g><path d="M292.0 318h10"></path><path d="M302.0 318h10"></path><g class="non-terminal ">
+<path d="M312.0 318h0.0"></path><path d="M427.0 318h0.0"></path><rect class="nterm" height="22" rx="10" ry="10" width="115.0" x="312.0" y="307"></rect><text x="369.5" y="322">columnname</text></g></g><path d="M447.0 318a10 10 0 0 0 10 -10v-267a10 10 0 0 1 10 -10"></path></g><path d="M 467.0 31 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
