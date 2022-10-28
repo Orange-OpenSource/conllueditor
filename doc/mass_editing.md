@@ -53,13 +53,17 @@ For example:
 and a feature `VerbForm=Part` and another child with UPOS `DET`.
 * `head(next(Upos:NOUN))`: true if the current token has a head which is followed by a token with UPOS `NOUN`
 
+Functions can be nested (eventhough `child(head())` does not make sense, does it :-)
+
 
 In order to compare values (for instance to check whether subject-verb agreement is OK) the expression `@Upos` or `@Feat:Number` give access to column values:
 * `@Feat:Number=head(@Feat:Number)` returns true if the current word and its head both have a feature `Number` with the same value
+* `@Upos=@Xpos` returns true if the current word has the same value for `UPOS` and `XPOS`
+* `@Deprel=prec(@Deprel)`: true, if the current word and the preceding word have the same `deprel` value
+* `@Xpos=head(head(@Feat:Featname))` true if the `XPOS` of the current word has the same value as the feature `Featname` of the head of its head.
 
-Functions can be nested (eventhough `child(head())` does not make sense, does it :-)
 
-The same language is used for complex search and replace
+The same search language is used for complex search and replace.
 
 For more information check the [formal grammar for conditions](conditions/README.md).
 
