@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.18.0
+* extension to mass-edit/complex search&replace: possibility to search heads/childs etc with same Feature value or same UPOS etc
+* new tests
+
 ## Version 2.17.5
 * new option --shortcutTimeout to set the maximal time (milliseconds) between to keys of a shortcut sequence
 

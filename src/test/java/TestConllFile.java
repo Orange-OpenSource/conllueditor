@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.15.1 as of 8th February 2022
+ @version 2.18.0 as of 27th October 2022
 */
 
 import com.orange.labs.conllparser.ConllException;
@@ -85,11 +85,16 @@ public class TestConllFile {
             FileUtils.writeStringToFile(out, warnings.toString(), StandardCharsets.UTF_8, true);
         }
 
+        try {
         URL ref = this.getClass().getResource(filename);
 
         Assert.assertEquals(String.format("Rule '%s' badly used\n ref: %s\n res: %s\n", rule, ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertEquals("File missing", filename, "");
+        }
     }
 
     private void applyRules(String [] rule, String [] newval, String filename) throws IOException, ConllException {
@@ -413,6 +418,52 @@ public class TestConllFile {
     }
 
 
+    @Test
+    public void test21value01() throws IOException, ConllException {
+        name("value 01");
+        applyRule("@Upos=head(@Upos)", "Misc:\"FOUND=UPOS_HEADUPOS\"", "value01.conllu");
+    }
 
-//!Empty   > feat=InlfClass:this(Feat_NounClass)   feat:NounClass=
+    @Test
+    public void test21value02() throws IOException, ConllException {
+        name("value 02");
+        applyRule("head(@Upos)=@Upos", "Misc:\"FOUND=HEADUPOS_UPOS\"", "value02.conllu");
+    }
+
+    @Test
+    public void test21value03() throws IOException, ConllException {
+        name("value 03");
+        applyRule("@Deprel=head(head(@Deprel))", "Misc:\"FOUND=DEPREL_HEADHEADDEPREL\"", "value03.conllu");
+    }
+
+    @Test
+    public void test21value04() throws IOException, ConllException {
+        name("value 04");
+        applyRule("@Feat:Gender=head(@Feat:Gender)", "Misc:\"FOUND=GENDER_HEADGENDER\"", "value04.conllu");
+    }
+
+    @Test
+    public void test21value05() throws IOException, ConllException {
+        name("value 05");
+        applyRule("prec(@Deprel)=next(@Deprel)", "Misc:\"FOUND=PRECDEP_NEXTDEP\"", "value05.conllu");
+    }
+
+    @Test
+    public void test21value06() throws IOException, ConllException {
+        name("value 06");
+        applyRule("prec(@Deprel)=prec(prec(@Deprel))", "Misc:\"FOUND=PRECDEP_PRECPRECDEP\"", "value06.conllu");
+    }
+    @Test
+
+    public void test21value07() throws IOException, ConllException {
+        name("value 07");
+        applyRule("next(@Upos)=next(next(@Upos))", "Misc:\"FOUND=NEXTUPOS_NEXTNEXTUPOS\"", "value07.conllu");
+    }
+
+    @Test
+    public void test21value08() throws IOException, ConllException {
+        name("value 08");
+        applyRule("child(@Upos)=@Upos", "Misc:\"FOUND=CHILDUPOS_UPOS\"", "value08.conllu");
+    }
+
 }
