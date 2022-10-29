@@ -76,6 +76,9 @@ ANTLR4 Grammar: [Conditions.g4](../../src/main/antlr4/com/orange/labs/conllparse
 ## EQUALS
 ![rule EQUALS](EQUALS.svg)
 
+## COMPATIBLE
+![rule COMPATIBLE](COMPATIBLE.svg)
+
 ## CUPOS
 ![rule CUPOS](CUPOS.svg)
 
