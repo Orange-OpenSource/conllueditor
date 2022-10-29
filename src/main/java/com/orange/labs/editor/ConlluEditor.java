@@ -2171,10 +2171,10 @@ public class ConlluEditor {
                 return formatErrMsg("invalid command «" + command + "»", currentSentenceId);
             }
         } catch (ConllException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return formatErrMsg("CoNLL-U error: " + e.getMessage(), currentSentenceId);
         } catch (PatternSyntaxException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return formatErrMsg("Bad regular expression: " + e.getMessage(), currentSentenceId);
         } catch (Exception e) {
             e.printStackTrace();

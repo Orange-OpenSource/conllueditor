@@ -383,10 +383,9 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     @Override
     public Boolean visitVorher(ConditionsParser.VorherContext ctx) {
         int currentid = pointedWord.getId();
-        if (currentid == 1) return false;
+        if (currentid <= 1) return false;
 
         ConllWord before = pointedWord;
-
         pointedWord = pointedWord.getMysentence().getWord(currentid-1);
         boolean rtc = visit(ctx.expression());
         pointedWord = before;

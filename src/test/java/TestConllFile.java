@@ -225,7 +225,7 @@ public class TestConllFile {
 
     @Test
     public void test02head() throws IOException, ConllException {
-         name("rule head");
+        name("rule head");
         applyRule("(head(Upos:VERB) and !Upos:PUNCT)", "misc:\"Head=Verbal\"", "rule7.conllu");
     }
 

@@ -107,13 +107,13 @@ public class CGetVisitor extends ConditionsBaseVisitor<List<String>> {
     @Override
     public List<String> visitGetvorher(ConditionsParser.GetvorherContext ctx) {
         int currentid = pointedWord.getId();
-        if (currentid == 1) return null;
+        if (currentid <= 1) return null;
 
         ConllWord before = pointedWord;
 
         pointedWord = pointedWord.getMysentence().getWord(currentid-1);
         List<String> value = visit(ctx.columnname());
-        System.err.println("PREC VALUE " + value);
+        //System.err.println("PREC VALUE " + value);
         pointedWord = before;
         return value;
     }
@@ -124,14 +124,14 @@ public class CGetVisitor extends ConditionsBaseVisitor<List<String>> {
         ConllWord before = pointedWord;
         List<String> rtc = new ArrayList<>();
         for(ConllWord cw : pointedWord.getDependents()) {
-            System.err.println("==HEAD " + pointedWord);
-            System.err.println("==DOWN VISITCHILD " + cw);
+            //System.err.println("==HEAD " + pointedWord);
+            //System.err.println("==DOWN VISITCHILD " + cw);
             pointedWord = cw;
             rtc.addAll(visit(ctx.columnname()));
         }
         
         pointedWord = before;
-        System.err.println("==RETURN " + rtc + " :: " + pointedWord);
+        //System.err.println("==RETURN " + rtc + " :: " + pointedWord);
         return rtc;
     }
 

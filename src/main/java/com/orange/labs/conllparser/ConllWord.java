@@ -1441,7 +1441,7 @@ public class ConllWord {
             //System.err.println("\n\nEVAL " + this);
             return CheckConditions.evaluate(condition, wordlists, this, false); // debug: show tokenisation of condition
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             throw new ConllException(e.getMessage());
         }
     }
