@@ -85,14 +85,14 @@ field
 
 
 
-UPOS      : 'Upos:' [A-Z]+ ;
+UPOS      : 'Upos:' [A-Z_]+ ;
 LEMMA     : 'Lemma:' ~[ \n\t)&|]+ ;
 FORM      : 'Form:' ~[ \n\t)&|]+ ;
 XPOS      : 'Xpos:' ~[ \n\t)&|]+ ;
 //DEPREL : 'Deprel:' [a-z]+( ':' ~[ \n\t)&|]+)? ;
 DEPREL    : 'Deprel:' ~[ \n\t)&|]+( ':' ~[ \n\t)&|]+)? ;
-FEAT      : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]+ ;
-MISC      : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]+ ;
+FEAT      : 'Feat:' [A-Za-z_[\]]+ [:=] [A-Za-z0-9]* ;
+MISC      : 'Misc:' [A-Za-z_]+ [:=] ~[ \n\t)&|]* ;
 ID        : 'Id:' [1-9][0-9]* ; // no "n.m" nor "n-m" yet
 MWT       : 'MWT:' [2-9] ; // length of a MWT in tokens
 HEADID    : 'HeadId:' [+-]?[0-9]+ ;
@@ -100,7 +100,7 @@ RELEUD    : 'EUD:' ([+-][0-9]+) [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
 ABSEUD    : 'EUD:' ([0-9]+|'*') [:=]  [a-z]+( ':' ~[ \n\t)&|]+)? ;
 
 ISEMPTY   : 'IsEmpty' ; // emptyword
-ISMWT     : 'IsMWT' ; // multi word tokenemptyword
+ISMWT     : 'IsMWT' ; // multi word token
 
 AND    : 'and' | '&&' ;
 OR     : 'or' | '||' ;

@@ -30,16 +30,17 @@ Examples:
   * `Id:` (Values: integer)
   * `MWT:` (Values: length of the multi-word token `[2-9]`)
   * `IsEmpty` (no value, true if the current node is empty)
-  * `IsMWT` (no value, true if the current node is empty)
+  * `IsMWT` (no value, true if the current node is a MWT)
 
 `Form:`, `Lemma:` and `Xpos:` can contain simple regular expression (only the character ')' cannot be used
+In order to check for the absence of a given Featurename in the Feature or Misc column, use the following:
+  * `Feat:Gender:` true if the cyurrent word has no feature `Gender`
 
 `EUD` cannot deal (yet) with empty word ids (`n.m`)
 
- `Lemma` and `Form` can have either a regex as argument or a filename of a file which contains a list of forms or lemmas:
+`Lemma` and `Form` can have either a regex as argument or a filename of a file which contains a list of forms or lemmas:
   * `Lemma:sing.* > misc:"Value=Sing"`
   * `Lemma:#mylemmas.txt > misc:"Value=Sing"` (if the file `mylemmas.txt` does not exist, the condition is false)
-
 
 In addition to key keys listed above, four functions are available to take the context of the token into account:
 * `child()` child of current token

@@ -1441,7 +1441,7 @@ public class ConllWord {
             //System.err.println("\n\nEVAL " + this);
             return CheckConditions.evaluate(condition, wordlists, this, false); // debug: show tokenisation of condition
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             throw new ConllException(e.getMessage());
         }
     }
@@ -1539,7 +1539,7 @@ public class ConllWord {
         return !features.isEmpty();
     }
 
-    // check whether featyre with value is present
+    // check whether feature with value is present
     public boolean hasFeature(String name, String val) {
         if (features.isEmpty()) {
             return false;

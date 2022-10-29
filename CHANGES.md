@@ -4,6 +4,7 @@
 * more tests for value access
 * added compatibility test `~` in addition to strict comparison with `=`
 * validator shortcut changed from `=` to `!`
+* check for absent features/misc-keys
 
 ## Version 2.18.0
 * extension to mass-edit/complex search&replace: possibility to search heads/childs etc with same Feature value or same UPOS etc

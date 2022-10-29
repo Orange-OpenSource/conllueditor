@@ -303,19 +303,31 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         if (use == null) {
             return false;
         }
-        boolean rtc = use.matchesFeatureValue(fv[0], fv[1]);
+        boolean rtc ;
+        if (fv.length == 2) {
+            rtc = use.matchesFeatureValue(fv[0], fv[1]);
+        } else {
+            // feature must not be in word
+            rtc = !use.getFeatures().containsKey(fv[0]);
+        }
         return rtc;
     }
 
     @Override
     public Boolean visitCheckMisc(ConditionsParser.CheckMiscContext ctx) {
         String text = ctx.MISC().getText();
-        String[] fv = text.substring(5).split("=");
+        String[] fv = text.substring(5).split("[:=]");
         ConllWord use = getCW();
         if (use == null) {
             return false;
         }
-        boolean rtc = use.matchesMiscValue(fv[0], fv[1]);
+        boolean rtc;
+        if (fv.length == 2) {
+            rtc = use.matchesMiscValue(fv[0], fv[1]);
+        } else {
+            // feature must not be in word
+            rtc = !use.getMisc().containsKey(fv[0]);
+        }
         return rtc;
     }
 
