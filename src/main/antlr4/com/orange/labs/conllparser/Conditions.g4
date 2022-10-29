@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.0 as of 26th October 2022
+ @version 2.18.1 as of 26th October 2022
 */
 
 // grammar to parse the conditions for complex search (and replace) and mass editing
@@ -50,6 +50,7 @@ expression
     | left=expression operator=OR right=expression   # oder
 
     | columnname EQUALS columnname     # valcompare
+    | columnname COMPATIBLE columnname # valcompatible
     
     ;
 
@@ -103,11 +104,12 @@ ISMWT     : 'IsMWT' ; // multi word tokenemptyword
 
 AND    : 'and' | '&&' ;
 OR     : 'or' | '||' ;
-NOT    : '!' | '~' ;
+NOT    : 'not' | '!' ;
 OPEN   : '(';
 CLOSE  : ')';
 AT     : '@';
 EQUALS : '=';
+COMPATIBLE : '~';
 
 CUPOS   : '@Upos' ;
 CXPOS   : '@Xpos' ;

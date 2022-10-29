@@ -189,24 +189,24 @@
 
 # text = Une exposition au musée du Louvre et un voyage au village catalan de Gosol
 # sentence 10
-1	Une	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-2	exposition	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-3-4	au	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-3	à	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-4	le	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-5	musée	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-6-7	du	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-6	de	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-7	le	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-8	Louvre	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-9	et	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-10	un	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-11	voyage	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-12-13	au	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-12	à	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-13	le	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-14	village	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-15	catalan	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
+1	Une	_	_	_	_	_	_	_	_
+2	exposition	_	_	_	_	_	_	_	_
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
+9	et	_	_	_	_	_	_	_	_
+10	un	_	_	_	_	_	_	_	_
+11	voyage	_	_	_	_	_	_	_	_
+12-13	au	_	_	_	_	_	_	_	_
+12	à	_	_	_	_	_	_	_	_
+13	le	_	_	_	_	_	_	_	_
+14	village	_	_	_	_	_	_	_	_
+15	catalan	_	_	_	_	_	_	_	_
 16	de	_	_	_	_	_	_	_	_
 17	Gosol	_	_	_	_	_	_	_	_
 
@@ -252,14 +252,14 @@
 # sent_id = unannotated
 # text = Une exposition au musée du Louvre
 # sentence 15
-1	Une	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-2	exposition	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-3-4	au	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-3	à	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-4	le	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-5	musée	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-6-7	du	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
-6	de	_	_	_	_	_	_	_	FOUND=NEXTUPOS_NEXTNEXTUPOS
+1	Une	_	_	_	_	_	_	_	_
+2	exposition	_	_	_	_	_	_	_	_
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
 7	le	_	_	_	_	_	_	_	_
 8	Louvre	_	_	_	_	_	_	_	_
 

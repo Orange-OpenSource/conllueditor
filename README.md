@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.18.0 (see [change history](CHANGES.md))
+Current version: 2.18.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -75,7 +75,7 @@ as described below.
 * `mvn install`
   * if the tests fail after `git pull` try deleting `target/test-classes` and `testoutput`. If this does not solve the problem, run `mvn install -DskipTests` to avoid running the JUnit tests and drop me a note
   * individual tests can be run by `mvn test -Dtest=TestConlluEditor#<testmethod>`)
-  * redirect stderr in order to see only maven messages:
+  * redirect stderr in order to see only maven messages (test reports are generated in `target/surefire-reports/`):
     * `mvn install 2> stderr_output.txt`
     * `mvn test -Dtest=TestConlluEditor#<testmethod>  2> stderr_output.txt`
 * download javascript libraries (bootstrap, popper, jquery and jquery-ui), the script [bin/installJQ.sh](bin/installJQ.sh) will do the job
@@ -603,7 +603,7 @@ There is a list of predefined shortcuts which cannot be altered:
 
 * `+` go to next sentence
 * `-` go to preceding sentence
-* `=` run validator on current sentence
+* `!` run validator on current sentence
 * `_` delete all features of active word
 * `delete`-key deletes active word
 * `?` shows/hides list of shortcuts
@@ -809,7 +809,7 @@ options:
 For Form the Levenshtein distance is calculated on characters, whereas for all other columns, the Levenshtein distance
 is calculate on a token basis.
 
-Since every sentence will be compared once with every other sentence, 
+Since every sentence will be compared once with every other sentence,
 this will take some time for CoNLL-U files wich many sentences and only a single thread and maximal distances != 0
 
 # Known bugs

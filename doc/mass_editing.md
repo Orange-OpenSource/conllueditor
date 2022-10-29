@@ -14,7 +14,7 @@ condition > new_values
 
 ## Condition
 `condition` is a logical expression which is evaluated for each word, and if true the _new values_ are set to the token which satisfies the condition.
-The `condition` is a set of `key:values`, operators like `and`, `or`  or `!` (not) and parentheses. The condition may contain whitespaces:
+The `condition` is a set of `key:values`, operators like `and`, `or`  or `not` and parentheses. The condition may contain whitespaces:
 
 Examples:
 * `Upos:ADP and !Deprel:case`: true if the current token has `ADP`  as UPOS and its deprel is not `case`. Available keys:
@@ -56,12 +56,18 @@ and a feature `VerbForm=Part` and another child with UPOS `DET`.
 Functions can be nested (eventhough `child(head())` does not make sense, does it :-)
 
 
-In order to compare values (for instance to check whether subject-verb agreement is OK) the expression `@Upos` or `@Feat:Number` give access to column values:
+In order to compare values (for instance to check whether subject-verb agreement is OK),
+value comparison is possible using the access operator `@`: e.g. `@Upos` or `@Feat:Number` gives access to column values 
+and `=` is used to compare.
+If any of the accessed columns is empty (`_`) the comparison is evaluated as false.
+
+For example:
 * `@Feat:Number=head(@Feat:Number)` returns true if the current word and its head both have a feature `Number` with the same value
 * `@Upos=@Xpos` returns true if the current word has the same value for `UPOS` and `XPOS`
 * `@Deprel=prec(@Deprel)`: true, if the current word and the preceding word have the same `deprel` value
 * `@Xpos=head(head(@Feat:Featname))` true if the `XPOS` of the current word has the same value as the feature `Featname` of the head of its head.
-
+* `@Feat:Gender=head(@Feat:Gender) and not Upos:DET` true if the head and the current word have the same value for the feature `Gender` and the current word is not a `DET`
+If either of the two words had no feature `Gender` the whole expression is evaluated as false.
 
 The same search language is used for complex search and replace.
 

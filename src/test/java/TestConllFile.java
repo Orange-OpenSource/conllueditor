@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.0 as of 27th October 2022
+ @version 2.18.1 as of 29th October 2022
 */
 
 import com.orange.labs.conllparser.ConllException;
@@ -466,4 +466,16 @@ public class TestConllFile {
         applyRule("child(@Upos)=@Upos", "Misc:\"FOUND=CHILDUPOS_UPOS\"", "value08.conllu");
     }
 
+    @Test
+    public void test21value09() throws IOException, ConllException {
+        name("value 09");
+        applyRule("@Feat:Gender=head(@Feat:Gender) and not (Upos:DET or Upos:NOUN)", "Misc:\"FOUND=GENDER_NOTUPOS\"", "value09.conllu");
+    }
+
+ @Test
+    public void test22value01() throws IOException, ConllException {
+        name("compatible value 01");
+        applyRule("@Feat:Gender~head(@Feat:Gender) and @Feat:Gender=@Feat:Gender", "Misc:\"FOUND=GENDER_COMPAT\"", "value10.conllu");
+    }    
 }
+

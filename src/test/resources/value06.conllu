@@ -191,24 +191,24 @@
 # sentence 10
 1	Une	_	_	_	_	_	_	_	_
 2	exposition	_	_	_	_	_	_	_	_
-3-4	au	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-3	à	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-4	le	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-5	musée	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-6-7	du	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-6	de	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-7	le	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-8	Louvre	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-9	et	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-10	un	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-11	voyage	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-12-13	au	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-12	à	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-13	le	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-14	village	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-15	catalan	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-16	de	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-17	Gosol	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
+9	et	_	_	_	_	_	_	_	_
+10	un	_	_	_	_	_	_	_	_
+11	voyage	_	_	_	_	_	_	_	_
+12-13	au	_	_	_	_	_	_	_	_
+12	à	_	_	_	_	_	_	_	_
+13	le	_	_	_	_	_	_	_	_
+14	village	_	_	_	_	_	_	_	_
+15	catalan	_	_	_	_	_	_	_	_
+16	de	_	_	_	_	_	_	_	_
+17	Gosol	_	_	_	_	_	_	_	_
 
 # text = Sam bought and prepared dinner
 # sentence 11
@@ -254,14 +254,14 @@
 # sentence 15
 1	Une	_	_	_	_	_	_	_	_
 2	exposition	_	_	_	_	_	_	_	_
-3-4	au	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-3	à	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-4	le	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-5	musée	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-6-7	du	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-6	de	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-7	le	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
-8	Louvre	_	_	_	_	_	_	_	FOUND=PRECDEP_PRECPRECDEP
+3-4	au	_	_	_	_	_	_	_	_
+3	à	_	_	_	_	_	_	_	_
+4	le	_	_	_	_	_	_	_	_
+5	musée	_	_	_	_	_	_	_	_
+6-7	du	_	_	_	_	_	_	_	_
+6	de	_	_	_	_	_	_	_	_
+7	le	_	_	_	_	_	_	_	_
+8	Louvre	_	_	_	_	_	_	_	_
 
 # sent_id = sv-ud-train-767
 # text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.

@@ -8,7 +8,7 @@
 5	sur	sur	ADP	_	_	7	case	_	_
 6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
 7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
-8	de	de	ADP	_	_	9	case	_	FOUND=PRECDEP_NEXTDEP
+8	de	de	ADP	_	_	9	case	_	_
 9	Howard	Howard	PROPN	_	_	7	nmod	_	_
 10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
 11	.	.	PUNCT	_	_	1	punct	_	_
@@ -41,7 +41,7 @@
 5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
 6	contexte	contexte	NOUN	_	Gender=Masc|Number=Sing	3	obl	_	_
 7	structurellement	structurellement	ADV	_	_	8	advmod	_	_
-8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	_
+8	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	6	amod	_	FOUND=GENDER_NOTUPOS
 9	?	?	PUNCT	_	_	3	punct	_	_
 
 # sent_id = fr-ud-dev_00004
@@ -61,12 +61,12 @@
 12	règne	régner	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	10	acl:relcl	_	_
 13	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	SpaceAfter=No
 14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
-15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	FOUND=GENDER_NOTUPOS
 16	et	et	CCONJ	_	_	18	cc	_	_
 17	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	18	det	_	_
 18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
-19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
-20	importante	important	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	SpaceAfter=No
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	FOUND=GENDER_NOTUPOS
+20	importante	important	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	SpaceAfter=No|FOUND=GENDER_NOTUPOS
 21	,	,	PUNCT	_	_	23	punct	_	_
 22	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	23	cop	_	_
 23	riche	riche	ADJ	_	Gender=Fem|Number=Sing	0	root	_	_
@@ -78,7 +78,7 @@
 29	y	y	PRON	_	_	30	advmod	_	_
 30	découvrent	découvrir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
 31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
-32	nouvelles	nouveau	ADJ	_	Gender=Fem|Number=Plur	33	amod	_	_
+32	nouvelles	nouveau	ADJ	_	Gender=Fem|Number=Plur	33	amod	_	FOUND=GENDER_NOTUPOS
 33	espèces	espèce	NOUN	_	Gender=Fem|Number=Plur	30	obj	_	_
 34	de	de	ADP	_	_	35	case	_	_
 35	bivalves	bivalve	NOUN	_	Gender=Masc|Number=Plur	33	nmod	_	SpaceAfter=No
@@ -90,14 +90,14 @@
 41	crustacés	crustacé	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	SpaceAfter=No
 42	,	,	PUNCT	_	_	44	punct	_	_
 43	de	de	ADP	_	_	44	case	_	_
-44	poulpes	poulpe	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	FOUND=PRECDEP_NEXTDEP
+44	poulpes	poulpe	NOUN	_	Gender=Masc|Number=Plur	35	conj	_	_
 45	dans	dans	ADP	_	_	47	case	_	_
 46	des	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	47	det	_	_
 47	zones	zone	NOUN	_	Gender=Fem|Number=Plur	30	obl	_	_
-48	pensées	penser	VERB	_	Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part	47	acl	_	_
+48	pensées	penser	VERB	_	Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part	47	acl	_	FOUND=GENDER_NOTUPOS
 49	jusqu'	jusque	ADP	_	_	50	case	_	SpaceAfter=No
 50	alors	alors	ADV	_	_	48	advmod	_	_
-51	désertiques	désertique	ADJ	_	Gender=Fem|Number=Plur	48	amod	_	SpaceAfter=No
+51	désertiques	désertique	ADJ	_	Gender=Fem|Number=Plur	48	amod	_	SpaceAfter=No|FOUND=GENDER_NOTUPOS
 52	.	.	PUNCT	_	_	23	punct	_	_
 
 # sent_id = fr-ud-train_00002
@@ -136,13 +136,13 @@
 9-10	du	_	_	_	_	_	_	_	_
 9	de	de	ADP	_	_	12	case	_	_
 10	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	12	det	_	_
-11	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	12	amod	_	_
+11	VIe	VIe	ADJ	_	Gender=Masc|Number=Sing|NumType=Ord	12	amod	_	FOUND=GENDER_NOTUPOS
 12	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	8	nmod	_	SpaceAfter=No
 13	.	.	PUNCT	_	_	3	punct	_	_
 
 # text = ils ont visité le Musée du Louvre.
 # sentence 6
-1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
+1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	FOUND=GENDER_NOTUPOS
 2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_
 3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
 4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
@@ -270,7 +270,7 @@
 2	du	du	PRON	PN|UTR|SIN|DEF|SUB	Case=Nom|Definite=Def|Gender=Com|Number=Sing|PronType=Prs	3	nsubj	3:nsubj|10.1:nsubj|15.1:nsubj	_
 3	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	22	advcl	22:advcl:om	_
 4	en	en	DET	DT|UTR|SIN|IND	Definite=Ind|Gender=Com|Number=Sing|PronType=Art	6	det	6:det	_
-5	halv	halv	ADJ	JJ|POS|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Com|Number=Sing	4	fixed	4:fixed	_
+5	halv	halv	ADJ	JJ|POS|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Com|Number=Sing	4	fixed	4:fixed	FOUND=GENDER_NOTUPOS
 6	liter	liter	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	7	nmod	7:nmod	_
 7	mjölk	mjölk	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	3	obj	3:obj	_
 8	för	för	ADP	PP	_	9	case	9:case	_
@@ -284,7 +284,7 @@
 15	och	och	CCONJ	KN	_	19	cc	15.1:cc	_
 15.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj:och	_
 16	ett	en	DET	DT|NEU|SIN|IND	Definite=Ind|Gender=Neut|Number=Sing|PronType=Art	18	det	18:det	_
-17	halvt	halv	ADJ	JJ|POS|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Neut|Number=Sing	16	fixed	16:fixed	_
+17	halvt	halv	ADJ	JJ|POS|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Degree=Pos|Gender=Neut|Number=Sing	16	fixed	16:fixed	FOUND=GENDER_NOTUPOS
 18	kilo	kilo	NOUN	NN|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Neut|Number=Sing	19	nmod	19:nmod	_
 19	margarin	margarin	NOUN	NN|NEU|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Neut|Number=Sing	12	conj	15.1:obj	Enhanced=obj
 20	för	för	ADP	PP	_	21	case	21:case	_

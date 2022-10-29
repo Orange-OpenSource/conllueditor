@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.5 as of 17th October 2022
+ @version 2.18.1 as of 29th October 2022
  */
 
 
@@ -986,7 +986,7 @@ $(window).on('keypress', function (evt) {
     } else if (evt.which == 45) { // "-"
         unsetPShC();
         sendmodifs({"cmd": "prec"});
-    } else if (evt.which == 61) { // "=" validator
+    } else if (evt.which == 33) { // '!' // 61 "=" validator
         unsetPShC();
         $("#valid").click();
     } else  if (evt.which == 95) { // "_" delete all features
@@ -1066,7 +1066,7 @@ $(window).on('keypress', function (evt) {
             if (shortcutseq[0] == "&" && shortcutseq.length > 1) {
                 var gotonode = parseInt(shortcutseq.substring(1), 10);
                 if (gotonode > 0) {
-                    console.log("EZEZE", gotonode);
+                    //console.log("EZEZE", gotonode);
                     var tokid = "#id1_" + gotonode;
                     try {
                         $(tokid)[0].scrollIntoView({block: "center", inline: "center"});

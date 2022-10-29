@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.0 as of 27th October 2022
+ @version 2.18.1 as of 29th October 2022
  */
 package com.orange.labs.conllparser;
 
@@ -449,7 +449,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     public Boolean visitValcompare(ConditionsParser.ValcompareContext ctx) {
         CGetVisitor getvisitor = new CGetVisitor(cword, wordlists);
        
-        System.err.println("GET VALUES FOR COMPARISON");
+        //System.err.println("GET VALUES FOR COMPARISON");
         //String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
         //String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
         //System.err.println("COMPARE " + left + " " + right);
@@ -457,11 +457,39 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         //return (left.equals(right));
         List<String> left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
         List<String> right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
-        System.err.println("COMPARE LIST " + left + " " + right);
+        //System.err.println("COMPARE LIST " + left + " " + right);
         if (left == null || right == null) return false;
         for (String l : left) {
+            if ("_".equals(l)) continue;
             for (String r : right) {
-                System.err.println("  COMPARE  " + l + " " + r);
+                if ("_".equals(r)) continue;
+                //System.err.println("  COMPARE  " + l + " " + r);
+                if (r.equals(l)) return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    @Override
+    public Boolean visitValcompatible(ConditionsParser.ValcompatibleContext ctx) {
+        CGetVisitor getvisitor = new CGetVisitor(cword, wordlists);
+       
+        //System.err.println("GET VALUES FOR COMPATIBILITY");
+        //String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
+        //String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
+        //System.err.println("COMPARE " + left + " " + right);
+        //if (left == null || right == null) return false;
+        //return (left.equals(right));
+        List<String> left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
+        List<String> right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
+        //System.err.println("COMPATIBLE LIST " + left + " " + right);
+        if (left == null || right == null) return true;
+        for (String l : left) {
+            if ("_".equals(l)) return true;
+            for (String r : right) {
+                if ("_".equals(r)) return true;
+                //System.err.println("  COMPATIBLE?  " + l + " " + r);
                 if (r.equals(l)) return true;
             }
         }
