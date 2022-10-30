@@ -392,7 +392,7 @@ the `search` button)
 
 ![Complex search](doc/complexsearch.png)
 
-Adding a replace expression (as in [Mass Editing](doc/mass_editing.md)) loke
+Adding a replace expression (as in [Mass Editing](doc/mass_editing.md)) like
 ```
 xpos:this(Upos)+"xpos" Feat:"Special:Present"
 ```
