@@ -406,7 +406,7 @@ public class ConllFile {
 //        br.close();
 //    }
 
-    
+
     class CondAndRepl {
         CheckCondition condition;
         String cstr;
@@ -423,7 +423,7 @@ public class ConllFile {
 
         }
     }
-    
+
     /** read rules file
      *   condition > newvals
      *   Upos:ADP and Lemma:d.* > Feat:Key="Val", Xpos:"prep"
@@ -442,17 +442,17 @@ public class ConllFile {
         int changes = 0;
         int ct = 0;
         StringBuilder warnings = new StringBuilder();
-        
+
         List<CondAndRepl> conds = new ArrayList<>();
-        
+
         while ((line = br.readLine()) != null) {
             ct++;
             line = line.trim();
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
-            
-            try {               
+
+            try {
                 CondAndRepl cr = new CondAndRepl(elems[0], elems[1]);
                 conds.add(cr);
             } catch (ConllException e) {
@@ -460,26 +460,25 @@ public class ConllFile {
                 throw new ConllException("Line " + ct + ": " + e.getMessage());
             }
         }
-        
-        
+
         for (CondAndRepl cr : conds) {
             Set<ConllWord>matching_cw = conditionalEdit(cr.condition, cr.replacements, wordlists, warnings);
             System.err.println(matching_cw.size() + " changes for condition: " + cr.cstr + " values: " + cr.values);
             changes += matching_cw.size();
         }
-        
+
         if (warnings.length() > 0) {
             System.err.println(warnings.toString());
         }
         System.err.println(changes + " changes");
         br.close();
     }
-    
+
     /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
     public Set<ConllWord> conditionalEdit(CheckCondition condition, List<GetReplacement>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord>matching_cw = new HashSet<>();
-      
+
         for (ConllSentence cs : sentences) {
             matching_cw.addAll(cs.conditionalEdit(condition, newvalues, wordlists, warnings));
         }
@@ -499,7 +498,30 @@ public class ConllFile {
         return matching_cw;
     }
 
-    
+
+
+    class ImplicationConditions {
+        CheckCondition ifcondition;
+        String ifstr;
+
+        CheckCondition thencondition;
+        String thenstr;
+        
+        int linenumber;
+
+        public ImplicationConditions(String i, String t, int l) throws ConllException {
+            linenumber = l;
+            ifcondition = new CheckCondition(i, false);
+            ifstr = i;
+            thencondition = new CheckCondition(t, false);
+            thenstr = t;
+        }
+        
+        public String toString() {
+            return "" + linenumber + ": " + ifstr + " == " + thenstr;
+        }
+    }
+
     public void conditionalValidation(File validfile) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(validfile);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
@@ -510,6 +532,8 @@ public class ConllFile {
         //int changes = 0;
         int ct = 0;
         StringBuilder warnings = new StringBuilder();
+        List<ImplicationConditions> ics = new ArrayList<>();
+        
         while ((line = br.readLine()) != null) {
             ct++;
             line = line.trim();
@@ -517,14 +541,20 @@ public class ConllFile {
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split("==", 2);
             try {
-                System.err.format("Rule %d %s", ct, line);
-                conditionalValidation(elems[0], elems[1], warnings);
-                System.err.println();
+                System.err.format("Reading rule %d %s\n", ct, line);
+                ImplicationConditions ic = new ImplicationConditions(elems[0], elems[1], ct);
+                ics.add(ic);
             } catch (ConllException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 throw new ConllException("Line " + ct + ": " + e.getMessage());
             }
         }
+        
+        for (ImplicationConditions ic : ics) {
+            System.err.println("Applying rule " + ic);
+            conditionalValidation(ic.ifcondition, ic.thencondition, warnings);
+        }
+        
         if (warnings.length() > 0) {
             System.err.println(warnings.toString());
         }
@@ -535,15 +565,16 @@ public class ConllFile {
 
 
     /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
-    public void conditionalValidation(String ifcondition, String thencondition, StringBuilder warnings) throws ConllException {
+    public void conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
         for (ConllSentence cs : sentences) {
-            //cs.conditionalValidation(ifcondition, thencondition, warnings);
+            cs.conditionalValidation(ifcondition, thencondition, warnings);
         }
 
-        //System.err.println();
     }
 
 
+    
+    
     /** run makeTrees() on every sentence to find strange stuff which prohibits editing:
      *  - cycles
      *  - in valid head ids
