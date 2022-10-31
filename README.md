@@ -21,11 +21,12 @@ The editor provides the following functionalities:
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
 * mass editing: modify tokens if a (complex) condition is satisfied
+* validation (using implications: _if conditions1 true then conditions2 must be true_)
 * sentence metadata editing
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.18.1 (see [change history](CHANGES.md))
+Current version: 2.19.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -627,6 +628,24 @@ script: /path/to/UniversalDependencies/tools/validate.py --lang cy --max-err 0 -
 `{FILE}` will be replaced with a file which contains the sentence to be validated in CoNLL-U format.
 This configuration file must be given to the server with the option `--validator <filename>`.
 The validation button will launch the validator on the current sentence.
+
+# Validation rules
+
+In order to check somme language dependend validity (like adjective - noun agreement) a set of conditions can be specified (using the
+syntax as in [Mass Editing](doc/mass_editing.md)) can be used.
+
+E.g. if the current word has a nsubj Deprel, is a noun ou proper noun, has verb as head which is finite, than the verb must have the feature Person:3
+```
+Deprel:nsubj and (Upos:NOUN or Upos:PROPN) and head(Upos:VERB) and head(Feat:VerbForm=Fin) == head(Feat:Person:3)
+```
+More examples can be found in [src/test/resources/validrules.txt](src/test/resources/validrules.txt)
+
+Run the validation:
+
+```
+./bin/validate.sh  src/test/resources/validrules.txt  src/test/resources/test.conllu
+```
+
 
 # Server API (used by the GUI)
 * `curl -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentence of a file is `read 0`, `sentid` is only used only for editing commands but must be present)

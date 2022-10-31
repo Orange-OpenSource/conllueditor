@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.19.0
+* validation rules (if a list of conditions applies to word than another list of conditions must apply too)
+* new tests
+
 ## Version 2.18.1
 * more tests for value access
 * added compatibility test `~` in addition to strict comparison with `=`
