@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.2 as of 31th October 2022
+ @version 2.19.0 as of 31th October 2022
  */
 package com.orange.labs.conllparser;
 
@@ -42,16 +42,15 @@ import org.antlr.v4.runtime.tree.*;
 public class GetReplacement {
     ParseTree tree; // parse the expression which gets the new value
     String column; // CoNLL-U column name
+
     /* parse a replacement
     @param target_value a string like feat:"Number="+this(Form)
     */
-
     public GetReplacement(String target_value) throws ConllException {
         String[] elems = target_value.split(":", 2);
         column = elems[0];
         if (elems.length == 2) {
             try {
-                //tree = parse_replacement(elems[1], false);
                 ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(elems[1]));
                 lexer.addErrorListener(new GrammarErrorListener());
 
@@ -78,43 +77,10 @@ public class GetReplacement {
     public String evaluate(ConllWord cword) throws ConllException {
         REvalVisitor eval = new REvalVisitor(cword);
         String rtc = eval.visit(tree);
-        //System.err.println("rtc " + rtc);
         return rtc;
     }
 
-//    public static ParseTree parse_replacement(String extraction, boolean debug) {
-//            ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
-//            lexer.addErrorListener(new GrammarErrorListener());
-//
-//            if (debug) {
-//                // we can see parsed tokens only once !
-//                for (Token tok : lexer.getAllTokens()) {
-//                    System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
-//                }
-//                lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
-//                lexer.addErrorListener(new GrammarErrorListener());
-//            }
-//
-//            CommonTokenStream tokens = new CommonTokenStream(lexer);
-//            ReplacementsParser parser = new ReplacementsParser(tokens);
-//            parser.addErrorListener(new GrammarErrorListener());
-//            ParseTree tree = parser.prog(); // parser
-//            return tree;
-//    }
-//
-//    public static String parse_and_evaluate_replacement(String extraction, ConllWord cword, boolean debug) throws ConllException {
-//        try {
-//            ParseTree tree = parse_replacement(extraction, debug);
-//            REvalVisitor eval = new REvalVisitor(cword);
-//            String rtc = eval.visit(tree);
-//            //System.err.println("rtc " + rtc);
-//            return rtc;
-//        } catch (Exception e) {
-//            // catch errors from bad replacements
-//            //e.printStackTrace();
-//            throw new ConllException(e.getMessage());
-//        }
-//    }
+
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
@@ -161,22 +127,6 @@ public class GetReplacement {
             for (String arg : ex) {
                 System.err.format("\nparsing <%s>\n", arg);
                 GetReplacement gr = new GetReplacement("column:" + arg);
-//                ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(arg));
-//                lexer.addErrorListener(new GrammarErrorListener());
-//
-////                // we can see tokens only once !
-////                for (Token tok : lexer.getAllTokens()) {
-////                    System.err.println("token: " + tok + "\t" + tok.getType());
-////                }
-////                if (true)   continue;
-//                CommonTokenStream tokens = new CommonTokenStream(lexer);
-//                ReplacementsParser parser = new ReplacementsParser(tokens);
-//                parser.addErrorListener(new GrammarErrorListener());
-//
-//                ParseTree tree = parser.prog(); // parse
-//
-//                REvalVisitor eval = new REvalVisitor(cword);
-//                String rtc = eval.visit(tree);
                 String rtc = gr.evaluate(cword);
                 System.err.format(":: " + arg + " ===> '%s'\n", rtc);
             }
