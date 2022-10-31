@@ -368,57 +368,138 @@ public class ConllFile {
      * @return number of changes
      * @throws FileNotFoundException
      */
+//    public void oooconditionalEdit(File rulefile) throws ConllException, IOException {
+//        FileInputStream fis = new FileInputStream(rulefile);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+//        String line;
+//
+//        // TODO: store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
+//        Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
+//        int changes = 0;
+//        int ct = 0;
+//        StringBuilder warnings = new StringBuilder();
+//        while ((line = br.readLine()) != null) {
+//            ct++;
+//            line = line.trim();
+//            //System.err.format("<%s>\n", line);
+//            if (line.isEmpty() || line.charAt(0) == '#') continue;
+//            String [] elems = line.split(">", 2);
+//            //List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
+//            try {
+//                List<GetReplacement>newvals = new ArrayList<>();
+//                for (String repl : elems[1].trim().split("[ \\t]+")) {
+//                    newvals.add(new GetReplacement(repl));
+//                }
+//                CheckCondition conditionpt = new CheckCondition(elems[0], false);
+//                Set<ConllWord>matching_cw = conditionalEdit(conditionpt, newvals, wordlists, warnings);
+//                System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
+//                changes += matching_cw.size();
+//            } catch (ConllException e) {
+//                //e.printStackTrace();
+//                throw new ConllException("Line " + ct + ": " + e.getMessage());
+//            }
+//        }
+//        if (warnings.length() > 0) {
+//            System.err.println(warnings.toString());
+//        }
+//        System.err.println(changes + " changes");
+//        br.close();
+//    }
+
+    
+    class CondAndRepl {
+        CheckCondition condition;
+        String cstr;
+        List<GetReplacement>replacements;
+        String values;
+        public CondAndRepl(String c, String rs) throws ConllException {
+            condition = new CheckCondition(c, false);
+            cstr = c;
+            replacements = new ArrayList<>();
+            values = rs;
+            for (String repl : rs.trim().split("[ \\t]+")) {
+                replacements.add(new GetReplacement(repl));
+            }
+
+        }
+    }
+    
+    /** read rules file
+     *   condition > newvals
+     *   Upos:ADP and Lemma:d.* > Feat:Key="Val", Xpos:"prep"
+     *   and apply rule + replacement on all words of all sentences
+     * @param rulefile
+     * @return number of changes
+     * @throws FileNotFoundException
+     */
     public void conditionalEdit(File rulefile) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(rulefile);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         String line;
 
-        // TODO: store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
+        // store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
         Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
         int changes = 0;
         int ct = 0;
         StringBuilder warnings = new StringBuilder();
+        
+        List<CondAndRepl> conds = new ArrayList<>();
+        
         while ((line = br.readLine()) != null) {
             ct++;
             line = line.trim();
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
-            //List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
-            try {
-                List<GetReplacement>newvals = new ArrayList<>();
-                for (String repl : elems[1].trim().split("[ \\t]+")) {
-                    newvals.add(new GetReplacement(repl));
-                }
-
-                Set<ConllWord>matching_cw = conditionalEdit(elems[0], newvals, wordlists, warnings);
-                System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
-                changes += matching_cw.size();
+            
+            try {               
+                CondAndRepl cr = new CondAndRepl(elems[0], elems[1]);
+                conds.add(cr);
             } catch (ConllException e) {
                 //e.printStackTrace();
                 throw new ConllException("Line " + ct + ": " + e.getMessage());
             }
         }
+        
+        
+        for (CondAndRepl cr : conds) {
+            Set<ConllWord>matching_cw = conditionalEdit(cr.condition, cr.replacements, wordlists, warnings);
+            System.err.println(matching_cw.size() + " changes for condition: " + cr.cstr + " values: " + cr.values);
+            changes += matching_cw.size();
+        }
+        
         if (warnings.length() > 0) {
             System.err.println(warnings.toString());
         }
         System.err.println(changes + " changes");
         br.close();
     }
-
+    
     /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
+    public Set<ConllWord> conditionalEdit(CheckCondition condition, List<GetReplacement>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
+        //int changes = 0;
+        Set<ConllWord>matching_cw = new HashSet<>();
+      
+        for (ConllSentence cs : sentences) {
+            matching_cw.addAll(cs.conditionalEdit(condition, newvalues, wordlists, warnings));
+        }
+
+        return matching_cw;
+    }
+
+    // Only used in tests
     public Set<ConllWord> conditionalEdit(String condition, List<GetReplacement>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord>matching_cw = new HashSet<>();
-        CheckCondition conditionpt = new CheckCondition(condition, false);
+       CheckCondition conditionpt = new CheckCondition(condition, false);
         for (ConllSentence cs : sentences) {
             matching_cw.addAll(cs.conditionalEdit(conditionpt, newvalues, wordlists, warnings));
         }
 
-        System.err.println();
         return matching_cw;
     }
 
+    
     public void conditionalValidation(File validfile) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(validfile);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));

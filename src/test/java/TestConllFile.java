@@ -28,21 +28,17 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.1 as of 29th October 2022
+ @version 2.18.2 as of 32th October 2022
  */
 
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.GetReplacement;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -58,7 +54,7 @@ public class TestConllFile {
     ConllFile cf;
 
     private void name(String n) {
-        System.out.format("\n***** Testing: %S ****\n", n);
+        System.out.format("\n***** Testing: %s ****\n", n);
     }
 
     @Before
@@ -276,7 +272,7 @@ public class TestConllFile {
 
     @Test
     public void test11badtoken() throws IOException {
-        name("test badtoken");
+        name("test bad token");
         String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -294,6 +290,7 @@ public class TestConllFile {
 
     @Test
     public void test12badparenthesis() throws IOException, ConllException {
+        name("test bad parenthesis");
         String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -311,6 +308,7 @@ public class TestConllFile {
 
     @Test
     public void test13badparenthesis() throws IOException, ConllException {
+        name("test bad parenthesis");
         String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -328,6 +326,7 @@ public class TestConllFile {
 
     @Test
     public void test14missingop() throws IOException, ConllException {
+        name("test missing operator");
         String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -345,6 +344,7 @@ public class TestConllFile {
 
     @Test
     public void test15doubleop() throws IOException, ConllException {
+        name("test double operator");
         String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -362,6 +362,7 @@ public class TestConllFile {
 
     @Test
     public void test16badNeg() throws IOException, ConllException {
+        name("test bad negation");
         String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -379,6 +380,7 @@ public class TestConllFile {
 
     @Test
     public void test171badAbsHeadId() throws IOException, ConllException {
+        name("test bad absolute head id");
         String[] textnewvals = "HeadId:\"titi\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
@@ -389,7 +391,7 @@ public class TestConllFile {
             cf.conditionalEdit("Upos:NOUN", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "invalid absolute head id, must be positive integer or 0 <titi>";
-            Assert.assertEquals(String.format("band absolute HeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+            Assert.assertEquals(String.format("bad absolute HeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
     }
@@ -532,7 +534,22 @@ public class TestConllFile {
             e.printStackTrace();
             Assert.assertEquals("File missing", "search_replace.conllu", "");
         }
+    }
 
+    @Test
+    public void test31mass_edit_fileerror() throws IOException, ConllException {
+        name("mass edit with file error");
+
+        URL sr = this.getClass().getResource("search_replace_errors.txt");
+        File srfile = new File(sr.getFile());
+
+        try {
+            cf.conditionalEdit(srfile);
+        } catch (ConllException e) {
+            String expected = "Line 4: pos:9 token recognition error at: 'aa'";
+            Assert.assertEquals(String.format("File format error not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
     }
 
 }

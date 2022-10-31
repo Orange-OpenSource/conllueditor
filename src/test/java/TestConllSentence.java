@@ -52,7 +52,7 @@ public class TestConllSentence {
     File folder;
 
     private void name(String n) {
-        System.out.format("\n***** Testing: %S ****\n", n);
+        System.out.format("\n***** Testing: %s ****\n", n);
     }
 
 

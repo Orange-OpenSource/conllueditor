@@ -80,7 +80,7 @@ public class TestConlluComparator {
     //public TemporaryFolder folder = new TemporaryFolder();
 
     private void name(String n) {
-        System.out.format("\n***** Testing: %S ****\n", n);
+        System.out.format("\n***** Testing: %s ****\n", n);
     }
 
     @Test
