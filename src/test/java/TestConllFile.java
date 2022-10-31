@@ -269,9 +269,8 @@ public class TestConllFile {
     }
 
 
-
     @Test
-    public void test11badtoken() throws IOException, ConllException {
+    public void test11badtoken() throws IOException {
         name("test badtoken");
         String[] newvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();

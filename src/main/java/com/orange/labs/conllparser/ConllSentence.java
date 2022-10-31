@@ -2067,7 +2067,7 @@ public class ConllSentence {
     /**
      * find first word in sentence, which matches the condition
      */
-    public ConllWord conditionalSearch(String condition) throws ConllException {
+    public ConllWord conditionalSearch(CheckCondition condition) throws ConllException {
         normalise();
         makeTrees(null);
         for (ConllWord cw : words) {
@@ -2102,7 +2102,7 @@ public class ConllSentence {
      * Replacements.g4)
      * @param wordlists here we for put contents of files in conditions like Lemma:#filename.txt
      */
-    public Set<ConllWord> conditionalEdit(String condition, List<String> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
+    public Set<ConllWord> conditionalEdit(CheckCondition condition, List<String> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord> matching_cw = new HashSet<>();
         if (newvalues.isEmpty()) {
@@ -2170,7 +2170,7 @@ public class ConllSentence {
         return matching_cw;
     }
 
-    public void conditionalValidation(String ifcondition, String thencondition, StringBuilder warnings) throws ConllException {
+    public void conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
         normalise();
         makeTrees(null);
         for (ConllWord cw : words) {

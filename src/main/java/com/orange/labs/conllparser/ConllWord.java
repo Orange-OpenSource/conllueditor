@@ -1436,10 +1436,11 @@ public class ConllWord {
     /* matches a longer condition like
     Upos:VERB && (Lemma:mange || Feat:Person=3)
      */
-    public boolean matchCondition(String condition, Map<String, Set<String>> wordlists) throws ConllException {
+    public boolean matchCondition(CheckCondition condition, Map<String, Set<String>> wordlists) throws ConllException {
         try {
             //System.err.println("\n\nEVAL " + this);
-            return CheckConditions.parse_end_evaluate_condition(condition, wordlists, this, false); // debug: show tokenisation of condition
+            return condition.evaluate(wordlists, this); // debug: show tokenisation of condition
+            //return CheckCondition.parse_end_evaluate_condition(condition, wordlists, this, false); // debug: show tokenisation of condition
         } catch (Exception e) {
             e.printStackTrace();
             throw new ConllException(e.getMessage());

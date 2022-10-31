@@ -405,8 +405,9 @@ public class ConllFile {
     public Set<ConllWord> conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord>matching_cw = new HashSet<>();
+        CheckCondition conditionpt = new CheckCondition(condition, false);
         for (ConllSentence cs : sentences) {
-            matching_cw.addAll(cs.conditionalEdit(condition, newvalues, wordlists, warnings));
+            matching_cw.addAll(cs.conditionalEdit(conditionpt, newvalues, wordlists, warnings));
         }
 
         System.err.println();
@@ -450,7 +451,7 @@ public class ConllFile {
     /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
     public void conditionalValidation(String ifcondition, String thencondition, StringBuilder warnings) throws ConllException {
         for (ConllSentence cs : sentences) {
-            cs.conditionalValidation(ifcondition, thencondition, warnings);
+            //cs.conditionalValidation(ifcondition, thencondition, warnings);
         }
 
         //System.err.println();

@@ -38,6 +38,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.orange.labs.conllparser.CheckCondition;
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
@@ -1065,11 +1066,12 @@ public class ConlluEditor {
                 // si le deuxième mot est "true" on cherche en arrière
                 boolean backwards = f[1].equalsIgnoreCase("true");
 
+                CheckCondition findpt = new CheckCondition(f[2], false);
                 for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
                         (backwards ? i >= 0 : i < numberOfSentences);
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
-                    ConllWord cw = cs.conditionalSearch(f[2]);
+                    ConllWord cw = cs.conditionalSearch(findpt); //f[2]);
                     if (cw != null) {
                         currentSentenceId = i;
                         ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.LEMMA, cw.getId(), cw.getId());
@@ -1104,6 +1106,7 @@ public class ConlluEditor {
 
                 List<String>newvals = Arrays.asList(replace.split("[ \\t]+"));
 
+                CheckCondition findpt = new CheckCondition(find, false);
                 for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
                         (backwards ? i >= 0 : i < numberOfSentences);
                         i = (backwards ? i - 1 : i + 1)) {
@@ -1114,7 +1117,7 @@ public class ConlluEditor {
                     history.add(cs);
 
                     StringBuilder warnings = new StringBuilder();
-                    Set<ConllWord> cws = cs.conditionalEdit(find, newvals, null, warnings);
+                    Set<ConllWord> cws = cs.conditionalEdit(findpt, newvals, null, warnings);
                     // TODO display warnings in GUI!
                     if (!cws.isEmpty()) {
                         currentSentenceId = i;
