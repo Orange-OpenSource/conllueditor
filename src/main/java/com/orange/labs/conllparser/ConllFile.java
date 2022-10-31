@@ -451,7 +451,9 @@ public class ConllFile {
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
-
+            if (elems.length != 2) {
+                throw new ConllException("Line " + ct + ": missing '>'");
+            }
             try {
                 CondAndRepl cr = new CondAndRepl(elems[0], elems[1]);
                 conds.add(cr);
@@ -506,7 +508,7 @@ public class ConllFile {
 
         CheckCondition thencondition;
         String thenstr;
-        
+
         int linenumber;
 
         public ImplicationConditions(String i, String t, int l) throws ConllException {
@@ -516,13 +518,13 @@ public class ConllFile {
             thencondition = new CheckCondition(t, false);
             thenstr = t;
         }
-        
+
         public String toString() {
             return "" + linenumber + ": " + ifstr + " == " + thenstr;
         }
     }
 
-    public void conditionalValidation(File validfile) throws ConllException, IOException {
+    public void conditionalValidation(File validfile, PrintStream err) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(validfile);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         String line;
@@ -531,50 +533,49 @@ public class ConllFile {
         //Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
         //int changes = 0;
         int ct = 0;
-        StringBuilder warnings = new StringBuilder();
+        if (err == null) err = System.err;
         List<ImplicationConditions> ics = new ArrayList<>();
-        
+
         while ((line = br.readLine()) != null) {
             ct++;
             line = line.trim();
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split("==", 2);
+            if (elems.length != 2) {
+                throw new ConllException("Line " + ct + ": missing '=='");
+            }
             try {
-                System.err.format("Reading rule %d %s\n", ct, line);
+                err.format("Reading rule %d %s\n", ct, line);
                 ImplicationConditions ic = new ImplicationConditions(elems[0], elems[1], ct);
                 ics.add(ic);
             } catch (ConllException e) {
                 //e.printStackTrace();
                 throw new ConllException("Line " + ct + ": " + e.getMessage());
             }
+            err.println("");
         }
-        
-        for (ImplicationConditions ic : ics) {
-            System.err.println("Applying rule " + ic);
-            conditionalValidation(ic.ifcondition, ic.thencondition, warnings);
-        }
-        
-        if (warnings.length() > 0) {
-            System.err.println(warnings.toString());
-        }
-
         br.close();
-    }
 
-
-
-    /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
-    public void conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
         for (ConllSentence cs : sentences) {
-            cs.conditionalValidation(ifcondition, thencondition, warnings);
-        }
+            StringBuilder warnings = new StringBuilder();
+            err.println("Sentence " + cs.getSentid());
+            err.println(cs.getSentence());
+            for (ImplicationConditions ic : ics) {
 
+                int errs = cs.conditionalValidation(ic.ifcondition, ic.thencondition, warnings);
+                if (errs > 0) {
+                    err.println("  Applying rule " + ic);
+                    err.println(warnings.toString());
+                }
+            }
+            err.println();
+        }
     }
 
+    
 
-    
-    
+
     /** run makeTrees() on every sentence to find strange stuff which prohibits editing:
      *  - cycles
      *  - in valid head ids
@@ -1006,7 +1007,7 @@ public class ConllFile {
                            cf.conditionalEdit(new File(conditionfile));
                         }
                         else if (validationfile != null) {
-                           cf.conditionalValidation(new File(validationfile));
+                           cf.conditionalValidation(new File(validationfile), null);
                         }
 
                         if (validationfile == null) {
@@ -1028,3 +1029,4 @@ public class ConllFile {
     }
 
 }
+

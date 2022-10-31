@@ -36,6 +36,8 @@ import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.GetReplacement;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -547,6 +549,48 @@ public class TestConllFile {
             cf.conditionalEdit(srfile);
         } catch (ConllException e) {
             String expected = "Line 4: pos:9 token recognition error at: 'aa'";
+            Assert.assertEquals(String.format("File format error not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
+                    expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void test40conditionvalidation() throws IOException, ConllException {
+        name("validation by conditions");
+
+        URL sr = this.getClass().getResource("validrules.txt");
+        File srfile = new File(sr.getFile());
+
+        File out = new File(folder, "validrules.result.txt");
+        PrintStream err = new PrintStream(out);
+        cf.conditionalValidation(srfile, err);
+
+
+        //FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
+
+        try {
+            URL ref = this.getClass().getResource("validrules.result.txt");
+
+            Assert.assertEquals(String.format("validation incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                    FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                    FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertEquals("File missing", "validrules.result.txt", "");
+        }
+    }
+
+    @Test
+    public void test41conditionvalidation_fileerror() throws IOException, ConllException {
+        name("validation by conditions with file error");
+
+        URL sr = this.getClass().getResource("validrules_errors.txt");
+        File srfile = new File(sr.getFile());
+
+        try {
+            cf.conditionalValidation(srfile, null);
+        } catch (ConllException e) {
+            String expected = "Line 2: pos:0 token recognition error at: 'Q'";
             Assert.assertEquals(String.format("File format error not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }

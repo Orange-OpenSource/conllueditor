@@ -1,0 +1,6 @@
+# if part before == is true, the part after must be true as well
+QQQDeprel:nsubj and (Upos:NOUN or Upos:PROPN) and head(Upos:VERB) and head(Feat:VerbForm=Fin) == head(Feat:Person:3)
+Deprel:cc = head(Deprel:conj) or head(Deprel:root)
+Deprel:acl == headD(Upos:NOUN
+Upos:NUM == Deprel:nummod
+Deprel:nummod == Upos:NUM

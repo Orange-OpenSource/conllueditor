@@ -2337,16 +2337,19 @@ public class ConllSentence {
     }
 
 
-    public void conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
+    public int conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
         normalise();
         makeTrees(null);
+        int cterrors = 0;
         for (ConllWord cw : words) {
             if (cw.matchCondition(ifcondition, null)) {
                 if (!cw.matchCondition(thencondition, null)) {
-                    System.err.println(" ERROR " + cw);
+                    warnings.append("   ERROR ").append(cw.toString()).append('\n');
+                    cterrors++;
                 }
             }
         }
+        return cterrors;
     }
 
 }
