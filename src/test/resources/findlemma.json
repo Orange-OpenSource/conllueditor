@@ -3,6 +3,7 @@
   "maxsentence": 19,
   "sentence": "la souris a mangé le fromage qui pue. ",
   "length": 9,
+  "sent_id": "conlueditor-test-7",
   "changes": 0,
   "tree": [
     {

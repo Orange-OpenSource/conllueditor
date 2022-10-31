@@ -140,6 +140,7 @@
 12	siècle	siècle	NOUN	_	Gender=Masc|Number=Sing	4	nmod	_	SpaceAfter=No|Head=4
 13	.	.	PUNCT	_	_	3	punct	_	_
 
+# sent_id = conlueditor-test-6
 # text = ils ont visité le Musée du Louvre.
 # sentence 6
 1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	0:root	EUD=Head_headid
@@ -153,6 +154,7 @@
 8	Louvre	Louvre	PROPN	PROPN	_	5	nmod	_	SpaceAfter=No|Head=+2
 9	.	.	PUNCT	PUNCT	_	3	punct	_	_
 
+# sent_id = conlueditor-test-7
 # text = la souris a mangé le fromage qui pue.
 # sentence 7
 1	la	le	DET	ART	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	Head=-2
@@ -165,6 +167,7 @@
 8	pue	puer	VERB	VERB	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	_	SpaceAfter=No
 9	.	.	PUNCT	PUNCT	_	4	punct	_	_
 
+# sent_id = conlueditor-test-8
 # text = il habite à Los Angeles.
 # sentence 8
 1	il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	0:root	EUD=Head_headid
@@ -174,6 +177,7 @@
 5	Angeles	Angeles	PROPN	PROPN	_	4	flat:name	_	SpaceAfter=No|Head=+2
 6	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
+# sent_id = conlueditor-test-9
 # text = Il aime bien le Miroir aux Alouettes.
 # sentence 9
 1	Il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	0:root	EUD=Head_headid
@@ -187,6 +191,7 @@
 8	Alouettes	alouette	NOUN	NOUN	Gender=Fem|Number=Plur	4	obl	_	SpaceAfter=No|Head=4
 9	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
+# sent_id = conlueditor-test-10-only-tokens
 # text = Une exposition au musée du Louvre et un voyage au village catalan de Gosol
 # sentence 10
 1	Une	_	_	_	_	_	_	_	_
@@ -210,6 +215,7 @@
 16	de	_	_	_	_	_	_	_	_
 17	Gosol	_	_	_	_	_	_	_	_
 
+# sent_id = conlueditor-test-11-eud
 # text = Sam bought and prepared dinner
 # sentence 11
 1	Sam	Sam	PROPN	_	_	3	nsubj	2:nsubj|4:nsubj|0:root	EUD=Head_headid|Head=+2
@@ -218,6 +224,7 @@
 4	prepared	prepare	VERB	_	_	2	conj	_	_
 5	dinner	dinner	NOUN	_	_	4	obj	2:obj|4:obj	Head=4
 
+# sent_id = conlueditor-test-12-eud-bad-ids
 # text = Sam persuaded Kim to fix dinner
 # sentence 12
 1	Sam	Sam	PROPN	_	_	3	nsubj	0:root	EUD=Head_headid|Head=+2
@@ -330,7 +337,7 @@ Warning: Cannot set relative head id in sentence fr-ud-dev_00002, word 1: negati
 Warning: Cannot set relative head id in sentence fr-ud-dev_00004, word 1: negative or 0 absolute head -1
 Warning: Cannot set relative head id in sentence fr-ud-train_00002, word 1: negative or 0 absolute head -1
 Warning: Cannot set relative head id in sentence fr-ud-train_00024, word 1: negative or 0 absolute head -1
-Warning: Cannot set relative head id in sentence null, word 1: negative or 0 absolute head -1
+Warning: Cannot set relative head id in sentence conlueditor-test-7, word 1: negative or 0 absolute head -1
 Warning: Cannot set absolute head id in sentence fr-ud-dev_00001, word 4: 4 == word id
 Warning: Cannot set absolute head id in sentence fr-ud-dev_00002, word 5: 4 depends from current word
 Warning: Cannot set absolute head id in sentence fr-ud-dev_00003, word 6: 4 depends from current word
@@ -344,7 +351,7 @@ Warning: Cannot set relative head id in sentence fr-ud-dev_00001, word 1: absolu
 Warning: Cannot set relative head id in sentence fr-ud-dev_00001, word 10: absolute head 12 > sentence length 11
 Warning: Cannot set relative head id in sentence fr-ud-dev_00002, word 13: absolute head 15 > sentence length 14
 Warning: Cannot set relative head id in sentence fr-ud-train_00002, word 16: absolute head 18 > sentence length 17
-Warning: Cannot set relative head id in sentence null, word 8: absolute head 10 > sentence length 9
-Warning: Cannot set relative head id in sentence null, word 5: absolute head 7 > sentence length 6
+Warning: Cannot set relative head id in sentence conlueditor-test-6, word 8: absolute head 10 > sentence length 9
+Warning: Cannot set relative head id in sentence conlueditor-test-8, word 5: absolute head 7 > sentence length 6
 Warning: Cannot set relative head id in sentence ellipsis1, word 5: absolute head 7 > sentence length 6
 Warning: Cannot set relative head id in sentence ellipsis2, word 5: absolute head 7 > sentence length 6
