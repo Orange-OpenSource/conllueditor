@@ -44,6 +44,7 @@ import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
 import com.orange.labs.conllparser.ConlluPlusConverter;
+import com.orange.labs.conllparser.GetReplacement;
 import com.orange.labs.conllparser.ValidFeatures;
 import com.orange.labs.httpserver.ServeurHTTP;
 import com.orange.labs.search.SubTreeSearch;
@@ -1104,7 +1105,11 @@ public class ConlluEditor {
                 // si le deuxième mot est "true" on cherche en arrière
                 boolean backwards = f[1].equalsIgnoreCase("true");
 
-                List<String>newvals = Arrays.asList(replace.split("[ \\t]+"));
+                //List<String>newvals = Arrays.asList(replace.split("[ \\t]+"));
+                List<GetReplacement>newvals = new ArrayList<>();
+                for (String repl : replace.split("[ \\t]+")) {
+                    newvals.add(new GetReplacement(repl));
+                }
 
                 CheckCondition findpt = new CheckCondition(find, false);
                 for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);

@@ -384,8 +384,13 @@ public class ConllFile {
             //System.err.format("<%s>\n", line);
             if (line.isEmpty() || line.charAt(0) == '#') continue;
             String [] elems = line.split(">", 2);
-            List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
+            //List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
             try {
+                List<GetReplacement>newvals = new ArrayList<>();
+                for (String repl : elems[1].trim().split("[ \\t]+")) {
+                    newvals.add(new GetReplacement(repl));
+                }
+
                 Set<ConllWord>matching_cw = conditionalEdit(elems[0], newvals, wordlists, warnings);
                 System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
                 changes += matching_cw.size();
@@ -402,7 +407,7 @@ public class ConllFile {
     }
 
     /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
-    public Set<ConllWord> conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
+    public Set<ConllWord> conditionalEdit(String condition, List<GetReplacement>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord>matching_cw = new HashSet<>();
         CheckCondition conditionpt = new CheckCondition(condition, false);
@@ -442,7 +447,7 @@ public class ConllFile {
         if (warnings.length() > 0) {
             System.err.println(warnings.toString());
         }
-      
+
         br.close();
     }
 
@@ -456,8 +461,8 @@ public class ConllFile {
 
         //System.err.println();
     }
-    
-    
+
+
     /** run makeTrees() on every sentence to find strange stuff which prohibits editing:
      *  - cycles
      *  - in valid head ids

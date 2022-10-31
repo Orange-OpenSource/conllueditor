@@ -29,10 +29,11 @@ are permitted provided that the following conditions are met:
 
  @author Johannes Heinecke
  @version 2.18.1 as of 29th October 2022
-*/
+ */
 
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
+import com.orange.labs.conllparser.GetReplacement;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +41,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -74,11 +77,15 @@ public class TestConllFile {
     }
 
     private void applyRule(String rule, String newval, String filename) throws IOException, ConllException {
-        String[] newvals = newval.split(" ");
+        String[] textnewvals = newval.split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit(rule, Arrays.asList(newvals), null, warnings);
-        } catch(Exception e) {
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit(rule, newvals, null, warnings);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -89,24 +96,28 @@ public class TestConllFile {
         }
 
         try {
-        URL ref = this.getClass().getResource(filename);
+            URL ref = this.getClass().getResource(filename);
 
-        Assert.assertEquals(String.format("Rule '%s' badly used\n ref: %s\n res: %s\n", rule, ref.toString(), out.toString()),
-                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+            Assert.assertEquals(String.format("Rule '%s' badly used\n ref: %s\n res: %s\n", rule, ref.toString(), out.toString()),
+                    FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                    FileUtils.readFileToString(out, StandardCharsets.UTF_8));
         } catch (Exception e) {
             e.printStackTrace();
             Assert.assertEquals("File missing", filename, "");
         }
     }
 
-    private void applyRules(String [] rule, String [] newval, String filename) throws IOException, ConllException {
+    private void applyRules(String[] rule, String[] newval, String filename) throws IOException, ConllException {
         StringBuilder warnings = new StringBuilder();
-        for (int x=0; x<rule.length; ++x) {
-            String[] newvals = newval[x].split(" ");
+        for (int x = 0; x < rule.length; ++x) {
+            String[] textnewvals = newval[x].split(" ");
             try {
-                cf.conditionalEdit(rule[x], Arrays.asList(newvals), null, warnings);
-            } catch(Exception e) {
+                List<GetReplacement> newvals = new ArrayList<>();
+                for (String repl : textnewvals) {
+                    newvals.add(new GetReplacement(repl));
+                }
+                cf.conditionalEdit(rule[x], newvals, null, warnings);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -123,8 +134,6 @@ public class TestConllFile {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
-
-
 
     @Test
     public void test01rule1() throws IOException, ConllException {
@@ -152,32 +161,31 @@ public class TestConllFile {
 
     @Test
     public void test01rule5() throws IOException, ConllException {
-         name("rule 5");
+        name("rule 5");
         applyRule("IsEmpty", "xpos:\"EMPTY\"", "rule5.conllu");
     }
 
     @Test
     public void test01rule5b() throws IOException, ConllException {
-         name("rule 5b");
+        name("rule 5b");
         applyRule("IsMWT", "MISC:\"MWT=Yes\"", "rule5b.conllu");
     }
 
-
     @Test
     public void test01rule6() throws IOException, ConllException {
-         name("rule 6");
+        name("rule 6");
         applyRule("Upos:NOUN and (Feat:Number=Plur or Feat:Gender=Masc )", "misc:\"Noun=Plural_or_Masc\"", "rule6.conllu");
     }
 
     @Test
     public void test01rule7() throws IOException, ConllException {
-         name("rule 7");
+        name("rule 7");
         applyRule("Misc:SpaceAfter=No and Lemma:.*[aeiou]", "misc:\"FinalVowel=Yes\"", "rule6b.conllu");
     }
 
     @Test
     public void test01rule8() throws IOException, ConllException {
-         name("rule 8");
+        name("rule 8");
         applyRule("Upos:NOUN", "feat:\"Number=\"", "rule6c.conllu");
     }
 
@@ -185,46 +193,44 @@ public class TestConllFile {
     public void test01rule9() throws IOException, ConllException {
         name("rule 01-9: test condtions for heads/euds");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
-        String [] rules = {"HeadId:-2",
-                           "HeadId:+2",
-                           "HeadId:9",
-                           "EUD:-4:obj",
-                           "EUD:*:nsubj",
-                           "EUD:3:conj"};
-        String [] newvals = {"Misc:\"RelHead=-2\"",
-                             "Misc:\"RelHead=2\"",
-                             "Misc:\"AbsHead=9\"",
-                             "Misc:\"RelEUD=-4_obj\"",
-                             "Misc:\"RelEUD=*_nsubj\"",
-                             "Misc:\"AbsEUD=3_conj\"",
-        };
+        String[] rules = {"HeadId:-2",
+            "HeadId:+2",
+            "HeadId:9",
+            "EUD:-4:obj",
+            "EUD:*:nsubj",
+            "EUD:3:conj"};
+        String[] newvals = {"Misc:\"RelHead=-2\"",
+            "Misc:\"RelHead=2\"",
+            "Misc:\"AbsHead=9\"",
+            "Misc:\"RelEUD=-4_obj\"",
+            "Misc:\"RelEUD=*_nsubj\"",
+            "Misc:\"AbsEUD=3_conj\"",};
         applyRules(rules,
-                   newvals,
-                   "rule01-9.conllu");
+                newvals,
+                "rule01-9.conllu");
     }
 
     @Test
     public void test01rule10() throws IOException, ConllException {
         name("rule 01-10: test replacements for heads/euds");
         //applyRule("RelHeadId:-2", "Misc:\"RelHead=-2\"", "rule01-9.conllu");
-        String [] rules = {"Upos:DET",
-                           "Upos:NOUN",
-                           "Upos:ADJ",
-                           "Deprel:nsubj",
-                           "Upos:PROPN",
-                           "Upos:ADV"};
-        String [] newvals = {"HeadId:\"-2\" Misc:\"Head=-2\"",
-                             "HeadId:\"4\" Misc:\"Head=4\"",
-                             "HeadId:head(HeadId) Misc:\"Head=Head_HeadId\"",
-                             "Eud:head(HeadId)+\":\"+head(Deprel) Misc:\"EUD=Head_headid\"",
-                             "HeadId:\"+2\" Misc:\"Head=+2\"",
-                             "Eud:\"-1:before\" Misc:\"EUD=Head-1\""
-                           };
+        String[] rules = {"Upos:DET",
+            "Upos:NOUN",
+            "Upos:ADJ",
+            "Deprel:nsubj",
+            "Upos:PROPN",
+            "Upos:ADV"};
+        String[] newvals = {"HeadId:\"-2\" Misc:\"Head=-2\"",
+            "HeadId:\"4\" Misc:\"Head=4\"",
+            "HeadId:head(HeadId) Misc:\"Head=Head_HeadId\"",
+            "Eud:head(HeadId)+\":\"+head(Deprel) Misc:\"EUD=Head_headid\"",
+            "HeadId:\"+2\" Misc:\"Head=+2\"",
+            "Eud:\"-1:before\" Misc:\"EUD=Head-1\""
+        };
         applyRules(rules,
-                   newvals,
-                   "rule01-10.conllu");
+                newvals,
+                "rule01-10.conllu");
     }
-
 
     @Test
     public void test02head() throws IOException, ConllException {
@@ -234,31 +240,31 @@ public class TestConllFile {
 
     @Test
     public void test02headshead() throws IOException, ConllException {
-         name("rule headshead");
+        name("rule headshead");
         applyRule("head(head(Upos:VERB and Feat:Tense=Pres ))", "misc:\"GrandmotherHead=Verbal\"", "rule8.conllu");
     }
 
     @Test
     public void test02headOfPreceding() throws IOException, ConllException {
-         name("rule headprec");
+        name("rule headprec");
         applyRule("prec(head(Upos:VERB))", "misc:\"HeadOfPreceding=Verbal\"", "rule9.conllu");
     }
 
     @Test
     public void test02PrecedingOfHead() throws IOException, ConllException {
-         name("rule prec head");
+        name("rule prec head");
         applyRule("head(prec(Upos:AUX))", "misc:\"PrecedingOfHead=Aux\"", "rule10.conllu");
     }
 
     @Test
     public void test02FollowingOfHead() throws IOException, ConllException {
-         name("rule following of head");
+        name("rule following of head");
         applyRule("head(next(Upos:NOUN))", "misc:\"FollowingOfHead=Noun\"", "rule11.conllu");
     }
 
     @Test
     public void test03Child1() throws IOException, ConllException {
-         name("rule child1");
+        name("rule child1");
         applyRule("child(Upos:VERB) and child(Upos:DET)", "misc:\"Deps=VERB+DET\"", "rule12.conllu");
     }
 
@@ -268,14 +274,17 @@ public class TestConllFile {
         applyRule("child(Upos:VERB && Feat:VerbForm=Part) and child(Upos:DET)", "misc:\"Deps=PARTC+DET\"", "rule13.conllu");
     }
 
-
     @Test
     public void test11badtoken() throws IOException {
         name("test badtoken");
-        String[] newvals = "xpos:\"det\"".split(" ");
+        String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("(Upos:ADP and Lemma )", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "pos:14 token recognition error at: 'Lemma '";
             Assert.assertEquals(String.format("bad token not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -285,10 +294,14 @@ public class TestConllFile {
 
     @Test
     public void test12badparenthesis() throws IOException, ConllException {
-        String[] newvals = "xpos:\"det\"".split(" ");
+        String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("Upos:ADP and Xpos:prep )", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "pos:23 extraneous input ')' expecting <EOF>";
             Assert.assertEquals(String.format("missing left parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -298,10 +311,14 @@ public class TestConllFile {
 
     @Test
     public void test13badparenthesis() throws IOException, ConllException {
-        String[] newvals = "xpos:\"det\"".split(" ");
+        String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("(Upos:DET and Xpos:prep ", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "pos:24 missing ')' at '<EOF>'";
             Assert.assertEquals(String.format("missing right parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -311,10 +328,14 @@ public class TestConllFile {
 
     @Test
     public void test14missingop() throws IOException, ConllException {
-        String[] newvals = "xpos:\"det\"".split(" ");
+        String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("Upos:ADP  Xpos:prep ", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "pos:10 extraneous input 'Xpos:prep' expecting <EOF>";
             Assert.assertEquals(String.format("missing operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -324,10 +345,14 @@ public class TestConllFile {
 
     @Test
     public void test15doubleop() throws IOException, ConllException {
-        String[] newvals = "xpos:\"det\"".split(" ");
+        String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("Upos:ADP and or Xpos:prep ", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "pos:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MWT, HEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '(', '@Upos', '@Xpos', '@Deprel', CFEAT}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -337,10 +362,14 @@ public class TestConllFile {
 
     @Test
     public void test16badNeg() throws IOException, ConllException {
-        String[] newvals = "xpos:\"det\"".split(" ");
+        String[] textnewvals = "xpos:\"det\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("Upos:ADP !and Xpos:prep ", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "pos:9 mismatched input '!' expecting {<EOF>, AND, OR}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -348,13 +377,16 @@ public class TestConllFile {
         }
     }
 
-
     @Test
     public void test171badAbsHeadId() throws IOException, ConllException {
-        String[] newvals = "HeadId:\"titi\"".split(" ");
+        String[] textnewvals = "HeadId:\"titi\"".split(" ");
         StringBuilder warnings = new StringBuilder();
         try {
-            cf.conditionalEdit("Upos:NOUN", Arrays.asList(newvals), null, warnings);
+            List<GetReplacement> newvals = new ArrayList<>();
+            for (String repl : textnewvals) {
+                newvals.add(new GetReplacement(repl));
+            }
+            cf.conditionalEdit("Upos:NOUN", newvals, null, warnings);
         } catch (ConllException e) {
             String expected = "invalid absolute head id, must be positive integer or 0 <titi>";
             Assert.assertEquals(String.format("band absolute HeadId not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
@@ -376,7 +408,6 @@ public class TestConllFile {
 //    }
 
     /* testing replacement grammar */
-
     @Test
     public void test20repl01() throws IOException, ConllException {
         name("repl 01");
@@ -419,7 +450,6 @@ public class TestConllFile {
         applyRule("Upos:VERB", "feat:\"InlfClass=\"+this(Feat_Number) feat:\"Number=\"", "rule26.conllu");
     }
 
-
     @Test
     public void test21value01() throws IOException, ConllException {
         name("value 01");
@@ -455,6 +485,7 @@ public class TestConllFile {
         name("value 06");
         applyRule("prec(@Deprel)=prec(prec(@Deprel))", "Misc:\"FOUND=PRECDEP_PRECPRECDEP\"", "value06.conllu");
     }
+
     @Test
 
     public void test21value07() throws IOException, ConllException {
@@ -478,10 +509,7 @@ public class TestConllFile {
     public void test22value01() throws IOException, ConllException {
         name("compatible value 01");
         applyRule("@Feat:Gender~head(@Feat:Gender) and @Feat:Gender=@Feat:Gender", "Misc:\"FOUND=GENDER_COMPAT\"", "value10.conllu");
-    }    
-
-
-
+    }
 
     @Test
     public void test30mass_edit() throws IOException, ConllException {
@@ -493,21 +521,18 @@ public class TestConllFile {
 
         File out = new File(folder, "search_replace.conllu");
         FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
-       
 
         try {
             URL ref = this.getClass().getResource("search_replace.conllu");
 
             Assert.assertEquals(String.format("search & replace incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
-                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+                    FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                    FileUtils.readFileToString(out, StandardCharsets.UTF_8));
         } catch (Exception e) {
             e.printStackTrace();
             Assert.assertEquals("File missing", "search_replace.conllu", "");
         }
 
     }
-    
 
 }
-

@@ -40,7 +40,7 @@ public class REvalVisitor extends ReplacementsBaseVisitor<String> {
     int level = 0; // -1 head, -2 head's head
     int sequence = 0; // -1 word to the left, 1 word to the right etc
 
-    public REvalVisitor(ConllWord cword, String extractexpression) {
+    public REvalVisitor(ConllWord cword) {
         this.cword = cword;
         current = cword;
     }

@@ -62,7 +62,6 @@ public class CheckCondition {
 //            parser.addErrorListener(new GrammarErrorListener());
 //            tree = parser.prog(); // parser
         } catch (ParseCancellationException e) {
-
             throw new ConllException(e.getMessage());
         }
     }

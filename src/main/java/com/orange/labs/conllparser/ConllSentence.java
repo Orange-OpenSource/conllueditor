@@ -2102,7 +2102,7 @@ public class ConllSentence {
      * Replacements.g4)
      * @param wordlists here we for put contents of files in conditions like Lemma:#filename.txt
      */
-    public Set<ConllWord> conditionalEdit(CheckCondition condition, List<String> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
+    public Set<ConllWord> conditionalEdit(CheckCondition condition, List<GetReplacement> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord> matching_cw = new HashSet<>();
         if (newvalues.isEmpty()) {
@@ -2123,11 +2123,12 @@ public class ConllSentence {
                 if (cw.matchCondition(condition, wordlists)) {
                     //changes++;
                     matching_cw.add(cw);
-                    for (String val : newvalues) {
-                        String[] elems = val.split(":", 2);
-                        if (elems.length == 2) {
-                            String newvalue = GetReplacement.parse_and_evaluate_replacement(elems[1], cw, false);
-                            switch (elems[0].toLowerCase()) {
+                    for (GetReplacement val : newvalues) {
+                        //String[] elems = val.split(":", 2);
+                        //if (elems.length == 2) {
+                            //String newvalue = GetReplacement.parse_and_evaluate_replacement(elems[1], cw, false);
+                            String newvalue = val.evaluate(cw);
+                            switch (val.column.toLowerCase()) {
                                 case "form":
                                     cw.setForm(newvalue);
                                     break;
@@ -2146,9 +2147,9 @@ public class ConllSentence {
 
                                 default:
                                     //throw new ConllException("invalid new value " + val);
-                                    System.err.println("Multitoken words cannot have " + elems[0] + "-value. Ignored");
+                                    System.err.println("Multitoken words cannot have " + val.column + "-value. Ignored");
                             }
-                        }
+                        //}
                     }
                 }
             }
@@ -2170,18 +2171,6 @@ public class ConllSentence {
         return matching_cw;
     }
 
-    public void conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
-        normalise();
-        makeTrees(null);
-        for (ConllWord cw : words) {
-            if (cw.matchCondition(ifcondition, null)) {
-                if (!cw.matchCondition(thencondition, null)) {
-                    System.err.println(" ERROR " + cw);
-                }
-            }
-        }
-    }
-    
     /**
      * apply a list of changes "column:value". Needed for the application of
      * rules in mass edit mode
@@ -2189,12 +2178,13 @@ public class ConllSentence {
      * @param newvalues
      * @param warnings
      */
-    void applyEdits(ConllWord cw, List<String> newvalues, StringBuilder warnings) throws ConllException {
-        for (String val : newvalues) {
-            String[] elems = val.split(":", 2);
-            if (elems.length == 2) {
-                String newvalue = GetReplacement.parse_and_evaluate_replacement(elems[1], cw, false);
-                switch (elems[0].toLowerCase()) {
+    void applyEdits(ConllWord cw, List<GetReplacement> newvalues, StringBuilder warnings) throws ConllException {
+        for (GetReplacement val : newvalues) {
+            //String[] elems = val.split(":", 2);
+            //if (elems.length == 2) {
+                //String newvalue = GetReplacement.parse_and_evaluate_replacement(elems[1], cw, false);
+                String newvalue = val.evaluate(cw);
+                switch (val.column.toLowerCase()) {
                     case "upos":
                         cw.setUpostag(newvalue);
                         break;
@@ -2206,7 +2196,7 @@ public class ConllSentence {
                         break;
                     case "headid":
                         if (newvalue.isEmpty()) {
-                            warnings.append("Warning: No value found for " + elems[0] + " in sentence " + sentid + ", word " + cw.getFullId()).append('\n');
+                            warnings.append("Warning: No value found for " + val.column + " in sentence " + sentid + ", word " + cw.getFullId()).append('\n');
                             break;
                         }
                         boolean absid = true;
@@ -2338,10 +2328,23 @@ public class ConllSentence {
                         break;
 
                     default:
-                        throw new ConllException("invalid receiving column <" + elems[0] + ">");
+                        throw new ConllException("invalid receiving column <" + val.column + ">");
                 }
-            } else {
-                throw new ConllException("invalid newvalue specification, must be recevinig_column:newvalue <" + val + ">");
+            //} else {
+            //    throw new ConllException("invalid newvalue specification, must be receiving_column:newvalue <" + val + ">");
+            //}
+        }
+    }
+
+
+    public void conditionalValidation(CheckCondition ifcondition, CheckCondition thencondition, StringBuilder warnings) throws ConllException {
+        normalise();
+        makeTrees(null);
+        for (ConllWord cw : words) {
+            if (cw.matchCondition(ifcondition, null)) {
+                if (!cw.matchCondition(thencondition, null)) {
+                    System.err.println(" ERROR " + cw);
+                }
             }
         }
     }
