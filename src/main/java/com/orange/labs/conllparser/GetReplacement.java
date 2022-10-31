@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.13.1 as of 16th October 2021
+ @version 2.18.2 as of 31th October 2022
  */
 package com.orange.labs.conllparser;
 
@@ -40,8 +40,8 @@ import org.antlr.v4.runtime.tree.*;
 
 public class GetReplacement {
 
-    public static String evaluate(String extraction, ConllWord cword) throws ConllException {
-        try {
+    public static ParseTree parse_replacement(String extraction, boolean debug) {
+      
             ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
             lexer.addErrorListener(new GrammarErrorListener());
 
@@ -49,11 +49,38 @@ public class GetReplacement {
 //        for (Token tok : lexer.getAllTokens()) {
 //           System.err.println("token: " + tok);
 //        }
+
+            if (debug) {
+                // we can see parsed tokens only once !
+                for (Token tok : lexer.getAllTokens()) {
+                    System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+                }
+                lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
+                lexer.addErrorListener(new GrammarErrorListener());    
+            }
+
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             ReplacementsParser parser = new ReplacementsParser(tokens);
             parser.addErrorListener(new GrammarErrorListener());
-            ParseTree tree = parser.prog(); // parse
+            ParseTree tree = parser.prog(); // parser
+            return tree;
+    }
+    
+    public static String parse_and_evaluate_replacement(String extraction, ConllWord cword, boolean debug) throws ConllException {
+        try {
+//            ReplacementsLexer lexer = new ReplacementsLexer(CharStreams.fromString(extraction));
+//            lexer.addErrorListener(new GrammarErrorListener());
+//
+//            // we can see tokens only once !
+//            //        for (Token tok : lexer.getAllTokens()) {
+//            //           System.err.println("token: " + tok);
+//            //        }
+//            CommonTokenStream tokens = new CommonTokenStream(lexer);
+//            ReplacementsParser parser = new ReplacementsParser(tokens);
+//            parser.addErrorListener(new GrammarErrorListener());
+//            ParseTree tree = parser.prog(); // parserr
 
+            ParseTree tree = parse_replacement(extraction, debug);
             REvalVisitor eval = new REvalVisitor(cword, extraction);
             String rtc = eval.visit(tree);
             //System.err.println("rtc " + rtc);

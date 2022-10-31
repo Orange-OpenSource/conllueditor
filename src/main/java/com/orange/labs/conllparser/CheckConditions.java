@@ -28,12 +28,11 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.0 as of 27th October 2022
+ @version 2.18.2 as of 31th October 2022
  */
 
 package com.orange.labs.conllparser;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +41,7 @@ import org.antlr.v4.runtime.tree.*;
 
 
 public class CheckConditions {
-    List<ParseTree> parsetrees;
+    //List<ParseTree> parsetrees;
     
     /** load and prepare a list of validation lines */
 //    public CheckConditions(List<String>lines) {
@@ -68,8 +67,8 @@ public class CheckConditions {
 //        }
 //    }
     
-    /* evaluate a condition on a ConllWord and also stores lists for Form and Lemma: "filename": (words) */
-    public static boolean evaluate_condition(String condition, Map<String, Set<String>> wordlists, ConllWord cword, boolean debug) throws Exception {
+    /* only compile a condition to be applied later */
+    public static ParseTree parse_condition(String condition, boolean debug) {
         ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
         lexer.addErrorListener(new GrammarErrorListener());
 
@@ -85,8 +84,29 @@ public class CheckConditions {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ConditionsParser parser = new ConditionsParser(tokens);
         parser.addErrorListener(new GrammarErrorListener());
-        ParseTree tree = parser.prog(); // parse
-
+        ParseTree tree = parser.prog(); // parser
+        return tree;
+    }
+    
+    /* evaluate a condition on a ConllWord and also stores lists for Form and Lemma: "filename": (words) */
+    public static boolean parse_end_evaluate_condition(String condition, Map<String, Set<String>> wordlists, ConllWord cword, boolean debug) throws Exception {
+//        ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
+//        lexer.addErrorListener(new GrammarErrorListener());
+//
+//        if (debug) {
+//            // we can see parsed tokens only once !
+//            for (Token tok : lexer.getAllTokens()) {
+//               System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+//            }
+//            lexer = new ConditionsLexer(CharStreams.fromString(condition));
+//            lexer.addErrorListener(new GrammarErrorListener());    
+//
+//        }
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//        ConditionsParser parser = new ConditionsParser(tokens);
+//        parser.addErrorListener(new GrammarErrorListener());
+//        ParseTree tree = parser.prog(); // parse
+        ParseTree tree = parse_condition(condition, debug);
         CEvalVisitor eval = new CEvalVisitor(cword, wordlists);
         boolean rtc = eval.visit(tree);
         //System.err.println("rtc " + rtc);

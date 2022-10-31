@@ -2126,7 +2126,7 @@ public class ConllSentence {
                     for (String val : newvalues) {
                         String[] elems = val.split(":", 2);
                         if (elems.length == 2) {
-                            String newvalue = GetReplacement.evaluate(elems[1], cw);
+                            String newvalue = GetReplacement.parse_and_evaluate_replacement(elems[1], cw, false);
                             switch (elems[0].toLowerCase()) {
                                 case "form":
                                     cw.setForm(newvalue);
@@ -2193,7 +2193,7 @@ public class ConllSentence {
         for (String val : newvalues) {
             String[] elems = val.split(":", 2);
             if (elems.length == 2) {
-                String newvalue = GetReplacement.evaluate(elems[1], cw);
+                String newvalue = GetReplacement.parse_and_evaluate_replacement(elems[1], cw, false);
                 switch (elems[0].toLowerCase()) {
                     case "upos":
                         cw.setUpostag(newvalue);
