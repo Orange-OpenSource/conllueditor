@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.2 as of 31th October 2022
+ @version 2.19.0 as of 31th October 2022
  */
 package com.orange.labs.conllparser;
 
@@ -44,23 +44,23 @@ public class CheckCondition {
 
     public CheckCondition(String condition, boolean debug) throws ConllException {
         try {
-            tree = parse_condition(condition, debug);
-//            ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
-//            lexer.addErrorListener(new GrammarErrorListener());
-//
-//            if (debug) {
-//                // we can see parsed tokens only once !
-//                for (Token tok : lexer.getAllTokens()) {
-//                    System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
-//                }
-//                lexer = new ConditionsLexer(CharStreams.fromString(condition));
-//                lexer.addErrorListener(new GrammarErrorListener());
-//
-//            }
-//            CommonTokenStream tokens = new CommonTokenStream(lexer);
-//            ConditionsParser parser = new ConditionsParser(tokens);
-//            parser.addErrorListener(new GrammarErrorListener());
-//            tree = parser.prog(); // parser
+            //tree = parse_condition(condition, debug);
+            ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
+            lexer.addErrorListener(new GrammarErrorListener());
+
+            if (debug) {
+                // we can see parsed tokens only once !
+                for (Token tok : lexer.getAllTokens()) {
+                    System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+                }
+                lexer = new ConditionsLexer(CharStreams.fromString(condition));
+                lexer.addErrorListener(new GrammarErrorListener());
+
+            }
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            ConditionsParser parser = new ConditionsParser(tokens);
+            parser.addErrorListener(new GrammarErrorListener());
+            tree = parser.prog(); // parser
         } catch (ParseCancellationException e) {
             throw new ConllException(e.getMessage());
         }
@@ -97,63 +97,64 @@ public class CheckCondition {
 //        boolean rtc = eval.visit(tree);
 //        }
 //    }
-    /* only compile a condition to be applied later */
-    public static ParseTree parse_condition(String condition, boolean debug) {
-        ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
-        lexer.addErrorListener(new GrammarErrorListener());
+//    /* only compile a condition to be applied later */
+//    public static ParseTree parse_condition(String condition, boolean debug) {
+//        ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(condition));
+//        lexer.addErrorListener(new GrammarErrorListener());
+//
+//        if (debug) {
+//            // we can see parsed tokens only once !
+//            for (Token tok : lexer.getAllTokens()) {
+//                System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+//            }
+//            lexer = new ConditionsLexer(CharStreams.fromString(condition));
+//            lexer.addErrorListener(new GrammarErrorListener());
+//
+//        }
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//        ConditionsParser parser = new ConditionsParser(tokens);
+//        parser.addErrorListener(new GrammarErrorListener());
+//        ParseTree tree = parser.prog(); // parser
+//        return tree;
+//    }
 
-        if (debug) {
-            // we can see parsed tokens only once !
-            for (Token tok : lexer.getAllTokens()) {
-                System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
-            }
-            lexer = new ConditionsLexer(CharStreams.fromString(condition));
-            lexer.addErrorListener(new GrammarErrorListener());
-
-        }
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        ConditionsParser parser = new ConditionsParser(tokens);
-        parser.addErrorListener(new GrammarErrorListener());
-        ParseTree tree = parser.prog(); // parser
-        return tree;
-    }
-
-    /* evaluate a condition on a ConllWord and also stores lists for Form and Lemma: "filename": (words) */
-    public static boolean evaluate_condition(ParseTree tree, Map<String, Set<String>> wordlists, ConllWord cword) throws Exception {
-        CEvalVisitor eval = new CEvalVisitor(cword, wordlists);
-        boolean rtc = eval.visit(tree);
-        //System.err.println("rtc " + rtc);
-        return rtc;
-    }
-
-    /* evaluate a condition on a ConllWord and also stores lists for Form and Lemma: "filename": (words) */
-    public static boolean parse_end_evaluate_condition(String condition, Map<String, Set<String>> wordlists, ConllWord cword, boolean debug) throws Exception {
-        ParseTree tree = parse_condition(condition, debug);
-        return evaluate_condition(tree, wordlists, cword);
-    }
+//    /* evaluate a condition on a ConllWord and also stores lists for Form and Lemma: "filename": (words) */
+//    public static boolean evaluate_condition(ParseTree tree, Map<String, Set<String>> wordlists, ConllWord cword) throws Exception {
+//        CEvalVisitor eval = new CEvalVisitor(cword, wordlists);
+//        boolean rtc = eval.visit(tree);
+//        //System.err.println("rtc " + rtc);
+//        return rtc;
+//    }
+//
+//    /* evaluate a condition on a ConllWord and also stores lists for Form and Lemma: "filename": (words) */
+//    public static boolean parse_end_evaluate_condition(String condition, Map<String, Set<String>> wordlists, ConllWord cword, boolean debug) throws Exception {
+//        ParseTree tree = parse_condition(condition, debug);
+//        return evaluate_condition(tree, wordlists, cword);
+//    }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
             System.err.println("Usage: Condition '<condition>' '<conllu word (spaces instead of tabs)>'");
         } else {
 
-            ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
-            lexer.addErrorListener(new GrammarErrorListener());
+//            ConditionsLexer lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
+//            lexer.addErrorListener(new GrammarErrorListener());
+//
+//            if (true) {
+//                // we can see parsed tokens only once !
+//                for (Token tok : lexer.getAllTokens()) {
+//                    System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
+//                }
+//                lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
+//                lexer.addErrorListener(new GrammarErrorListener());
+//            }
+//            CommonTokenStream tokens = new CommonTokenStream(lexer);
+//            ConditionsParser parser = new ConditionsParser(tokens);
+//            parser.addErrorListener(new GrammarErrorListener());
+//
+//            ParseTree tree = parser.prog(); // parse
 
-            if (true) {
-                // we can see parsed tokens only once !
-                for (Token tok : lexer.getAllTokens()) {
-                    System.err.println("token: " + tok.getText() + "\t" + tok.getType() + "\t" + lexer.getVocabulary().getSymbolicName(tok.getType()));
-                }
-                lexer = new ConditionsLexer(CharStreams.fromString(args[0]));
-                lexer.addErrorListener(new GrammarErrorListener());
-            }
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            ConditionsParser parser = new ConditionsParser(tokens);
-            parser.addErrorListener(new GrammarErrorListener());
-
-            ParseTree tree = parser.prog(); // parse
-
+            CheckCondition cc = new CheckCondition(args[0], true);
             //ConllWord cword;
             ConllSentence csent;
             if (args.length == 1) {
@@ -168,8 +169,9 @@ public class CheckCondition {
             ConllWord cword = csent.getWord(1);
             ConllWord cword2 = csent.getWord(2);
             System.err.println(csent);
-            CEvalVisitor eval = new CEvalVisitor(cword, null);
-            boolean rtc = eval.visit(tree);
+            //CEvalVisitor eval = new CEvalVisitor(cword, null);
+            //boolean rtc = eval.visit(tree);
+            boolean rtc = cc.evaluate(null, cword);
             System.err.println("rtc " + rtc);
         }
     }
