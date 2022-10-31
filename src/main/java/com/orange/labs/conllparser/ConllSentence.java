@@ -2170,6 +2170,18 @@ public class ConllSentence {
         return matching_cw;
     }
 
+    public void conditionalValidation(String ifcondition, String thencondition, StringBuilder warnings) throws ConllException {
+        normalise();
+        makeTrees(null);
+        for (ConllWord cw : words) {
+            if (cw.matchCondition(ifcondition, null)) {
+                if (!cw.matchCondition(thencondition, null)) {
+                    System.err.println(" ERROR " + cw);
+                }
+            }
+        }
+    }
+    
     /**
      * apply a list of changes "column:value". Needed for the application of
      * rules in mass edit mode

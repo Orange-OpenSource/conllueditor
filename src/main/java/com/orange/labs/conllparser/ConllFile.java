@@ -363,11 +363,12 @@ public class ConllFile {
     /** read rules file
      *   condition > newvals
      *   Upos:ADP and Lemma:d.* > Feat:Key="Val", Xpos:"prep"
+     *   and apply rule + replacement on all words of all sentences
      * @param rulefile
      * @return number of changes
      * @throws FileNotFoundException
      */
-    public void conditionalEdit(String rulefile) throws ConllException, IOException {
+    public void conditionalEdit(File rulefile) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(rulefile);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
         String line;
@@ -400,7 +401,7 @@ public class ConllFile {
         br.close();
     }
 
-
+    /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
     public Set<ConllWord> conditionalEdit(String condition, List<String>newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
         //int changes = 0;
         Set<ConllWord>matching_cw = new HashSet<>();
@@ -412,7 +413,50 @@ public class ConllFile {
         return matching_cw;
     }
 
+    public void conditionalValidation(File validfile) throws ConllException, IOException {
+        FileInputStream fis = new FileInputStream(validfile);
+        BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+        String line;
 
+        // TODO: store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
+        //Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
+        //int changes = 0;
+        int ct = 0;
+        StringBuilder warnings = new StringBuilder();
+        while ((line = br.readLine()) != null) {
+            ct++;
+            line = line.trim();
+            //System.err.format("<%s>\n", line);
+            if (line.isEmpty() || line.charAt(0) == '#') continue;
+            String [] elems = line.split("==", 2);
+            try {
+                System.err.format("Rule %d %s", ct, line);
+                conditionalValidation(elems[0], elems[1], warnings);
+                System.err.println();
+            } catch (ConllException e) {
+                e.printStackTrace();
+                throw new ConllException("Line " + ct + ": " + e.getMessage());
+            }
+        }
+        if (warnings.length() > 0) {
+            System.err.println(warnings.toString());
+        }
+      
+        br.close();
+    }
+
+
+
+    /* check a condition and apply modifications on all words of all sentences and return a list of matching words*/
+    public void conditionalValidation(String ifcondition, String thencondition, StringBuilder warnings) throws ConllException {
+        for (ConllSentence cs : sentences) {
+            cs.conditionalValidation(ifcondition, thencondition, warnings);
+        }
+
+        //System.err.println();
+    }
+    
+    
     /** run makeTrees() on every sentence to find strange stuff which prohibits editing:
      *  - cycles
      *  - in valid head ids
@@ -694,7 +738,19 @@ public class ConllFile {
 
     public static void main(String args[]) {
         if (args.length == 0) {
-            System.out.println("usage: ConllFile [--debug] [--nostrict] [--cedit conditionfile] [--filter 'regex'] [--shuffle] [--first n] [--last -n] [--subphrase <deprel,deprel>] [--crossval n --outfileprefix n] [ --conll|--tex|--ann] ] [--dep2chunk rule] [--stats] file.conll|-");
+            System.out.println("usage: ConllFile [options] file.conll|-");
+            System.out.println("   --cedit <conditionfile>     search&replace on a conllu file");
+            System.out.println("   --cvalid <if/then file>     validate conditions on all word of a conllu file");
+            System.out.println("   --conll                     output in CoNLL-U format");
+            System.out.println("   --tex                       output in LaTeX format");
+            System.out.println("   --nostrict                  accept deprel other tahn 'root' for words with head 0");
+            System.out.println("   --shuffle                   shuffle the order of the sentences");
+            System.out.println("   --first <n>                 ignore first n sentences");
+            System.out.println("   --last <n>                  ignore the sentences after n");
+            System.out.println("   --subphrase <deprel,deprel> outputs partial phrases of words linked by given depl");
+            System.out.println("   --crossval <n>              splits the file in n parts (n-1 parts for training and 1 part for testing, needs --outfileprefix");
+            System.out.println("   --outfileprefix <n>         specify the prefix used fo the files created by --crossval");
+            System.out.println("   --stats                     file statistics (in json format)");
         } else {
             //for (String a : args) System.err.println("arg " + a);
             String filter = null;
@@ -709,6 +765,7 @@ public class ConllFile {
             int cvparts = 0;
             String outfileprefix = null;
             String conditionfile = null;
+            String validationfile = null;
             Set<String>subphrase_deprels = null;
 
             Output output = Output.TEXT;
@@ -729,14 +786,17 @@ public class ConllFile {
                 } else if (args[a].equals("--debug")) {
                     debug = true;
                     argindex++;
-                } else if (args[a].equals("--debug")) {
-                    debug = true;
-                    argindex++;
                 } else if (args[a].equals("--stats")) {
                     stats = true;
                     argindex++;
+                } else if (args[a].equals("--nostrict")) {
+                    strict = false;
+                    argindex++;
                 } else if (args[a].equals("--cedit")) {
                     conditionfile = args[++a];
+                    argindex += 2;
+                } else if (args[a].equals("--cvalid")) {
+                    validationfile = args[++a];
                     argindex += 2;
                 } else if (args[a].equals("--subphrase")) {
                     subphrase_deprels = new HashSet<String>(Arrays.asList(args[++a].split(",")));
@@ -825,9 +885,15 @@ public class ConllFile {
                         crossval(cf, cvparts, shuffle, outfileprefix);
                     } else {
                         if (conditionfile != null) {
-                           cf.conditionalEdit(conditionfile);
+                           cf.conditionalEdit(new File(conditionfile));
                         }
-                        processInput(out, cf, output, filter, shuffle, strict, first, last);
+                        else if (validationfile != null) {
+                           cf.conditionalValidation(new File(validationfile));
+                        }
+
+                        if (validationfile == null) {
+                            processInput(out, cf, output, filter, shuffle, strict, first, last);
+                        }
                     }
                 }
             } catch (ConllException e) {

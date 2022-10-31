@@ -1,0 +1,5 @@
+# search and replace
+# if a word matches to the rules left of '>', the modifications right of the '>' are applied
+Upos:NOUN and Feat:Number:Plur > Xpos:"pluralnoun"
+Upos:DET and @Feat:Gender = head(@Feat:Gender) > Misc:"DET_Gender=Agree" 
+not Upos:DET and @Feat:Gender = head(@Feat:Gender) > Misc:"NOT_DET_Gender=Agree"

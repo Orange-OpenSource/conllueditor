@@ -33,8 +33,11 @@ are permitted provided that the following conditions are met:
 
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -275,7 +278,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("(Upos:ADP and Lemma )", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:14 token recognition error at: 'Lemma '";
+            String expected = "pos:14 token recognition error at: 'Lemma '";
             Assert.assertEquals(String.format("bad token not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -288,7 +291,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and Xpos:prep )", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:23 extraneous input ')' expecting <EOF>";
+            String expected = "pos:23 extraneous input ')' expecting <EOF>";
             Assert.assertEquals(String.format("missing left parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -301,7 +304,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("(Upos:DET and Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:24 missing ')' at '<EOF>'";
+            String expected = "pos:24 missing ')' at '<EOF>'";
             Assert.assertEquals(String.format("missing right parenthesis not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -314,7 +317,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP  Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:10 extraneous input 'Xpos:prep' expecting <EOF>";
+            String expected = "pos:10 extraneous input 'Xpos:prep' expecting <EOF>";
             Assert.assertEquals(String.format("missing operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -327,7 +330,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP and or Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MWT, HEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '(', '@Upos', '@Xpos', '@Deprel', CFEAT}";
+            String expected = "pos:13 extraneous input 'or' expecting {'head', 'child', 'prec', 'next', UPOS, LEMMA, FORM, XPOS, DEPREL, FEAT, MISC, ID, MWT, HEADID, RELEUD, ABSEUD, 'IsEmpty', 'IsMWT', NOT, '(', '@Upos', '@Xpos', '@Deprel', CFEAT}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -340,7 +343,7 @@ public class TestConllFile {
         try {
             cf.conditionalEdit("Upos:ADP !and Xpos:prep ", Arrays.asList(newvals), null, warnings);
         } catch (ConllException e) {
-            String expected = "line 1:9 mismatched input '!' expecting {<EOF>, AND, OR}";
+            String expected = "pos:9 mismatched input '!' expecting {<EOF>, AND, OR}";
             Assert.assertEquals(String.format("double operator not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, e.getMessage()),
                     expected, e.getMessage());
         }
@@ -472,10 +475,40 @@ public class TestConllFile {
         applyRule("@Feat:Gender=head(@Feat:Gender) and not (Upos:DET or Upos:NOUN)", "Misc:\"FOUND=GENDER_NOTUPOS\"", "value09.conllu");
     }
 
- @Test
+    @Test
     public void test22value01() throws IOException, ConllException {
         name("compatible value 01");
         applyRule("@Feat:Gender~head(@Feat:Gender) and @Feat:Gender=@Feat:Gender", "Misc:\"FOUND=GENDER_COMPAT\"", "value10.conllu");
     }    
+
+
+
+
+    @Test
+    public void test30mass_edit() throws IOException, ConllException {
+        name("mass edit");
+
+        URL sr = this.getClass().getResource("search_replace.txt");
+        File srfile = new File(sr.getFile());
+        cf.conditionalEdit(srfile);
+
+        File out = new File(folder, "search_replace.conllu");
+        FileUtils.writeStringToFile(out, cf.toString(), StandardCharsets.UTF_8);
+       
+
+        try {
+            URL ref = this.getClass().getResource("search_replace.conllu");
+
+            Assert.assertEquals(String.format("search & replace incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertEquals("File missing", "search_replace.conllu", "");
+        }
+
+    }
+    
+
 }
 

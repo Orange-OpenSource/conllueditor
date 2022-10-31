@@ -1439,7 +1439,7 @@ public class ConllWord {
     public boolean matchCondition(String condition, Map<String, Set<String>> wordlists) throws ConllException {
         try {
             //System.err.println("\n\nEVAL " + this);
-            return CheckConditions.evaluate(condition, wordlists, this, false); // debug: show tokenisation of condition
+            return CheckConditions.evaluate_condition(condition, wordlists, this, false); // debug: show tokenisation of condition
         } catch (Exception e) {
             e.printStackTrace();
             throw new ConllException(e.getMessage());

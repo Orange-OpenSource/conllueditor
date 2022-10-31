@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.12.0 as of 5th June 2021
+ @version 2.18.2 as of 31th October 2022
  */
 
 
@@ -51,6 +51,7 @@ public class GrammarErrorListener extends BaseErrorListener {
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e)
             throws ParseCancellationException {
-        throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
+        //throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg);
+        throw new ParseCancellationException("pos:" + charPositionInLine + " " + msg);
     }
 }
