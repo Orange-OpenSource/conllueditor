@@ -2500,17 +2500,21 @@ public class ConlluEditor {
 
             String savea = line.getOptionValue(saveAfter);
 
-            if (savea != null && Integer.parseInt(savea) > 0) {
-                ce.setSaveafter(Integer.parseInt(savea));
-            } else {
-                System.err.println("Invalid value for option --saveAfter. Must be positive integer");
+            if (savea != null) {
+                if(Integer.parseInt(savea) > 0) {
+                    ce.setSaveafter(Integer.parseInt(savea));
+                } else {
+                    System.err.println("Invalid value for option --saveAfter. Must be positive integer");
+                }
             }
 
             String scto = line.getOptionValue(shortcuttimeout);
-            if (scto != null && Integer.parseInt(scto) > 0) {
-                ce.setShortcutTimeout(Integer.parseInt(scto));
-            } else {
-                System.err.println("Invalid value for option --shortcutTimeout. Must be positive integer");
+            if (scto != null) { 
+                if (Integer.parseInt(scto) > 0) {
+                    ce.setShortcutTimeout(Integer.parseInt(scto));
+                } else {
+                    System.err.println("Invalid value for option --shortcutTimeout. Must be positive integer");
+                }
             }
 
 
