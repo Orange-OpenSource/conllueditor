@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.5 as of 17th October 2022
+ @version 2.19.1 as of 4th November 2022
  */
 package com.orange.labs.editor;
 
@@ -120,10 +120,10 @@ public class ConlluEditor {
 
     private String programmeversion;
     //private String gitcommitidfull;
-    private String gitcommitidabbrev;
-    private String gitcommittime;
+    private String gitcommitidabbrev = "?";
+    private String gitcommittime ="?";
     private boolean gitdirty = false;
-    private String gitbranch;
+    private String gitbranch ="?";
     private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
 
     private int debug = 1;
@@ -142,12 +142,15 @@ public class ConlluEditor {
         p.load(ClassLoader.getSystemResourceAsStream("conllueditor.properties"));
         programmeversion = p.getProperty("version");
 
-        p.load(ClassLoader.getSystemResourceAsStream("git.properties"));
-        //gitcommitidfull = p.getProperty("git.commit.id.full");
-        gitcommitidabbrev = p.getProperty("git.commit.id.abbrev");
-        gitcommittime = p.getProperty("git.commit.time");
-        gitdirty = "true".equalsIgnoreCase(p.getProperty("git.dirty"));
-        gitbranch = p.getProperty("git.branch");
+        InputStream gitprops = ClassLoader.getSystemResourceAsStream("git.properties");
+        if (gitprops != null) {
+            p.load(ClassLoader.getSystemResourceAsStream("git.properties"));
+            //gitcommitidfull = p.getProperty("git.commit.id.full");
+            gitcommitidabbrev = p.getProperty("git.commit.id.abbrev");
+            gitcommittime = p.getProperty("git.commit.time");
+            gitdirty = "true".equalsIgnoreCase(p.getProperty("git.dirty"));
+            gitbranch = p.getProperty("git.branch");
+        }
 
         StringBuilder sb = new StringBuilder();
         if (!"master".equals(gitbranch)) sb.append(", branche: ").append(gitbranch);
@@ -163,7 +166,7 @@ public class ConlluEditor {
                 break;
             case 2:
 
-                // file is not git controlled. Check whether conllfile + suffix exist
+                // file is not git controlled but directory is. Check whether conllfile + suffix exist
                 File temp = new File(conllfile + suffix);
                 if (temp.exists()) {
                     if (overwrite) {
@@ -175,10 +178,14 @@ public class ConlluEditor {
                 System.err.format("+++ edited file '%s' not tracked by git, writing all changes to '%s%s'\n", conllfile, conllfile, suffix);
                 break;
             case 3:
-                // file is not git controlled. Check whether conllfile + suffix exist
+                // neither file nor directory are git controlled. Check whether conllfile + suffix exist
                 temp = new File(conllfile + suffix);
                 if (temp.exists()) {
-                    throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
+                    if (overwrite) {
+                        System.err.format("*** ATTENTION option --overwrite: overwriting existing backup file '%s%s'\n", conllfile, suffix);
+                    } else {
+                        throw new ConllException(String.format("Backup file '%s%s' exists already. Either rename or put edited file '%s' under git control", conllfile, suffix, conllfile));
+                    }
                 }
                 System.err.format("+++ edited file '%s' not in git controlled directory, writing all changes to '%s%s'\n", conllfile, conllfile, suffix);
 
@@ -1932,9 +1939,14 @@ public class ConlluEditor {
                 }
                 csent = cfile.getSentences().get(currentSentenceId);
                 history.add(csent);
+                ConllWord modWord = csent.getHead();
 
                 JsonElement jelement = JsonParser.parseString(f[2]);
                 JsonObject jo = jelement.getAsJsonObject();
+                if (jo.has("sent_id")) {
+                    String sentid = jo.get("sent_id").getAsString().trim();
+                    csent.setSentid(sentid);
+                }
                 if (jo.has("newdoc")) {
                     String newdoc = jo.get("newdoc").getAsString().trim();
                     //if (!newdoc.isEmpty()) {
@@ -1953,14 +1965,18 @@ public class ConlluEditor {
                         csent.setTranslit(newdoc);
                     //}
                 }
-                 if (jo.has("translations")) {
+                if (jo.has("translations")) {
                     String t = jo.get("translations").getAsString().trim();
                     boolean rtc = csent.setTranslations(t);
                     if (!rtc) {
                         return formatErrMsg("Bad format in translations box: ''" + t, currentSentenceId);
                     }
-                 }
-
+                }
+                try {
+                    writeBackup(currentSentenceId, modWord, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
                 return returnTree(currentSentenceId, csent);
             } else if (command.startsWith("mod comments ")) {
                 String[] f = command.trim().split(" +", 3);
@@ -2193,7 +2209,7 @@ public class ConlluEditor {
     /**
      * only needed for test, to avoid committing the test file
      */
-    public void setCallcitcommot(boolean b) {
+    public void setCallgitcommit(boolean b) {
         callgitcommit = b;
     }
 
@@ -2496,7 +2512,7 @@ public class ConlluEditor {
             } else {
                 System.err.println("Invalid value for option --shortcutTimeout. Must be positive integer");
             }
-            
+
 
             int debug = 0x0d;
             if (line.hasOption(verbosity)) {

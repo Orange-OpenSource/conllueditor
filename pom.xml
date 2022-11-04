@@ -32,13 +32,13 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.19.0 as of 31th October 2022
+    version 2.19.1 as of 4th November 2022
     -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>2.19.0</version>
+    <version>2.19.1</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -205,6 +205,7 @@
                         <includeOnlyProperty>^git.branch$</includeOnlyProperty>
                     </includeOnlyProperties>
                     <commitIdGenerationMode>full</commitIdGenerationMode>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
                 </configuration>
             </plugin>
 

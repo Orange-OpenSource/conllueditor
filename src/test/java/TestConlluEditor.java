@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.0 as of 4th July 2022
+ @version 2.19.1 as of 4th November 2022
  */
 
 import com.google.gson.Gson;
@@ -65,7 +65,7 @@ public class TestConlluEditor {
         URL url = this.getClass().getResource("test.conllu");
         File file = new File(url.getFile());
         try {
-            ce = new ConlluEditor(file.toString());
+            ce = new ConlluEditor(file.toString(), true);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -177,7 +177,7 @@ public class TestConlluEditor {
     @Test
     public void test05Mod() throws IOException {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".21");
         ce.setSaveafter(1);
         ce.process("mod lemma 9 Lemma", 0, "editinfo");
@@ -203,7 +203,7 @@ public class TestConlluEditor {
     @Test
     public void test061InvalidHead() throws IOException {
         name("setting invalid head (setting head to a dependant node)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".22");
         ce.setSaveafter(1);
 
@@ -230,7 +230,7 @@ public class TestConlluEditor {
     @Test
     public void test062HeadBeyondLastToken() throws IOException {
         name("setting invalid head (head id after last token)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".23");
         ce.setSaveafter(1);
 
@@ -257,7 +257,7 @@ public class TestConlluEditor {
     @Test
     public void test063HeadIsDep() throws IOException {
         name("setting invalid head (head id is the same as Dep Id)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".24");
         ce.setSaveafter(1);
 
@@ -284,7 +284,7 @@ public class TestConlluEditor {
     @Test
     public void test064InvaldDepId() throws IOException {
         name("Dep ID does not exist");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".25");
         ce.setSaveafter(1);
 
@@ -313,7 +313,7 @@ public class TestConlluEditor {
         @Test
     public void test065BadMod() throws IOException {
         name("setting invalid mod sequence (missing 4th element)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".26");
         ce.setSaveafter(1);
 
@@ -378,7 +378,7 @@ public class TestConlluEditor {
     @Test
     public void test11EditJoinSplit() throws IOException {
         name("modifying lemma, deprel, and split/join");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setSaveafter(1);
         //String rtc =
         ce.process("mod lemma 3 Oasis", 3, "editinfo");
@@ -397,7 +397,7 @@ public class TestConlluEditor {
     @Test
     public void test12EditJoinSplitBeforeMWT() throws IOException {
         name("split/join before a MWT");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".5");
         ce.setSaveafter(1);
         ce.process("mod split 2 3", 4, "editinfo");
@@ -413,7 +413,7 @@ public class TestConlluEditor {
     @Test
     public void test13EditJoinSplitBeforeEmptyNode() throws IOException {
         name("split/join before a empty word");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".6");
         ce.setSaveafter(1);
         //String rtc =
@@ -430,7 +430,7 @@ public class TestConlluEditor {
     @Test
     public void test14EditJoinSplitWithEnhDeps() throws IOException {
         name("split/join before a enhanced deps");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".7");
         ce.setSaveafter(1);
         ce.process("mod split 4 ", 13, "editinfo");
@@ -447,7 +447,7 @@ public class TestConlluEditor {
     @Test
     public void test15CreateMWT() throws IOException {
         name("create two MWT with three/two words and rename contracted form");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".8");
         ce.setSaveafter(1);
         ce.process("mod compose 1 3", 17, "editinfo");
@@ -466,7 +466,7 @@ public class TestConlluEditor {
     @Test
     public void test16JoinOverlapMWTstart() throws IOException {
         name("join overlapping be first word of a MWT");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".9");
         ce.setSaveafter(1);
         //String rtc =
@@ -482,7 +482,7 @@ public class TestConlluEditor {
     @Test
     public void test17JoinOverlapMWTend() throws IOException {
         name("join overlapping be last word of a MWT");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".10");
         ce.setSaveafter(1);
         //String rtc =
@@ -498,7 +498,7 @@ public class TestConlluEditor {
     @Test
     public void test180MWTwithSpaceAfter() throws IOException {
         name("create MWT with SpaceAfter=No");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".18");
         ce.setSaveafter(1);
         //String rtc =
@@ -514,7 +514,7 @@ public class TestConlluEditor {
    @Test
     public void test181MWTfromWord() throws IOException {
         name("create MWT from Word");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".181");
         ce.setSaveafter(1);
         //String rtc =
@@ -532,7 +532,7 @@ public class TestConlluEditor {
   @Test
     public void test182MWTfromWordError() throws IOException {
         name("create MWT from word which is already part of an MWT");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".182");
         ce.setSaveafter(1);
         //String rtc =
@@ -558,7 +558,7 @@ public class TestConlluEditor {
     @Test
     public void test19SentSplit() throws IOException {
         name("split sentences (with enhanced dependencies and empty words");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".17");
         ce.setSaveafter(1);
         //String rtc =
@@ -575,7 +575,7 @@ public class TestConlluEditor {
     @Test
     public void test201EditMetaData() throws IOException {
         name("modify sentence metadata");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".201");
         ce.setSaveafter(1);
         //String rtc =
@@ -591,7 +591,7 @@ public class TestConlluEditor {
     @Test
     public void test202EditMetaDataError() throws IOException {
         name("modify sentence metadata error");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".202");
         ce.setSaveafter(1);
         //String rtc =
@@ -618,7 +618,7 @@ public class TestConlluEditor {
     @Test
     public void test21Read() throws IOException {
         name("read sentence");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setSaveafter(1);
 
         String rtc = ce.process("read 13", 1, "");
@@ -639,7 +639,7 @@ public class TestConlluEditor {
     @Test
     public void test22ReadSecond() throws IOException {
         name("read a second sentence");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setSaveafter(1);
         String rtc = ce.process("read 16", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -660,7 +660,7 @@ public class TestConlluEditor {
     @Test
     public void test301FindSubtree() throws IOException {
         name("findsubtree1");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
 
         String subtree = "# global.columns = ID	LEMMA	UPOS	FEATS	HEAD	DEPREL\n" +
                         "1	_	ADP	_	3	_\n" +
@@ -687,7 +687,7 @@ public class TestConlluEditor {
     @Test
     public void test302FindSubtree() throws IOException {
         name("findsubtree2");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
 
         String subtree = "# global.columns = ID	FORM	LEMMA	UPOS	FEATS	HEAD	DEPREL\n" +
                         "1	en	_	DET	_	3	d.*\n" +
@@ -715,7 +715,7 @@ public class TestConlluEditor {
     @Test
     public void test303CreateSubtree() throws IOException {
         name("createsubtree 10 columns");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
 
         //ce.process("read 0", 1, "");
         String rtc = ce.process("createsubtree 7", 0, "");
@@ -737,7 +737,7 @@ public class TestConlluEditor {
     @Test
     public void test304CreateSubtree() throws IOException {
         name("createsubtree selected columns");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
 
         String rtc = ce.process("createsubtree 9 # global.columns = ID LEMMA UPOS HEAD DEPREL", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -759,7 +759,7 @@ public class TestConlluEditor {
     @Test
     public void test305CreateSubtreeMissingID() throws IOException {
         name("createsubtree missing ID column");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
 
         String rtc = ce.process("createsubtree 9 # global.columns = LEMMA UPOS HEAD DEPREL", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -780,7 +780,7 @@ public class TestConlluEditor {
     @Test
     public void test31FindLemma() throws IOException {
         name("findlemma");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setSaveafter(1);
         String rtc = ce.process("findlemma false fromage/.*/puer", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -801,7 +801,7 @@ public class TestConlluEditor {
     @Test
     public void test32FindForm() throws IOException {
         name("findword");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setSaveafter(1);
         String rtc = ce.process("findword false \" and \"", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -822,7 +822,7 @@ public class TestConlluEditor {
     @Test
     public void test33FindDeprel() throws IOException {
         name("finddeprel");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("finddeprel true orphan", 16, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -841,7 +841,7 @@ public class TestConlluEditor {
     @Test
     public void test34FindSequence() throws IOException {
         name("find sequence");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findmulti false l:un/u:ADJ", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -866,7 +866,7 @@ public class TestConlluEditor {
     @Test
     public void test35FindSentenceId() throws IOException {
         name("findsenteid");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findsentid false c.*-ud", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -886,7 +886,7 @@ public class TestConlluEditor {
     @Test
     public void test36FindSentenceIdBadRE() throws IOException {
         name("findsenteid (bad RE)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findsentid false c.*[]-ud", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -907,7 +907,7 @@ public class TestConlluEditor {
     @Test
     public void test37FindNothing() throws IOException {
         name("findupos (error)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findupos false TOTO", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -927,7 +927,7 @@ public class TestConlluEditor {
     @Test
     public void test38Undo() throws IOException {
         name("modifying UPOS and Lemma, followed by undo");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".3");
         ce.setSaveafter(1);
         ce.process("mod lemma 1 Sammie", 13, "editinfo");
@@ -944,7 +944,7 @@ public class TestConlluEditor {
     @Test
     public void test39AddED() throws IOException {
         name("adding/deleting enhanced dependency");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".4");
         ce.setSaveafter(1);
         ce.process("mod ed add 7 6 ref", 7, "editinfo");
@@ -962,7 +962,7 @@ public class TestConlluEditor {
     @Test
     public void test400FindExpressionForm() throws IOException {
         name("findexpression Form");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findexpression false Form:règne", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -981,7 +981,7 @@ public class TestConlluEditor {
     @Test
     public void test401FindExpressionMWT() throws IOException {
         name("findexpression IsEmpty");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findexpression false IsMWT", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -1000,7 +1000,7 @@ public class TestConlluEditor {
         @Test
     public void test402FindExpressionIsEmpty() throws IOException {
         name("findexpression IsEmpty");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         String rtc = ce.process("findexpression false IsEmpty and Lemma:laittaa", 1, "");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -1019,7 +1019,7 @@ public class TestConlluEditor {
     @Test
     public void test41validUPOS() throws IOException {
         name("testing valid UPOS");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         URL url = this.getClass().getResource("upos.txt");
         File file = new File(url.getFile());
         List<String>filenames = new ArrayList<>();
@@ -1043,7 +1043,7 @@ public class TestConlluEditor {
     @Test
     public void test42validDeprel() throws IOException {
         name("testing valid deprels");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         URL url = this.getClass().getResource("deprel.txt");
         File file = new File(url.getFile());
         List<String>filenames = new ArrayList<>();
@@ -1067,7 +1067,7 @@ public class TestConlluEditor {
     @Test
     public void test43validFeats() throws IOException {
         name("testing valid features");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         URL url = this.getClass().getResource("feat_val.txt");
         File file = new File(url.getFile());
         List<String>filenames = new ArrayList<>();
@@ -1093,7 +1093,7 @@ public class TestConlluEditor {
     @Test
     public void test50deleteWords() throws IOException {
         name("delete words");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".11");
         ce.setSaveafter(1);
         ce.process("mod delete 12", 16, "editinfo");
@@ -1111,7 +1111,7 @@ public class TestConlluEditor {
     @Test
     public void test51insertEmptyWords() throws IOException {
         name("insert empty word");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".12");
         ce.setSaveafter(1);
         ce.process("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
@@ -1141,7 +1141,7 @@ public class TestConlluEditor {
     @Test
     public void test52deleteEmptyWords() throws IOException {
         name("delete empty word");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".14");
         ce.setSaveafter(1);
 
@@ -1158,7 +1158,7 @@ public class TestConlluEditor {
     @Test
     public void test53deleteEmptyWords_Invald() throws IOException {
         name("delete empty word (error)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".15");
 
         String msg = ce.process("mod emptydelete 5.2", 13, "editinfo");
@@ -1181,7 +1181,7 @@ public class TestConlluEditor {
     @Test
     public void test54deleteWords_Invald() throws IOException {
         name("delete word (error)");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".16");
 
         String msg = ce.process("mod delete 11", 9, "editinfo");

@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.19.1
+* correction in metadata editing test
+* allow compilation without `.git`
+
 ## Version 2.19.0
 * validation rules (if a list of conditions applies to word than another list of conditions must apply too)
 * new tests

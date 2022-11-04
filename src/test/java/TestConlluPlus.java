@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2022, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.2 as of 22nd February 2021
+ @version 2.19.1 as of 4th November 2022
  */
 
 import com.google.gson.JsonElement;
@@ -154,7 +154,7 @@ public class TestConlluPlus {
     @Test
     public void test11EditExtraCol() throws IOException {
         name("modifying columns 11 and 12");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".3");
         ce.setSaveafter(1);
 
@@ -177,7 +177,7 @@ public class TestConlluPlus {
     @Test
     public void test12EditInvalidExtraCol() throws IOException {
         name("trying to modify columns 11 and 12 with invalid colname");
-        ce.setCallcitcommot(false);
+        ce.setCallgitcommit(false);
         ce.setBacksuffix(".4");
         ce.setSaveafter(1);
 
