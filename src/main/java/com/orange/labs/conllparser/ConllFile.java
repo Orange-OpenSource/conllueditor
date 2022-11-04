@@ -559,17 +559,18 @@ public class ConllFile {
 
         for (ConllSentence cs : sentences) {
             StringBuilder warnings = new StringBuilder();
-            err.println("Sentence " + cs.getSentid());
-            err.println(cs.getSentence());
             for (ImplicationConditions ic : ics) {
 
                 int errs = cs.conditionalValidation(ic.ifcondition, ic.thencondition, warnings);
                 if (errs > 0) {
+                    err.println("Sentence " + cs.getSentid());
+                    err.println(cs.getSentence());
+
                     err.println("  Applying rule " + ic);
                     err.println(warnings.toString());
                 }
             }
-            err.println();
+            //err.println();
         }
     }
 
@@ -860,6 +861,7 @@ public class ConllFile {
             System.out.println("usage: ConllFile [options] file.conll|-");
             System.out.println("   --cedit <conditionfile>     search&replace on a conllu file");
             System.out.println("   --cvalid <if/then file>     validate conditions on all word of a conllu file");
+            //System.err.println("   --quiet                     less verbose output (currently only with --cvalid");
             System.out.println("   --conll                     output in CoNLL-U format");
             System.out.println("   --tex                       output in LaTeX format");
             System.out.println("   --nostrict                  accept deprel other tahn 'root' for words with head 0");
@@ -878,6 +880,7 @@ public class ConllFile {
             boolean debug = false;
             boolean strict = true;
             boolean stats = false;
+            boolean quiet = false;
 
             int first = 1;
             int last = -1; // = all
@@ -907,6 +910,9 @@ public class ConllFile {
                     argindex++;
                 } else if (args[a].equals("--stats")) {
                     stats = true;
+                    argindex++;
+                } else if (args[a].equals("--quiet")) {
+                    quiet = true;
                     argindex++;
                 } else if (args[a].equals("--nostrict")) {
                     strict = false;

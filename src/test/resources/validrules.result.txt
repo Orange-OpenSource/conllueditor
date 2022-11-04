@@ -8,56 +8,10 @@ Reading rule 5 Upos:NUM == Deprel:nummod
 
 Reading rule 6 Deprel:nummod == Upos:NUM
 
-Sentence fr-ud-dev_00001
-Aviator, un film sur la vie de Howard Hughes. 
-
-Sentence fr-ud-dev_00002
-Les études durent six ans mais leur contenu diffère donc selon les Facultés. 
-
-Sentence fr-ud-dev_00003
-Mais comment faire dans un contexte structurellement raciste ? 
-
-Sentence fr-ud-dev_00004
-L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
-
-Sentence fr-ud-train_00002
-L'œuvre est située dans la galerie des batailles, dans le château de Versailles. 
-
-Sentence fr-ud-train_00024
-Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
-
-Sentence conlueditor-test-6
-ils ont visité le Musée du Louvre. 
-
-Sentence conlueditor-test-7
-la souris a mangé le fromage qui pue. 
-
-Sentence conlueditor-test-8
-il habite à Los Angeles. 
-
-Sentence conlueditor-test-9
-Il aime bien le Miroir aux Alouettes. 
-
-Sentence conlueditor-test-10-only-tokens
-Une exposition au musée du Louvre et un voyage au village catalan de Gosol 
-
-Sentence conlueditor-test-11-eud
-Sam bought and prepared dinner 
-
-Sentence conlueditor-test-12-eud-bad-ids
-Sam persuaded Kim to fix dinner 
-
 Sentence ellipsis1
 Sam fixed lunch and Kim dinner 
   Applying rule 2: Deprel:nsubj and (Upos:NOUN or Upos:PROPN) and head(Upos:VERB) and head(Feat:VerbForm=Fin)  ==  head(Feat:Person:3)
    ERROR 1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
-
-
-Sentence ellipsis2
-Mary organised bred and John beer 
-
-Sentence unannotated
-Une exposition au musée du Louvre 
 
 Sentence sv-ud-train-767
 Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22. 
@@ -66,13 +20,8 @@ Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt ki
    ERROR 14	2:57	2:57	NUM	RG|NOM	Case=Nom|NumType=Card	12	orphan	10.1:obl:för	Enhanced=obl
    ERROR 21	2:87	2:87	NUM	RG|NOM	Case=Nom|NumType=Card	19	orphan	15.1:obl:för	Enhanced=obl
 
-
 Sentence gl_ctg-ud-dev.conllu 625
 Dáselle nova redacción a o punto 2 
   Applying rule 5: Upos:NUM  ==  Deprel:nummod
    ERROR 9	2	2	NUM	Z	_	8	nmod	_	Treeler=sn
-
-
-Sentence fi_tdt-ud-train.conllu b712.11
-Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
 

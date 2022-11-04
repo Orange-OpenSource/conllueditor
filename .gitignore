@@ -17,6 +17,6 @@ JHE.txt
 .antlr/
 NOTES-jhe.md
 release.md
-bin/make-release.sh
+tools/
 releases/
 old/
