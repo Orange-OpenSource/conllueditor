@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.19.2
+* correction in legacy function
+
 ## Version 2.19.1
 * correction in metadata editing test
 * allow compilation without `.git`
