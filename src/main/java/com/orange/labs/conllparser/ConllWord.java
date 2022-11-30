@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.0 as of 28th October 2022
+ @version 2.19.2 as of 28th November 2022
  */
 package com.orange.labs.conllparser;
 
@@ -1921,15 +1921,16 @@ public class ConllWord {
 
             res.add(child);
             if (child == head) {
-                break;
+                return res;
+                //break;
             }
         }
-
-        if (res.isEmpty()) {
+        return null;
+/*        if (res.isEmpty()) {
             return null;
         } else {
             return res;
-        }
+        }*/
     }
 
     /**
