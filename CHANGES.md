@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.19.3
+* option `-r` no longer needed (using another way to calculate the position of `conllueditor/gui` from the compiled `.jar`-file
+
 ## Version 2.19.2
 * correction in legacy function
 
