@@ -118,6 +118,18 @@ public class ServeurHTTP {
             System.exit(11);
         }
 
+        if (rootdir == null) {
+            // if no rootdir (path to /gui) is given we assume the jar file is in /target, so we can
+            // calculate the position of /gui from the postion of the jar file
+            String s = new File(ServeurHTTP.class.getProtectionDomain()
+            .getCodeSource()
+            .getLocation()
+            .getPath()).getParentFile().getParent() + File.separator + "gui";
+            s = URLDecoder.decode(s, "UTF-8");
+            rootdir = s;
+            System.err.println("calculated rootdir from .jar: " + s);
+        }
+
         if (rootdir != null) {
             Path rdir = new File(rootdir).toPath();
             if (!Files.exists(rdir)) {

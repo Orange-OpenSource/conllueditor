@@ -41,7 +41,8 @@ if [[ "$1" =~ ^Xmx[0-9]g$ ]]; then
 fi
 
 if [ "$1" == "-r" ]; then
-    ROOTDIR="--rootdir $BASENAME/../gui"
+    # not needed anymore, but we keep the option "-r" for users which are used to it
+    # ROOTDIR="--rootdir $BASENAME/../gui"
     shift
 fi
 
