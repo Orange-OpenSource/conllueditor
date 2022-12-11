@@ -1,0 +1,28 @@
+# sent_id = fr-ud-dev_00002
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés. 
+FOUND 1
+FINAL 1
+4	six	six	NUM	_	_	5	nummod	_	_
+# sent_id = sv-ud-train-767
+# text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22. 
+FOUND 4
+FINAL 1
+9	0:78	0:78	NUM	RG|NOM	Case=Nom|NumType=Card	3	obl	3:obl:för	SpaceAfter=No
+FINAL 2
+14	2:57	2:57	NUM	RG|NOM	Case=Nom|NumType=Card	12	orphan	10.1:obl:för	Enhanced=obl
+FINAL 3
+21	2:87	2:87	NUM	RG|NOM	Case=Nom|NumType=Card	19	orphan	15.1:obl:för	Enhanced=obl
+FINAL 4
+25	6:22	6:22	NUM	RG|NOM	Case=Nom|NumType=Card	22	nummod	22:nummod	SpaceAfter=No
+# sent_id = gl_ctg-ud-dev.conllu 625
+# text = Dáselle nova redacción a o punto 2 
+FOUND 1
+FINAL 1
+9	2	2	NUM	Z	_	8	nmod	_	Treeler=sn
+# sent_id = fi_tdt-ud-train.conllu b712.11
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
+FOUND 2
+FINAL 1
+2	1	1	NUM	Num	NumType=Card	3	nummod	3:nummod	_
+FINAL 2
+10	4	4	NUM	Num	NumType=Card	11	nummod	11:nummod	_

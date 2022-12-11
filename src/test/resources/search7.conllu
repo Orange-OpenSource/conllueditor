@@ -1,0 +1,69 @@
+# sent_id = fr-ud-dev_00002
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés. 
+FOUND 1
+FINAL 1
+1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
+2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
+3	durent	durer	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+FOUND 4
+FINAL 1
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	SpaceAfter=No
+3	oasis	oasis	NOUN	_	Gender=Fem|Number=Sing	23	nsubj	_	_
+23	riche	riche	ADJ	_	Gender=Fem|Number=Sing	0	root	_	_
+FINAL 2
+12	règne	régner	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	10	acl:relcl	_	_
+13	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	SpaceAfter=No
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+FINAL 3
+27	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	28	det	_	_
+28	chercheurs	chercheur	NOUN	_	Gender=Masc|Number=Plur	30	nsubj	_	_
+30	découvrent	découvrir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
+FINAL 4
+30	découvrent	découvrir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
+31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
+33	espèces	espèce	NOUN	_	Gender=Fem|Number=Plur	30	obj	_	_
+# sent_id = fr-ud-train_00002
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles. 
+FOUND 1
+FINAL 1
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
+2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_
+4	située	situer	VERB	_	Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=\s\t\s
+# sent_id = fr-ud-train_00024
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
+FOUND 2
+FINAL 1
+1	Les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	2	det	_	_
+2	experts	expert	NOUN	_	Gender=Masc|Number=Plur	3	nsubj	_	_
+3	sont	être	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+FINAL 2
+6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
+7	ce	ce	DET	_	Gender=Masc|Number=Sing|PronType=Dem	8	det	_	_
+8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
+# sent_id = conlueditor-test-6
+# text = ils ont visité le Musée du Louvre. 
+FOUND 1
+FINAL 1
+3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
+5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_
+# sent_id = conlueditor-test-7
+# text = la souris a mangé le fromage qui pue. 
+FOUND 2
+FINAL 1
+1	la	le	DET	ART	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	_
+2	souris	souris	NOUN	NOUN	Gender=Fem|Number=Sing	4	nsubj	_	_
+4	mangé	manger	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+FINAL 2
+4	mangé	manger	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+5	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	6	det	_	_
+6	fromage	fromage	NOUN	NOUN	Gender=Masc|Number=Sing	4	obj	_	_
+# sent_id = conlueditor-test-9
+# text = Il aime bien le Miroir aux Alouettes. 
+FOUND 1
+FINAL 1
+2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
+5	Miroir	miroir	NOUN	NOUN	Gender=Masc|Number=Sing	2	obj	_	_

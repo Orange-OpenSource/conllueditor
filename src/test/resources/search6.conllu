@@ -1,0 +1,59 @@
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+FOUND 14
+FINAL 1
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	SpaceAfter=No
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+FINAL 2
+9	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	10	det	_	_
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+FINAL 3
+13	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	SpaceAfter=No
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+FINAL 4
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+17	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	18	det	_	_
+FINAL 5
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+27	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	28	det	_	_
+FINAL 6
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
+FINAL 7
+14	obscurité	obscurité	NOUN	_	Gender=Fem|Number=Sing	12	nsubj	_	_
+15	totale	total	ADJ	_	Gender=Fem|Number=Sing	14	amod	_	_
+46	des	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	47	det	_	_
+FINAL 8
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	3	det	_	SpaceAfter=No
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+FINAL 9
+9	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	10	det	_	_
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+FINAL 10
+13	l'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	14	det	_	SpaceAfter=No
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+FINAL 11
+17	une	un	DET	_	Definite=Ind|Gender=Fem|Number=Sing|PronType=Art	18	det	_	_
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+FINAL 12
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+27	les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	28	det	_	_
+FINAL 13
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+31	de	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	33	det	_	_
+FINAL 14
+18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
+19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
+46	des	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	47	det	_	_

@@ -36,7 +36,6 @@ import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.GetReplacement;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;

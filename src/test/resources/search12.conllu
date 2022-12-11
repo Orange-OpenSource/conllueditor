@@ -1,0 +1,34 @@
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ? 
+FOUND 1
+FINAL 1
+3	faire	faire	VERB	_	VerbForm=Inf	0	root	_	_
+# sent_id = fr-ud-train_00024
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
+FOUND 1
+FINAL 1
+6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
+# sent_id = conlueditor-test-11-eud
+# text = Sam bought and prepared dinner 
+FOUND 2
+FINAL 1
+2	bought	buy	VERB	_	_	0	root	_	_
+FINAL 2
+4	prepared	prepare	VERB	_	_	2	conj	_	_
+# sent_id = conlueditor-test-12-eud-bad-ids
+# text = Sam persuaded Kim to fix dinner 
+FOUND 2
+FINAL 1
+2	persuaded	persuade	VERB	_	_	0	root	_	_
+FINAL 2
+5	fix	fix	VERB	_	_	2	xcomp	_	_
+# sent_id = ellipsis2
+# text = Mary organised bred and John beer 
+FOUND 1
+FINAL 1
+2	organised	organise	VERB	_	_	0	root	0:root	_
+# sent_id = gl_ctg-ud-dev.conllu 625
+# text = Dáselle nova redacción a o punto 2 
+FOUND 1
+FINAL 1
+1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence|SpaceAfter=No

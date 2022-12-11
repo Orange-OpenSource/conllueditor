@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.19.2 as of 28th November 2022
+ @version 2.20.0 as of 3rd December 2022
  */
 package com.orange.labs.conllparser;
 
@@ -1540,6 +1540,14 @@ public class ConllWord {
         return !features.isEmpty();
     }
 
+    // check whether feature with any value is present
+    public boolean hasFeature(String name) {
+        if (features.isEmpty()) {
+            return false;
+        }
+        return features.containsKey(name);
+    }
+    
     // check whether feature with value is present
     public boolean hasFeature(String name, String val) {
         if (features.isEmpty()) {
