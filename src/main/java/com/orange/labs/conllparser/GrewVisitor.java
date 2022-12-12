@@ -112,7 +112,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 
         if (debug) {
             System.out.println("MATCHEDNODES " + matchednodes);
-            System.out.println(" sss " + nodes);
         }
 
         // check whether every nodename matches a CW
@@ -225,9 +224,11 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                             }
                             break;
                         }
+                        System.out.println("AAAAAAAAAAA " + rel.deprels + " " + dep.getDeplabel() + " " + rel.notdeprels);
                         if (rel.deprels != null 
                                 //&& !rel.deprel.equals(dep.getDeplabel())
-                                && !rel.deprels.contains(dep.getDeplabel())
+                                && ((!rel.deprels.contains(dep.getDeplabel()) && !rel.notdeprels)
+                                    || rel.deprels.contains(dep.getDeplabel()) && rel.notdeprels)
                                 ) {
                             // dependant does not have the deprel required
                             ok = false;
@@ -694,7 +695,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         if (ctx.relval() != null) {
             relval = ctx.relval().getText();
         }
-        currel = new Rel(relval, head, dep, null, without);
+        currel = new Rel(relval, head, dep, null, without, false);
         relations.put(dep, currel);
         return true;
     }
@@ -709,8 +710,8 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             deprels.add(c.getText());
         }
         
-        boolean neg = without;
-        if (ctx.NOT() != null) neg = !neg;
+        boolean neg = false;
+        if (ctx.NOT() != null) neg = true;
         
         if (!without) {
             Node cn = nodes.get(head);
@@ -722,14 +723,14 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             if (cn == null) {
                 cn = new Node(dep);
                 nodes.put(dep, cn);
-                cn.addfeats("deprels", deprels, neg);
+                cn.addfeats("deprels", deprels, without || neg);
             }
         }
         String relval = null;
         if (ctx.relval() != null) {
             relval = ctx.relval().getText();
         }
-        currel = new Rel(relval, head, dep, deprels, neg);
+        currel = new Rel(relval, head, dep, deprels, without, neg);
         relations.put(dep, currel);
         return true;
     }
@@ -816,20 +817,22 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 
         String id;
         List<String> deprels;
+        boolean notdeprels = false;
         String head;
         String dep;
         boolean without = false;
 
-        public Rel(String id, String head, String dep, List<String> deprels, boolean without) {
+        public Rel(String id, String head, String dep, List<String> deprels, boolean without, boolean notdeprels) {
             this.id = id;
             this.head = head;
             this.dep = dep;
             this.deprels = deprels;
+            this.notdeprels = notdeprels;
             this.without = without;
         }
 
         public String toString() {
-            return id + " " + (without ? '!' : "") + head + " --" + deprels + "--> " + dep;
+            return id + " " + (without ? '!' : "") + head + " --" + (notdeprels ? "^" : "")+ deprels + "--> " + dep;
         }
 
     }
