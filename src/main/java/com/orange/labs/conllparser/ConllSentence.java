@@ -1417,6 +1417,11 @@ public class ConllSentence {
                 // current word further down than following
                 other.setForm(current.getForm() + other.getForm());
                 other.setLemma(current.getLemma() + other.getLemma());
+
+                // all children of current must become children of other
+                for (ConllWord deps : current.getDependents()) {
+                    deps.setHead(other.getId());
+                }
                 //System.err.println("CURRENT FURTHER DOWN, deleting " + current);
                 words.remove(current);
             } else {
