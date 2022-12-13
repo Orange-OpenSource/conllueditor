@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.15.2 as of 9th February 2022
+ @version 2.19.5 as of 13th December 2022
  */
 package com.orange.labs.comparison;
 
@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -325,7 +326,7 @@ public class ConlluComparator {
                 for (String sentence : identical.keySet()) {
                     identical_form += identical.get(sentence).size();
                 }
-                out.append(String.format("# identical sentences (Form) %d/%d  %.1f%%\n", identical_form, keys.size(), (100.0 * identical_form / keys.size())));
+                out.append(String.format(Locale.ROOT, "# identical sentences (Form) %d/%d  %.1f%%\n", identical_form, keys.size(), (100.0 * identical_form / keys.size())));
             }
 
             // output identical sentences
