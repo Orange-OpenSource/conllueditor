@@ -28,15 +28,13 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.1 as of 29th October 2022
+ @version 2.20.0 as of 13th December 2022
  */
 
 
 var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 /* test with curl
  curl --noproxy '*' -F "sentid=1" -F "cmd=read 1"  http://localhost:8888/edit/
-
-
  */
 
 // Return the value of the named parameter
@@ -2365,6 +2363,8 @@ $(document).ready(function () {
             inputtext = "findmulti " + backwards + " " + $("#multifield").val();
         } else if (this.id === "findsentid") {
             inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
+        } else if (this.id === "grewmatchsearchgo") {
+            inputtext = "findgrewmatch " + backwards + " " + $("#grewmatchsearchexpression").val();
         } else if (this.id === "searchgo") {
             inputtext = "findexpression " + backwards + " " + $("#searchexpression").val();
         } else if (this.id === "replacego") {

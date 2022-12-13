@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.19.1 as of 4th November 2022
+ @version 2.20.0 as of 13th December 2022
  */
 package com.orange.labs.editor;
 
@@ -39,6 +39,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.orange.labs.conllparser.CheckCondition;
+import com.orange.labs.conllparser.CheckGrewmatch;
 import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
@@ -72,6 +73,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -494,7 +496,7 @@ public class ConlluEditor {
                     //    diffmap.add(sysw.getFullId());
                 } else if (!sysw.equals(goldw)) {
                     JsonObject lines = new JsonObject();
-                    // TODO improve: do notcode HTML in json !!
+                    // TODO improve: do not code HTML in json !!
                     lines.addProperty("gold", "<td>" + goldw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
                     lines.addProperty("edit", "<td>" + sysw.toString().replaceAll("[ \t]+", "</td> <td>") + "</td>");
 
@@ -1065,6 +1067,36 @@ public class ConlluEditor {
                     }
                 }
                 return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
+
+            } else if (command.startsWith("findgrewmatch ")) {
+                String[] f = command.trim().split(" +", 3);
+                if (f.length != 3) {
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+                }
+                // si le deuxième mot est "true" on cherche en arrière
+                boolean backwards = f[1].equalsIgnoreCase("true");
+
+                CheckGrewmatch cgm = new CheckGrewmatch(f[2], false);
+                for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
+                        (backwards ? i >= 0 : i < numberOfSentences);
+                        i = (backwards ? i - 1 : i + 1)) {
+                    ConllSentence cs = cfile.getSentences().get(i);
+                    List<List<ConllWord>> llcw = cgm.match(null, cs);
+                    if (llcw != null) {
+                        Set<Integer>ids = new TreeSet<>();
+                        for (List<ConllWord> lcw : llcw) {
+                            for (ConllWord cw : lcw) {
+                                ids.add(cw.getId());
+                            }
+                        }
+
+                        currentSentenceId = i;
+                        ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, ids);
+                        return returnTree(currentSentenceId, cs, hl); //cw.getUpostag());
+                    }
+                }
+                return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
+
 
             } else if (command.startsWith("findexpression ")) {
                 String[] f = command.trim().split(" +", 3);

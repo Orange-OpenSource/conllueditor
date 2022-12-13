@@ -36,7 +36,6 @@ import com.orange.labs.conllparser.ConllException;
 import com.orange.labs.conllparser.ConllFile;
 import com.orange.labs.conllparser.ConllSentence;
 import com.orange.labs.conllparser.ConllWord;
-import com.orange.labs.conllparser.GetReplacement;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -175,6 +174,18 @@ public class TestGrewmatch {
     public void test12() throws IOException, ConllException {
         name("search 12");
         applySearch("pattern { N [ upos=VERB, !Tense ] }", "search12.conllu");
+    }
+
+    @Test
+    public void test13() throws IOException, ConllException {
+        name("search 13");
+        applySearch("pattern { V [ upos=VERB] } without {V -[nsubj]-> N} ", "search13.conllu");
+    }
+
+    @Test
+    public void test14() throws IOException, ConllException {
+        name("search 14");
+        applySearch("pattern { V [ upos=VERB]; V -[nsubj]-> N} without { N [upos=NOUN]} ", "search14.conllu");
     }
 
 }

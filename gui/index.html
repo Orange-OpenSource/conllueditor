@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.18.1 as of 29th October 2022
+    version 2.20.0 as of 13th December 2022
     -->
 
     <head>
@@ -210,15 +210,26 @@
 
                 <tr><td id="searchandreplace">
                     <div>
-                    <input class="inputfield" placeholder="Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)" title="find expression" size="70" type="text" id="searchexpression" value="">
-                     <button class="editbuttons mybutton" id="searchgo">search</button>
-
-                        </div>
-                        <div>
-                    <input class="inputfield" placeholder="replace expression" title="replace expression" size="70" type="text" id="replaceexpression" value="">
-                    <button class="editbuttons mybutton" id="replacego">search & replace</button>
-                        </div>
+                        <input class="inputfield" placeholder="Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)" title="find expression" size="70" type="text" id="searchexpression" value="">
+                        <button class="editbuttons mybutton" id="searchgo">search</button>
+                    </div>
+                    <div>
+                       <input class="inputfield" placeholder="replace expression" title="replace expression" size="70" type="text" id="replaceexpression" value="">
+                       <button class="editbuttons mybutton" id="replacego">search & replace</button>
+                    </div>
                 </td></tr>
+                
+                <tr><td id="grewmatchsearchandreplace">
+                    <div>
+                        <input class="inputfield" placeholder="pattern {[upos=NOUN]}" title="grewmach pattern" size="70" type="text" id="grewmatchsearchexpression" value="">
+                        <button class="editbuttons mybutton" id="grewmatchsearchgo">search</button>
+                    </div>
+                    <!--div>
+                       <input class="inputfield" placeholder="replace expression" title="replace expression" size="70" type="text" id="replaceexpression" value="">
+                       <button class="editbuttons mybutton" id="replacego">search & replace</button>
+                    </div-->
+                </td></tr>
+
 
                 <tr><td id="subtreesearch">
                     <textarea rows="4" class="inputfield" title="subtree" type="text" id="editsubtree"># global.columns = ID&#9;FORM&#9;LEMMA&#9;UPOS&#9;XPOS&#9;FEATS&#9;HEAD&#9;DEPREL

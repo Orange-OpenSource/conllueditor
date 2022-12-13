@@ -81,7 +81,7 @@ public class CheckGrewmatch {
     public List<List<ConllWord>> match(Map<String, Set<String>> wordlists, ConllSentence csent) {
         GrewVisitor eval = new GrewVisitor(wordlists);
         boolean rtc = eval.visit(tree);
-        eval.out();
+        //eval.out();
 
         // TODO APPLY CONDITIONS on word
         return eval.match(csent);        
