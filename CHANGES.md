@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.19.5
+* corrected Locale issue in tests
+
 ## Version 2.19.4
 * bug corrected in joining two tokens
 
