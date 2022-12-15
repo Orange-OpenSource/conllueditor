@@ -219,6 +219,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                             }
                             break;
                         }
+
                         //System.out.println("AAAAAAAAAAA " + rel.deprels + " " + dep.getDeplabel() + " " + rel.notdeprels);
                         if (rel.deprels != null 
                                 //&& !rel.deprel.equals(dep.getDeplabel())
