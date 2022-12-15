@@ -1,0 +1,30 @@
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ? 
+FOUND 1
+FINAL 1
+3	faire	faire	VERB	_	VerbForm=Inf	0	root	_	_
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+FOUND 1
+FINAL 1
+48	pensées	penser	VERB	_	Gender=Fem|Number=Plur|Tense=Past|VerbForm=Part	47	acl	_	_
+# sent_id = fr-ud-train_00024
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
+FOUND 1
+FINAL 1
+6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
+# sent_id = conlueditor-test-11-eud
+# text = Sam bought and prepared dinner 
+FOUND 1
+FINAL 1
+4	prepared	prepare	VERB	_	_	2	conj	_	_
+# sent_id = conlueditor-test-12-eud-bad-ids
+# text = Sam persuaded Kim to fix dinner 
+FOUND 1
+FINAL 1
+5	fix	fix	VERB	_	_	2	xcomp	_	_
+# sent_id = fi_tdt-ud-train.conllu b712.11
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
+FOUND 1
+FINAL 1
+8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_

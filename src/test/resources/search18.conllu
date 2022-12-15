@@ -1,0 +1,81 @@
+# sent_id = fr-ud-dev_00002
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés. 
+FOUND 1
+FINAL 1
+3	durent	durer	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+5	ans	an	NOUN	_	Gender=Masc|Number=Plur	3	obj	_	_
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+FOUND 1
+FINAL 1
+30	découvrent	découvrir	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	23	parataxis	_	_
+33	espèces	espèce	NOUN	_	Gender=Fem|Number=Plur	30	obj	_	_
+# sent_id = fr-ud-train_00024
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
+FOUND 1
+FINAL 1
+6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
+8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
+# sent_id = conlueditor-test-6
+# text = ils ont visité le Musée du Louvre. 
+FOUND 1
+FINAL 1
+3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_
+# sent_id = conlueditor-test-7
+# text = la souris a mangé le fromage qui pue. 
+FOUND 1
+FINAL 1
+4	mangé	manger	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+6	fromage	fromage	NOUN	NOUN	Gender=Masc|Number=Sing	4	obj	_	_
+# sent_id = conlueditor-test-9
+# text = Il aime bien le Miroir aux Alouettes. 
+FOUND 1
+FINAL 1
+2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+5	Miroir	miroir	NOUN	NOUN	Gender=Masc|Number=Sing	2	obj	_	_
+# sent_id = conlueditor-test-11-eud
+# text = Sam bought and prepared dinner 
+FOUND 1
+FINAL 1
+2	bought	buy	VERB	_	_	0	root	_	_
+5	dinner	dinner	NOUN	_	_	2	obj	2:obj|4:obj	_
+# sent_id = conlueditor-test-12-eud-bad-ids
+# text = Sam persuaded Kim to fix dinner 
+FOUND 2
+FINAL 1
+2	persuaded	persuade	VERB	_	_	0	root	_	_
+3	Kim	Kim	PROPN	_	_	2	obj	2:obj|5:nsubj	_
+FINAL 2
+5	fix	fix	VERB	_	_	2	xcomp	_	_
+6	dinner	dinner	NOUN	_	_	5	obj	_	_
+# sent_id = ellipsis1
+# text = Sam fixed lunch and Kim dinner 
+FOUND 1
+FINAL 1
+2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_
+3	lunch	lunch	NOUN	NN	Number=Sing	2	obj	2:obj	_
+# sent_id = ellipsis2
+# text = Mary organised bred and John beer 
+FOUND 1
+FINAL 1
+2	organised	organise	VERB	_	_	0	root	0:root	_
+3	bred	bred	NOUN	_	_	2	obj	2:obj	_
+# sent_id = sv-ud-train-767
+# text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22. 
+FOUND 1
+FINAL 1
+3	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	22	advcl	22:advcl:om	_
+7	mjölk	mjölk	NOUN	NN|UTR|SIN|IND|NOM	Case=Nom|Definite=Ind|Gender=Com|Number=Sing	3	obj	3:obj	_
+# sent_id = gl_ctg-ud-dev.conllu 625
+# text = Dáselle nova redacción a o punto 2 
+FOUND 1
+FINAL 1
+1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence|SpaceAfter=No
+5	redacción	redacción	NOUN	NCFS000	_	1	obj	_	Treeler=cd
+# sent_id = fi_tdt-ud-train.conllu b712.11
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
+FOUND 1
+FINAL 1
+8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_
+9	perustahnan	perus#tahna	NOUN	N	Case=Gen|Number=Sing	8	obj	8:obj	_

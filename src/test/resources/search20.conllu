@@ -1,0 +1,9 @@
+# sent_id = fr-ud-dev_00004
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+FOUND 2
+FINAL 1
+10	milieu	milieu	NOUN	_	Gender=Masc|Number=Sing	23	obl	_	_
+23	riche	riche	ADJ	_	Gender=Fem|Number=Sing	0	root	_	_
+FINAL 2
+11	où	où	PRON	_	PronType=Rel	12	obl	_	_
+12	règne	régner	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	10	acl:relcl	_	_

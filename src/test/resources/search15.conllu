@@ -1,0 +1,13 @@
+# sent_id = fr-ud-train_00002
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles. 
+FOUND 2
+FINAL 1
+3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
+4	située	situer	VERB	_	Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=\s\t\s
+5	dans	dans	ADP	_	_	7	case	_	_
+7	galerie	galerie	NOUN	_	Gender=Fem|Number=Sing	4	obl	_	_
+FINAL 2
+3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
+4	située	situer	VERB	_	Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=\s\t\s
+12	dans	dans	ADP	_	_	14	case	_	_
+14	château	château	NOUN	_	Gender=Masc|Number=Sing	4	obl	_	_

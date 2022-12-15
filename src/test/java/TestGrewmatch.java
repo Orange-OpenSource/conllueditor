@@ -88,25 +88,25 @@ public class TestGrewmatch {
                     results.append(gc.prettyprint(llcw));
                 }
             }
-        } catch (Exception e) {
+        } catch (ConllException e) {
             e.printStackTrace();
+            throw e;
         }
 
-        File out = new File(folder, filename);
-        FileUtils.writeStringToFile(out, results.toString(), StandardCharsets.UTF_8);
-//        if (warnings.length() > 0) {
-//            FileUtils.writeStringToFile(out, warnings.toString(), StandardCharsets.UTF_8, true);
-//        }
+        if (filename != null) { 
+            File out = new File(folder, filename);
+            FileUtils.writeStringToFile(out, results.toString(), StandardCharsets.UTF_8);
+        
+            try {
+                 URL ref = this.getClass().getResource(filename);
 
-        try {
-            URL ref = this.getClass().getResource(filename);
-
-            Assert.assertEquals(String.format("Rule '%s' badly used\n ref: %s\n res: %s\n", rule, ref.toString(), out.toString()),
-                    FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                    FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.assertEquals("File missing", filename, "");
+                Assert.assertEquals(String.format("Rule '%s' badly used\n ref: %s\n res: %s\n", rule, ref.toString(), out.toString()),
+                        FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+            } catch (Exception e) {
+                e.printStackTrace();
+                Assert.assertEquals("File missing", filename, "");
+            }
         }
     }
 
@@ -188,4 +188,94 @@ public class TestGrewmatch {
         applySearch("pattern { V [ upos=VERB]; V -[nsubj]-> N} without { N [upos=NOUN]} ", "search14.conllu");
     }
 
+    @Test
+    public void test15() throws IOException, ConllException {
+        name("search 15");
+        applySearch("pattern { V -[aux]-> AP; P [lemma=dans]; V -[obl]-> N; N -[case]-> P; }", "search15.conllu");
+    }
+
+    @Test
+    public void test16() throws IOException, ConllException {
+        name("search 16");
+        applySearch("pattern { V -[obj]-> N;  V < N;}", "search16.conllu");
+    }
+    @Test
+    public void test17() throws IOException, ConllException {
+        name("search 17");
+        applySearch("pattern { V -[obj]-> N;  N > V;}", "search16.conllu");
+    }
+
+    @Test
+    public void test18() throws IOException, ConllException {
+        name("search 18");
+        applySearch("pattern { V -[obj]-> N;  N >> V;}", "search18.conllu");
+    }
+
+    @Test
+    public void test19() throws IOException, ConllException {
+        name("search 19");
+        applySearch("pattern { V -[obj]-> N;  N >> V;} without { N > V} ", "search19.conllu");
+    }
+
+    @Test
+    public void test20() throws IOException, ConllException {
+        name("search 20");
+        applySearch("pattern { V -[obl]-> N} without {N << V} ", "search20.conllu");
+    }
+
+    @Test
+    public void test21() throws IOException, ConllException {
+        name("search 21");
+        applySearch("pattern{V[lemma=\"être\"]}", "search21.conllu");
+    }
+
+
+    
+    @Test
+    public void testerror1() throws IOException, ConllException {
+        name("error 1");
+        String msg = null;
+        try {
+            applySearch("pattern { V -[obl-> N}",  null);
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
+
+        String expected = "pos:17 mismatched input '->' expecting {'|', ']->'}";
+        Assert.assertEquals(String.format("missing right bracket not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+        expected, msg);
+
+    }
+
+    @Test
+    public void testerror2() throws IOException, ConllException {
+        name("error 2");
+        String msg = null;
+        try {
+            applySearch("pattern { V -[obl]-> N} without N << V}",  null);
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
+
+        String expected = "pos:32 missing '{' at 'N'";
+        Assert.assertEquals(String.format("missing left brace not detected\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+        expected, msg);
+    }
+
+
+    @Test
+    public void testerror3() throws IOException, ConllException {
+        name("error 3");
+        String msg = null;
+        try {
+
+        applySearch("pattern { V[lemma=être]} ", null);
+    } catch (Exception e) {
+        msg = e.getMessage();
+    }
+
+    String expected = "pos:18 token recognition error at: 'ê'";
+    Assert.assertEquals(String.format("missing quotes for non-ASCII characters\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+    expected, msg);
+    }
 }

@@ -1,0 +1,66 @@
+# sent_id = conlueditor-test-6
+# text = ils ont visité le Musée du Louvre. 
+FOUND 1
+FINAL 1
+1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
+3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
+# sent_id = conlueditor-test-7
+# text = la souris a mangé le fromage qui pue. 
+FOUND 1
+FINAL 1
+7	qui	qui	PRON	REL	PronType=Rel	8	nsubj	_	_
+8	pue	puer	VERB	VERB	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	_	SpaceAfter=No
+# sent_id = conlueditor-test-8
+# text = il habite à Los Angeles. 
+FOUND 1
+FINAL 1
+1	il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
+2	habite	habiter	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+# sent_id = conlueditor-test-9
+# text = Il aime bien le Miroir aux Alouettes. 
+FOUND 1
+FINAL 1
+1	Il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
+2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+# sent_id = conlueditor-test-11-eud
+# text = Sam bought and prepared dinner 
+FOUND 1
+FINAL 1
+1	Sam	Sam	PROPN	_	_	2	nsubj	2:nsubj|4:nsubj	_
+2	bought	buy	VERB	_	_	0	root	_	_
+# sent_id = conlueditor-test-12-eud-bad-ids
+# text = Sam persuaded Kim to fix dinner 
+FOUND 1
+FINAL 1
+1	Sam	Sam	PROPN	_	_	2	nsubj	_	_
+2	persuaded	persuade	VERB	_	_	0	root	_	_
+# sent_id = ellipsis1
+# text = Sam fixed lunch and Kim dinner 
+FOUND 1
+FINAL 1
+1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
+2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_
+# sent_id = ellipsis2
+# text = Mary organised bred and John beer 
+FOUND 1
+FINAL 1
+1	Mary	Mary	PROPN	_	_	2	nsubj	2:nsubj	_
+2	organised	organise	VERB	_	_	0	root	0:root	_
+# sent_id = sv-ud-train-767
+# text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22. 
+FOUND 2
+FINAL 1
+2	du	du	PRON	PN|UTR|SIN|DEF|SUB	Case=Nom|Definite=Def|Gender=Com|Number=Sing|PronType=Prs	3	nsubj	3:nsubj|10.1:nsubj|15.1:nsubj	_
+3	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	22	advcl	22:advcl:om	_
+FINAL 2
+22	gör	göra	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	0:root	_
+23	detta	denna	PRON	PN|NEU|SIN|DEF|SUB/OBJ	Definite=Def|Gender=Neut|Number=Sing|PronType=Dem	22	nsubj	22:nsubj	_
+# sent_id = gl_ctg-ud-dev.conllu 625
+# text = Dáselle nova redacción a o punto 2 
+FOUND 2
+FINAL 1
+1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence|SpaceAfter=No
+2	se	se	PRON	PP3CN000	_	1	nsubj	_	Treeler=suj|SpaceAfter=No
+FINAL 2
+1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence|SpaceAfter=No
+3	lle	lle	PRON	PP3CSD00	_	1	nsubj	_	Treeler=suj

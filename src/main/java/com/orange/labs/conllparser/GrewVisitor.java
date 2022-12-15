@@ -61,7 +61,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     boolean without = false; // whether or not we parse "without" expressions
 
     public GrewVisitor(//ConllWord cword,
-            Map<String, Set<String>> wordlists) {
+        Map<String, Set<String>> wordlists) {
         //this.cword = cword;
         //pointedWord = cword;
         this.wordlists = wordlists;
@@ -73,29 +73,21 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         strictlybefore = new HashMap<>();
     }
 
-    /**
-     * get the correct ConllWord (current word, its head, head's head, preceing
-     * or following). If there is no word at the end of the path (since the path
-     * demanded is not in this tree), null is returned
-     */
-//    private ConllWord getCW() {
-//        return pointedWord;
-//    }
+
     // TODO put into CheckGrewmatch ?
-    // TODO optimze, far too slow!!!!
+    // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) {
         final boolean debug = false;
         // find list of nodes which match
         // check whether all relations of query can be established between nodes
         // delete relations if order constraints exist
 
-        // TODO: what does match() return if no node in query ('pattern {A -> B}')
         // find nodes which match every variable
         Map<String, List<ConllWord>> matchednodes = new TreeMap<>(); // nodename (in rule): CW
-        //Map<Integer, String> id2node = new TreeMap<>(); // cw id: nodename
         for (ConllWord cw : csent.getWords()) {
-            List<String> rtc = match(cw);
-            for (String nodename : rtc) {
+            List<Node> rtc = match(cw);
+            for (Node node : rtc) {
+                String nodename = node.id;
                 List<ConllWord> cws = matchednodes.get(nodename);
                 if (cws == null) {
                     cws = new ArrayList<>();
@@ -127,7 +119,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         for (String nodename : matchednodes.keySet()) {
             node_order.add(nodename);
         }
-
+        //System.out.println("NODE ORDER " + node_order);
         if (!nodes.isEmpty() && matchednodes.isEmpty()) {
             return null; // nothing found
         }
@@ -141,6 +133,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         }
         node_combinations = cartesianProduct(node_combinations);
         List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+       // List<List<Node>> final_nodes = new ArrayList<>();
         int num_nodes = matchednodes.size();
         //System.out.println("dsd" + num_nodes);
 
@@ -153,10 +146,12 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             if (tmp.size() == num_nodes) {
                 //System.out.println("COMBINATION");
                 Map<String, ConllWord> node2cw = new HashMap<>();
+                Map<Integer, String> cw2node = new HashMap<>();
                 int i = 0;
                 for (ConllWord cw : lcw) {
                     node2cw.put(node_order.get(i), cw);
                     //System.out.println("   " + node_order.get(i) + " " + cw.getFullId());
+                    cw2node.put(cw.getId(), node_order.get(i));
                     i++;
                 }
 
@@ -269,23 +264,22 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                 }
 
                 final_node_combinations.add(lcw);
+ //               List<Node> ln = new ArrayList<>();
+ //               for (ConllWord cw : lcw) {
+ //                   Node nn = new Node();
+ //               }
 
             }
         }
 
-        //System.out.println("FOUND1 " + final_node_combinations.size());
-//        for (List<ConllWord> lcw : final_node_combinations) {
-//            System.out.println("FINAL");
-//            for (ConllWord cw : lcw) {
-//                System.out.println("  " + cw);
-//            }
-//        }
         if (!final_node_combinations.isEmpty()) {
             return final_node_combinations;
         } else {
             return null;
         }
     }
+
+
 
     //https://stackoverflow.com/questions/714108/cartesian-product-of-an-arbitrary-number-of-sets
     private <T> List<List<T>> cartesianProduct(List<List<T>> lists) {
@@ -324,18 +318,18 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         }
     }
 
-    private List<String> match(ConllWord cw) {
+    private List<Node> match(ConllWord cw) {
         final boolean debug = false;
         boolean ok = true; // empty expression matches always
 
         // for all nodes
-        List<String> matched = new ArrayList<>();
+        List<Node> matched = new ArrayList<>();
         if (debug) {
             System.out.println("Try to match " + cw);
         }
         for (String n : nodes.keySet()) {
             if (debug) {
-                System.out.println("..NODE " + n);
+                System.out.println("..NODE " + n + " == " + nodes.get(n));
             }
             ok = true;
             Node nd = nodes.get(n);
@@ -465,7 +459,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                 }
             }
             if (ok) {
-                matched.add(n);
+                matched.add(nodes.get(n));
             }
 
         }
@@ -748,6 +742,19 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             must_feats = new HashMap<>();
             must_not_feats = new HashMap<>();
             sealed = new HashSet<>();
+        }
+
+        public Node(Node o) {
+            id = o.id;
+            must_feats = new HashMap<>();
+            for (String k : o.must_feats.keySet()) {
+                must_feats.put(k, new ArrayList<>(must_feats.get(k)));
+            }
+            must_not_feats = new HashMap<>();
+            for (String k : o.must_not_feats.keySet()) {
+                must_not_feats.put(k, new ArrayList<>(must_not_feats.get(k)));
+            }
+            sealed = new HashSet<>(o.sealed);
         }
 
         public void seal(String cat) {
