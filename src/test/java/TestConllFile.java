@@ -561,7 +561,7 @@ public class TestConllFile {
         File srfile = new File(sr.getFile());
 
         File out = new File(folder, "validrules.result.txt");
-        PrintStream err = new PrintStream(out);
+        PrintStream err = new PrintStream(out,  StandardCharsets.UTF_8);
         cf.conditionalValidation(srfile, err);
 
 
