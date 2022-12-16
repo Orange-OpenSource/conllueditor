@@ -197,18 +197,18 @@
                     </td>
                 </tr>
 
-                <tr><td colspan="1">
-                        <!-- tables with shortcuts (invoked with key "?" -->
-                   <table id="shortcuthelp">
-                      <tr><td class="sc">shortcuts</td> <td id="scfilename" class="sc_help_td"></td></tr>
-                      <tr><td class="sc" id="upostr">UPOS</td><td id="uposshortcuts" class="sc_help_td"></td></tr>
-                      <tr><td class="sc" id="xpostr">XPOS</td><td id="xposshortcuts" class="sc_help_td"></td></tr>
-                      <tr><td class="sc" id="depreltr">Deplabel</td><td id="deplshortcuts" class="sc_help_td"></td></tr>
-                      <tr><td class="sc" id="featstr">Features</td><td id="featsshortcuts" class="sc_help_td"></td></tr>
-                  </table>
+                <tr id="shortcuthelp"><td colspan="1">
+                    <!-- tables with shortcuts (invoked with key "?" -->
+                    <table id="shortcuttable">
+                        <tr><td class="sc">shortcuts</td> <td id="scfilename" class="sc_help_td"></td></tr>
+                        <tr><td class="sc" id="upostr">UPOS</td><td id="uposshortcuts" class="sc_help_td"></td></tr>
+                        <tr><td class="sc" id="xpostr">XPOS/UPOS</td><td id="xposshortcuts" class="sc_help_td"></td></tr>
+                        <tr><td class="sc" id="depreltr">Deplabel</td><td id="deplshortcuts" class="sc_help_td"></td></tr>
+                        <tr><td class="sc" id="featstr">Features</td><td id="featsshortcuts" class="sc_help_td"></td></tr>
+                   </table>
                 </td></tr>
 
-                <tr><td id="searchandreplace">
+                <tr id="searchandreplace"><td>
                     <div>
                         <input class="inputfield" placeholder="Upos:NOUN and Deprel:obj and head(Feat:Tense:Pres)" title="find expression" size="70" type="text" id="searchexpression" value="">
                         <button class="editbuttons mybutton" id="searchgo">search</button>
@@ -219,10 +219,10 @@
                     </div>
                 </td></tr>
                 
-                <tr><td id="grewmatchsearchandreplace">
+                <tr id="grewmatchsearchandreplace"><td>
                     <div>
-                        <input class="inputfield" placeholder="pattern {[upos=NOUN]}" title="grewmach pattern" size="70" type="text" id="grewmatchsearchexpression" value="">
-                        <button class="editbuttons mybutton" id="grewmatchsearchgo">search</button>
+                        <input class="inputfield" placeholder="pattern {[upos=NOUN]}" title="grewmatch pattern" size="70" type="text" id="grewmatchsearchexpression" value="">
+                        <button class="editbuttons mybutton" id="grewmatchsearchgo">grewmatch search</button>
                     </div>
                     <!--div>
                        <input class="inputfield" placeholder="replace expression" title="replace expression" size="70" type="text" id="replaceexpression" value="">
@@ -231,7 +231,7 @@
                 </td></tr>
 
 
-                <tr><td id="subtreesearch">
+                <tr id="subtreesearch"><td>
                     <textarea rows="4" class="inputfield" title="subtree" type="text" id="editsubtree"># global.columns = ID&#9;FORM&#9;LEMMA&#9;UPOS&#9;XPOS&#9;FEATS&#9;HEAD&#9;DEPREL
 #1&#9;_&#9;_&#9;_&#9;_&#9;_&#9;0&#9;_
 #2&#9;_&#9;_&#9;_&#9;_&#9;_&#9;1&#9;_

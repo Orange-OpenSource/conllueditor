@@ -551,11 +551,15 @@ text {
 
 #shortcuthelp {
     display: none;
+}
+
+#shortcuttable {
     font-size: 80%;
     border: 1px solid;
     text-align: left;
-    font-family: Mono;
+    /*font-family: monospace;*/
 }
+
 
 
 #subtreesearch {
@@ -564,7 +568,10 @@ text {
 
 #searchandreplace {
     display: none;
+}
 
+#grewmatchsearchandreplace {
+    display: none;
 }
 
 
@@ -580,6 +587,7 @@ text {
 
 .sckey {
     font-weight: bold;
+    font-family: monospace;
 }
 
 

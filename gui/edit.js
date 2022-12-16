@@ -343,7 +343,6 @@ function getServerInfo() {
             sorttable.makeSortable(drustbl);
 
 
-
             // stats for features per UPOS
             var fvustbl = document.createElement("table");
             fvustbl.className = "sortable";
@@ -391,11 +390,6 @@ function getServerInfo() {
             }
             sorttable.makeSortable(fvustbl);
 
-
-
-
-
-            
             $('#filename').empty();
             $('#filename').append(data.filename);
             if (data.reinit) {
@@ -549,24 +543,18 @@ function getServerInfo() {
 
 
 //var more = true;
-var more = 1; // 1 normal search, 2: search and replace, 3: subtree search, 0: hide all
+var more = 1; // 1 normal search, 2: search and replace, 3: subtree search, 4: grewmatchsearch, 0: hide all
 var lastmore = 1; // to get back to the correct search mode after shortcuts have been displayed
 
 
 function switchSearch(on) {
     if (on) {
-        //console.log("SEARCH OPENING");
-        //$("#act_search").text("hide search");
         $(".search").show();
         $('body').css("margin-top", "280px");
-        //more = true;
     } else {
-        //console.log("SEARCH CLOSING");
-        //$("#act_search").text("show search");
         $(".search").hide();
         if (!showshortcathelp)
             $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
-        //more = false;
     }
 }
 
@@ -592,7 +580,17 @@ function switchSubtree(on) {
     }
 }
 
+function switchGrewmatchReplace(on) {
+    if (on) {
+        $("#grewmatchsearchandreplace").show();
+        $('body').css("margin-top", "300px");
+    } else {
+        $("#grewmatchsearchandreplace").hide();
+        $('body').css("margin-top", "280px");
+    }
+}
 
+// when adding new search mode, change also more = 4 in ToggleShortcutHelp()!
 function ToggleSearch() {
     if (more == 1) {
         // go to mode 2: show S&R
@@ -601,6 +599,7 @@ function ToggleSearch() {
         switchSearch(false);
         switchSearchReplace(true);
         switchSubtree(false);
+        switchGrewmatchReplace(false);
 
         if (showshortcathelp) {
             switchSCHelp(false);
@@ -613,17 +612,30 @@ function ToggleSearch() {
         switchSearch(false);
         switchSearchReplace(false);
         switchSubtree(true);
+        switchGrewmatchReplace(false);
 
         if (showshortcathelp) {
             switchSCHelp(false);
         }
-
     } else if (more == 3) {
+        // go to mode ": show grewmatchsearch
+        more = 4;
+        // in mode key '?' does not toogle shortcuts
+        switchSearch(false);
+        switchSearchReplace(false);
+        switchSubtree(false);
+        switchGrewmatchReplace(true);
+
+        if (showshortcathelp) {
+            switchSCHelp(false);
+        }
+    } else if (more == 4) {
         // go to mode 0, hide everything
         more = 0;
         switchSearch(false);
         switchSearchReplace(false);
         switchSubtree(false);
+        switchGrewmatchReplace(false);
 
     } else {
         // in mode 0 go to standard mode
@@ -631,6 +643,7 @@ function ToggleSearch() {
         switchSearch(true);
         switchSearchReplace(false);
         switchSubtree(false);
+        switchGrewmatchReplace(false);
 
         if (showshortcathelp) {
             // switch off
@@ -664,14 +677,14 @@ function ToggleShortcutHelp() {
         switchSCHelp(false);
         more = lastmore - 1; // on mode back
         if (more < 0)
-            more = 3;
+            more = 4;
         ToggleSearch();
 
     } else {
         // show short cut help
         switchSCHelp(true);
         lastmore = more; // show search again when shortcut help is switched off
-        more = 3;
+        more = 4;
         ToggleSearch();
     }
 }
@@ -736,7 +749,7 @@ function parseShortcuts() {
             longestshortcut = Math.max(longestshortcut, p.length);
             $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
             //sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
-            sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp; ";
+            sc_uposString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsUPOS[p] + "</span>&nbsp; ";
         }
         $("#upostr").show();
         $("#uposshortcuts").append(sc_uposString);
@@ -761,7 +774,7 @@ function parseShortcuts() {
     $("#xpostr").hide();
     $("#shortcuttableXPOS").empty();
     if (Object.keys(shortcutsXPOS).length > 0) {
-        $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>set UPOS to</th></tr>"); // add header
+        $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>and UPOS to</th></tr>"); // add header in help page
         for (var p in shortcutsXPOS) {
             longestshortcut = Math.max(longestshortcut, p.length);
             $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
