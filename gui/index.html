@@ -221,7 +221,7 @@
                 
                 <tr id="grewmatchsearchandreplace"><td>
                     <div>
-                        <input class="inputfield" placeholder="pattern {[upos=NOUN]}" title="grewmatch pattern" size="70" type="text" id="grewmatchsearchexpression" value="">
+                        <input class="inputfield" placeholder="pattern {N [upos=NOUN]} without {V -[nsubj]-> N}" title="grewmatch pattern" size="70" type="text" id="grewmatchsearchexpression" value="">
                         <button class="editbuttons mybutton" id="grewmatchsearchgo">grewmatch search</button>
                     </div>
                     <!--div>
@@ -232,7 +232,8 @@
 
 
                 <tr id="subtreesearch"><td>
-                    <textarea rows="4" class="inputfield" title="subtree" type="text" id="editsubtree"># global.columns = ID&#9;FORM&#9;LEMMA&#9;UPOS&#9;XPOS&#9;FEATS&#9;HEAD&#9;DEPREL
+                    <textarea rows="4" class="inputfield" title="subtree" type="text" id="editsubtree"># ***Legacy, will be withdrawn in a future version!
+# global.columns = ID&#9;FORM&#9;LEMMA&#9;UPOS&#9;XPOS&#9;FEATS&#9;HEAD&#9;DEPREL
 #1&#9;_&#9;_&#9;_&#9;_&#9;_&#9;0&#9;_
 #2&#9;_&#9;_&#9;_&#9;_&#9;_&#9;1&#9;_
                     </textarea>
@@ -558,6 +559,14 @@
                             <li> <span class="userinputdoc">Lemma:this(Form)</span> set lemma to the form of current token
                         </ul>
                         (for more examples, see <a href="https://github.com/Orange-OpenSource/conllueditor/blob/master/doc/mass_editing.md">Mass editing</a>)
+
+                        <h3>Grew Match search</h3>
+                        ConlluEditor implements a subset of search as defined in <a href="http://universal.grew.fr/?corpus=UD_English-ParTUT@2.11">Grew Match</a>. The subset includes
+                        <ul>
+                           <li> node definitions: <span class="userinputdoc">pattern {N [upos=NOUN, lemma <> "thing"] } </span>
+                           <li> deprel definitions: <span class="userinputdoc">pattern { V -[nsubj]-> N}</span> (including combinations of node and deprel definitions)
+                           <li> <span class="userinputdoc">without</span> negations
+                        </ul>
 
                         <h2>Run a validator</h2>
                         Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all

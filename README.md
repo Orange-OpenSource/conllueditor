@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.19.5 (see [change history](CHANGES.md))
+Current version: 2.20.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -406,8 +406,16 @@ In order to undo this replacement, click the undo button (
 <img src="gui/img/undo.svg" alt="undo" width="15"/>), to continue
 replacing, click `search & replace` again
 
+## Grew Match search
+ConlluEditor implements a subset of search as defined in [Grew Match](http://universal.grew.fr/?corpus=UD_English-ParTUT@2.11">Gre Match). The subset includes
+
+* node definitions: `pattern {N [upos=NOUN, lemma <> "thing"] }`
+* deprel definitions: `pattern { V -[nsubj]-> N}` (including combinations of node and deprel definitions)
+* `without` negations
+
 ## Matching subtrees
 
+**legacy, will be redrawn in a future version**
 This mode allows you to input a tree (using `_` as wildcards and regular expressions).
 Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with
 a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions.
