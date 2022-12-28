@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.16.1 as of 4th March 2022
+ @version 2.20.0 as of 28th December 2022
  */
 package com.orange.labs.conllparser;
 
@@ -2357,4 +2357,39 @@ public class ConllSentence {
         return cterrors;
     }
 
+/** check whether current sentence is projective. Implies that makeTree() has been called.
+ * for trees with more than one root this may return an invalid value
+ * @return
+ */
+    public boolean isProjective() {
+        for (ConllWord cw : words) {
+            //System.err.println("WWWWWW " + cw);
+            if (cw.getHead() != 0 && cw.getHeadWord() != null) {
+                int distance = cw.getId() - cw.getHead();
+                if (distance > 2) {
+                    // head before dependant
+                    for (int id = cw.getHead()+1; id < cw.getId(); id++) {
+                        // all nodes between dep and head must depend from head
+                        ConllWord c = getWord(id);
+                        if (!cw.getHeadWord().commands(c)) {
+                            System.err.println(cw.getHeadWord() + " does not command " + c);
+                            return false;
+                        }
+                    }
+                } else if (distance < -2) {
+                    // head after dependant
+                    for (int id = cw.getId()+1; id < cw.getHead(); id++) {
+                        // all nodes between dep and head must depend from head
+                        ConllWord c = getWord(id);
+                        //System.err.println("ttttt " + id + " " + c);
+                        if (!cw.getHeadWord().commands(c)) {
+                            System.err.println(cw.getHeadWord() + " Does not command " + c);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }

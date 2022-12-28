@@ -130,4 +130,29 @@ public class TestConllSentence {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+    @Test
+    public void testProjectivity() throws IOException, ConllException {
+        URL url = this.getClass().getResource("projtest.conllu");
+        File file = new File(url.getFile());
+        ConllFile cf = new ConllFile(file, false, false);
+        StringBuilder sb = new StringBuilder();
+        for (ConllSentence csent : cf.getSentences()) {
+            csent.normalise();
+            csent.makeTrees(null);
+            sb.append(csent);
+            boolean rtc = csent.isProjective();
+            if (rtc) sb.append("is projective\n");
+            else  sb.append("is NOT projective\n");
+        }
+
+        File out = new File(folder, "projectivity.txt");
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("projectivity.txt");
+
+        Assert.assertEquals(String.format("tree projectivity not detected correctly\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+
+    }
 }
