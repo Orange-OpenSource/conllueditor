@@ -2359,9 +2359,10 @@ public class ConllSentence {
 
 /** check whether current sentence is projective. Implies that makeTree() has been called.
  * for trees with more than one root this may return an invalid value
- * @return
+ * @return 
  */
-    public boolean isProjective() {
+    public boolean isProjective(List<ConllWord> unproj) {
+        
         for (ConllWord cw : words) {
             //System.err.println("WWWWWW " + cw);
             if (cw.getHead() != 0 && cw.getHeadWord() != null) {
@@ -2372,8 +2373,12 @@ public class ConllSentence {
                         // all nodes between dep and head must depend from head
                         ConllWord c = getWord(id);
                         if (!cw.getHeadWord().commands(c)) {
-                            System.err.println(cw.getHeadWord() + " does not command " + c);
-                            return false;
+                            //System.err.println(cw.getHeadWord() + " does not command " + c);
+                            if (unproj == null) {
+                                return false;
+                            } else {
+                                unproj.add(c);
+                            }
                         }
                     }
                 } else if (distance < -2) {
@@ -2383,13 +2388,21 @@ public class ConllSentence {
                         ConllWord c = getWord(id);
                         //System.err.println("ttttt " + id + " " + c);
                         if (!cw.getHeadWord().commands(c)) {
-                            System.err.println(cw.getHeadWord() + " Does not command " + c);
-                            return false;
+                            //System.err.println(cw.getHeadWord() + " Does not command " + c);
+                            if (unproj == null) {
+                                return false;
+                            } else {
+                                unproj.add(c);
+                            }
                         }
                     }
                 }
             }
         }
-        return true;
+        if (unproj == null || unproj.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

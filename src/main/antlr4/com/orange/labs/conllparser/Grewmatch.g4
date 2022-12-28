@@ -38,7 +38,17 @@ are permitted provided that the following conditions are met:
 
 grammar Grewmatch;
 
-expression : pattern without* EOF # final
+expression
+	: pattern without* EOF # final
+	| globals # globalrule
+	;
+
+globals 
+	: GLOBAL OPEN globalcond CLOSE # globallist 
+	;
+
+globalcond
+	: IS_PROJ # projectivity
 	;
 
 pattern
@@ -103,6 +113,8 @@ utfstring : UTFSTRING
 WS	: [ \t\n] + -> skip ;
 PATTERN : 'pattern' ;
 WITHOUT	: 'without' ;
+GLOBAL	: 'global' ;
+IS_PROJ	: ( 'is_projective' | 'is_not_projective' );
 COMMA	: ',' ;
 SEMICOLON	: ';' ;
 COLON	: ':' ;

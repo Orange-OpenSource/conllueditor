@@ -60,6 +60,8 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     Map<String, String> strictlybefore;
     boolean without = false; // whether or not we parse "without" expressions
 
+    List<String>globals;
+
     public GrewVisitor(//ConllWord cword,
         Map<String, Set<String>> wordlists) {
         //this.cword = cword;
@@ -71,6 +73,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         differentnodes = new HashMap<>();
         before = new HashMap<>();
         strictlybefore = new HashMap<>();
+        globals = new ArrayList<>();
     }
 
 
@@ -78,6 +81,34 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) {
         final boolean debug = false;
+
+        // TODO can global {} co-occur with pattern ????
+        if (!globals.isEmpty()) {
+            for (String gl : globals) {
+                System.err.println("eeeeeeeeeeeee " + gl);
+                if ("is_not_projective".equals(gl)) {
+                    System.err.println("zzzzzz");
+                    List<ConllWord>unproj = new ArrayList<>();
+                    boolean rtc = csent.isProjective(unproj);
+                    System.err.println("rrrrr " + rtc + " " + unproj);
+                    if (!rtc) {
+                        List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+                        final_node_combinations.add(unproj);
+                        return final_node_combinations;
+                    }
+                } else if ("is_projective".equals(gl)) {
+                    boolean rtc = csent.isProjective(null);
+                    if (rtc) {
+                        List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+                        List<ConllWord>proj = new ArrayList<>();
+                        proj.addAll(csent.getWords());
+                        final_node_combinations.add(proj);
+                        return final_node_combinations;
+                    }
+                }
+            }
+        }
+
         // find list of nodes which match
         // check whether all relations of query can be established between nodes
         // delete relations if order constraints exist
@@ -727,6 +758,27 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         }
         currel = new Rel(relval, head, dep, deprels, without, neg);
         relations.put(dep, currel);
+        return true;
+    }
+
+    @Override
+    public Boolean visitGlobalrule(GrewmatchParser.GlobalruleContext ctx) {
+        boolean value = visit(ctx.globals());
+        return value;
+    }
+
+    
+    @Override
+    public Boolean visitGloballist(GrewmatchParser.GloballistContext ctx) {
+        boolean value = visit(ctx.globalcond());
+        return value;
+    }
+
+
+    @Override
+    public Boolean visitProjectivity(GrewmatchParser.ProjectivityContext ctx) {
+        globals.add(ctx.IS_PROJ().toString());
+        System.err.println("azazazaza " + ctx.IS_PROJ());
         return true;
     }
 

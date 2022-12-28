@@ -140,7 +140,7 @@ public class TestConllSentence {
             csent.normalise();
             csent.makeTrees(null);
             sb.append(csent);
-            boolean rtc = csent.isProjective();
+            boolean rtc = csent.isProjective(null);
             if (rtc) sb.append("is projective\n");
             else  sb.append("is NOT projective\n");
         }
