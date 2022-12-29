@@ -81,7 +81,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     // TODO put into CheckGrewmatch ?
     // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) {
-        final boolean debug = true;
+        final boolean debug = false;
 
         // TODO can global {} co-occur with pattern ????
         if (!globals.isEmpty()) {
@@ -296,20 +296,17 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                                 break;
                             }
                             if (ok) allnegok = true;
-                            System.out.println("QQQQ " + rel + " "+ ok + " " + allnegok);
                         }
                     }
-                    System.out.println("1RRRR " + ok + " " + allnegok);
                     
                     if (!allnegok) continue;
                     else ok=true;
-                    System.out.println("2RRRR " + ok + " " + allnegok);
                 }
         
                 if (!ok) {
                     continue;
                 }
-                System.out.println("ADDED " + lcw);
+                //System.out.println("ADDED " + lcw);
                 final_node_combinations.add(lcw);
                 //               List<Node> ln = new ArrayList<>();
                 //               for (ConllWord cw : lcw) {
