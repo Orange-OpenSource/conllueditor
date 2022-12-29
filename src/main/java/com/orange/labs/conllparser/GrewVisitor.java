@@ -49,7 +49,8 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     int sequence = 0; // -1 word to the left, 1 word to the right etc
 
     Map<String, Node> nodes; // id: Node
-    Map<String, Rel> relations; // dep: Rel
+    List<Map<String, Rel>> relations; // dep: Rel each map are AND combined, each list element OR
+    Map<String, Rel> localrelations; // dep: Rel each map are AND combined, each list element OR
     Node curnode = null;
     Rel currel = null;
     Map<String, String> identicalnodes;
@@ -60,15 +61,16 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     Map<String, String> strictlybefore;
     boolean without = false; // whether or not we parse "without" expressions
 
-    List<String>globals;
+    List<String> globals;
 
     public GrewVisitor(//ConllWord cword,
-        Map<String, Set<String>> wordlists) {
+            Map<String, Set<String>> wordlists) {
         //this.cword = cword;
         //pointedWord = cword;
         this.wordlists = wordlists;
         nodes = new TreeMap<>();
-        relations = new TreeMap<>();
+        relations = new ArrayList<>();
+
         identicalnodes = new HashMap<>();
         differentnodes = new HashMap<>();
         before = new HashMap<>();
@@ -76,11 +78,10 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         globals = new ArrayList<>();
     }
 
-
     // TODO put into CheckGrewmatch ?
     // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) {
-        final boolean debug = false;
+        final boolean debug = true;
 
         // TODO can global {} co-occur with pattern ????
         if (!globals.isEmpty()) {
@@ -88,7 +89,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                 System.err.println("eeeeeeeeeeeee " + gl);
                 if ("is_not_projective".equals(gl)) {
                     System.err.println("zzzzzz");
-                    List<ConllWord>unproj = new ArrayList<>();
+                    List<ConllWord> unproj = new ArrayList<>();
                     boolean rtc = csent.isProjective(unproj);
                     System.err.println("rrrrr " + rtc + " " + unproj);
                     if (!rtc) {
@@ -100,7 +101,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                     boolean rtc = csent.isProjective(null);
                     if (rtc) {
                         List<List<ConllWord>> final_node_combinations = new ArrayList<>();
-                        List<ConllWord>proj = new ArrayList<>();
+                        List<ConllWord> proj = new ArrayList<>();
                         proj.addAll(csent.getWords());
                         final_node_combinations.add(proj);
                         return final_node_combinations;
@@ -112,7 +113,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         // find list of nodes which match
         // check whether all relations of query can be established between nodes
         // delete relations if order constraints exist
-
         // find nodes which match every variable
         Map<String, List<ConllWord>> matchednodes = new TreeMap<>(); // nodename (in rule): CW
         for (ConllWord cw : csent.getWords()) {
@@ -164,7 +164,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         }
         node_combinations = cartesianProduct(node_combinations);
         List<List<ConllWord>> final_node_combinations = new ArrayList<>();
-       // List<List<Node>> final_nodes = new ArrayList<>();
+        // List<List<Node>> final_nodes = new ArrayList<>();
         int num_nodes = matchednodes.size();
         //System.out.println("dsd" + num_nodes);
 
@@ -194,11 +194,13 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                     ConllWord formerid = node2cw.get(former);
                     ConllWord latterid = node2cw.get(latter);
                     if (debug) {
-                       System.out.println("ORDER CHECK " + formerid + " " + former + " before " + latterid + " " + latter);
+                        System.out.println("ORDER CHECK " + formerid + " " + former + " before " + latterid + " " + latter);
                     }
                     if (formerid.getId() >= latterid.getId()) {
                         ok = false;
-                        if (debug) System.out.println(" ORDER FAILED");
+                        if (debug) {
+                            System.out.println(" ORDER FAILED");
+                        }
                         break;
                     }
                     //System.out.println(" TTTT");
@@ -213,14 +215,16 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                     //find CWs associated with nodenames (in current tuple)
                     ConllWord formerid = node2cw.get(former);
                     ConllWord latterid = node2cw.get(latter);
-                    
+
                     if (debug) {
-                       System.out.println("ORDER CHECK " + formerid + " " + former + " strictlybefore " + latterid + " " + latter);
+                        System.out.println("ORDER CHECK " + formerid + " " + former + " strictlybefore " + latterid + " " + latter);
                     }
 
                     if (formerid.getId() + 1 != latterid.getId()) {
                         ok = false;
-                        if (debug) System.out.println(" STRICT ORDER FAILED");
+                        if (debug) {
+                            System.out.println(" STRICT ORDER FAILED");
+                        }
                         break;
                     }
                     //System.out.println(" TTTT");
@@ -230,76 +234,87 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                 }
 
                 // check relation constraints
-                for (String rid : relations.keySet()) {
-                    Rel rel = relations.get(rid);
-                    ConllWord head = node2cw.get(rel.head);
-                    ConllWord dep = node2cw.get(rel.dep);
+                for (Map<String, Rel> m : relations) {
+                    boolean allnegok = false;
+                    for (String rid : m.keySet()) {
+                        Rel rel = m.get(rid);
+                        ConllWord head = node2cw.get(rel.head);
+                        ConllWord dep = node2cw.get(rel.dep);
 
-                    if (debug) {
-                        System.out.println("CHECK REL " + rel);
-                        System.out.println("  head " + head);
-                        System.out.println("  dep  " + dep);
-                    }
-
-                    if (!rel.without) {
-                        if (dep.getHeadWord() != head) {
-                            // the head is not the head requred
-                            ok = false;
-                            if (debug) {
-                                System.out.println("BAD HEAD");
-                            }
-                            break;
+                        if (debug) {
+                            System.out.println("CHECK REL " + rel);
+                            System.out.println("  head " + head);
+                            System.out.println("  dep  " + dep);
                         }
 
-                        //System.out.println("AAAAAAAAAAA " + rel.deprels + " " + dep.getDeplabel() + " " + rel.notdeprels);
-                        if (rel.deprels != null 
-                                //&& !rel.deprel.equals(dep.getDeplabel())
-                                && ((!rel.deprels.contains(dep.getDeplabel()) && !rel.notdeprels)
-                                    || rel.deprels.contains(dep.getDeplabel()) && rel.notdeprels)
-                                ) {
-                            // dependant does not have the deprel required
-                            ok = false;
-                            if (debug) {
-                                System.out.println("NOT REQUIRED DEPREL");
-                            }
-                            break;
-                        }
-                    } else {
-                        if (dep == null) {
-                            // no dep node defined as node, so check whether the head does not
-                            // have a dependent with forbidden relation
-                            for (ConllWord d : head.getDependents()) {
-                                //if (d.getDeplabel().equals(rel.deprel)) {
-                                if (rel.deprels.contains(d.getDeplabel())) {
-                                    ok = false;
-                                    if (debug) {
-                                        System.out.println("FORBIDDEN REPREL");
-                                    }
+                        if (!rel.without) {
+                            if (dep.getHeadWord() != head) {
+                                // the head is not the head requred
+                                ok = false;
+                                if (debug) {
+                                    System.out.println("BAD HEAD");
                                 }
+                                break;
                             }
-                        } else if ((dep.getHeadWord() == head || head == null)
-                                && rel.deprels != null
-                                //&& rel.deprel.equals(dep.getDeplabel())
-                                && rel.deprels.contains(dep.getDeplabel())
-                                ) {
-                            // dependant hase the forbidden deprel
-                            ok = false;
-                            if (debug) {
-                                System.out.println("FORBIDDEN REPREL");
+
+                            //System.out.println("AAAAAAAAAAA " + rel.deprels + " " + dep.getDeplabel() + " " + rel.notdeprels);
+                            if (rel.deprels != null
+                                    //&& !rel.deprel.equals(dep.getDeplabel())
+                                    && ((!rel.deprels.contains(dep.getDeplabel()) && !rel.notdeprels)
+                                    || rel.deprels.contains(dep.getDeplabel()) && rel.notdeprels)) {
+                                // dependant does not have the deprel required
+                                ok = false;
+                                if (debug) {
+                                    System.out.println("NOT REQUIRED DEPREL");
+                                }
+                                break;
                             }
-                            break;
+                        } else {
+                            if (dep == null) {
+                                // no dep node defined as node, so check whether the head does not
+                                // have a dependent with forbidden relation
+                                for (ConllWord d : head.getDependents()) {
+                                    //if (d.getDeplabel().equals(rel.deprel)) {
+                                    if (rel.deprels.contains(d.getDeplabel())) {
+                                        ok = false;
+                                       
+                                        if (debug) {
+                                            System.out.println("FORBIDDEN DEPREL");
+                                        }
+                                    }
+                                 
+                                }
+                            } else if ((dep.getHeadWord() == head || head == null)
+                                    && rel.deprels != null
+                                    //&& rel.deprel.equals(dep.getDeplabel())
+                                    && rel.deprels.contains(dep.getDeplabel())) {
+                                // dependant hase the forbidden deprel
+                                ok = false;
+                                if (debug) {
+                                    System.out.println("FORBIDDEN DEPREL");
+                                }
+                                break;
+                            }
+                            if (ok) allnegok = true;
+                            System.out.println("QQQQ " + rel + " "+ ok + " " + allnegok);
                         }
                     }
+                    System.out.println("1RRRR " + ok + " " + allnegok);
+                    
+                    if (!allnegok) continue;
+                    else ok=true;
+                    System.out.println("2RRRR " + ok + " " + allnegok);
                 }
+        
                 if (!ok) {
                     continue;
                 }
-
+                System.out.println("ADDED " + lcw);
                 final_node_combinations.add(lcw);
- //               List<Node> ln = new ArrayList<>();
- //               for (ConllWord cw : lcw) {
- //                   Node nn = new Node();
- //               }
+                //               List<Node> ln = new ArrayList<>();
+                //               for (ConllWord cw : lcw) {
+                //                   Node nn = new Node();
+                //               }
 
             }
         }
@@ -310,8 +325,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             return null;
         }
     }
-
-
 
     //https://stackoverflow.com/questions/714108/cartesian-product-of-an-arbitrary-number-of-sets
     private <T> List<List<T>> cartesianProduct(List<List<T>> lists) {
@@ -499,7 +512,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     }
 
     public void out() {
-        System.out.println("===================");
+        System.out.println("=================== start");
         for (String n : nodes.keySet()) {
             System.out.println("NODE: " + n + " " + nodes.get(n).toString());
         }
@@ -516,10 +529,14 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             System.out.println("STRICTLYBEFORE: " + n + " before " + strictlybefore.get(n).toString());
         }
 
-        for (String n : relations.keySet()) {
-            System.out.println("REL " + relations.get(n).toString());
+        for (Map<String, Rel> m : relations) {
+            System.out.println("RELS");
+            for (String n : m.keySet()) {
+                System.out.print(" REL " + m.get(n).toString());
+            }
+            System.out.println();
         }
-        System.out.println("===================");
+        System.out.println("=================== end");
     }
 
     @Override
@@ -548,12 +565,15 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     public Boolean visitWithoutlist(GrewmatchParser.WithoutlistContext ctx) {
         boolean value = true;
         without = true;
+        localrelations = new TreeMap<>();
         for (GrewmatchParser.RheolContext rc : ctx.rheol()) {
             //value = value && 
             visit(rc);
         }
 
         without = false;
+        relations.add(localrelations);
+        localrelations = null;
         return value;
     }
 
@@ -581,17 +601,19 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         // for each condition in pattern
         String left = ctx.conllucolumn().getText();
         //System.out.println("left " + left);
-       
+
         boolean neg = without;
-        if (ctx.NOT() != null) neg = !neg;
+        if (ctx.NOT() != null) {
+            neg = !neg;
+        }
         curnode.addfeat(left, "", neg);
-           
+
         curnode.seal(left);
         //System.out.println("SEAL " + left);
         //boolean value = visit(ctx.pattern()); // evaluate the expression child
         return true; //value;
     }
-    
+
     @Override
     public Boolean visitCond2(GrewmatchParser.Cond2Context ctx) {
         // for each condition in pattern
@@ -698,8 +720,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 //        }
 //        return true;
 //    }
-
-    
     @Override
     public Boolean visitRelation(GrewmatchParser.RelationContext ctx) {
         String head = ctx.nodename(0).getText();
@@ -722,7 +742,13 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             relval = ctx.relval().getText();
         }
         currel = new Rel(relval, head, dep, null, without, false);
-        relations.put(dep, currel);
+        if (localrelations == null) {
+            localrelations = new TreeMap<>();
+            localrelations.put(dep, currel);
+            relations.add(localrelations);
+        } else {
+            localrelations.put(dep, currel);
+        }
         return true;
     }
 
@@ -730,15 +756,17 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     public Boolean visitNamedrelation(GrewmatchParser.NamedrelationContext ctx) {
         String head = ctx.nodename(0).getText();
         String dep = ctx.nodename(1).getText();
-        List<String>deprels = new ArrayList<>();
-      
+        List<String> deprels = new ArrayList<>();
+
         for (DeprelContext c : ctx.deprel()) {
             deprels.add(c.getText());
         }
-        
+
         boolean neg = false;
-        if (ctx.NOT() != null) neg = true;
-        
+        if (ctx.NOT() != null) {
+            neg = true;
+        }
+
         if (!without) {
             Node cn = nodes.get(head);
             if (cn == null) {
@@ -757,7 +785,14 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             relval = ctx.relval().getText();
         }
         currel = new Rel(relval, head, dep, deprels, without, neg);
-        relations.put(dep, currel);
+        //relations.put(dep, currel);
+        if (localrelations == null) {
+            localrelations = new TreeMap<>();
+            localrelations.put(dep, currel);
+            relations.add(localrelations);
+        } else {
+            localrelations.put(dep, currel);
+        }
         return true;
     }
 
@@ -767,13 +802,11 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         return value;
     }
 
-    
     @Override
     public Boolean visitGloballist(GrewmatchParser.GloballistContext ctx) {
         boolean value = visit(ctx.globalcond());
         return value;
     }
-
 
     @Override
     public Boolean visitProjectivity(GrewmatchParser.ProjectivityContext ctx) {
@@ -836,7 +869,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             }
         }
 
-         public void addfeats(String k, List<String> v, boolean negated) throws GrewException {
+        public void addfeats(String k, List<String> v, boolean negated) throws GrewException {
             if (sealed.contains(k)) {
                 throw new GrewException("inconsistent nodes");
             }
@@ -857,7 +890,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                 vals.addAll(v);
             }
         }
-        
+
         public String toString() {
             StringBuilder tmp = new StringBuilder();
             tmp.append(id).append("::");
@@ -892,7 +925,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         }
 
         public String toString() {
-            return id + " " + (without ? '!' : "") + head + " --" + (notdeprels ? "^" : "")+ deprels + "--> " + dep;
+            return (id != null ? id + " " : "") + (without ? '!' : "") + head + " --" + (notdeprels ? "^" : "") + deprels + "--> " + dep;
         }
 
     }

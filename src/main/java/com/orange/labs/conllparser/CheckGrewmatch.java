@@ -127,10 +127,9 @@ public class CheckGrewmatch {
         boolean rtc = eval.visit(tree);
         if (debug) eval.out();
 
-        // TODO APPLY CONDITIONS on word
         int ct = 0;
         for (ConllSentence cs : cf.getSentences()) {
-            if (debug) System.out.println("======================= ");
+            //if (debug) System.out.println("======================= ");
             cs.normalise();
             cs.makeTrees(null);
             List<List<ConllWord>> llcw = eval.match(cs);
@@ -188,7 +187,7 @@ public class CheckGrewmatch {
                 String line;
                 while ((line = br.readLine()) != null) {
                     line = line.strip();
-                    if (line.length() > 0 && line.charAt(0) != '#') {
+                    if (line.length() > 0 && line.charAt(0) != '#' && line.charAt(0) != '%') {
                         System.out.println("compiling " + line);
                         CheckGrewmatch cg = new CheckGrewmatch(line, false);
                         cgs.add(cg);

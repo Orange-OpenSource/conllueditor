@@ -229,7 +229,18 @@ public class TestGrewmatch {
         applySearch("pattern{V[lemma=\"être\"]}", "search21.conllu");
     }
 
+    @Test
+    public void test22() throws IOException, ConllException {
+        name("search 22");
+        applySearch("pattern { V [upos=VERB] } without { V -[nsubj]-> S; V -[obj]-> O }", "search22.conllu");
+    }
 
+    @Test
+    public void test23() throws IOException, ConllException {
+        name("search 23");
+        applySearch("pattern { V [upos=VERB] } without { V -[nsubj]-> S} without { V -[obj]-> O }", "search23.conllu");
+    }
+    
     
     @Test
     public void testerror1() throws IOException, ConllException {
