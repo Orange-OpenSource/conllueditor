@@ -178,23 +178,44 @@ public class CheckGrewmatch {
      */
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            System.err.println("Usage: Condition 'grewmatch'|@patternfile [conllu file]");
+            System.err.println("Usage: CheckGrewmatch [--debug] [--join] 'grewmatch'|@patternfile [conllu file]");
         } else {
+            boolean debug = false;
+            boolean join = false; // if true merge all input files first
+            int offset = 0;
+            for (int i = 0; i<args.length; ++i) {
+                if (args[i].charAt(0) != '-') {
+                    break;
+                }
+                offset++;
+                switch (args[i]) {
+                    case "--debug":
+                        debug = true;
+                        break;
+                    case "--join":
+                        join = true;
+                        break;
+                    default:
+                        System.err.println("Invalid option " + args[i]);
+                }
+                
+            }
+            
             List<CheckGrewmatch> cgs = new ArrayList<>();
-            if (args[0].charAt(0) == '@') {
-                FileInputStream fis = new FileInputStream(new File(args[0].substring(1)));
+            if (args[offset].charAt(0) == '@') {
+                FileInputStream fis = new FileInputStream(new File(args[offset].substring(1)));
                 BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
                 String line;
                 while ((line = br.readLine()) != null) {
                     line = line.strip();
                     if (line.length() > 0 && line.charAt(0) != '#' && line.charAt(0) != '%') {
-                        System.out.println("compiling " + line);
+                        if (debug) System.out.println("compiling " + line);
                         CheckGrewmatch cg = new CheckGrewmatch(line, false);
                         cgs.add(cg);
                     }
                 }
             } else {
-                CheckGrewmatch cg = new CheckGrewmatch(args[0], true);
+                CheckGrewmatch cg = new CheckGrewmatch(args[offset], true);
                 cgs.add(cg);
             }
             ConllSentence csent;
@@ -235,15 +256,31 @@ public class CheckGrewmatch {
                 //System.err.println("rtc " + rtc);
             } else {
                 int matches = 0;
-                for (int i = 1; i < args.length; ++i) {
-                    ConllFile cf = new ConllFile(new File(args[i]), null);
+                if (join) {
+                    List<ConllFile> cfs = new ArrayList<>();
+                    for (int i = offset+1; i < args.length; ++i) {
+                        ConllFile cf = new ConllFile(new File(args[i]), null);
+                        cfs.add(cf);
+                    }
                     for (CheckGrewmatch cg : cgs) {
                         System.out.println(cg.condition);
-                        int r = cg.evaluate(null, cf, true);
-                        matches += r;
+                        int r = 0;
+                        for (ConllFile cf : cfs) {
+                            r += cg.evaluate(null, cf, debug);
+                            matches += r;
+                        }
                         System.out.println("solutions: " + r);
                     }
-                   
+                } else {
+                    for (int i = offset+1; i < args.length; ++i) {
+                        ConllFile cf = new ConllFile(new File(args[i]), null);
+                        for (CheckGrewmatch cg : cgs) {
+                            System.out.println(cg.condition);
+                            int r = cg.evaluate(null, cf, debug);
+                            matches += r;
+                            System.out.println("solutions: " + r);
+                        }
+                    }
                 }
                 System.out.println(matches + " matches");
             }
