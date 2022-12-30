@@ -59,6 +59,9 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     Map<String, Set<String>> wordlists; // stores lists for Form and Lemma: "filename": (words)
     Map<String, String> before;
     Map<String, String> strictlybefore;
+
+    List<Compare> equals;
+
     boolean without = false; // whether or not we parse "without" expressions
 
     List<String> globals;
@@ -76,11 +79,12 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         before = new HashMap<>();
         strictlybefore = new HashMap<>();
         globals = new ArrayList<>();
+        equals = new ArrayList<>();
     }
 
     // TODO put into CheckGrewmatch ?
     // TODO optimize
-    public List<List<ConllWord>> match(ConllSentence csent) {
+    public List<List<ConllWord>> match(ConllSentence csent) throws ConllException {
         final boolean debug = false;
 
         // TODO can global {} co-occur with pattern ????
@@ -115,7 +119,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         // delete relations if order constraints exist
         // find nodes which match every variable
         Map<String, List<ConllWord>> matchednodes = new TreeMap<>(); // nodename (in rule): CW
-        for (ConllWord cw : csent.getWords()) {
+        for (ConllWord cw : csent.getAllWords()) {
             List<Node> rtc = match(cw);
             for (Node node : rtc) {
                 String nodename = node.id;
@@ -233,6 +237,81 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                     continue;
                 }
 
+                // check field comparisons
+                for (Compare cp : equals) {
+                    if (debug) System.out.println("CONSTRAINT " + cp);
+                    Node n1 = nodes.get(cp.node1);
+                    if (n1 == null) {
+                        throw new ConllException("Identifier " + cp.node1 + " not found");
+                    }
+                    Node n2 = nodes.get(cp.node2);
+                    if (n2 == null) {
+                        throw new ConllException("Identifier " + cp.node2 + " not found");
+                    }
+                    ConllWord cw1 = node2cw.get(n1.id);
+                    ConllWord cw2 = node2cw.get(n2.id);
+                    //System.out.println("AA1 " + n1.id + " " + cw1);
+                    //System.out.println("AA2 " + n2.id + " " + cw2);
+
+                    String val1;
+                    switch (cp.field1) {
+                        case "upos":
+                            val1 = cw1.getUpostag();
+                            break;
+                        case "xpos":
+                            val1 = cw1.getXpostag();
+                            break;
+                        case "form":
+                            val1 = cw1.getForm();
+                            break;
+                        case "lemma":
+                            val1 = cw1.getLemma();
+                            break;
+                        default:
+                            val1 = cw1.getFeatures().get(cp.field1);
+                    }
+                    if (val1 == null) {
+                        ok = false;
+                        continue;
+                    }
+                    String val2;
+                    switch (cp.field2) {
+                        case "upos":
+                            val2 = cw2.getUpostag();
+                            break;
+                        case "xpos":
+                            val2 = cw2.getXpostag();
+                            break;
+                        case "form":
+                            val2 = cw2.getForm();
+                            break;
+                        case "lemma":
+                            val2 = cw2.getLemma();
+                            break;
+                        default:
+                            val2 = cw2.getFeatures().get(cp.field2);
+                    }
+                    if (val2 == null) {
+                        ok = false;
+                        continue;
+                    }
+                    //System.out.println("VALS " + val1 + " " + val2);
+                    if (cp.equal != cp.without) {
+                        // features must be present and equal
+                        if (val1 == null || val2 == null || !val1.endsWith(val2)) {
+                            ok = false;
+                            continue;
+                        }
+                    } else {
+                        // features must be present and unequal
+                        if (val1 == null || val2 == null || val1.endsWith(val2)) {
+                            ok = false;
+                            continue;
+                        }
+                    }
+
+                }
+
                 // check relation constraints
                 for (Map<String, Rel> m : relations) {
                     boolean allnegok = false;
@@ -277,12 +356,12 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                                     //if (d.getDeplabel().equals(rel.deprel)) {
                                     if (rel.deprels.contains(d.getDeplabel())) {
                                         ok = false;
-                                       
+
                                         if (debug) {
                                             System.out.println("FORBIDDEN DEPREL");
                                         }
                                     }
-                                 
+
                                 }
                             } else if ((dep.getHeadWord() == head || head == null)
                                     && rel.deprels != null
@@ -295,14 +374,19 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                                 }
                                 break;
                             }
-                            if (ok) allnegok = true;
+                            if (ok) {
+                                allnegok = true;
+                            }
                         }
                     }
-                    
-                    if (!allnegok) continue;
-                    else ok=true;
+
+                    if (!allnegok) {
+                        continue;
+                    } else {
+                        ok = true;
+                    }
                 }
-        
+
                 if (!ok) {
                     continue;
                 }
@@ -525,7 +609,9 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         for (String n : strictlybefore.keySet()) {
             System.out.println("STRICTLYBEFORE: " + n + " before " + strictlybefore.get(n).toString());
         }
-
+        for(Compare c : equals) {
+            System.out.println("CONSTRAINT " + c);
+        }
         for (Map<String, Rel> m : relations) {
             System.out.println("RELS");
             for (String n : m.keySet()) {
@@ -678,45 +764,32 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         return true;
     }
 
-//    @Override
-//    public Boolean visitOrder2(GrewmatchParser.Order2Context ctx) {
-//        String one = ctx.nodenamefield(0).getText();
-//        String two = ctx.nodenamefield(1).getText();
-//        System.out.println("ooooooooooooooooooooooo " + one);
-//        //ctx.nodenamefield(1).
-//        Node cn = nodes.get(one);
-//        if (cn == null) {
-//            cn = new Node(one);
-//            nodes.put(one, cn);
-//        }
-//        cn = nodes.get(two);
-//        if (cn == null) {
-//            cn = new Node(two);
-//            nodes.put(two, cn);
-//        }
-//
-//        String cp;
-//        if (ctx.eq() != null) {
-//            cp = ctx.eq().getText();
-//        } else {
-//            cp = ctx.comp().getText();
-//        }
-//        switch (cp) {
-//            case "<<":
-//                before.put(one, two);
-//                break;
-//            case ">>":
-//                before.put(two, one);
-//                break;
-//            case "<":
-//                strictlybefore.put(one, two);
-//                break;
-//            case ">":
-//                strictlybefore.put(two, one);
-//                break;
-//        }
-//        return true;
-//    }
+    @Override
+    public Boolean visitOrder2(GrewmatchParser.Order2Context ctx) {
+        String one = ctx.nodenamefield(0).getText();
+        String two = ctx.nodenamefield(1).getText();
+        //System.out.println("ooooooooooooooooooooooo " + one);
+        String[] oneparts = one.split("\\.", 2);
+        String[] twoparts = two.split("\\.", 2);
+
+        String cp;
+        if (ctx.eq() != null) {
+            cp = ctx.eq().getText();
+        } else {
+            cp = ctx.comp().getText();
+        }
+        switch (cp) {
+            case "<>":
+                equals.add(new Compare(oneparts[0], oneparts[1], twoparts[0], twoparts[1], false, without));
+                break;
+            case "=":
+                equals.add(new Compare(oneparts[0], oneparts[1], twoparts[0], twoparts[1], true, without));
+                break;
+        }
+
+        return true;
+    }
+
     @Override
     public Boolean visitRelation(GrewmatchParser.RelationContext ctx) {
         String head = ctx.nodename(0).getText();
@@ -900,7 +973,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             return tmp.toString();
 
         }
-
     }
 
     class Rel {
@@ -924,7 +996,29 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         public String toString() {
             return (id != null ? id + " " : "") + (without ? '!' : "") + head + " --" + (notdeprels ? "^" : "") + deprels + "--> " + dep;
         }
+    }
 
+    class Compare {
+
+        String node1;
+        String node2;
+        String field1;
+        String field2;
+        boolean equal;
+        boolean without;
+
+        public Compare(String n1, String f1, String n2, String f2, boolean e, boolean w) {
+            node1 = n1;
+            node2 = n2;
+            field1 = f1;
+            field2 = f2;
+            equal = e;
+            without = w;
+        }
+
+        public String toString() {
+            return node1 + "." + field1 + (equal ? "=" : "<>") + node2 + "." + field2;
+        }
     }
 
 }

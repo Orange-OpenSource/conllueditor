@@ -5,6 +5,8 @@ FINAL 1
 8	pue	puer	VERB	VERB	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	_	SpaceAfter=No
 # sent_id = fi_tdt-ud-train.conllu b712.11
 # text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
-FOUND 1
+FOUND 2
 FINAL 1
+0.1	Laitoin	laittaa	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
+FINAL 2
 8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_

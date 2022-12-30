@@ -1,0 +1,6 @@
+# sent_id = conlueditor-test-6
+# text = ils ont visité le Musée du Louvre. 
+FOUND 1
+FINAL 1
+1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
+3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_

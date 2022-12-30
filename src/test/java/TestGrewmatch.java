@@ -93,10 +93,10 @@ public class TestGrewmatch {
             throw e;
         }
 
-        if (filename != null) { 
+        if (filename != null) {
             File out = new File(folder, filename);
             FileUtils.writeStringToFile(out, results.toString(), StandardCharsets.UTF_8);
-        
+
             try {
                  URL ref = this.getClass().getResource(filename);
 
@@ -240,8 +240,25 @@ public class TestGrewmatch {
         name("search 23");
         applySearch("pattern { V [upos=VERB] } without { V -[nsubj]-> S} without { V -[obj]-> O }", "search23.conllu");
     }
-    
-    
+
+    @Test
+    public void test24() throws IOException, ConllException {
+        name("search 24");
+        applySearch("pattern { N -[nsubj]-> M; N.Number = M.Number}", "search24.conllu");
+    }
+
+    @Test
+    public void test25() throws IOException, ConllException {
+        name("search 25");
+        applySearch("pattern { N -[nsubj]-> M; N.Number <> M.Number}", "search25.conllu");
+    }
+
+    @Test
+    public void test26() throws IOException, ConllException {
+        name("search 26");
+        applySearch("pattern { N -[nsubj]-> M; N.Number <> M.BadFeature}", "search26.conllu");
+    }
+
     @Test
     public void testerror1() throws IOException, ConllException {
         name("error 1");
@@ -279,14 +296,30 @@ public class TestGrewmatch {
         name("error 3");
         String msg = null;
         try {
+            applySearch("pattern { V[lemma=être]} ", null);
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
 
-        applySearch("pattern { V[lemma=être]} ", null);
-    } catch (Exception e) {
-        msg = e.getMessage();
+        String expected = "pos:18 token recognition error at: 'ê'";
+        Assert.assertEquals(String.format("missing quotes for non-ASCII characters\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+        expected, msg);
     }
 
-    String expected = "pos:18 token recognition error at: 'ê'";
-    Assert.assertEquals(String.format("missing quotes for non-ASCII characters\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
-    expected, msg);
+    @Test
+    public void testerror4() throws IOException, ConllException {
+        name("error 4");
+        String msg = null;
+        try {
+            applySearch("pattern { N -[nsubj]-> M; N.Number <> MM.Number}", null);
+        } catch (Exception e) {
+            msg = e.getMessage();
+        }
+
+        String expected = "Identifier MM not found";
+        Assert.assertEquals(String.format("invalid query\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
+        expected, msg);
     }
+
+
 }

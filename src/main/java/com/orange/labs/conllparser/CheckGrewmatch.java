@@ -78,7 +78,7 @@ public class CheckGrewmatch {
         }
     }
 
-    public List<List<ConllWord>> match(Map<String, Set<String>> wordlists, ConllSentence csent) {
+    public List<List<ConllWord>> match(Map<String, Set<String>> wordlists, ConllSentence csent) throws ConllException {
         GrewVisitor eval = new GrewVisitor(wordlists);
         boolean rtc = eval.visit(tree);
         //eval.out();
@@ -129,7 +129,7 @@ public class CheckGrewmatch {
 
         int ct = 0;
         for (ConllSentence cs : cf.getSentences()) {
-            //if (debug) System.out.println("======================= ");
+            //if (deNode n1 = nodes.get(cp.node1);bug) System.out.println("======================= ");
             cs.normalise();
             cs.makeTrees(null);
             List<List<ConllWord>> llcw = eval.match(cs);
@@ -282,7 +282,7 @@ public class CheckGrewmatch {
                         }
                     }
                 }
-                System.out.println(matches + " matches");
+                if (debug) System.out.println(matches + " matches");
             }
 
         }

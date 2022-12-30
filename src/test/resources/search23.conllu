@@ -13,3 +13,20 @@ FINAL 1
 FOUND 1
 FINAL 1
 4	prepared	prepare	VERB	_	_	2	conj	_	_
+# sent_id = ellipsis1
+# text = Sam fixed lunch and Kim dinner 
+FOUND 1
+FINAL 1
+5.1	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	_	_	2:conj	_
+# sent_id = sv-ud-train-767
+# text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22. 
+FOUND 2
+FINAL 1
+10.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj|22:advcl:om	_
+FINAL 2
+15.1	köper	köpa	VERB	VB|PRS|AKT	Mood=Ind|Tense=Pres|VerbForm=Fin|Voice=Act	_	_	3:conj:och	_
+# sent_id = fi_tdt-ud-train.conllu b712.11
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
+FOUND 1
+FINAL 1
+0.1	Laitoin	laittaa	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
