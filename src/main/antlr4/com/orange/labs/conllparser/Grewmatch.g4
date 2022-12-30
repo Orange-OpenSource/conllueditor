@@ -44,11 +44,11 @@ expression
 	;
 
 globals 
-	: GLOBAL OPEN globalcond CLOSE # globallist 
+	: GLOBAL OPEN globalconds CLOSE # globallist 
 	;
 
-globalcond
-	: IS_PROJ # projectivity
+globalconds
+	: IS_SOMETHING # globalcond
 	;
 
 pattern
@@ -114,7 +114,7 @@ WS	: [ \t\n] + -> skip ;
 PATTERN : 'pattern' ;
 WITHOUT	: 'without' ;
 GLOBAL	: 'global' ;
-IS_PROJ	: ( 'is_projective' | 'is_not_projective' );
+IS_SOMETHING	: ( 'is_projective' | 'is_not_projective' | 'is_tree' | 'is_not_tree' );
 COMMA	: ',' ;
 SEMICOLON	: ';' ;
 COLON	: ':' ;

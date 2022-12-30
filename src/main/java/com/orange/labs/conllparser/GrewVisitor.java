@@ -85,7 +85,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     // TODO put into CheckGrewmatch ?
     // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) throws ConllException {
-        final boolean debug = false;
+        final boolean debug = true;
 
         // TODO can global {} co-occur with pattern ????
         if (!globals.isEmpty()) {
@@ -110,6 +110,10 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                         final_node_combinations.add(proj);
                         return final_node_combinations;
                     }
+                } else if ("is_not_tree".equals(gl)) {
+                    // TODO
+                } else if ("is_tree".equals(gl)) {
+                    // TODO
                 }
             }
         }
@@ -882,14 +886,14 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 
     @Override
     public Boolean visitGloballist(GrewmatchParser.GloballistContext ctx) {
-        boolean value = visit(ctx.globalcond());
+        boolean value = visit(ctx.globalconds());
         return value;
     }
 
     @Override
-    public Boolean visitProjectivity(GrewmatchParser.ProjectivityContext ctx) {
-        globals.add(ctx.IS_PROJ().toString());
-        System.err.println("azazazaza " + ctx.IS_PROJ());
+    public Boolean visitGlobalcond(GrewmatchParser.GlobalcondContext ctx) {
+        globals.add(ctx.IS_SOMETHING().toString());
+        System.err.println("azazazaza " + ctx.IS_SOMETHING());
         return true;
     }
 

@@ -412,6 +412,7 @@ ConlluEditor implements a subset of search as defined in [Grew Match](http://uni
 * node definitions: `pattern {N [upos=NOUN, lemma <> "thing"] }`
 * deprel definitions: `pattern { V -[nsubj]-> N}` (including combinations of node and deprel definitions)
 * `without` negations
+* (enhanced relations are still ignored however)
 
 ## Matching subtrees
 
