@@ -314,7 +314,10 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 
                 // check relation constraints
                 for (Map<String, Rel> m : relations) {
+                    // all relation groups must be true
+                    // without == true: at least one of the relations in m mist be true
                     boolean allnegok = false;
+                    //System.out.println("ABC " + m);
                     for (String rid : m.keySet()) {
                         Rel rel = m.get(rid);
                         ConllWord head = node2cw.get(rel.head);
@@ -330,6 +333,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                             if (dep.getHeadWord() != head) {
                                 // the head is not the head requred
                                 ok = false;
+                                allnegok = false;
                                 if (debug) {
                                     System.out.println("BAD HEAD");
                                 }
@@ -349,6 +353,8 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                                 break;
                             }
                         } else {
+                            // without == true
+                            ok = true;
                             if (dep == null) {
                                 // no dep node defined as node, so check whether the head does not
                                 // have a dependent with forbidden relation
@@ -361,7 +367,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                                             System.out.println("FORBIDDEN DEPREL");
                                         }
                                     }
-
                                 }
                             } else if ((dep.getHeadWord() == head || head == null)
                                     && rel.deprels != null
@@ -370,23 +375,26 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                                 // dependant hase the forbidden deprel
                                 ok = false;
                                 if (debug) {
-                                    System.out.println("FORBIDDEN DEPREL");
+                                    System.out.println("FORBIDDEN  DEPREL");
                                 }
                                 break;
                             }
                             if (ok) {
-                                allnegok = true;
+                                //allnegok = true;
+                                break;
                             }
+                            //System.out.println("ZZZZZZ " + ok + " " + allnegok);
                         }
                     }
-
-                    if (!allnegok) {
-                        continue;
-                    } else {
-                        ok = true;
-                    }
+                    //System.out.println("ZZZZZZ2 " + ok + " " + allnegok);
+                    if (!ok) break;
+//                    if (!allnegok) {
+//                       continue;
+//                    } else {
+//                        ok = true;
+//                    }
                 }
-
+                //System.out.println("zzzzzz " + ok);
                 if (!ok) {
                     continue;
                 }
