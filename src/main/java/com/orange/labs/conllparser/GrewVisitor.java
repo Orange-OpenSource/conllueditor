@@ -663,6 +663,11 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                 value = value && visit(cc);
             }
         }
+        if (ctx.globals() != null) {
+            for (GrewmatchParser.GlobalsContext cc : ctx.globals()) {
+                value = value && visit(cc);
+            }
+        }
         return value;
     }
 
