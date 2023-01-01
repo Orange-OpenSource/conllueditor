@@ -85,7 +85,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     // TODO put into CheckGrewmatch ?
     // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) throws ConllException {
-        final boolean debug = true;
+        final boolean debug = false;
 
         // TODO can global {} co-occur with pattern ????
         if (!globals.isEmpty()) {
@@ -123,7 +123,12 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         // delete relations if order constraints exist
         // find nodes which match every variable
         Map<String, List<ConllWord>> matchednodes = new TreeMap<>(); // nodename (in rule): CW
-        for (ConllWord cw : csent.getAllWords()) {
+        List<ConllWord>allwords = csent.getAllWords();
+        ConllWord root = new ConllWord("__0__");
+        root.setId(0);
+        
+        allwords.add(root);
+        for (ConllWord cw : allwords) {
             List<Node> rtc = match(cw);
             for (Node node : rtc) {
                 String nodename = node.id;
@@ -334,7 +339,8 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                         }
 
                         if (!rel.without) {
-                            if (dep.getHeadWord() != head) {
+                            if (dep.getHeadWord() != head && !(dep.getHead() == 0 && (head != null && head.getId() == 0))
+                                    ) {
                                 // the head is not the head requred
                                 ok = false;
                                 allnegok = false;
