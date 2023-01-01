@@ -1,0 +1,18 @@
+# sent_id = null
+# text = JetBlue canceled our flight this morning which was already late 
+FOUND 1
+FINAL 1
+5	this	this	DET	_	_	6	det	_	_
+6	morning	morning	NOUN	_	_	2	advmod	_	_
+# sent_id = fr-ud-dev_00001_modified
+# text = Aviator, un film sur la vie de Howard Hughes. 
+FOUND 1
+FINAL 1
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+5	sur	sur	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+8	de	de	ADP	_	_	9	case	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No

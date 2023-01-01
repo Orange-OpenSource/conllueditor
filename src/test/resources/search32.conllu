@@ -1,0 +1,90 @@
+# sent_id = null
+# text = JetBlue canceled our flight which was already late 
+FOUND 7
+FINAL 1
+1	JetBlue	JetBlue	PROPN	_	_	2	nsubj	_	_
+2	canceled	cancel	VERB	_	_	0	root	_	_
+FINAL 2
+0	__0__	_	_	_	_	0	root	_	_
+2	canceled	cancel	VERB	_	_	0	root	_	_
+FINAL 3
+3	our	our	PRON	_	_	4	nmod:poss	_	_
+4	flight	flight	NOUN	_	_	2	obj	_	_
+FINAL 4
+5	which	which	PRON	_	_	8	nsubj	_	_
+8	late	late	ADJ	_	_	4	acl:relcl	_	_
+FINAL 5
+6	was	be	AUX	_	_	8	aux	_	_
+8	late	late	ADJ	_	_	4	acl:relcl	_	_
+FINAL 6
+7	already	already	ADV	_	_	8	advmod	_	_
+8	late	late	ADJ	_	_	4	acl:relcl	_	_
+FINAL 7
+4	flight	flight	NOUN	_	_	2	obj	_	_
+8	late	late	ADJ	_	_	4	acl:relcl	_	_
+# sent_id = null
+# text = JetBlue canceled our flight this morning which was already late 
+FOUND 9
+FINAL 1
+1	JetBlue	JetBlue	PROPN	_	_	2	nsubj	_	_
+2	canceled	cancel	VERB	_	_	0	root	_	_
+FINAL 2
+0	__0__	_	_	_	_	0	root	_	_
+2	canceled	cancel	VERB	_	_	0	root	_	_
+FINAL 3
+3	our	our	PRON	_	_	4	nmod:poss	_	_
+4	flight	flight	NOUN	_	_	2	obj	_	_
+FINAL 4
+5	this	this	DET	_	_	6	det	_	_
+6	morning	morning	NOUN	_	_	2	advmod	_	_
+FINAL 5
+2	canceled	cancel	VERB	_	_	0	root	_	_
+6	morning	morning	NOUN	_	_	2	advmod	_	_
+FINAL 6
+7	which	which	PRON	_	_	10	nsubj	_	_
+10	late	late	ADJ	_	_	4	acl:relcl	_	_
+FINAL 7
+8	was	be	AUX	_	_	10	aux	_	_
+10	late	late	ADJ	_	_	4	acl:relcl	_	_
+FINAL 8
+9	already	already	ADV	_	_	10	advmod	_	_
+10	late	late	ADJ	_	_	4	acl:relcl	_	_
+FINAL 9
+4	flight	flight	NOUN	_	_	2	obj	_	_
+10	late	late	ADJ	_	_	4	acl:relcl	_	_
+# sent_id = fr-ud-dev_00001_modified
+# text = Aviator, un film sur la vie de Howard Hughes. 
+FOUND 11
+FINAL 1
+0	__0__	_	_	_	_	0	root	_	_
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+FINAL 2
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+2	,	,	PUNCT	_	_	1	punct	_	_
+FINAL 3
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+FINAL 4
+0	__0__	_	_	_	_	0	root	_	_
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+FINAL 5
+5	sur	sur	ADP	_	_	7	case	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+FINAL 6
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+FINAL 7
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+FINAL 8
+8	de	de	ADP	_	_	9	case	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+FINAL 9
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+FINAL 10
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No
+FINAL 11
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+11	.	.	PUNCT	_	_	1	punct	_	_

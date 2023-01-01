@@ -1,0 +1,10 @@
+# sent_id = null
+# text = JetBlue canceled our flight which was already late 
+FOUND 1
+FINAL 1
+2	canceled	cancel	VERB	_	_	0	root	_	_
+# sent_id = null
+# text = JetBlue canceled our flight this morning which was already late 
+FOUND 1
+FINAL 1
+2	canceled	cancel	VERB	_	_	0	root	_	_

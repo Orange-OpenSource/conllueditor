@@ -40,8 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -55,6 +53,7 @@ public class TestGrewmatch {
 
     File folder;
     ConllFile cf;
+    ConllFile cf2;
 
     private void name(String n) {
         System.out.format("\n***** Testing: %s ****\n", n);
@@ -67,8 +66,11 @@ public class TestGrewmatch {
 
         URL url = this.getClass().getResource("test.conllu");
         File file = new File(url.getFile());
+        URL url2 = this.getClass().getResource("projtest.conllu");
+        File file2 = new File(url2.getFile());
         try {
             cf = new ConllFile(file, false, false);
+            cf2 = new ConllFile(file2, false, false);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -76,10 +78,14 @@ public class TestGrewmatch {
     }
 
     private void applySearch(String rule, String filename) throws IOException, ConllException {
+        applySearch(rule, filename, cf);
+    }
+    
+    private void applySearch(String rule, String filename, ConllFile conllf) throws IOException, ConllException {
         StringBuilder results = new StringBuilder();
         try {
             CheckGrewmatch gc = new CheckGrewmatch(rule, false);
-            for (ConllSentence cs : cf.getSentences()) {
+            for (ConllSentence cs : conllf.getSentences()) {
                 cs.normalise();
                 cs.makeTrees(null);
                 List<List<ConllWord>> llcw = gc.match(null, cs);
@@ -259,6 +265,43 @@ public class TestGrewmatch {
         applySearch("pattern { N -[nsubj]-> M; N.Number <> M.BadFeature}", "search26.conllu");
     }
 
+    @Test
+    public void test27() throws IOException, ConllException {
+        name("search 27");
+        applySearch("global { is_tree }", "search27.conllu", cf2);
+    }
+
+    @Test
+    public void test28() throws IOException, ConllException {
+        name("search 28");
+        applySearch("global { is_not_tree }", "search28.conllu", cf2);
+    }    
+
+    @Test
+    public void test29() throws IOException, ConllException {
+        name("search 29");
+        applySearch("global { is_projective }", "search29.conllu", cf2);
+    }
+
+    @Test
+    public void test30() throws IOException, ConllException {
+        name("search 30");
+        applySearch("global { is_not_projective }", "search30.conllu", cf2);
+    }    
+    
+    @Test
+    public void test31() throws IOException, ConllException {
+        name("search 31");
+        applySearch("pattern { V -[obj|subj]-> N}", "search31.conllu", cf2);
+    }
+ 
+    @Test
+    public void test32() throws IOException, ConllException {
+        name("search 32");
+        applySearch("pattern { V -[^obj|subj]-> N}", "search32.conllu", cf2);
+    }
+    
+    
     @Test
     public void testerror1() throws IOException, ConllException {
         name("error 1");

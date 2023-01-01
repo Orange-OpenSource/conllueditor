@@ -90,12 +90,9 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         // TODO can global {} co-occur with pattern ????
         if (!globals.isEmpty()) {
             for (String gl : globals) {
-                System.err.println("eeeeeeeeeeeee " + gl);
                 if ("is_not_projective".equals(gl)) {
-                    System.err.println("zzzzzz");
                     List<ConllWord> unproj = new ArrayList<>();
                     boolean rtc = csent.isProjective(unproj);
-                    System.err.println("rrrrr " + rtc + " " + unproj);
                     if (!rtc) {
                         List<List<ConllWord>> final_node_combinations = new ArrayList<>();
                         final_node_combinations.add(unproj);
@@ -110,10 +107,26 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                         final_node_combinations.add(proj);
                         return final_node_combinations;
                     }
-                } else if ("is_not_tree".equals(gl)) {
-                    // TODO
-                } else if ("is_tree".equals(gl)) {
-                    // TODO
+                } else {
+                    List<ConllWord> roots = new ArrayList<>();
+                    for (ConllWord cw : csent.getWords()) {
+                        //System.out.println("qqqq " + cw.getHead() + " " + cw);
+                        if (cw.getHead() < 1) roots.add(cw);
+                    }
+
+                    if ("is_not_tree".equals(gl)) {
+                        if (roots.size() > 1) {
+                            List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+                            final_node_combinations.add(roots);
+                            return final_node_combinations;
+                        }
+                    } else if ("is_tree".equals(gl)) {
+                        if (csent.getHeads().size() == 1) {
+                            List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+                            final_node_combinations.add(roots);
+                            return final_node_combinations;
+                        }
+                    }
                 }
             }
         }
@@ -409,7 +422,9 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
                     continue;
                 }
                 //System.out.println("ADDED " + lcw);
-                final_node_combinations.add(lcw);
+                if (!lcw.isEmpty()) {
+                    final_node_combinations.add(lcw);
+                }
                 //               List<Node> ln = new ArrayList<>();
                 //               for (ConllWord cw : lcw) {
                 //                   Node nn = new Node();
@@ -899,7 +914,6 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     @Override
     public Boolean visitGlobalcond(GrewmatchParser.GlobalcondContext ctx) {
         globals.add(ctx.IS_SOMETHING().toString());
-        System.err.println("azazazaza " + ctx.IS_SOMETHING());
         return true;
     }
 
