@@ -25,6 +25,8 @@ if [ "$2" == "" ]; then
 	exit 1
 fi
 
+NEWESTJAR=$(ls -tr $TARGETDIR/ConlluEditor-* | grep with-dep | tail -1)
+
 PATTERN=$1
 shift
 CONLLU=$*

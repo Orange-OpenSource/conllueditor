@@ -1,0 +1,34 @@
+pattern { N [upos=NUM];} 
+pattern { N [upos=NUM]; N-[nummod]-> H}
+pattern { V [upos=VERB]; V-[obj]-> N}
+pattern { V [upos=VERB]; V-[obj]-> N} without { V -[nsubj]-> N2}
+pattern { V [upos=VERB]; V-[obj]-> N; V -[nsubj]-> N2}
+pattern { N [upos=NOUN]; A [upos=ADJ]; D [upos=DET]; A > N}
+pattern { V -[obj|nsubj]-> N; N -[det]-> D}
+pattern { N [ upos=VERB, Mood=Ind, Person="1" ] }
+#pattern { N [ upos=VERB, Mood=Ind, Person="1" ] }
+pattern { N [ upos=VERB, Mood=Ind, Person<>"1" ] }
+pattern { N [ upos=VERB, Tense ] }
+pattern { N [ upos=VERB, !Tense ] }
+
+pattern { V -[aux:pass]-> AP;  BY [lemma=by];  V -[obl]-> N;  N -[case]-> BY;}
+pattern {  N -[^nsubj|obj]-> M; }
+pattern { N -[nsubj]-> M; N.Number = M.Number;}
+pattern { N -[nsubj]-> M; N.Number <> M.Number;}
+pattern { V [ upos=VERB ];  V -[nsubj|nsubj:pass]-> S;  V << S; }
+pattern { V [upos=VERB] }  without { V -[nsubj|nsubj:pass]-> S } 
+pattern { V [upos=VERB, lemma=make] } without { V -[nsubj|nsubj:pass]-> S } without { V -[obj]-> O }
+
+pattern { V [upos=VERB] } without { V -[nsubj]-> S; V -[obj]-> O }
+pattern { V [upos=VERB] } without { V -[nsubj]-> S} without { V -[obj]-> O }
+
+pattern {  GOV [upos <> NOUN|ADJ|PROPN];  GOV -[det]-> DEP;}
+
+pattern { N1 [upos=DET]; N2 [upos=ADJ]; N3 [upos=ADJ]; N4 [upos=NOUN]; N1 < N2; N2 < N3; N3 < N4 }
+
+pattern { N1 [upos=DET]; N2 [upos=ADJ]; N3 [upos=ADJ]; N4 [upos=NOUN]; N1 < N2; N2 < N3; N3 < N4 }
+global { is_not_projective } pattern { N[upos="ADV"] }
+
+pattern { V [upos="VERB", VerbForm <> Ger|Inf|Part, Mood <> Imp] } without { V -[nsubj|csubj|nsubj:pass]-> S} without { N -[cop|aux|aux:pass|conj]-> V}
+
+pattern {  N1 -[conj]-> N2;  N1.upos <> N2.upos; }
