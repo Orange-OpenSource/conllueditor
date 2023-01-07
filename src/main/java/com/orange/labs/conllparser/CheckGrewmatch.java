@@ -122,7 +122,7 @@ public class CheckGrewmatch {
         return sb.toString();
     }
     
-    public int evaluate(Map<String, Set<String>> wordlists, ConllFile cf, boolean debug) throws Exception {
+    public int evaluate(Map<String, Set<String>> wordlists, ConllFile cf, boolean debug, boolean filter) throws Exception {
         GrewVisitor eval = new GrewVisitor(wordlists);
         boolean rtc = eval.visit(tree);
         if (debug) eval.out();
@@ -144,6 +144,9 @@ public class CheckGrewmatch {
                             System.out.println("  " + cw);
                         }
                     }
+                }
+                if (filter) {
+                    System.out.println(cs);
                 }
             }
         }
@@ -178,10 +181,11 @@ public class CheckGrewmatch {
      */
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            System.err.println("Usage: CheckGrewmatch [--debug] [--join] 'grewmatch'|@patternfile [conllu file]");
+            System.err.println("Usage: CheckGrewmatch [--debug] [--join] [--filter] 'grewmatch'|@patternfile [conllu file]");
         } else {
             boolean debug = false;
             boolean join = false; // if true merge all input files first
+            boolean filter = false; // if true, output all sentences with match the pattern
             int offset = 0;
             for (int i = 0; i<args.length; ++i) {
                 if (args[i].charAt(0) != '-') {
@@ -194,6 +198,9 @@ public class CheckGrewmatch {
                         break;
                     case "--join":
                         join = true;
+                        break;
+                    case "--filter":
+                        filter = true;
                         break;
                     default:
                         System.err.println("Invalid option " + args[i]);
@@ -215,7 +222,7 @@ public class CheckGrewmatch {
                     }
                 }
             } else {
-                CheckGrewmatch cg = new CheckGrewmatch(args[offset], true);
+                CheckGrewmatch cg = new CheckGrewmatch(args[offset], debug);
                 cgs.add(cg);
             }
             ConllSentence csent;
@@ -257,6 +264,7 @@ public class CheckGrewmatch {
             } else {
                 int matches = 0;
                 if (join) {
+                    // merge conllu files first and then search patterns
                     List<ConllFile> cfs = new ArrayList<>();
                     for (int i = offset+1; i < args.length; ++i) {
                         ConllFile cf = new ConllFile(new File(args[i]), null);
@@ -266,19 +274,19 @@ public class CheckGrewmatch {
                         System.out.println(cg.condition);
                         int r = 0;
                         for (ConllFile cf : cfs) {
-                            r += cg.evaluate(null, cf, debug);
+                            r += cg.evaluate(null, cf, debug, filter);
                             matches += r;
                         }
-                        System.out.println("solutions: " + r);
+                        if (!filter) System.out.println("solutions: " + r);
                     }
                 } else {
                     for (int i = offset+1; i < args.length; ++i) {
                         ConllFile cf = new ConllFile(new File(args[i]), null);
                         for (CheckGrewmatch cg : cgs) {
                             System.out.println(cg.condition);
-                            int r = cg.evaluate(null, cf, debug);
+                            int r = cg.evaluate(null, cf, debug, filter);
                             matches += r;
-                            System.out.println("solutions: " + r);
+                            if (!filter) System.out.println("solutions: " + r);
                         }
                     }
                 }
