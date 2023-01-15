@@ -542,9 +542,8 @@ function getServerInfo() {
 }
 
 
-//var more = true;
-var more = 1; // 1 normal search, 2: search and replace, 3: subtree search, 4: grewmatchsearch, 0: hide all
-var lastmore = 1; // to get back to the correct search mode after shortcuts have been displayed
+//var more = 1; // 1 normal search, 2: search and replace, 3: subtree search, 4: grewmatchsearch, 0: hide all
+//var lastmore = 1; // to get back to the correct search mode after shortcuts have been displayed
 
 
 function switchSearch(on) {
@@ -591,68 +590,68 @@ function switchGrewmatchReplace(on) {
 }
 
 // when adding new search mode, change also more = 4 in ToggleShortcutHelp()!
-function ToggleSearch() {
-    if (more == 1) {
-        // go to mode 2: show S&R
-        more = 2;
-        // is on
-        switchSearch(false);
-        switchSearchReplace(true);
-        switchSubtree(false);
-        switchGrewmatchReplace(false);
-
-        if (showshortcathelp) {
-            switchSCHelp(false);
-        }
-
-    } else if (more == 2) {
-        // go to mode ": show Subtrees
-        more = 3;
-        // in mode key '?' does not toogle shortcuts
-        switchSearch(false);
-        switchSearchReplace(false);
-        switchSubtree(true);
-        switchGrewmatchReplace(false);
-
-        if (showshortcathelp) {
-            switchSCHelp(false);
-        }
-    } else if (more == 3) {
-        // go to mode ": show grewmatchsearch
-        more = 4;
-        // in mode key '?' does not toogle shortcuts
-        switchSearch(false);
-        switchSearchReplace(false);
-        switchSubtree(false);
-        switchGrewmatchReplace(true);
-
-        if (showshortcathelp) {
-            switchSCHelp(false);
-        }
-    } else if (more == 4) {
-        // go to mode 0, hide everything
-        more = 0;
-        switchSearch(false);
-        switchSearchReplace(false);
-        switchSubtree(false);
-        switchGrewmatchReplace(false);
-
-    } else {
-        // in mode 0 go to standard mode
-        more = 1;
-        switchSearch(true);
-        switchSearchReplace(false);
-        switchSubtree(false);
-        switchGrewmatchReplace(false);
-
-        if (showshortcathelp) {
-            // switch off
-            //ToggleShortcutHelp();
-            switchSCHelp(false);
-        }
-    }
-    //console.log("SEARCH", more);
-}
+//function ToggleSearch() {
+//    if (more == 1) {
+//        // go to mode 2: show S&R
+//        more = 2;
+//        // is on
+//        switchSearch(false);
+//        switchSearchReplace(true);
+//        switchSubtree(false);
+//        switchGrewmatchReplace(false);
+//
+//        if (showshortcathelp) {
+//            switchSCHelp(false);
+//        }
+//
+//    } else if (more == 2) {
+//        // go to mode ": show Subtrees
+//        more = 3;
+//        // in mode key '?' does not toogle shortcuts
+//        switchSearch(false);
+//        switchSearchReplace(false);
+//        switchSubtree(true);
+//        switchGrewmatchReplace(false);
+//
+//        if (showshortcathelp) {
+//            switchSCHelp(false);
+//        }
+//    } else if (more == 3) {
+//        // go to mode ": show grewmatchsearch
+//        more = 4;
+//        // in mode key '?' does not toogle shortcuts
+//        switchSearch(false);
+//        switchSearchReplace(false);
+//        switchSubtree(false);
+//        switchGrewmatchReplace(true);
+//
+//        if (showshortcathelp) {
+//            switchSCHelp(false);
+//        }
+//    } else if (more == 4) {
+//        // go to mode 0, hide everything
+//        more = 0;
+//        switchSearch(false);
+//        switchSearchReplace(false);
+//        switchSubtree(false);
+//        switchGrewmatchReplace(false);
+//
+//    } else {
+//        // in mode 0 go to standard mode
+//        more = 1;
+//        switchSearch(true);
+//        switchSearchReplace(false);
+//        switchSubtree(false);
+//        switchGrewmatchReplace(false);
+//
+//        if (showshortcathelp) {
+//            // switch off
+//            //ToggleShortcutHelp();
+//            switchSCHelp(false);
+//        }
+//    }
+//    //console.log("SEARCH", more);
+//}
 
 var showshortcathelp = false;
 
@@ -664,8 +663,8 @@ function switchSCHelp(on) {
         showshortcathelp = true;
     } else {
         $("#shortcuthelp").hide();
-        if (!more)
-            $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
+       // if (!more)
+        //    $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
         showshortcathelp = false;
     }
 }
@@ -675,17 +674,14 @@ function ToggleShortcutHelp() {
     if (showshortcathelp) {
         // hide short cut help
         switchSCHelp(false);
-        more = lastmore - 1; // on mode back
-        if (more < 0)
-            more = 4;
-        ToggleSearch();
-
+        $("#searchmode").click();
     } else {
-        // show short cut help
+        // show short cut help (and hide Search)
         switchSCHelp(true);
-        lastmore = more; // show search again when shortcut help is switched off
-        more = 4;
-        ToggleSearch();
+        switchSearch(false);
+        switchSearchReplace(false);
+        switchSubtree(false);
+        switchGrewmatchReplace(false);
     }
 }
 
@@ -2194,6 +2190,62 @@ $(document).ready(function () {
 
     });
 
+    $("#searchmode").click(function () {
+        if (this.id === "searchmode") {
+            console.log("zzz", $(this).val());
+            if ($(this).val() === "complex") {
+                switchSearch(false);
+                switchSearchReplace(true);
+                switchSubtree(false);
+                switchGrewmatchReplace(false);
+                $('body').css("margin-top", "200px"); // header is smaller, decrease body margin
+                if (showshortcathelp) {
+                    switchSCHelp(false);
+                }
+            }
+            else if ($(this).val() === "subtrees") {
+                // in mode key '?' does not toogle shortcuts
+                switchSearch(false);
+                switchSearchReplace(false);
+                switchSubtree(true);
+                switchGrewmatchReplace(false);
+                if (showshortcathelp) {
+                    switchSCHelp(false);
+                }
+            } 
+            else if ($(this).val() === "grew") {
+                // in mode key '?' does not toogle shortcuts
+                switchSearch(false);
+                switchSearchReplace(false);
+                switchSubtree(false);
+                switchGrewmatchReplace(true);
+                $('body').css("margin-top", "160px"); // header is smaller, decrease body margin
+                if (showshortcathelp) {
+                    switchSCHelp(false);
+                }
+            }
+            else if ($(this).val() === "simple") {
+                switchSearch(true);
+                switchSearchReplace(false);
+                switchSubtree(false);
+                switchGrewmatchReplace(false);
+                $('body').css("margin-top", "260px"); // header is smaller, decrease body margin
+                if (showshortcathelp) {
+                    switchSCHelp(false);
+                }
+            }
+            else {
+                // hide search panels
+                switchSearch(false);
+                switchSearchReplace(false);
+                switchSubtree(false);
+                switchGrewmatchReplace(false);
+                $('body').css("margin-top", "120px"); // header is smaller, decrease body margin
+            }
+        }
+
+    });
+
     $("#flat3").click(function () {
         if (this.id === "flat3") {
             //console.log("zzz", $(this).val());
@@ -2223,45 +2275,6 @@ $(document).ready(function () {
     });
 
     $(".mycheck").click(function () {
-        //console.log("clicked", this.id);
-//        if (this.id === "flat2") {
-//            if (!flatgraph) {
-//                $(this).addClass('active');
-//                $("#bie").show();
-//                $("#edit_ed").show();
-//            } else {
-//                $(this).removeClass('active');
-//                //$("#flat2").text("show tree" + flatgraph);
-//                $("#bie").hide();
-//                $("#edit_ed").hide();
-//                editing_enhanced = false;
-//                $("#edit_ed").removeClass('active');
-//            }
-//            flatgraph = !flatgraph;
-//            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
-//            sendmodifs(datadico);
-//        } else
-//        if (this.id === "flat3") {
-//            //console.log("zzz", $(this).val());
-//
-//            if ($(this).val() === "tree") {
-//                //$(this).addClass('active');
-//                $("#bie").show();
-//                $("#edit_ed").show();
-//                flatgraph = false;
-//            } else {
-//                //$(this).removeClass('active');
-//                //$("#flat2").text("show tree" + flatgraph);
-//                flatgraph = true;
-//                $("#bie").hide();
-//                $("#edit_ed").hide();
-//                editing_enhanced = false;
-//                $("#edit_ed").removeClass('active');
-//            }
-//            //flatgraph = !flatgraph;
-//            var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
-//            sendmodifs(datadico);
-//        } else
         if (this.id === "feat2") {
             if (!showfeats) {
                 $(this).addClass('active');

@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.20.0
+* added a search fonction which implements (partially) grew match search patterns
+* search menu acces changed to combo box
+* new tests
+
 ## Version 2.19.5
 * corrected Locale issue in tests
 

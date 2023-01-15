@@ -80,7 +80,7 @@ public class TestGrewmatch {
     private void applySearch(String rule, String filename) throws IOException, ConllException {
         applySearch(rule, filename, cf);
     }
-    
+
     private void applySearch(String rule, String filename, ConllFile conllf) throws IOException, ConllException {
         StringBuilder results = new StringBuilder();
         try {
@@ -275,7 +275,20 @@ public class TestGrewmatch {
     public void test28() throws IOException, ConllException {
         name("search 28");
         applySearch("global { is_not_tree }", "search28.conllu", cf2);
-    }    
+    }
+
+    @Test
+    public void test28a() throws IOException, ConllException {
+        name("search 28a");
+        applySearch("global { is_not_tree } pattern { N [upos=NOUN]}", "search28.conllu", cf2);
+    }
+
+    @Test
+    public void test28b() throws IOException, ConllException {
+        name("search 28b");
+        applySearch("global { is_not_tree } pattern { N [upos=VERB]}", "search28.conllu", cf2);
+    }
+
 
     @Test
     public void test29() throws IOException, ConllException {
@@ -287,21 +300,27 @@ public class TestGrewmatch {
     public void test30() throws IOException, ConllException {
         name("search 30");
         applySearch("global { is_not_projective }", "search30.conllu", cf2);
-    }    
-    
+    }
+
+    @Test
+    public void test30a() throws IOException, ConllException {
+        name("search 30a");
+        applySearch("global { is_not_projective } pattern { N [upos=NOUN]}", "search30a.conllu", cf2);
+    }
+
     @Test
     public void test31() throws IOException, ConllException {
         name("search 31");
         applySearch("pattern { V -[obj|subj]-> N}", "search31.conllu", cf2);
     }
- 
+
     @Test
     public void test32() throws IOException, ConllException {
         name("search 32");
         applySearch("pattern { V -[^obj|subj]-> N}", "search32.conllu", cf2);
     }
-    
-    
+
+
     @Test
     public void testerror1() throws IOException, ConllException {
         name("error 1");

@@ -122,8 +122,14 @@
                         <button class ="editbuttons mybutton editmode" title="save file before min edits are reached (option --saveAfter)" id="save">save changes</button>
                         <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
 
-                        <button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();" title="hide/show search fields">toggle search modes</button>
-                        <!-- <button class="mybutton" id="act_subtree" style="width:130" onmousedown="ToggleSubtree();" title="hide/show subtree search">show subtree search</button> -->
+                        <!--button class="mybutton" id="act_search" style="width:130" onmousedown="ToggleSearch();" title="hide/show search fields">toggle search modes</button-->
+                        <span class="dewisl dewis">
+                        <select id="searchmode">
+                            <option value="simple" selected>simple search</option>
+                            <option value="complex">search &amp; replace</option>
+                            <option value="grew">grew match</option>
+                            <option value="hide">hide search</option>
+                        </select>
                     </td>
                 </tr>
 
@@ -628,7 +634,7 @@
                        <h2>About</h2>
                        ConlluEditor v<span id="ce_version"></span>, <a href="https://github.com/Orange-OpenSource/conllueditor">https://github.com/Orange-OpenSource/conllueditor</a> <br>
                        Author: Johannes Heinecke.
-                       Copyright © 2018-2022 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
+                       Copyright © 2018-2023 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
                        <p>
                            Powered by <a target="_blank" href="https://jquery.com/">jquery</a>,
                            <a target="_blank" href="https://getbootstrap.com">bootstrap</a> and

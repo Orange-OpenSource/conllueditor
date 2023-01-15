@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 2nd December 2022
+ @version 2.20.0 as of 15th January 2023
  */
 package com.orange.labs.conllparser;
 
@@ -85,27 +85,31 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     // TODO put into CheckGrewmatch ?
     // TODO optimize
     public List<List<ConllWord>> match(ConllSentence csent) throws ConllException {
-        final boolean debug = false;
+        final boolean debug = true;
 
-        // TODO can global {} co-occur with pattern ????
+        List<List<ConllWord>> final_node_combinations = new ArrayList<>();
         if (!globals.isEmpty()) {
             for (String gl : globals) {
                 if ("is_not_projective".equals(gl)) {
+                    // sentence must not be projective
                     List<ConllWord> unproj = new ArrayList<>();
                     boolean rtc = csent.isProjective(unproj);
                     if (!rtc) {
-                        List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+
                         final_node_combinations.add(unproj);
-                        return final_node_combinations;
+                        //return final_node_combinations;
+                    } else {
+                        return null;
                     }
                 } else if ("is_projective".equals(gl)) {
                     boolean rtc = csent.isProjective(null);
                     if (rtc) {
-                        List<List<ConllWord>> final_node_combinations = new ArrayList<>();
                         List<ConllWord> proj = new ArrayList<>();
                         proj.addAll(csent.getWords());
                         final_node_combinations.add(proj);
-                        return final_node_combinations;
+                        //return final_node_combinations;
+                    } else {
+                        return null;
                     }
                 } else {
                     List<ConllWord> roots = new ArrayList<>();
@@ -116,15 +120,17 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 
                     if ("is_not_tree".equals(gl)) {
                         if (roots.size() > 1) {
-                            List<List<ConllWord>> final_node_combinations = new ArrayList<>();
                             final_node_combinations.add(roots);
-                            return final_node_combinations;
+                            //return final_node_combinations;
+                        } else {
+                            return null;
                         }
                     } else if ("is_tree".equals(gl)) {
                         if (csent.getHeads().size() == 1) {
-                            List<List<ConllWord>> final_node_combinations = new ArrayList<>();
                             final_node_combinations.add(roots);
-                            return final_node_combinations;
+                            //return final_node_combinations;
+                        } else {
+                            return null; //final_node_combinations;
                         }
                     }
                 }
@@ -139,7 +145,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         List<ConllWord>allwords = csent.getAllWords();
         ConllWord root = new ConllWord("__0__");
         root.setId(0);
-        
+
         allwords.add(root);
         for (ConllWord cw : allwords) {
             List<Node> rtc = match(cw);
@@ -189,7 +195,8 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
             node_combinations.add(lcw);
         }
         node_combinations = cartesianProduct(node_combinations);
-        List<List<ConllWord>> final_node_combinations = new ArrayList<>();
+
+        // /*List<List<ConllWord>> */final_node_combinations = new ArrayList<>();
         // List<List<Node>> final_nodes = new ArrayList<>();
         int num_nodes = matchednodes.size();
         //System.out.println("dsd" + num_nodes);
@@ -675,7 +682,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
     public Boolean visitPatternlist(GrewmatchParser.PatternlistContext ctx) {
         boolean value = true;
         for (GrewmatchParser.RheolContext rc : ctx.rheol()) {
-            //value = value && 
+            //value = value &&
             visit(rc);
         }
 
@@ -688,7 +695,7 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         without = true;
         localrelations = new TreeMap<>();
         for (GrewmatchParser.RheolContext rc : ctx.rheol()) {
-            //value = value && 
+            //value = value &&
             visit(rc);
         }
 

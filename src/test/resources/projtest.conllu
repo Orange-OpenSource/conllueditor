@@ -1,3 +1,4 @@
+# sent_id = projective_01
 # text = JetBlue canceled our flight which was already late
 1	JetBlue	JetBlue	PROPN	_	_	2	nsubj	_	_
 2	canceled	cancel	VERB	_	_	0	root	_	_
@@ -8,6 +9,7 @@
 7	already	already	ADV	_	_	8	advmod	_	_
 8	late	late	ADJ	_	_	4	acl:relcl	_	_
 
+# sent_id = non_projective_01
 # text = JetBlue canceled our flight this morning which was already late
 1	JetBlue	JetBlue	PROPN	_	_	2	nsubj	_	_
 2	canceled	cancel	VERB	_	_	0	root	_	_

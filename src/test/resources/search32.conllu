@@ -1,4 +1,4 @@
-# sent_id = null
+# sent_id = projective_01
 # text = JetBlue canceled our flight which was already late 
 FOUND 7
 FINAL 1
@@ -22,7 +22,7 @@ FINAL 6
 FINAL 7
 4	flight	flight	NOUN	_	_	2	obj	_	_
 8	late	late	ADJ	_	_	4	acl:relcl	_	_
-# sent_id = null
+# sent_id = non_projective_01
 # text = JetBlue canceled our flight this morning which was already late 
 FOUND 9
 FINAL 1
