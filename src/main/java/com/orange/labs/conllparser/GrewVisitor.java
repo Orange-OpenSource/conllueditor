@@ -664,7 +664,13 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
 
     @Override
     public Boolean visitFinal(GrewmatchParser.FinalContext ctx) {
-        boolean value = visit(ctx.pattern());
+        boolean value = true;
+        //boolean value = visit(ctx.pattern());
+        if (ctx.pattern() != null) {
+            for (GrewmatchParser.PatternContext cc : ctx.pattern()) {
+                value = value && visit(cc);
+            }
+        }
         if (ctx.without() != null) {
             for (GrewmatchParser.WithoutContext cc : ctx.without()) {
                 value = value && visit(cc);

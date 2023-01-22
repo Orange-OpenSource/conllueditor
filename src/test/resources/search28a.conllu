@@ -1,0 +1,10 @@
+# sent_id = fr-ud-dev_00001_modified
+# text = Aviator, un film sur la vie de Howard Hughes. 
+FOUND 3
+FINAL 1
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+FINAL 2
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	0	root	_	_
+FINAL 3
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_

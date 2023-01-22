@@ -248,6 +248,12 @@ public class TestGrewmatch {
     }
 
     @Test
+    public void test23b() throws IOException, ConllException {
+        name("search 23b");
+        applySearch("without { V -[nsubj]-> S} pattern { V [upos=VERB] } without { V -[obj]-> O }", "search23.conllu");
+    }
+
+    @Test
     public void test24() throws IOException, ConllException {
         name("search 24");
         applySearch("pattern { N -[nsubj]-> M; N.Number = M.Number}", "search24.conllu");
@@ -280,15 +286,14 @@ public class TestGrewmatch {
     @Test
     public void test28a() throws IOException, ConllException {
         name("search 28a");
-        applySearch("global { is_not_tree } pattern { N [upos=NOUN]}", "search28.conllu", cf2);
+        applySearch("global { is_not_tree } pattern { N [upos=NOUN]}", "search28a.conllu", cf2);
     }
 
     @Test
     public void test28b() throws IOException, ConllException {
         name("search 28b");
-        applySearch("global { is_not_tree } pattern { N [upos=VERB]}", "search28.conllu", cf2);
+        applySearch("global { is_not_tree } pattern { N [upos=VERB]}", "search28b.conllu", cf2);
     }
-
 
     @Test
     public void test29() throws IOException, ConllException {
@@ -306,6 +311,12 @@ public class TestGrewmatch {
     public void test30a() throws IOException, ConllException {
         name("search 30a");
         applySearch("global { is_not_projective } pattern { N [upos=NOUN]}", "search30a.conllu", cf2);
+    }
+
+    @Test
+    public void test30b() throws IOException, ConllException {
+        name("search 30b");
+        applySearch("pattern { N [upos=NOUN]} global { is_not_projective }", "search30a.conllu", cf2);
     }
 
     @Test

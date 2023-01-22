@@ -39,7 +39,8 @@ are permitted provided that the following conditions are met:
 grammar Grewmatch;
 
 expression
-	: pattern without* globals* EOF # final
+//	: pattern without* globals* EOF # final
+	: (pattern | without | globals)+ EOF # final
 	| globals # globalrule
 	;
 
