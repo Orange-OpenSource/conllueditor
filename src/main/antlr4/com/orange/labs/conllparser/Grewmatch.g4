@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 10th December 2022
+ @version 2.20.0 as of 22nd January 2023
  */
 
 
@@ -39,9 +39,8 @@ are permitted provided that the following conditions are met:
 grammar Grewmatch;
 
 expression
-//	: pattern without* globals* EOF # final
 	: (pattern | without | globals)+ EOF # final
-	| globals # globalrule
+//	| globals # globalrule
 	;
 
 globals 

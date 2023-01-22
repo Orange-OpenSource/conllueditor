@@ -917,11 +917,11 @@ public class GrewVisitor extends GrewmatchBaseVisitor<Boolean> {
         return true;
     }
 
-    @Override
-    public Boolean visitGlobalrule(GrewmatchParser.GlobalruleContext ctx) {
-        boolean value = visit(ctx.globals());
-        return value;
-    }
+//    @Override
+//    public Boolean visitGlobalrule(GrewmatchParser.GlobalruleContext ctx) {
+//        boolean value = visit(ctx.globals());
+//        return value;
+//    }
 
     @Override
     public Boolean visitGloballist(GrewmatchParser.GloballistContext ctx) {
