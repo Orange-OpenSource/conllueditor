@@ -1580,6 +1580,9 @@ var editing_enhanced = false;
 var translit_words = [];
 var missingtranslits = false;
 
+// concatenated forms (in a correct file this equals the contents of the "# text" field
+var concatenatedforms = "";
+
 // position of highlighted things (search result)
 var highlightX = 0;
 var highlightY = 0;
@@ -1667,6 +1670,7 @@ function formatPhrase(item) {
 
         // metadata edit
         $("#csent_id").val("");
+        $("#ctext").val("");
         $("#cnewdoc").val("");
         $("#cnewpar").val("");
         $("#ctranslit").val("");
@@ -1677,8 +1681,12 @@ function formatPhrase(item) {
             $("#cnewdoc").val(item.newdoc);
         if (item.newpar)
             $("#cnewpar").val(item.newpar);
+        if (item.text)
+            $("#ctext").val(item.text);
         if (item.translit)
             $("#ctranslit").val(item.translit);
+
+        concatenatedforms = item.sentence;
 
         if (item.translit_words) {
             translit_words = item.translit_words;
@@ -2022,6 +2030,7 @@ $(document).ready(function () {
             "sent_id": $("#csent_id").val(),
             "translit": $("#ctranslit").val(),
             "translations": $("#ctranslations").val(),
+            "text": $("#ctext").val(),
         }
         sendmodifs({"cmd": "mod editmetadata " + JSON.stringify(object)});
         $("#metadataEdit").modal("hide");
@@ -2033,6 +2042,12 @@ $(document).ready(function () {
 
     });
 
+    $("#inittext").click(function () {
+        // create # text from forms
+        //console.log("IIII ", translit_words.join(" "));
+        $("#ctext").val(concatenatedforms);
+
+    });
     /* delete clicked MWT form */
     $('#editMWtoken').click(function () {
         misc = $("#currentMWTmisc").val(); //.replace(/\n+/, ",");

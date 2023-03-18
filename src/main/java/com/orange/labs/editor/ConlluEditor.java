@@ -792,6 +792,7 @@ public class ConlluEditor {
                                      { "newdoc":"document id",
                                        "newpar":"paragraph id",
                                        "sent_id":"sentence id",
+                                       "text": "sentence", // for "# text"
                                        "translit":"transliteration",
                                        "translations":"de: German translation\nen: English translation ..."
                                       }
@@ -2008,6 +2009,12 @@ public class ConlluEditor {
                     String newdoc = jo.get("newpar").getAsString().trim();
                     //if (!newdoc.isEmpty()) {
                         csent.setNewpar(newdoc);
+                    //}
+                }
+                if (jo.has("text")) {
+                    String text = jo.get("text").getAsString().trim();
+                    //if (!newdoc.isEmpty()) {
+                        csent.setText(text);
                     //}
                 }
                 if (jo.has("translit")) {

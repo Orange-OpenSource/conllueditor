@@ -1852,7 +1852,20 @@ public class ConllSentence {
     public String getText() {
         return text;
     }
-    
+
+    /** change the text of the sentence, return true if really changed */
+    public boolean setText(String t) {
+        if (t == null || t.isEmpty()) return false;
+
+        boolean changed = false;
+        if (!t.equals(text)) {
+            changed = true;
+            text = t;
+        }
+
+        return changed;
+    }
+
     /** gets sentence by concatenating forms */
     public String getSentence() {
         return getSentence(null);
@@ -2368,10 +2381,10 @@ public class ConllSentence {
 
 /** check whether current sentence is projective. Implies that makeTree() has been called.
  * for trees with more than one root this may return an invalid value
- * @return 
+ * @return
  */
     public boolean isProjective(List<ConllWord> unproj) {
-        
+
         for (ConllWord cw : words) {
             //System.err.println("WWWWWW " + cw);
             if (cw.getHead() != 0 && cw.getHeadWord() != null) {

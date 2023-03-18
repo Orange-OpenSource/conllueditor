@@ -2,6 +2,7 @@
 
 ## Version 2.21.0
 * warning if the `# text = ...` does not correspond to the concatenated forms (respecting Space(s)After)
+* inputfield to edit value for `# text` or set from concatenated forms
 * tests updated
 * new tests
 
