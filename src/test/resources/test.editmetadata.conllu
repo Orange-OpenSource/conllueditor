@@ -1,7 +1,7 @@
 # newdoc id = test doc
 # newpar id = new paragraph
 # sent_id = changed-01
-# text = Aviator, un film sur la vie de Howard Hughes.
+# text = a changed text!
 # text_en = a translation
 # sentence 0
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No

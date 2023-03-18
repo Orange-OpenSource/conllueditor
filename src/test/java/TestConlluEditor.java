@@ -623,6 +623,7 @@ public class TestConlluEditor {
         ce.setCallgitcommit(false);
         ce.setBacksuffix("");
         ce.setSaveafter(1);
+
         File out = new File(folder, "test.sentsplit.conllu");
         ce.setOutfilename(out);
         //String rtc =
@@ -640,16 +641,19 @@ public class TestConlluEditor {
     public void test201EditMetaData() throws IOException {
         name("modify sentence metadata");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".201");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.editmetadata.conllu");
+        ce.setOutfilename(out);
         //String rtc =
-        ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en: a translation\"}", 0, "editinfo");
+        ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"text\": \"a changed text!\", \"translations\": \"en: a translation\"}", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.editmetadata.conllu");
-        URL res = this.getClass().getResource("test.conllu.201"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.201"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
@@ -992,35 +996,42 @@ public class TestConlluEditor {
     public void test38Undo() throws IOException {
         name("modifying UPOS and Lemma, followed by undo");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".3");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.mod.undo.conllu");
+        ce.setOutfilename(out);
+
         ce.process("mod lemma 1 Sammie", 13, "editinfo");
         ce.process("mod upos 2 VERBPAST", 13, "editinfo");
         ce.process("mod undo", 13, "editinfo");
 
         URL ref = this.getClass().getResource("test.mod.undo.conllu");
-        URL res = this.getClass().getResource("test.conllu.3");
-        Assert.assertEquals(String.format("mod undo output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.3");
+        Assert.assertEquals(String.format("mod undo output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test39AddED() throws IOException {
         name("adding/deleting enhanced dependency");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".4");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+        File out = new File(folder, "test.add_ed.conllu");
+        ce.setOutfilename(out);
+
         ce.process("mod ed add 7 6 ref", 7, "editinfo");
         ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
         ce.process("mod ed del 1 4", 11, "editinfo");
 
         URL ref = this.getClass().getResource("test.add_ed.conllu");
-        URL res = this.getClass().getResource("test.conllu.4");
+        //URL res = this.getClass().getResource("test.conllu.4");
 
-        Assert.assertEquals(String.format("mod ed incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        Assert.assertEquals(String.format("mod ed incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
@@ -1237,8 +1248,6 @@ public class TestConlluEditor {
         ce.setBacksuffix(".15");
 
         String msg = ce.process("mod emptydelete 5.2", 13, "editinfo");
-        //URL ref = this.getClass().getResource("test.deleteempty.conllu");
-        //URL res = this.getClass().getResource("test.conllu.15");
 
         String expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"Empty word noes not exist «mod emptydelete 5.2»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
@@ -1260,8 +1269,6 @@ public class TestConlluEditor {
         ce.setBacksuffix(".16");
 
         String msg = ce.process("mod delete 11", 9, "editinfo");
-        //URL ref = this.getClass().getResource("test.deleteempty.conllu");
-        //URL res = this.getClass().getResource("test.conllu.16");
 
         String expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID id «mod delete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
