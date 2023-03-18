@@ -303,7 +303,7 @@
 26	.	.	PUNCT	MAD	_	22	punct	22:punct	_
 
 # sent_id = gl_ctg-ud-dev.conllu 625
-# text = Dáselle nova redacción ao punto 2
+# text = Dáselle nova redacción a o punto 2
 # sentence 17
 # used to test adding MWT 1-3 and 6-7
 1-3	Dáselle	_	_	_	_	_	_	_	_

@@ -101,7 +101,7 @@
 52	.	.	PUNCT	_	_	23	punct	_	_
 
 # sent_id = fr-ud-train_00002
-# text = L'œuvre est située dans la galerie MWT2 batailles, dans le château de Versailles.
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
 # sentence 4
 1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
 2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_
@@ -123,7 +123,7 @@
 17	.	.	PUNCT	_	_	4	punct	_	_
 
 # sent_id = fr-ud-train_00024
-# text = Les experts sont unanimes pour dater ce manuscrit MWT2 VIe siècle.
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle.
 # sentence 5
 1	Les	le	DET	_	Definite=Def|Gender=Masc|Number=Plur|PronType=Art	2	det	_	_
 2	experts	expert	NOUN	_	Gender=Masc|Number=Plur	3	nsubj	_	_
@@ -141,7 +141,7 @@
 13	.	.	PUNCT	_	_	3	punct	_	_
 
 # sent_id = conlueditor-test-6
-# text = ils ont visité le Musée MWT2 Louvre.
+# text = ils ont visité le Musée du Louvre.
 # sentence 6
 1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
 2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_
@@ -178,7 +178,7 @@
 6	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
 # sent_id = conlueditor-test-9
-# text = Il aime bien le Miroir MWT2 Alouettes.
+# text = Il aime bien le Miroir aux Alouettes.
 # sentence 9
 1	Il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
 2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
@@ -192,7 +192,7 @@
 9	.	.	PUNCT	PUNCT	_	2	punct	_	_
 
 # sent_id = conlueditor-test-10-only-tokens
-# text = Une exposition MWT2 musée MWT2 Louvre et un voyage MWT2 village catalan de Gosol
+# text = Une exposition au musée du Louvre et un voyage au village catalan de Gosol
 # sentence 10
 1	Une	_	_	_	_	_	_	_	_
 2	exposition	_	_	_	_	_	_	_	_
@@ -257,7 +257,7 @@
 6	beer	beer	NOUN	_	_	5	orphan	5.1:obj	_
 
 # sent_id = unannotated
-# text = Une exposition MWT2 musée MWT2 Louvre
+# text = Une exposition au musée du Louvre
 # sentence 15
 1	Une	_	_	_	_	_	_	_	_
 2	exposition	_	_	_	_	_	_	_	_

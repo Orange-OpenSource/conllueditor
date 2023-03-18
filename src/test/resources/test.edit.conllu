@@ -1,5 +1,5 @@
 # sent_id = fr-ud-dev_00001
-# text = Aviator, un film sur la vie de Form Hughes.
+# text = Aviator, un film sur la vie de Howard Hughes.
 # sentence 0
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
 2	,	,	PUNCT	_	_	1	punct	_	_
@@ -14,7 +14,7 @@
 11	.	.	PUNCT	_	_	1	punct	_	_
 
 # sent_id = fr-ud-dev_00002
-# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés .
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
 # sentence 1
 1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
 2	études	étude	NOUN	_	_	3	nsubj	_	_

@@ -1,7 +1,8 @@
 {
   "sentenceid": 2,
   "maxsentence": 19,
-  "sentence": "Mais comment faire dans un contexte structurellement raciste ? ",
+  "text": "Mais comment faire dans un contexte structurellement raciste ?",
+  "sentence": "Mais comment faire dans un contexte structurellement raciste ?",
   "length": 9,
   "sent_id": "fr-ud-dev_00003",
   "changes": 0,

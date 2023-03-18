@@ -9,19 +9,19 @@ Reading rule 5 Upos:NUM == Deprel:nummod
 Reading rule 6 Deprel:nummod == Upos:NUM
 
 Sentence ellipsis1
-Sam fixed lunch and Kim dinner 
+Sam fixed lunch and Kim dinner
   Applying rule 2: Deprel:nsubj and (Upos:NOUN or Upos:PROPN) and head(Upos:VERB) and head(Feat:VerbForm=Fin)  ==  head(Feat:Person:3)
    ERROR 1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
 
 Sentence sv-ud-train-767
-Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22. 
+Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.
   Applying rule 5: Upos:NUM  ==  Deprel:nummod
    ERROR 9	0:78	0:78	NUM	RG|NOM	Case=Nom|NumType=Card	3	obl	3:obl:för	SpaceAfter=No
    ERROR 14	2:57	2:57	NUM	RG|NOM	Case=Nom|NumType=Card	12	orphan	10.1:obl:för	Enhanced=obl
    ERROR 21	2:87	2:87	NUM	RG|NOM	Case=Nom|NumType=Card	19	orphan	15.1:obl:för	Enhanced=obl
 
 Sentence gl_ctg-ud-dev.conllu 625
-Dáselle nova redacción a o punto 2 
+Dáselle nova redacción a o punto 2
   Applying rule 5: Upos:NUM  ==  Deprel:nummod
    ERROR 9	2	2	NUM	Z	_	8	nmod	_	Treeler=sn
 

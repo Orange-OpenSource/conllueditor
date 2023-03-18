@@ -1,7 +1,8 @@
 {
   "sentenceid": 4,
   "maxsentence": 19,
-  "sentence": "L\u0027œuvre est située dans la galerie des batailles, dans le château de Versailles. ",
+  "text": "L\u0027œuvre est située dans la galerie des batailles, dans le château de Versailles.",
+  "sentence": "L\u0027œuvre est située dans la galerie des batailles, dans le château de Versailles.",
   "length": 17,
   "sent_id": "fr-ud-train_00002",
   "changes": 0,

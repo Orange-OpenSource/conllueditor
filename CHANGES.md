@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.21.0
+* warning if the `# text = ...` does not correspond to the concatenated forms (respecting Space(s)After)
+* tests updated
+* new tests
+
 ## Version 2.20.0
 * added a search fonction which implements (partially) grew match search patterns
 * search menu acces changed to combo box
@@ -109,7 +114,7 @@
 * adding a complex search mode (syntax as in mass editing) and search-and-replace
 
 ## Version 2.12.4
-* mass-editing: 
+* mass-editing:
    * allow brackets in feature names like `Number[psor]=...`
    * delete features if value is empty
 

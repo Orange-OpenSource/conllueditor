@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2022, Orange S.A.
+ Copyright (c) 2018-2023, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 13th December 2022
+ @version 2.21.0 as of 18th March 2023
  */
 
 
@@ -316,7 +316,7 @@ function getServerInfo() {
                 headerrow.append(hdcell);
                 hdcell.innerHTML = p;
             }
-            
+
             var tbody = document.createElement("tbody");
             drustbl.append(tbody);
 
@@ -1014,8 +1014,8 @@ $(window).on('keypress', function (evt) {
         // Make a new timeout set to go off in 1000ms (1 second)
         timeout = setTimeout(function () {
             // process sequence
-            //    console.log('Input Value:', shortcutseq);  
-        
+            //    console.log('Input Value:', shortcutseq);
+
             var newval = shortcutsUPOS[shortcutseq];
             if (newval != undefined) {
                 //console.log("UPOS", newval);
@@ -1061,7 +1061,7 @@ $(window).on('keypress', function (evt) {
                     // change only XPOS
                     sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
                 }
-                
+
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];
@@ -1102,7 +1102,7 @@ $(window).on('keypress', function (evt) {
 // OLD
 // process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
 //$(window).on('keypressQQQ', function (evt) {
-//    return; 
+//    return;
 //    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
 //    //console.log("kk", evt.which, unprocessedkeystrokes);
 //
@@ -1699,7 +1699,10 @@ function formatPhrase(item) {
             $("#cursentid").append(" (sent_id: ").append(item.sent_id).append(") ");
         }
         $("#total").append(item.maxsentence);
-        $("#titre").append(item.sentence);
+        if (item.text)
+            $("#titre").append(item.text);
+        else
+            $("#titre").append(item.sentence);
 
 
         if (item.errors != undefined) {
@@ -1715,7 +1718,19 @@ function formatPhrase(item) {
                 $("#errors").append("|" + item.errors.invalidDeprels + " invalid Deprels");
             if (item.errors.invalidFeatures)
                 $("#errors").append("|" + item.errors.invalidFeatures + " invalid Features");
+            if (item.errors.incoherenttext) {
+                var text = item.errors.incoherenttext.text;
+                var concat = item.errors.incoherenttext.forms;
+                var pos = item.errors.incoherenttext.differs;
+                var text_line = text.substring(0, pos)
+                                + '<span class="errorhl">' + text.substring(pos, pos+1)
+                                + "</span>" + text.substring(pos+1);
+                var forms_line = concat.substring(0, pos)
+                                + '<span class="errorhl">' + concat.substring(pos, pos+1)
+                                + "</span>" + concat.substring(pos+1);
 
+                $("#errors").append("|incoherent \"# text\" and forms: «" + text_line + "» ≠ «" + forms_line) + "»";
+            }
             $("#errors").append("|");
         }
         $("#sentencetext").show();
@@ -2212,7 +2227,7 @@ $(document).ready(function () {
                 if (showshortcathelp) {
                     switchSCHelp(false);
                 }
-            } 
+            }
             else if ($(this).val() === "grew") {
                 // in mode key '?' does not toogle shortcuts
                 switchSearch(false);

@@ -1,15 +1,15 @@
 # sent_id = fr-ud-dev_00004
-# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques.
 FOUND 1
 FINAL 1
 22	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	23	cop	_	_
 # sent_id = fr-ud-train_00002
-# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles. 
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
 FOUND 1
 FINAL 1
 3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
 # sent_id = fr-ud-train_00024
-# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle.
 FOUND 1
 FINAL 1
 3	sont	être	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_

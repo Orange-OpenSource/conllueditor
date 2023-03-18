@@ -271,7 +271,7 @@
 80	Louvre	_	_	_	_	_	_	_	_
 
 # sent_id = sv-ud-train-767
-# text = Om du köper en halv halv liter mjölk för 0:78, en limpaför 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.
+# text = Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.
 # sentence 16
 1	Om	om	SCONJ	SN	_	3	mark	3:mark	_
 2	du	du	PRON	PN|UTR|SIN|DEF|SUB	Case=Nom|Definite=Def|Gender=Com|Number=Sing|PronType=Prs	3	nsubj	3:nsubj|11.1:nsubj|15.1:nsubj	_

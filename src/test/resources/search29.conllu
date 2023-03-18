@@ -1,5 +1,5 @@
 # sent_id = projective_01
-# text = JetBlue canceled our flight which was already late 
+# text = JetBlue canceled our flight which was already late
 FOUND 1
 FINAL 1
 1	JetBlue	JetBlue	PROPN	_	_	2	nsubj	_	_

@@ -1,5 +1,5 @@
 # sent_id = fr-ud-train_00002
-# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles. 
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
 FOUND 2
 FINAL 1
 3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_

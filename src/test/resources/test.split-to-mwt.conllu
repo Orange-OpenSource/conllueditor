@@ -1,5 +1,5 @@
 # sent_id = fr-ud-dev_00001
-# text = Aviator, un film surla vie de Howard Hughes.
+# text = Aviator, un film sur la vie de Howard Hughes.
 # sentence 0
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No
 2	,	,	PUNCT	_	_	1	punct	_	_

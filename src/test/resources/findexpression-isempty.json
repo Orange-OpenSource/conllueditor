@@ -1,7 +1,8 @@
 {
   "sentenceid": 18,
   "maxsentence": 19,
-  "sentence": "Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. ",
+  "text": "Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.",
+  "sentence": "Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.",
   "length": 13,
   "sent_id": "fi_tdt-ud-train.conllu b712.11",
   "changes": 0,

@@ -1,5 +1,5 @@
 # sent_id = fr-ud-dev_00004
-# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques. 
+# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques.
 FOUND 2
 FINAL 1
 10	milieu	milieu	NOUN	_	Gender=Masc|Number=Sing	23	obl	_	_

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.19.1 as of 4th November 2022
+ @version 2.21.0 as of 18th March 2023
  */
 
 import com.google.gson.Gson;
@@ -178,8 +178,12 @@ public class TestConlluEditor {
     public void test05Mod() throws IOException {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".21");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.edit.conllu");
+        ce.setOutfilename(out);
+
         ce.process("mod lemma 9 Lemma", 0, "editinfo");
         ce.process("mod form 9 Form", 0, "editinfo");
         ce.process("mod upos 9 X", 0, "editinfo");
@@ -194,11 +198,33 @@ public class TestConlluEditor {
         ce.process("mod misc 13", 1, "editinfo"); // delete all misc
 
         URL ref = this.getClass().getResource("test.edit.conllu");
-        URL res = this.getClass().getResource("test.conllu.21"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
+
+
+     @Test
+    public void test051Mod() throws IOException {
+        name("modifying form, to get incoherent text warning");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix(".51");
+        ce.setSaveafter(1);
+
+        String rtc = ce.process("mod form 9 Form", 0, "editinfo");
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "incoherent_text.json");
+
+        URL ref = this.getClass().getResource("incoherent_text.json");
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8, false);
+
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
 
     @Test
     public void test061InvalidHead() throws IOException {
@@ -380,6 +406,11 @@ public class TestConlluEditor {
         name("modifying lemma, deprel, and split/join");
         ce.setCallgitcommit(false);
         ce.setSaveafter(1);
+        ce.setBacksuffix("");
+
+        File out = new File(folder, "test.mod.conllu");
+        ce.setOutfilename(out);
+
         //String rtc =
         ce.process("mod lemma 3 Oasis", 3, "editinfo");
         /*rtc = */ce.process("mod 1 2 detfalse", 3, "editinfo");
@@ -388,68 +419,83 @@ public class TestConlluEditor {
 
 
         URL ref = this.getClass().getResource("test.mod.conllu");
-        URL res = this.getClass().getResource("test.conllu.2"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.2"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test12EditJoinSplitBeforeMWT() throws IOException {
         name("split/join before a MWT");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".5");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.split-mwt.conllu");
+        ce.setOutfilename(out);
+
         ce.process("mod split 2 3", 4, "editinfo");
         ce.process("mod join 5", 4, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-mwt.conllu");
-        URL res = this.getClass().getResource("test.conllu.5"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.5"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test13EditJoinSplitBeforeEmptyNode() throws IOException {
         name("split/join before a empty word");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".6");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.split-ew.conllu");
+        ce.setOutfilename(out);
         //String rtc =
         ce.process("mod split 5 ", 16, "editinfo");
         ce.process("mod join 13", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-ew.conllu");
-        URL res = this.getClass().getResource("test.conllu.6"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.6"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test14EditJoinSplitWithEnhDeps() throws IOException {
         name("split/join before a enhanced deps");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".7");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.split-ed.conllu");
+        ce.setOutfilename(out);
+
         ce.process("mod split 4 ", 13, "editinfo");
         ce.process("mod split 3", 13, "editinfo");
         ce.process("mod join 4", 13, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-ed.conllu");
-        URL res = this.getClass().getResource("test.conllu.7"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.7"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test15CreateMWT() throws IOException {
         name("create two MWT with three/two words and rename contracted form");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".8");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.create-mwt.conllu");
+        ce.setOutfilename(out);
+
         ce.process("mod compose 1 3", 17, "editinfo");
         ce.process("mod editmwt 1 3 Dáselle", 17, "editinfo");
 
@@ -457,75 +503,91 @@ public class TestConlluEditor {
         ce.process("mod editmwt 6 7 ao Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
-        URL res = this.getClass().getResource("test.conllu.8"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.8"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test16JoinOverlapMWTstart() throws IOException {
         name("join overlapping be first word of a MWT");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".9");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.join-mwt.conllu");
+        ce.setOutfilename(out);
+
         //String rtc =
         ce.process("mod join 5", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt.conllu");
-        URL res = this.getClass().getResource("test.conllu.9"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.9"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test17JoinOverlapMWTend() throws IOException {
         name("join overlapping be last word of a MWT");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".10");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.join-mwt-2.conllu");
+        ce.setOutfilename(out);
+
         //String rtc =
         ce.process("mod join 6", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt-2.conllu");
-        URL res = this.getClass().getResource("test.conllu.10"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.10"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test180MWTwithSpaceAfter() throws IOException {
         name("create MWT with SpaceAfter=No");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".18");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.mwt-spaceafter.conllu");
+        ce.setOutfilename(out);
+
         //String rtc =
         ce.process("mod compose 9 2", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.mwt-spaceafter.conllu");
-        URL res = this.getClass().getResource("test.conllu.18"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.18"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
    @Test
     public void test181MWTfromWord() throws IOException {
         name("create MWT from Word");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".181");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+
+        File out = new File(folder, "test.split-to-mwt.conllu");
+        ce.setOutfilename(out);
+
         //String rtc =
         ce.process("mod misc 5 SpaceAfter=No", 0, "editinfo");
         ce.process("mod tomwt 5 su uu ur", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-to-mwt.conllu");
-        URL res = this.getClass().getResource("test.conllu.181"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.181"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
 
@@ -559,16 +621,18 @@ public class TestConlluEditor {
     public void test19SentSplit() throws IOException {
         name("split sentences (with enhanced dependencies and empty words");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".17");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+        File out = new File(folder, "test.sentsplit.conllu");
+        ce.setOutfilename(out);
         //String rtc =
         ce.process("mod sentsplit 11", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.sentsplit.conllu");
-        URL res = this.getClass().getResource("test.conllu.17"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllu.17"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
 
@@ -1094,65 +1158,76 @@ public class TestConlluEditor {
     public void test50deleteWords() throws IOException {
         name("delete words");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".11");
+        //ce.setBacksuffix(".11");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+        File out = new File(folder, "test.delete.conllu");
+        ce.setOutfilename(out);
         ce.process("mod delete 12", 16, "editinfo");
         ce.process("mod delete 9", 16, "editinfo");
         ce.process("mod delete 10", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.delete.conllu");
-        URL res = this.getClass().getResource("test.conllu.11");
+        //URL res = this.getClass().getResource("test.conllu.11");
 
-        Assert.assertEquals(String.format("delete words incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+
+        Assert.assertEquals(String.format("delete words incorrect\n ref: %s\n res: %s\n", ref.toString(), out /*res*/.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                //FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test51insertEmptyWords() throws IOException {
         name("insert empty word");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".12");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
+        File out = new File(folder, "test.insertempty.conllu");
+        ce.setOutfilename(out);
         ce.process("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
         ce.process("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
 
         ce.process("mod emptyinsert 3 premier lemma3 POS1 XPOS1", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.insertempty.conllu");
-        URL res = this.getClass().getResource("test.conllu.12");
+        //URL res = this.getClass().getResource("test.conllu.12");
 
-        Assert.assertEquals(String.format("insert empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        Assert.assertEquals(String.format("insert empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
 
 
         // delete empty word
-        ce.setBacksuffix(".13");
+        //ce.setBacksuffix(".13");
+        out = new File(folder, "test.insertempty+delete.conllu");
+        ce.setOutfilename(out);
         ce.process("mod emptydelete 4.1", 0, "editinfo");
         URL ref2 = this.getClass().getResource("test.insertempty+delete.conllu");
-        URL res2 = this.getClass().getResource("test.conllu.13");
+        //URL res2 = this.getClass().getResource("test.conllu.13");
 
-        Assert.assertEquals(String.format("delete empty words incorrect\n ref: %s\n res: %s\n", ref2.toString(), res2.toString()),
+        Assert.assertEquals(String.format("delete empty words incorrect\n ref: %s\n res: %s\n", ref2.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref2.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res2.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
     public void test52deleteEmptyWords() throws IOException {
         name("delete empty word");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".14");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
 
+        File out = new File(folder, "test.deleteempty.conllu");
+        ce.setOutfilename(out);
 
         ce.process("mod emptydelete 5.1", 13, "editinfo");
         URL ref = this.getClass().getResource("test.deleteempty.conllu");
-        URL res = this.getClass().getResource("test.conllu.14");
+        //URL res = this.getClass().getResource("test.conllu.14");
 
-        Assert.assertEquals(String.format("delete empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        Assert.assertEquals(String.format("delete empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test

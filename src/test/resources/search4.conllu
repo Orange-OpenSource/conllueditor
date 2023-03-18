@@ -1,17 +1,17 @@
 # sent_id = fr-ud-train_00024
-# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle. 
+# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle.
 FOUND 1
 FINAL 1
 6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
 8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
 # sent_id = conlueditor-test-12-eud-bad-ids
-# text = Sam persuaded Kim to fix dinner 
+# text = Sam persuaded Kim to fix dinner
 FOUND 1
 FINAL 1
 5	fix	fix	VERB	_	_	2	xcomp	_	_
 6	dinner	dinner	NOUN	_	_	5	obj	_	_
 # sent_id = fi_tdt-ud-train.conllu b712.11
-# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.
 FOUND 1
 FINAL 1
 8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_

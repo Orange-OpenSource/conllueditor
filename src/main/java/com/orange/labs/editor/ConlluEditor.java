@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 13th December 2022
+ @version 2.21.0 as of 18th March 2023
  */
 package com.orange.labs.editor;
 
@@ -99,6 +99,7 @@ public class ConlluEditor {
 
     ConllFile cfile;
     File filename;
+    File outfilename = null; // == filename, only in tests this has a different value
     //ConllSentence csent = null;
     //int currentSentenceId = 0;
     //ConllWord modWord = null; // last modified word
@@ -126,7 +127,7 @@ public class ConlluEditor {
     private String gitcommittime ="?";
     private boolean gitdirty = false;
     private String gitbranch ="?";
-    private String suffix = ".2"; // used to wrtie the edited file to avoid overwriting the original file
+    private String suffix = ".2"; // used to write the edited file to avoid overwriting the original file
 
     private int debug = 1;
 
@@ -423,6 +424,7 @@ public class ConlluEditor {
             cw.setArc_height(heights.get(id));
         }
         JsonObject solution = prepare(sentid);
+        solution.addProperty("text", csent.getText());
         solution.addProperty("sentence", csent.getSentence());
         solution.addProperty("length", (csent.getWords().size() + csent.numOfEmptyWords()));
 
@@ -549,6 +551,23 @@ public class ConlluEditor {
         if (ae.features > 0) {
             anyerrors = true;
             errors.addProperty("invalidFeatures", ae.features);
+        }
+        String sent = csent.getSentence();
+        if (!sent.equals(csent.getText())) {
+
+            int pos = -1;
+            for (int i = 0; i<sent.length(); ++i) {
+                if (sent.charAt(i) != csent.getText().charAt(i)) {
+                    pos = i;
+                    break;
+                }
+            }
+            anyerrors = true;
+            JsonObject tt = new JsonObject();
+            tt.addProperty("text", csent.getText());
+            tt.addProperty("forms", csent.getSentence());
+            tt.addProperty("differs", pos); // first differing character
+            errors.add("incoherenttext", tt);
         }
         if (anyerrors) {
             solution.add("errors", errors);
@@ -2249,6 +2268,10 @@ public class ConlluEditor {
         suffix = s;
     }
 
+    public void setOutfilename(File f) {
+        outfilename = f;
+    }
+
     /**
      * check whether the directory of the edited file is under git version
      * control, and if so whether the edited file is under git control, or not
@@ -2312,9 +2335,10 @@ public class ConlluEditor {
         if (!forcesave && (saveafter < 0 || changesSinceSave < saveafter)) {
             return null; // no need to save yet
         }
-        File dir = filename.getParentFile().toPath().normalize().toFile();
+        if (outfilename == null) outfilename = filename;
+        File dir = outfilename.getParentFile().toPath().normalize().toFile();
         if ((debug & 0x01) == 2) {
-            System.err.println("Saving file " + filename);
+            System.err.println("Saving file " + outfilename);
         }
 
         try {
@@ -2331,7 +2355,7 @@ public class ConlluEditor {
                 Path gitdirbase = gitdir.getAbsoluteFile().getParentFile().toPath().normalize();
                 //System.err.println("gitdirbase    " + gitdirbase);
                 //System.err.println("filename      " + filename.toPath().normalize());
-                Path filepathInGit = gitdirbase.relativize(filename.toPath().normalize());
+                Path filepathInGit = gitdirbase.relativize(outfilename.toPath().normalize());
                 //System.err.println("IGNORED " + status.getIgnoredNotInIndex());
                 //System.err.println("filenameInGit " + filepathInGit);
                 Set<String> untracked = status.getUntracked();
@@ -2341,7 +2365,7 @@ public class ConlluEditor {
 //
 //                }
                 if (!callgitcommit || untracked.contains(filepathInGit.toString())) {
-                    String backUpFilename = filename + suffix;
+                    String backUpFilename = outfilename + suffix;
                     //System.err.println("Write ddddd " );
                     BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(backUpFilename), StandardCharsets.UTF_8));
                     bw.write(cfile.toString());
@@ -2354,24 +2378,24 @@ public class ConlluEditor {
                     //System.err.format("Tag '%s': '%s' set.", tagname, tagmessage);
                     //return tagname;
                 } else {
-                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), StandardCharsets.UTF_8));
+                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outfilename), StandardCharsets.UTF_8));
                     bw.write(cfile.toString());
                     bw.close();
                     changesSinceSave = 0;
                     git.add().addFilepattern(filepathInGit.toString()).call();
                     if (modWord == null) {
-                        git.commit().setMessage(String.format("saving %s sentence: %d (%s)", filename, currentSentenceId + 1, editinfo)).call();
+                        git.commit().setMessage(String.format("saving %s sentence: %d (%s)", outfilename, currentSentenceId + 1, editinfo)).call();
                     } else {
                         //String sentid = "";
                         //if ()
-                        git.commit().setMessage(String.format("modification: %s sentence %d, word: %d (%s)", filename, currentSentenceId + 1, modWord.getId(), editinfo)).call();
+                        git.commit().setMessage(String.format("modification: %s sentence %d, word: %d (%s)", outfilename, currentSentenceId + 1, modWord.getId(), editinfo)).call();
                     }
                     System.err.printf("File '%s' committed\n", filepathInGit);
-                    return filename.toString();
+                    return outfilename.toString();
 
                 }
             } else {
-                String backUpFilename = filename + suffix;
+                String backUpFilename = outfilename + suffix;
                 //System.err.println("Write ddddd " );
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(backUpFilename), StandardCharsets.UTF_8));
                 bw.write(cfile.toString());
@@ -2541,7 +2565,7 @@ public class ConlluEditor {
             }
 
             String scto = line.getOptionValue(shortcuttimeout);
-            if (scto != null) { 
+            if (scto != null) {
                 if (Integer.parseInt(scto) > 0) {
                     ce.setShortcutTimeout(Integer.parseInt(scto));
                 } else {

@@ -1,0 +1,230 @@
+{
+  "sentenceid": 0,
+  "maxsentence": 19,
+  "text": "Aviator, un film sur la vie de Howard Hughes.",
+  "sentence": "Aviator, un film sur la vie de Form Hughes.",
+  "length": 11,
+  "sent_id": "fr-ud-dev_00001",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 1,
+      "id": 1,
+      "form": "Aviator",
+      "lemma": "Aviator",
+      "misc": [
+        {
+          "name": "SpaceAfter",
+          "val": "No"
+        }
+      ],
+      "xpos": "_",
+      "upos": "PROPN",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 2,
+          "archeight": 1,
+          "id": 2,
+          "form": ",",
+          "lemma": ",",
+          "xpos": "_",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 4,
+          "archeight": 2,
+          "id": 4,
+          "form": "film",
+          "lemma": "film",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "appos",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 3,
+              "archeight": 1,
+              "id": 3,
+              "form": "un",
+              "lemma": "un",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Ind"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "_",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
+              "archeight": 3,
+              "id": 7,
+              "form": "vie",
+              "lemma": "vie",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "_",
+              "upos": "NOUN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 5,
+                  "archeight": 2,
+                  "id": 5,
+                  "form": "sur",
+                  "lemma": "sur",
+                  "xpos": "_",
+                  "upos": "ADP",
+                  "deprel": "case",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 6,
+                  "archeight": 1,
+                  "id": 6,
+                  "form": "la",
+                  "lemma": "le",
+                  "feats": [
+                    {
+                      "name": "Definite",
+                      "val": "Def"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Fem"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Art"
+                    }
+                  ],
+                  "xpos": "_",
+                  "upos": "DET",
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 9,
+                  "archeight": 2,
+                  "id": 9,
+                  "form": "Form",
+                  "lemma": "Howard",
+                  "xpos": "_",
+                  "upos": "PROPN",
+                  "deprel": "nmod",
+                  "chunk": 0,
+                  "type": "",
+                  "children": [
+                    {
+                      "position": 8,
+                      "archeight": 1,
+                      "id": 8,
+                      "form": "de",
+                      "lemma": "de",
+                      "xpos": "_",
+                      "upos": "ADP",
+                      "deprel": "case",
+                      "chunk": 0,
+                      "type": ""
+                    },
+                    {
+                      "position": 10,
+                      "archeight": 1,
+                      "id": 10,
+                      "form": "Hughes",
+                      "lemma": "Hughes",
+                      "misc": [
+                        {
+                          "name": "SpaceAfter",
+                          "val": "No"
+                        }
+                      ],
+                      "xpos": "_",
+                      "upos": "PROPN",
+                      "deprel": "flat:name",
+                      "chunk": 0,
+                      "type": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 11,
+          "archeight": 4,
+          "id": 11,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "_",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "SpaceAfter\u003dNo",
+  "errors": {
+    "incoherenttext": {
+      "text": "Aviator, un film sur la vie de Howard Hughes.",
+      "forms": "Aviator, un film sur la vie de Form Hughes.",
+      "differs": 31
+    }
+  },
+  "comments": "sentence 0\n",
+  "canUndo": true,
+  "canRedo": false
+}

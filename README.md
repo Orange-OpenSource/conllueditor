@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.20.0 (see [change history](CHANGES.md))
+Current version: 2.21.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -370,10 +370,10 @@ comments and sentences ids.
   * `case=det` finds a word with _case_ deprel whose head has a child with a _mark_ deprel.
 Click on the loop symbol to start the search. Activate the backwards symbol, to search backwards
 
-Other search modes can be chosen by clicking on the `toggle search modes` buttons:
+Other search modes can be chosen with the search select bar (top rop right)
 
 * complex search and search and replace
-* matching subtrees
+* match like search (cf. [Grew Match](http://universal.grew.fr/?corpus=UD_English-ParTUT@2.11))
 * no search (to have less headers on top of the GUI)
 
 ## Complex search and search and replace

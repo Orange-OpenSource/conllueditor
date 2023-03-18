@@ -1,10 +1,10 @@
 # sent_id = conlueditor-test-7
-# text = la souris a mangé le fromage qui pue. 
+# text = la souris a mangé le fromage qui pue.
 FOUND 1
 FINAL 1
 8	pue	puer	VERB	VERB	Mood=Ind|Number=Sing|Person=1|Tense=Pres|VerbForm=Fin	6	acl:relcl	_	SpaceAfter=No
 # sent_id = fi_tdt-ud-train.conllu b712.11
-# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle. 
+# text = Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.
 FOUND 2
 FINAL 1
 0.1	Laitoin	laittaa	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_

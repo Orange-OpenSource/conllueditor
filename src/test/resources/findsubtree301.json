@@ -1,7 +1,8 @@
 {
   "sentenceid": 9,
   "maxsentence": 19,
-  "sentence": "Il aime bien le Miroir aux Alouettes. ",
+  "text": "Il aime bien le Miroir aux Alouettes.",
+  "sentence": "Il aime bien le Miroir aux Alouettes.",
   "length": 9,
   "sent_id": "conlueditor-test-9",
   "changes": 0,

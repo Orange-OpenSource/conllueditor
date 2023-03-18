@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -29,6 +29,7 @@ are permitted provided that the following conditions are met:
 
  @author Johannes Heinecke
  @version 2.19.1 as of 4th November 2022
+ @version 2.21.0 as of 18th March 2023
  */
 
 import com.google.gson.JsonElement;
@@ -101,7 +102,7 @@ public class TestConlluPlus {
         URL inurl = this.getClass().getResource("test2.conllup");
         File out = new File(folder, "fileout2.txt");
         try {
-            //ConllFile cd = 
+            //ConllFile cd =
             		new ConllFile(new File(inurl.getFile()), false, false);
         } catch (Exception e) {
             FileUtils.writeStringToFile(out, e.getMessage()+ "\n", StandardCharsets.UTF_8, false);
@@ -126,21 +127,21 @@ public class TestConlluPlus {
         URL url = this.getClass().getResource("out1.conllup");
 
         String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0); // to have the global.columns line
-        JsonElement jelement = JsonParser.parseString(res); 
+        JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
-       // String rtc = 
+       // String rtc =
         		ce.process("read 1", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 1);
-        jelement = JsonParser.parseString(res); 
+        jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
-        //rtc = 
+        //rtc =
         		ce.process("read 2", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 2);
-        jelement = JsonParser.parseString(res); 
+        jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
@@ -155,22 +156,25 @@ public class TestConlluPlus {
     public void test11EditExtraCol() throws IOException {
         name("modifying columns 11 and 12");
         ce.setCallgitcommit(false);
-        ce.setBacksuffix(".3");
+        ce.setBacksuffix("");
         ce.setSaveafter(1);
 
-        //String rtc = 
+        File out = new File(folder, "test.mod.conllup");
+        ce.setOutfilename(out);
+
+        //String rtc =
         ce.process("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
         //rtc =
         ce.process("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
-        //rtc = 
+        //rtc =
         ce.process("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
 
 
         URL ref = this.getClass().getResource("test.mod.conllup");
-        URL res = this.getClass().getResource("test.conllup.3"); // modified file
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), res.toString()),
+        //URL res = this.getClass().getResource("test.conllup.3"); // modified file
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8));
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
 
@@ -182,7 +186,7 @@ public class TestConlluPlus {
         ce.setSaveafter(1);
 
         String rtc = ce.process("mod extracol 8 ZZSEM:COREF I:COREF9", 0, "editinfo");
-        File out = new File(folder, "fileout3.json");
+        File out = new File(folder, "error3.json");
         FileUtils.writeStringToFile(out, rtc, StandardCharsets.UTF_8, false);
         URL ref = this.getClass().getResource("error3.json");
 

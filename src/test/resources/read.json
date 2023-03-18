@@ -1,7 +1,8 @@
 {
   "sentenceid": 13,
   "maxsentence": 19,
-  "sentence": "Sam fixed lunch and Kim dinner ",
+  "text": "Sam fixed lunch and Kim dinner",
+  "sentence": "Sam fixed lunch and Kim dinner",
   "length": 7,
   "sent_id": "ellipsis1",
   "changes": 0,
