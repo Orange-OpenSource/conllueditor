@@ -494,7 +494,8 @@ see [Mass Editing](doc/mass_editing.md)
 
 ## Metadata editing
 
-The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph, as well as its sentence id, translations (mostly into English) or transliterations.
+The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph, 
+the sentence itself, as well as its sentence id, translations (mostly into English) or transliterations.
 Clicking on `edit metadata` opens the Metadata dialogue.
 For translations, the translations must be prefixed with the language code as shown in the screen shot.
 If the words of the current sentence, contains transliteration information (MISC column, Translit field),
