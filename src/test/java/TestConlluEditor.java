@@ -43,7 +43,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -82,6 +84,27 @@ public class TestConlluEditor {
         System.out.format("\n***** Testing: %s ****\n", n);
     }
 
+    
+    private void runtest(String filename, Map<String, Integer>commands, String errormsg ) throws IOException {
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix("");
+        ce.setSaveafter(1);
+
+        File out = new File(folder, filename);
+        ce.setOutfilename(out);
+
+        for (String cmd : commands.keySet()) {
+            ce.process(cmd, commands.get(cmd), "editinfo");
+        }
+
+
+        URL ref = this.getClass().getResource(filename);
+
+        Assert.assertEquals(String.format("%s\n ref: %s\n res: %s\n", errormsg, ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+    
     @Test
     public void test01Latex() throws IOException {
         name("LaTeX output");
@@ -174,36 +197,58 @@ public class TestConlluEditor {
 
     }
 
-    @Test
+//    @Test
+//    public void ootest05Mod() throws IOException {
+//        name("modifying form, lemma, feat, upos, xpos, deprel and head");
+//        ce.setCallgitcommit(false);
+//        ce.setBacksuffix("");
+//        ce.setSaveafter(1);
+//
+//        File out = new File(folder, "test.edit.conllu");
+//        ce.setOutfilename(out);
+//
+//        ce.process("mod lemma 9 Lemma", 0, "editinfo");
+//        ce.process("mod form 9 Form", 0, "editinfo");
+//        ce.process("mod upos 9 X", 0, "editinfo");
+//        ce.process("mod xpos 9 test", 0, "editinfo");
+//        ce.process("mod feat 9 Num=Sg|Gen=F", 0, "editinfo");
+//        ce.process("mod feat 9 NE=Place", 0, "editinfo"); // overwrites previous command
+//        ce.process("mod addfeat 9 Other=Val", 0, "editinfo");
+//        ce.process("mod deprel 9 dep", 0, "editinfo");
+//        ce.process("mod 9 1", 0, "editinfo");
+//
+//        ce.process("mod feat 2", 1, "editinfo"); // delete all features
+//        ce.process("mod misc 13", 1, "editinfo"); // delete all misc
+//
+//        URL ref = this.getClass().getResource("test.edit.conllu");
+//
+//        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+//                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+//                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+//    }
+
+       @Test
     public void test05Mod() throws IOException {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
-        ce.setCallgitcommit(false);
-        ce.setBacksuffix("");
-        ce.setSaveafter(1);
+        Map <String, Integer>commands = new LinkedHashMap<>();
+        
+        commands.put("mod lemma 9 Lemma", 0);
+        commands.put("mod form 9 Form", 0);
+        commands.put("mod upos 9 X", 0);
+        commands.put("mod xpos 9 test", 0);
+        commands.put("mod feat 9 Num=Sg|Gen=F", 0);
+        commands.put("mod feat 9 NE=Place", 0); // overwrites previous command
+        commands.put("mod addfeat 9 Other=Val", 0);
+        commands.put("mod deprel 9 dep", 0);
+        commands.put("mod 9 1", 0);
 
-        File out = new File(folder, "test.edit.conllu");
-        ce.setOutfilename(out);
+        commands.put("mod feat 2", 1); // delete all features
+        commands.put("mod misc 13", 1); // delete all misc
 
-        ce.process("mod lemma 9 Lemma", 0, "editinfo");
-        ce.process("mod form 9 Form", 0, "editinfo");
-        ce.process("mod upos 9 X", 0, "editinfo");
-        ce.process("mod xpos 9 test", 0, "editinfo");
-        ce.process("mod feat 9 Num=Sg|Gen=F", 0, "editinfo");
-        ce.process("mod feat 9 NE=Place", 0, "editinfo"); // overwrites previous command
-        ce.process("mod addfeat 9 Other=Val", 0, "editinfo");
-        ce.process("mod deprel 9 dep", 0, "editinfo");
-        ce.process("mod 9 1", 0, "editinfo");
-
-        ce.process("mod feat 2", 1, "editinfo"); // delete all features
-        ce.process("mod misc 13", 1, "editinfo"); // delete all misc
-
-        URL ref = this.getClass().getResource("test.edit.conllu");
-
-        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
-                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-    }
-
+        runtest("test.edit.conllu", commands, "CoNLL-U output incorrect");
+    } 
+    
+   
 
      @Test
     public void test051Mod() throws IOException {

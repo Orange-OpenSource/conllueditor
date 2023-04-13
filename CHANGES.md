@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.21.1
+* corrected `bin/replace.sh`
+
 ## Version 2.21.0
 * warning if the `# text = ...` does not correspond to the concatenated forms (respecting Space(s)After)
 * inputfield to edit value for `# text` or set from concatenated forms
