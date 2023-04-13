@@ -1,13 +1,11 @@
 #!/bin/bash
 
 
-#LANG=en_US.UTF-8
-
 OSTYPE=$(uname -s)
 
 case "$OSTYPE" in
     Darwin*)
-        # Mac
+        # Mac
         BASENAME=$(dirname $(greadlink -f $0))
         ;;
     Linux*)
@@ -15,7 +13,7 @@ case "$OSTYPE" in
         BASENAME=$(dirname $(readlink -f $0))
         ;;
     *)
-        # all the rest
+        # all the rest
         BASENAME=$(dirname $(readlink -f $0))
         ;;
 esac
