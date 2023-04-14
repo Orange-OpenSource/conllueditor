@@ -1,7 +1,7 @@
 # Changes
 
 ## Version 2.21.1
-* corrected `bin/replace.sh`
+* corrected `bin/replace.sh` for MacOS users
 
 ## Version 2.21.0
 * warning if the `# text = ...` does not correspond to the concatenated forms (respecting Space(s)After)
