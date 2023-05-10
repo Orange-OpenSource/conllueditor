@@ -448,9 +448,9 @@
                             <li>The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).
                                 <br>For example
                                 <ul>
-                                    <li><span class="userinputdoc">the</span> finds next occurrance of <i>the</i>, including <i>them</i> or <i>weather</i>.
-                                    <li><span class="userinputdoc">&quot; the &quot;</span> finds next occurrance of the definite article <i>the</i>.
-                                    <li><span class="userinputdoc">some of</span> finds next occurrance of <i>some of</i> (no quotes necessary, since the search string does not start with a blank).
+                                    <li><span class="userinputdoc">the</span> finds next occurrence of <i>the</i>, including <i>them</i> or <i>weather</i>.
+                                    <li><span class="userinputdoc">&quot; the &quot;</span> finds next occurrence of the definite article <i>the</i>.
+                                    <li><span class="userinputdoc">some of</span> finds next occurrence of <i>some of</i> (no quotes necessary, since the search string does not start with a blank).
                                 </ul>
                             <li>The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
                                 <ul>
@@ -477,7 +477,7 @@
                                 <ul>
                                     <li><span class="userinputdoc">cc&lt;nsubj</span> finds a word with <i>cc</i> deprel whose head has also a <i>nsubj</i> child.
                                     <li><span class="userinputdoc">case&gt;mark</span> finds a word with <i>case</i> deprel which has a child with a <i>mark</i> deprel.
-                                        <li><span class="userinputdoc">case=det</span> finds a word with <i>case</i> deprel whose head has a child with a <i>mark</i> deprel.
+                                        <li><span class="userinputdoc">case=det</span> finds a word with <i>case</i> deprel whose head has a child with a <i>det</i> deprel.
                                 </ul>
                         </ul>
                         <p>hit enter or click on the <img class="helptextbutton" style="width: 35px;" src="img/search.svg"> to start the search.
@@ -575,7 +575,7 @@
                         </ul>
 
                         <h2>Run a validator</h2>
-                        Any programme which can validate a file in CoNLL-U can be used. Specify the programm with all
+                        Any programme which can validate a file in CoNLL-U can be used. Specify the programme with all the
                         needed options and <tt>{FILE}</tt> at the position of the file to be validated in a file like
                         <br><tt>&nbsp;   script: /path/to/UDtools/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}</tt>
                         <br>and give this file as option to the server.
