@@ -141,7 +141,7 @@
 130	.	.	PUNCT	_	_	30	punct	_	_
 
 # sent_id = conlueditor-test-6
-# text = ils ont visité le Musée du Louvre.
+# text = ils ont visité le Musée dele Louvre.
 # sentence 6
 1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
 2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_

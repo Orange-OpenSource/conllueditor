@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.21.0 as of 18th March 2023
+ @version 2.22.0 as of 19th May 2023
  */
 package com.orange.labs.conllparser;
 
@@ -581,8 +581,10 @@ public class ConllSentence {
                 }
             }
         }
-
+        // set text of split sentences
+        text = getSentence();
         newsent.normalise();
+        newsent.setText(newsent.getSentence());
         return newsent;
     }
 
@@ -605,6 +607,7 @@ public class ConllSentence {
                 contracted.putAll(n.contracted);
             }
         }
+        text = getSentence();
     }
 
     /**

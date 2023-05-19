@@ -45,7 +45,7 @@
 9	?	?	PUNCT	_	_	3	punct	_	_
 
 # sent_id = fr-ud-dev_00004
-# text = L'« oasis de vie », dans un milieu où règne l'obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques.
+# text = L'« oasis de vie» , dans un milieu où règne l'obscurité totale et une pression hydrostatique hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu'alors désertiques.
 # sentence 3
 1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	detfalse	_	SpaceAfter=No
 2	«	«	PUNCT	_	_	3	punct	_	_

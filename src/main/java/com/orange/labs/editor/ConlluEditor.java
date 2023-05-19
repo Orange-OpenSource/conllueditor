@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.21.0 as of 18th March 2023
+ @version 2.22.0 as of 19th May 2023
  */
 package com.orange.labs.editor;
 
@@ -124,9 +124,9 @@ public class ConlluEditor {
     private String programmeversion;
     //private String gitcommitidfull;
     private String gitcommitidabbrev = "?";
-    private String gitcommittime ="?";
+    private String gitcommittime = "?";
     private boolean gitdirty = false;
-    private String gitbranch ="?";
+    private String gitbranch = "?";
     private String suffix = ".2"; // used to write the edited file to avoid overwriting the original file
 
     private int debug = 1;
@@ -156,8 +156,12 @@ public class ConlluEditor {
         }
 
         StringBuilder sb = new StringBuilder();
-        if (!"master".equals(gitbranch)) sb.append(", branche: ").append(gitbranch);
-        if (gitdirty) sb.append(", this branch contains uncommited modifications!");
+        if (!"master".equals(gitbranch)) {
+            sb.append(", branche: ").append(gitbranch);
+        }
+        if (gitdirty) {
+            sb.append(", this branch contains uncommited modifications!");
+        }
         System.err.format("ConlluEditor V %s (commit %s%s)\n", programmeversion, gitcommitidabbrev, sb.toString());
         filename = new File(conllfile);
         filename = filename.getAbsoluteFile().toPath().normalize().toFile();
@@ -228,7 +232,6 @@ public class ConlluEditor {
         }
         cfile = new ConllFile(filename, null);
         numberOfSentences = cfile.getSentences().size();
-
 
         System.out.println("Number of sentences loaded: " + numberOfSentences);
 
@@ -457,7 +460,6 @@ public class ConlluEditor {
             solution.addProperty("translit_missing", missingtranslit);
         }
 
-
         if (csent.getTranslations() != null) {
             JsonObject t = new JsonObject();
             for (String key : csent.getTranslations().keySet()) {
@@ -554,9 +556,8 @@ public class ConlluEditor {
         }
         String sent = csent.getSentence();
         if (!sent.equals(csent.getText())) {
-
             int pos = -1;
-            for (int i = 0; i<sent.length(); ++i) {
+            for (int i = 0; i < sent.length() && i < csent.getText().length(); ++i) {
                 if (sent.charAt(i) != csent.getText().charAt(i)) {
                     pos = i;
                     break;
@@ -728,7 +729,7 @@ public class ConlluEditor {
     }
 
     // TODO: write and commit file only when changing sentence: problem with multithread
-    /** Process the commands comming from the JavaScript GUI.
+    /* Process the commands comming from the JavaScript GUI.
         @param command command string
         @param currentSentenceId the id of the current sentence (sent by the GUI
         @return json representation of the sentence after the command has been applied or error message
@@ -1103,7 +1104,7 @@ public class ConlluEditor {
                     ConllSentence cs = cfile.getSentences().get(i);
                     List<List<ConllWord>> llcw = cgm.match(null, cs);
                     if (llcw != null) {
-                        Set<Integer>ids = new TreeSet<>();
+                        Set<Integer> ids = new TreeSet<>();
                         for (List<ConllWord> lcw : llcw) {
                             for (ConllWord cw : lcw) {
                                 ids.add(cw.getId());
@@ -1116,7 +1117,6 @@ public class ConlluEditor {
                     }
                 }
                 return formatErrMsg("not found «" + f[2] + "»", currentSentenceId);
-
 
             } else if (command.startsWith("findexpression ")) {
                 String[] f = command.trim().split(" +", 3);
@@ -1148,24 +1148,24 @@ public class ConlluEditor {
                 if (f.length != 3) {
                     return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
-                String [] find_replace = f[2].split(" >");
+                String[] find_replace = f[2].split(" >");
                 if (find_replace.length != 2) {
                     return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
                 }
                 String find = find_replace[0].strip();
                 String replace = find_replace[1].strip();
                 if (find.isEmpty()) {
-                     return formatErrMsg("INVALID syntax. Missing search expression «" + command + "»", currentSentenceId);
+                    return formatErrMsg("INVALID syntax. Missing search expression «" + command + "»", currentSentenceId);
                 }
                 if (replace.isEmpty()) {
-                     return formatErrMsg("INVALID syntax. Missing replace expression «" + command + "»", currentSentenceId);
+                    return formatErrMsg("INVALID syntax. Missing replace expression «" + command + "»", currentSentenceId);
                 }
 
                 // si le deuxième mot est "true" on cherche en arrière
                 boolean backwards = f[1].equalsIgnoreCase("true");
 
                 //List<String>newvals = Arrays.asList(replace.split("[ \\t]+"));
-                List<GetReplacement>newvals = new ArrayList<>();
+                List<GetReplacement> newvals = new ArrayList<>();
                 for (String repl : replace.split("[ \\t]+")) {
                     newvals.add(new GetReplacement(repl));
                 }
@@ -1185,8 +1185,10 @@ public class ConlluEditor {
                     // TODO display warnings in GUI!
                     if (!cws.isEmpty()) {
                         currentSentenceId = i;
-                        Set<Integer>ids = new HashSet<>();
-                        for (ConllWord cw : cws) ids.add(cw.getId());
+                        Set<Integer> ids = new HashSet<>();
+                        for (ConllWord cw : cws) {
+                            ids.add(cw.getId());
+                        }
                         ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.LEMMA, ids);
 
                         changesSinceSave += 1;
@@ -1200,7 +1202,6 @@ public class ConlluEditor {
                     }
                 }
                 return formatErrMsg("not found «" + find + "»", currentSentenceId);
-
 
             } else if (command.startsWith("findlemma ")
                     || command.startsWith("findfeat ")
@@ -1308,11 +1309,10 @@ public class ConlluEditor {
                     InputStream is = new ByteArrayInputStream(subtree.toString().getBytes(StandardCharsets.UTF_8));
                     String gg = cpc.convert(is);
                     sb.append(gg);
-                }
-                else {
+                } else {
                     sb.append("# global.columns = ");
                     for (String s : cs.getColumndefs().keySet()) {
-                      sb.append(" ").append(s);
+                        sb.append(" ").append(s);
                     }
                     sb.append("\n").append(subtree.toString());
                 }
@@ -1632,6 +1632,9 @@ public class ConlluEditor {
                     if (id + complen > csent.getWords().size()) {
                         return formatErrMsg("INVALID MWT length (to big) «" + command + "»", currentSentenceId);
                     }
+                    if (complen < 2) {
+                        return formatErrMsg("INVALID MWT length (must be >= 2) «" + command + "»", currentSentenceId);
+                    }
                 } catch (NumberFormatException e) {
                     return formatErrMsg("INVALID id (not an integer) «" + command + "» " + e.getMessage(), currentSentenceId);
                 }
@@ -1676,7 +1679,7 @@ public class ConlluEditor {
                     composedWord.addMisc(spaceAfterKey, spaceAfterVal);
                 }
                 csent.addWord(composedWord, id);
-
+                csent.setText(csent.getSentence());
                 try {
                     writeBackup(currentSentenceId, composedWord, editinfo);
                 } catch (IOException ex) {
@@ -1724,6 +1727,7 @@ public class ConlluEditor {
                 // delete MT word
                 if (end == 0) {
                     csent.deleteContracted(start);
+                    csent.setText(csent.getSentence());
                     return returnTree(currentSentenceId, csent);
                 }
                 // modify it
@@ -1737,6 +1741,7 @@ public class ConlluEditor {
                     }
                 }
 
+                csent.setText(csent.getSentence());
                 try {
                     writeBackup(currentSentenceId, cw, editinfo);
                 } catch (IOException ex) {
@@ -1813,6 +1818,7 @@ public class ConlluEditor {
                     csent.deleteWord(id);
                 }
 
+                csent.setText(csent.getSentence());
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
                 } catch (IOException ex) {
@@ -2002,25 +2008,25 @@ public class ConlluEditor {
                 if (jo.has("newdoc")) {
                     String newdoc = jo.get("newdoc").getAsString().trim();
                     //if (!newdoc.isEmpty()) {
-                        csent.setNewdoc(newdoc);
+                    csent.setNewdoc(newdoc);
                     //}
                 }
                 if (jo.has("newpar")) {
                     String newdoc = jo.get("newpar").getAsString().trim();
                     //if (!newdoc.isEmpty()) {
-                        csent.setNewpar(newdoc);
+                    csent.setNewpar(newdoc);
                     //}
                 }
                 if (jo.has("text")) {
                     String text = jo.get("text").getAsString().trim();
                     //if (!newdoc.isEmpty()) {
-                        csent.setText(text);
+                    csent.setText(text);
                     //}
                 }
                 if (jo.has("translit")) {
                     String newdoc = jo.get("translit").getAsString().trim();
                     //if (!newdoc.isEmpty()) {
-                        csent.setTranslit(newdoc);
+                    csent.setTranslit(newdoc);
                     //}
                 }
                 if (jo.has("translations")) {
@@ -2342,7 +2348,9 @@ public class ConlluEditor {
         if (!forcesave && (saveafter < 0 || changesSinceSave < saveafter)) {
             return null; // no need to save yet
         }
-        if (outfilename == null) outfilename = filename;
+        if (outfilename == null) {
+            outfilename = filename;
+        }
         File dir = outfilename.getParentFile().toPath().normalize().toFile();
         if ((debug & 0x01) == 2) {
             System.err.println("Saving file " + outfilename);
@@ -2468,7 +2476,6 @@ public class ConlluEditor {
                 .build();
         options.addOption(rootdir);
 
-
         Option shortcuts = Option.builder("s").longOpt("shortcuts")
                 .argName("file")
                 .hasArg()
@@ -2564,7 +2571,7 @@ public class ConlluEditor {
             String savea = line.getOptionValue(saveAfter);
 
             if (savea != null) {
-                if(Integer.parseInt(savea) > 0) {
+                if (Integer.parseInt(savea) > 0) {
                     ce.setSaveafter(Integer.parseInt(savea));
                 } else {
                     System.err.println("Invalid value for option --saveAfter. Must be positive integer");
@@ -2580,21 +2587,23 @@ public class ConlluEditor {
                 }
             }
 
-
             int debug = 0x0d;
             if (line.hasOption(verbosity)) {
                 debug = Integer.parseInt(line.getOptionValue(verbosity), 16);
             }
             ce.setDebug(debug);
 
-
             if (line.hasOption(compare)) {
                 ce.setComparisonFile(line.getOptionValue(compare));
             }
 
             int mode = 0; // noedit: 1, reinit: 2
-            if (line.hasOption(noedit)) mode = 1;
-            if (line.hasOption(reinit)) mode = 2;
+            if (line.hasOption(noedit)) {
+                mode = 1;
+            }
+            if (line.hasOption(reinit)) {
+                mode = 2;
+            }
             if (mode > 0) {
                 ce.setMode(mode);
             }

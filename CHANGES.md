@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.22.0
+* update `# text = ...` after `sentsplit`, `sentjoin`, `compose`, `split` and `join`
+
 ## Version 2.21.1
 * corrected `bin/replace.sh` for MacOS users
 

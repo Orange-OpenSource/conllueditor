@@ -101,7 +101,7 @@
 52	.	.	PUNCT	_	_	23	punct	_	_
 
 # sent_id = fr-ud-train_00002
-# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# text = L'œuv re est situéedans la galerie des batailles, dans le château de Versailles.
 # sentence 4
 1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
 2	œuv	œuv	NOUN	_	Gender=Fem|Number=Sing	5	nsubj	_	_
