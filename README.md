@@ -327,6 +327,10 @@ In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
 tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
+All operations which change the tokenisation of the sentence will create a `incoherent # text and forms` warning. This is because the è# text = ....` 
+metadata must be coherent with the concatenation of forms (taken into account `SpacesAfter`/`SpaceAfter` fields in the MISC column.
+Unless earlier versions, the `# text ...` is no longer updated automatically, but must be adapted manually using the `edit metadata` button.
+
 ## Commands to be used with `modify` button:
 
 * `split id [splitpos]` 	split a word in two (it will be copied to a new node and attached to the same head). If `splitpos` is given, the characters of Form and Lemma left of splitpos will remain in the original word, the rest will be the new word
