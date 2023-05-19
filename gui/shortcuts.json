@@ -32,6 +32,10 @@
        ":vf": "VerbForm=Fin",
        ":vp": "VerbForm=Part"
     },
+    "misc": {
+       ":sa": "SpacesAfter=\\n",
+       ":san": "SpaceAfter=No"
+    },
     "deplabel": {
         "a": "amod",
         "b": "advmod",

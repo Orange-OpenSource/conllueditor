@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.21.0 as of 18th March 2023
+ @version 2.22.0 as of 19th May 2023
  */
 
 
@@ -276,6 +276,9 @@ function getServerInfo() {
                 }
                 if (data.shortcuts.feats) {
                     shortcutsFEATS = data.shortcuts.feats;
+                }
+                if (data.shortcuts.misc) {
+                    shortcutsMISC = data.shortcuts.misc;
                 }
                 parseShortcuts();
             } else {
@@ -659,7 +662,7 @@ var showshortcathelp = false;
 function switchSCHelp(on) {
     if (on) {
         $("#shortcuthelp").show();
-        $('body').css("margin-top", "260px");
+        $('body').css("margin-top", "290px");
         showshortcathelp = true;
     } else {
         $("#shortcuthelp").hide();
@@ -705,7 +708,10 @@ var shortcutsXPOS = {// no point defining language specific xpos here.
 };
 
 var shortcutsFEATS = {
+};
 
+
+var shortcutsMISC = {
 };
 
 
@@ -722,6 +728,7 @@ function showshortcuts() {
         shortcutsXPOS = json.xpos;
         shortcutsDEPL = json.deplabel;
         shortcutsFEATS = json.feats;
+        shortcutsMISC = json.misc;
         $("#scfilename").html("gui/shortcuts.json");
         parseShortcuts();
     });
@@ -733,7 +740,7 @@ function parseShortcuts() {
     var sc_xposString = "";
     var sc_deplString = "";
     var sc_featsString = "";
-
+    var sc_miscString = "";
 
 
     $("#shortcuttableUPOS").empty(); // clear default values
@@ -795,6 +802,20 @@ function parseShortcuts() {
         }
         $("#featstr").show();
         $("#featsshortcuts").append(sc_featsString);
+    }
+
+    $("#shortcuttableMISC").empty();
+    $("#miscshortcuts").empty();
+    $("#miscstr").hide();
+    if (Object.keys(shortcutsMISC).length > 0) {
+        $("#shortcuttableMISC").append("<tr><th>key</th> <th>set MISC</th></tr>"); // add header
+        for (var p in shortcutsMISC) {
+            longestshortcut = Math.max(longestshortcut, p.length);
+            $("#shortcuttableMISC").append("<tr><td>" + p + "</td> <td>" + shortcutsMISC[p] + "</td></tr>");
+            sc_miscString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsMISC[p] + "</span>&nbsp; ";
+        }
+        $("#miscstr").show();
+        $("#miscshortcuts").append(sc_miscString);
     }
 }
 
@@ -1000,6 +1021,10 @@ $(window).on('keypress', function (evt) {
         sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
         unsetPShC();
         return;
+    } else  if (evt.which == 47) { // "/" delete all misc key-values
+        sendmodifs({"cmd": "mod misc " + clickedNodes[0] + " " + "_"});
+        unsetPShC();
+        return;
     } else if (clickedNodes.length == 0) {
         unsetPShC();
         return;
@@ -1043,6 +1068,17 @@ $(window).on('keypress', function (evt) {
             newval = shortcutsFEATS[shortcutseq];
             if (newval != undefined) {
                 sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
+                shortcutseq = "";
+                deprels = [];
+                uposs = [];
+                clickedNodes = [];
+                unsetPShC();
+                return;
+            }
+
+            newval = shortcutsMISC[shortcutseq];
+            if (newval != undefined) {
+                sendmodifs({"cmd": "mod misc " + clickedNodes[0] + " " + newval});
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];

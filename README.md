@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.21.1 (see [change history](CHANGES.md))
+Current version: 2.22.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -574,7 +574,7 @@ will happily delete the `ID` column from the output file, so the `HEAD` column d
 # Shortcuts
 
 ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing:
-These single letter keys change the UPOS/XPOS/deplabel/feature of
+These single letter keys change the UPOS/XPOS/deplabel/feature/misc of
 the active word to the defined value. To activate a word, click once on the word.
 Shortcuts can be single letters or a sequence of multiple letters:
 
@@ -603,6 +603,10 @@ Shortcuts can be single letters or a sequence of multiple letters:
        ":gf": "Gender=Fem",
        ...
     },
+    "misc": {
+       ":sa": "SpacesAfter=\\n",
+       ":san": "SpaceAfter=No"
+    },
     "deplabel": {
         "a": "amod",
         "av": "advmod",
@@ -623,6 +627,7 @@ There is a list of predefined shortcuts which cannot be altered:
 * `-` go to preceding sentence
 * `!` run validator on current sentence
 * `_` delete all features of active word
+* `/` delete all miscs of active word
 * `delete`-key deletes active word
 * `?` shows/hides list of shortcuts
 * `&` followed by _n_ digits: Shift view on the syntax tree so that the token with the given ID is centered in the visible part of the tree.

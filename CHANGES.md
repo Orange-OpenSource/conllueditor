@@ -1,7 +1,9 @@
 # Changes
 
 ## Version 2.22.0
+* shortcuts for MISC column added
 * update `# text = ...` after `sentsplit`, `sentjoin`, `compose`, `split` and `join`
+* tests updated
 
 ## Version 2.21.1
 * corrected `bin/replace.sh` for MacOS users
