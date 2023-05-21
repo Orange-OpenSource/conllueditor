@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.0 as of 19th May 2023
+ @version 2.22.1 as of 21st May 2023
  */
 package com.orange.labs.conllparser;
 
@@ -167,6 +167,7 @@ public class ConllSentence {
         newpar = orig.newpar;
         sentid = orig.sentid;
         translit = orig.translit;
+        text = orig.text;
         if (orig.translations != null) {
             translations = new HashMap<>();
             translations.putAll(orig.translations);

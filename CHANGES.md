@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.22.1
+* undo/redo bug corrected
+* check json encoded error messages in tests
+
 ## Version 2.22.0
 * shortcuts for MISC column added
 * update `# text = ...` after `sentsplit`, `sentjoin`, `compose`, `split` and `join`

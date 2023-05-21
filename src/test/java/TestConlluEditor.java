@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.21.0 as of 18th March 2023
+ @version 2.22.1 as of 21st May 2023
  */
 
 import com.google.gson.Gson;
@@ -84,7 +84,7 @@ public class TestConlluEditor {
         System.out.format("\n***** Testing: %s ****\n", n);
     }
 
-    
+
     private void runtest(String filename, Map<String, Integer>commands, String errormsg ) throws IOException {
         ce.setCallgitcommit(false);
         ce.setBacksuffix("");
@@ -104,7 +104,16 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
-    
+
+    /** catch errror message from ce.process()) */
+    private String processwrapper(String command, int sentid, String comment) {
+        String res = ce.process(command, sentid, comment);
+        if (res.contains("\"error\"")) {
+             Assert.assertFalse("Exception catched: " + res, true);
+        }
+        return res;
+    }
+
     @Test
     public void test01Latex() throws IOException {
         name("LaTeX output");
@@ -117,7 +126,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
-        ce.process("read 13", 1, "editinfo");
+        processwrapper("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.LATEX, 13);
         // first sentence 13
         JsonElement jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
@@ -151,7 +160,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
-        ce.process("read 13", 1, "editinfo");
+        processwrapper("read 13", 1, "editinfo");
         String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13);
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
@@ -178,14 +187,14 @@ public class TestConlluEditor {
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         //String rtc =
-        ce.process("read 14", 1, "editinfo");
+        processwrapper("read 14", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 14);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
         //rtc =
-        ce.process("read 15", 1, "editinfo");
+        processwrapper("read 15", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 15);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
@@ -207,18 +216,18 @@ public class TestConlluEditor {
 //        File out = new File(folder, "test.edit.conllu");
 //        ce.setOutfilename(out);
 //
-//        ce.process("mod lemma 9 Lemma", 0, "editinfo");
-//        ce.process("mod form 9 Form", 0, "editinfo");
-//        ce.process("mod upos 9 X", 0, "editinfo");
-//        ce.process("mod xpos 9 test", 0, "editinfo");
-//        ce.process("mod feat 9 Num=Sg|Gen=F", 0, "editinfo");
-//        ce.process("mod feat 9 NE=Place", 0, "editinfo"); // overwrites previous command
-//        ce.process("mod addfeat 9 Other=Val", 0, "editinfo");
-//        ce.process("mod deprel 9 dep", 0, "editinfo");
-//        ce.process("mod 9 1", 0, "editinfo");
+//        processwrapper("mod lemma 9 Lemma", 0, "editinfo");
+//        processwrapper("mod form 9 Form", 0, "editinfo");
+//        processwrapper("mod upos 9 X", 0, "editinfo");
+//        processwrapper("mod xpos 9 test", 0, "editinfo");
+//        processwrapper("mod feat 9 Num=Sg|Gen=F", 0, "editinfo");
+//        processwrapper("mod feat 9 NE=Place", 0, "editinfo"); // overwrites previous command
+//        processwrapper("mod addfeat 9 Other=Val", 0, "editinfo");
+//        processwrapper("mod deprel 9 dep", 0, "editinfo");
+//        processwrapper("mod 9 1", 0, "editinfo");
 //
-//        ce.process("mod feat 2", 1, "editinfo"); // delete all features
-//        ce.process("mod misc 13", 1, "editinfo"); // delete all misc
+//        processwrapper("mod feat 2", 1, "editinfo"); // delete all features
+//        processwrapper("mod misc 13", 1, "editinfo"); // delete all misc
 //
 //        URL ref = this.getClass().getResource("test.edit.conllu");
 //
@@ -231,7 +240,7 @@ public class TestConlluEditor {
     public void test05Mod() throws IOException {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
         Map <String, Integer>commands = new LinkedHashMap<>();
-        
+
         commands.put("mod lemma 9 Lemma", 0);
         commands.put("mod form 9 Form", 0);
         commands.put("mod upos 9 X", 0);
@@ -246,9 +255,9 @@ public class TestConlluEditor {
         commands.put("mod misc 13", 1); // delete all misc
 
         runtest("test.edit.conllu", commands, "CoNLL-U output incorrect");
-    } 
-    
-   
+    }
+
+
 
      @Test
     public void test051Mod() throws IOException {
@@ -280,7 +289,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
-        ce.process("read 1", 1, "editinfo");
+        processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 9 12 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -307,7 +316,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
-        ce.process("read 1", 1, "editinfo");
+        processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 9 22 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -334,7 +343,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
-        ce.process("read 1", 1, "editinfo");
+        processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 9 9 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -361,7 +370,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
-        ce.process("read 1", 1, "editinfo");
+        processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 19 9 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -390,7 +399,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
-        ce.process("read 1", 1, "editinfo");
+        processwrapper("read 1", 1, "editinfo");
 
         StringBuilder sb = new StringBuilder();
         sb.append("[\n");
@@ -457,10 +466,10 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         //String rtc =
-        ce.process("mod lemma 3 Oasis", 3, "editinfo");
-        /*rtc = */ce.process("mod 1 2 detfalse", 3, "editinfo");
-        ce.process("mod split 19", 3, "editinfo");
-        ce.process("mod join 5", 3, "editinfo");
+        processwrapper("mod lemma 3 Oasis", 3, "editinfo");
+        /*rtc = */processwrapper("mod 1 2 detfalse", 3, "editinfo");
+        processwrapper("mod split 19", 3, "editinfo");
+        processwrapper("mod join 5", 3, "editinfo");
 
 
         URL ref = this.getClass().getResource("test.mod.conllu");
@@ -480,8 +489,8 @@ public class TestConlluEditor {
         File out = new File(folder, "test.split-mwt.conllu");
         ce.setOutfilename(out);
 
-        ce.process("mod split 2 3", 4, "editinfo");
-        ce.process("mod join 5", 4, "editinfo");
+        processwrapper("mod split 2 3", 4, "editinfo");
+        processwrapper("mod join 5", 4, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-mwt.conllu");
         //URL res = this.getClass().getResource("test.conllu.5"); // modified file
@@ -500,8 +509,8 @@ public class TestConlluEditor {
         File out = new File(folder, "test.split-ew.conllu");
         ce.setOutfilename(out);
         //String rtc =
-        ce.process("mod split 5 ", 16, "editinfo");
-        ce.process("mod join 13", 16, "editinfo");
+        processwrapper("mod split 5 ", 16, "editinfo");
+        processwrapper("mod join 13", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-ew.conllu");
         //URL res = this.getClass().getResource("test.conllu.6"); // modified file
@@ -520,9 +529,9 @@ public class TestConlluEditor {
         File out = new File(folder, "test.split-ed.conllu");
         ce.setOutfilename(out);
 
-        ce.process("mod split 4 ", 13, "editinfo");
-        ce.process("mod split 3", 13, "editinfo");
-        ce.process("mod join 4", 13, "editinfo");
+        processwrapper("mod split 4 ", 13, "editinfo");
+        processwrapper("mod split 3", 13, "editinfo");
+        processwrapper("mod join 4", 13, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-ed.conllu");
         //URL res = this.getClass().getResource("test.conllu.7"); // modified file
@@ -541,11 +550,11 @@ public class TestConlluEditor {
         File out = new File(folder, "test.create-mwt.conllu");
         ce.setOutfilename(out);
 
-        ce.process("mod compose 1 3", 17, "editinfo");
-        ce.process("mod editmwt 1 3 Dáselle", 17, "editinfo");
+        processwrapper("mod compose 1 3", 17, "editinfo");
+        processwrapper("mod editmwt 1 3 Dáselle", 17, "editinfo");
 
-        ce.process("mod compose 6 2", 17, "editinfo");
-        ce.process("mod editmwt 6 7 ao Gloss=to_him", 17, "editinfo");
+        processwrapper("mod compose 6 2", 17, "editinfo");
+        processwrapper("mod editmwt 6 7 ao Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
         //URL res = this.getClass().getResource("test.conllu.8"); // modified file
@@ -565,7 +574,7 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         //String rtc =
-        ce.process("mod join 5", 6, "editinfo");
+        processwrapper("mod join 5", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt.conllu");
         //URL res = this.getClass().getResource("test.conllu.9"); // modified file
@@ -585,7 +594,7 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         //String rtc =
-        ce.process("mod join 6", 6, "editinfo");
+        processwrapper("mod join 6", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt-2.conllu");
         //URL res = this.getClass().getResource("test.conllu.10"); // modified file
@@ -605,7 +614,7 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         //String rtc =
-        ce.process("mod compose 9 2", 0, "editinfo");
+        processwrapper("mod compose 9 2", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.mwt-spaceafter.conllu");
         //URL res = this.getClass().getResource("test.conllu.18"); // modified file
@@ -625,8 +634,8 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         //String rtc =
-        ce.process("mod misc 5 SpaceAfter=No", 0, "editinfo");
-        ce.process("mod tomwt 5 su uu ur", 0, "editinfo");
+        processwrapper("mod misc 5 SpaceAfter=No", 0, "editinfo");
+        processwrapper("mod tomwt 5 su uu ur", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.split-to-mwt.conllu");
         //URL res = this.getClass().getResource("test.conllu.181"); // modified file
@@ -672,7 +681,7 @@ public class TestConlluEditor {
         File out = new File(folder, "test.sentsplit.conllu");
         ce.setOutfilename(out);
         //String rtc =
-        ce.process("mod sentsplit 11", 16, "editinfo");
+        processwrapper("mod sentsplit 11", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.sentsplit.conllu");
         //URL res = this.getClass().getResource("test.conllu.17"); // modified file
@@ -692,7 +701,7 @@ public class TestConlluEditor {
         File out = new File(folder, "test.editmetadata.conllu");
         ce.setOutfilename(out);
         //String rtc =
-        ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"text\": \"a changed text!\", \"translations\": \"en: a translation\"}", 0, "editinfo");
+        processwrapper("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"text\": \"a changed text!\", \"translations\": \"en: a translation\"}", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.editmetadata.conllu");
         //URL res = this.getClass().getResource("test.conllu.201"); // modified file
@@ -1047,10 +1056,9 @@ public class TestConlluEditor {
         File out = new File(folder, "test.mod.undo.conllu");
         ce.setOutfilename(out);
 
-        ce.process("mod lemma 1 Sammie", 13, "editinfo");
-        ce.process("mod upos 2 VERBPAST", 13, "editinfo");
-        ce.process("mod undo", 13, "editinfo");
-
+        processwrapper("mod lemma 1 Sammie", 13, "editinfo");
+        processwrapper("mod upos 2 VERBPAST", 13, "editinfo");
+        processwrapper("mod undo", 13, "editinfo");
         URL ref = this.getClass().getResource("test.mod.undo.conllu");
         //URL res = this.getClass().getResource("test.conllu.3");
         Assert.assertEquals(String.format("mod undo output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
@@ -1067,9 +1075,9 @@ public class TestConlluEditor {
         File out = new File(folder, "test.add_ed.conllu");
         ce.setOutfilename(out);
 
-        ce.process("mod ed add 7 6 ref", 7, "editinfo");
-        ce.process("mod ed add 8 6 nsubj", 7, "editinfo");
-        ce.process("mod ed del 1 4", 11, "editinfo");
+        processwrapper("mod ed add 7 6 ref", 7, "editinfo");
+        processwrapper("mod ed add 8 6 nsubj", 7, "editinfo");
+        processwrapper("mod ed del 1 4", 11, "editinfo");
 
         URL ref = this.getClass().getResource("test.add_ed.conllu");
         //URL res = this.getClass().getResource("test.conllu.4");
@@ -1219,9 +1227,9 @@ public class TestConlluEditor {
         ce.setSaveafter(1);
         File out = new File(folder, "test.delete.conllu");
         ce.setOutfilename(out);
-        ce.process("mod delete 12", 16, "editinfo");
-        ce.process("mod delete 9", 16, "editinfo");
-        ce.process("mod delete 10", 16, "editinfo");
+        processwrapper("mod delete 12", 16, "editinfo");
+        processwrapper("mod delete 9", 16, "editinfo");
+        processwrapper("mod delete 10", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.delete.conllu");
         //URL res = this.getClass().getResource("test.conllu.11");
@@ -1241,10 +1249,10 @@ public class TestConlluEditor {
         ce.setSaveafter(1);
         File out = new File(folder, "test.insertempty.conllu");
         ce.setOutfilename(out);
-        ce.process("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
-        ce.process("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
+        processwrapper("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
+        processwrapper("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
 
-        ce.process("mod emptyinsert 3 premier lemma3 POS1 XPOS1", 0, "editinfo");
+        processwrapper("mod emptyinsert 3 premier lemma3 POS1 XPOS1", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.insertempty.conllu");
         //URL res = this.getClass().getResource("test.conllu.12");
@@ -1258,7 +1266,7 @@ public class TestConlluEditor {
         //ce.setBacksuffix(".13");
         out = new File(folder, "test.insertempty+delete.conllu");
         ce.setOutfilename(out);
-        ce.process("mod emptydelete 4.1", 0, "editinfo");
+        processwrapper("mod emptydelete 4.1", 0, "editinfo");
         URL ref2 = this.getClass().getResource("test.insertempty+delete.conllu");
         //URL res2 = this.getClass().getResource("test.conllu.13");
 
@@ -1277,7 +1285,7 @@ public class TestConlluEditor {
         File out = new File(folder, "test.deleteempty.conllu");
         ce.setOutfilename(out);
 
-        ce.process("mod emptydelete 5.1", 13, "editinfo");
+        processwrapper("mod emptydelete 5.1", 13, "editinfo");
         URL ref = this.getClass().getResource("test.deleteempty.conllu");
         //URL res = this.getClass().getResource("test.conllu.14");
 
