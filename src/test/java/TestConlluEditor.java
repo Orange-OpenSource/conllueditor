@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.1 as of 21st May 2023
+ @version 2.22.2 as of 22nd May 2023
  */
 
 import com.google.gson.Gson;
@@ -94,7 +94,7 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         for (String cmd : commands.keySet()) {
-            ce.process(cmd, commands.get(cmd), "editinfo");
+            processwrapper(cmd, commands.get(cmd), "editinfo");
         }
 
 
@@ -105,7 +105,11 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
-    /** catch errror message from ce.process()) */
+    /** catch errror message from ce.process() when it is a real error (and not a test for an error).
+     * ce.process() catches all java Exceptions and returns a json error message with "error": "mesage".
+     * Sometimes we test whether CE detected an error, but when this is not the case the presence of "error" in the
+     * returned String fo ce.process() means that something went wrong which should not have gone wrong.
+     */
     private String processwrapper(String command, int sentid, String comment) {
         String res = ce.process(command, sentid, comment);
         if (res.contains("\"error\"")) {
@@ -206,37 +210,8 @@ public class TestConlluEditor {
 
     }
 
-//    @Test
-//    public void ootest05Mod() throws IOException {
-//        name("modifying form, lemma, feat, upos, xpos, deprel and head");
-//        ce.setCallgitcommit(false);
-//        ce.setBacksuffix("");
-//        ce.setSaveafter(1);
-//
-//        File out = new File(folder, "test.edit.conllu");
-//        ce.setOutfilename(out);
-//
-//        processwrapper("mod lemma 9 Lemma", 0, "editinfo");
-//        processwrapper("mod form 9 Form", 0, "editinfo");
-//        processwrapper("mod upos 9 X", 0, "editinfo");
-//        processwrapper("mod xpos 9 test", 0, "editinfo");
-//        processwrapper("mod feat 9 Num=Sg|Gen=F", 0, "editinfo");
-//        processwrapper("mod feat 9 NE=Place", 0, "editinfo"); // overwrites previous command
-//        processwrapper("mod addfeat 9 Other=Val", 0, "editinfo");
-//        processwrapper("mod deprel 9 dep", 0, "editinfo");
-//        processwrapper("mod 9 1", 0, "editinfo");
-//
-//        processwrapper("mod feat 2", 1, "editinfo"); // delete all features
-//        processwrapper("mod misc 13", 1, "editinfo"); // delete all misc
-//
-//        URL ref = this.getClass().getResource("test.edit.conllu");
-//
-//        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
-//                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
-//                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-//    }
 
-       @Test
+    @Test
     public void test05Mod() throws IOException {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
         Map <String, Integer>commands = new LinkedHashMap<>();
@@ -258,8 +233,7 @@ public class TestConlluEditor {
     }
 
 
-
-     @Test
+    @Test
     public void test051Mod() throws IOException {
         name("modifying form, to get incoherent text warning");
         ce.setCallgitcommit(false);
@@ -315,7 +289,6 @@ public class TestConlluEditor {
         ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
-        //String rtc =
         processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 9 22 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -342,7 +315,6 @@ public class TestConlluEditor {
         ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
-        //String rtc =
         processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 9 9 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -369,7 +341,6 @@ public class TestConlluEditor {
         ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
-        //String rtc =
         processwrapper("read 1", 1, "editinfo");
         String rtc = ce.process("mod 19 9 dep", 1, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
@@ -398,7 +369,6 @@ public class TestConlluEditor {
         ce.setSaveafter(1);
 
         // call read to be sure makeTrees has been called on sentence 1
-        //String rtc =
         processwrapper("read 1", 1, "editinfo");
 
         StringBuilder sb = new StringBuilder();
@@ -465,9 +435,8 @@ public class TestConlluEditor {
         File out = new File(folder, "test.mod.conllu");
         ce.setOutfilename(out);
 
-        //String rtc =
         processwrapper("mod lemma 3 Oasis", 3, "editinfo");
-        /*rtc = */processwrapper("mod 1 2 detfalse", 3, "editinfo");
+        processwrapper("mod 1 2 detfalse", 3, "editinfo");
         processwrapper("mod split 19", 3, "editinfo");
         processwrapper("mod join 5", 3, "editinfo");
 
@@ -508,7 +477,6 @@ public class TestConlluEditor {
 
         File out = new File(folder, "test.split-ew.conllu");
         ce.setOutfilename(out);
-        //String rtc =
         processwrapper("mod split 5 ", 16, "editinfo");
         processwrapper("mod join 13", 16, "editinfo");
 
@@ -573,7 +541,6 @@ public class TestConlluEditor {
         File out = new File(folder, "test.join-mwt.conllu");
         ce.setOutfilename(out);
 
-        //String rtc =
         processwrapper("mod join 5", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt.conllu");
@@ -593,7 +560,6 @@ public class TestConlluEditor {
         File out = new File(folder, "test.join-mwt-2.conllu");
         ce.setOutfilename(out);
 
-        //String rtc =
         processwrapper("mod join 6", 6, "editinfo");
 
         URL ref = this.getClass().getResource("test.join-mwt-2.conllu");
@@ -613,7 +579,6 @@ public class TestConlluEditor {
         File out = new File(folder, "test.mwt-spaceafter.conllu");
         ce.setOutfilename(out);
 
-        //String rtc =
         processwrapper("mod compose 9 2", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.mwt-spaceafter.conllu");
@@ -633,7 +598,6 @@ public class TestConlluEditor {
         File out = new File(folder, "test.split-to-mwt.conllu");
         ce.setOutfilename(out);
 
-        //String rtc =
         processwrapper("mod misc 5 SpaceAfter=No", 0, "editinfo");
         processwrapper("mod tomwt 5 su uu ur", 0, "editinfo");
 
@@ -651,7 +615,7 @@ public class TestConlluEditor {
         ce.setCallgitcommit(false);
         ce.setBacksuffix(".182");
         ce.setSaveafter(1);
-        //String rtc =
+
         String rtc = ce.process("mod tomwt 8 aa bb", 4, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
@@ -680,7 +644,6 @@ public class TestConlluEditor {
 
         File out = new File(folder, "test.sentsplit.conllu");
         ce.setOutfilename(out);
-        //String rtc =
         processwrapper("mod sentsplit 11", 16, "editinfo");
 
         URL ref = this.getClass().getResource("test.sentsplit.conllu");
@@ -700,11 +663,9 @@ public class TestConlluEditor {
 
         File out = new File(folder, "test.editmetadata.conllu");
         ce.setOutfilename(out);
-        //String rtc =
         processwrapper("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"text\": \"a changed text!\", \"translations\": \"en: a translation\"}", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.editmetadata.conllu");
-        //URL res = this.getClass().getResource("test.conllu.201"); // modified file
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
@@ -716,9 +677,8 @@ public class TestConlluEditor {
         ce.setCallgitcommit(false);
         ce.setBacksuffix(".202");
         ce.setSaveafter(1);
-        //String rtc =
-        String rtc = ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en a translation\"}", 0, "editinfo");
 
+        String rtc = ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en a translation\"}", 0, "editinfo");
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -1234,7 +1194,6 @@ public class TestConlluEditor {
         URL ref = this.getClass().getResource("test.delete.conllu");
         //URL res = this.getClass().getResource("test.conllu.11");
 
-
         Assert.assertEquals(String.format("delete words incorrect\n ref: %s\n res: %s\n", ref.toString(), out /*res*/.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 //FileUtils.readFileToString(new File(res.getFile()), StandardCharsets.UTF_8),
@@ -1251,7 +1210,6 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
         processwrapper("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
         processwrapper("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
-
         processwrapper("mod emptyinsert 3 premier lemma3 POS1 XPOS1", 0, "editinfo");
 
         URL ref = this.getClass().getResource("test.insertempty.conllu");
@@ -1275,6 +1233,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+    
     @Test
     public void test52deleteEmptyWords() throws IOException {
         name("delete empty word");
@@ -1294,6 +1253,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+    
     @Test
     public void test53deleteEmptyWords_Invald() throws IOException {
         name("delete empty word (error)");
@@ -1311,7 +1271,6 @@ public class TestConlluEditor {
         expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"INVALID id (not an integer) «mod delete 5.1» For input string: \\\"5.1\\\"\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
-
     }
 
 

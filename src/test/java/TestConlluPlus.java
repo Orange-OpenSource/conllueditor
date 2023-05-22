@@ -28,8 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.19.1 as of 4th November 2022
- @version 2.21.0 as of 18th March 2023
+ @version 2.22.2 as of 22nd May 2023
  */
 
 import com.google.gson.JsonElement;
@@ -78,6 +77,20 @@ public class TestConlluPlus {
 
     private void name(String n) {
         System.out.format("\n***** Testing: %s ****\n", n);
+    }
+
+
+    /** catch errror message from ce.process() when it is a real error (and not a test for an error).
+     * ce.process() catches all java Exceptions and returns a json error message with "error": "mesage".
+     * Sometimes we test whether CE detected an error, but when this is not the case the presence of "error" in the
+     * returned String fo ce.process() means that something went wrong which should not have gone wrong.
+     */
+    private String processwrapper(String command, int sentid, String comment) {
+        String res = ce.process(command, sentid, comment);
+        if (res.contains("\"error\"")) {
+             Assert.assertFalse("Exception catched: " + res, true);
+        }
+        return res;
     }
 
     @Test
@@ -131,15 +144,14 @@ public class TestConlluPlus {
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
-       // String rtc =
-        		ce.process("read 1", 1, "editinfo");
+        processwrapper("read 1", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 1);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
-        //rtc =
-        		ce.process("read 2", 1, "editinfo");
+
+        processwrapper("read 2", 1, "editinfo");
         res = ce.getraw(ConlluEditor.Raw.CONLLU, 2);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
@@ -162,12 +174,9 @@ public class TestConlluPlus {
         File out = new File(folder, "test.mod.conllup");
         ce.setOutfilename(out);
 
-        //String rtc =
-        ce.process("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
-        //rtc =
-        ce.process("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
-        //rtc =
-        ce.process("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
+        processwrapper("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
+        processwrapper("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
+        processwrapper("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
 
 
         URL ref = this.getClass().getResource("test.mod.conllup");
