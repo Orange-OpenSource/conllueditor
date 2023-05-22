@@ -16,7 +16,7 @@ import org.junit.runners.MethodSorters;
 
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
