@@ -229,6 +229,8 @@ public class TestConlluEditor {
         commands.put("mod feat 2", 1); // delete all features
         commands.put("mod misc 13", 1); // delete all misc
 
+        commands.put("mod addmisc 6 Key=Value1", 3); // add a misc
+        
         runtest("test.edit.conllu", commands, "CoNLL-U output incorrect");
     }
 

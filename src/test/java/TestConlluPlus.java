@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.2 as of 22nd May 2023
+ @version 2.22.2 as of 24th May 2023
  */
 
 import com.google.gson.JsonElement;

@@ -52,7 +52,7 @@
 3	oasis	oasis	NOUN	_	Gender=Fem|Number=Sing	23	nsubj	_	_
 4	de	de	ADP	_	_	5	case	_	_
 5	vie	vie	NOUN	_	Gender=Fem|Number=Sing	3	nmod	_	_
-6	»	»	PUNCT	_	_	3	punct	_	SpaceAfter=No
+6	»	»	PUNCT	_	_	3	punct	_	SpaceAfter=No|Key=Value1
 7	,	,	PUNCT	_	_	3	punct	_	_
 8	dans	dans	ADP	_	_	10	case	_	_
 9	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	10	det	_	_

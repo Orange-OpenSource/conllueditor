@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.0 as of 19th May 2023
+ @version 2.22.2 as of 24th May 2023
  */
 
 
@@ -1078,7 +1078,7 @@ $(window).on('keypress', function (evt) {
 
             newval = shortcutsMISC[shortcutseq];
             if (newval != undefined) {
-                sendmodifs({"cmd": "mod misc " + clickedNodes[0] + " " + newval});
+                sendmodifs({"cmd": "mod addmisc " + clickedNodes[0] + " " + newval});
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];

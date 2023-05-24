@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.22.2
+* MISC shortcut correction, `mod addmisc` added
+* new test
+
 ## Version 2.22.1
 * undo/redo bug corrected
 * check json encoded error messages in tests

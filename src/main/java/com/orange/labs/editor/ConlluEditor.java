@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.0 as of 19th May 2023
+ @version 2.22.2 as of 24th May 2023
  */
 package com.orange.labs.editor;
 
@@ -1426,6 +1426,7 @@ public class ConlluEditor {
                     || command.startsWith("mod feat ")
                     || command.startsWith("mod addfeat ")
                     || command.startsWith("mod misc ")
+                    || command.startsWith("mod addmisc ")
                     || command.startsWith("mod extracol ") // mod extracol id colname vals....
                     ) {
                 // on attend
@@ -1517,6 +1518,10 @@ public class ConlluEditor {
                         } else {
                             modWord.setMisc(f[3]);
                         }
+                        break;
+                    }
+                    case "addmisc": {
+                        modWord.addMisc(f[3]);
                         break;
                     }
                     case "enhdeps": {
