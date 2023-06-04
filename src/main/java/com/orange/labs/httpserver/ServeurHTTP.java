@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2021, Orange S.A.
+Copyright (c) 2018-2023, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.10.0 as of 10th January 2021
+ @version 2.22.3 as of 4th June 2023
  */
 package com.orange.labs.httpserver;
 
@@ -105,14 +105,17 @@ public class ServeurHTTP {
         HttpServer server = HttpServer.create(new InetSocketAddress(this.port), 0);
 
         String indexhtml = null;
+        String indexjs = null;
         if (e instanceof ConlluEditor) {
             ce = (ConlluEditor) e;
             server.createContext("/edit/", new EditHandler(ce));
             indexhtml = "index.html";
+            indexjs = "edit.js";
         } else if (e instanceof ParserClient) {
             pc = (ParserClient) e;
             server.createContext("/parse/", new ParseHandler(pc));
             indexhtml = "parse.html";
+            indexjs = "parse.js";
         } else {
             System.err.println("Bad Context: " + e);
             System.exit(11);
@@ -128,9 +131,7 @@ public class ServeurHTTP {
             s = URLDecoder.decode(s, "UTF-8");
             rootdir = s;
             System.err.println("calculated rootdir from .jar: " + s);
-        }
-
-        if (rootdir != null) {
+        } else {
             Path rdir = new File(rootdir).toPath();
             if (!Files.exists(rdir)) {
                 throw new IOException(rootdir + " does not exist");
@@ -138,8 +139,15 @@ public class ServeurHTTP {
             if (!Files.isDirectory(rdir)) {
                 throw new IOException(rootdir + " is not a directory");
             }
-            server.createContext("/", new FileHandler(rootdir, indexhtml));
+            if (!Files.exists(new File(rootdir, indexhtml).toPath())) {
+                throw new IOException(rootdir + " does contain '" + indexhtml + "'");
+            }
+            if (!Files.exists(new File(rootdir, indexjs).toPath())) {
+                throw new IOException(rootdir + " does contain '" + indexjs + "'");
+            }
         }
+
+        server.createContext("/", new FileHandler(rootdir, indexhtml));
         server.setExecutor(null);
 
         String hostname = "localhost";

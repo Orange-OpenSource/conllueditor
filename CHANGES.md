@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.22.3
+* bug concerning --rootdir corrected
+
 ## Version 2.22.2
 * MISC shortcut correction, `mod addmisc` added
 * new test
