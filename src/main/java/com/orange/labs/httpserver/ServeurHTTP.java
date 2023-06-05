@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.3 as of 4th June 2023
+ @version 2.22.3 as of 5th June 2023
  */
 package com.orange.labs.httpserver;
 
@@ -140,10 +140,10 @@ public class ServeurHTTP {
                 throw new IOException(rootdir + " is not a directory");
             }
             if (!Files.exists(new File(rootdir, indexhtml).toPath())) {
-                throw new IOException(rootdir + " does contain '" + indexhtml + "'");
+                throw new IOException(rootdir + " does not contain '" + indexhtml + "'");
             }
             if (!Files.exists(new File(rootdir, indexjs).toPath())) {
-                throw new IOException(rootdir + " does contain '" + indexjs + "'");
+                throw new IOException(rootdir + " does not contain '" + indexjs + "'");
             }
         }
 
