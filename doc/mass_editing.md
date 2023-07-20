@@ -32,9 +32,13 @@ Examples:
   * `IsEmpty` (no value, true if the current node is empty)
   * `IsMWT` (no value, true if the current node is a MWT)
 
-`Form:`, `Lemma:` and `Xpos:` can contain simple regular expression (only the character ')' cannot be used
+`Form:`, `Lemma:` and `Xpos:` can contain simple regular expression (only the character ')' cannot be used.
+
+To check for any Feat or Misc value, leave the value empty:
+  * `Feat:Gender:` true if the current word has the feature `Gender` with any value
+
 In order to check for the absence of a given Featurename in the Feature or Misc column, use the following:
-  * `Feat:Gender:` true if the cyurrent word has no feature `Gender`
+  * `not Feat:Gender:` true if the current word has no feature `Gender`
 
 `EUD` cannot deal (yet) with empty word ids (`n.m`)
 

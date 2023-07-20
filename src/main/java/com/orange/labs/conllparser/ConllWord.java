@@ -1547,7 +1547,7 @@ public class ConllWord {
         }
         return features.containsKey(name);
     }
-    
+
     // check whether feature with value is present
     public boolean hasFeature(String name, String val) {
         if (features.isEmpty()) {

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.18.1 as of 29th October 2022
+ @version 2.22.4 as of 20th July 2023
  */
 package com.orange.labs.conllparser;
 
@@ -305,10 +305,15 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         }
         boolean rtc ;
         if (fv.length == 2) {
-            rtc = use.matchesFeatureValue(fv[0], fv[1]);
+            if ("!".equals(fv[1])) {
+                // feature must not be in word
+                rtc = !use.getFeatures().containsKey(fv[0]);
+            } else {
+                rtc = use.matchesFeatureValue(fv[0], fv[1]);
+            }
         } else {
-            // feature must not be in word
-            rtc = !use.getFeatures().containsKey(fv[0]);
+            // mist must be in word with any key
+            rtc = use.getFeatures().containsKey(fv[0]);
         }
         return rtc;
     }
@@ -323,10 +328,15 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         }
         boolean rtc;
         if (fv.length == 2) {
-            rtc = use.matchesMiscValue(fv[0], fv[1]);
+            if ("!".equals(fv[1])) {
+                // misc must not be in word
+                rtc = !use.getMisc().containsKey(fv[0]);
+            } else {
+                rtc = use.matchesMiscValue(fv[0], fv[1]);
+            }
         } else {
-            // feature must not be in word
-            rtc = !use.getMisc().containsKey(fv[0]);
+            // mist must be in word with any key
+            rtc = use.getMisc().containsKey(fv[0]);
         }
         return rtc;
     }
@@ -459,7 +469,7 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
     @Override
     public Boolean visitValcompare(ConditionsParser.ValcompareContext ctx) {
         CGetVisitor getvisitor = new CGetVisitor(cword, wordlists);
-       
+
         //System.err.println("GET VALUES FOR COMPARISON");
         //String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
         //String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname
@@ -480,12 +490,12 @@ public class CEvalVisitor extends ConditionsBaseVisitor<Boolean> {
         }
         return false;
     }
-    
-    
+
+
     @Override
     public Boolean visitValcompatible(ConditionsParser.ValcompatibleContext ctx) {
         CGetVisitor getvisitor = new CGetVisitor(cword, wordlists);
-       
+
         //System.err.println("GET VALUES FOR COMPATIBILITY");
         //String left = getvisitor.visit(ctx.columnname(0));  // get value of left columnname
         //String right = getvisitor.visit(ctx.columnname(1));  // get value of right columnname

@@ -3,7 +3,7 @@
     <!--
     This library is under the 3-Clause BSD License
 
-    Copyright (c) 2018-2022, Orange S.A.
+    Copyright (c) 2018-2023, Orange S.A.
 
     Redistribution and use in source and binary forms, with or without modification,
     are permitted provided that the following conditions are met:
@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.20.0 as of 13th December 2022
+    version 2.22.4 as of 20th July 2023
     -->
 
     <head>
@@ -225,7 +225,7 @@
                        <button class="editbuttons mybutton" id="replacego">search & replace</button>
                     </div>
                 </td></tr>
-                
+
                 <tr id="grewmatchsearchandreplace"><td>
                     <div>
                         <input class="inputfield" placeholder="pattern {N [upos=NOUN]} without {V -[nsubj]-> N}" title="grewmatch pattern" size="70" type="text" id="grewmatchsearchexpression" value="">
@@ -513,9 +513,12 @@
                         </ul>
                         In order to check for the absence of a given Featurename in the Feature or Misc column, use the following:
                         <ul>
-                            <li><span class="userinputdoc">Feat:Gender:</span> true if the cyurrent word has no feature <span class="userinputdoc">Gender</span>
+                            <li><span class="userinputdoc">not Feat:Gender:</span> true if the current word has no feature <span class="userinputdoc">Gender</span>.
                         </ul>
-
+                        In order to check any Feature (more Misc) value, do not specify the value:
+                        <ul>
+                            <li><span class="userinputdoc">Feat:Gender:</span> true if the current word has feature <span class="userinputdoc">Gender</span> with any value.
+                        </ul>
                         In addition to key keys listed above, four functions are available to take the context of the token into account:
                         <ul>
                             <li>  <span class="userinputdoc">child()</span> child of current token</li>
@@ -546,7 +549,7 @@
                             <li> <span class="userinputdoc">@Deprel=prec(@Deprel)</span>: true, if the current word and the preceding word have the same <span class="userinputdoc">deprel</span> value
                             <li> <span class="userinputdoc">@Xpos=head(head(@Feat:Featname))</span> true if the `XPOS` of the current word has the same value as the feature <span class="userinputdoc">Featname</span> of the head of its head.
                             <li> <span class="userinputdoc">@Feat:Gender=head(@Feat:Gender) and not Upos:DET</span> true if the head and the current word have the same value for the feature <span class="userinputdoc">Gender</span> and the current word is not a <span class="userinputdoc">DET</span>
-
+                        </ul>
 
                         <h3>Search and replace</h3>
 

@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.22.3 (see [change history](CHANGES.md))
+Current version: 2.22.4 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -327,7 +327,7 @@ In order to create a multiword token, use the `compose <wordid> <length>`
 command. Click on the multiword token bar (at the bottom of the dependency
 tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
-All operations which change the tokenisation of the sentence will create a `incoherent # text and forms` warning. This is because the è# text = ....` 
+All operations which change the tokenisation of the sentence will create a `incoherent # text and forms` warning. This is because the è# text = ....`
 metadata must be coherent with the concatenation of forms (taken into account `SpacesAfter`/`SpaceAfter` fields in the MISC column.
 Unless earlier versions, the `# text ...` is no longer updated automatically, but must be adapted manually using the `edit metadata` button.
 
@@ -498,7 +498,7 @@ see [Mass Editing](doc/mass_editing.md)
 
 ## Metadata editing
 
-The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph, 
+The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph,
 the sentence itself, as well as its sentence id, translations (mostly into English) or transliterations.
 Clicking on `edit metadata` opens the Metadata dialogue.
 For translations, the translations must be prefixed with the language code as shown in the screen shot.

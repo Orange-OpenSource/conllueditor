@@ -454,6 +454,30 @@ public class TestConllFile {
     }
 
     @Test
+    public void test20repl08() throws IOException, ConllException {
+        name("repl 08");
+        applyRule("Feat:VerbForm:Inf", "misc:\"VF=INF\"", "rule27.conllu");
+    }
+
+    @Test
+    public void test20repl09() throws IOException, ConllException {
+        name("repl 09");
+        applyRule("Feat:VerbForm:", "misc:\"VF=ANY\"", "rule28.conllu");
+    }
+
+    @Test
+    public void test20repl10() throws IOException, ConllException {
+        name("repl 09");
+        applyRule("not Feat:Number:", "misc:\"NoNumber=True\"", "rule30.conllu");
+    }
+
+    @Test
+    public void test20repl11() throws IOException, ConllException {
+        name("repl 11");
+        applyRule("Misc:SpaceAfter:", "feat:\"SPACEAFTER=ANY\"", "rule29.conllu");
+    }
+
+    @Test
     public void test21value01() throws IOException, ConllException {
         name("value 01");
         applyRule("@Upos=head(@Upos)", "Misc:\"FOUND=UPOS_HEADUPOS\"", "value01.conllu");

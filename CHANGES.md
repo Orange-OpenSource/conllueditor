@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.22.4
+* `Feat:VerbForm=` or `Misc:SpaceAfter=` (no value given) searches for words which have the feature/misc name with any value (use `not Feat:VerbForm:` to look for words which do not have the given feature)
+* new tests
+
 ## Version 2.22.3
 * bug concerning --rootdir corrected
 
