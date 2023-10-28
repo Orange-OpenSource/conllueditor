@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.2 as of 24th May 2023
+ @version 2.23.0 as of 28th October 2023
  */
 package com.orange.labs.editor;
 
@@ -604,7 +604,7 @@ public class ConlluEditor {
     /**
      * get raw text; Latex, conllu, sdparse or the output of the validation
      */
-    public String getraw(Raw raw, int currentSentenceId) {
+    public String getraw(Raw raw, int currentSentenceId, boolean all_enhanced) {
         JsonObject solution = new JsonObject();
 
         ConllSentence csent = null;
@@ -627,7 +627,7 @@ public class ConlluEditor {
 
                     break;
                 case LATEX:
-                    solution.addProperty("raw", csent.getLaTeX());
+                    solution.addProperty("raw", csent.getLaTeX(all_enhanced));
                     break;
                 case SDPARSE:
                     solution.addProperty("raw", csent.getSDparse());

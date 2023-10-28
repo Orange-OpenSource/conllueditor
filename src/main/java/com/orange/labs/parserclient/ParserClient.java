@@ -290,7 +290,7 @@ public class ParserClient {
                 solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce chapps
 
                 // adding also a CoNLL-U, sd-parse and a LaTeX representation
-                solution.addProperty("latex", csent.getLaTeX());
+                solution.addProperty("latex", csent.getLaTeX(false));
                 solution.addProperty("sdparse", csent.getSDparse());
                 solution.addProperty("conllu", csent.toString());
                 solutions.add(solution);

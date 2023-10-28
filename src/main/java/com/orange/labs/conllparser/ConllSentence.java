@@ -28,8 +28,8 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.1 as of 21st May 2023
- */
+ @version 2.23.0 as of 28th October 2023
+*/
 package com.orange.labs.conllparser;
 
 import com.google.gson.JsonArray;
@@ -813,13 +813,16 @@ public class ConllSentence {
     /**
      * format the sentence for use with xelatex (tikz-dependencie)
      */
-    public String getLaTeX() {
+    public String getLaTeX(boolean all_enhanced) {
         StringBuilder sb = new StringBuilder();
         try {
             makeTrees(null);
 
             Map<String, Integer> position = new HashMap<>(); // position of each word, needed for latex-deprel
-            sb.append("%% for tikz-dependency\n");
+            sb.append("%% for tikz-dependency\n%% use following packages:\n");
+            sb.append("%% \\usepackage{tikz}\n");
+            sb.append("%% \\usepackage{tikz-dependency}\n");
+
             if (newdoc != null) {
                 sb.append("% newdoc ").append(newdoc).append('\n');
             }
@@ -980,10 +983,15 @@ public class ConllSentence {
                             System.err.println("Invalid empty word head " + ed.getFullHeadId() + " " + ed);
                         } else {
                             int ewheadpos = position.get(ed.getFullHeadId());
-                            if (ewheadpos != headpos) {
+                            if (all_enhanced || ewheadpos != headpos) {
                                 sb.append("\n\\depedge[edge below]{").append(ewheadpos).append("}{")
                                         .append(mypos).append("}{")
-                                        .append(ed.deprel).append("}\n");
+                                        .append(ed.deprel).append("}");
+                                if (ewheadpos == headpos) {
+                                    sb.append(" % enhanced == basic\n");
+                                } else {
+                                    sb.append("\n");
+                                }
                             }
                         }
                     }
@@ -1016,7 +1024,8 @@ public class ConllSentence {
 
             sb.append("\\end{dependency}\n");
 
-            sb.append("\n\n%% for deptrees.sty\n");
+            sb.append("\n\n\n%% for deptrees.sty\n");
+            sb.append("%% \\usepackage{deptrees}\n");
             sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist + 1));
             sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
             for (ConllWord head : getHeads()) {

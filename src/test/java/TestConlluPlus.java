@@ -28,8 +28,8 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.2 as of 24th May 2023
- */
+ @version 2.23.0 as of 28th October 2023
+*/
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -139,20 +139,20 @@ public class TestConlluPlus {
 
         URL url = this.getClass().getResource("out1.conllup");
 
-        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0); // to have the global.columns line
+        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0, false); // to have the global.columns line
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         processwrapper("read 1", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 1);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 1, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
 
         processwrapper("read 2", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 2);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 2, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);

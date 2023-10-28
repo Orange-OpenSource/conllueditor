@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.2 as of 24th May 2023
+ @version 2.23.0 as of 28th October 2023
  */
 
 
@@ -125,7 +125,7 @@ function downloadSVG(ident) {
 
 
 function getRaw(what, title) {
-    var urlbase = URL_BASE + "get" + what + "?sentid=" + ($("#currentsent").text() - 1);
+    var urlbase = URL_BASE + "get" + what + "?all_enhanced=" + show_basic_in_enhanced + "&sentid=" + ($("#currentsent").text() - 1);
     //console.log("UU " + urlbase);
     $('#rawtext').empty(); // clean text
     $('#showRawModalLabel').html(title); //update modal title

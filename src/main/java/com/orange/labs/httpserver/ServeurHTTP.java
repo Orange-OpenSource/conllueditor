@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.3 as of 5th June 2023
+ @version 2.23.0 as of 28th October 2023
  */
 package com.orange.labs.httpserver;
 
@@ -278,27 +278,33 @@ public class ServeurHTTP {
                 if (query != null) {
                     Map<String, String> ma = queryToMap(query);
                     String s = ma.get("sentid");
+                    String e = ma.get("all_enhanced");
+                    boolean all_enhanced = false;
+                    if ("true".equals(e)) {
+                        all_enhanced = true;
+                    }
+
                     if (s != null) {
                         sentid = Integer.parseInt(s);
 
                         if (path.equals("/edit/getvalidation")) {
-                            response = ce.getraw(ConlluEditor.Raw.VALIDATION, sentid) + "\n";
+                            response = ce.getraw(ConlluEditor.Raw.VALIDATION, sentid, false) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;
                         } else if (path.equals("/edit/getlatex")) {
-                            response = ce.getraw(ConlluEditor.Raw.LATEX, sentid) + "\n";
+                            response = ce.getraw(ConlluEditor.Raw.LATEX, sentid, all_enhanced) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;
                         } else if (path.equals("/edit/getconllu")) {
-                            response = ce.getraw(ConlluEditor.Raw.CONLLU, sentid) + "\n";
+                            response = ce.getraw(ConlluEditor.Raw.CONLLU, sentid, false) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;
                         } else if (path.equals("/edit/getsdparse")) {
-                            response = ce.getraw(ConlluEditor.Raw.SDPARSE, sentid) + "\n";
+                            response = ce.getraw(ConlluEditor.Raw.SDPARSE, sentid, all_enhanced) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;
                         } else if (path.equals("/edit/getspacyjson")) {
-                            response = ce.getraw(ConlluEditor.Raw.SPACY_JSON, sentid) + "\n";
+                            response = ce.getraw(ConlluEditor.Raw.SPACY_JSON, sentid, all_enhanced) + "\n";
                             http_rtc = HttpURLConnection.HTTP_OK;
                             json = true;
                         } else {

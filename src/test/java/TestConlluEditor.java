@@ -28,8 +28,8 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.22.2 as of 22nd May 2023
- */
+ @version 2.23.0 as of 28th October 2023
+*/
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -131,7 +131,7 @@ public class TestConlluEditor {
         // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
         processwrapper("read 13", 1, "editinfo");
-        String res = ce.getraw(ConlluEditor.Raw.LATEX, 13);
+        String res = ce.getraw(ConlluEditor.Raw.LATEX, 13, false);
         // first sentence 13
         JsonElement jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
         JsonObject jobject = jelement.getAsJsonObject();
@@ -139,8 +139,17 @@ public class TestConlluEditor {
         StringBuilder sb = new StringBuilder();
         sb.append(jobject.get("raw").getAsString()).append('\n');
 
+        
+        // LatEx this time with enhanced relations
+        res = ce.getraw(ConlluEditor.Raw.LATEX, 13, true);
+        // first sentence 13
+        jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
+        jobject = jelement.getAsJsonObject();
+
+        sb.append(jobject.get("raw").getAsString()).append('\n');
+        
         // add LateX for sentence 18
-        res = ce.getraw(ConlluEditor.Raw.LATEX, 18);
+        res = ce.getraw(ConlluEditor.Raw.LATEX, 18, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         sb.append(jobject.get("raw").getAsString()).append('\n');
@@ -165,7 +174,7 @@ public class TestConlluEditor {
         // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
         processwrapper("read 13", 1, "editinfo");
-        String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13);
+        String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13, false);
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
 
@@ -185,21 +194,21 @@ public class TestConlluEditor {
 
         URL url = this.getClass().getResource("out1.conllu");
 
-        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13);
+        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13, false);
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         //String rtc =
         processwrapper("read 14", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 14);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 14, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
         //rtc =
         processwrapper("read 15", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 15);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 15, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);

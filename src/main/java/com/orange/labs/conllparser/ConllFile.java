@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.17.3 as of 25th September 2022
+ @version 2.23.0 as of 28th October 2023
 */
 package com.orange.labs.conllparser;
 
@@ -784,7 +784,7 @@ public class ConllFile {
                                     out.print(cs.toString());
                                     break;
                                 case LATEX:
-                                    out.println(cs.getLaTeX());
+                                    out.println(cs.getLaTeX(false));
                                     break;
                                 default:
                                     out.println(cs.getSentence());
@@ -809,7 +809,7 @@ public class ConllFile {
                             out.print(cs.toString(strict));
                             break;
                         case LATEX:
-                            out.println(cs.getLaTeX());
+                            out.println(cs.getLaTeX(false));
                             break;
                         default:
                             out.println(cs.getSentence());
