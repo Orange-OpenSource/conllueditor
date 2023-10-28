@@ -348,7 +348,9 @@ Unless earlier versions, the `# text ...` is no longer updated automatically, bu
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
-LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
+LaTeX output includes MWE units as well as enhanced dependencies. Enhanced dependencies which are identical too basic dependencies
+are shown in the LaTeX output if the button `show basic in enhanced` is activated.
+The `download` downloads the current image as a svg-file.
 A click on the filename on the top of the screens opens a windows with some file
 statistics:
 
