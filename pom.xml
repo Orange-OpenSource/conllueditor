@@ -32,21 +32,21 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.23.0 as of 28th October 2023
+    version 2.24.0 as of 28th October 2023
     -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>2.23.0</version>
+    <version>2.24.0</version>
     <packaging>jar</packaging>
 
     <properties>
         <!-- mis dans un fichier properties avec le plugin properties-maven-plugin -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.11</maven.compiler.source>
+        <maven.compiler.target>1.11</maven.compiler.target>
         <mainClass>com.orange.labs.editor.ConlluEditor</mainClass>
         <version>${project.version}</version>
     </properties>
@@ -60,7 +60,8 @@
             <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.9.2</version>
+                <version>4.13.1</version>
+                <!-- do not forget to update antlr dependency below -->
                 <configuration>
                     <listener>false</listener>
                     <visitor>true</visitor>
@@ -79,11 +80,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.11.0</version>
                 <configuration>
-                    <!--release>11</release-->
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>11</release>
+                    <!--source>1.8</source>
+                    <target>1.8</target-->
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
@@ -91,7 +92,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.3.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -104,7 +105,7 @@
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.6.0</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
@@ -139,7 +140,7 @@
                 -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>1.2.1</version>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
@@ -157,7 +158,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.2.2</version>
                 <configuration>
                     <!-- https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html -->
                     <printSummary>true</printSummary>
@@ -220,46 +221,68 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.9</version>
+            <version>2.10.1</version>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>6.6.1.202309021850-r</version>
+            <version>6.7.0.202309050840-r</version>
         </dependency>
 
         <!-- Junit tests -->
-        <dependency>
+        <!--dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
             <scope>test</scope>
+        </dependency-->
+        <!-- upgrade to junit 5: https://symflower.com/en/company/blog/2023/migrating-from-junit-4-to-5/ -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.1</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>2.15.0</version>
         </dependency>
 
         <dependency>
             <groupId>commons-cli</groupId>
             <artifactId>commons-cli</artifactId>
-            <version>1.5.0</version>
+            <version>1.6.0</version>
         </dependency>
         
         <!-- https://www.slf4j.org/codes.html#StaticLoggerBinder: needed to avoid a message about absent SLF4J configuration -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
-            <version>1.7.32</version>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.9</version>
         </dependency>
 
         <dependency>
             <groupId>org.antlr</groupId>
             <artifactId>antlr4-runtime</artifactId>
-            <version>4.9.2</version>
+            <version>4.13.1</version>
         </dependency>
 
     </dependencies>

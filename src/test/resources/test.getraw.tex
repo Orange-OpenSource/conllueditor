@@ -1,0 +1,60 @@
+%% for tikz-dependency
+%% use following packages:
+%% \usepackage{tikz}
+%% \usepackage{tikz-dependency}
+% sent_id = ellipsis1
+\begin{dependency}
+\begin{deptext}
+%% forms:
+Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\
+%% lemmas:
+% Sam	\& fix	\& lunch	\& and	\& Kim	\& fix	\& dinner	\\
+%% UPOS:
+% PROPN	\& VERB	\& NOUN	\& CCONJ	\& PROPN	\& VERB	\& NOUN	\\
+%% XPOS:
+% NNP	\& VBD	\& NN	\& CC	\& NNP	\& VBD	\& NN	\\
+%% IDs:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 5.1	\& 6	\\
+%% Position in sentence:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\\
+\end{deptext}
+
+%        head dependent deprel
+\depedge{2}{1}{nsubj}
+
+\depedge[edge below]{2}{1}{nsubj} % enhanced == basic
+\deproot[edge unit distance=4ex]{2}{root}%%
+\depedge{2}{3}{obj}
+
+\depedge[edge below]{2}{3}{obj} % enhanced == basic
+\depedge{5}{4}{cc}
+
+\depedge[edge below]{5}{4}{cc} % enhanced == basic
+
+\depedge[edge below]{6}{4}{cc}
+\depedge{2}{5}{conj}
+
+\depedge[edge below]{2}{5}{conj} % enhanced == basic
+
+\depedge[edge below]{6}{5}{nsubj}
+\depedge[edge below]{2}{6}{conj}
+\depedge{5}{7}{orphan}
+
+\depedge[edge below]{6}{7}{obj}
+\end{dependency}
+
+
+
+%% for deptrees.sty
+%% \usepackage{deptrees}
+\setbottom{4} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{2}{fixed}{VERB}
+\root{5}{fixed}{VERB}
+% headpos, hor-pos, vert-pos, form, UPOS, deprel
+\dep{2}{1}{1}{Sam}{PROPN}{nsubj}
+\dep{2}{3}{1}{lunch}{NOUN}{obj}
+\dep{2}{5}{1}{Kim}{PROPN}{conj}
+\dep{5}{4}{2}{and}{CCONJ}{cc}
+\dep{5}{6}{2}{dinner}{NOUN}{orphan}
+\end{tikzpicture}

@@ -1,0 +1,418 @@
+{
+  "sentenceid": 4,
+  "maxsentence": 19,
+  "text": "L\u0027œuvre est située dans la galerie des batailles, dans le château de Versailles.",
+  "sentence": "L\u0027œuvre est située dans la galerie des batailles, dans le château de Versailles.",
+  "length": 17,
+  "sent_id": "fr-ud-train_00002",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 4,
+      "id": 4,
+      "form": "située",
+      "lemma": "situer",
+      "feats": [
+        {
+          "name": "Gender",
+          "val": "Fem"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Part"
+        }
+      ],
+      "misc": [
+        {
+          "name": "SpaceAfter",
+          "val": "\\s\\t\\s"
+        }
+      ],
+      "xpos": "_",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 2,
+          "archeight": 2,
+          "id": 2,
+          "form": "œuvre",
+          "lemma": "œuvre",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Fem"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 1,
+              "archeight": 1,
+              "id": 1,
+              "form": "L\u0027",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "_",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 3,
+          "archeight": 1,
+          "id": 3,
+          "form": "est",
+          "lemma": "être",
+          "feats": [
+            {
+              "name": "Mood",
+              "val": "Ind"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Person",
+              "val": "3"
+            },
+            {
+              "name": "Tense",
+              "val": "Pres"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Fin"
+            }
+          ],
+          "xpos": "_",
+          "upos": "AUX",
+          "deprel": "aux",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 7,
+          "archeight": 3,
+          "id": 7,
+          "form": "galerie",
+          "lemma": "galerie",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Fem"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "obl",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 5,
+              "archeight": 2,
+              "id": 5,
+              "form": "dans",
+              "lemma": "dans",
+              "xpos": "_",
+              "upos": "ADP",
+              "deprel": "case",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 6,
+              "archeight": 1,
+              "id": 6,
+              "form": "la",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": " "
+                }
+              ],
+              "xpos": "_",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 10,
+              "archeight": 3,
+              "id": 10,
+              "form": "batailles",
+              "lemma": "bataille",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Plur"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "_",
+              "upos": "NOUN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 8,
+                  "archeight": 2,
+                  "id": 8,
+                  "form": "de",
+                  "lemma": "de",
+                  "mwe": {
+                    "fromid": 8,
+                    "toid": 9,
+                    "form": "des"
+                  },
+                  "xpos": "_",
+                  "upos": "ADP",
+                  "deprel": "case",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 9,
+                  "archeight": 1,
+                  "id": 9,
+                  "form": "les",
+                  "lemma": "le",
+                  "feats": [
+                    {
+                      "name": "Definite",
+                      "val": "Def"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Fem"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Plur"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Art"
+                    }
+                  ],
+                  "xpos": "_",
+                  "upos": "DET",
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 11,
+          "archeight": 4,
+          "id": 11,
+          "form": ",",
+          "lemma": ",",
+          "xpos": "_",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 14,
+          "archeight": 5,
+          "id": 14,
+          "form": "château",
+          "lemma": "château",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "obl",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 12,
+              "archeight": 2,
+              "id": 12,
+              "form": "dans",
+              "lemma": "dans",
+              "xpos": "_",
+              "upos": "ADP",
+              "deprel": "case",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 13,
+              "archeight": 1,
+              "id": 13,
+              "form": "le",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "_",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 16,
+              "archeight": 2,
+              "id": 16,
+              "form": "Versailles",
+              "lemma": "Versailles",
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "_",
+              "upos": "PROPN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 15,
+                  "archeight": 1,
+                  "id": 15,
+                  "form": "de",
+                  "lemma": "de",
+                  "xpos": "_",
+                  "upos": "ADP",
+                  "deprel": "case",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 17,
+          "archeight": 6,
+          "id": 17,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "_",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "SpaceAfter\u003d\\s\\t\\s",
+  "comments": "sentence 4\n",
+  "canUndo": false,
+  "canRedo": false
+}

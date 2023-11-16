@@ -1,0 +1,155 @@
+{
+  "sentenceid": 8,
+  "maxsentence": 19,
+  "text": "il habite à Los Angeles.",
+  "sentence": "il habite à Los Angeles.",
+  "length": 7,
+  "sent_id": "conlueditor-test-8",
+  "changes": 1,
+  "tree": [
+    {
+      "position": 2,
+      "id": 2,
+      "form": "habite",
+      "lemma": "habiter",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Person",
+          "val": "3"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        }
+      ],
+      "xpos": "VERB",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 1,
+          "id": 1,
+          "form": "il",
+          "lemma": "il",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Person",
+              "val": "3"
+            },
+            {
+              "name": "PronType",
+              "val": "Prs"
+            }
+          ],
+          "xpos": "PERS_NOM",
+          "upos": "PRON",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 4,
+          "archeight": 2,
+          "id": 4,
+          "form": "Los",
+          "lemma": "Los",
+          "xpos": "PROPN",
+          "upos": "PROPN",
+          "deprel": "obl",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 3,
+              "archeight": 1,
+              "id": 3,
+              "form": "à",
+              "lemma": "à",
+              "xpos": "ADP",
+              "upos": "ADP",
+              "deprel": "case",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 5,
+              "archeight": 1,
+              "id": 5,
+              "form": "Ange",
+              "lemma": "Ange",
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "PROPN",
+              "upos": "PROPN",
+              "deprel": "flat:name",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 6,
+              "archeight": 2,
+              "id": 6,
+              "form": "les",
+              "lemma": "les",
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "PROPN",
+              "upos": "PROPN",
+              "deprel": "flat:name",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 7,
+          "archeight": 3,
+          "id": 7,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "PUNCT",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 8\n",
+  "canUndo": true,
+  "canRedo": false
+}

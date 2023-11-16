@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.24.0 as of 14th November 2023
  */
 package com.orange.labs.httpserver;
 
@@ -64,6 +64,7 @@ import java.util.Map;
  * @author Johannes Heinecke <johannes.heinecke@orange.com>
  */
 public class ServeurHTTP {
+
     private int port;
     private ConlluEditor ce = null;
     private ParserClient pc = null;
@@ -90,6 +91,7 @@ public class ServeurHTTP {
             + "</body>\n</html>\n";
     private static String e404 = String.format(errortemplate, "404 Not Found", "404");
     private static String e400 = String.format(errortemplate, "400 Bad Request", "400");
+    private HttpServer server;
 
     /**
      * use server for CoNLL-U editing
@@ -102,7 +104,7 @@ public class ServeurHTTP {
         //this.ce = ce;
         this.debug = debug;
 
-        HttpServer server = HttpServer.create(new InetSocketAddress(this.port), 0);
+        server = HttpServer.create(new InetSocketAddress(this.port), 0);
 
         String indexhtml = null;
         String indexjs = null;
@@ -116,18 +118,15 @@ public class ServeurHTTP {
             server.createContext("/parse/", new ParseHandler(pc));
             indexhtml = "parse.html";
             indexjs = "parse.js";
-        } else {
-            System.err.println("Bad Context: " + e);
-            System.exit(11);
         }
 
         if (rootdir == null) {
             // if no rootdir (path to /gui) is given we assume the jar file is in /target, so we can
             // calculate the position of /gui from the postion of the jar file
             String s = new File(ServeurHTTP.class.getProtectionDomain()
-            .getCodeSource()
-            .getLocation()
-            .getPath()).getParentFile().getParent() + File.separator + "gui";
+                    .getCodeSource()
+                    .getLocation()
+                    .getPath()).getParentFile().getParent() + File.separator + "gui";
             s = URLDecoder.decode(s, "UTF-8");
             rootdir = s;
             System.err.println("calculated rootdir from .jar: " + s);
@@ -155,7 +154,7 @@ public class ServeurHTTP {
         try {
             InetAddress addr = InetAddress.getLocalHost();
             //if ((debug & 2) != 0) {
-             hostname = addr.getHostName();
+            hostname = addr.getHostName();
             //} else {
             //    hostname = addr.toString();
             //}
@@ -168,6 +167,10 @@ public class ServeurHTTP {
             System.err.println("Point your browser to http://" + hostname + "/conllueditor?port=" + this.port);
         }
         server.start();
+    }
+
+    public void stop() {
+        server.stop(1);
     }
 
     /**
@@ -198,78 +201,94 @@ public class ServeurHTTP {
 
             boolean json = true;
             String response = null;
+
+            URI requestedUri = he.getRequestURI();
+            String path = requestedUri.getPath();
+            System.err.println("METHOD " + he.getRequestMethod());
+            System.err.println("PATH   " + path);
             int http_rtc = HttpURLConnection.HTTP_NO_CONTENT;
+
             // try {
-            //URI requestedUri = he.getRequestURI();
-            //String path = requestedUri.getPath();
             if (he.getRequestMethod().equalsIgnoreCase("POST")) {
-                // REQUEST Headers
-                //Headers requestHeaders = he.getRequestHeaders();
-                //for (String key : requestHeaders.keySet())
-                //    System.err.println("HEADER " + key  + ":"  + requestHeaders.getFirst(key));
-                // REQUEST Body
-                InputStream is = he.getRequestBody();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
-                String command = null;
-                Integer sentid = null;
-
-                String boundary = Multipart.getBoundary(he.getRequestHeaders());
-                if (boundary != null) {
-                    // multipart
-                    Multipart contents = new Multipart(boundary, br);
-                    if ((debug & 0x20) != 0) {
-                        System.err.println("EditHandler: multiparts:\n" + contents);
-                    }
-                    command = contents.getFields().get("cmd").trim();
-                    sentid = Integer.parseInt(contents.getFields().get("sentid").trim());
-
+                if (!"/edit/".equals(path)) {
+                    http_rtc = HttpURLConnection.HTTP_BAD_REQUEST;
+                    json = true;
+                    response = "{ \"error\": \"bad POST path: '" + path + "'\" }";
                 } else {
-                    // post normal
-                    StringBuilder contents = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        contents.append(line).append(" ");
-                    }
-                    //text = contents.toString().trim();
-                    if ((debug & 0x20) != 0) {
-                        System.err.println("EditHandler: data: ");
-                    }
-                    String[] lines = contents.toString().split("&");
-                    for (String l : lines) {
-                        l = l.trim();
+                    // REQUEST Headers
+                    //Headers requestHeaders = he.getRequestHeaders();
+                    //for (String key : requestHeaders.keySet())
+                    //    System.err.println("HEADER " + key  + ":"  + requestHeaders.getFirst(key));
+                    // REQUEST Body
+                    InputStream is = he.getRequestBody();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+                    String command = null;
+                    Integer sentid = null;
+
+                    String boundary = Multipart.getBoundary(he.getRequestHeaders());
+                    if (boundary != null) {
+                        // multipart
+                        Multipart contents = new Multipart(boundary, br);
+                        if ((debug & 0x20) != 0) {
+                            System.err.println("EditHandler: multiparts:\n" + contents);
+                        }
+                        command = contents.getFields().get("cmd").trim();
+                        sentid = Integer.parseInt(contents.getFields().get("sentid").trim());
+
+                    } else {
+                        // post normal
+                        StringBuilder contents = new StringBuilder();
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            contents.append(line).append(" ");
+                        }
 
                         if ((debug & 0x20) != 0) {
-                            System.err.println("  " + l);
+                            System.err.println("EditHandler: data: ");
                         }
+                        String[] lines = contents.toString().split("&");
+                        for (String l : lines) {
+                            l = l.trim();
 
-                        //System.err.println("ddd " + l);
-                        if (l.startsWith("cmd=")) {
-                            command = URLDecoder.decode(l.substring(4), "UTF-8"); // couper cmd=
-                            // break;
-                        } else if (l.startsWith("sentid=")) {
-                            String s = URLDecoder.decode(l.substring(7), "UTF-8"); // couper sentid=
-                            sentid = Integer.parseInt(s);
+                            if ((debug & 0x20) != 0) {
+                                System.err.println("  " + l);
+                            }
+
+                            //System.err.println("ddd " + l);
+                            if (l.startsWith("cmd=")) {
+                                command = URLDecoder.decode(l.substring(4), "UTF-8"); // couper cmd=
+                                // break;
+                            } else if (l.startsWith("sentid=")) {
+                                String s = URLDecoder.decode(l.substring(7), "UTF-8"); // couper sentid=
+                                sentid = Integer.parseInt(s);
+                            }
                         }
                     }
-                }
 
-                if (command != null && !command.isEmpty()
-                    && sentid != null) {
-                    response = ce.process(command, sentid, client);
-                    http_rtc = HttpURLConnection.HTTP_OK;
-                    if (response == null) {
-                        response = "";
-                        http_rtc = HttpURLConnection.HTTP_NO_CONTENT;
+                    if (command == null || sentid == null) {
+                        http_rtc = HttpURLConnection.HTTP_BAD_REQUEST;
+                        json = true;
+                        response = "{ \"error\": \"parameters 'cmd' and 'sentid' are mandatory\" }";
+                    }
+                    if (command != null && !command.isEmpty()
+                            && sentid != null) {
+                        response = ce.process(command, sentid, client);
+                        http_rtc = HttpURLConnection.HTTP_OK;
+                        if (response == null) {
+                            response = "";
+                            http_rtc = HttpURLConnection.HTTP_NO_CONTENT;
+                        }
                     }
                 }
             } else if (he.getRequestMethod().equalsIgnoreCase("GET")) {
-                URI requestedUri = he.getRequestURI();
-                String path = requestedUri.getPath();
+                //URI requestedUri = he.getRequestURI();
+                //String path = requestedUri.getPath();
                 json = false;
 
                 String query = requestedUri.getQuery();
-
+                System.err.println("QUERY " + query);
                 if ((debug & 0x20) != 0) {
                     System.err.println("EditHandler <" + path + "> query <" + query + ">");
                 }
@@ -311,6 +330,10 @@ public class ServeurHTTP {
                             http_rtc = HttpURLConnection.HTTP_BAD_REQUEST;
                             response = e400;
                         }
+                    } else {
+                            http_rtc = HttpURLConnection.HTTP_BAD_REQUEST;
+                            json = true;
+                            response = "{ \"error\": \"parameter 'sentid' is mandatory\" }";
                     }
                 } else if (path.equals("/edit/info")) {
                     response = ce.getInfo() + "\n";
@@ -352,6 +375,7 @@ public class ServeurHTTP {
      * Handler for the parser client
      */
     class ParseHandler implements HttpHandler {
+
         private final ParserClient cl;
 
         public ParseHandler(ParserClient cl) {
@@ -575,6 +599,11 @@ public class ServeurHTTP {
                     http_rtc = HttpURLConnection.HTTP_NOT_FOUND; // 404
                     fileContent = e404.getBytes();
                 }
+            } else {
+                http_rtc = HttpURLConnection.HTTP_BAD_METHOD; // 405
+                URI requestedUri = he.getRequestURI();
+                String path = requestedUri.getPath();
+                fileContent = String.format("Filehandler: Bad POST Path '%s'", path).getBytes();
             }
 
             if ((debug & 0x400) != 0) {

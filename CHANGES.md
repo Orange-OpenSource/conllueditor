@@ -1,5 +1,11 @@
 # Changes
 
+## Version 2.24.0
+* compiling with openjdk 17
+* unitary tests upgraded to jupiter.junit 5
+* dependencies upgraded to latest version
+* new tests for server API
+
 ## Version 2.23.0
 * if `show basic in enhanced` is activated, this also applies for LaTeX output
 * new test

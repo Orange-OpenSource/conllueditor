@@ -1964,7 +1964,7 @@ function getSubtree(commands) {
 
 var olddata = undefined;
 /* send correct command to ConlluEditor server using ajax http post
- and re diesplay sentence afterwards (with json receivend from server after the modif) */
+   and redisplay sentence afterwards (with json receivend from server after the modif) */
 function sendmodifs(commands) {
     commands["sentid"] = $("#currentsent").text() - 1;
 

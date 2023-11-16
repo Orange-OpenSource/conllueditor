@@ -86,7 +86,7 @@ public class TestConlluEditor {
 
 
     private void runtest(String filename, Map<String, Integer>commands, String errormsg ) throws IOException {
-        ce.setCallgitcommit(false);
+        ce.setCallgitcommit(false); // to avoid git commits on the test files
         ce.setBacksuffix("");
         ce.setSaveafter(1);
 

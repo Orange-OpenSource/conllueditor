@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.23.0 (see [change history](CHANGES.md))
+Current version: 2.24.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -44,7 +44,7 @@ For more information see section [File Comparison](#file-comparison)
 
 ### Requirements
 
-* Java jre >= 11.0 (but not yet 17.0)
+* Java jre >= 11.0 (including 17)
 * Firefox (tested with version 60.9 on Windows 10, >= 63 on Linux and 69.0.1 on MacOS Sierra),
   Chromium or Chrome (both tested with version 70 on Linux),
   Edge (tested with version 44.17763.1.0 on Windows 10),
@@ -56,7 +56,7 @@ For more information see section [File Comparison](#file-comparison)
 * on MacOS: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
-* Java jdk >= 11.0
+* Java jdk >= 11.0 (including 17)
 * maven (tested with >= 3.3.9)
 
 #### Docker

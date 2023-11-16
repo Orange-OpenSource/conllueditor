@@ -1,0 +1,250 @@
+{
+  "sentenceid": 6,
+  "maxsentence": 19,
+  "text": "ils ont visité le Musée du Louvre.",
+  "sentence": "ils ont visité le Musée du Louvre.",
+  "length": 9,
+  "sent_id": "fr-ud-dev_00006",
+  "newpar": "",
+  "newdoc": "",
+  "translit": "",
+  "translations": {
+    "en": "They visited the Louvre museum."
+  },
+  "changes": 1,
+  "tree": [
+    {
+      "position": 3,
+      "id": 3,
+      "form": "visité",
+      "lemma": "visiter",
+      "feats": [
+        {
+          "name": "Gender",
+          "val": "Masc"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Part"
+        }
+      ],
+      "xpos": "PARTP",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 2,
+          "id": 1,
+          "form": "ils",
+          "lemma": "il",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Plur"
+            },
+            {
+              "name": "Person",
+              "val": "3"
+            },
+            {
+              "name": "PronType",
+              "val": "Prs"
+            }
+          ],
+          "xpos": "PERS_NOM",
+          "upos": "PRON",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 2,
+          "archeight": 1,
+          "id": 2,
+          "form": "ont",
+          "lemma": "avoir",
+          "feats": [
+            {
+              "name": "Mood",
+              "val": "Ind"
+            },
+            {
+              "name": "Number",
+              "val": "Plur"
+            },
+            {
+              "name": "Person",
+              "val": "3"
+            },
+            {
+              "name": "Tense",
+              "val": "Pres"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Fin"
+            }
+          ],
+          "xpos": "AUXA",
+          "upos": "AUX",
+          "deprel": "aux",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 5,
+          "archeight": 2,
+          "id": 5,
+          "form": "Musée",
+          "lemma": "musée",
+          "feats": [
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NOUN",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 1,
+              "id": 4,
+              "form": "le",
+              "lemma": "le",
+              "feats": [
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Art"
+                }
+              ],
+              "xpos": "ART",
+              "upos": "DET",
+              "deprel": "det",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 8,
+              "archeight": 3,
+              "id": 8,
+              "form": "Louvre",
+              "lemma": "Louvre",
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "PROPN",
+              "upos": "PROPN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 6,
+                  "archeight": 2,
+                  "id": 6,
+                  "form": "de",
+                  "lemma": "de",
+                  "mwe": {
+                    "fromid": 6,
+                    "toid": 7,
+                    "form": "du"
+                  },
+                  "xpos": "ADP",
+                  "upos": "ADP",
+                  "deprel": "case",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 7,
+                  "archeight": 1,
+                  "id": 7,
+                  "form": "le",
+                  "lemma": "le",
+                  "feats": [
+                    {
+                      "name": "Definite",
+                      "val": "Def"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Masc"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Art"
+                    }
+                  ],
+                  "xpos": "ART",
+                  "upos": "DET",
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 9,
+          "archeight": 4,
+          "id": 9,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "PUNCT",
+          "upos": "PUNCT",
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 6\n",
+  "canUndo": true,
+  "canRedo": false
+}
