@@ -64,11 +64,13 @@ $(document).ready(function() {
     });
 
 function largertd(where) {
+    where = where.toLowerCase();
     //console.log("TTT", where, $(where).width());
     $(".i" + where).width($(".i" + where).width()+50);
 }
 function smallertd(where) {
     //console.log("ttt", where);
+    where = where.toLowerCase();
     if ($(".i" + where).width() > 100) {
 	$(".i" + where).width($(".i" + where).width()-50);
     }
@@ -89,8 +91,8 @@ function drawTable(parent, trees) {
 	    //hdcell.className = "theader";
             headerrow.append(hdcell);
             hdcell.innerHTML = conllucolumns[i]; // headers come from server FEATS
-	    if (conllucolumns[i] == "FEATS") {
-		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup" type="button" value="+" onclick=largertd("feat") /> <input class="mybutton smallmybutton" id="featssizeup" type="button" value="&ndash;" onclick=smallertd("feat") />'
+	    if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
+		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup"' + i + ' type="button" value="+" onclick=largertd("' + conllucolumns[i] + '") /> <input class="mybutton smallmybutton" id="featssizedown"' + i + ' type="button" value="&ndash;" onclick=smallertd("' + conllucolumns[i] + '") />'
 
 	    }
             //hdcell.className = "tdid";
@@ -156,7 +158,7 @@ function drawTableMWE(rows, mwe, position) {
     cell8.innerHTML = "_";
 
     var cell9 = row.insertCell(-1);
-    cell9.className = "tdehd noedit";
+    cell9.className = "tddeps noedit";
     cell9.innerHTML = "_";
 
     var cell10 = row.insertCell(-1);
@@ -271,13 +273,13 @@ function drawTableWord(rows, word, head) {
         	featuresAllOK = false;
         }
     }
-    //cell6.innerHTML = '<input onkeyup="checkFeat(this, ' + word.id + ' )"  class="ifeat" type="text" id="tfeat_' + word.position + '" value="' + fstr + '"></input>';
-    fcell = makeInputfield("feat", word, checkFeat, fstr);
+    //cell6.innerHTML = '<input onkeyup="checkFeat(this, ' + word.id + ' )"  class="ifeats" type="text" id="tfeats_' + word.position + '" value="' + fstr + '"></input>';
+    fcell = makeInputfield("feats", word, checkFeat, fstr);
     if (! featuresAllOK) {
     	fcell.className += " worderror";
     }
     cell6.append(fcell);
-    cell6.className = "tdfeat";
+    cell6.className = "tdfeats";
 
 
     var cell7 = row.insertCell(-1);
@@ -320,7 +322,7 @@ function drawTableWord(rows, word, head) {
     }
     //cell9.innerHTML = '<input class="iehd" onkeyup="checkEUD(this, ' + word.id + ' )" type="text" id="tehd_' + word.position + '" value="' + fstr + '"></input>';
     //cell9.className = "tdehd";
-    cell9.append(makeInputfield("ehd", word, checkEUD, fstr));
+    cell9.append(makeInputfield("deps", word, checkEUD, fstr));
 
     var cell10 = row.insertCell(-1);
     fstr = "";

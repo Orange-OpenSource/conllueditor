@@ -102,16 +102,16 @@ table.conllutable select {
 
 }
 
-.ifeat { 
+.ifeats {
     width: 250px;
 }
-/*.tdfeat { 
+/*.tdfeats {
     width: 250px;
 }*/
 
 
-.ihead { 
-    width: 40px;
+.ihead {
+    width: 45px;
     ootext-align: right;
 }
 
@@ -119,7 +119,7 @@ table.conllutable select {
     width: 80px;
 }
 
-.iehd {
+.ideps {
     width: 100px;
 }
 
