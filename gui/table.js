@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2020, Orange S.A.
+ Copyright (c) 2018-2024, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,17 +28,18 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.7.1 as of 17th August 2020
+ @version 2.21.0 as of 18th March 2023
  */
 
 $(document).ready(function() {
-    //console.log("qqqq");
     // focusout must be linked to a non-dynamic parent of the <input> in question
+    // called when leaving the table cell which has been edited
+    // "arbre" is the id of the table
     $("#arbre").focusout(function(e) {
-        //console.log("FOT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
-
+	//console.log("FOCUSOUT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
         if (e.target.origvalue != e.target.value) {
             var modcommand = e.target.conllucol; //className.split()[0].substr(1);
+	    //console.log("MODCOM", modcommand);
             if (modcommand == "head") {
                 sendmodifs({"cmd": "mod " + e.target.origwordid + " " + e.target.value});
             } else if (modcommand == "deprel") {
@@ -48,11 +49,12 @@ $(document).ready(function() {
             } else if (e.target.extracol != undefined) {
             	sendmodifs({"cmd": "mod extracol " + e.target.origwordid + " " + modcommand + " " + e.target.value});
 
-            } else {
+            } else if (modcommand != undefined) {
                 sendmodifs({"cmd": "mod " + modcommand + " " + e.target.origwordid + " " + e.target.value});
             }
         }
     });
+
 
 //    $("#arbre").focusin(function() {
 //        console.log("FIN", this);
@@ -61,6 +63,16 @@ $(document).ready(function() {
 
     });
 
+function largertd(where) {
+    //console.log("TTT", where, $(where).width());
+    $(".i" + where).width($(".i" + where).width()+50);
+}
+function smallertd(where) {
+    //console.log("ttt", where);
+    if ($(".i" + where).width() > 100) {
+	$(".i" + where).width($(".i" + where).width()-50);
+    }
+}
 
 var formalErrors = 0;
 function drawTable(parent, trees) {
@@ -74,12 +86,19 @@ function drawTable(parent, trees) {
         var headerrow = document.createElement("tr");
         for (var i = 0; i < conllucolumns.length; ++i) {
             var hdcell = document.createElement('th');
+	    //hdcell.className = "theader";
             headerrow.append(hdcell);
-            hdcell.innerHTML = conllucolumns[i];
+            hdcell.innerHTML = conllucolumns[i]; // headers come from server FEATS
+	    if (conllucolumns[i] == "FEATS") {
+		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup" type="button" value="+" onclick=largertd("feat") /> <input class="mybutton smallmybutton" id="featssizeup" type="button" value="&ndash;" onclick=smallertd("feat") />'
+
+	    }
             //hdcell.className = "tdid";
         }
         tbl.append(headerrow);
     }
+
+
 
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
