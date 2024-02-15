@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.25.0
+* table view:
+  * buttons to change display width of FEATS, DEPS and MISC column
+  * short cuts work here as well now
+
 ## Version 2.24.0
 * compiling with openjdk 17
 * unitary tests upgraded to jupiter.junit 5

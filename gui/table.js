@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.21.0 as of 18th March 2023
+ @version 2.25.0 as of 15th February 2024
  */
 
 $(document).ready(function() {
@@ -75,13 +75,14 @@ function smallertd(where) {
 	$(".i" + where).width($(".i" + where).width()-50);
     }
 }
-
+var currentwordid = 0; // if != 0, the word to apply edit shortcuts to
 var formalErrors = 0;
 function drawTable(parent, trees) {
     formalErrors = 0;
     var tbl = document.createElement("table");
     tbl.className = "conllutable";
-
+    currentwordid = 0;
+    console.log("DRAW", currentwordid);
     var rows = {}; // position: row
 
     if (conllucolumns.length > 0) {
@@ -203,20 +204,26 @@ function drawTableWord(rows, word, head) {
     //var cell1 = row.insertCell(-1); // add at the end
     cell1.innerHTML = word.id;
     cell1.className = "tdid";
+    cell1.id = "td" + word.id;
+    cell1.onclick = function(event) {
+	console.log("hit id", word.id);
+	$("." + cell1.className).css("background", "white");
+	if (currentwordid == word.id) {
+	    currentwordid = 0;
+	    clickedNodes = [];
+	} else {
+	    // word to apply shortcuts to
+	    $("#" + cell1.id).css("background", "yellow");
+	    currentwordid = word.id;
+	    clickedNodes.push(word.id);
+	}
+    };
 
     var cell2 = row.insertCell(-1);
     cell2.className = "tdform";
     //cell2.innerHTML = '<input class="iform tdsave" onfocusout="saveField(this, ' + word.id + ' )" onkeyup="checkForm(this, ' + word.id + ' )" type="text" id="tform_' + word.position + '" value="' + word.form + '"></input>';
 
     cell2.append(makeInputfield("form", word, checkForm));
-//    var icell2 = document.createElement('input');
-//    icell2.className = "tdform";
-//    icell2.id = "tform_" + word.position;;
-//    icell2.value = word.form;
-//    icell2.origvalue = word.form; //keep the original value in order to avoid updating server if no change is detected
-//    icell2.origwordid = word.id;
-//    icell2.onkeyup = function(event) { checkForm(icell2, word.id)};
-//    cell2.append(icell2);
 
     var cell3 = row.insertCell(-1);
     cell3.className = "tdlemma";

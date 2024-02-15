@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2023, Orange S.A.
+ Copyright (c) 2018-2024, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.25.0 as of 15th February 2024
  */
 
 
@@ -592,72 +592,8 @@ function switchGrewmatchReplace(on) {
     }
 }
 
-// when adding new search mode, change also more = 4 in ToggleShortcutHelp()!
-//function ToggleSearch() {
-//    if (more == 1) {
-//        // go to mode 2: show S&R
-//        more = 2;
-//        // is on
-//        switchSearch(false);
-//        switchSearchReplace(true);
-//        switchSubtree(false);
-//        switchGrewmatchReplace(false);
-//
-//        if (showshortcathelp) {
-//            switchSCHelp(false);
-//        }
-//
-//    } else if (more == 2) {
-//        // go to mode ": show Subtrees
-//        more = 3;
-//        // in mode key '?' does not toogle shortcuts
-//        switchSearch(false);
-//        switchSearchReplace(false);
-//        switchSubtree(true);
-//        switchGrewmatchReplace(false);
-//
-//        if (showshortcathelp) {
-//            switchSCHelp(false);
-//        }
-//    } else if (more == 3) {
-//        // go to mode ": show grewmatchsearch
-//        more = 4;
-//        // in mode key '?' does not toogle shortcuts
-//        switchSearch(false);
-//        switchSearchReplace(false);
-//        switchSubtree(false);
-//        switchGrewmatchReplace(true);
-//
-//        if (showshortcathelp) {
-//            switchSCHelp(false);
-//        }
-//    } else if (more == 4) {
-//        // go to mode 0, hide everything
-//        more = 0;
-//        switchSearch(false);
-//        switchSearchReplace(false);
-//        switchSubtree(false);
-//        switchGrewmatchReplace(false);
-//
-//    } else {
-//        // in mode 0 go to standard mode
-//        more = 1;
-//        switchSearch(true);
-//        switchSearchReplace(false);
-//        switchSubtree(false);
-//        switchGrewmatchReplace(false);
-//
-//        if (showshortcathelp) {
-//            // switch off
-//            //ToggleShortcutHelp();
-//            switchSCHelp(false);
-//        }
-//    }
-//    //console.log("SEARCH", more);
-//}
 
 var showshortcathelp = false;
-
 
 function switchSCHelp(on) {
     if (on) {
@@ -902,7 +838,7 @@ function getWordLengthsOfTree(item, maxlen) {
 
 var conllwords = {}; // all words of current sentence
 var mwts = {}; // all multiword tokens of current sentence
-var clickedNodes = [];
+var clickedNodes = []; // used for shortcuts, to rember which nodes are currently active
 //var unprocessedkeystrokes = []; // process multi key shortcuts
 //var jumptotokendigits = []; // process keys to get the number of the token to jump to
 //var token_to_be_focussed = -1; // set to 0 if "&" is hit, the following two digits focuss the token, if any of the following keys is not a digit, we quit the loop
@@ -923,7 +859,6 @@ $(window).on('keydown', function (evt) {
 
     if (graphtype == 3) {
         // in table mode, we need all keys to edit the table cells
-        return;
     }
 
     // a word is active
@@ -984,30 +919,30 @@ var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
     //console.log("yyyy", evt, shortcutseq, shortcuttimeout);
+    console.log("current table word", currentwordid);
+
+    console.log("clickedNodes", clickedNodes);
+
     if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         unsetPShC();
         return;
     }
-
-    else if (graphtype == 3) {
-        // in table mode, we need all keys to edit the table cells
+    // hardwired key
+    else if (evt.which == 63) { // "?"
         unsetPShC();
-        return;
+        ToggleShortcutHelp();
     }
 
     else if ($("#subtreesearch").is(":visible") && evt.which !== 33) {
         // when editing a subtree, we need all keys to edit the table cells
         unsetPShC();
         return;
-    }
 
     // hardwired keys
-    else if (evt.which == 63) { // "?"
+    } else if (evt.which == 63) { // "?"
         unsetPShC();
         ToggleShortcutHelp();
-        //} else if (evt.which == 33) { // "!"
-        //    ToggleSubtree();
     } else if (evt.which == 43) { // "+"
         unsetPShC();
         sendmodifs({"cmd": "next"});
@@ -1017,6 +952,12 @@ $(window).on('keypress', function (evt) {
     } else if (evt.which == 33) { // '!' // 61 "=" validator
         unsetPShC();
         $("#valid").click();
+
+    } else if (graphtype == 3 && currentwordid == 0) {
+        // in table mode, we need all keys to edit the table cells
+        unsetPShC();
+        return;
+
     } else  if (evt.which == 95) { // "_" delete all features
         sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
         unsetPShC();
@@ -1135,163 +1076,6 @@ $(window).on('keypress', function (evt) {
     }
 });
 
-// OLD
-// process shortcuts: we catch keys hit in the editor. If a word is active, we try to apply
-//$(window).on('keypressQQQ', function (evt) {
-//    return;
-//    //console.log("AEVT", evt.which, evt.keyCode, String.fromCharCode(evt.keyCode), clickedNodes);
-//    //console.log("kk", evt.which, unprocessedkeystrokes);
-//
-//    if ($(".modal").is(":visible")) {
-//        // if a model is open, we do not want to catch keypress events, since we are editing text
-//        unsetPShC();
-//        return;
-//    }
-//
-//    if (graphtype == 3) {
-//        // in table mode, we need all keys to edit the table cells
-//        unsetPShC();
-//        return;
-//    }
-//
-//    if ($("#subtreesearch").is(":visible") && evt.which !== 33) {
-//        // when editing a subtree, we need all keys to edit the table cells
-//        unsetPShC();
-//        return;
-//    }
-//
-//    // inputting a token number to center in viewport
-//    if (token_to_be_focussed > -1) {
-//        if (evt.which >= 48 && evt.which <= 57) { // 0 - 9
-//            if (token_to_be_focussed == 0) {
-//                jumptotokendigits.push(String.fromCharCode(evt.which));
-//                $("#pendingshortcuts").text("&" + jumptotokendigits.join(""));
-//                token_to_be_focussed++;
-//                return;
-//            } else if (token_to_be_focussed == 1) {
-//                jumptotokendigits.push(String.fromCharCode(evt.which));
-//                //} else {
-//                // we have seen two digits
-//                var tokid = "#id1_" + parseInt(jumptotokendigits.join(""));
-//                $(tokid)[0].scrollIntoView({block: "center", inline: "center"});
-//                token_to_be_focussed = -1;
-//                unsetPShC();
-//            }
-//
-//        } else {
-//            // no integer, stop this and to not center token in viewport
-//            token_to_be_focussed = -1;
-//            unsetPShC();
-//        }
-//    }
-//
-//    // hardwired keys
-//    else if (evt.which == 63) { // "?"
-//        unsetPShC();
-//        ToggleShortcutHelp();
-//        //} else if (evt.which == 33) { // "!"
-//        //    ToggleSubtree();
-//    } else if (evt.which == 43) { // "+"
-//        unsetPShC();
-//        sendmodifs({"cmd": "next"});
-//    } else if (evt.which == 45) { // "-"
-//        unsetPShC();
-//        sendmodifs({"cmd": "prec"});
-//    } else if (evt.which == 61) { // "=" validator
-//        unsetPShC();
-//        $("#valid").click();
-//
-//    } else if (evt.which == 38) { // "&" followed by three digits: put word with ID into viewport
-//        unsetPShC();
-//        // move viewport to make token visible
-//        token_to_be_focussed = 0;
-//        $("#pendingshortcuts").text("&");
-//        $("#psc").show();
-//        return;
-//
-//    } else if (clickedNodes.length == 1) {
-//        // a word is active
-//        if (evt.which == 95) { // "_" delete all features
-//            sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
-//            clickedNodes = [];
-//            deprels = [];
-//            uposs = [];
-//            unsetPShC();
-//            return;
-//        }
-//
-//        // interpret shortkeys
-//        currentkey = String.fromCharCode(evt.which);
-//        if (unprocessedkeystrokes.length < longestshortcut) { //== 1) {
-//            currentkey = unprocessedkeystrokes.join("") + currentkey;
-//        }
-//
-//        var newval = shortcutsUPOS[currentkey];
-//        if (newval != undefined) {
-//            //console.log("UPOS", newval);
-//            sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
-//            clickedNodes = [];
-//            deprels = [];
-//            uposs = [];
-//            unsetPShC();
-//            return;
-//        }
-//
-//        newval = shortcutsDEPL[currentkey];
-//        if (newval != undefined) {
-//            //console.log("DEPL", newval);
-//            sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
-//            clickedNodes = [];
-//            deprels = [];
-//            uposs = [];
-//            unsetPShC();
-//            return;
-//        }
-//
-//        newval = shortcutsFEATS[currentkey];
-//        if (newval != undefined) {
-//            sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
-//            clickedNodes = [];
-//            deprels = [];
-//            uposs = [];
-//            unsetPShC();
-//            return;
-//        }
-//
-//        newval = shortcutsXPOS[currentkey];
-//        if (newval != undefined) {
-//            //console.log("XPOS", newval, newval[0]);
-//            if (newval.length > 1) {
-//                // change UPOS and XPOS
-//                sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
-//            } else {
-//                // change only XPOS
-//                sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
-//            }
-//
-//            clickedNodes = [];
-//            deprels = [];
-//            uposs = [];
-//            unsetPShC();
-//            return;
-//        }
-//
-//        // so we got here with a key which is not a shortcut. So maybe it is the first key
-//        // of a multi-key shortcut?
-//        if (unprocessedkeystrokes.length < longestshortcut - 1) { //(unprocessedkeystrokes.length == 0) {
-//            unprocessedkeystrokes.push(String.fromCharCode(evt.which));
-//            $("#pendingshortcuts").text(unprocessedkeystrokes.join(""));
-//            $("#psc").show();
-//        } else if (token_to_be_focussed >= 0) {
-//        } else {
-//            unsetPShC();
-//        }
-//        return;
-//
-//    }
-//    unprocessedkeystrokes = [];
-//    $("#pendingshortcuts").empty();
-//});
 
 // hovering on a word which differes from the corresponding word in the --compare file
 // will show the differences
@@ -1308,7 +1092,7 @@ function HideCompareErrors() {
 var extracols = []; // ids of extra column fields
 
 // permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
-// il faut clikcer sur un mot et sur sa future tete pour changer l'arbre
+// il faut cliquer sur un mot et sur sa future tete pour changer l'arbre
 // si on click deux fois sur le meme mot, ce mot devient racine
 // si on click ailleurs, l'historique est vidée.
 function ModifyTree(evt) {
