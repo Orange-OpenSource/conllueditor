@@ -685,7 +685,7 @@ The GUI uses the following API when editing
 * `curl -F "sentid=3" -F "cmd=mod extracol 4 SEM:NE B:Person"  http://host:port/edit/` set the non-standard UD column named _SEM:EN_ of word 4 to _B:Person_
 
 `upos` (in the first example) can be replaced with
-`form`, `lemma`, `xpos`, `head`, `deprel`, `feat`, `misc` -for the latter two the value must be a comma separated list of `Key=Value`.
+`form`, `lemma`, `xpos`, `head`, `deprel`, `feats`, `misc` -for the latter two the value must be a comma separated list of `Key=Value`.
 In all cases the new version of the edited sentence is returned (in json).
 However if the `sentid` or `id` are invalid, an error messages (in json format) is returned.
 
