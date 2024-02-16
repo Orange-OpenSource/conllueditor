@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.25.1
+* table view:
+  * keep modified column width
+  * FORM, LEMMA, UPOS, XPOS are also modifiable
+
 ## Version 2.25.0
 * table view:
   * buttons to change display width of FEATS, DEPS and MISC column

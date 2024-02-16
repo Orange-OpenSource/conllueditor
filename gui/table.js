@@ -37,7 +37,7 @@ $(document).ready(function() {
     // called when leaving the table cell which has been edited
     // "arbre" is the id of the table
     $("#arbre").focusout(function(e) {
-	//console.log("FOCUSOUT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
+        //console.log("FOCUSOUT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
         if (e.target.origvalue != e.target.value) {
             var modcommand = e.target.conllucol; //className.split()[0].substr(1);
 	    console.log("MODCOM", modcommand);
@@ -58,28 +58,26 @@ $(document).ready(function() {
         }
     });
 
-
 //    $("#arbre").focusin(function() {
 //        console.log("FIN", this);
 //    });
+});
 
-
-    });
+var columnwidth = {}; // if a column widht is changed, we store it here 
 
 function largertd(where) {
-    where = where.toLowerCase();
-    console.log("TTT", where, $(".i" + where).width());
-    $(".i" + where).width($(".i" + where).width()+50);
-    //$(".i" + where).css({"width": $(".i" + where).width()+50});
-    //$(".i" + where).css("width", $(".i" + where).width()+50);
+    //console.log("TTT", where, $(".th" + where).width());
+    $(".th" + where).width($(".th" + where).width() + 50);
+    columnwidth[where] = $(".th" + where).width();
 }
 function smallertd(where) {
     //console.log("ttt", where);
-    where = where.toLowerCase();
-    if ($(".i" + where).width() > 100) {
-	$(".i" + where).width($(".i" + where).width()-50);
+    if ($(".th" + where).width() > 170) {
+	$(".th" + where).width($(".th" + where).width()-50);
+	columnwidth[where] = $(".th" + where).width();
     }
 }
+
 var currentwordid = 0; // if != 0, the word to apply edit shortcuts to
 var formalErrors = 0;
 function drawTable(parent, trees) {
@@ -87,26 +85,24 @@ function drawTable(parent, trees) {
     var tbl = document.createElement("table");
     tbl.className = "conllutable";
     currentwordid = 0;
-    console.log("DRAW", currentwordid);
+    //console.log("DRAW", currentwordid);
     var rows = {}; // position: row
 
     if (conllucolumns.length > 0) {
         var headerrow = document.createElement("tr");
         for (var i = 0; i < conllucolumns.length; ++i) {
             var hdcell = document.createElement('th');
-	    //hdcell.className = "theader";
+	    colname = conllucolumns[i].toLowerCase();
+	    hdcell.className = "theader th" +colname;
             headerrow.append(hdcell);
-            hdcell.innerHTML = conllucolumns[i]; // headers come from server FEATS
+            hdcell.innerHTML = conllucolumns[i]; // headers come from server
 	    //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
 	    if (conllucolumns[i] != "ID" && conllucolumns[i] != "HEAD" && conllucolumns[i] != "DEPREL") {
-		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup"' + i + ' type="button" value="+" onclick=largertd("' + conllucolumns[i] + '") /> <input class="mybutton smallmybutton" id="featssizedown"' + i + ' type="button" value="&ndash;" onclick=smallertd("' + conllucolumns[i] + '") />'
-		    //hdcell.style.width = "400px";
-		    //colname = conllucolumns[i].toLowerCase()
-		    //   	       console.log("XXX", $(".i" + colname).width());
-		    //     	       $(".i" + colname).width(400);
-
+		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup"' 
+		    + i + ' type="button" value="+" onclick=largertd("' 
+		    + colname + '") /> <input class="mybutton smallmybutton" id="featssizedown"' 
+		    + i + ' type="button" value="&ndash;" onclick=smallertd("' + colname + '") />';
 	    }
-
         }
         tbl.append(headerrow);
     }
@@ -121,6 +117,14 @@ function drawTable(parent, trees) {
         tbl.append(rows[pos]);
     }
     parent.append(tbl);
+    for (var i = 0; i < conllucolumns.length; ++i) {
+	colname = conllucolumns[i].toLowerCase();
+	//console.log("COLN", colname, columnwidth[colname], $(".th" + colname).width());
+	if (colname in columnwidth) {
+	    // reset column width since it was changed by user earlier
+	    $(".th" + colname).width(columnwidth[colname]);
+	}
+    }
 }
 
 var numberofextracols = 0; // needed to complete the table in MWE rows
@@ -177,8 +181,6 @@ function drawTableMWE(rows, mwe, position) {
         fstr = fstr.concat('=');
         fstr = fstr.concat(val);
     }
-    //cell10.innerHTML = '<input class="imisc" type="text" id="tmiscmwe_' + mwe.fromid + '" value="' + fstr + '"></input>';
-    //cell10.className = "tdmisc";
     cell10.append(makeInputfield("misc", word, checkFeat, fstr));
 
     // found no other way to order table rows correctly ...
@@ -223,14 +225,11 @@ function drawTableWord(rows, word, head) {
 
     var cell2 = row.insertCell(-1);
     cell2.className = "tdform";
-    //cell2.innerHTML = '<input class="iform tdsave" onfocusout="saveField(this, ' + word.id + ' )" onkeyup="checkForm(this, ' + word.id + ' )" type="text" id="tform_' + word.position + '" value="' + word.form + '"></input>';
-
     cell2.append(makeInputfield("form", word, checkForm));
 
     var cell3 = row.insertCell(-1);
     cell3.className = "tdlemma";
     cell3.append(makeInputfield("lemma", word, checkForm));
-    //cell3.innerHTML = '<input class="ilemma iisave" onkeyup="checkForm(this, ' + word.id + ' )" type="text" id="tlemma_' + word.position + '" value="' + word.lemma + '"></input>';
 
     var cell4 = row.insertCell(-1);
     cell4.className = "tdupos";
@@ -245,9 +244,7 @@ function drawTableWord(rows, word, head) {
         cell4.innerHTML = inner + "</select>";
     } else {
         cell4.append(makeInputfield("upos", word, checkUpos));
-        //cell4.innerHTML = '<input class="iupos" type="text" id="tupos_' + word.position + '" value="' + word.upos + '"></input>';
     }
-
 
     var cell5 = row.insertCell(-1);
     cell5.className = "tdxpos";
@@ -262,7 +259,6 @@ function drawTableWord(rows, word, head) {
         cell5.innerHTML = inner + "</select>";
     } else {
         cell5.append(makeInputfield("xpos", word, checkForm));
-        //cell5.innerHTML = '<input class="ixpos" type="text" id="txpos_' + word.position + '" value="' + word.xpos + '"></input>';
     }
 
     var cell6 = row.insertCell(-1);
@@ -282,7 +278,7 @@ function drawTableWord(rows, word, head) {
         	featuresAllOK = false;
         }
     }
-    //cell6.innerHTML = '<input onkeyup="checkFeat(this, ' + word.id + ' )"  class="ifeats" type="text" id="tfeats_' + word.position + '" value="' + fstr + '"></input>';
+
     fcell = makeInputfield("feats", word, checkFeat, fstr);
     if (! featuresAllOK) {
     	fcell.className += " worderror";
@@ -290,13 +286,9 @@ function drawTableWord(rows, word, head) {
     cell6.append(fcell);
     cell6.className = "tdfeats";
 
-
     var cell7 = row.insertCell(-1);
     cell7.className = "tdhead";
-    //cell7.innerHTML = '<input onkeyup="checkHead(this, ' + word.id + ' )" class="ihead" type="text" id="thead_' + word.position + '" value="' + head + '"></input>';
     cell7.append(makeInputfield("head", word, checkHead, head));
-
-
 
     var cell8 = row.insertCell(-1);
     cell8.className = "tddeprel";
@@ -310,7 +302,6 @@ function drawTableWord(rows, word, head) {
         }
         cell8.innerHTML = inner + "</select>";
     } else {
-        //cell8.innerHTML = '<input class="ideprel" type="text" id="tdeprel_' + word.position + '" value="' + word.deprel + '"></input>';
     	word.head = head; // not in original json from server
         cell8.append(makeInputfield("deprel", word, checkDeprel));
     }
@@ -329,8 +320,7 @@ function drawTableWord(rows, word, head) {
         fstr = fstr.concat(':');
         fstr = fstr.concat(val);
     }
-    //cell9.innerHTML = '<input class="iehd" onkeyup="checkEUD(this, ' + word.id + ' )" type="text" id="tehd_' + word.position + '" value="' + fstr + '"></input>';
-    //cell9.className = "tdehd";
+
     cell9.append(makeInputfield("deps", word, checkEUD, fstr));
 
     var cell10 = row.insertCell(-1);
@@ -346,8 +336,7 @@ function drawTableWord(rows, word, head) {
         fstr = fstr.concat('=');
         fstr = fstr.concat(val);
     }
-    //cell10.innerHTML = '<input class="imisc" onkeyup="checkFeat(this, ' + word.id + ' )" type="text" id="tmisc_' + word.position + '" value="' + fstr + '"></input>';
-    //cell10.className = "tdmisc";
+
     cell10.append(makeInputfield("misc", word, checkFeat, fstr));
 
     rows[parseInt(word.position) * 10] = row;

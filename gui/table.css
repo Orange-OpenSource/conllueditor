@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.0 as of 15th February 2024
+ @version 2.25.1 as of 15th February 2024
 */
 
 
@@ -63,70 +63,51 @@ table.conllutable th {
    background-color: #edd;
 }
 
-.tdid {
+.tdid, .thid {
     color: #aaa;
     width: 60px;
     min-width: 60px;
     text-align: right;
 }
 
-/*.tdform, .tdlemma {
-    width: 120px;
-}
-*/
-
-.iform, .ilemma {
-    width: 120px;
-    /*font-family: serif; */
+.iform, .ilemma, .iupos, .ixpos, .ifeats, .ihead, .ideprel, .ideps, .imisc {
+    width: 100%;
 }
 
+.thform, .thlemma {
+    width: 120px;
+}
 
-.tdupos {
-    width: 90px;
+.thupos {
+    width: 100px;
 } 
 
-
-.tdxpos {
+.thxpos {
     width: 120px;
 } 
 
-table.conllutable select {
-    color: darkgreen;
-}
-
-.iupos {
-    width: 90px;
-
-}
-.ixpos {
-    width: 120px; 
-
-}
-
-.ifeats {
+.thfeats {
     width: 250px;
-    mmwidth: 100%;
 }
-/*.tdfeats {
-    width: 250px;
-}*/
 
-
-.ihead {
+.thhead {
     width: 45px;
-    ootext-align: right;
 }
 
-.ideprel {
+.thdeprel {
     width: 80px;
 }
 
-.ideps {
+.thdeps {
     width: 100px;
 }
 
-.imisc {
+.thmisc {
     width: 120px;
+}
+
+table.conllutable select {
+    color: darkgreen;
 }
 
 
