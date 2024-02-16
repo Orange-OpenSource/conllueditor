@@ -280,6 +280,7 @@ displays the tree/hedge width a (configurable) fixed word width.
 
 The table view is still *experimental*, all green fields can be edited:
 The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence.
+Columns can be made larger or narrower by using the buttons `+` and `-`.
 
 ![Edit screen (flat graph)](doc/table.png)
 
