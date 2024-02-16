@@ -66,16 +66,17 @@ table.conllutable th {
 .tdid {
     color: #aaa;
     width: 60px;
+    min-width: 60px;
     text-align: right;
 }
 
-.tdform, .tdlemma {
-    width: 100px;
+/*.tdform, .tdlemma {
+    width: 120px;
 }
-
+*/
 
 .iform, .ilemma {
-    width: 100px;
+    width: 120px;
     /*font-family: serif; */
 }
 
@@ -104,6 +105,7 @@ table.conllutable select {
 
 .ifeats {
     width: 250px;
+    mmwidth: 100%;
 }
 /*.tdfeats {
     width: 250px;

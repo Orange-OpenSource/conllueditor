@@ -28,24 +28,27 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.0 as of 15th February 2024
+ @version 2.25.1 as of 16th February 2024
  */
 
 $(document).ready(function() {
     // focusout must be linked to a non-dynamic parent of the <input> in question
+
     // called when leaving the table cell which has been edited
     // "arbre" is the id of the table
     $("#arbre").focusout(function(e) {
 	//console.log("FOCUSOUT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
         if (e.target.origvalue != e.target.value) {
             var modcommand = e.target.conllucol; //className.split()[0].substr(1);
-	    //console.log("MODCOM", modcommand);
+	    console.log("MODCOM", modcommand);
             if (modcommand == "head") {
                 sendmodifs({"cmd": "mod " + e.target.origwordid + " " + e.target.value});
             } else if (modcommand == "deprel") {
                 sendmodifs({"cmd": "mod " + e.target.origwordid + " " + e.target.word.head + " " + e.target.value});
-            } else if (modcommand == "ehd") {
+            } else if (modcommand == "deps") {
                 sendmodifs({"cmd": "mod enhdeps " + e.target.origwordid + " " + e.target.value});
+		//} else if (modcommand == "feats") {
+                //sendmodifs({"cmd": "mod feat " + e.target.origwordid + " " + e.target.value});
             } else if (e.target.extracol != undefined) {
             	sendmodifs({"cmd": "mod extracol " + e.target.origwordid + " " + modcommand + " " + e.target.value});
 
@@ -65,8 +68,10 @@ $(document).ready(function() {
 
 function largertd(where) {
     where = where.toLowerCase();
-    //console.log("TTT", where, $(where).width());
+    console.log("TTT", where, $(".i" + where).width());
     $(".i" + where).width($(".i" + where).width()+50);
+    //$(".i" + where).css({"width": $(".i" + where).width()+50});
+    //$(".i" + where).css("width", $(".i" + where).width()+50);
 }
 function smallertd(where) {
     //console.log("ttt", where);
@@ -92,24 +97,24 @@ function drawTable(parent, trees) {
 	    //hdcell.className = "theader";
             headerrow.append(hdcell);
             hdcell.innerHTML = conllucolumns[i]; // headers come from server FEATS
-	    if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
+	    //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
+	    if (conllucolumns[i] != "ID" && conllucolumns[i] != "HEAD" && conllucolumns[i] != "DEPREL") {
 		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup"' + i + ' type="button" value="+" onclick=largertd("' + conllucolumns[i] + '") /> <input class="mybutton smallmybutton" id="featssizedown"' + i + ' type="button" value="&ndash;" onclick=smallertd("' + conllucolumns[i] + '") />'
+		    //hdcell.style.width = "400px";
+		    //colname = conllucolumns[i].toLowerCase()
+		    //   	       console.log("XXX", $(".i" + colname).width());
+		    //     	       $(".i" + colname).width(400);
 
 	    }
-            //hdcell.className = "tdid";
+
         }
         tbl.append(headerrow);
     }
 
-
-
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
-
         drawTableWord(rows, tree, 0);
-
         //row.className = "extracoltr";
-
     }
 
     for (const pos in rows) {
@@ -129,9 +134,6 @@ function drawTableMWE(rows, mwe, position) {
     cell1.className = "tdid";
 
     var cell2 = row.insertCell(-1);
-    //console.log("ZZZZ", mwe);
-    //cell2.innerHTML = '<input class="iform" onfocusout="saveMWEField(this, ' + mwe.fromid + ', ' + mwe.toid + ', \'' + mwe.form + '\')" onfocusout="checkForm(this, ' + word.id + ' )" type="text" id="tmweform_' + mwe.fromid + '" value="' + mwe.form + '"></input>';
-    //cell2.className = "tdform";
     cell2.append(makeInputfield("form", word, checkForm, mwe.form));
 
     var cell3 = row.insertCell(-1);
@@ -182,14 +184,14 @@ function drawTableMWE(rows, mwe, position) {
     // found no other way to order table rows correctly ...
     rows[(parseInt(position) - 0.1) * 10] = row;
 
-
-    	// extra columns
-    	for (var x = 0; x < numberofextracols; x++) {
-    	    var cellX = row.insertCell(-1);
-    	    cellX.className = "tdX noedit";
-    	    cellX.innerHTML = "_";
-    	}
+    // extra columns
+    for (var x = 0; x < numberofextracols; x++) {
+	var cellX = row.insertCell(-1);
+	cellX.className = "tdX noedit";
+	cellX.innerHTML = "_";
+    }
 }
+
 
 function drawTableWord(rows, word, head) {
     if (word.mwe != undefined) {
@@ -365,13 +367,14 @@ function drawTableWord(rows, word, head) {
     	}
     	if (numberofextracols == 0) numberofextracols =  Object.keys(word.nonstandard).length;
     }
+
 }
 
 
 
 function makeInputfield(idsuffix, word, checkfct, value) {
     var icell = document.createElement('input');
-    icell.className = "tablecell  i" + idsuffix;// + " worderror";
+    icell.className = "tablecell i" + idsuffix;// + " worderror";
     if (word[idsuffix + "highlight"] != undefined) {
     	icell.className += " highlight";
     }
@@ -379,6 +382,7 @@ function makeInputfield(idsuffix, word, checkfct, value) {
     if (word[idsuffix + "error"] != undefined) {
     	icell.className += " worderror";
     }
+    
     icell.conllucol = idsuffix;
     icell.id = "t" + idsuffix + "_" + word.position;
     if (value == undefined) {

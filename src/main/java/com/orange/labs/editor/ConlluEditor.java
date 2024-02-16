@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.25.1 as of 16th February 2024
  */
 package com.orange.labs.editor;
 
@@ -1423,7 +1423,7 @@ public class ConlluEditor {
                     || command.startsWith("mod form ")
                     || command.startsWith("mod deprel ")
                     || command.startsWith("mod enhdeps ")
-                    || command.startsWith("mod feat ")
+                    || command.startsWith("mod feats ") // || command.startsWith("mod feat ") // TODO delete "mod feat", it is legacy
                     || command.startsWith("mod addfeat ")
                     || command.startsWith("mod misc ")
                     || command.startsWith("mod addmisc ")
@@ -1435,7 +1435,7 @@ public class ConlluEditor {
                 if (f.length < 3) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
-                if (f.length < 4 && !f[1].equals("feat") && !f[1].equals("misc")) {
+                if (f.length < 4 && !f[1].equals("feats") && !f[1].equals("misc")) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 if ("pos".equals(f[1]) || "extracol".equals(f[1])) {
@@ -1499,7 +1499,8 @@ public class ConlluEditor {
                     case "deprel": // change only dep label, not head
                         modWord.setDeplabel(f[3]);
                         break;
-                    case "feat": {
+		    //case "feat": // TODO delete "mod feat", it is legacy
+                    case "feats": {
                         if (f.length < 4) {
                             modWord.setFeatures(ConllWord.EmptyColumn);
                         } else {

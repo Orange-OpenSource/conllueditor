@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.0 as of 15th February 2024
+ @version 2.25.1 as of 16th February 2024
  */
 
 
@@ -959,7 +959,7 @@ $(window).on('keypress', function (evt) {
         return;
 
     } else  if (evt.which == 95) { // "_" delete all features
-        sendmodifs({"cmd": "mod feat " + clickedNodes[0] + " " + "_"});
+        sendmodifs({"cmd": "mod feats " + clickedNodes[0] + " " + "_"});
         unsetPShC();
         return;
     } else  if (evt.which == 47) { // "/" delete all misc key-values
@@ -1928,7 +1928,7 @@ $(document).ready(function () {
             fs = "_";
 
         if (fs != $("#cfeats").val()) {
-            sendmodifs({"cmd": "mod feat " + conllword.id + " " + $("#cfeats").val()});
+            sendmodifs({"cmd": "mod feats " + conllword.id + " " + $("#cfeats").val()});
         }
 
         // TODO: well, can be improved too

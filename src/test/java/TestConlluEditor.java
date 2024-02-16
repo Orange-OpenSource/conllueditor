@@ -229,13 +229,13 @@ public class TestConlluEditor {
         commands.put("mod form 9 Form", 0);
         commands.put("mod upos 9 X", 0);
         commands.put("mod xpos 9 test", 0);
-        commands.put("mod feat 9 Num=Sg|Gen=F", 0);
-        commands.put("mod feat 9 NE=Place", 0); // overwrites previous command
+        commands.put("mod feats 9 Num=Sg|Gen=F", 0);
+        commands.put("mod feats 9 NE=Place", 0); // overwrites previous command
         commands.put("mod addfeat 9 Other=Val", 0);
         commands.put("mod deprel 9 dep", 0);
         commands.put("mod 9 1", 0);
 
-        commands.put("mod feat 2", 1); // delete all features
+        commands.put("mod feats 2", 1); // delete all features
         commands.put("mod misc 13", 1); // delete all misc
 
         commands.put("mod addmisc 6 Key=Value1", 3); // add a misc
@@ -409,7 +409,7 @@ public class TestConlluEditor {
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod feat", 1, "editinfo");
+        rtc = ce.process("mod feats", 1, "editinfo");
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 

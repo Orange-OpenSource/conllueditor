@@ -230,6 +230,12 @@ img.helptextbutton {
         );
 }
 
+.smallmybutton {
+  height: 25px;
+  font-size: smaller;
+  border-radius: 8px;
+}
+
 input {
    font-family: inherit;
 }
