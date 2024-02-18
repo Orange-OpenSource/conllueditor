@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.1 as of 16th February 2024
+ @version 2.25.2 as of 18th February 2024
  */
 
 
@@ -2207,6 +2207,7 @@ $(document).ready(function () {
             $("#deprel").val("");
             $("#multifield").val("");
             $("#sentenceid").val("");
+            $("#comment").val("");
         }
     });
 

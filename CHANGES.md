@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.25.2
+* clear button also empties comment search
+
 ## Version 2.25.1
 * table view:
   * keep modified column width
