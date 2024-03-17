@@ -1301,8 +1301,24 @@ public class TestConlluEditor {
         expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID empty word id «mod emptydelete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
-
     }
+
+    @Test
+    public void test56insertWords() throws IOException {
+        name("insert empty word");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix("");
+        ce.setSaveafter(1);
+        File out = new File(folder, "test.insert.conllu");
+        ce.setOutfilename(out);
+        processwrapper("mod insert 5 premier", 2, "editinfo");
+
+        URL ref = this.getClass().getResource("test.insert.conllu");
+        Assert.assertEquals(String.format("insert empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
 
 
 //    @Test

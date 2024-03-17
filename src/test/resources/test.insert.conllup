@@ -1,0 +1,52 @@
+# global.columns = ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC SEM:NE SEM:COREF
+# sent_id = fr-ud-dev_00001
+# text = Aviator, un film sur la vie de Howard Hughes.
+# sentence 0
+1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No	B:Work	B:Coref1
+2	,	,	PUNCT	_	_	1	punct	_	_	_	_
+3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_	_	B:Coref1
+4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_	_	I:Coref1
+5	sur	sur	ADP	_	_	7	case	_	_	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_	_	_
+7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_	_	_
+8	de	de	ADP	_	_	9	case	_	_	_	_
+9	Howard	Howard	PROPN	_	_	7	nmod	_	_	B:Person	_
+10	Hughes	Hughes	PROPN	_	_	9	flat:name	_	SpaceAfter=No	I:Person	_
+11	.	.	PUNCT	_	_	1	punct	_	_	_	_
+
+# sent_id = fr-ud-dev_00003
+# text = Mais comment faire dans un contexte structurellement raciste ?
+# sentence 2
+1	Mais	mais	CCONJ	_	_	3	cc	_	_	_	_
+2	comment	comment	ADV	_	_	3	advmod	_	_	_	_
+3	faire	faire	VERB	_	VerbForm=Inf	0	root	_	_	_	_
+4	dans	dans	ADP	_	_	7	case	_	_	_	_
+5	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	7	det	_	_	_	_
+6	premier	_	_	_	_	0	root	_	_	_	_
+7	contexte	contexte	NOUN	_	Gender=Masc|Number=Sing	3	obl	_	_	_	_
+8	structurellement	structurellement	ADV	_	_	9	advmod	_	_	_	_
+9	raciste	raciste	ADJ	_	Gender=Masc|Number=Sing	7	amod	_	_	_	_
+10	?	?	PUNCT	_	_	3	punct	_	_	_	_
+
+# sent_id = fr-ud-train_00002
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# sentence 4
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No	_	_
+2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_	_	_
+3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_	_	_
+4	située	situer	VERB	_	Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=\s\t\s	_	_
+5	dans	dans	ADP	_	_	7	case	_	_	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	SpaceAfter= 	_	_
+7	galerie	galerie	NOUN	_	Gender=Fem|Number=Sing	4	obl	_	_	_	_
+8-9	des	_	_	_	_	_	_	_	_	_	_
+8	de	de	ADP	_	_	10	case	_	_	_	_
+9	les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	10	det	_	_	_	_
+10	batailles	bataille	NOUN	_	Gender=Fem|Number=Plur	7	nmod	_	SpaceAfter=No	_	_
+11	,	,	PUNCT	_	_	4	punct	_	_	_	_
+12	dans	dans	ADP	_	_	14	case	_	_	_	_
+13	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	_	_	_
+14	château	château	NOUN	_	Gender=Masc|Number=Sing	4	obl	_	_	B:PLACE	_
+15	de	de	ADP	_	_	16	case	_	_	I:PLACE	_
+16	Versailles	Versailles	PROPN	_	_	14	nmod	_	SpaceAfter=No	I:PLACE	_
+17	.	.	PUNCT	_	_	4	punct	_	_	_	_
+

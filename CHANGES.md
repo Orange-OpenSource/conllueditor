@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.25.3
+* correction: add non-standard columns when adding words and MWT
+* new tests
+
 ## Version 2.25.2
 * clear button also empties comment search
 

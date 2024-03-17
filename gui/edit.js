@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.2 as of 18th February 2024
+ @version 2.25.3 as of 18th February 2024
  */
 
 
@@ -1412,7 +1412,7 @@ var highlightY = 0;
  * @returns {undefined}
  */
 function formatPhrase(item) {
-    //console.log("eee " + item.message);
+    //console.log("eee " + item);
     if (autoadaptwidth) {
         var maxlen = getAllWordLengths(item, 0);
         //console.log("MAXLEN " + maxlen);

@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.1 as of 16th February 2024
+ @version 2.25.3 as of 16th March 2024
  */
 
 $(document).ready(function() {
@@ -40,7 +40,7 @@ $(document).ready(function() {
         //console.log("FOCUSOUT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
         if (e.target.origvalue != e.target.value) {
             var modcommand = e.target.conllucol; //className.split()[0].substr(1);
-	    console.log("MODCOM", modcommand);
+	        //console.log("MODCOM", modcommand, e.target);
             if (modcommand == "head") {
                 sendmodifs({"cmd": "mod " + e.target.origwordid + " " + e.target.value});
             } else if (modcommand == "deprel") {
@@ -51,7 +51,8 @@ $(document).ready(function() {
                 //sendmodifs({"cmd": "mod feat " + e.target.origwordid + " " + e.target.value});
             } else if (e.target.extracol != undefined) {
             	sendmodifs({"cmd": "mod extracol " + e.target.origwordid + " " + modcommand + " " + e.target.value});
-
+            } else if (modcommand == "editmwt") {
+                sendmodifs({"cmd": "mod editmwt " + e.target.fromid + " " + e.target.toid + " " + e.target.value});
             } else if (modcommand != undefined) {
                 sendmodifs({"cmd": "mod " + modcommand + " " + e.target.origwordid + " " + e.target.value});
             }
@@ -136,9 +137,10 @@ function drawTableMWE(rows, mwe, position) {
     //var cell1 = row.insertCell(-1); // add at the end
     cell1.innerHTML = mwe.fromid + "-" + mwe.toid;
     cell1.className = "tdid";
-
+    console.log("mmmmm", mwe);
     var cell2 = row.insertCell(-1);
-    cell2.append(makeInputfield("form", word, checkForm, mwe.form));
+    //cell2.append(makeInputfield("form", word, checkForm, mwe.form));
+    cell2.append(makeInputfield("editmwt", mwe, checkForm, mwe.form));
 
     var cell3 = row.insertCell(-1);
     cell3.className = "tdlemma noedit";
@@ -383,6 +385,11 @@ function makeInputfield(idsuffix, word, checkfct, value) {
     }
     icell.word = word;
     icell.origwordid = word.id; // keep word id as well
+    if (word.fromid) {
+        // MWEs
+        icell.fromid = word.fromid;
+        icell.toid = word.toid;
+    }
     icell.onkeyup =  function(event) { checkfct(icell, word.id)};
     return icell;
 }

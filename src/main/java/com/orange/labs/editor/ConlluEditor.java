@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.1 as of 16th February 2024
+ @version 2.25.3 as of 16th March 2024
  */
 package com.orange.labs.editor;
 
@@ -1576,7 +1576,7 @@ public class ConlluEditor {
                 // insert a new MWT before the current word
                 // the current word becomes the first word of the MWT (inheriting all columns except form)
                 ConllWord cw = csent.getWord(id);
-                ConllWord composedWord = new ConllWord(cw.getForm(), id, id + f.length - 4);
+                ConllWord composedWord = new ConllWord(cw.getForm(), id, id + f.length - 4, csent.getColumndefs());
 
                 //get spaceafterfrom orginal word
                 Map<String, Object> misc = cw.getMisc();
@@ -1601,7 +1601,7 @@ public class ConlluEditor {
 
                 for (int x = 4; x < f.length; ++x) {
                     // add other new words
-                    ConllWord cw2 = new ConllWord(f[x]);
+                    ConllWord cw2 = new ConllWord(f[x], csent.getColumndefs());
                     cw2.setLemma(f[x]);
                     cw2.setHead(cw.getId());
                     cw2.setDeplabel("fixed");
@@ -1968,7 +1968,8 @@ public class ConlluEditor {
                 }
                 history.add(csent);
                 String form = f[3];
-                ConllWord newword = new ConllWord(form);
+
+                ConllWord newword = new ConllWord(form, csent.getColumndefs());
                 if (f.length > 4) {
                     newword.setLemma(f[4]);
                     if (f.length > 5) {

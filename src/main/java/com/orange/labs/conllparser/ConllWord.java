@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 3rd December 2022
+ @version 2.25.3 as of 16th March 2024
  */
 package com.orange.labs.conllparser;
 
@@ -188,6 +188,8 @@ public class ConllWord {
     }
 
     public ConllWord(String form) {
+        this(form, null);
+        /* 
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
         this.form = form;
@@ -206,9 +208,48 @@ public class ConllWord {
         spacesAfter = " ";
         spacesBefore = "";
         deps = new ArrayList<>();
+        */
+    }
+
+    public ConllWord(String form, Map<String, Integer> columndefs) {
+        dependents = new ArrayList<>();
+        depmap = new TreeMap<>();
+        this.form = form;
+        id = 1;
+        head = 0;
+        lemma = EmptyColumn;
+        upostag = EmptyColumn;
+        xpostag = EmptyColumn;
+        deplabel = EmptyColumn;
+        if (orderfeatures) {
+            features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER); //Arrays.asList(elems[shift + 5].split("\\|")));
+        } else {
+            features = new LinkedHashMap<>();
+        }
+        misc = new LinkedHashMap<>();
+        spacesAfter = " ";
+        spacesBefore = "";
+        deps = new ArrayList<>();
+        if (columndefs != null) {
+            /* process non-standard columns*/
+            for (String col : columndefs.keySet()) {
+                if (!ConllFile.conllustandard.contains(col)) {
+                    if (namedColumns == null) {
+                        namedColumns = new LinkedHashMap<>();
+                    }
+                    LinkedHashSet<String> lhs = new LinkedHashSet<String>();
+                    lhs.add(EmptyColumn);
+                    namedColumns.put(col, lhs);
+                }
+            }
+        }
     }
 
     public ConllWord(String composedform, int from, int to) {
+        this(composedform, from, to, null);
+    }
+
+    public ConllWord(String composedform, int from, int to,  Map<String, Integer> columndefs) {
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
         this.form = composedform;
@@ -223,6 +264,21 @@ public class ConllWord {
         misc = new LinkedHashMap<>();
         spacesAfter = " ";
         spacesBefore = "";
+        if (columndefs != null) {
+            /* process non-standard columns*/
+            for (String col : columndefs.keySet()) {
+                System.err.println("zzaa "+col);
+                if (!ConllFile.conllustandard.contains(col)) {
+                    if (namedColumns == null) {
+                        namedColumns = new LinkedHashMap<>();
+                    }
+                    System.err.println("added");
+                    LinkedHashSet<String> lhs = new LinkedHashSet<String>();
+                    lhs.add(EmptyColumn);
+                    namedColumns.put(col, lhs);
+                }
+            }
+        }
     }
 
     private int getColumn(String colname, Map<String, Integer> columndefs) {
@@ -250,7 +306,7 @@ public class ConllWord {
                 case "MISC":
                     return 9;
                 default:
-                    return 9;
+                    return 10;
             }
         } else {
             return columndefs.getOrDefault(colname, -1);
@@ -460,7 +516,7 @@ public class ConllWord {
                 setMisc(elems[posMISC]);
             }
         }
-        /* process non-standard colums*/
+        /* process non-standard columns*/
         if (columndefs != null) {
             for (String col : columndefs.keySet()) {
                 if (!ConllFile.conllustandard.contains(col)) {

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.25.3 as of 28th October 2023
 */
 
 import com.google.gson.JsonElement;
@@ -204,6 +204,60 @@ public class TestConlluPlus {
         FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+    @Test
+    public void test21insertEmptyWords() throws IOException {
+        name("insert empty word");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix("");
+        ce.setSaveafter(1);
+        File out = new File(folder, "test.insertempty.conllup");
+        ce.setOutfilename(out);
+        processwrapper("mod emptyinsert 4 first lemma1 POS1 XPOS1", 0, "editinfo");
+        processwrapper("mod emptyinsert 4 second lemma2 POS2 XPOS2", 0, "editinfo");
+        processwrapper("mod emptyinsert 3 premier lemma3 POS1 XPOS1", 0, "editinfo");
+
+        URL ref = this.getClass().getResource("test.insertempty.conllup");
+
+        Assert.assertEquals(String.format("insert empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test22insertWords() throws IOException {
+        name("insert empty word");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix("");
+        ce.setSaveafter(1);
+        File out = new File(folder, "test.insert.conllup");
+        ce.setOutfilename(out);
+        processwrapper("mod insert 5 premier", 1, "editinfo");
+
+        URL ref = this.getClass().getResource("test.insert.conllup");
+        Assert.assertEquals(String.format("insert empty words incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test23MWTfromWord() throws IOException {
+        name("create MWT from Word");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix("");
+        ce.setSaveafter(1);
+
+        File out = new File(folder, "test.split-to-mwt.conllup");
+        ce.setOutfilename(out);
+
+        processwrapper("mod misc 4 SpaceAfter=No", 1, "editinfo");
+        processwrapper("mod tomwt 4 dan le", 1, "editinfo");
+
+        URL ref = this.getClass().getResource("test.split-to-mwt.conllup");
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+        FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
 
     @Test
     public void test44ConlluConversion() throws ConllException, IOException {
