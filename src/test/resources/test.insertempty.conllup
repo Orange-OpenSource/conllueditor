@@ -5,10 +5,10 @@
 1	Aviator	Aviator	PROPN	_	_	0	root	_	SpaceAfter=No	B:Work	B:Coref1
 2	,	,	PUNCT	_	_	1	punct	_	_	_	_
 3	un	un	DET	_	Definite=Ind|Gender=Masc|Number=Sing|PronType=Art	4	det	_	_	_	B:Coref1
-3.1	premier	lemma3	POS1	XPOS1	_	_	_	_	_	_	_
+3.1	premier	lemma3	POS1	XPOS1	_	_	_	_	_	*	*
 4	film	film	NOUN	_	Gender=Masc|Number=Sing	1	appos	_	_	_	I:Coref1
-4.1	first	lemma1	POS1	XPOS1	_	_	_	_	_	_	_
-4.2	second	lemma2	POS2	XPOS2	_	_	_	_	_	_	_
+4.1	first	lemma1	POS1	XPOS1	_	_	_	_	_	*	*
+4.2	second	lemma2	POS2	XPOS2	_	_	_	_	_	*	*
 5	sur	sur	ADP	_	_	7	case	_	_	_	_
 6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	_	_	_
 7	vie	vie	NOUN	_	Gender=Fem|Number=Sing	4	nmod	_	_	_	_

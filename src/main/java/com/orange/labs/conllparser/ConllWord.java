@@ -81,6 +81,7 @@ public class ConllWord {
 
     private Tokentype toktype = Tokentype.WORD;
     public final static String EmptyColumn = "_";
+    public final static String EmptyExtraColumn = "*"; // non standard columns use "*" if empty
 
     private static Pattern number = Pattern.compile("\\d{1,3}(#\\d{3})+");
     public static final boolean DEBUG = false;
@@ -238,7 +239,7 @@ public class ConllWord {
                         namedColumns = new LinkedHashMap<>();
                     }
                     LinkedHashSet<String> lhs = new LinkedHashSet<String>();
-                    lhs.add(EmptyColumn);
+                    lhs.add(EmptyExtraColumn);
                     namedColumns.put(col, lhs);
                 }
             }
@@ -267,14 +268,12 @@ public class ConllWord {
         if (columndefs != null) {
             /* process non-standard columns*/
             for (String col : columndefs.keySet()) {
-                System.err.println("zzaa "+col);
                 if (!ConllFile.conllustandard.contains(col)) {
                     if (namedColumns == null) {
                         namedColumns = new LinkedHashMap<>();
                     }
-                    System.err.println("added");
                     LinkedHashSet<String> lhs = new LinkedHashSet<String>();
-                    lhs.add(EmptyColumn);
+                    lhs.add(EmptyExtraColumn);
                     namedColumns.put(col, lhs);
                 }
             }
