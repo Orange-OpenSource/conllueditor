@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.3 as of 16th March 2024
+ @version 2.25.3 as of 20th March 2024
  */
 
 $(document).ready(function() {
@@ -47,7 +47,7 @@ $(document).ready(function() {
                 sendmodifs({"cmd": "mod " + e.target.origwordid + " " + e.target.word.head + " " + e.target.value});
             } else if (modcommand == "deps") {
                 sendmodifs({"cmd": "mod enhdeps " + e.target.origwordid + " " + e.target.value});
-		//} else if (modcommand == "feats") {
+		    //} else if (modcommand == "feats") {
                 //sendmodifs({"cmd": "mod feat " + e.target.origwordid + " " + e.target.value});
             } else if (e.target.extracol != undefined) {
             	sendmodifs({"cmd": "mod extracol " + e.target.origwordid + " " + modcommand + " " + e.target.value});
@@ -64,7 +64,7 @@ $(document).ready(function() {
 //    });
 });
 
-var columnwidth = {}; // if a column widht is changed, we store it here 
+var columnwidth = {}; // if a column width is changed, we store it here
 
 function largertd(where) {
     //console.log("TTT", where, $(".th" + where).width());
@@ -86,6 +86,7 @@ function drawTable(parent, trees) {
     var tbl = document.createElement("table");
     tbl.className = "conllutable";
     currentwordid = 0;
+    clickedNodes = [];
     //console.log("DRAW", currentwordid);
     var rows = {}; // position: row
 
@@ -137,7 +138,7 @@ function drawTableMWE(rows, mwe, position) {
     //var cell1 = row.insertCell(-1); // add at the end
     cell1.innerHTML = mwe.fromid + "-" + mwe.toid;
     cell1.className = "tdid";
-    console.log("mmmmm", mwe);
+    //console.log("mmmmm", mwe);
     var cell2 = row.insertCell(-1);
     //cell2.append(makeInputfield("form", word, checkForm, mwe.form));
     cell2.append(makeInputfield("editmwt", mwe, checkForm, mwe.form));
@@ -211,19 +212,20 @@ function drawTableWord(rows, word, head) {
     cell1.innerHTML = word.id;
     cell1.className = "tdid";
     cell1.id = "td" + word.id;
+
     cell1.onclick = function(event) {
-	console.log("hit id", word.id);
-	$("." + cell1.className).css("background", "white");
-	if (currentwordid == word.id) {
-	    currentwordid = 0;
-	    clickedNodes = [];
-	} else {
-	    // word to apply shortcuts to
-	    $("#" + cell1.id).css("background", "yellow");
-	    currentwordid = word.id;
-	    clickedNodes.push(word.id);
-	}
-    };
+	    //console.log("hit id", word.id);
+	    $("." + cell1.className).css("background", "white");
+	    if (currentwordid == word.id) {
+	        currentwordid = 0;
+	        clickedNodes = [];
+	    } else {
+	        // word to apply shortcuts to
+    	    $("#" + cell1.id).css("background", "yellow");
+	        currentwordid = word.id;
+	        clickedNodes.push(word.id);
+	    }
+    }
 
     var cell2 = row.insertCell(-1);
     cell2.className = "tdform";
@@ -360,7 +362,6 @@ function drawTableWord(rows, word, head) {
     }
 
 }
-
 
 
 function makeInputfield(idsuffix, word, checkfct, value) {
