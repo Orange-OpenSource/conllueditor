@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.25.3 (see [change history](CHANGES.md))
+Current version: 2.25.4 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -280,6 +280,7 @@ displays the tree/hedge width a (configurable) fixed word width.
 
 The table view is still *experimental*, all green fields can be edited:
 The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence.
+Cotrl-click on an ID does not unmakr the token after applying a shortcut. This allows to apply several shortcuts on the same word.
 Columns can be made larger or narrower by using the buttons `+` and `-`.
 
 ![Edit screen (flat graph)](doc/table.png)

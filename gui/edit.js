@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.3 as of 18th February 2024
+ @version 2.25.4 as of 26th March 2024
  */
 
 
@@ -48,7 +48,7 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 
 var isIE = /*@cc_on!@*/false || !!document.documentMode;
 var isEdge = !isIE && !!window.StyleMedia;
-var sentenceId = 0;
+//var sentenceId = 0;
 
 function choosePort() {
     // http port
@@ -842,6 +842,8 @@ var clickedNodes = []; // used for shortcuts, to rember which nodes are currentl
 //var unprocessedkeystrokes = []; // process multi key shortcuts
 //var jumptotokendigits = []; // process keys to get the number of the token to jump to
 //var token_to_be_focussed = -1; // set to 0 if "&" is hit, the following two digits focuss the token, if any of the following keys is not a digit, we quit the loop
+var keepmarked = -1; // Ctrl-click marks a word (for shortcuts) and keeps it marked once the shortcut has been executed (only used in tableview). Here we put the current sentence ID, if sentence is changed, it is set to -1 again
+
 var deprels = [];
 var uposs = [];
 var clickCount = 0;
@@ -919,9 +921,9 @@ var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
     //console.log("yyyy", evt, shortcutseq, shortcuttimeout);
-    console.log("current table word", currentwordid);
+    //console.log("current table word", currentwordid);
 
-    console.log("clickedNodes", clickedNodes);
+    //console.log("clickedNodes", clickedNodes);
 
     if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
@@ -989,7 +991,9 @@ $(window).on('keypress', function (evt) {
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];
-                clickedNodes = [];
+                if (keepmarked == -1) {
+                    clickedNodes = [];
+                }
                 unsetPShC();
                 return;
             }
@@ -1001,7 +1005,9 @@ $(window).on('keypress', function (evt) {
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];
-                clickedNodes = [];
+                if (keepmarked == -1) {
+                    clickedNodes = [];
+                }
                 unsetPShC();
                 return;
             }
@@ -1012,7 +1018,9 @@ $(window).on('keypress', function (evt) {
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];
-                clickedNodes = [];
+                if (keepmarked == -1) {
+                    clickedNodes = [];
+                }
                 unsetPShC();
                 return;
             }
@@ -1023,7 +1031,9 @@ $(window).on('keypress', function (evt) {
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];
-                clickedNodes = [];
+                if (keepmarked == -1) {
+                    clickedNodes = [];
+                }
                 unsetPShC();
                 return;
             }
@@ -1042,7 +1052,9 @@ $(window).on('keypress', function (evt) {
                 shortcutseq = "";
                 deprels = [];
                 uposs = [];
-                clickedNodes = [];
+                if (keepmarked == -1) {
+                    clickedNodes = [];
+                }
                 unsetPShC();
                 return;
             }
@@ -1418,8 +1430,6 @@ function formatPhrase(item) {
         //console.log("MAXLEN " + maxlen);
     }
 
-
-
     highlightX = 0;
     highlightY = 0;
 
@@ -1610,7 +1620,7 @@ function formatPhrase(item) {
             }
             drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
         } else if (graphtype == 3) {
-            drawTable($("#arbre"), item.tree);
+            drawTable($("#arbre"), item.tree, item.sentenceid);
         } else {
             //console.log(item.comparisontree);
             incorrectwords = new Set(); // put incorrect word in comparison mode

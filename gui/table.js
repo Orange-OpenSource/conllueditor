@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.3 as of 20th March 2024
+ @version 2.25.4 as of 26th March 2024
  */
 
 $(document).ready(function() {
@@ -81,13 +81,21 @@ function smallertd(where) {
 
 var currentwordid = 0; // if != 0, the word to apply edit shortcuts to
 var formalErrors = 0;
-function drawTable(parent, trees) {
+
+function drawTable(parent, trees, sentid) {
     formalErrors = 0;
     var tbl = document.createElement("table");
     tbl.className = "conllutable";
-    currentwordid = 0;
-    clickedNodes = [];
-    //console.log("DRAW", currentwordid);
+    //console.log("ZZZZZZss", keepmarked, sentid);
+
+    if (keepmarked == -1 || keepmarked != sentid) {
+        //console.log("NOT keepmarked");
+        currentwordid = 0;
+        clickedNodes = [];
+        keepmarked = -1;
+    }
+
+    //console.log("DRAW", currentwordid, currentwordid, clickedNodes);
     var rows = {}; // position: row
 
     if (conllucolumns.length > 0) {
@@ -111,7 +119,7 @@ function drawTable(parent, trees) {
 
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
-        drawTableWord(rows, tree, 0);
+        drawTableWord(rows, tree, 0, sentid);
         //row.className = "extracoltr";
     }
 
@@ -120,12 +128,16 @@ function drawTable(parent, trees) {
     }
     parent.append(tbl);
     for (var i = 0; i < conllucolumns.length; ++i) {
-	colname = conllucolumns[i].toLowerCase();
-	//console.log("COLN", colname, columnwidth[colname], $(".th" + colname).width());
-	if (colname in columnwidth) {
-	    // reset column width since it was changed by user earlier
-	    $(".th" + colname).width(columnwidth[colname]);
-	}
+	    colname = conllucolumns[i].toLowerCase();
+	    //console.log("COLN", colname, columnwidth[colname], $(".th" + colname).width());
+	    if (colname in columnwidth) {
+	        // reset column width since it was changed by user earlier
+	        $(".th" + colname).width(columnwidth[colname]);
+	    }
+    }
+
+    if (keepmarked > -1) {
+        $("#td" + currentwordid).css("background", "orange"); 
     }
 }
 
@@ -140,7 +152,6 @@ function drawTableMWE(rows, mwe, position) {
     cell1.className = "tdid";
     //console.log("mmmmm", mwe);
     var cell2 = row.insertCell(-1);
-    //cell2.append(makeInputfield("form", word, checkForm, mwe.form));
     cell2.append(makeInputfield("editmwt", mwe, checkForm, mwe.form));
 
     var cell3 = row.insertCell(-1);
@@ -198,7 +209,7 @@ function drawTableMWE(rows, mwe, position) {
 }
 
 
-function drawTableWord(rows, word, head) {
+function drawTableWord(rows, word, head, sentid) {
     if (word.mwe != undefined) {
         drawTableMWE(rows, word.mwe, word.position);
     }
@@ -221,11 +232,25 @@ function drawTableWord(rows, word, head) {
 	        clickedNodes = [];
 	    } else {
 	        // word to apply shortcuts to
-    	    $("#" + cell1.id).css("background", "yellow");
+            if (event.ctrlKey) {
+                $("#" + cell1.id).css("background", "orange");
+                keepmarked = sentid;
+                clickedNodes = []; // keepmarked true means that the last clicked word is still active
+            } else {
+    	        $("#" + cell1.id).css("background", "yellow");
+                keepmarked = -1;
+            }
 	        currentwordid = word.id;
 	        clickedNodes.push(word.id);
 	    }
     }
+
+    /*
+    if (keepmarked && word.id == currentwordid) {
+        console.log("RECOLOR", cell1.id, word.id, currentwordid, $("#" + cell1.id));
+        $("#" + cell1.id).css("background", "orange"); // DOES NOT WORK HERE
+    }
+    */
 
     var cell2 = row.insertCell(-1);
     cell2.className = "tdform";
@@ -346,7 +371,7 @@ function drawTableWord(rows, word, head) {
     rows[parseInt(word.position) * 10] = row;
     if (word.children) {
         for (var i = 0; i < word.children.length; i++) {
-            drawTableWord(rows, word.children[i], word.id);
+            drawTableWord(rows, word.children[i], word.id, sentid);
         }
     }
 
@@ -360,7 +385,6 @@ function drawTableWord(rows, word, head) {
     	}
     	if (numberofextracols == 0) numberofextracols =  Object.keys(word.nonstandard).length;
     }
-
 }
 
 

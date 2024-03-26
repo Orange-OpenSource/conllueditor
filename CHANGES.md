@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.25.6
+* table view: Ctrl-click on Word ID keeps Word marked until sentence is changed or ID clicked again (to accelerate edtiing using shortcuts)
+
 ## Version 2.25.3
 * corrections:
    * add non-standard columns when adding words and MWT
