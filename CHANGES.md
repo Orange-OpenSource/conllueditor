@@ -1,6 +1,6 @@
 # Changes
 
-## Version 2.25.6
+## Version 2.25.4
 * table view: Ctrl-click on Word ID keeps Word marked until sentence is changed or ID clicked again (to accelerate edtiing using shortcuts)
 
 ## Version 2.25.3
