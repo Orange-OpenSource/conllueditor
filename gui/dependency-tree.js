@@ -187,14 +187,14 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     item.yy = level;
 
 
-    // faire la ligne entre tete est dépendant
+    // faire la ligne entre tete et dépendant
     if (originx != 0 && originy != 0) {
         // si ce n'est pas la tete de la phrase
 
         // creer le path pour le connecteur tete - fille (une ligne)
         var path = document.createElementNS(svgNS, "path");
         //var pathvar = "path" + curid + "_" + item.id + "_" + level;
-        var pathvar = gold_idprefix + "path_" + head + "_" + item.id + "_" + item.deprel;
+        var pathvar = gold_idprefix + "qqpath_" + head + "_" + item.id + "_" + item.deprel;
         path.setAttribute("id", pathvar);
         path.setAttribute("stroke", "black");
         if (use_deprel_as_type) {

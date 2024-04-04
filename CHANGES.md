@@ -6,7 +6,7 @@
 ## Version 2.25.3
 * corrections:
    * add non-standard columns when adding words and MWT
-   * unmark word when changing current sentence (in table view)
+   * unmark word when changing current sentence (n  in table view)
 * use `*` instead of `_` for empty non-standard columns (CoNLL-U plus)
 * new tests
 

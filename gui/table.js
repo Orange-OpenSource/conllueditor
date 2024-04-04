@@ -108,10 +108,10 @@ function drawTable(parent, trees, sentid) {
             hdcell.innerHTML = conllucolumns[i]; // headers come from server
 	    //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
 	    if (conllucolumns[i] != "ID" && conllucolumns[i] != "HEAD" && conllucolumns[i] != "DEPREL") {
-		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="featssizeup"' 
-		    + i + ' type="button" value="+" onclick=largertd("' 
-		    + colname + '") /> <input class="mybutton smallmybutton" id="featssizedown"' 
-		    + i + ' type="button" value="&ndash;" onclick=smallertd("' + colname + '") />';
+		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="' + colname + 'sizeup' 
+		    + '" type="button" value="+" onclick=largertd("' 
+		    + colname + '") /> <input class="mybutton smallmybutton" id="' + colname + 'sizedown' 
+		    + '" type="button" value="&ndash;" onclick=smallertd("' + colname + '") />';
 	    }
         }
         tbl.append(headerrow);

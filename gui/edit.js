@@ -920,7 +920,7 @@ let timeout = null;
 var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
-    //console.log("yyyy", evt, shortcutseq, shortcuttimeout);
+		 //console.log("yyyy", $(window), evt, shortcutseq, shortcuttimeout);
     //console.log("current table word", currentwordid);
 
     //console.log("clickedNodes", clickedNodes);
