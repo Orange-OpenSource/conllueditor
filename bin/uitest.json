@@ -1,0 +1,39 @@
+[
+  {
+	"ignore": false,
+	"name": "test readpage",
+	"function": ["readpage", "5"],
+	"expected": "# sent_id = fr-ud-train_00002\n# text = L'\u0153uvre est situ\u00e9e dans la galerie des batailles, dans le ch\u00e2teau de Versailles.\n# sentence 4\n1\tL'\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t2\tdet\t_\tSpaceAfter=No\n2\t\u0153uvre\t\u0153uvre\tNOUN\t_\tGender=Fem|Number=Sing\t4\tnsubj\t_\t_\n3\test\t\u00eatre\tAUX\t_\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t4\taux\t_\t_\n4\tsitu\u00e9e\tsituer\tVERB\t_\tGender=Fem|Number=Sing|Tense=Past|VerbForm=Part\t0\troot\t_\tSpaceAfter=\\s\\t\\s\n5\tdans\tdans\tADP\t_\t_\t7\tcase\t_\t_\n6\tla\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t7\tdet\t_\tSpaceAfter=&nbsp;\n7\tgalerie\tgalerie\tNOUN\t_\tGender=Fem|Number=Sing\t4\tobl\t_\t_\n8-9\tdes\t_\t_\t_\t_\t_\t_\t_\t_\n8\tde\tde\tADP\t_\t_\t10\tcase\t_\t_\n9\tles\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t10\tdet\t_\t_\n10\tbatailles\tbataille\tNOUN\t_\tGender=Fem|Number=Plur\t7\tnmod\t_\tSpaceAfter=No\n11\t,\t,\tPUNCT\t_\t_\t4\tpunct\t_\t_\n12\tdans\tdans\tADP\t_\t_\t14\tcase\t_\t_\n13\tle\tle\tDET\t_\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t14\tdet\t_\t_\n14\tch\u00e2teau\tch\u00e2teau\tNOUN\t_\tGender=Masc|Number=Sing\t4\tobl\t_\t_\n15\tde\tde\tADP\t_\t_\t16\tcase\t_\t_\n16\tVersailles\tVersailles\tPROPN\t_\t_\t14\tnmod\t_\tSpaceAfter=No\n17\t.\t.\tPUNCT\t_\t_\t4\tpunct\t_\t_\n\n"
+  },
+  {
+	"name": "edit MWT",
+	"function": ["editMWT", "5", "#mwe_8_9_des"],
+	"expected": "# sent_id = fr-ud-train_00002\n# text = L'\u0153uvre est situ\u00e9e dans la galerie desdesbat , dans le ch\u00e2teau de Versailles.\n# sentence 4\n1\tL'\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t2\tdet\t_\tSpaceAfter=No\n2\t\u0153uvre\t\u0153uvre\tNOUN\t_\tGender=Fem|Number=Sing\t4\tnsubj\t_\t_\n3\test\t\u00eatre\tAUX\t_\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t4\taux\t_\t_\n4\tsitu\u00e9e\tsituer\tVERB\t_\tGender=Fem|Number=Sing|Tense=Past|VerbForm=Part\t0\troot\t_\tSpaceAfter=\\s\\t\\s\n5\tdans\tdans\tADP\t_\t_\t7\tcase\t_\t_\n6\tla\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t7\tdet\t_\tSpaceAfter=&nbsp;\n7\tgalerie\tgalerie\tNOUN\t_\tGender=Fem|Number=Sing\t4\tobl\t_\t_\n8-10\tdesdesbat\t_\t_\t_\t_\t_\t_\t_\t_\n8\tde\tde\tADP\t_\t_\t10\tcase\t_\t_\n9\tles\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t10\tdet\t_\t_\n10\tbatailles\tbataille\tNOUN\t_\tGender=Fem|Number=Plur\t7\tnmod\t_\tSpaceAfter=No\n11\t,\t,\tPUNCT\t_\t_\t4\tpunct\t_\t_\n12\tdans\tdans\tADP\t_\t_\t14\tcase\t_\t_\n13\tle\tle\tDET\t_\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t14\tdet\t_\t_\n14\tch\u00e2teau\tch\u00e2teau\tNOUN\t_\tGender=Masc|Number=Sing\t4\tobl\t_\t_\n15\tde\tde\tADP\t_\t_\t16\tcase\t_\t_\n16\tVersailles\tVersailles\tPROPN\t_\t_\t14\tnmod\t_\tSpaceAfter=No\n17\t.\t.\tPUNCT\t_\t_\t4\tpunct\t_\t_\n\n"
+  },
+  {
+	"name": "edit Deprel",
+	"function": ["changeDeprel", "5", "//*[@id=\"textpath_7_6_det\"]"],
+	"expected": "# sent_id = fr-ud-train_00002\n# text = L'\u0153uvre est situ\u00e9e dans la galerie des batailles, dans le ch\u00e2teau de Versailles.\n# sentence 4\n1\tL'\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t2\tdet\t_\tSpaceAfter=No\n2\t\u0153uvre\t\u0153uvre\tNOUN\t_\tGender=Fem|Number=Sing\t4\tnsubj\t_\t_\n3\test\t\u00eatre\tAUX\t_\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t4\taux\t_\t_\n4\tsitu\u00e9e\tsituer\tVERB\t_\tGender=Fem|Number=Sing|Tense=Past|VerbForm=Part\t0\troot\t_\tSpaceAfter=\\s\\t\\s\n5\tdans\tdans\tADP\t_\t_\t7\tcase\t_\t_\n6\tla\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t7\tamod\t_\tSpaceAfter=&nbsp;\n7\tgalerie\tgalerie\tNOUN\t_\tGender=Fem|Number=Sing\t4\tobl\t_\t_\n8-9\tdes\t_\t_\t_\t_\t_\t_\t_\t_\n8\tde\tde\tADP\t_\t_\t10\tcase\t_\t_\n9\tles\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t10\tdet\t_\t_\n10\tbatailles\tbataille\tNOUN\t_\tGender=Fem|Number=Plur\t7\tnmod\t_\tSpaceAfter=No\n11\t,\t,\tPUNCT\t_\t_\t4\tpunct\t_\t_\n12\tdans\tdans\tADP\t_\t_\t14\tcase\t_\t_\n13\tle\tle\tDET\t_\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t14\tdet\t_\t_\n14\tch\u00e2teau\tch\u00e2teau\tNOUN\t_\tGender=Masc|Number=Sing\t4\tobl\t_\t_\n15\tde\tde\tADP\t_\t_\t16\tcase\t_\t_\n16\tVersailles\tVersailles\tPROPN\t_\t_\t14\tnmod\t_\tSpaceAfter=No\n17\t.\t.\tPUNCT\t_\t_\t4\tpunct\t_\t_\n\n"
+  },
+  {
+	"name": "search",
+	"function": ["search", "habiter"],
+	"expected": "# sent_id = conlueditor-test-8\n# text = il habite \u00e0 Los Angeles.\n# sentence 8\n1\til\til\tPRON\tPERS_NOM\tGender=Masc|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t_\t_\n2\thabite\thabiter\tVERB\tVERB\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n3\t\u00e0\t\u00e0\tADP\tADP\t_\t4\tcase\t_\t_\n4\tLos\tLos\tPROPN\tPROPN\t_\t2\tobl\t_\t_\n5\tAngeles\tAngeles\tPROPN\tPROPN\t_\t4\tflat:name\t_\tSpaceAfter=No\n6\t.\t.\tPUNCT\tPUNCT\t_\t2\tpunct\t_\t_\n\n"
+  },
+  {
+	"comment": "other clicks currently hard coded in uitest.py",
+	"name": "tablemode",
+	"function": ["tablemode", "9"],
+	"expected": "# sent_id = conlueditor-test-9\n# text = Il aime bien le Miroir aux Alouettes.\n# sentence 9\n1\tIl\til\tPRON\tPERS_NOM\tGender=Masc|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t_\t_\n2\taime\taimer\tVERB\tVERB\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n3\tbien\tbien\tDET\tADV\t_\t2\tadvmod\t_\t_\n4\tle\tle\tDET\tART\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t5\tdet\t_\t_\n5\tMiroir\tmiroir\tVERB\tNOUN\tPerson=2\t2\tobj\t_\t_\n6-7\taux\t_\t_\t_\t_\t_\t_\t_\t_\n6\t\u00e0\t\u00e0\tADP\tADP\t_\t8\tcase\t_\t_\n7\tles\tle\tDET\tART\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t8\tdet\t_\t_\n8\tAlouettes\talouette\tNOUN\tNOUN\tGender=Fem|Number=Plur\t2\tobl\t_\tSpaceAfter=No\n9\t.\t.\tPUNCT\tPUNCT\t_\t2\tpunct\t_\t_\n\n"
+  },
+  {
+	"name": "edittable",
+	"function": ["edittable", "2", [["tupos_3", "X"], 
+					["tlemma_4", "number"],
+					["tform_1", "LES"]
+					]],
+	"expected": "# sent_id = fr-ud-dev_00002\n# text = Les \u00e9tudes durent six ans mais leur contenu diff\u00e8re donc selon les Facult\u00e9s.\n# sentence 1\n1\tLES\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t2\tdet\t_\t_\n2\t\u00e9tudes\t\u00e9tude\tNOUN\t_\tGender=Fem|Number=Plur\t3\tnsubj\t_\t_\n3\tdurent\tdurer\tX\t_\tMood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n4\tsix\tnumber\tNUM\t_\t_\t5\tnummod\t_\t_\n5\tans\tan\tNOUN\t_\tGender=Masc|Number=Plur\t3\tobj\t_\t_\n6\tmais\tmais\tCCONJ\t_\t_\t9\tcc\t_\t_\n7\tleur\tson\tDET\t_\tGender=Masc|Number=Sing|PronType=Prs\t8\tnmod:poss\t_\t_\n8\tcontenu\tcontenu\tNOUN\t_\tGender=Masc|Number=Sing\t9\tnsubj\t_\t_\n9\tdiff\u00e8re\tdiff\u00e9rer\tVERB\t_\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t3\tconj\t_\t_\n10\tdonc\tdonc\tADV\t_\t_\t9\tadvmod\t_\t_\n11\tselon\tselon\tADP\t_\t_\t13\tcase\t_\t_\n12\tles\tle\tDET\t_\tDefinite=Def|Number=Plur|PronType=Art\t13\tdet\t_\t_\n13\tFacult\u00e9s\tFacult\u00e9s\tPROPN\t_\t_\t9\tobl\t_\tSpaceAfter=No\n14\t.\t.\tPUNCT\t_\t_\t3\tpunct\t_\t_\n\n"
+  }
+
+
+]
