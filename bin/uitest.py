@@ -7,7 +7,10 @@
 #   ./bin/conlluedit.sh /tmp/test.conllu 5556
 
 import json
+<<<<<<< HEAD
 import re
+=======
+>>>>>>> a7c9beb0c95fcc808142ad4d8dff4c7c1da19592
 import sys
 import time
 
@@ -31,7 +34,11 @@ class CE_UItest:
             if args.headless:
                 # creates different results
                 options.add_argument('--headless')
+<<<<<<< HEAD
                 options.add_argument('--window-size=1920,1380')
+=======
+                options.add_argument('--window-size=1920,1080')
+>>>>>>> a7c9beb0c95fcc808142ad4d8dff4c7c1da19592
                 # options.headless = args.headless
 
             self.driverService = Service(args.gecko)
@@ -235,7 +242,11 @@ if __name__ == "__main__":
     parser.add_argument("--headless", "-H", default=False, action="store_true", help="do not show browser window")
     parser.add_argument("--gecko", "-g", default="/snap/bin/geckodriver", type=str, help="path to geckodreiver (needed with firefox)")
     parser.add_argument("--url", "-u", default="http://localhost:5556", type=str, help="URL of ConlluEditor")
+<<<<<<< HEAD
     parser.add_argument("--filter", "-f", default=None, type=str, help="regex to filter tests")
+=======
+    parser.add_argument("-k", default=None, type=str, help="regex on tests to perform")
+>>>>>>> a7c9beb0c95fcc808142ad4d8dff4c7c1da19592
 
 
     if len(sys.argv) < 2:
