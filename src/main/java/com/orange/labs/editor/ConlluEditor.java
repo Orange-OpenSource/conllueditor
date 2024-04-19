@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.3 as of 16th March 2024
+ @version 2.25.5 as of 19th April 2024
  */
 package com.orange.labs.editor;
 
@@ -555,7 +555,14 @@ public class ConlluEditor {
             errors.addProperty("invalidFeatures", ae.features);
         }
         String sent = csent.getSentence();
-        if (!sent.equals(csent.getText())) {
+        if (csent.getText() == null) {
+            anyerrors = true;
+            JsonObject tt = new JsonObject();
+            tt.addProperty("text", "");
+            tt.addProperty("forms", csent.getSentence());
+            tt.addProperty("differs", 1); // first differing character
+            errors.add("incoherenttext", tt);
+        } else if (!sent.equals(csent.getText())) {
             int pos = -1;
             for (int i = 0; i < sent.length() && i < csent.getText().length(); ++i) {
                 if (sent.charAt(i) != csent.getText().charAt(i)) {
