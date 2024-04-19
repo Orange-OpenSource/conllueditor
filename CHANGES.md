@@ -1,7 +1,7 @@
 # Changes
 
 ## Version 2.25.5
-* accept sentences sithout `# text = ...` (but issue warning)
+* accept sentences without `# text = ...` (but issue warning)
 
 ## Version 2.25.4
 * table view: Ctrl-click on Word ID keeps Word marked until sentence is changed or ID clicked again (to accelerate edtiing using shortcuts)
