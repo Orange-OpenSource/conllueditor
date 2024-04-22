@@ -68,7 +68,7 @@ public class TestConllSentence {
 
         SDParse sdp = new SDParse("the little sleeps mouse\nnsubj(sleeps, mouse)\ndet(mouse, the)\namod(mouse, little)");
 
-        String ref = "# text = the little sleeps mouse\n"+
+        String ref = //"# text = the little sleeps mouse\n"+
                      "1	the	_	_	_	_	4	det	_	_\n"+
                      "2	little	_	_	_	_	4	amod	_	_\n"+
                      "3	sleeps	_	_	_	_	0	root	_	_\n"+

@@ -1,4 +1,3 @@
-# text = POS tags can be attached to ( any part of ) the sentence text .
 1	POS	_	NNP	_	_	2	dep	_	_
 2	tags	_	NNS	_	_	5	nsubjpass	_	_
 3	can	_	MD	_	_	5	aux	_	_

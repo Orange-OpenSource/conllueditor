@@ -1,6 +1,6 @@
 {
   "sentenceid": 0,
   "maxsentence": 19,
-  "ok": "# global.columns \u003d  ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC\n# text \u003d sur la vie de Howard Hughes\n1\tsur\tsur\tADP\t_\t_\t3\tcase\t_\t_\n2\tla\tle\tDET\t_\tDefinite\u003dDef|Gender\u003dFem|Number\u003dSing|PronType\u003dArt\t3\tdet\t_\t_\n3\tvie\tvie\tNOUN\t_\tGender\u003dFem|Number\u003dSing\t0\troot\t_\t_\n4\tde\tde\tADP\t_\t_\t5\tcase\t_\t_\n5\tHoward\tHoward\tPROPN\t_\t_\t3\tnmod\t_\t_\n6\tHughes\tHughes\tPROPN\t_\t_\t5\tflat:name\t_\tSpaceAfter\u003dNo\n\n",
+  "ok": "# global.columns \u003d  ID FORM LEMMA UPOS XPOS FEATS HEAD DEPREL DEPS MISC\n1\tsur\tsur\tADP\t_\t_\t3\tcase\t_\t_\n2\tla\tle\tDET\t_\tDefinite\u003dDef|Gender\u003dFem|Number\u003dSing|PronType\u003dArt\t3\tdet\t_\t_\n3\tvie\tvie\tNOUN\t_\tGender\u003dFem|Number\u003dSing\t0\troot\t_\t_\n4\tde\tde\tADP\t_\t_\t5\tcase\t_\t_\n5\tHoward\tHoward\tPROPN\t_\t_\t3\tnmod\t_\t_\n6\tHughes\tHughes\tPROPN\t_\t_\t5\tflat:name\t_\tSpaceAfter\u003dNo\n\n",
   "changes": 0
 }
