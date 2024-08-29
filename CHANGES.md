@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.25.6
+* correction for warning if feature is used with UPOS which is not valid (needs use of `--features`)
+
 ## Version 2.25.5
 * accept sentences without `# text = ...` (but issue warning)
 

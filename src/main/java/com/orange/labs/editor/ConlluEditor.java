@@ -2477,7 +2477,7 @@ public class ConlluEditor {
         options.addOption(language);
 
         Option validator = Option.builder("v").longOpt("validator")
-                .argName("file")
+                .argName("LANG")
                 .hasArg()
                 .desc("file with validator configuration")
                 .build();

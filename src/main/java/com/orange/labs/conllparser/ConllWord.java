@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.3 as of 16th March 2024
+ @version 2.25.6 as of 29th August 2024
  */
 package com.orange.labs.conllparser;
 
@@ -190,7 +190,7 @@ public class ConllWord {
 
     public ConllWord(String form) {
         this(form, null);
-        /* 
+        /*
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
         this.form = form;
@@ -1522,7 +1522,6 @@ public class ConllWord {
             // check whether feat/val is valid
             if (validfeats != null) {
                 int rtc = validfeats.isValid(upostag, xpostag, f, val);
-
                 if (rtc == 1) {
                     jfeat.addProperty("error", "name");
                     ae.features++;

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2020, Orange S.A.
+Copyright (c) 2020-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.9.0 as of 30th December 2020
+ @version 2.25.6 as of 29th August 2024
  */
 package com.orange.labs.conllparser;
 
@@ -54,9 +54,9 @@ import java.util.Set;
  * Loads a file which defines all valid features and optionally gives for each
  * UPOS the list of valid features names. Format: Feature1=Val1 Feature1=Val2
  * ... U:NOUN Feature1 Feature2 ... X:NN Feature1 Feature2
- * 
+ *
  * or
- * 
+ *
  * loads the official data/feats.json file (from  https://github.com/UniversalDependencies/tools)
  * which defines for all UD languages valid features/values for each UPOS
  * if no language is given, it loads only universal feature/value pairs
@@ -108,6 +108,7 @@ public class ValidFeatures {
             }
         }
         System.err.format("%d valid Features read from %s\n", validFeatures.size(), filenames.toString());
+        System.err.println(validFeatures);
         System.err.println(uposFnames);
         System.err.println(xposFnames);
     }
@@ -142,8 +143,8 @@ public class ValidFeatures {
             }
         }
 
-        
-        if (uposok || xposok) return 0;
+
+        if (uposok && xposok) return 0;
         return 1;
     }
 
@@ -175,12 +176,12 @@ public class ValidFeatures {
         // if no language is given, read all features of all languages which are type=universal and doc:global, read uvalues and unused_uvalues
         BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fn), StandardCharsets.UTF_8));
         JsonObject jfile = JsonParser.parseReader(br).getAsJsonObject();
-        
+
         JsonObject features = jfile.getAsJsonObject("features");
         if (features == null) return;
         if (lg == null) {
             // get all universal define features
-            
+
             for (String lgcode : features.keySet()) {
                 JsonObject jlang = features.getAsJsonObject(lgcode);
                 for (String featurename : jlang.keySet()) {
@@ -189,7 +190,7 @@ public class ValidFeatures {
                     String type = feature.get("type").getAsString();
                     String doc = feature.get("doc").getAsString();
                     if (!type.equals("universal") || !doc.equals("global")) {
-                        // we only use universal features                    
+                        // we only use universal features
                         continue;
                     }
 
@@ -205,7 +206,7 @@ public class ValidFeatures {
                         //System.err.format("%s=%s\n", featurename, val);
                         addFvalue(featurename, val);
                     }
-                    
+
                 }
             }
         } else {
