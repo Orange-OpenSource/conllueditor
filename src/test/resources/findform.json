@@ -3,6 +3,7 @@
   "maxsentence": 19,
   "text": "Sam bought and prepared dinner",
   "sentence": "Sam bought and prepared dinner",
+  "previous_modification": 0,
   "length": 5,
   "sent_id": "conlueditor-test-11-eud",
   "changes": 0,

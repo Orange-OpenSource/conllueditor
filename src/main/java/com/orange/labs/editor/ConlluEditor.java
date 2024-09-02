@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.5 as of 19th April 2024
+ @version 2.26.0 as of 1st September 2024
  */
 package com.orange.labs.editor;
 
@@ -429,6 +429,7 @@ public class ConlluEditor {
         JsonObject solution = prepare(sentid);
         solution.addProperty("text", csent.getText());
         solution.addProperty("sentence", csent.getSentence());
+        solution.addProperty("previous_modification", csent.getLastModification());
         solution.addProperty("length", (csent.getWords().size() + csent.numOfEmptyWords()));
 
         if (csent.getSentid() != null) {
@@ -735,6 +736,12 @@ public class ConlluEditor {
         return solution.toString();
     }
 
+    // only for the unitary tests. Get the lastmodification value of a sentences without using "read" (which will delete undo history)
+    public int getLastModification(int sentid) {
+        ConllSentence csnt = cfile.getSentences().get(sentid);
+        return csnt.getLastModification();
+    }
+
     // TODO: write and commit file only when changing sentence: problem with multithread
     /* Process the commands comming from the JavaScript GUI.
         @param command command string
@@ -817,7 +824,7 @@ public class ConlluEditor {
           save                       save the file either to <filename.conllu>.2 (if <filename.conllu> not git controlled)
                                      or to <filename.conllu> and execute a "git add" and "git commit"
     */
-    public String process(String command, int currentSentenceId, String editinfo) {
+    public String process(String command, int currentSentenceId, String editinfo, int prevmod) {
         if (mode == 2) {
             try {
                 init();
@@ -846,8 +853,20 @@ public class ConlluEditor {
                 if (mode != 0) {
                     return formatErrMsg("NO editing in browse mode", currentSentenceId);
                 }
+
+                // check whether the previous_modificatin date returned by the client is the same
+                // as the one of the server. If not another client has changed the sentence in the meantime and we
+                // must reject the modification coming in.
+                ConllSentence csentt = cfile.getSentences().get(currentSentenceId);
+                System.err.println("PREVMOD local:" + csentt.getLastModification() + " client: " + prevmod);
+                if (csentt.getLastModification() > prevmod) {
+                     return formatErrMsg(String.format("This sentence (%s) has been modified by another user (mod counter %d > %d).\nModification rejected.\nPlease reload sentence before next modification", 
+                               currentSentenceId, csentt.getLastModification(), prevmod),  currentSentenceId);
+                }
+
                 changesSinceSave += 1;
             }
+
 
             ConllSentence csent; // = cfile.getSentences().get(currentSentenceId);
 
@@ -1546,6 +1565,8 @@ public class ConlluEditor {
                     }
                 }
 
+                csent.increaseModificationCounter();
+
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
                 } catch (IOException ex) {
@@ -1618,6 +1639,7 @@ public class ConlluEditor {
 
                 csent.addWord(composedWord, id);
 
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, composedWord, editinfo);
                 } catch (IOException ex) {
@@ -1693,6 +1715,7 @@ public class ConlluEditor {
                 }
                 csent.addWord(composedWord, id);
                 csent.setText(csent.getSentence());
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, composedWord, editinfo);
                 } catch (IOException ex) {
@@ -1755,6 +1778,7 @@ public class ConlluEditor {
                 }
 
                 csent.setText(csent.getSentence());
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, cw, editinfo);
                 } catch (IOException ex) {
@@ -1832,6 +1856,7 @@ public class ConlluEditor {
                 }
 
                 csent.setText(csent.getSentence());
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
                 } catch (IOException ex) {
@@ -1869,6 +1894,8 @@ public class ConlluEditor {
 
                 cfile.getSentences().add(currentSentenceId + 1, newsent);
                 numberOfSentences++;
+                newsent.increaseModificationCounter();
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, null, editinfo);
                 } catch (IOException ex) {
@@ -1889,6 +1916,7 @@ public class ConlluEditor {
                 }
                 ConllSentence nextsent = cfile.getSentences().get(currentSentenceId + 1);
                 csent.joinsentence(nextsent);
+                csent.increaseModificationCounter();
                 cfile.getSentences().remove(currentSentenceId + 1);
                 numberOfSentences--;
                 try {
@@ -1940,6 +1968,7 @@ public class ConlluEditor {
                 history.add(csent);
 
                 csent.deleteEmptyWord(id, subid);
+                csent.increaseModificationCounter();
 
                 try {
                     writeBackup(currentSentenceId, null, editinfo);
@@ -1993,6 +2022,7 @@ public class ConlluEditor {
                     csent.addWord(newword, id);
                 }
 
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, newword, editinfo);
                 } catch (IOException ex) {
@@ -2050,12 +2080,15 @@ public class ConlluEditor {
                         return formatErrMsg("Bad format in translations box: ''" + t, currentSentenceId);
                     }
                 }
+                csent.increaseModificationCounter();
+
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
                 } catch (IOException ex) {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }
                 return returnTree(currentSentenceId, csent);
+
             } else if (command.startsWith("mod comments ")) {
                 String[] f = command.trim().split(" +", 3);
                 String newcomment;
@@ -2074,6 +2107,7 @@ public class ConlluEditor {
 
                 ConllWord modWord = csent.getHead();
                 csent.setComments(newcomment);
+                csent.increaseModificationCounter();
 
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
@@ -2101,6 +2135,7 @@ public class ConlluEditor {
                     if (cs != null) {
                         cfile.getSentences().set(currentSentenceId, cs);
                         csent = cfile.getSentences().get(currentSentenceId);
+                        csent.increaseModificationCounter();
                         writeBackup(currentSentenceId, null, "redo");
                         return returnTree(currentSentenceId, csent);
                     }
@@ -2152,6 +2187,7 @@ public class ConlluEditor {
                 } else {
                     return formatErrMsg("INVALID ed command «" + command + "»", currentSentenceId);
                 }
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, dep, editinfo);
                 } catch (IOException ex) {
@@ -2242,6 +2278,7 @@ public class ConlluEditor {
                 }
 
                 ConllWord modWord = depword;
+                csent.increaseModificationCounter();
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
                 } catch (IOException ex) {

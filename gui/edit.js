@@ -1418,13 +1418,14 @@ var concatenatedforms = "";
 // position of highlighted things (search result)
 var highlightX = 0;
 var highlightY = 0;
+var previous_modified = 0;
 /**
  *  afficher une phrase avec ses relations sémantique
  * @param {type} item json retourné par le serveur avec "relation" et "tree" liste avec un arbre ou plusieurs arbres partiels
  * @returns {undefined}
  */
 function formatPhrase(item) {
-    //console.log("eee " + item);
+    console.log("Item:", item);
     if (autoadaptwidth) {
         var maxlen = getAllWordLengths(item, 0);
         //console.log("MAXLEN " + maxlen);
@@ -1432,6 +1433,7 @@ function formatPhrase(item) {
 
     highlightX = 0;
     highlightY = 0;
+    previous_modified = item.previous_modification;
 
     if (item.error) {
         alert(item.error);
@@ -1761,7 +1763,7 @@ var olddata = undefined;
    and redisplay sentence afterwards (with json receivend from server after the modif) */
 function sendmodifs(commands) {
     commands["sentid"] = $("#currentsent").text() - 1;
-
+    commands["prevmod"] = previous_modified;
     $.ajax({
         url: URL_BASE,
         type: 'POST',

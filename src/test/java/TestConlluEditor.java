@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.26.0 as of 1st September 2024
 */
 
 import com.google.gson.Gson;
@@ -97,7 +97,6 @@ public class TestConlluEditor {
             processwrapper(cmd, commands.get(cmd), "editinfo");
         }
 
-
         URL ref = this.getClass().getResource(filename);
 
         Assert.assertEquals(String.format("%s\n ref: %s\n res: %s\n", errormsg, ref.toString(), out.toString()),
@@ -110,12 +109,18 @@ public class TestConlluEditor {
      * Sometimes we test whether CE detected an error, but when this is not the case the presence of "error" in the
      * returned String fo ce.process() means that something went wrong which should not have gone wrong.
      */
-    private String processwrapper(String command, int sentid, String comment) {
-        String res = ce.process(command, sentid, comment);
-        if (res.contains("\"error\"")) {
+    private int processwrapper(String command, int sentid, String comment) {
+        // read sentence to know its current modification counter (but with "read" since this deletes the Undo History, which we need to test
+        int prevmod = ce.getLastModification(sentid);
+
+        String res = ce.process(command, sentid, comment, prevmod);
+        JsonElement jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
+        JsonObject jobject = jelement.getAsJsonObject();
+
+        if (jobject.has("error")) {
              Assert.assertFalse("Exception catched: " + res, true);
         }
-        return res;
+        return jobject.getAsJsonPrimitive("previous_modification").getAsInt();
     }
 
     @Test
@@ -139,7 +144,7 @@ public class TestConlluEditor {
         StringBuilder sb = new StringBuilder();
         sb.append(jobject.get("raw").getAsString()).append('\n');
 
-        
+
         // LatEx this time with enhanced relations
         res = ce.getraw(ConlluEditor.Raw.LATEX, 13, true);
         // first sentence 13
@@ -147,7 +152,7 @@ public class TestConlluEditor {
         jobject = jelement.getAsJsonObject();
 
         sb.append(jobject.get("raw").getAsString()).append('\n');
-        
+
         // add LateX for sentence 18
         res = ce.getraw(ConlluEditor.Raw.LATEX, 18, false);
         jelement = JsonParser.parseString(res);
@@ -221,7 +226,7 @@ public class TestConlluEditor {
 
 
     @Test
-    public void test05Mod() throws IOException {
+    public void test050Mod() throws IOException {
         name("modifying form, lemma, feat, upos, xpos, deprel and head");
         Map <String, Integer>commands = new LinkedHashMap<>();
 
@@ -239,7 +244,7 @@ public class TestConlluEditor {
         commands.put("mod misc 13", 1); // delete all misc
 
         commands.put("mod addmisc 6 Key=Value1", 3); // add a misc
-        
+
         runtest("test.edit.conllu", commands, "CoNLL-U output incorrect");
     }
 
@@ -251,12 +256,35 @@ public class TestConlluEditor {
         ce.setBacksuffix(".51");
         ce.setSaveafter(1);
 
-        String rtc = ce.process("mod form 9 Form", 0, "editinfo");
+        String rtc = ce.process("mod form 9 Form", 0, "editinfo", 1); // we changed the sentence already once
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "incoherent_text.json");
 
         URL ref = this.getClass().getResource("incoherent_text.json");
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8, false);
+
+        Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test052Mod_2clients() throws IOException {
+        name("modifying form by two different clients");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix(".52");
+        ce.setSaveafter(1);
+        // ce is reloaded for each test, so the last_modification counters are always reset to 0
+
+        String rtc = ce.process("mod form 9 Form", 0, "editinfo", 0); // we changed the sentence already once
+        rtc = ce.process("mod form 10 Form", 0, "editinfo", 0); // we changed the sentence already once
+        JsonElement jelement = JsonParser.parseString(rtc);
+        System.err.println("AAAAAAAA " + rtc);
+        File out = new File(folder, "multiple_access.json");
+
+        URL ref = this.getClass().getResource("multiple_access.json");
         FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8, false);
 
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
@@ -275,7 +303,7 @@ public class TestConlluEditor {
         // call read to be sure makeTrees has been called on sentence 1
         //String rtc =
         processwrapper("read 1", 1, "editinfo");
-        String rtc = ce.process("mod 9 12 dep", 1, "editinfo");
+        String rtc = ce.process("mod 9 12 dep", 1, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -301,7 +329,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         processwrapper("read 1", 1, "editinfo");
-        String rtc = ce.process("mod 9 22 dep", 1, "editinfo");
+        String rtc = ce.process("mod 9 22 dep", 1, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -327,7 +355,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         processwrapper("read 1", 1, "editinfo");
-        String rtc = ce.process("mod 9 9 dep", 1, "editinfo");
+        String rtc = ce.process("mod 9 9 dep", 1, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -353,7 +381,7 @@ public class TestConlluEditor {
 
         // call read to be sure makeTrees has been called on sentence 1
         processwrapper("read 1", 1, "editinfo");
-        String rtc = ce.process("mod 19 9 dep", 1, "editinfo");
+        String rtc = ce.process("mod 19 9 dep", 1, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -384,36 +412,36 @@ public class TestConlluEditor {
 
         StringBuilder sb = new StringBuilder();
         sb.append("[\n");
-        String rtc = ce.process("mod lemma 9", 1, "editinfo");
+        String rtc = ce.process("mod lemma 9", 1, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
         // delete CR (\r) otherwise this tests fails on Windows...
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod form 8", 1, "editinfo");
+        rtc = ce.process("mod form 8", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod upos 1", 1, "editinfo");
+        rtc = ce.process("mod upos 1", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod xpos 1", 1, "editinfo");
+        rtc = ce.process("mod xpos 1", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod pos 5", 1, "editinfo");
+        rtc = ce.process("mod pos 5", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod deprel 3", 1, "editinfo");
+        rtc = ce.process("mod deprel 3", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod feats", 1, "editinfo");
+        rtc = ce.process("mod feats", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append(",\n");
 
-        rtc = ce.process("mod misc", 1, "editinfo");
+        rtc = ce.process("mod misc", 1, "editinfo", 0);
         jelement = JsonParser.parseString(rtc);
         sb.append(prettyprintJSON(jelement).replaceAll("\\\\r", "")).append("\n");
         sb.append("]\n");
@@ -627,7 +655,7 @@ public class TestConlluEditor {
         ce.setBacksuffix(".182");
         ce.setSaveafter(1);
 
-        String rtc = ce.process("mod tomwt 8 aa bb", 4, "editinfo");
+        String rtc = ce.process("mod tomwt 8 aa bb", 4, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -689,7 +717,7 @@ public class TestConlluEditor {
         ce.setBacksuffix(".202");
         ce.setSaveafter(1);
 
-        String rtc = ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en a translation\"}", 0, "editinfo");
+        String rtc = ce.process("mod editmetadata { \"newdoc\": \"test doc\", \"newpar\": \"new paragraph\", \"sent_id\": \"changed-01\", \"translations\": \"en a translation\"}", 0, "editinfo", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -714,7 +742,7 @@ public class TestConlluEditor {
         ce.setCallgitcommit(false);
         ce.setSaveafter(1);
 
-        String rtc = ce.process("read 13", 1, "");
+        String rtc = ce.process("read 13", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("read.json");
@@ -734,7 +762,7 @@ public class TestConlluEditor {
         name("read a second sentence");
         ce.setCallgitcommit(false);
         ce.setSaveafter(1);
-        String rtc = ce.process("read 16", 1, "");
+        String rtc = ce.process("read 16", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("read.json");
@@ -760,7 +788,7 @@ public class TestConlluEditor {
                         "2	_	DET	Gender=Fem	3	_\n" +
                         "3	_	NOUN	_	0	_\n";
 
-        String rtc = ce.process("findsubtree false "+subtree, 5, "");
+        String rtc = ce.process("findsubtree false "+subtree, 5, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -788,7 +816,7 @@ public class TestConlluEditor {
                         "3	_	_	NOUN	_	4	_\n" +
                         "4	_	_	NOUN	_	0	_\n";
 
-        String rtc = ce.process("findsubtree false "+subtree, 1, "");
+        String rtc = ce.process("findsubtree false "+subtree, 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -811,7 +839,7 @@ public class TestConlluEditor {
         ce.setCallgitcommit(false);
 
         //ce.process("read 0", 1, "");
-        String rtc = ce.process("createsubtree 7", 0, "");
+        String rtc = ce.process("createsubtree 7", 0, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -832,7 +860,7 @@ public class TestConlluEditor {
         name("createsubtree selected columns");
         ce.setCallgitcommit(false);
 
-        String rtc = ce.process("createsubtree 9 # global.columns = ID LEMMA UPOS HEAD DEPREL", 1, "");
+        String rtc = ce.process("createsubtree 9 # global.columns = ID LEMMA UPOS HEAD DEPREL", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -854,7 +882,7 @@ public class TestConlluEditor {
         name("createsubtree missing ID column");
         ce.setCallgitcommit(false);
 
-        String rtc = ce.process("createsubtree 9 # global.columns = LEMMA UPOS HEAD DEPREL", 1, "");
+        String rtc = ce.process("createsubtree 9 # global.columns = LEMMA UPOS HEAD DEPREL", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -875,7 +903,7 @@ public class TestConlluEditor {
         name("findlemma");
         ce.setCallgitcommit(false);
         ce.setSaveafter(1);
-        String rtc = ce.process("findlemma false fromage/.*/puer", 1, "");
+        String rtc = ce.process("findlemma false fromage/.*/puer", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findlemma.json");
@@ -896,7 +924,7 @@ public class TestConlluEditor {
         name("findword");
         ce.setCallgitcommit(false);
         ce.setSaveafter(1);
-        String rtc = ce.process("findword false \" and \"", 1, "");
+        String rtc = ce.process("findword false \" and \"", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -916,7 +944,7 @@ public class TestConlluEditor {
     public void test33FindDeprel() throws IOException {
         name("finddeprel");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("finddeprel true orphan", 16, "");
+        String rtc = ce.process("finddeprel true orphan", 16, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "finddeprel.json");
@@ -935,7 +963,7 @@ public class TestConlluEditor {
     public void test34FindSequence() throws IOException {
         name("find sequence");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findmulti false l:un/u:ADJ", 1, "");
+        String rtc = ce.process("findmulti false l:un/u:ADJ", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -944,7 +972,7 @@ public class TestConlluEditor {
 
         FileUtils.writeStringToFile(out, "[" + prettyprintJSON(jelement), StandardCharsets.UTF_8);
 
-        rtc = ce.process("findmulti false f:et.*%u:DET", 1, "");
+        rtc = ce.process("findmulti false f:et.*%u:DET", 1, "", 0);
         jelement = JsonParser.parseString(rtc);
         FileUtils.writeStringToFile(out, "," + prettyprintJSON(jelement) + "]", StandardCharsets.UTF_8, true);
 
@@ -960,7 +988,7 @@ public class TestConlluEditor {
     public void test35FindSentenceId() throws IOException {
         name("findsenteid");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findsentid false c.*-ud", 1, "");
+        String rtc = ce.process("findsentid false c.*-ud", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -980,7 +1008,7 @@ public class TestConlluEditor {
     public void test36FindSentenceIdBadRE() throws IOException {
         name("findsenteid (bad RE)");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findsentid false c.*[]-ud", 1, "");
+        String rtc = ce.process("findsentid false c.*[]-ud", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("findform.json");
@@ -1001,7 +1029,7 @@ public class TestConlluEditor {
     public void test37FindNothing() throws IOException {
         name("findupos (error)");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findupos false TOTO", 1, "");
+        String rtc = ce.process("findupos false TOTO", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         //File out = folder.newFile("finduposKO.json");
@@ -1062,7 +1090,7 @@ public class TestConlluEditor {
     public void test400FindExpressionForm() throws IOException {
         name("findexpression Form");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findexpression false Form:règne", 1, "");
+        String rtc = ce.process("findexpression false Form:règne", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "findexpression-form.json");
@@ -1081,7 +1109,7 @@ public class TestConlluEditor {
     public void test401FindExpressionMWT() throws IOException {
         name("findexpression IsEmpty");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findexpression false IsMWT", 1, "");
+        String rtc = ce.process("findexpression false IsMWT", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "findexpression-ismwt.json");
@@ -1100,7 +1128,7 @@ public class TestConlluEditor {
     public void test402FindExpressionIsEmpty() throws IOException {
         name("findexpression IsEmpty");
         ce.setCallgitcommit(false);
-        String rtc = ce.process("findexpression false IsEmpty and Lemma:laittaa", 1, "");
+        String rtc = ce.process("findexpression false IsEmpty and Lemma:laittaa", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "findexpression-isempty.json");
@@ -1125,7 +1153,7 @@ public class TestConlluEditor {
         filenames.add(file.toString());
         ce.setValidUPOS(filenames);
 
-        String rtc = ce.process("read 2", 1, "");
+        String rtc = ce.process("read 2", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "uposvalid.json");
@@ -1149,7 +1177,7 @@ public class TestConlluEditor {
         filenames.add(file.toString());
         ce.setValidDeprels(filenames, null);
 
-        String rtc = ce.process("read 2", 1, "");
+        String rtc = ce.process("read 2", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "deprelvalid.json");
@@ -1173,7 +1201,7 @@ public class TestConlluEditor {
         filenames.add(file.toString());
         ce.setValidFeatures(filenames, null, false);
 
-        String rtc = ce.process("read 1", 1, "");
+        String rtc = ce.process("read 1", 1, "", 0);
         JsonElement jelement = JsonParser.parseString(rtc);
 
         File out = new File(folder, "featsvalid.json");
@@ -1244,7 +1272,7 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
-    
+
     @Test
     public void test52deleteEmptyWords() throws IOException {
         name("delete empty word");
@@ -1264,20 +1292,20 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
-    
+
     @Test
     public void test53deleteEmptyWords_Invald() throws IOException {
         name("delete empty word (error)");
         ce.setCallgitcommit(false);
         ce.setBacksuffix(".15");
 
-        String msg = ce.process("mod emptydelete 5.2", 13, "editinfo");
+        String msg = ce.process("mod emptydelete 5.2", 13, "editinfo", 0);
 
         String expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"Empty word noes not exist «mod emptydelete 5.2»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
-        msg = ce.process("mod delete 5.1", 13, "editinfo"); // bad command
+        msg = ce.process("mod delete 5.1", 13, "editinfo", 0); // bad command
 
         expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"INVALID id (not an integer) «mod delete 5.1» For input string: \\\"5.1\\\"\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
@@ -1291,13 +1319,13 @@ public class TestConlluEditor {
         ce.setCallgitcommit(false);
         ce.setBacksuffix(".16");
 
-        String msg = ce.process("mod delete 11", 9, "editinfo");
+        String msg = ce.process("mod delete 11", 9, "editinfo", 0);
 
         String expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID id «mod delete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
-        msg = ce.process("mod emptydelete 11", 9, "editinfo"); // bad command
+        msg = ce.process("mod emptydelete 11", 9, "editinfo", 0); // bad command
         expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID empty word id «mod emptydelete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);

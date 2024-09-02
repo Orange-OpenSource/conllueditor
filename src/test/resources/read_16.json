@@ -3,6 +3,7 @@
   "maxsentence": 19,
   "text": "Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.",
   "sentence": "Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.",
+  "previous_modification": 0,
   "length": 28,
   "sent_id": "sv-ud-train-767",
   "changes": 0,

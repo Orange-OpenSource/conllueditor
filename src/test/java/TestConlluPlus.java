@@ -85,12 +85,31 @@ public class TestConlluPlus {
      * Sometimes we test whether CE detected an error, but when this is not the case the presence of "error" in the
      * returned String fo ce.process() means that something went wrong which should not have gone wrong.
      */
-    private String processwrapper(String command, int sentid, String comment) {
-        String res = ce.process(command, sentid, comment);
-        if (res.contains("\"error\"")) {
+//    private String processwrapper(String command, int sentid, String comment) {
+//        String res = ce.process(command, sentid, comment, 0);
+//        if (res.contains("\"error\"")) {
+//             Assert.assertFalse("Exception catched: " + res, true);
+//        }
+//        return res;
+//    }
+    private int processwrapper(String command, int sentid, String comment) {
+        return processwrapper(command, sentid, comment, 0);
+    }
+    private int processwrapper(String command, int sentid, String comment, int ooprevmod) {
+        // read sentence to know its current modification counter
+        String rtc = ce.process("read " + sentid, 1, "", 1000);
+        JsonElement jelement = JsonParser.parseString(rtc);
+        JsonObject jobject = jelement.getAsJsonObject();
+        int prevmod = jobject.getAsJsonPrimitive("previous_modification").getAsInt();
+
+        String res = ce.process(command, sentid, comment, prevmod);
+        jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
+        jobject = jelement.getAsJsonObject();
+
+        if (jobject.has("error")) {
              Assert.assertFalse("Exception catched: " + res, true);
         }
-        return res;
+        return jobject.getAsJsonPrimitive("previous_modification").getAsInt();
     }
 
     @Test
@@ -174,8 +193,8 @@ public class TestConlluPlus {
         File out = new File(folder, "test.mod.conllup");
         ce.setOutfilename(out);
 
-        processwrapper("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
-        processwrapper("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo");
+        int prevmod = processwrapper("mod extracol 1 SEM:NE B:OEUVRE", 0, "editinfo");
+        processwrapper("mod extracol 6 SEM:COREF B:COREF9", 0, "editinfo", prevmod);
         processwrapper("mod extracol 7 SEM:COREF I:COREF9", 0, "editinfo");
 
 
@@ -194,7 +213,7 @@ public class TestConlluPlus {
         ce.setBacksuffix(".4");
         ce.setSaveafter(1);
 
-        String rtc = ce.process("mod extracol 8 ZZSEM:COREF I:COREF9", 0, "editinfo");
+        String rtc = ce.process("mod extracol 8 ZZSEM:COREF I:COREF9", 0, "editinfo", 0);
         File out = new File(folder, "error3.json");
         FileUtils.writeStringToFile(out, rtc, StandardCharsets.UTF_8, false);
         URL ref = this.getClass().getResource("error3.json");

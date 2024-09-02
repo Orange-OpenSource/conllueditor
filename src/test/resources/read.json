@@ -3,6 +3,7 @@
   "maxsentence": 19,
   "text": "Sam fixed lunch and Kim dinner",
   "sentence": "Sam fixed lunch and Kim dinner",
+  "previous_modification": 0,
   "length": 7,
   "sent_id": "ellipsis1",
   "changes": 0,

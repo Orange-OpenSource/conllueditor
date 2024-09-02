@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.26.0
+* rudimental check to stop two clients modify the same sentence at the same time
+* new test
+
 ## Version 2.25.6
 * correction for warning if feature is used with UPOS which is not valid (needs use of `--features`)
 

@@ -3,6 +3,7 @@
   "maxsentence": 19,
   "text": "Mary organised bred and John beer",
   "sentence": "Mary organised bred and John beer",
+  "previous_modification": 0,
   "length": 7,
   "sent_id": "ellipsis2",
   "changes": 0,

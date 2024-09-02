@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.26.0 as of 1st September 2024
 */
 package com.orange.labs.conllparser;
 
@@ -89,6 +89,7 @@ public class ConllSentence {
 
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
     Map<String, Integer> columndefs = null;
+    private int last_modified = 0; // last modification date in this session. To avoid to users edit the same sentence at the same time. When a modification is sent by the client, the modifcation date must still be the same
 
     public enum Scoretype {
         /*FORM, */
@@ -173,6 +174,14 @@ public class ConllSentence {
             translations.putAll(orig.translations);
         }
         columndefs = orig.columndefs;
+        // every time the sentence is modified in a ConlluEditor sesscion we increase this counter
+        // a client gets the current value, and when the client sents the modification back to the server the
+        // value on the server side must not have changed. If it has changed a second client edited the same
+        // sentence at the same time and was quicker to send it back to the server.
+        // ConlluEditor.process() increases this value if the sentences was succesfully modifed
+        // it would have been better to use system time here, but this coplicated the unittests too much for
+        // the time being
+        last_modified = 0; //System.currentTimeMillis();
     }
 
     private void parse(List<AbstractMap.SimpleEntry<Integer, String>> conlllines) throws ConllException {
@@ -1067,7 +1076,6 @@ public class ConllSentence {
     }
 
     public ConllWord getContracted(int id) {
-        //System.err.println("aaaaa " + contracted.keySet());
         return contracted.get(id);
     }
 
@@ -1503,7 +1511,6 @@ public class ConllSentence {
             w.getDependentsMap().clear();
         }
 
-        //System.err.println("aaaaaa " + words);
         int position = 1;
 
         // sentence initial empty word (0.1)
@@ -2058,6 +2065,17 @@ public class ConllSentence {
 
     public Map<String, String> getTranslations() {
         return translations;
+    }
+
+    public int getLastModification() {
+        return last_modified;
+    }
+    /*public void setLastModification(long m) {
+        last_modified = m;
+    }
+    */
+    public void increaseModificationCounter() {
+        last_modified++;
     }
 
     /**

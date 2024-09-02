@@ -226,6 +226,7 @@ public class ServeurHTTP {
 
                     String command = null;
                     Integer sentid = null;
+                    Integer last_mod = 0;
 
                     String boundary = Multipart.getBoundary(he.getRequestHeaders());
                     if (boundary != null) {
@@ -236,6 +237,9 @@ public class ServeurHTTP {
                         }
                         command = contents.getFields().get("cmd").trim();
                         sentid = Integer.parseInt(contents.getFields().get("sentid").trim());
+                        if (contents.getFields().containsKey("prevmod")) {
+                            last_mod = Integer.parseInt(contents.getFields().get("prevmod").trim());
+                        }
 
                     } else {
                         // post normal
@@ -263,6 +267,9 @@ public class ServeurHTTP {
                             } else if (l.startsWith("sentid=")) {
                                 String s = URLDecoder.decode(l.substring(7), "UTF-8"); // couper sentid=
                                 sentid = Integer.parseInt(s);
+                            } else if (l.startsWith("prevmod=")) {
+                                String s = URLDecoder.decode(l.substring(8), "UTF-8"); // couper prevmod=
+                                last_mod = Integer.parseInt(s);
                             }
                         }
                     }
@@ -274,7 +281,7 @@ public class ServeurHTTP {
                     }
                     if (command != null && !command.isEmpty()
                             && sentid != null) {
-                        response = ce.process(command, sentid, client);
+                        response = ce.process(command, sentid, client, last_mod);
                         http_rtc = HttpURLConnection.HTTP_OK;
                         if (response == null) {
                             response = "";
