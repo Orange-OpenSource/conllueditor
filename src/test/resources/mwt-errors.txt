@@ -1,0 +1,3 @@
+Contracted word must not have columns filled after position 2
+
+

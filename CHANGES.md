@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.26.1
+* more specific error messages when loading an invalid file
+* show all errors in an CoNLL-U file (not just the first)
+* new tests
+
 ## Version 2.26.0
 * rudimental check to stop two clients modify the same sentence at the same time
 * new test

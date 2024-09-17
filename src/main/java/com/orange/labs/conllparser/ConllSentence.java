@@ -193,83 +193,87 @@ public class ConllSentence {
         List<String> lastnonstandardinfo = null;
         Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
 
+        List<ConllException> errors = new ArrayList<>();
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
-            String line = cline.getValue();
-            if (line.startsWith("#")) {
-                if (line.startsWith("# newpar")) {
-                    newpar = line.substring(8).trim();
-                    if (newpar.startsWith("id =")) {
-                        newpar = newpar.substring(4).strip();
-                    }
-                } else if (line.startsWith("# newdoc")) {
-                    newdoc = line.substring(8).trim();
-                    if (newdoc.startsWith("id =")) {
-                        newdoc = newdoc.substring(4).strip();
-                    }
-                } else if (line.startsWith("# sent_id = ")) {
-                    sentid = line.substring(12).trim();
-                } else if (line.startsWith("# text = ")) {
-                    text = line.substring(9).trim();
-                } else if (line.startsWith("# translit = ")) {
-                    translit = line.substring(13).trim();
-                } else if (line.startsWith("# text_")) {
-                    if (translations == null) {
-                        translations = new HashMap<>();
-                    }
-                    Matcher m = translationFields.matcher(line);
-                    if (m.matches()) {
-                        translations.put(m.group(1), m.group(2));
+            try {
+                String line = cline.getValue();
+                if (line.startsWith("#")) {
+                    if (line.startsWith("# newpar")) {
+                        newpar = line.substring(8).trim();
+                        if (newpar.startsWith("id =")) {
+                            newpar = newpar.substring(4).strip();
+                        }
+                    } else if (line.startsWith("# newdoc")) {
+                        newdoc = line.substring(8).trim();
+                        if (newdoc.startsWith("id =")) {
+                            newdoc = newdoc.substring(4).strip();
+                        }
+                    } else if (line.startsWith("# sent_id = ")) {
+                        sentid = line.substring(12).trim();
+                    } else if (line.startsWith("# text = ")) {
+                        text = line.substring(9).trim();
+                    } else if (line.startsWith("# translit = ")) {
+                        translit = line.substring(13).trim();
+                    } else if (line.startsWith("# text_")) {
+                        if (translations == null) {
+                            translations = new HashMap<>();
+                        }
+                        Matcher m = translationFields.matcher(line);
+                        if (m.matches()) {
+                            translations.put(m.group(1), m.group(2));
+                        } else {
+                            System.err.format("WARNING: ignoring invalid '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
+                        }
                     } else {
-                        System.err.format("WARNING: ignoring invalid '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
+                        comments.add(line.substring(1).trim());
                     }
-                } else {
-                    comments.add(line.substring(1).trim());
+                    continue;
                 }
-                continue;
-            }
-            String[] fields = line.split("\t", 1);
-            //System.err.println("LINE\t" + line + " ");
-            if (fields.length < 1) {
-                System.err.format("WARNING: ignoring short line %d: \"%s\"\n", cline.getKey(), line);
-                continue;
-            }
+                String[] fields = line.split("\t", 1);
+                //System.err.println("LINE\t" + line + " ");
+                if (fields.length < 1) {
+                    System.err.format("WARNING: ignoring short line %d: \"%s\"\n", cline.getKey(), line);
+                    continue;
+                }
 
-            ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, columndefs, cline.getKey());
-            w.setMysentence(this);
+                ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, columndefs, cline.getKey());
+                w.setMysentence(this);
 
-            if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
-                hasEnhancedDeps = true;
-            }
+                if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
+                    hasEnhancedDeps = true;
+                }
 
-//            lastAnnots = w.getAnnots();
-//            if (lastAnnots != null) {
-//                hasAnnot = true;
-//                for (Annotation a : lastAnnots) {
-//                    if (a.target && a.begin) {
-//                        frames.put(a.frame, w);
-//                    }
-//                }
-//            }
-            if (w.getTokentype() == ConllWord.Tokentype.WORD) {
-                if (!w.hasXpostag("NON-VU")) {
-                    words.add(w);
+                if (w.getTokentype() == ConllWord.Tokentype.WORD) {
+                    if (!w.hasXpostag("NON-VU")) {
+                        words.add(w);
+                    }
+                } else if (w.getTokentype() == ConllWord.Tokentype.EMPTY) {
+                    if (emptywords == null) {
+                        emptywords = new HashMap<>();
+                    }
+                    List<ConllWord> ew = emptywords.get(w.getId());
+                    if (ew == null) {
+                        ew = new ArrayList<>();
+                        emptywords.put(w.getId(), ew);
+                    }
+                    ew.add(w);
+                } else { // w.getTokentype() == ConllWord.Tokentype.CONTRACTED)
+                    if (contracted == null) {
+                        contracted = new HashMap<>();
+                    }
+                    contracted.put(w.getId(), w);
                 }
-            } else if (w.getTokentype() == ConllWord.Tokentype.EMPTY) {
-                if (emptywords == null) {
-                    emptywords = new HashMap<>();
-                }
-                List<ConllWord> ew = emptywords.get(w.getId());
-                if (ew == null) {
-                    ew = new ArrayList<>();
-                    emptywords.put(w.getId(), ew);
-                }
-                ew.add(w);
-            } else { // w.getTokentype() == ConllWord.Tokentype.CONTRACTED)
-                if (contracted == null) {
-                    contracted = new HashMap<>();
-                }
-                contracted.put(w.getId(), w);
+            } catch (ConllException ex) {
+                // catch all errors of the sentence, not just the first
+                errors.add(ex);
             }
+        }
+        if (!errors.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (ConllException ex : errors) {
+                sb.append(ex.getMessage()).append('\n');
+            }
+            throw new ConllException(sb.toString());
         }
 
     }

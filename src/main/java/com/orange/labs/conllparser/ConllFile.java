@@ -151,6 +151,7 @@ public class ConllFile {
 
         columndefs = new LinkedHashMap<>();
         try {
+            List<String> errors = new ArrayList<>();
             while ((line = br.readLine()) != null) {
                 ctline++;
                 if (ctline == 1) {
@@ -163,7 +164,7 @@ public class ConllFile {
                         for (String d : elems) {
                             int pos = columndefs.size();
                             if (columndefs.containsKey(d)) {
-                                throw new ConllException("doubled column name in  conllu+ definition " + line);
+                                throw new ConllException("doubled column name in conllu+ definition " + line);
                             }
                             columndefs.put(d, pos);
                         }
@@ -204,11 +205,18 @@ public class ConllFile {
                 }
                 if (line.trim().isEmpty()) {
                     if (!sentenceLines.isEmpty() && countWords != 0) {
-                        processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID, columndefs);
+                        try {
+                            processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID, columndefs);
+                        } catch (ConllException ex) {
+                            sentenceLines.clear();
+                            errors.add(ex.getMessage());
+                        }
                         countWords = 0;
+
                     }
                 } else {
                     if (line.startsWith("#")) {
+                        // TODO remove GRANA comments
                         if (line.startsWith("#NOGRANA")) {
                             showgrana = false;
                         } else if (line.startsWith("#NOID")) {
@@ -220,8 +228,8 @@ public class ConllFile {
                         }
                         sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
                     } else {
-
-                        // les lignes CONLL commence toujours avec un nombre, SAUF si on utilise le
+                        // TODO deprecate usage of shift
+                        // les lignes CONLL commencent toujours avec un nombre, SAUF si on utilise le
                         // shift, dans ce cas on peut trouver autre choses dans des colonnes < shift ...
                         String[] elems = line.split("\t");
                         if (//elems.length >= 8 &&
@@ -232,18 +240,32 @@ public class ConllFile {
                             countWords++;
                         } else {
                             //System.err.println("WARNING: incorrect line ignored: (line " + ctline + "): " + line);
-                            throw new ConllException("incorrect line: (line " + ctline + "): " + line);
+                            //throw new ConllException("incorrect line: (line " + ctline + "): " + line + "\n   First column must contain the ID");
+                            errors.add("incorrect line: (line " + ctline + "): " + line + "\n   First column must contain the ID");
                         }
                     }
                 }
             }
-            // stock last block
+
+            // process last block of words (= sentence)
             if (!sentenceLines.isEmpty() && countWords > 0) {
-                processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget,
-                        showgrana, showID, columndefs);
+                try {
+                processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID, columndefs);
+                } catch (ConllException e) {
+                    errors.add(e.getMessage());
+                }
+            }
+
+            if (!errors.isEmpty()) {
+                StringBuilder sb = new StringBuilder('\n');
+                for (String ex : errors) {
+                    sb.append(ex).append('\n');
+                }
+                throw new ConllException(sb.toString());
             }
         } catch (ConllException e) {
-            throw new ConllException(e.getMessage() + " (line " + ctline + ")");
+            //throw new ConllException(e.getMessage() + " (sentence ending with line " + ctline + ")");
+            throw new ConllException(e.getMessage());
         }
         System.err.format("%d lines (%d sentences) read\n", ctline, sentences.size());
     }
@@ -574,7 +596,7 @@ public class ConllFile {
         }
     }
 
-    
+
 
 
     /** run makeTrees() on every sentence to find strange stuff which prohibits editing:

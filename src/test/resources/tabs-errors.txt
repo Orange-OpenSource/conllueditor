@@ -1,0 +1,9 @@
+empty xpostag. Use '_' in line (10) "6	mais	mais	CCONJ		_	9	cc	_	_"
+invalid line: 13 '9	diffère	différer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	3	conj	_	'.
+    There are only 9 columns in this word (instead of 10). Check whether there are tabulators between columns!
+    9<TAB>diffère<TAB>différer<TAB>VERB<TAB>_<TAB>Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin<TAB>3<TAB>conj<TAB>_<TAB>
+invalid line: 17 '13	Facultés Facultés	PROPN	_	_	9	obl	_	SpaceAfter=No'.
+    There are only 9 columns in this word (instead of 10). Check whether there are tabulators between columns!
+    13<TAB>Facultés<**SPACE**>Facultés<TAB>PROPN<TAB>_<TAB>_<TAB>9<TAB>obl<TAB>_<TAB>SpaceAfter=No
+
+

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.6 as of 29th August 2024
+ @version 2.26.1 as of 17 September 2024
  */
 package com.orange.labs.conllparser;
 
@@ -320,10 +320,22 @@ public class ConllWord {
         depmap = new TreeMap<>();
         String[] elems = conllline.split("\t");
 
-        if ((columndefs != null && elems.length < columndefs.size()) || elems.length < 10) { //if (elems.length < 8) {
-            //if (elems.length < columndefs.size()) { //if (elems.length < 8) {
-            throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'");
+        //if ((columndefs != null && elems.length < columndefs.size()) || elems.length < 10) { //if (elems.length < 8) {
+        //    throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'");
+        //}
+        if (elems.length < 10) {
+            throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'.\n    There are only " + elems.length
+                    + " columns in this word (instead of 10). Check whether there are tabulators between columns!\n    "
+                    + conllline.replaceAll("\t", "<TAB>").replaceAll(" ", "<**SPACE**>"));
         }
+        if (columndefs != null && elems.length < columndefs.size()) {
+            throw new ConllException("invalid line: " + linenumber + " '" + conllline + "'.\n    Number of column definitions ("
+                    + columndefs.size()
+                    + ") does not fit the number of columns in this word ("
+                    + elems.length + ") . Check whether there are tabulators between columns!\n    "
+                    + conllline.replaceAll("\t", "<TAB>").replaceAll(" ", "<**SPACE**>"));
+        }
+
         //System.out.println("L:"+conllline);
         int posID = getColumn("ID", columndefs);
         if (posID != -1) {
@@ -357,7 +369,7 @@ public class ConllWord {
             }
 
             if (form.isEmpty()) {
-                throw new ConllException("empty form. Use '" + EmptyColumn + "' in line (" + linenumber + "): " + conllline);
+                throw new ConllException("Empty form. Use '" + EmptyColumn + "' in line (" + linenumber + "): " + conllline);
             }
         }
         int posMISC = getColumn("MISC", columndefs);
@@ -391,9 +403,9 @@ public class ConllWord {
                 if (lemma.isEmpty()) {
                     if (RELAXED) {
                         lemma = EmptyColumn;
-                        System.err.println("lemma column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                        System.err.println("lemma column empty. Set to '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     } else {
-                        throw new ConllException("empty lemma. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
+                        throw new ConllException("Empty lemma. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     }
                 }
             }
@@ -404,7 +416,7 @@ public class ConllWord {
                 if (upostag.isEmpty()) {
                     if (RELAXED) {
                         upostag = EmptyColumn;
-                        System.err.println("upostag column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                        System.err.println("upostag column empty. Set to '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     } else {
                         throw new ConllException("empty upostag. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     }
@@ -417,7 +429,7 @@ public class ConllWord {
                 if (xpostag.isEmpty()) {
                     if (RELAXED) {
                         xpostag = EmptyColumn;
-                        System.err.println("xpostag column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                        System.err.println("xpostag column empty. Set to '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     } else {
                         throw new ConllException("empty xpostag. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     }
@@ -435,7 +447,7 @@ public class ConllWord {
                 if (elems[posFEAT].isEmpty()) {
                     if (RELAXED) {
                         elems[5] = EmptyColumn;
-                        System.err.println("feature column empty. Set to \"_\" in line (" + linenumber + ") \"" + conllline + '"');
+                        System.err.println("feature column empty. Set to '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     } else {
                         throw new ConllException("empty features. Use '" + EmptyColumn + "' in line (" + linenumber + ") \"" + conllline + '"');
                     }

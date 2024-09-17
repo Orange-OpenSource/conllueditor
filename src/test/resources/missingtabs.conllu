@@ -1,0 +1,18 @@
+# sent_id = fr-ud-dev_00002
+# text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
+# sentence 1
+# several errors in this file
+1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
+2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	SpacesAfter=\t\n
+3	durent	durer	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+4	six	six	NUM	_	_	5	nummod	_	_
+5	ans	an	NOUN	_	Gender=Masc|Number=Plur	3	obj	_	_
+6	mais	mais	CCONJ		_	9	cc	_	_
+7	leur	son	DET	_	Gender=Masc|Number=Sing|PronType=Prs	8	nmod	_	_
+8	contenu	contenu	NOUN	_	Gender=Masc|Number=Sing	9	nsubj	_	_
+9	diffère	différer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	3	conj	_	
+10	donc	donc	ADV	_	_	9	advmod	_	_
+11	selon	selon	ADP	_	_	13	case	_	_
+12	les	le	DET	_	Definite=Def|Number=Plur|PronType=Art	13	det	_	_
+13	Facultés Facultés	PROPN	_	_	9	obl	_	SpaceAfter=No
+

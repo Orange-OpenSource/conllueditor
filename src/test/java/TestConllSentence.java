@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2021-2022, Orange S.A.
+Copyright (c) 2021-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 23rd December 2022
+ @version 2.26.1 as of 17th September 2024
  */
 
 import com.orange.labs.conllparser.ConllException;
@@ -129,6 +129,88 @@ public class TestConllSentence {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
+
+
+    @Test
+    public void test11_missingtabs() throws IOException, ConllException {
+        URL url = this.getClass().getResource("missingtabs.conllu");
+        File file = new File(url.getFile());
+        StringBuilder sb = new StringBuilder();
+        try {
+            ConllFile cf = new ConllFile(file, false, false);
+        } catch (ConllException e) {
+            sb.append(e.getMessage()).append('\n');
+        }
+        File out = new File(folder, "tabs-errors.txt");
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("tabs-errors.txt");
+
+        Assert.assertEquals(String.format("tabs errors not detected correctly\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test12_emptycolumn() throws IOException, ConllException {
+        URL url = this.getClass().getResource("emptycolumn.conllu");
+        File file = new File(url.getFile());
+        StringBuilder sb = new StringBuilder();
+        try {
+            ConllFile cf = new ConllFile(file, false, false);
+        } catch (ConllException e) {
+            sb.append(e.getMessage()).append('\n');
+        }
+        File out = new File(folder, "emptycolumn-errors.txt");
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("emptycolumn-errors.txt");
+
+        Assert.assertEquals(String.format("empty column errors not detected correctly\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test13_overfull_mwt() throws IOException, ConllException {
+        URL url = this.getClass().getResource("bad_mwt.conllu");
+        File file = new File(url.getFile());
+        StringBuilder sb = new StringBuilder();
+        try {
+            ConllFile cf = new ConllFile(file, false, false);
+        } catch (ConllException e) {
+            sb.append(e.getMessage()).append('\n');
+        }
+        File out = new File(folder, "mwt-errors.txt");
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("mwt-errors.txt");
+
+        Assert.assertEquals(String.format("empty column errors not detected correctly\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+   @Test
+    public void test14_multiple_errors() throws IOException, ConllException {
+        URL url = this.getClass().getResource("multiple_errors.conllu");
+        File file = new File(url.getFile());
+        StringBuilder sb = new StringBuilder();
+        try {
+            ConllFile cf = new ConllFile(file, false, false);
+        } catch (ConllException e) {
+            sb.append(e.getMessage()).append('\n');
+        }
+        File out = new File(folder, "multiple-errors.txt");
+        FileUtils.writeStringToFile(out, sb.toString(), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("multiple-errors.txt");
+
+        Assert.assertEquals(String.format("empty column errors not detected correctly\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
 
     @Test
     public void testProjectivity() throws IOException, ConllException {
