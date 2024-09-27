@@ -312,6 +312,7 @@ public class ConlluEditor {
     }
 
     public void setValidUPOS(List<String> filenames) throws IOException {
+        // TODO take from --features if given
         validUPOS = readList(filenames);
         System.err.format("%d valid UPOS read from %s\n", validUPOS.size(), filenames.toString());
     }
@@ -733,6 +734,10 @@ public class ConlluEditor {
             coldefs.add(cd);
         }
         solution.add("columns", coldefs);
+        
+        JsonObject desc = validFeatures.getAsJson();
+        solution.add("features", desc);
+        //System.err.println("qqqqqqqqq " + solution);
         return solution.toString();
     }
 

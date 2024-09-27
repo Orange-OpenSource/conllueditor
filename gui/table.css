@@ -70,8 +70,50 @@ table.conllutable th {
     text-align: right;
 }
 
-.iform, .ilemma, .iupos, .ixpos, .ifeats, .ihead, .ideprel, .ideps, .imisc {
+.iform, .ilemma, .iupos, .ixpos, .ihead, .ideprel, .ideps, .imisc {
     width: 100%;
+}
+
+/* make radiobutton look like normal buttons */
+label {
+    display: inline-block;
+   /* width: 100px;
+    height: 50px;
+    border: solid 2px red;*/
+    display: inline-block;
+    text-decoration: none;
+
+    /* top right bottom left */
+    qqpadding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+}
+input[type="radio"] {
+    display:none;   
+}
+input[type="radio"]:checked + label {
+        background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(224, 116, 13)),
+        color-stop(1, rgb(252, 145, 14))
+        );
+}
+
+.ifeats {
+    width: 95%;
 }
 
 .thform, .thlemma {
@@ -110,4 +152,6 @@ table.conllutable select {
     color: darkgreen;
 }
 
-
+.tdfeats {
+   white-space: nowrap;
+}

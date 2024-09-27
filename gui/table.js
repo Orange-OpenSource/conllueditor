@@ -108,9 +108,9 @@ function drawTable(parent, trees, sentid) {
             hdcell.innerHTML = conllucolumns[i]; // headers come from server
 	    //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
 	    if (conllucolumns[i] != "ID" && conllucolumns[i] != "HEAD" && conllucolumns[i] != "DEPREL") {
-		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="' + colname + 'sizeup' 
-		    + '" type="button" value="+" onclick=largertd("' 
-		    + colname + '") /> <input class="mybutton smallmybutton" id="' + colname + 'sizedown' 
+		hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="' + colname + 'sizeup'
+		    + '" type="button" value="+" onclick=largertd("'
+		    + colname + '") /> <input class="mybutton smallmybutton" id="' + colname + 'sizedown'
 		    + '" type="button" value="&ndash;" onclick=smallertd("' + colname + '") />';
 	    }
         }
@@ -137,7 +137,7 @@ function drawTable(parent, trees, sentid) {
     }
 
     if (keepmarked > -1) {
-        $("#td" + currentwordid).css("background", "orange"); 
+        $("#td" + currentwordid).css("background", "orange");
     }
 }
 
@@ -309,9 +309,13 @@ function drawTableWord(rows, word, head, sentid) {
     }
 
     fcell = makeInputfield("feats", word, checkFeat, fstr);
+    //console.log("TTT", word, checkFeat, fstr);
     if (! featuresAllOK) {
     	fcell.className += " worderror";
     }
+
+    eb = makeEditbutton("feats", word, word.feats);
+    cell6.append(eb);
     cell6.append(fcell);
     cell6.className = "tdfeats";
 
@@ -387,6 +391,77 @@ function drawTableWord(rows, word, head, sentid) {
     }
 }
 
+function makeEditbutton(idsuffix, word, keyvaluelist) {
+    // cell6.append('<input class="mybutton smallmybutton" id="edit" type="button" value="e" onclick="smallertd(&quot;feats&quot;)">');
+     var icell = document.createElement('input');
+     icell.className = "mybutton smallmybutton e" + idsuffix;
+     icell.id = "et" + idsuffix + "_" + word.position;
+     icell.type="button";
+     icell.value="m";
+
+
+     icell.onclick =  function(event) {
+         //checkfct(icell, word.id)
+        console.log("YYY", word.id, word.upos, keyvaluelist, );
+         //<tr><th>Name</th> <th>Values</th> </tr>
+        $("#featureEditing").empty();
+
+        var currentkeyvalues = {};
+        for (var x in keyvaluelist) {
+          currentkeyvalues[keyvaluelist[x].name] = keyvaluelist[x].val;
+        }
+
+
+        var feats_possible = null;
+        if (feats_per_upos) {
+             var feats_possible = new Set(feats_per_upos[word.upos]);
+        } else {
+              // imposible to know whether a fature is valid for the given UPOS, no editing here possible
+
+        }
+
+        $("#FE_id").text(word.id);
+        var x = 0;
+        for (let p of feats_possible) {
+            //console.log("rrr", x, p, feats_possible);
+            $("#featureEditing").append('<tr class="feedit" id="fe_' + x + '">');
+
+            $("#fe_" + x).append('<td id="fe_name_' + x + '">' + p + '</td>');
+            $("#fe_" + x).append('<td id="fe_radio_' + x + '">')
+            var found = false;
+            for (var ii = 0; ii < featvalues[p].length; ii++) {
+                //$("#fe_radio_" + x).append(featvalues[p][ii] + ": ");
+                var checked = "";
+                if (featvalues[p][ii] == currentkeyvalues[p]) {
+                    checked = "checked";
+                    found = true;
+                }
+                $("#fe_radio_" + x).append('<input type="radio" id="fe_radiob_' + x + '_' + ii + '" name="fval_' + x + '" value="'
+                            + featvalues[p][ii] + '" ' + checked + '/> <label for="fe_radiob_' + x  + '_' + ii + '">'
+                            + featvalues[p][ii] + '</label>');
+            }
+            //$("#fe_radio_" + x).append("None: ");
+            var checked = "";
+            if (!found) {
+                checked = "checked";
+            }
+            $("#fe_radio_" + x).append('<input type="radio" id="fe_radiobn_' + x + '" name="fval_' + x + '" value="'
+                                + "None" + '" ' + checked + '/> <label for="fe_radiobn_' + x + '">None</label>');
+            x++;
+        }
+        for (f in currentkeyvalues) {
+            if (!feats_possible.has(f)) {
+                $("#featureEditing").append('<tr class="feedit_unknown" id="fe_' + x + '">');
+                $("#fe_" + x).append('<td id="fe_name_' + x + '">' + f + '</td>');
+                $("#fe_" + x).append('<td id="fe_val_' + x + '">' + currentkeyvalues[f] + '</td>');
+                x++;
+            }
+        }
+        $("#editFeats").modal();
+     };
+
+     return icell;
+}
 
 function makeInputfield(idsuffix, word, checkfct, value) {
     var icell = document.createElement('input');
@@ -398,7 +473,7 @@ function makeInputfield(idsuffix, word, checkfct, value) {
     if (word[idsuffix + "error"] != undefined) {
     	icell.className += " worderror";
     }
-    
+
     icell.conllucol = idsuffix;
     icell.id = "t" + idsuffix + "_" + word.position;
     if (value == undefined) {

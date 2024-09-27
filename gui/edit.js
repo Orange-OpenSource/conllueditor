@@ -161,7 +161,9 @@ var featlist = [];
 var misclist = ["Gloss=", "LGloss=", "SpaceAfter=No", "SpacesAfter=", "Translit=", "LTranslit=", "Typo=Yes"];
 var incorrectwords = {};
 var conllucolumns = [];
-
+var feats_per_upos = {};
+var feats_per_xpos = {};
+var featvalues = {};
 var shortcuttimeout = 700; // msecs to wait before a shortcut is considered complete
 
 
@@ -283,6 +285,15 @@ function getServerInfo() {
                 parseShortcuts();
             } else {
                 showshortcuts();
+            }
+            if (data.features.uposfeats) {
+                feats_per_upos = data.features.uposfeats;
+            }
+            if (data.features.xposfeats) {
+                feats_per_xpos = data.features.xposfeats;
+            }
+            if (data.features.featvalues) {
+                featvalues = data.features.featvalues;
             }
 
             data.stats;
@@ -1425,7 +1436,7 @@ var previous_modified = 0;
  * @returns {undefined}
  */
 function formatPhrase(item) {
-    console.log("Item:", item);
+    //console.log("Item:", item);
     if (autoadaptwidth) {
         var maxlen = getAllWordLengths(item, 0);
         //console.log("MAXLEN " + maxlen);
@@ -2386,8 +2397,39 @@ $(document).ready(function () {
     },
             function () {
                 $("#comparediff").empty();
-
             });
+
+    $('#editFeatures').click(function () {
+        // modify features in table view
+
+        // get features valid for the given UPOS
+        fvals = [];
+        for (var k=0; k<$(".feedit").length; k++) {
+            var val = $('input[name="fval_' + k + '"]:checked').val();
+            if (val != "None") {
+                fvals.push($('#fe_name_' + k).text() + "=" + val);
+            }
+        }
+
+        // get features invalid for the given UPOS
+        for (var m=0; m<$(".feedit_unknown").length; m++) {
+            mk = k + m;
+
+            fvals.push($('#fe_name_' + mk).text() + "=" + $('#fe_val_' + mk).text());
+        }
+
+        var feat="_";
+        if (fvals.length > 0) {
+            feat = fvals.join("|");
+            //console.log("aaa", $("#FE_id").text(), feat);
+        }
+
+        if (feat != $("#cfeats").val()) {
+            sendmodifs({"cmd": "mod feats " + $("#FE_id").text() + " " + feat});
+        }
+         $('#editFeats').modal('hide');
+    });
+
 
     // TODO pour lire la phrase r
     //unction relirePhraseCourante() {
