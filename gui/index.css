@@ -678,3 +678,9 @@ text {
 .dewisl select {
     width: 150px
 }
+
+.FEtitle {
+    /*background-color: #ff8000;*/
+    font-style: italic;
+    margin-right: 15px;
+}

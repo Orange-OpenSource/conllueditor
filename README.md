@@ -294,9 +294,9 @@ a `m`odify button appears:
 
 Click on tone of the `m`odify button opens a Feature-edit popup where the valid feature values for the given UPOS can be chosen or unset:
 
-![Edit screen (feature editing)](doc/featedit.png)
+![Edit screen (feature editing)](doc/feat-edit.png)
 
-Invalid features will be shown but can only edited by directly writing into the table cell.
+Invalid features will be shown, the value can be changed via an input field. If its value is set to empty, the feature will be removed.
 
 For most languages (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json] will be OK, but for
 some languages it still contains errors.

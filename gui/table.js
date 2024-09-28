@@ -431,6 +431,8 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
         //console.log("FEATVALUES", featvalues);
 
         $("#FE_id").text(word.id);
+        $("#FE_form").text(word.form);
+        $("#FE_upos").text(word.upos);
         var x = 0;
         for (let p of feats_possible) {
             //console.log("rrr", x, p, feats_possible);
