@@ -290,11 +290,11 @@ When the server is started with the option `--features feats.json` (feats.json)[
 and `--language <lg>` (language code of the treebank), features can be easier edited using the feature edit mode. In the Feature-column
 a `m`odify button appears:
 
-![Edit screen (flat graph)](doc/table-with-featedit.png)
+![Edit screen (flat graph with feature editing)](doc/table-with-featedit.png)
 
 Click on tone of the `m`odify button opens a Feature-edit popup where the valid feature values for the given UPOS can be chosen or unset:
 
-![Edit screen (flat graph)](doc/featedit.png)
+![Edit screen (feature editing)](doc/featedit.png)
 
 Invalid features will be shown but can only edited by directly writing into the table cell.
 
