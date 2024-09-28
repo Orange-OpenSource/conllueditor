@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.20.0 as of 11th December 2022
+ @version 2.27.0 as of 28th September 2024
  */
 
 import com.orange.labs.conllparser.CheckGrewmatch;
@@ -69,8 +69,8 @@ public class TestGrewmatch {
         URL url2 = this.getClass().getResource("projtest.conllu");
         File file2 = new File(url2.getFile());
         try {
-            cf = new ConllFile(file, false, false);
-            cf2 = new ConllFile(file2, false, false);
+            cf = new ConllFile(file /*, false, false*/);
+            cf2 = new ConllFile(file2 /*, false, false*/);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

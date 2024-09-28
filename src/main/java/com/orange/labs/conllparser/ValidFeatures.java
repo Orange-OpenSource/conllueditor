@@ -32,6 +32,7 @@ are permitted provided that the following conditions are met:
  */
 package com.orange.labs.conllparser;
 
+import GrewmatchVisitor.java;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -153,38 +154,54 @@ public class ValidFeatures {
     //Map<String, Set<String>> uposFnames = null; // upos: [fnames] // valid featurenames for a given upos
     //Map<String, Set<String>> xposFnames = null; // xpos: [fnames] // valid featurenames for a given xpos
     public JsonObject getAsJson() {
-        JsonObject upos = new JsonObject();
-        for (String key : uposFnames.keySet()) {
-            JsonArray feat = new JsonArray();
-            for (String fname : uposFnames.get(key)) {
-                feat.add(fname);
-            }
-            upos.add(key, feat);
-        }
-        JsonObject xpos = new JsonObject();
-        for (String key : xposFnames.keySet()) {
-            JsonArray feat = new JsonArray();
-            for (String fname : xposFnames.get(key)) {
-                feat.add(fname);
-            }
-            xpos.add(key, feat);
-        }
-        JsonObject validvalues = new JsonObject();
-        for (String key : validFeatures.keySet()) {
-            JsonArray feat = new JsonArray();
-            for (String fname : validFeatures.get(key)) {
-                feat.add(fname);
-            }
-            validvalues.add(key, feat);
-        }
         JsonObject descriptors = new JsonObject();
-        descriptors.add("uposfeats", upos);
-        descriptors.add("xposfeats", xpos);
-        descriptors.add("featvalues", validvalues);
-        //System.err.println("AAAAA " + descriptors);
+
+        if (validFeatures != null && !validFeatures.isEmpty()) {
+            JsonObject validvalues = new JsonObject();
+            for (String key : validFeatures.keySet()) {
+                JsonArray feat = new JsonArray();
+                for (String fname : validFeatures.get(key)) {
+                    feat.add(fname);
+                }
+                validvalues.add(key, feat);
+            }
+            descriptors.add("featvalues", validvalues);
+        
+        if (uposFnames != null) {
+            JsonObject upos = new JsonObject();
+            for (String key : uposFnames.keySet()) {
+                JsonArray feat = new JsonArray();
+                for (String fname : uposFnames.get(key)) {
+                    if (validFeatures.containsKey(fname)) {
+                        feat.add(fname);
+                    }
+                }
+                upos.add(key, feat);
+            }
+            descriptors.add("uposfeats", upos);
+        }
+
+        if (xposFnames != null) {
+            JsonObject xpos = new JsonObject();
+            for (String key : xposFnames.keySet()) {
+                JsonArray feat = new JsonArray();
+                for (String fname : xposFnames.get(key)) {
+                     if (validFeatures.containsKey(fname)) {
+                    feat.add(fname);
+                     }
+                }
+                xpos.add(key, feat);
+            }
+            descriptors.add("xposfeats", xpos);
+        }
+        }
+        if (descriptors.isEmpty()) {
+            return null;
+        }
+
         return descriptors;
     }
-    
+
     public List<String> getList() {
         List<String> fl = new ArrayList<>();
         for (String fname : validFeatures.keySet()) {

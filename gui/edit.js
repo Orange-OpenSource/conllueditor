@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.4 as of 26th March 2024
+ @version 2.27.0 as of 28th September 2024
  */
 
 
@@ -286,14 +286,16 @@ function getServerInfo() {
             } else {
                 showshortcuts();
             }
-            if (data.features.uposfeats) {
-                feats_per_upos = data.features.uposfeats;
-            }
-            if (data.features.xposfeats) {
-                feats_per_xpos = data.features.xposfeats;
-            }
-            if (data.features.featvalues) {
-                featvalues = data.features.featvalues;
+            if (data.features) {
+                if (data.features.uposfeats) {
+                    feats_per_upos = data.features.uposfeats;
+                }
+                if (data.features.xposfeats) {
+                    feats_per_xpos = data.features.xposfeats;
+                }
+                if (data.features.featvalues) {
+                    featvalues = data.features.featvalues;
+                }
             }
 
             data.stats;

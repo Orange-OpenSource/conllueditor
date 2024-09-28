@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.27.0
+* if options `--features and --language` are used, in table view mode features can be easier edited
+* commented legacy code
+
 ## Version 2.26.1
 * more specific error messages when loading an invalid file
 * show all errors in an CoNLL-U file (not just the first)

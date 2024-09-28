@@ -714,6 +714,11 @@ public class ConlluEditor {
                 jd.add(d);
             }
             solution.add("validFeatures", jd);
+
+            JsonObject desc = validFeatures.getAsJson();
+            if (desc != null) {
+                solution.add("features", desc);
+            }
         }
 
         if (shortcuts != null) {
@@ -734,9 +739,7 @@ public class ConlluEditor {
             coldefs.add(cd);
         }
         solution.add("columns", coldefs);
-        
-        JsonObject desc = validFeatures.getAsJson();
-        solution.add("features", desc);
+
         //System.err.println("qqqqqqqqq " + solution);
         return solution.toString();
     }
@@ -865,7 +868,7 @@ public class ConlluEditor {
                 ConllSentence csentt = cfile.getSentences().get(currentSentenceId);
                 System.err.println("PREVMOD local:" + csentt.getLastModification() + " client: " + prevmod);
                 if (csentt.getLastModification() > prevmod) {
-                     return formatErrMsg(String.format("This sentence (%s) has been modified by another user (mod counter %d > %d).\nModification rejected.\nPlease reload sentence before next modification", 
+                     return formatErrMsg(String.format("This sentence (%s) has been modified by another user (mod counter %d > %d).\nModification rejected.\nPlease reload sentence before next modification",
                                currentSentenceId, csentt.getLastModification(), prevmod),  currentSentenceId);
                 }
 

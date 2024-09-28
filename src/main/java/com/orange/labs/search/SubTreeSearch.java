@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2021, Orange S.A.
+Copyright (c) 2021-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.11.0 as of 13th March 2021
+ @version 2.27.0 as of 28th September 2024
  */
 package com.orange.labs.search;
 
@@ -254,7 +254,7 @@ public class SubTreeSearch {
         String subtree = readLineByLine(args[0]);
         SubTreeSearch std = new SubTreeSearch(subtree);
 
-        ConllFile cf = new ConllFile(new File(args[1]), false, false);
+        ConllFile cf = new ConllFile(new File(args[1])/*, false, false*/);
         for (ConllSentence cs : cf.getSentences()) {
             //int rtc =
             Set<Integer> rtc = std.match(cs);

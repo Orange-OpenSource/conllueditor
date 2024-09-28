@@ -117,7 +117,7 @@ public class TestConlluPlus {
         name("CoNLL-U PLUS read valid file");
 
         URL inurl = this.getClass().getResource("test.conllup");
-        ConllFile cd = new ConllFile(new File(inurl.getFile()), false, false);
+        ConllFile cd = new ConllFile(new File(inurl.getFile())/*, false, false*/);
         File out = new File(folder, "fileout.conllup");
         FileUtils.writeStringToFile(out, cd.toString(), StandardCharsets.UTF_8, false);
 
@@ -135,7 +135,7 @@ public class TestConlluPlus {
         File out = new File(folder, "fileout2.txt");
         try {
             //ConllFile cd =
-            		new ConllFile(new File(inurl.getFile()), false, false);
+            		new ConllFile(new File(inurl.getFile())/*, false, false*/);
         } catch (Exception e) {
             FileUtils.writeStringToFile(out, e.getMessage()+ "\n", StandardCharsets.UTF_8, false);
         }

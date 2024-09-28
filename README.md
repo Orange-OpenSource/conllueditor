@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.26.1 (see [change history](CHANGES.md))
+Current version: 2.27.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -224,7 +224,7 @@ together with the option `--language`
 in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
 Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
 together with the option `--language`. This will highlight features which are not used with a correct
-UPOS.
+UPOS and enable afeature edit mode in table view mode (see below)
 * `--language <lg code>` use feature and/or deprel definitions in the json files given to the `--features` and `--deprels`
 options. Without `--language` only the universal features and deprels are used.
 * `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
@@ -286,6 +286,40 @@ Columns can be made larger or narrower by using the buttons `+` and `-`.
 
 ![Edit screen (flat graph)](doc/table.png)
 
+When the server is started with the option `--features feats.json` (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json]
+and `--language <lg>` (language code of the treebank), features can be easier edited using the feature edit mode. In the Feature-column
+a `m`odify button appears:
+
+![Edit screen (flat graph)](doc/table-with-featedit.png)
+
+Click on tone of the `m`odify button opens a Feature-edit popup where the valid feature values for the given UPOS can be chosen or unset:
+
+![Edit screen (flat graph)](doc/featedit.png)
+
+Invalid features will be shown but can only edited by directly writing into the table cell.
+
+For most languages (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json] will be OK, but for
+some languages it still contains errors.
+ConllUEditor provides a script (bin/collectFeatVal.py)[bin/collectFeatVal.py] which allows to take the most frequent Features+Values from
+existing CoNLL-U files to create are correct version of `feats.json`.
+
+Options:
+
+  * `-h`, `--help`            show this help message and exit
+  * `--files FILES [FILES ...]`, `-f FILES [FILES ...]`  Conllu files to count UPOS/Feature correspondances
+  * `--out OUT`, `-o OUT`     output format. valid values: `txt`, `json`, `feats` (`feats` produces same format as `feats.json`)
+  * `--keep KEEP [KEEP ...]`, `-k KEEP [KEEP ...]`  features to keep with every UPOS (e.g. like `Foreign`)
+  * `--featvalues`, `-v`      use features and values
+  * `--threshold THRESHOLD`, `-t THRESHOLD`  ignore Features occuring less than `THRESHOLD`% times with a given UPOS
+
+E.g.:
+
+```
+./bin/collectFeatVal.py -f ud-treebanks-v2.14/UD_Welsh-CCG/cy_ccg-ud-*llu
+       -o feats
+       -k Foreign Typo Abbr
+       -t 3
+```
 
 ## Editing words and dependency relations
 

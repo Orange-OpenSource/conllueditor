@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.26.1 as of 17th September 2024
+ @version 2.27.0 as of 28th September 2024
  */
 
 import com.orange.labs.conllparser.ConllException;
@@ -111,7 +111,7 @@ public class TestConllSentence {
     public void test10cycles() throws IOException, ConllException {
         URL url = this.getClass().getResource("badtrees.conllu");
         File file = new File(url.getFile());
-        ConllFile cf = new ConllFile(file, false, false);
+        ConllFile cf = new ConllFile(file/*, false, false*/);
         StringBuilder sb = new StringBuilder();
         for (ConllSentence csent : cf.getSentences()) {
             try {
@@ -137,7 +137,7 @@ public class TestConllSentence {
         File file = new File(url.getFile());
         StringBuilder sb = new StringBuilder();
         try {
-            ConllFile cf = new ConllFile(file, false, false);
+            ConllFile cf = new ConllFile(file/*, false, false*/);
         } catch (ConllException e) {
             sb.append(e.getMessage()).append('\n');
         }
@@ -157,7 +157,7 @@ public class TestConllSentence {
         File file = new File(url.getFile());
         StringBuilder sb = new StringBuilder();
         try {
-            ConllFile cf = new ConllFile(file, false, false);
+            ConllFile cf = new ConllFile(file/*, false, false*/);
         } catch (ConllException e) {
             sb.append(e.getMessage()).append('\n');
         }
@@ -177,7 +177,7 @@ public class TestConllSentence {
         File file = new File(url.getFile());
         StringBuilder sb = new StringBuilder();
         try {
-            ConllFile cf = new ConllFile(file, false, false);
+            ConllFile cf = new ConllFile(file/*, false, false*/);
         } catch (ConllException e) {
             sb.append(e.getMessage()).append('\n');
         }
@@ -197,7 +197,7 @@ public class TestConllSentence {
         File file = new File(url.getFile());
         StringBuilder sb = new StringBuilder();
         try {
-            ConllFile cf = new ConllFile(file, false, false);
+            ConllFile cf = new ConllFile(file/*, false, false*/);
         } catch (ConllException e) {
             sb.append(e.getMessage()).append('\n');
         }
@@ -216,7 +216,7 @@ public class TestConllSentence {
     public void testProjectivity() throws IOException, ConllException {
         URL url = this.getClass().getResource("projtest.conllu");
         File file = new File(url.getFile());
-        ConllFile cf = new ConllFile(file, false, false);
+        ConllFile cf = new ConllFile(file/*, false, false*/);
         StringBuilder sb = new StringBuilder();
         for (ConllSentence csent : cf.getSentences()) {
             csent.normalise();

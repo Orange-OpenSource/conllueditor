@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.26.0 as of 1st September 2024
+ @version 2.27.0 as of 28th September 2024
 */
 package com.orange.labs.conllparser;
 
@@ -63,9 +63,9 @@ public class ConllSentence {
     protected Map<Integer, ConllWord> contracted = null; // contracted words (MWT) startid (before hyphen): word
 
     //private final int shift; // il y a des fichiers conll qui ont des colonnes supplémentaires AVANT la colonne id il faut les ignorer; shift est le nombre des colonnes à gauche à ignorer
-    private boolean hasAnnot = false; // au moins une annotation dans la phrase
+    //private boolean hasAnnot = false; // au moins une annotation dans la phrase
     private boolean hasEnhancedDeps = false; // at least one word with enhanced deps (in this case we add basic deps to deps in conllu output)
-    private Map<String, ConllWord> frames; // collect frame names of targets of this sentence
+    //private Map<String, ConllWord> frames; // collect frame names of targets of this sentence
 
     protected ConllWord head = null; // rempli par makeTrees(): premiere ou seule tete
     protected List<ConllWord> headss = null; // rempli par makeTrees(): toutes les tetes
@@ -84,8 +84,8 @@ public class ConllSentence {
     // store preceding comments
     private List<String> comments = null;
     // on lit des commentaires dans le fichier CONLL qui sont uniquement utiles pour Gift
-    private boolean showgrana = true;
-    private boolean showID = true;
+    //private boolean showgrana = true;
+    //private boolean showID = true;
 
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
     Map<String, Integer> columndefs = null;
@@ -120,7 +120,7 @@ public class ConllSentence {
 
     public ConllSentence(List<ConllWord> cw) {
         words = cw;
-        frames = new HashMap<>();
+        //frames = new HashMap<>();
         //hasEnhancedDeps = words.get(0).isBasicdeps_in_ed_column();
 
         comments = new ArrayList<>();
@@ -140,7 +140,7 @@ public class ConllSentence {
      */
     public ConllSentence(ConllSentence orig) {
         words = new ArrayList<>();
-        frames = new HashMap<>();
+        //frames = new HashMap<>();
         comments = new ArrayList<>(orig.comments);
         hasEnhancedDeps = orig.hasEnhancedDeps;
         for (ConllWord word : orig.getWords()) {
@@ -186,7 +186,7 @@ public class ConllSentence {
 
     private void parse(List<AbstractMap.SimpleEntry<Integer, String>> conlllines) throws ConllException {
         words = new ArrayList<>();
-        frames = new HashMap<>();
+        //frames = new HashMap<>();
         comments = new ArrayList<>();
         hasEnhancedDeps = false;
         //Set<Annotation> lastAnnots = null;
@@ -349,6 +349,7 @@ public class ConllSentence {
         return words.size();
     }
 
+    /*
     // informations utilisé par Gift pour savoir si on affiche ou pas les IDs et les span (grana)
     public void setShowgrana(boolean showgrana) {
         this.showgrana = showgrana;
@@ -365,18 +366,19 @@ public class ConllSentence {
     public boolean isShowID() {
         return showID;
     }
+    */
 
-    public boolean isAnnotated() {
-        return hasAnnot;
-    }
+//    public boolean isAnnotated() {
+//        return hasAnnot;
+//    }
 
-    public boolean hasTargets() {
-        return !frames.isEmpty();
-    }
-
-    public Map<String, ConllWord> getFrameNames() {
-        return frames;
-    }
+//    public boolean hasTargets() {
+//        return !frames.isEmpty();
+//    }
+//
+//    public Map<String, ConllWord> getFrameNames() {
+//        return frames;
+//    }
 
     public ConllWord getHead() {
         return head;

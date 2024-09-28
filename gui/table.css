@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.1 as of 15th February 2024
+ @version 2.27.0 as of 28th September 2024
 */
 
 
@@ -113,7 +113,7 @@ input[type="radio"]:checked + label {
 }
 
 .ifeats {
-    width: 95%;
+    width: 90%;
 }
 
 .thform, .thlemma {

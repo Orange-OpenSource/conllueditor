@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.4 as of 26th March 2024
+ @version 2.27.0 as of 28th September 2024
  */
 
 $(document).ready(function() {
@@ -314,8 +314,11 @@ function drawTableWord(rows, word, head, sentid) {
     	fcell.className += " worderror";
     }
 
-    eb = makeEditbutton("feats", word, word.feats);
-    cell6.append(eb);
+    if (Object.keys(feats_per_upos).length > 0) {
+        // language specific feature list for each UPOS available
+        eb = makeEditbutton("feats", word, word.feats);
+        cell6.append(eb);
+    }
     cell6.append(fcell);
     cell6.className = "tdfeats";
 
@@ -402,7 +405,7 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
 
      icell.onclick =  function(event) {
          //checkfct(icell, word.id)
-        console.log("YYY", word.id, word.upos, keyvaluelist, );
+        //console.log("YYY", word.id, word.upos, keyvaluelist, );
          //<tr><th>Name</th> <th>Values</th> </tr>
         $("#featureEditing").empty();
 
@@ -419,6 +422,7 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
               // imposible to know whether a fature is valid for the given UPOS, no editing here possible
 
         }
+        //console.log("FEATVALUES", featvalues);
 
         $("#FE_id").text(word.id);
         var x = 0;

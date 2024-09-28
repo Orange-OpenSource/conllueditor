@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.19.5 as of 13th December 2022
+ @version 2.27.0 as of 28th September 2024
  */
 package com.orange.labs.comparison;
 
@@ -92,11 +92,11 @@ public class ConlluComparator {
             }
         } else if (objects.get(0) instanceof String) {
             for (Object o : objects) {
-                cdocs.add(new ConllFile(new File((String) o), false, false));
+                cdocs.add(new ConllFile(new File((String) o)/*, false, false*/));
             }
         } else if (objects.get(0) instanceof File) {
             for (Object o : objects) {
-                cdocs.add(new ConllFile((File) o, false, false));
+                cdocs.add(new ConllFile((File) o /*, false, false*/));
             }
         }
 
@@ -109,11 +109,11 @@ public class ConlluComparator {
                 }
             } else if (objects2.get(0) instanceof String) {
                 for (Object o : objects2) {
-                    cdocs2.add(new ConllFile(new File((String) o), false, false));
+                    cdocs2.add(new ConllFile(new File((String) o)/*, false, false*/));
                 }
             } else if (objects2.get(0) instanceof File) {
                 for (Object o : objects2) {
-                    cdocs2.add(new ConllFile((File) o, false, false));
+                    cdocs2.add(new ConllFile((File) o /*, false, false*/));
                 }
             }
         } else {

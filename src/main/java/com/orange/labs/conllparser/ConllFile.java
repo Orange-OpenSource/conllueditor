@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2022, Orange S.A.
+ Copyright (c) 2018-2024, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.23.0 as of 28th October 2023
+ @version 2.27.0 as of 28th September 2024
 */
 package com.orange.labs.conllparser;
 
@@ -89,10 +89,10 @@ public class ConllFile {
      * @throws IOException
      * @throws com.orange.labs.nlp.conllparser.ConllWord.ConllWordException
      */
-    public ConllFile(File file, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws IOException, ConllException {
+    public ConllFile(File file/*, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget*/) throws IOException, ConllException {
         this.file = file;
         FileInputStream fis = new FileInputStream(file);
-        parse(fis, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
+        parse(fis /*, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget*/);
         fis.close();
     }
 
@@ -106,17 +106,17 @@ public class ConllFile {
      * @throws ConllException
      * @throws IOException
      */
-    public ConllFile(String filecontents, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
-        this.file = new File("__contents__");
-        InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-        parse(inputStream, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget);
-    }
+//    public ConllFile(String filecontents/*, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget*/) throws ConllException, IOException {
+//        this.file = new File("__contents__");
+//        InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
+//        parse(inputStream/*, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget*/);
+//    }
 
     public ConllFile(File file, Class<? extends ConllSentence> cs) throws IOException, ConllException {
         this.file = file;
         conllsentenceSubclass = cs;
         FileInputStream fis = new FileInputStream(file);
-        parse(fis, false, false);
+        parse(fis/*, false, false*/);
         fis.close();
     }
 
@@ -128,16 +128,16 @@ public class ConllFile {
         this.file = new File("__contents__");
         conllsentenceSubclass = cs;
         InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-        parse(inputStream, false, false);
+        parse(inputStream/*, false, false*/);
     }
 
     public ConllFile(InputStream inputStream) throws ConllException, IOException {
         this.file = new File("__stream__");
         //InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-        parse(inputStream, false, false);
+        parse(inputStream/*, false, false*/);
     }
 
-    private void parse(InputStream ips, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget) throws ConllException, IOException {
+    private void parse(InputStream ips /*, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget*/) throws ConllException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(ips, StandardCharsets.UTF_8));
         sentences = new ArrayList<>();
 
@@ -145,8 +145,8 @@ public class ConllFile {
         int countWords = 0; // count only non-comment lines
         String line;
         // on lit des commentaires dans le fichier CONLL qui sont uniquement utiles pour Gift
-        boolean showgrana = true;
-        boolean showID = true;
+        //boolean showgrana = true;
+        //boolean showID = true;
         ctline = 0;
 
         columndefs = new LinkedHashMap<>();
@@ -206,7 +206,7 @@ public class ConllFile {
                 if (line.trim().isEmpty()) {
                     if (!sentenceLines.isEmpty() && countWords != 0) {
                         try {
-                            processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID, columndefs);
+                            processSentence(sentenceLines, /*ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, */columndefs);
                         } catch (ConllException ex) {
                             sentenceLines.clear();
                             errors.add(ex.getMessage());
@@ -217,7 +217,7 @@ public class ConllFile {
                 } else {
                     if (line.startsWith("#")) {
                         // TODO remove GRANA comments
-                        if (line.startsWith("#NOGRANA")) {
+                        /*if (line.startsWith("#NOGRANA")) {
                             showgrana = false;
                         } else if (line.startsWith("#NOID")) {
                             showID = false;
@@ -225,7 +225,7 @@ public class ConllFile {
                             showgrana = true;
                         } else if (line.startsWith("#ID")) {
                             showID = true;
-                        }
+                        }*/
                         sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
                     } else {
                         // TODO deprecate usage of shift
@@ -250,7 +250,7 @@ public class ConllFile {
             // process last block of words (= sentence)
             if (!sentenceLines.isEmpty() && countWords > 0) {
                 try {
-                processSentence(sentenceLines, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget, showgrana, showID, columndefs);
+                processSentence(sentenceLines, /*ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget,*/ columndefs);
                 } catch (ConllException e) {
                     errors.add(e.getMessage());
                 }
@@ -275,8 +275,8 @@ public class ConllFile {
      * du block, maintenant on les traite.
      */
     private void processSentence(List<AbstractMap.SimpleEntry<Integer, String>> sentenceLines,
-            boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget,
-            boolean showgrana, boolean showID,
+            //boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget,
+            //boolean showgrana, boolean showID,
             Map<String, Integer>columndefs) throws ConllException {
         // on a lu un bloc de lignes CONLL qui font une phrase
         ConllSentence c = null;
@@ -299,15 +299,15 @@ public class ConllFile {
                 throw new ConllException("" + ex.getCause());
             }
         }
-        if (!ignoreSentencesWithoutAnnot || c.isAnnotated()) {
-            if (!ignoreSentencesWithoutTarget || c.hasTargets()) {
+        //if (!ignoreSentencesWithoutAnnot /*|| c.isAnnotated()*/) {
+        //    if (!ignoreSentencesWithoutTarget /*|| c.hasTargets()*/) {
                 sentences.add(c);
-            }
-        }
-        if (c != null) {
-            c.setShowID(showID);
-            c.setShowgrana(showgrana);
-        }
+         //   }
+        //}
+//        if (c != null) {
+//            c.setShowID(showID);
+//            c.setShowgrana(showgrana);
+//        }
         sentenceLines.clear();
 
     }
@@ -363,7 +363,7 @@ public class ConllFile {
         return sb.toString();
     }
 
-    public String getAnn() {
+    /*public String getAnn() {
         StringBuilder sb = new StringBuilder();
         int offset = 0;
         int count = 1;
@@ -380,7 +380,7 @@ public class ConllFile {
         }
 
         return sb.toString();
-    }
+    }*/
 
     /** read rules file
      *   condition > newvals
@@ -630,7 +630,8 @@ public class ConllFile {
     }
 
     public enum Output {
-        TEXT, CONLL, ANN, LATEX
+        TEXT, CONLL, //ANN,
+        LATEX
     };
 
     public JsonObject getFilestats() {
@@ -775,9 +776,10 @@ public class ConllFile {
             boolean strict,
             int first, int last) throws ConllException {
 
-        if (output == Output.ANN) {
-            out.print(cf.getAnn());
-        } else {
+        //if (output == Output.ANN) {
+        //    out.print(cf.getAnn());
+        //} else {
+        if (true) {
             List<ConllSentence> sentences = cf.getSentences();
             if (shuffle) {
                 Collections.shuffle(sentences);
@@ -921,9 +923,9 @@ public class ConllFile {
                 } else if (args[a].equals("--conll")) {
                     output = Output.CONLL;
                     argindex++;
-                } else if (args[a].equals("--ann")) {
-                    output = Output.ANN;
-                    argindex++;
+                //} else if (args[a].equals("--ann")) {
+                //    output = Output.ANN;
+                //    argindex++;
                 } else if (args[a].equals("--tex")) {
                     output = Output.LATEX;
                     argindex++;
@@ -1016,7 +1018,7 @@ public class ConllFile {
                     }
 
                 } else {
-                    cf = new ConllFile(new File(args[argindex]), false, false);
+                    cf = new ConllFile(new File(args[argindex])/*, false, false*/);
                     if (stats) {
                         System.out.println(cf.getFilestats());
                     }
