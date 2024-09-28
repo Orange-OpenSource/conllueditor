@@ -113,7 +113,8 @@ input[type="radio"]:checked + label {
 }
 
 .ifeats {
-    width: 90%;
+    /*width: 100%;*/
+       width: 230px; /* thfeats: 250- 18 (modify button)) */
 }
 
 .thform, .thlemma {
@@ -154,4 +155,5 @@ table.conllutable select {
 
 .tdfeats {
    white-space: nowrap;
+   display: block;
 }

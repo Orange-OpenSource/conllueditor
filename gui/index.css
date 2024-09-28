@@ -234,6 +234,7 @@ img.helptextbutton {
   height: 25px;
   font-size: smaller;
   border-radius: 8px;
+  width: 18px;
 }
 
 input {

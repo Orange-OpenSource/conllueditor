@@ -2416,8 +2416,9 @@ $(document).ready(function () {
         // get features invalid for the given UPOS
         for (var m=0; m<$(".feedit_unknown").length; m++) {
             mk = k + m;
-
-            fvals.push($('#fe_name_' + mk).text() + "=" + $('#fe_val_' + mk).text());
+            if ($('#fe_value_' + mk).val() != "") {
+                fvals.push($('#fe_name_' + mk).text() + "=" + $('#fe_value_' + mk).val());
+            }
         }
 
         var feat="_";

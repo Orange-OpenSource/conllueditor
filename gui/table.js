@@ -70,12 +70,18 @@ function largertd(where) {
     //console.log("TTT", where, $(".th" + where).width());
     $(".th" + where).width($(".th" + where).width() + 50);
     columnwidth[where] = $(".th" + where).width();
+    if (where == "feats") {
+            $(".i" + where).width($(".i" + where).width() + 50);
+        }
 }
 function smallertd(where) {
-    //console.log("ttt", where);
-    if ($(".th" + where).width() > 170) {
+    console.log("ttt", where);
+    if ($(".th" + where).width() > 120) {
 	$(".th" + where).width($(".th" + where).width()-50);
 	columnwidth[where] = $(".th" + where).width();
+        if (where == "feats") {
+            $(".i" + where).width($(".i" + where).width()-50);
+        }
     }
 }
 
@@ -454,10 +460,12 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
             x++;
         }
         for (f in currentkeyvalues) {
+            // features which are not defined for this UPOS and for which we do not have valid values
             if (!feats_possible.has(f)) {
                 $("#featureEditing").append('<tr class="feedit_unknown" id="fe_' + x + '">');
                 $("#fe_" + x).append('<td id="fe_name_' + x + '">' + f + '</td>');
-                $("#fe_" + x).append('<td id="fe_val_' + x + '">' + currentkeyvalues[f] + '</td>');
+                //$("#fe_" + x).append('<td id="fe_val_' + x + '">' + currentkeyvalues[f] + '</td>');
+                $("#fe_" + x).append('<td id="fe_val_' + x + '"><input type="text" id="fe_value_' + x + '" value="' + currentkeyvalues[f] + '"></td>');
                 x++;
             }
         }
