@@ -84,7 +84,7 @@ label {
     text-decoration: none;
 
     /* top right bottom left */
-    qqpadding: 5px 5px 5px 5px;
+    padding: 5px 10px 5px 10px;
     border: 1px solid #959595;
 
     -webkit-border-radius: 5px;
