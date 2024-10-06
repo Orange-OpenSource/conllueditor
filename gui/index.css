@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.21.0 as of 18th March 2023
+ @version 2.28.0 as of 6th October 2024
 */
 
 body {
@@ -683,4 +683,27 @@ text {
     /*background-color: #ff8000;*/
     font-style: italic;
     margin-right: 15px;
+}
+
+#multishortcutlist {
+    font-size: 80%;
+    border: 1px solid black;
+}
+
+.upossc {
+    color: #9164cd;
+}
+.xpossc {
+    color: #50be87;
+}
+.featsc {
+    color: #4bb4e6;
+}
+
+.deprelsc {
+    color: #0a6e31;
+}
+
+.miscsc {
+    color: #492191;
 }

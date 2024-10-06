@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.26.0 as of 1st September 2024
+ @version 2.28.0 as of 6th October 2024
  */
 package com.orange.labs.editor;
 
@@ -38,6 +38,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.annotations.JsonAdapter;
 import com.orange.labs.conllparser.CheckCondition;
 import com.orange.labs.conllparser.CheckGrewmatch;
 import com.orange.labs.conllparser.ConllException;
@@ -344,6 +345,62 @@ public class ConlluEditor {
 
         Gson gson = new Gson();
         shortcuts = gson.fromJson(bufferedReader, JsonObject.class);
+
+        /* transform legacy shortcuts into new format */
+        JsonElement version = shortcuts.get("version");
+        if (version == null || version.getAsInt() < 2) {
+            JsonObject v2 = new JsonObject();
+            for (String key : shortcuts.keySet()) {
+
+                if (key.equals("upos")) {
+                    for (String sc : shortcuts.get(key).getAsJsonObject().keySet()) {
+                        JsonObject edits = new JsonObject();
+                        edits.addProperty("UPOS", shortcuts.get(key).getAsJsonObject().get(sc).getAsString());
+                        v2.add(sc, edits);
+                    }
+                }
+                else if (key.equals("deplabel")) {
+                    for (String sc : shortcuts.get(key).getAsJsonObject().keySet()) {
+                        JsonObject edits = new JsonObject();
+                        edits.addProperty("DEP", shortcuts.get(key).getAsJsonObject().get(sc).getAsString());
+                        v2.add(sc, edits);
+                    }
+                }
+                else if (key.equals("feats")) {
+                     for (String sc : shortcuts.get(key).getAsJsonObject().keySet()) {
+                        JsonObject edits = new JsonObject();
+                        JsonArray feats = new JsonArray();
+                        feats.add(shortcuts.get(key).getAsJsonObject().get(sc).getAsString());
+                        edits.add("FEATS", feats);
+                        v2.add(sc, edits);
+                    }
+
+                }
+                else if (key.equals("misc")) {
+                     for (String sc : shortcuts.get(key).getAsJsonObject().keySet()) {
+                        JsonObject edits = new JsonObject();
+                        JsonArray feats = new JsonArray();
+                        feats.add(shortcuts.get(key).getAsJsonObject().get(sc).getAsString());
+                        edits.add("MISC", feats);
+                        v2.add(sc, edits);
+                    }
+
+                }
+                else if (key.equals("xpos")) {
+                    for (String sc : shortcuts.get(key).getAsJsonObject().keySet()) {
+                        JsonObject edits = new JsonObject();
+                        JsonArray xpos_upos = shortcuts.get(key).getAsJsonObject().get(sc).getAsJsonArray();
+                        edits.addProperty("XPOS", xpos_upos.get(0).getAsString());
+                        edits.addProperty("UPOS", xpos_upos.get(1).getAsString());
+                        v2.add(sc, edits);
+                    }
+                }
+            }
+            shortcuts = new JsonObject();
+            shortcuts.addProperty("version", 2);
+            shortcuts.add("shortcuts", v2);
+        }
+
         shortcuts.addProperty("filename", filename);
         System.err.format("Shortcut file '%s' read\n", filename);
     }

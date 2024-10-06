@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.28.0
+* changed format of `shortcut.json` file (old format still understood)
+* shortcuts can modify a list of things (UPOS, XPOS, Deprels, FEATS, MISC)
+
 ## Version 2.27.0
 * if options `--features and --language` are used, in table view mode features can be easier edited
 * commented legacy code

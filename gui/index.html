@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.27.0 as of 21st September 2024
+    version 2.28.0 as of 6th October 2024
     -->
 
     <head>
@@ -67,7 +67,8 @@
         <script type="text/javascript" src="./lib/jquery-ui-1.12.1/jquery-ui.min.js" ></script>
         <!--script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script-->
 
-        <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+        <script src="./lib/sorttable.js"></script>
+        <!--script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script-->
 
 
         <script src="./word.js" type="text/javascript"></script>
@@ -205,14 +206,15 @@
 
                 <tr id="shortcuthelp"><td colspan="1">
                     <!-- tables with shortcuts (invoked with key "?" -->
-                    <table id="shortcuttable">
+                    <!--table id="shortcuttable">
                         <tr><td class="sc">shortcuts</td> <td id="scfilename" class="sc_help_td"></td></tr>
                         <tr><td class="sc" id="upostr">UPOS</td><td id="uposshortcuts" class="sc_help_td"></td></tr>
                         <tr><td class="sc" id="xpostr">XPOS/UPOS</td><td id="xposshortcuts" class="sc_help_td"></td></tr>
                         <tr><td class="sc" id="depreltr">Deplabel</td><td id="deplshortcuts" class="sc_help_td"></td></tr>
                         <tr><td class="sc" id="featstr">Features</td><td id="featsshortcuts" class="sc_help_td"></td></tr>
                         <tr><td class="sc" id="miscstr">MISC</td><td id="miscshortcuts" class="sc_help_td"></td></tr>
-                    </table>
+                    </table-->
+                    <div id="multishortcutlist"></dv>
                 </td></tr>
 
                 <tr id="searchandreplace"><td>
@@ -370,7 +372,7 @@
 
                         <p><b>fast editing</b> Some UPOS/deprel can be changed by clicking on the word and than hit a key (sequence). UPOS and deprel
                             can be modified without going into the edit window. The following keys are defined
-                        <table>
+                        <table id="shortcuttableLegacy">
                           <tr>
                             <td valign="top"><table id="shortcuttableUPOS" style="float: left" border="0">
                             </table></td>
@@ -387,6 +389,9 @@
                             <td valign="top"><table id="shortcuttableMISC" border="0">
                             </table></td>
                           </tr>
+                        </table>
+                        <table id="shortcuttableMulti">
+                            <tr><th>key sequence</th>  <th>set UPOS to</th> <th>set XPOS to</th> <th>set DEPREL to</th> <th>set FEATS to</th><th>set MISC to</th></tr>
                         </table>
 
 			<p>There is a list of predefined shortcuts which cannot be altered:

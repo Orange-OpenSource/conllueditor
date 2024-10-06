@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 
-Current version: 2.27.0 (see [change history](CHANGES.md))
+Current version: 2.28.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -53,6 +53,7 @@ For more information see section [File Comparison](#file-comparison)
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js and popper.min.js.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
+* sorttable.js (https://www.kryogenix.org/code/browser/sorttable/sorttable.js)
 * on MacOS: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
@@ -203,7 +204,7 @@ Other parameters (shown below in section [other options](#other-options)) can be
 `--env include_unused=1`,
 `--env deprels=deprels.ud`,
 `--env features=feat_val.ud`,
-`--env shortcuts=hortcuts.json`, or
+`--env shortcuts=multi-shortcuts.json`, or
 `--env compare=file.conllu`,
 . However all files given, **must** reside in the `</absolute/path/to/datadir>` directory.
 
@@ -230,7 +231,7 @@ options. Without `--language` only the universal features and deprels are used.
 * `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
 are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
-* `--shortcuts <file>` list of shortcut definitions (see section [shortcuts](#shortcuts) below, format, cf. [gui/shortcuts.json](gui/hortcuts.json))
+* `--shortcuts <file>` list of shortcut definitions (see section [shortcuts](#shortcuts) below, format, cf. [gui/multi-shortcuts.json](gui/hortcuts.json))
 * `--shortcutTimeout <milliseconds>` maximal tile allowed between to keys of a shortcut sequence
 * `--debug <hex>` hex number to activate debug information of the server (printed to stderr)
 * `--saveAfter <number>` if given, the server saves/commits the changed file only after _number_ edits. To force saving the current state, click on the `save` button.
@@ -281,7 +282,7 @@ displays the tree/hedge width a (configurable) fixed word width.
 
 The table view is still *experimental*, all green fields can be edited:
 The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence.
-Cotrl-click on an ID does not unmakr the token after applying a shortcut. This allows to apply several shortcuts on the same word.
+Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word.
 Columns can be made larger or narrower by using the buttons `+` and `-`.
 
 ![Edit screen (flat graph)](doc/table.png)
@@ -613,46 +614,35 @@ will happily delete the `ID` column from the output file, so the `HEAD` column d
 
 # Shortcuts
 
-ConlluEdit uses a file [gui/shortcuts.json](gui/hortcuts.json) which defines shortcuts to accelerate editing:
-These single letter keys change the UPOS/XPOS/deplabel/feature/misc of
+ConlluEdit uses a file [gui/shortcuts.json](gui/shortcuts.json) which defines shortcuts to accelerate editing:
+These single letter keys changes a list of values (UPOS/XPOS/deplabel/feature/misc) of
 the active word to the defined value. To activate a word, click once on the word.
-Shortcuts can be single letters or a sequence of multiple letters:
+Shortcuts can be single letters or a sequence of multiple letters (in the `FEATS` and `MISC`: a `"_"` removes all values):
 
 ```
 {
-    "upos": {
-        "AV": "ADV",
-        "C": "CCONJ",
-        "D": "DET",
-        "P": "PROPN",
-        "I": "INTJ",
-        "A": "ADJ",
-        "N": "NOUN",
-        "AP": "ADP",
-        "R": "PRON",
-        "S": "SCONJ",
-        "T": "PART",
-        "U": "NUM",
-        "V": "VERB",
-        "X": "AUX",
-        ".": "PUNCT"
+  "version": 2,
+  "shortcuts": {
+    "AV": {
+        "UPOS": "ADV",
+        "FEATS": [ "_" ]
     },
-   "feats": {
-       ":ns": "Number=Sing",
-       ":np": "Number=Plur",
-       ":gf": "Gender=Fem",
-       ...
+    "D": {
+        "UPOS": "DET",
+        "FEATS": [ "_", "Gender=Fem", "Number=Plur" ]
     },
-    "misc": {
-       ":sa": "SpacesAfter=\\n",
-       ":san": "SpaceAfter=No"
+    ":sa": {
+        "MISC": [ "SpacesAfter=\\n" ]
     },
-    "deplabel": {
-        "a": "amod",
-        "av": "advmod",
-        "c": "case",
-        ....
-    }
+    ":san": {
+        "MISC": [ "SpaceAfter=No" ]
+    },
+   "PI3M": {
+        "UPOS": "PRON",
+        "XPOS": "indep",
+        "FEATS": ["_", "Number=Sing", "Person=3", "Gender=Masc", "PronType=Prs"]
+    },
+    ...
 }
 ```
 There is a timeout, so multi-letter shortcuts must be typed with maximally 700ms intervals (change this value with the `--shortcutTimeout <milliseconds>` option). This makes it possible to

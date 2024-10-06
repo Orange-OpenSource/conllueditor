@@ -1,65 +1,193 @@
 {
-    "comment": "this files defines shortcuts to fast edit upos, xpos, feats and deprel of the active word. For xpos two values can to be given in a list: XPOS and UPOS). +, -, ? and = have hardwired meanings and cannot be used in shortcuts",
-    "upos": {
-        "AV": "ADV",
-        "C": "CCONJ",
-        "D": "DET",
-        "E": "PROPN",
-        "I": "INTJ",
-        "AJ": "ADJ",
-        "N": "NOUN",
-        "P": "ADP",
-        "R": "PRON",
-        "S": "SCONJ",
-        "T": "PART",
-        "U": "NUM",
-        "V": "VERB",
-        "X": "AUX",
-        ".": "PUNCT"
+  "version": 2,
+  "shortcuts": {
+    "AV": {
+      "UPOS": "ADV"
     },
-    "feats": {
-       ":ns": "Number=Sing",  
-       ":np": "Number=Plur",
-       ":gf": "Gender=Fem",
-       ":gm": "Gender=Masc",
-       ":p1": "Person=1",
-       ":p2": "Person=2",
-       ":p3": "Person=3",
-       ":tp": "Tense=Present",
-       ":ta": "Tense=Past",
-       ":mi": "Mood=Ind",
-       ":vi": "VerbForm=Inf",
-       ":vf": "VerbForm=Fin",
-       ":vp": "VerbForm=Part"
+    "C": {
+      "UPOS": "CCONJ"
     },
-    "misc": {
-       ":sa": "SpacesAfter=\\n",
-       ":san": "SpaceAfter=No"
+    "D": {
+      "UPOS": "DET"
     },
-    "deplabel": {
-        "a": "amod",
-        "b": "advmod",
-        "c": "case",
-        "d": "det",
-        "f": "fixed",
-        "l": "acl",
-        "m": "nmod",
-        "o": "obj",
-        "p": "punct",
-        "r": "acl:relcl",
-        "t": "parataxis",
-        "s": "nsubj",
-        "u": "nummod",
-        "v": "advcl",
-        "x": "xcomp",
-        "h": "aux"
+    "E": {
+      "UPOS": "PROPN"
     },
-    "xpos": {
-        "i": ["impf", "AUX"],
-        "j": ["pred", "PART"],
-        "k": ["verbnoun", "NOUN"],
-        "F": ["place", "PROPN"],
-        "g": ["person", "PROPN"]
+    "I": {
+      "UPOS": "INTJ"
+    },
+    "AJ": {
+      "UPOS": "ADJ"
+    },
+    "N": {
+      "UPOS": "NOUN"
+    },
+    "P": {
+      "UPOS": "ADP"
+    },
+    "R": {
+      "UPOS": "PRON"
+    },
+    "S": {
+      "UPOS": "SCONJ"
+    },
+    "T": {
+      "UPOS": "PART"
+    },
+    "U": {
+      "UPOS": "NUM"
+    },
+    "V": {
+      "UPOS": "VERB"
+    },
+    "X": {
+      "UPOS": "AUX"
+    },
+    ".": {
+      "UPOS": "PUNCT"
+    },
+    ":ns": {
+      "FEATS": [
+        "Number=Sing"
+      ]
+    },
+    ":np": {
+      "FEATS": [
+        "Number=Plur"
+      ]
+    },
+    ":gf": {
+      "FEATS": [
+        "Gender=Fem"
+      ]
+    },
+    ":gm": {
+      "FEATS": [
+        "Gender=Masc"
+      ]
+    },
+    ":p1": {
+      "FEATS": [
+        "Person=1"
+      ]
+    },
+    ":p2": {
+      "FEATS": [
+        "Person=2"
+      ]
+    },
+    ":p3": {
+      "FEATS": [
+        "Person=3"
+      ]
+    },
+    ":tp": {
+      "FEATS": [
+        "Tense=Present"
+      ]
+    },
+    ":ta": {
+      "FEATS": [
+        "Tense=Past"
+      ]
+    },
+    ":mi": {
+      "FEATS": [
+        "Mood=Ind"
+      ]
+    },
+    ":vi": {
+      "FEATS": [
+        "VerbForm=Inf"
+      ]
+    },
+    ":vf": {
+      "FEATS": [
+        "VerbForm=Fin"
+      ]
+    },
+    ":vp": {
+      "FEATS": [
+        "VerbForm=Part"
+      ]
+    },
+    ":sa": {
+      "MISC": [
+        "SpacesAfter=\\n"
+      ]
+    },
+    ":san": {
+      "MISC": [
+        "SpaceAfter=No"
+      ]
+    },
+    "a": {
+      "DEP": "amod"
+    },
+    "b": {
+      "DEP": "advmod"
+    },
+    "c": {
+      "DEP": "case"
+    },
+    "d": {
+      "DEP": "det"
+    },
+    "f": {
+      "DEP": "fixed"
+    },
+    "l": {
+      "DEP": "acl"
+    },
+    "m": {
+      "DEP": "nmod"
+    },
+    "o": {
+      "DEP": "obj"
+    },
+    "p": {
+      "DEP": "punct"
+    },
+    "r": {
+      "DEP": "acl:relcl"
+    },
+    "t": {
+      "DEP": "parataxis"
+    },
+    "s": {
+      "DEP": "nsubj"
+    },
+    "u": {
+      "DEP": "nummod"
+    },
+    "v": {
+      "DEP": "advcl"
+    },
+    "x": {
+      "DEP": "xcomp"
+    },
+    "h": {
+      "DEP": "aux"
+    },
+    "i": {
+      "XPOS": "impf",
+      "UPOS": "AUX"
+    },
+    "j": {
+      "XPOS": "pred",
+      "UPOS": "PART"
+    },
+    "k": {
+      "XPOS": "verbnoun",
+      "UPOS": "NOUN"
+    },
+    "F": {
+      "XPOS": "place",
+      "UPOS": "PROPN"
+    },
+    "g": {
+      "XPOS": "person",
+      "UPOS": "PROPN"
     }
+  }
 }
-

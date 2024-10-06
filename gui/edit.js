@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.27.0 as of 28th September 2024
+ @version 2.28.0 as of 6th October 2024
  */
 
 
@@ -265,25 +265,37 @@ function getServerInfo() {
             if (data.shortcuttimeout)
                 shortcuttimeout = data.shortcuttimeout
             if (data.shortcuts) {
-                //console.log("SHORTCUTS", data.shortcuts);
-                $("#scfilename").html(data.shortcuts.filename);
-                if (data.shortcuts.deplabel) {
-                    shortcutsDEPL = data.shortcuts.deplabel;
+                if ((data.shortcuts.version == 2)) {
+                    //shortcutsMulti = data.shortcuts.shortcuts;
+                    shortcutsMulti = Object.keys(data.shortcuts.shortcuts).sort().reduce((obj, key) => {
+                        obj[key] = data.shortcuts.shortcuts[key];
+                        return obj;
+                    }, {});
+
+                    parseShortcuts();
+//                } else {
+//                    //console.log("SHORTCUTS", data.shortcuts);
+//                    $("#scfilename").html(data.shortcuts.filename);
+//                    if (data.shortcuts.deplabel) {
+//                        shortcutsDEPL = data.shortcuts.deplabel;
+//                    }
+//                    if (data.shortcuts.upos) {
+//                        shortcutsUPOS = data.shortcuts.upos;
+//                    }
+//                    if (data.shortcuts.xpos) {
+//                        shortcutsXPOS = data.shortcuts.xpos;
+//                    }
+//                    if (data.shortcuts.feats) {
+//                        shortcutsFEATS = data.shortcuts.feats;
+//                    }
+//                    if (data.shortcuts.misc) {
+//                        shortcutsMISC = data.shortcuts.misc;
+//                    }
+//                    parseShortcutsLegacy();
                 }
-                if (data.shortcuts.upos) {
-                    shortcutsUPOS = data.shortcuts.upos;
-                }
-                if (data.shortcuts.xpos) {
-                    shortcutsXPOS = data.shortcuts.xpos;
-                }
-                if (data.shortcuts.feats) {
-                    shortcutsFEATS = data.shortcuts.feats;
-                }
-                if (data.shortcuts.misc) {
-                    shortcutsMISC = data.shortcuts.misc;
-                }
-                parseShortcuts();
+
             } else {
+                // load defaults
                 showshortcuts();
             }
             if (data.features) {
@@ -637,31 +649,41 @@ function ToggleShortcutHelp() {
     }
 }
 
+// all shortcut sequences are stored here
+var shortcutsMulti = {
+    /*"PI3SM": {
+            "UPOS": "PRON",
+            "XPOS": "indep",
+            "FEATS": ["_", "Number=Sing", "Person=3", "Gender=Masc", "PronType=Prs"]
+        },*/
 
-// default shortcuts (overriden by from configuration file)
-var shortcutsUPOS = {
-    /*   "N": "NOUN",
-     "A": "ADV",
-     ...*/
-};
-
-var shortcutsDEPL = {
-    /*   "s": "nsubj",
-     "u": "nummod",*/
-};
-
-var shortcutsXPOS = {// no point defining language specific xpos here.
-    //"N": ["NN", "NOUN"], // XPOS modifies also upos
-    //"E": ["NNP", "PROPN"],
-    //"W": ["VBZ"] // xpos keeps upos unchanged
-};
-
-var shortcutsFEATS = {
 };
 
 
-var shortcutsMISC = {
-};
+//// default shortcuts (overriden by from configuration file)
+//var shortcutsUPOS = {
+//    /*   "N": "NOUN",
+//     "A": "ADV",
+//     ...*/
+//};
+//
+//var shortcutsDEPL = {
+//    /*   "s": "nsubj",
+//     "u": "nummod",*/
+//};
+//
+//var shortcutsXPOS = {// no point defining language specific xpos here.
+//    //"N": ["NN", "NOUN"], // XPOS modifies also upos
+//    //"E": ["NNP", "PROPN"],
+//    //"W": ["VBZ"] // xpos keeps upos unchanged
+//};
+//
+//var shortcutsFEATS = {
+//};
+//
+//
+//var shortcutsMISC = {
+//};
 
 
 var longestshortcut = 1; // longest shortcut key (in order to know when to top piling key strokes :-)
@@ -669,104 +691,182 @@ var longestshortcut = 1; // longest shortcut key (in order to know when to top p
 /** run by getServerInfo() when no shortcuts are provided by server.
  Reads defaults from gui/shortcut.json and updates help page.
  */
+//function showshortcutsLegacy() {
+//    //console.log("load DEFAULT shortcuts");
+//    $.getJSON("shortcuts.json", function (json) {
+//        // if no error, we override defaults
+//        shortcutsUPOS = json.upos;
+//        shortcutsXPOS = json.xpos;
+//        shortcutsDEPL = json.deplabel;
+//        shortcutsFEATS = json.feats;
+//        shortcutsMISC = json.misc;
+//        $("#scfilename").html("gui/shortcuts.json");
+//        parseShortcutsLegacy();
+//    });
+//}
+
+
+/** run by getServerInfo() when no shortcuts are provided by server.
+ Reads defaults from gui/shortcut.json and updates help page. */
 function showshortcuts() {
     //console.log("load DEFAULT shortcuts");
-    $.getJSON("shortcuts.json", function (json) {
+    $.getJSON("multi-shortcuts.json", function (json) {
         // if no error, we override defaults
-        shortcutsUPOS = json.upos;
-        shortcutsXPOS = json.xpos;
-        shortcutsDEPL = json.deplabel;
-        shortcutsFEATS = json.feats;
-        shortcutsMISC = json.misc;
-        $("#scfilename").html("gui/shortcuts.json");
+        shortcutsMulti = json.shortcuts;
+        $("#scfilename").html("gui/multi-shortcuts.json");
         parseShortcuts();
     });
 }
 
-/** read json from shortcutsUPOS and update Help Modal */
+/** read json from shortcutsMulti and update Help Modal and display when hitting '?' */
 function parseShortcuts() {
-    var sc_uposString = "";
-    var sc_xposString = "";
-    var sc_deplString = "";
-    var sc_featsString = "";
-    var sc_miscString = "";
-
-
-    $("#shortcuttableUPOS").empty(); // clear default values
-    $("#uposshortcuts").empty();
-    $("#upostr").hide();
-    if (Object.keys(shortcutsUPOS).length > 0) {
-        $("#shortcuttableUPOS").append("<tr><th>key</th> <th>set UPOS to</th></tr>"); // add header
-        for (var p in shortcutsUPOS) {
+    $("#multishortcutlist").empty(); // table shown with "?"
+    var sc_String = "";
+    if (Object.keys(shortcutsMulti).length > 0) {
+        for (var p in shortcutsMulti) {
             longestshortcut = Math.max(longestshortcut, p.length);
-            $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
-            //sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
-            sc_uposString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsUPOS[p] + "</span>&nbsp; ";
+
+            // shortcut list shown with '?'
+            var parts = "";
+            var sc_uposString = "";
+            var sc_xposString = "";
+            var sc_deplString = "";
+            var sc_featsString = "";
+            var sc_miscString = "";
+            if ("UPOS" in shortcutsMulti[p]) {
+                parts +=  '<span title="UPOS" class="upossc">' + shortcutsMulti[p]["UPOS"] + "</span>";
+                sc_uposString = shortcutsMulti[p]["UPOS"];
+            }
+            if ("XPOS" in shortcutsMulti[p]) {
+                parts += ' <span title="XPOS" class="xpossc">' + shortcutsMulti[p]["XPOS"] + "</span>";
+                sc_xposString = shortcutsMulti[p]["XPOS"];
+            }
+            if ("DEP" in shortcutsMulti[p]) {
+                parts += ' <span title="Deprel" class="deprelsc">' + shortcutsMulti[p]["DEP"] + "</span>";
+                sc_deplString = shortcutsMulti[p]["DEP"];
+            }
+            if ("FEATS" in shortcutsMulti[p]) {
+                //parts += " F:"
+                for (const f of shortcutsMulti[p]["FEATS"]) {
+                    parts += ' <span title="Feature-Value" class="featsc">' + f + "</span>";
+                    sc_featsString += " " + f
+                }
+            }
+            if ("MISC" in shortcutsMulti[p]) {
+                //parts += " M:"
+                for (const f of shortcutsMulti[p]["MISC"]) {
+                    parts += ' <span title="Misc-value" class="miscsc">' + f + "</span>";
+                    sc_miscString += " " + f
+                }
+            }
+            if (sc_String != "") sc_String += ", ";
+            else {
+                sc_String += '<span class="sckey">shortcut</span>= <span class="upossc">UPOS</span>  <span class="xpossc">XPOS</span>  <span class="deprelsc">Deprel</span>  <span class="featsc">Feature=Value</span>  <span class="miscsc">MISC</span><br/>';
+            }
+            sc_String += '<span class="sckey">' + p + '</span>=<span class="scval">' + parts + "</span>";
+            // help page
+            $("#shortcuttableMulti").append("<tr><td>" + p + "</td> <td>"
+                    + sc_uposString + "</td> <td>"
+                    + sc_xposString + "</td> <td>"
+                    + sc_deplString + "</td> <td>"
+                    + sc_featsString + "</td> <td>"
+                    + sc_miscString + "</td></tr>");
+
         }
-        $("#upostr").show();
-        $("#uposshortcuts").append(sc_uposString);
     }
-
-    $("#shortcuttableDEPL").empty();
-    $("#deplshortcuts").empty();
-    $("#depreltr").hide();
-    if (Object.keys(shortcutsDEPL).length > 0) {
-        $("#shortcuttableDEPL").append("<tr><th>key</th> <th>set deplabel to</th></tr>"); // add header
-        for (var p in shortcutsDEPL) {
-            longestshortcut = Math.max(longestshortcut, p.length);
-            $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
-            sc_deplString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsDEPL[p] + "</span>&nbsp; ";
-        }
-        $("#depreltr").show();
-        $("#deplshortcuts").append(sc_deplString);
-    }
-
-
-    $("#xposshortcuts").empty();
-    $("#xpostr").hide();
-    $("#shortcuttableXPOS").empty();
-    if (Object.keys(shortcutsXPOS).length > 0) {
-        $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>and UPOS to</th></tr>"); // add header in help page
-        for (var p in shortcutsXPOS) {
-            longestshortcut = Math.max(longestshortcut, p.length);
-            $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
-                    + shortcutsXPOS[p][0] + "</td> <td>"
-                    + shortcutsXPOS[p][1] + "</td></tr>");
-            sc_xposString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp; ";
-        }
-        $("#xpostr").show();
-        $("#xposshortcuts").append(sc_xposString);
-    }
-
-
-    $("#shortcuttableFEATS").empty();
-    $("#featsshortcuts").empty();
-    $("#featstr").hide();
-    if (Object.keys(shortcutsFEATS).length > 0) {
-        $("#shortcuttableFEATS").append("<tr><th>key</th> <th>set feature</th></tr>"); // add header
-        for (var p in shortcutsFEATS) {
-            longestshortcut = Math.max(longestshortcut, p.length);
-            $("#shortcuttableFEATS").append("<tr><td>" + p + "</td> <td>" + shortcutsFEATS[p] + "</td></tr>");
-            sc_featsString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsFEATS[p] + "</span>&nbsp; ";
-        }
-        $("#featstr").show();
-        $("#featsshortcuts").append(sc_featsString);
-    }
-
-    $("#shortcuttableMISC").empty();
-    $("#miscshortcuts").empty();
-    $("#miscstr").hide();
-    if (Object.keys(shortcutsMISC).length > 0) {
-        $("#shortcuttableMISC").append("<tr><th>key</th> <th>set MISC</th></tr>"); // add header
-        for (var p in shortcutsMISC) {
-            longestshortcut = Math.max(longestshortcut, p.length);
-            $("#shortcuttableMISC").append("<tr><td>" + p + "</td> <td>" + shortcutsMISC[p] + "</td></tr>");
-            sc_miscString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsMISC[p] + "</span>&nbsp; ";
-        }
-        $("#miscstr").show();
-        $("#miscshortcuts").append(sc_miscString);
-    }
+    //$("#multistr").show();
+    $("#multishortcutlist").append(sc_String);
+    $(".sc").hide();
+    $("#shortcuttable").hide();
+    //$("#shortcuttableLegacy").hide();
 }
+
+/** read json from shortcutsUPOS and update Help Modal */
+//function parseShortcutsLegacy() {
+//    var sc_uposString = "";
+//    var sc_xposString = "";
+//    var sc_deplString = "";
+//    var sc_featsString = "";
+//    var sc_miscString = "";
+//    $("#multishortcutlist").empty();
+//    $("#multistr").hide();
+//    $("#shortcuttableMulti").hide();
+//
+//    $("#shortcuttableUPOS").empty(); // clear default values
+//    $("#uposshortcuts").empty();
+//    $("#upostr").hide();
+//    if (Object.keys(shortcutsUPOS).length > 0) {
+//        $("#shortcuttableUPOS").append("<tr><th>key</th> <th>set UPOS to</th></tr>"); // add header
+//        for (var p in shortcutsUPOS) {
+//            longestshortcut = Math.max(longestshortcut, p.length);
+//            $("#shortcuttableUPOS").append("<tr><td>" + p + "</td> <td>" + shortcutsUPOS[p] + "</td></tr>");
+//            //sc_uposString += '<span class="sckey">' + p + "=" + shortcutsUPOS[p] + "</span>&nbsp;&nbsp;";
+//            sc_uposString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsUPOS[p] + "</span>&nbsp; ";
+//        }
+//        $("#upostr").show();
+//        $("#uposshortcuts").append(sc_uposString);
+//    }
+//
+//    $("#shortcuttableDEPL").empty();
+//    $("#deplshortcuts").empty();
+//    $("#depreltr").hide();
+//    if (Object.keys(shortcutsDEPL).length > 0) {
+//        $("#shortcuttableDEPL").append("<tr><th>key</th> <th>set deplabel to</th></tr>"); // add header
+//        for (var p in shortcutsDEPL) {
+//            longestshortcut = Math.max(longestshortcut, p.length);
+//            $("#shortcuttableDEPL").append("<tr><td>" + p + "</td> <td>" + shortcutsDEPL[p] + "</td></tr>");
+//            sc_deplString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsDEPL[p] + "</span>&nbsp; ";
+//        }
+//        $("#depreltr").show();
+//        $("#deplshortcuts").append(sc_deplString);
+//    }
+//
+//
+//    $("#xposshortcuts").empty();
+//    $("#xpostr").hide();
+//    $("#shortcuttableXPOS").empty();
+//    if (Object.keys(shortcutsXPOS).length > 0) {
+//        $("#shortcuttableXPOS").append("<tr><th>key</th> <th>set XPOS to</th> <th>and UPOS to</th></tr>"); // add header in help page
+//        for (var p in shortcutsXPOS) {
+//            longestshortcut = Math.max(longestshortcut, p.length);
+//            $("#shortcuttableXPOS").append("<tr><td>" + p + "</td> <td>"
+//                    + shortcutsXPOS[p][0] + "</td> <td>"
+//                    + shortcutsXPOS[p][1] + "</td></tr>");
+//            sc_xposString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsXPOS[p][0] + "/" + shortcutsXPOS[p][1] + "</span>&nbsp; ";
+//        }
+//        $("#xpostr").show();
+//        $("#xposshortcuts").append(sc_xposString);
+//    }
+//
+//
+//    $("#shortcuttableFEATS").empty();
+//    $("#featsshortcuts").empty();
+//    $("#featstr").hide();
+//    if (Object.keys(shortcutsFEATS).length > 0) {
+//        $("#shortcuttableFEATS").append("<tr><th>key</th> <th>set feature</th></tr>"); // add header
+//        for (var p in shortcutsFEATS) {
+//            longestshortcut = Math.max(longestshortcut, p.length);
+//            $("#shortcuttableFEATS").append("<tr><td>" + p + "</td> <td>" + shortcutsFEATS[p] + "</td></tr>");
+//            sc_featsString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsFEATS[p] + "</span>&nbsp; ";
+//        }
+//        $("#featstr").show();
+//        $("#featsshortcuts").append(sc_featsString);
+//    }
+//
+//    $("#shortcuttableMISC").empty();
+//    $("#miscshortcuts").empty();
+//    $("#miscstr").hide();
+//    if (Object.keys(shortcutsMISC).length > 0) {
+//        $("#shortcuttableMISC").append("<tr><th>key</th> <th>set MISC</th></tr>"); // add header
+//        for (var p in shortcutsMISC) {
+//            longestshortcut = Math.max(longestshortcut, p.length);
+//            $("#shortcuttableMISC").append("<tr><td>" + p + "</td> <td>" + shortcutsMISC[p] + "</td></tr>");
+//            sc_miscString += '<span class="sckey">' + p + '</span>=<span class="scval">' + shortcutsMISC[p] + "</span>&nbsp; ";
+//        }
+//        $("#miscstr").show();
+//        $("#miscshortcuts").append(sc_miscString);
+//    }
+//}
 
 // in order to have word "boxes" as wide as needed, we stock here the width needed for each
 // word (taking the word form) as well as the x-position of each word in the graph
@@ -906,12 +1006,10 @@ function unsetPShC() {
 
 // inpsired by https://stackoverflow.com/questions/123999/how-can-i-tell-if-a-dom-element-is-visible-in-the-current-viewport
 function isElementInViewport(el) {
-
     // Special bonus for those using jQuery
     //if (typeof jQuery === "function" && el instanceof jQuery) {
     //    el = el[0];
     //}
-
 
     //console.log("EL", el[0]);
     var rect = el[0].getBoundingClientRect();
@@ -997,13 +1095,41 @@ $(window).on('keypress', function (evt) {
             // process sequence
             //    console.log('Input Value:', shortcutseq);
 
-            var newval = shortcutsUPOS[shortcutseq];
-            if (newval != undefined) {
-                //console.log("UPOS", newval);
-                sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
+            var newvals = shortcutsMulti[shortcutseq];
+
+            if (newvals != undefined) {
+                for (var what in newvals) {
+                    if (what == "UPOS") {
+                        sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newvals[what]});
+                    }
+                    else if (what == "XPOS") {
+                        sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newvals[what]});
+                    }
+                    else if (what == "DEP") {
+                        sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newvals[what]});
+                    }
+                    else if (what == "FEATS") {
+                        for (var f of newvals[what]) {
+                            if ( f == "_") {
+                                // delete all existing
+                                sendmodifs({"cmd": "mod feats " + clickedNodes[0] + " " + "_"});
+                            } else {
+                                sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + f});
+                            }
+                        }
+                    }
+                    else if (what == "MISC") {
+                        for (var f of newvals[what]) {
+                            if ( f == "_") {
+                                // delete all existing
+                                sendmodifs({"cmd": "mod misc " + clickedNodes[0] + " " + "_"});
+                            } else {
+                                sendmodifs({"cmd": "mod addmisc " + clickedNodes[0] + " " + f});
+                            }
+                        }
+                    }
+                }
                 shortcutseq = "";
-                deprels = [];
-                uposs = [];
                 if (keepmarked == -1) {
                     clickedNodes = [];
                 }
@@ -1011,67 +1137,83 @@ $(window).on('keypress', function (evt) {
                 return;
             }
 
-            newval = shortcutsDEPL[shortcutseq];
-            if (newval != undefined) {
-                //console.log("DEPL", newval);
-                sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
-                shortcutseq = "";
-                deprels = [];
-                uposs = [];
-                if (keepmarked == -1) {
-                    clickedNodes = [];
-                }
-                unsetPShC();
-                return;
-            }
 
-            newval = shortcutsFEATS[shortcutseq];
-            if (newval != undefined) {
-                sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
-                shortcutseq = "";
-                deprels = [];
-                uposs = [];
-                if (keepmarked == -1) {
-                    clickedNodes = [];
-                }
-                unsetPShC();
-                return;
-            }
-
-            newval = shortcutsMISC[shortcutseq];
-            if (newval != undefined) {
-                sendmodifs({"cmd": "mod addmisc " + clickedNodes[0] + " " + newval});
-                shortcutseq = "";
-                deprels = [];
-                uposs = [];
-                if (keepmarked == -1) {
-                    clickedNodes = [];
-                }
-                unsetPShC();
-                return;
-            }
-
-            newval = shortcutsXPOS[shortcutseq];
-            if (newval != undefined) {
-                //console.log("XPOS", newval, newval[0]);
-                if (newval.length > 1) {
-                    // change UPOS and XPOS
-                    sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
-                } else {
-                    // change only XPOS
-                    sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
-                }
-
-                shortcutseq = "";
-                deprels = [];
-                uposs = [];
-                if (keepmarked == -1) {
-                    clickedNodes = [];
-                }
-                unsetPShC();
-                return;
-            }
-
+//            if (false) {
+//                var newval = shortcutsUPOS[shortcutseq];
+//                if (newval != undefined) {
+//                    //console.log("UPOS", newval);
+//                    sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
+//                    shortcutseq = "";
+//                    deprels = [];
+//                    uposs = [];
+//                    if (keepmarked == -1) {
+//                        clickedNodes = [];
+//                    }
+//                    unsetPShC();
+//                    return;
+//                }
+//
+//                newval = shortcutsDEPL[shortcutseq];
+//                if (newval != undefined) {
+//                    //console.log("DEPL", newval);
+//                    sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
+//                    shortcutseq = "";
+//                    deprels = [];
+//                    uposs = [];
+//                    if (keepmarked == -1) {
+//                        clickedNodes = [];
+//                    }
+//                    unsetPShC();
+//                    return;
+//                }
+//
+//                newval = shortcutsFEATS[shortcutseq];
+//                if (newval != undefined) {
+//                    sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
+//                    shortcutseq = "";
+//                    deprels = [];
+//                    uposs = [];
+//                    if (keepmarked == -1) {
+//                        clickedNodes = [];
+//                    }
+//                    unsetPShC();
+//                    return;
+//                }
+//
+//                newval = shortcutsMISC[shortcutseq];
+//                if (newval != undefined) {
+//                    sendmodifs({"cmd": "mod addmisc " + clickedNodes[0] + " " + newval});
+//                    shortcutseq = "";
+//                    deprels = [];
+//                    uposs = [];
+//                    if (keepmarked == -1) {
+//                        clickedNodes = [];
+//                    }
+//                    unsetPShC();
+//                    return;
+//                }
+//
+//                newval = shortcutsXPOS[shortcutseq];
+//                if (newval != undefined) {
+//                    //console.log("XPOS", newval, newval[0]);
+//                    if (newval.length > 1) {
+//                        // change UPOS and XPOS
+//                        sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
+//                    } else {
+//                        // change only XPOS
+//                        sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
+//                    }
+//
+//                    shortcutseq = "";
+//                    deprels = [];
+//                    uposs = [];
+//                    if (keepmarked == -1) {
+//                        clickedNodes = [];
+//                    }
+//                    unsetPShC();
+//                    return;
+//                }
+//            }
             if (shortcutseq[0] == "&" && shortcutseq.length > 1) {
                 var gotonode = parseInt(shortcutseq.substring(1), 10);
                 if (gotonode > 0) {
