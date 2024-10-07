@@ -223,7 +223,8 @@ function makeItemFreqPercent_table(appendto, data, total, what) {
         cell.innerHTML = percentage.toFixed(2);
         cell.setAttribute('style', 'text-align: right;');
     }
-    sorttable.makeSortable(upostbl);
+    // be sure that sortable.js is found and loaded
+    //sorttable.makeSortable(upostbl);
 }
 
 /** get information from ConlluEditor server:
@@ -368,7 +369,7 @@ function getServerInfo() {
                     }
                 }
             }
-            sorttable.makeSortable(drustbl);
+            //sorttable.makeSortable(drustbl);
 
 
             // stats for features per UPOS
@@ -416,7 +417,7 @@ function getServerInfo() {
                     }
                 }
             }
-            sorttable.makeSortable(fvustbl);
+            //sorttable.makeSortable(fvustbl);
 
             $('#filename').empty();
             $('#filename').append(data.filename);
@@ -710,10 +711,10 @@ var longestshortcut = 1; // longest shortcut key (in order to know when to top p
  Reads defaults from gui/shortcut.json and updates help page. */
 function showshortcuts() {
     //console.log("load DEFAULT shortcuts");
-    $.getJSON("multi-shortcuts.json", function (json) {
+    $.getJSON("shortcuts.json", function (json) {
         // if no error, we override defaults
         shortcutsMulti = json.shortcuts;
-        $("#scfilename").html("gui/multi-shortcuts.json");
+        $("#scfilename").html("gui/shortcuts.json");
         parseShortcuts();
     });
 }
