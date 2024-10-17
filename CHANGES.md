@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.28.1
+* java import error corrected
+
 ## Version 2.28.0
 * changed format of `shortcut.json` file (old format still understood)
 * shortcuts can modify a list of things (UPOS, XPOS, Deprels, FEATS, MISC)

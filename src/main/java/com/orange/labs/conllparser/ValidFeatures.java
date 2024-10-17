@@ -28,11 +28,10 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.25.6 as of 29th August 2024
+ @version 2.28.1 as of 17th October 2024
  */
 package com.orange.labs.conllparser;
 
-import GrewmatchVisitor.java;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
