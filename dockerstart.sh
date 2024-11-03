@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# this script is only needed to launche the server in an docker container
+# this script is only needed to launch the server in an docker container
 # outside docker please use bin/conlluedit.sh
 
 filename=$1
@@ -10,6 +10,11 @@ if [ "$1" != "" ]; then
     echo " ** cannot run validator within docker"
     echo " ** please run it on the edited file ($1) outside docker"
     #ivalidator="--validator $1"
+fi
+shift
+
+if [ "$1" != "" ]; then
+    iuiconfig="--uiconfig $1"
 fi
 shift
 
@@ -59,13 +64,14 @@ fi
 shift
 
 echo "options given:"
+echo "  uiconfig       $iuiconfig"
 echo "  validator      $ivalidator"
 echo "  upos           $iupos"
 echo "  xpos           $ixpos"
 echo "  deprels        $ideprels"
 echo "  features       $ifeats"
 echo "  language       $ilang"
-echo "  include unused $iunused"
+echo "  include_unused $iunused"
 echo "  shortcuts      $ishortcuts"
 echo "  saveafter      $isaveafter"
 echo "  compare        $icompare"
@@ -74,7 +80,6 @@ echo "  filename       $filename"
 java -Xmx4g -cp /usr/src/ConlluEditor/ConlluEditor.jar \
 	com.orange.labs.editor.ConlluEditor \
 	--rootdir /usr/src/ConlluEditor \
-        $ivalidator $iupos $ixpos $ideprels $ifeats $ilang $iunused $ishortcuts $isaveafter \
-        $icompare \
+        $iuiconfig $ivalidator $iupos $ixpos $ideprels $ifeats $ilang $iunused $ishortcuts $isaveafter $icompare \
 	${filename}  5555
 

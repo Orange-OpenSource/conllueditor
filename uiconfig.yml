@@ -1,0 +1,36 @@
+# UI configuration
+ui:
+  right2left: 
+    status: inactive  # inactive, active, 
+    show: hidden #
+  features: 
+    status: active
+    #show: hidden
+  misc: 
+    status: active
+    show: hidden
+  searchmode: none # simple, searchreplace, grew, none
+  display: flat # graph, flat, table
+  shortcuts: hidden # show, hidden
+  nodewidth: 
+    status: variable # fixed, variable
+    show: hidden # show, hidden
+  latex: show # show, hidden
+  conllu: show # show, hidden
+  sdparse: hidden # show, hidden
+  spacy: hidden # show, hidden
+
+#validation:
+#  language: cy
+#  xpos: 
+#    - xpos.cy
+#  upos: 
+#    - ${UDTOOLS}/cpos.ud
+#  deprels:
+#    - ${UDTOOLS}/deprels.json
+#    - deprel.cy
+#  features: 
+#    - ${UDTOOLS}/feats.json
+#    - upos-feat_val.cy
+#  validator: valid.conf
+#  shortcuts: sc.json

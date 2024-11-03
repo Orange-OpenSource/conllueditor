@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.28.0 as of 6th October 2024
+ @version 2.29.0 as of 3rd November 2024
  */
 
 
@@ -44,7 +44,14 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 //}
 
 
-// TODO add new sentence
+var graphtype = 1; // 1: tree, 2: hedge, 3: table
+var showfeats = false;
+var showmisc = false;
+var showr2l = false;
+var autoadaptwidth = true;
+var showshortcuthelp = false;
+
+
 
 var isIE = /*@cc_on!@*/false || !!document.documentMode;
 var isEdge = !isIE && !!window.StyleMedia;
@@ -88,7 +95,7 @@ function enableTab(id) {
 
             // get caret position/selection
             var val = this.value,
-                    start = this.selectionStart,
+                    start = this.selectionStart,misc
                     end = this.selectionEnd;
 
             // set textarea value to: text before caret + tab + text after caret
@@ -434,7 +441,106 @@ function getServerInfo() {
             } else {
                 $('#save').hide();
             }
+            
+            // deactivate buttons as defined in uiconfig.json
+            console.log("UI", data.uiconfig);
+            if (data.uiconfig) {
+                
+                if (data.uiconfig.right2left_show === "hidden") {
+                    $("#r2l").hide();
+                } 
+                if (data.uiconfig.right2left_status === "active") {
+                    showr2l = true;
+                    $("#r2l").addClass('active');
+                } else {
+                    showr2l = false;
+                    $("#r2l").removeClass('active');
+                }
+                
+                if (data.uiconfig.features_show === "hidden") {
+                    $("#feat2").hide();
+                } 
+                if (data.uiconfig.features_status === "active") {
+                    showfeats = true;
+                    $("#feat2").addClass('active');
+                } else {
+                    showfeats = false;
+                    $("#feat2").removeClass('active');
+                }
 
+                if (data.uiconfig.misc_show === "hidden") {
+                    $("#misc2").hide();
+                } else if (data.uiconfig.misc_status === "active") {
+                    showmisc= true;
+                    $("#misc2").addClass('active');
+                } else {
+                    showmisc = false;
+                    $("#misc2").removeClass('active');
+                }
+                
+                if (data.uiconfig.display === "flat") {
+                    graphtype = 2;
+                    $("#flat3").val("flat");
+                } else if (data.uiconfig.display === "table") {
+                    graphtype = 3;
+                    $("#flat3").val("table");
+                } else {
+                    graphtype = 1;
+                    $("#flat3").val("tree");
+                }
+                
+                if (data.uiconfig.searchmode === "simple") {
+                     $("#searchmode").val("simple");
+                }
+                if (data.uiconfig.searchmode === "searchreplace") {
+                     $("#searchmode").val("complex");
+                }
+                if (data.uiconfig.searchmode === "grew") {
+                     $("#searchmode").val("grew");
+                }
+                if (data.uiconfig.searchmode === "none") {
+                     $("#searchmode").val("hide");
+                }
+                $("#searchmode").click();
+
+                
+                if (data.uiconfig.shortcuts === "show") {
+                    showshortcuthelp = false;
+                    ToggleShortcutHelp();
+                }
+                
+                if (data.uiconfig.nodewidth_show === "hidden") {
+                    $("#adaptwidth").removeClass('onlyWithTree');
+                    $("#adaptwidth").hide();
+                } else if (data.uiconfig.nodewidth_status === "variable") {
+                    autoadaptwidth= false;
+                    $("#adaptwidth").click();
+                    //$("#misc2").addClass('active');
+                } else {
+                    autoadaptwidth = true;
+                    $("#adaptwidth").click();
+                    //$("#misc2").removeClass('active');
+                }
+                
+                
+                if (data.uiconfig.latex === "hidden") {
+                    $("#latex").removeClass('onlyWithTree');
+                    $("#latex").hide();
+                }
+                if (data.uiconfig.conllu === "hidden") {
+                    $("#conllu").removeClass('onlyWithTree');
+                    $("#conllu").hide();
+                }
+                if (data.uiconfig.sdparse === "hidden") {
+                    $("#sdparse").removeClass('onlyWithTree');
+                    $("#sdparse").hide();
+                }
+                if (data.uiconfig.spacy === "hidden") {
+                    $("#json").removeClass('onlyWithTree');
+                    $("#json").hide();
+                }
+                
+            }
             // set version number to logo (shown if mouse hovers on the logo)
             //$('#logo').attr("title", data.version);
             $('#ce_version').text(data.version);
@@ -581,7 +687,7 @@ function switchSearch(on) {
         $('body').css("margin-top", "280px");
     } else {
         $(".search").hide();
-        if (!showshortcathelp)
+        if (!showshortcuthelp)
             $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
     }
 }
@@ -619,24 +725,22 @@ function switchGrewmatchReplace(on) {
 }
 
 
-var showshortcathelp = false;
-
 function switchSCHelp(on) {
     if (on) {
         $("#shortcuthelp").show();
         $('body').css("margin-top", "290px");
-        showshortcathelp = true;
+        showshortcuthelp = true;
     } else {
         $("#shortcuthelp").hide();
        // if (!more)
         //    $('body').css("margin-top", "150px"); // header is smaller, decrease body margin
-        showshortcathelp = false;
+        showshortcuthelp = false;
     }
 }
 
 function ToggleShortcutHelp() {
-    //console.log("SC", showshortcathelp, more, lastmore);
-    if (showshortcathelp) {
+    //console.log("SC", showshortcuthelp, more, lastmore);
+    if (showshortcuthelp) {
         // hide short cut help
         switchSCHelp(false);
         $("#searchmode").click();
@@ -1555,11 +1659,7 @@ function unhighlight() {
 
 
 //var flatgraph = false;
-var graphtype = 1; // 1: tree, 2: hedge, 3: table
-var showfeats = false;
-var showmisc = false;
-var showr2l = false;
-var autoadaptwidth = true;
+
 var backwards = false;
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var editing_enhanced = false;
@@ -2217,7 +2317,7 @@ $(document).ready(function () {
                 switchSubtree(false);
                 switchGrewmatchReplace(false);
                 $('body').css("margin-top", "200px"); // header is smaller, decrease body margin
-                if (showshortcathelp) {
+                if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
             }
@@ -2227,7 +2327,7 @@ $(document).ready(function () {
                 switchSearchReplace(false);
                 switchSubtree(true);
                 switchGrewmatchReplace(false);
-                if (showshortcathelp) {
+                if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
             }
@@ -2238,7 +2338,7 @@ $(document).ready(function () {
                 switchSubtree(false);
                 switchGrewmatchReplace(true);
                 $('body').css("margin-top", "160px"); // header is smaller, decrease body margin
-                if (showshortcathelp) {
+                if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
             }
@@ -2248,7 +2348,7 @@ $(document).ready(function () {
                 switchSubtree(false);
                 switchGrewmatchReplace(false);
                 $('body').css("margin-top", "260px"); // header is smaller, decrease body margin
-                if (showshortcathelp) {
+                if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
             }

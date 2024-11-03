@@ -1,8 +1,6 @@
 # Editor for Treebanks in CoNLL-U format and Front-End for dependency parser servers
 
-This Software is a tool which facilitates the editing of syntactic relations and morphological features of files in CoNLL-U format
-(http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor
-loads the CoNLL-U file and saves changes to disk (and performs a `git commit` if the file is under git version control).
+This Software is a tool which facilitates the editing of syntactic relations and morphological features of files in CoNLL-U format (http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor loads the CoNLL-U file and saves changes to disk (and performs a `git commit` if the file is under git version control).
 
 The editor provides the following functionalities:
 * editing words (forms, lemmas, upos, xpos, features, enhanced dependencies) (fast edit for UPOS and deprel)
@@ -25,8 +23,9 @@ The editor provides the following functionalities:
 * sentence metadata editing
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
+* configuring the UI on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.28.1 (see [change history](CHANGES.md))
+Current version: 2.29.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -46,10 +45,10 @@ For more information see section [File Comparison](#file-comparison)
 
 * Java jre >= 11.0 (including 17)
 * Firefox (tested with version 60.9 on Windows 10, >= 63 on Linux and 69.0.1 on MacOS Sierra),
-  Chromium or Chrome (both tested with version 70 on Linux),
-  Edge (tested with version 44.17763.1.0 on Windows 10),
-  Opera (tested with version 63 on Linux),
-  Safari (tested with version 11.1 on MacOS Sierra)
+  * Chromium or Chrome (both tested with version 70 on Linux),
+  * Edge (tested with version 44.17763.1.0 on Windows 10),
+  * Opera (tested with version 63 on Linux),
+  * Safari (tested with version 11.1 on MacOS Sierra)
 * jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js and popper.min.js.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
@@ -66,8 +65,7 @@ Alternatively, a recent version of Docker can be used to run the docker image (s
 
 #### Github Release
 
-To avoid compilation, you can download the latest release, unzip the conllueditor-a.b.c.zip into a directory and start the server
-as described below.
+To avoid compilation, you can download the latest release, unzip the conllueditor-a.b.c.zip into a directory and start the server as described below.
 
 ### License
 * This software is under the [3-Clause BSD License](LICENSE)
@@ -151,8 +149,7 @@ mvn install
 
 ## Starting the server
 
-On smaller machines, the memory management of the java VM (`-Xmx...` option) may have to be modified in
-`bin/conlluedit.sh`. The current value (`-Xmx4g`) is largely sufficient to load larger treebanks with up to 1,5M tokens.
+On smaller machines, the memory management of the java VM (`-Xmx...` option) may have to be modified in `bin/conlluedit.sh`. The current value (`-Xmx4g`) is largely sufficient to load larger treebanks with up to 1,5M tokens.
 
 
 ConlluEditor comes with a simple HTTP server:
@@ -204,9 +201,10 @@ Other parameters (shown below in section [other options](#other-options)) can be
 `--env include_unused=1`,
 `--env deprels=deprels.ud`,
 `--env features=feat_val.ud`,
-`--env shortcuts=multi-shortcuts.json`, or
-`--env compare=file.conllu`,
-. However all files given, **must** reside in the `</absolute/path/to/datadir>` directory.
+`--env shortcuts=multi-shortcuts.json`,
+`--env compare=file.conllu`, or
+`--env uiconfig=uiconfig.yml`
+. However all files given, **must** reside in the `</absolute/path/to/datadir>` directory. Further files given in the `uiconfig.yml` must also reside in the `</absolute/path/to/datadir>` directory.
 
 When finished, stop the docker container (it is removed automatically by the `--rm` option given):
 
@@ -216,20 +214,14 @@ docker stop conllueditor
 
 
 ### Other options
+* `--uiconfig <file>` yaml file to specify activated buttosn, display etc (see below in section [UI configuration](#ui-configuration))
 * `--UPOS <file>` comma separated list of files containing valid UPOS tags (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
 * `--XPOS <file>` comma separated list of files containing valid XPOS tags
-* `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud).
-Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/deprels.json)
-together with the option `--language`
-* `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud)
-in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
-Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
-together with the option `--language`. This will highlight features which are not used with a correct
-UPOS and enable afeature edit mode in table view mode (see below)
-* `--language <lg code>` use feature and/or deprel definitions in the json files given to the `--features` and `--deprels`
-options. Without `--language` only the universal features and deprels are used.
-* `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json)
-are marked as unused. They will only be included to the list of valid features if this option is given.
+* `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud). Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/deprels.json) together with the option `--language`
+* `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud) in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
+Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/feats.json) together with the option `--language`. This will highlight features which are not used with a correct UPOS and enable afeature edit mode in table view mode (see below)
+* `--language <lg code>` use feature and/or deprel definitions in the json files given to the `--features` and `--deprels` options. Without `--language` only the universal features and deprels are used.
+* `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json) are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definitions (see section [shortcuts](#shortcuts) below, format, cf. [gui/multi-shortcuts.json](gui/hortcuts.json))
 * `--shortcutTimeout <milliseconds>` maximal tile allowed between to keys of a shortcut sequence
@@ -242,9 +234,7 @@ especially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 
-If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of
-the sentence, warnings are writte to screen. Such errors may occur if an automatic pre-annotation tools do not work correctly.
-UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
+If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of the sentence, warnings are writte to screen. Such errors may occur if an automatic pre-annotation tools do not work correctly. UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
 In this case please correct the errors using a text editor before loading the file into ConlluEditor.
 
 
@@ -254,17 +244,14 @@ More help on editing can be found by clicking the `Help` button.
 
 If the server has been (re)started reload the page in your navigator.
 
-Load the first sentence by clicking on `read sentence`: clicking on a word and then clicking on the head-word creates a dependency relation.
-An edit window opens to enter the relation a name. Existing relations can be renamed by clicking on their name.
-Clicking twice on a word deletes its eventual dependency relation and makes it root.
+Load the first sentence by clicking on `read sentence`: clicking on a word and then clicking on the head-word creates a dependency relation. An edit window opens to enter the relation a name. Existing relations can be renamed by clicking on their name. Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or double click on the word. For more help use the `Help` button.
 To delete a word, click ont it and hit the `delete` key.
 
 
 ## Display modes
 
-The sentence is shown as a dependency tree or as a flat graph (“dependency hedge”), morphological features can be shown or hidden with the `features` button,
-information of the MISC column can be shown with the `misc` button.
+The sentence is shown as a dependency tree or as a flat graph (“dependency hedge”), morphological features can be shown or hidden with the `features` button, information of the MISC column can be shown with the `misc` button.
 multiword tokens (having `n-m` ids) are marked by a grey line spanning the multiword expression.
 If any UPOS/XPOS/deprel is not in the validation lists (specified with the `--UPOS` etc. options)
 it is shown in red.
@@ -275,21 +262,15 @@ The select button `tree graph` allows to toggle between a dependency tree layout
 
 ![Choose view](doc/chooseview.png)
 
-The button `fixed width`
-displays the tree/hedge width a (configurable) fixed word width.
+The button `fixed width` displays the tree/hedge width a (configurable) fixed word width.
 
 ![Edit screen (flat graph)](doc/graph.png)
 
-The table view is still *experimental*, all green fields can be edited:
-The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence.
-Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word.
-Columns can be made larger or narrower by using the buttons `+` and `-`.
+The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word. Columns can be made larger or narrower by using the buttons `+` and `-`.
 
 ![Edit screen (flat graph)](doc/table.png)
 
-When the server is started with the option `--features feats.json` (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json]
-and `--language <lg>` (language code of the treebank), features can be easier edited using the feature edit mode. In the Feature-column
-a `m`odify button appears:
+When the server is started with the option `--features feats.json` (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json] and `--language <lg>` (language code of the treebank), features can be easier edited using the feature edit mode. In the Feature-column a `m`odify button appears:
 
 ![Edit screen (flat graph with feature editing)](doc/table-with-featedit.png)
 
@@ -299,13 +280,10 @@ Click on tone of the `m`odify button opens a Feature-edit popup where the valid 
 
 Invalid features will be shown, the value can be changed via an input field. If its value is set to empty, the feature will be removed.
 
-For most languages (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json] will be OK, but for
-some languages it still contains errors.
-ConllUEditor provides a script (bin/collectFeatVal.py)[bin/collectFeatVal.py] which allows to take the most frequent Features+Values from
-existing CoNLL-U files to create are correct version of `feats.json`.
+For most languages (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json] will be OK, but for some languages it still contains errors.
+ConllUEditor provides a script (bin/collectFeatVal.py)[bin/collectFeatVal.py] which allows to take the most frequent Features+Values from existing CoNLL-U files to create are correct version of `feats.json`.
 
 Options:
-
   * `-h`, `--help`            show this help message and exit
   * `--files FILES [FILES ...]`, `-f FILES [FILES ...]`  Conllu files to count UPOS/Feature correspondances
   * `--out OUT`, `-o OUT`     output format. valid values: `txt`, `json`, `feats` (`feats` produces same format as `feats.json`)
@@ -324,8 +302,7 @@ E.g.:
 
 ## Editing words and dependency relations
 
-Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server,
-autocompleting is proposed
+Word editing window (CTRL-click on the word). If UPOS/XPOS/deprels are given to the server, autocompleting is proposed
 
 ![Edit screen (flat graph)](doc/edit.png)
 
@@ -343,9 +320,7 @@ Empty nodes (having `n.1` ids) are shown in a dashed box:
 
 ![Empty nodes](doc/tree_emptynode.png)
 
-The flat graph mode also displays enhanced dependencies. In this mode enhanced
-dependencies can be added/modified/deleted (activate `edit enhanced dependencies`).
-if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayed too.
+The flat graph mode also displays enhanced dependencies. In this mode enhanced dependencies can be added/modified/deleted (activate `edit enhanced dependencies`). if the button `show basic in enhanced` is active, all enhanced dependency relations which are also a basic dependency, are displayed too.
 
 ![Empty nodes](doc/graph_emptynode.png)
 
@@ -354,20 +329,14 @@ See section [Enhanced Dependencies](#enhanced-dependencies) for more information
 
 ## Split or merge adjacent words (editing tokenisation)
 
-In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new
-word to the right of `<wordid>`. This new word can then be edit, with a CTRL-click.
-The command `join <wordid>` merges the word with `<wordid>`
-with the following. This joined word gets the dependency relation of the word closer to root.
+In order to split a word or join two (adjacent) words, use the `modify` button: the command `split <wordid>` inserts a new word to the right of `<wordid>`. This new word can then be edit, with a CTRL-click. The command `join <wordid>` merges the word with `<wordid>` with the following. This joined word gets the dependency relation of the word closer to root.
 
 Whole sentences can be split with the `sentsplit <wordid>` command. The current sentences can be concatenated with the following sentence
 with `sentjoin` command.
 
-In order to create a multiword token, use the `compose <wordid> <length>`
-command. Click on the multiword token bar (at the bottom of the dependency
-tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
+In order to create a multiword token, use the `compose <wordid> <length>` command. Click on the multiword token bar (at the bottom of the dependency tree/graph to open a dialogue which allows to edit or delete the token (i.e. the `n-m` line).
 
-All operations which change the tokenisation of the sentence will create a `incoherent # text and forms` warning. This is because the è# text = ....`
-metadata must be coherent with the concatenation of forms (taken into account `SpacesAfter`/`SpaceAfter` fields in the MISC column.
+All operations which change the tokenisation of the sentence will create a `incoherent # text and forms` warning. This is because the `# text = ....` metadata must be coherent with the concatenation of forms (taken into account `SpacesAfter`/`SpaceAfter` fields in the MISC column.
 Unless earlier versions, the `# text ...` is no longer updated automatically, but must be adapted manually using the `edit metadata` button.
 
 ## Commands to be used with `modify` button:
@@ -387,8 +356,7 @@ Unless earlier versions, the `# text ...` is no longer updated automatically, bu
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
-LaTeX output includes MWE units as well as enhanced dependencies. Enhanced dependencies which are identical too basic dependencies
-are shown in the LaTeX output if the button `show basic in enhanced` is activated.
+LaTeX output includes MWE units as well as enhanced dependencies. Enhanced dependencies, which are identical to basic dependencies are shown in the LaTeX output if the button `show basic in enhanced` is activated.
 The `download` downloads the current image as a svg-file.
 A click on the filename on the top of the screens opens a windows with some file
 statistics:
@@ -397,8 +365,7 @@ statistics:
 
 # Searching
 
-The search fields at the top of the screen can be used to search for forms, lemmas, UPOS, XPOS, deprels (or sequences of these),
-comments and sentences ids.
+The search fields at the top of the screen can be used to search for forms, lemmas, UPOS, XPOS, deprels (or sequences of these), comments and sentences ids.
 
 * The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).   For example
   * `the` finds next occurrance of _the_, including _them_ or _weather_.
@@ -423,8 +390,7 @@ Other search modes can be chosen with the search select bar (top rop right)
 
 ## Complex search and search and replace
 
-This opens a search and search-and-display field. The search fields provides a simple language to find
-sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
+This opens a search and search-and-display field. The search fields provides a simple language to find sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
 
 For instance
 ```
@@ -442,7 +408,6 @@ Adding a replace expression (as in [Mass Editing](doc/mass_editing.md)) like
 ```
 xpos:this(Upos)+"xpos" Feat:"Special:Present"
 ```
-
 and click `search & replace`. This replaces all matching tokens in the first sentence where at least one token is matching the search condition:
 
 ![Search and replace](doc/searchandreplace.png)
@@ -466,9 +431,7 @@ Some examples can be found in [grewtests.txt](grewtests.txt)
 
 **legacy, will be redrawn in a future version**
 This mode allows you to input a tree (using `_` as wildcards and regular expressions).
-Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with
-a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions.
-(N.B. in this mode the `?`-key is no longer a hot-key to display shortcuts)
+Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions (N.B. in this mode the `?`-key is no longer a hot-key to display shortcuts).
 E.g.
 
 ```
@@ -478,8 +441,7 @@ E.g.
 3	_	NOUN	_	0	_
 ```
 
-matches any sentences wich contains a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and
-a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
+matches any sentences wich contains a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
 
 ![Subtree search](doc/subtreesearch.png)
 
@@ -503,7 +465,6 @@ nsubj(sees, cat-2)
 obj(sees, cat-6)
 ```
 
-
 The `sdparse` format may contain `_` as wildcards (in this case position information is obligatory)
 
 ```
@@ -514,15 +475,11 @@ det(_-3, _-2)
 ```
 ![Subtree search](doc/subtreesearch-sdparse-wildcards.png)
 
-In order facilitate the edition of the subtree, you can enter the Id of a word in the tree and click
-the `import subtree`? Doing so enters a partial tree of the word the current sentence and all its direct
-and indirect dependents.
+In order facilitate the edition of the subtree, you can enter the Id of a word in the tree and click the `import subtree`? Doing so enters a partial tree of the word the current sentence and all its direct and indirect dependents.
 
 ![Import subtree from current sentence](doc/importsubtree.png)
 
-If the first line in the subtree window is a valid CoNLL-U Plus column definition,
-the imported subtree contains only the indicated columns. For example, if the subtree window
-contains (as a first line):
+If the first line in the subtree window is a valid CoNLL-U Plus column definition, the imported subtree contains only the indicated columns. For example, if the subtree window contains (as a first line):
 
 ```
 # global.columns = ID UPOS HEAD DEPREL
@@ -534,26 +491,20 @@ contains (as a first line):
 
 # Mass Editing
 
-A simple languages to modify tokens if a (complex condition is met)
-see [Mass Editing](doc/mass_editing.md)
+A simple languages to modify tokens if a (complex condition is met) see [Mass Editing](doc/mass_editing.md)
 
 ## Metadata editing
 
-The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph,
-the sentence itself, as well as its sentence id, translations (mostly into English) or transliterations.
+The CoNLL-U format provides some special comment lines to indicate whether the current sentence is the beginning of a new document, new paragraph, the sentence itself, as well as its sentence id, translations (mostly into English) or transliterations.
 Clicking on `edit metadata` opens the Metadata dialogue.
 For translations, the translations must be prefixed with the language code as shown in the screen shot.
-If the words of the current sentence, contains transliteration information (MISC column, Translit field),
-the sentence transliteration can be initialized by clicking on `init`
+If the words of the current sentence, contains transliteration information (MISC column, Translit field), the sentence transliteration can be initialized by clicking on `init`
 
 ![Metadata edit](doc/metadataedit.png)
 
 ## Enhanced Dependencies
 Enhanced dependencies ([http://universaldependencies.org/format.html#syntactic-annotation])
-in graphic mode can only be edited in flat mode. If the button `edit enhanced dependencies` is activated
-clicking on words creates enhanced dependency relations. Click on the dependency label to modify it or to
-delete the enhanced dependency relation.
-Alternatively, enhanced dependencies can be edited manually via the word edit menu.
+in graphic mode can only be edited in flat mode. If the button `edit enhanced dependencies` is activated clicking on words creates enhanced dependency relations. Click on the dependency label to modify it or to delete the enhanced dependency relation. Alternatively, enhanced dependencies can be edited manually via the word edit menu.
 
 
 ## Other annotation
@@ -566,8 +517,7 @@ in the first line
 ```
 Valid CoNLL-U Plus with missing standard columns are currently rejected.
 
-The additional columns are displayed under the graph/hedge and can be edited.
-The values in these columns are not interpreted (for instance BIO markings), they are just shown.
+The additional columns are displayed under the graph/hedge and can be edited. The values in these columns are not interpreted (for instance BIO markings), they are just shown.
 
 ![extra columns in tree view](doc/tree_extracols.png)
 
@@ -579,13 +529,11 @@ The values in these columns are not interpreted (for instance BIO markings), the
 
 ### CoNLL-U / CoNLLu Plus conversion
 
-A simple conversion program is provided to convert any CoNLL-U (Plus) file into another. It takes
-as arguments the input file name and a comma separated list of output columns. Specified output columns
-absent in the input file will be replaced with `_`. If the output column list is absent, a standard CoNLL-U file is produced.
+A simple conversion program is provided to convert any CoNLL-U (Plus) file into another. It takes as arguments the input file name and a comma separated list of output columns. Specified output columns absent in the input file will be replaced with `_`. If the output column list is absent, a standard CoNLL-U file is produced.
 
 for instance
 
-`   bin/conlluconvert.sh` [`src/test/resources/test.conllup`](src/test/resources/test.conllup) ` ID,FORM,DEPREL,HEAD,SEM:NE`
+`bin/conlluconvert.sh` [`src/test/resources/test.conllup`](src/test/resources/test.conllup) ` ID,FORM,DEPREL,HEAD,SEM:NE`
 
 generates
 
@@ -607,16 +555,13 @@ generates
 ...
 ```
 
-No semantic/plausibility check is performed. E.g.
-`bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD`
-will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense anymore.
+No semantic/plausibility check is performed. E.g. `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD` will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense anymore.
 
 
 # Shortcuts
 
 ConlluEdit uses a file [gui/shortcuts.json](gui/shortcuts.json) which defines shortcuts to accelerate editing:
-These single letter keys changes a list of values (UPOS/XPOS/deplabel/feature/misc) of
-the active word to the defined value. To activate a word, click once on the word.
+These single letter keys changes a list of values (UPOS/XPOS/deplabel/feature/misc) of the active word to the defined value. To activate a word, click once on the word.
 Shortcuts can be single letters or a sequence of multiple letters (in the `FEATS` and `MISC`: a `"_"` removes all values):
 
 ```
@@ -645,8 +590,7 @@ Shortcuts can be single letters or a sequence of multiple letters (in the `FEATS
     ...
 }
 ```
-There is a timeout, so multi-letter shortcuts must be typed with maximally 700ms intervals (change this value with the `--shortcutTimeout <milliseconds>` option). This makes it possible to
-define shortcuts with different length and an identical sequence at the beginning
+There is a timeout, so multi-letter shortcuts must be typed with maximally 700ms intervals (change this value with the `--shortcutTimeout <milliseconds>` option). This makes it possible to define shortcuts with different length and an identical sequence at the beginning
 (like above `A` and `AV`).
 
 A personalised list (same format as [gui/shortcuts.json](gui/shortcuts.json)) can be used with the `--shortcuts` option.
@@ -664,8 +608,7 @@ There is a list of predefined shortcuts which cannot be altered:
 
 # Multiuser/save/git
 
-The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**.
-To be on the safe side, start a server for every annotator on a different port/machine.
+The ConlluEditor can be used by multiple annotators at the time, provided that **no sentence is edited by more than one person at a time**. To be on the safe side, start a server for every annotator on a different port/machine.
 After each modification the edited file is saved:
 * if the edited file is in a git versioned directory, each change is git-commited using the sentence number and the word id in the commit message.
 * if not, it is saved under a different filename (adding `.2`) in the same directory, the original file is not modified.
@@ -677,14 +620,11 @@ must be configured in a text file
 ```
 script: /path/to/UniversalDependencies/tools/validate.py --lang cy --max-err 0 --level 5 {FILE}
 ```
-`{FILE}` will be replaced with a file which contains the sentence to be validated in CoNLL-U format.
-This configuration file must be given to the server with the option `--validator <filename>`.
-The validation button will launch the validator on the current sentence.
+`{FILE}` will be replaced with a file which contains the sentence to be validated in CoNLL-U format. This configuration file must be given to the server with the option `--validator <filename>`. The validation button will launch the validator on the current sentence.
 
 # Validation rules
 
-In order to check somme language dependend validity (like adjective - noun agreement) a set of conditions can be specified (using the
-syntax as in [Mass Editing](doc/mass_editing.md)) can be used.
+In order to check somme language dependend validity (like adjective - noun agreement) a set of conditions can be specified (using the syntax as in [Mass Editing](doc/mass_editing.md)) can be used.
 
 E.g. if the current word has a nsubj Deprel, is a noun ou proper noun, has verb as head which is finite, than the verb must have the feature Person:3
 ```
@@ -697,6 +637,57 @@ Run the validation:
 ```
 ./bin/validate.sh  src/test/resources/validrules.txt  src/test/resources/test.conllu
 ```
+
+# UI configuration
+
+The default UI can be modified in order to set some functionalities as default (like flat trees or showing Features) or to hide some buttons not needed for your language (for instance right-to-left display for a language written in the Latin alphabet)
+Adapt [uiconfig.yml](uiconfig.yml) to your needs:
+
+```
+# UI configuration
+ui:
+  right2left:
+    status: inactive   # inactive, active
+    show: hidden       #
+  features:
+    status: active     # inactive, active
+    #show: hidden
+  misc:
+    status: active     # inactive, active
+    show: hidden
+  searchmode: none     # simple, searchreplace, grew, none
+  display: flat        # graph, flat, table
+  shortcuts: hidden    # show, hidden
+  nodewidth:
+    status: variable   # fixed, variable
+    show: hidden       # show, hidden
+  latex: show          # show, hidden
+  conllu: show         # show, hidden
+  sdparse: hidden      # show, hidden
+  spacy: hidden        # show, hidden
+
+#validation:
+#  language: cy
+#  xpos:
+#    - xpos.cy
+#  upos:
+#    - ${UDTOOLS}/cpos.ud  # environment variables are allowed
+#  deprels:
+#    - ${UDTOOLS}/deprels.json
+#    - deprel.cy
+#  features:
+#    - ${UDTOOLS}/feats.json
+#    - upos-feat_val.cy
+#  validator: valid.conf
+#  shortcuts: sc.json
+```
+Use it with the option `--uiconfig uiconfig.yml`
+
+The values in the `validation:` section are the same as for the options `--upos`. These option, if present too, override the values given in the `uiconfig.yml` file. Using this example just above, ConlluEditor opens loke this:
+
+![Custom UI](doc/custom-ui.png)
+
+
 
 
 # Server API (used by the GUI)

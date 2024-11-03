@@ -32,13 +32,13 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.28.0 as of 6th October 2024
+    version 2.29.0 as of 6th October 2024
     -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>2.28.0</version>
+    <version>2.29.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -285,6 +285,11 @@
             <version>4.13.1</version>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.2</version>
+        </dependency>
 
+    </dependencies>
 </project>

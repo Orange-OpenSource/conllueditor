@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.28.0 as of 6th October 2024
+ @version 2.29.0 as of 2nd November 2024
  */
 package com.orange.labs.editor;
 
@@ -38,7 +38,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.annotations.JsonAdapter;
 import com.orange.labs.conllparser.CheckCondition;
 import com.orange.labs.conllparser.CheckGrewmatch;
 import com.orange.labs.conllparser.ConllException;
@@ -64,11 +63,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -89,6 +91,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * classe très basique qui lit un fichier CONLL, affiche la premiere phrase,
@@ -122,6 +125,7 @@ public class ConlluEditor {
 
     ConllFile comparisonFile = null;
 
+    Map<String, String>uiconfig = null;
     private String programmeversion;
     //private String gitcommitidfull;
     private String gitcommitidabbrev = "?";
@@ -403,6 +407,97 @@ public class ConlluEditor {
 
         shortcuts.addProperty("filename", filename);
         System.err.format("Shortcut file '%s' read\n", filename);
+    }
+
+    /** read the User Interface configuration file. The information in the "ui" part
+     *  is sent to the client in order to activate/shos/hide buttons
+     * @param configfile
+     * @throws IOException
+     */
+    public void setUIConfig(String configfile) throws IOException {
+        uiconfig = new HashMap<>();
+        InputStream inputStream = new FileInputStream(new File(configfile));
+        Yaml yaml = new Yaml();
+        Map<String, Object> cfg = yaml.load(inputStream);
+        Map<String, Object> ui = (Map<String, Object>)cfg.get("ui");
+        for (String key : ui.keySet()) {
+            Object val = ui.get(key);
+            if (val.getClass() == String.class) {
+                uiconfig.put(key, (String)ui.get(key));
+            }
+            else if (val.getClass() == LinkedHashMap.class) {
+                LinkedHashMap<String, String>map = (LinkedHashMap<String, String>)val;
+                for (String what : map.keySet()) {
+                    uiconfig.put(key + "_" + what, map.get(what));
+                }
+            }
+            else {
+                System.err.println("Bad value in " + configfile + " vor key " + key);
+            }
+        }
+
+        String mydir = (new File(configfile)).getParent();
+        Map<String, Object> validation = (Map<String, Object>)cfg.get("validation");
+
+        if (validation != null) {
+            String language = (String)validation.get("language");
+
+            for (String key : validation.keySet()) {
+                //System.err.println("QQQQQ " + key + " " + validation.get(key).getClass());
+                Object val = validation.get(key);
+                if (key.equals("xpos")) {
+                    List<String>paths = new ArrayList<>();
+                    for (String fn : (ArrayList<String>)val) {
+                        paths.add(makePath(mydir, fn));
+                    }
+                    setValidXPOS(paths);
+                }
+                else if (key.equals("upos")) {
+                    List<String>paths = new ArrayList<>();
+                    for (String fn : (ArrayList<String>)val) {
+                        paths.add(makePath(mydir, fn));
+                    }
+                    setValidUPOS(paths);
+                }
+                else if (key.equals("deprels")) {
+                    List<String>paths = new ArrayList<>();
+                    for (String fn : (ArrayList<String>)val) {
+                        paths.add(makePath(mydir, fn));
+                    }
+                    setValidDeprels(paths, language);
+                }
+                else if (key.equals("features")) {
+                    List<String>paths = new ArrayList<>();
+                    for (String fn : (ArrayList<String>)val) {
+                        paths.add(makePath(mydir, fn));
+                    }
+                    setValidFeatures(paths, language, false);
+                }
+                else if (key.equals("validator")) {
+                    setValidator(makePath(mydir, (String)val));
+                }
+                else if (key.equals("shortcuts")) {
+                    setShortcuts(makePath(mydir, (String)val));
+                }
+            }
+        }
+    }
+
+    /* make a file relative from a directory */
+    private String makePath(String dir, String path) {
+        Pattern pattern = Pattern.compile("\\$\\{(.+)\\}");
+        Matcher matcher = pattern.matcher(path);
+        while (matcher.find()) {
+            String variable = matcher.group(1);
+            String replace = System.getenv(variable);
+            path = path.replaceAll("\\$\\{" + variable + "\\}", replace);
+        }
+        File f = new File(path);
+        if (f.isAbsolute()) {
+            return path;
+        } else {
+            return Paths.get(dir, path).toString();
+        }
     }
 
     public void setValidator(String validatorconf) {
@@ -796,6 +891,13 @@ public class ConlluEditor {
             coldefs.add(cd);
         }
         solution.add("columns", coldefs);
+        if (uiconfig != null) {
+            JsonObject jo = new JsonObject();
+            for (String key : uiconfig.keySet()) {
+                jo.addProperty(key, uiconfig.get(key));
+            }
+            solution.add("uiconfig", jo);
+        }
 
         //System.err.println("qqqqqqqqq " + solution);
         return solution.toString();
@@ -2652,6 +2754,13 @@ public class ConlluEditor {
                 .build();
         options.addOption(compare);
 
+        Option uiconfig = Option.builder("u").longOpt("uiconfig")
+                .argName("file")
+                .hasArg()
+                .desc("UI configuration file (to choose default views and hide unneeded buttons")
+                .build();
+        options.addOption(uiconfig);
+
         CommandLineParser parser = new DefaultParser();
 
         try {
@@ -2663,6 +2772,9 @@ public class ConlluEditor {
 
             ConlluEditor ce = new ConlluEditor(line.getArgList().get(0), line.hasOption(overwrite));
 
+            if (line.hasOption(uiconfig)) {
+                ce.setUIConfig(line.getOptionValue(uiconfig));
+            }
             if (line.hasOption(upos)) {
                 ce.setValidUPOS(Arrays.asList(line.getOptionValue(upos).split(",")));
             }
@@ -2739,158 +2851,4 @@ public class ConlluEditor {
             System.exit(11);
         }
     }
-
-//    static void help() {
-//        System.err.println("usage: edit.sh [options] conllfile port");
-//        System.err.println("   --UPOS <files>       comma separated list of files with valid UPOS");
-//        System.err.println("   --XPOS <files>       comma separated list of files with valid UPOS");
-//        System.err.println("   --deprels <files>    comma separated list of files with valid deprels or data/deprels.json from https://github.com/UniversalDependencies/tools.git (the latter requires --language)");
-//        System.err.println("   --features <files>   comma separated list of files with valid [upos:]feature=value pairs or data/feats.json from https://github.com/UniversalDependencies/tools.git) (the latter requires --language)");
-//        System.err.println("   --validator <file>   file with validator configuration");
-//        System.err.println("   --rootdir <dir>      root of fileserver (must include index.html and edit.js etc.  for ConlluEditor");
-//        System.err.println("   --saveAfter <number> saves edited file after n changes (default save (commit) when going to another sentence");
-//        System.err.println("   --verb <int>         specifiy verbosity (hexnumber, interpreted as bitmap)");
-//        System.err.println("   --shortcuts <file>   list of shortcut definition (json)");
-//        System.err.println("   --noedit             only browsing");
-//        //System.err.println("   --overwrite         overwrite existing backup file if file ist not git versioned");
-//        System.err.println("   --relax              correct some formal errors in CoNLL-U more or less silently");
-//        System.err.println("   --reinit             only browsing, reload file after each sentence (to read changes if the file is changed by other means)");
-//        System.err.println("   --compare <file>     comparison mode: display a second (gold) tree in gray behind the current tree to see differences");
-//    }
-//
-//    public static void oomain(String[] args) {
-//        if (args.length < 2) {
-//            // reinit will reread the whole file at each action (to take into account external modification)
-//            // as a consequence, editing is not possible
-//            help();
-//            System.exit(1);
-//        }
-//
-//        List<String> uposfiles = null;
-//        List<String> xposfiles = null;
-//        List<String> deprelfiles = null;
-//        List<String> featurefiles = null;
-//        String language = null;
-//        String shortcutfile = null;
-//        String rootdir = null;
-//        String validator = null;
-//        boolean include_unused = false;
-//        boolean overwrite = false;
-//        int debug = 0x0d;
-//        int saveafter = -1;
-//        int mode = 0; // noedit: 1, reinit: 2
-//        String comparisonFile = null;
-//
-//        int argindex = 0;
-//        for (int a = 0; a < args.length - 1; ++a) {
-//            if (args[a].equals("--UPOS")) {
-//                String[] fns = args[++a].split(",");
-//                uposfiles = Arrays.asList(fns);
-//                argindex += 2;
-//            } else if (args[a].equals("--XPOS")) {
-//                String[] fns = args[++a].split(",");
-//                xposfiles = Arrays.asList(fns);
-//                argindex += 2;
-//            } else if (args[a].equals("--features")) {
-//                String[] fns = args[++a].split(",");
-//                featurefiles = Arrays.asList(fns);
-//                argindex += 2;
-//            } else if (args[a].equals("--language")) {
-//                language = args[++a];
-//                argindex += 2;
-//            } else if (args[a].equals("--include_unused")) {
-//                include_unused = true;
-//                argindex += 1;
-//
-//            } else if (args[a].equals("--deprels")) {
-//                String[] fns = args[++a].split(",");
-//                deprelfiles = Arrays.asList(fns);
-//                argindex += 2;
-//            } else if (args[a].equals("--shortcuts")) {
-//                shortcutfile = args[++a];
-//                argindex += 2;
-//            } else if (args[a].equals("--validator")) {
-//                validator = args[++a];
-//                argindex += 2;
-//            } else if (args[a].equals("--rootdir")) {
-//                rootdir = args[++a];
-//                argindex += 2;
-//            } else if (args[a].equals("--saveAfter")) {
-//                saveafter = Integer.parseInt(args[++a]);
-//                argindex += 2;
-//            } else if (args[a].equals("--verb")) {
-//                debug = Integer.parseInt(args[++a], 16);
-//                argindex += 2;
-//            } else if (args[a].equals("--noedit")) {
-//                if (mode == 0) {
-//                    mode = 1;
-//                }
-//                argindex += 1;
-//            } else if (args[a].equals("--relax")) {
-//                ConllWord.RELAXED = true;
-//                argindex += 1;
-//            } else if (args[a].equals("--reinit")) {
-//                mode = 2;
-//                argindex += 1;
-//            } else if (args[a].equals("--overwrite")) {
-//                overwrite = true;
-//                argindex += 1;
-//            } else if (args[a].equals("--compare")) {
-//                comparisonFile = args[++a];
-//                argindex += 2;
-//            } else if (args[a].startsWith("-")) {
-//                System.err.println("Invalid option " + args[a]);
-//                help();
-//                System.exit(2);
-//            }
-//        }
-//
-//        try {
-//            ConlluEditor ce = new ConlluEditor(args[argindex], overwrite);
-//            if (uposfiles != null) {
-//                ce.setValidUPOS(uposfiles);
-//            }
-//            if (xposfiles != null) {
-//                ce.setValidXPOS(xposfiles);
-//            }
-//            if (deprelfiles != null) {
-//                ce.setValidDeprels(deprelfiles, language);
-//            }
-//            if (featurefiles != null) {
-//                ce.setValidFeatures(featurefiles, language, include_unused);
-//            }
-//            if (validator != null) {
-//                ce.setValidator(validator);
-//            }
-//            if (shortcutfile != null) {
-//                ce.setShortcuts(shortcutfile);
-//            }
-//            if (saveafter != 0) {
-//                ce.setSaveafter(saveafter);
-//            } else {
-//                System.err.println("Invalid value for option --saveAfter");
-//            }
-//
-//            ce.setDebug(debug);
-//
-//            if (comparisonFile != null) {
-//                ce.setComparisonFile(comparisonFile);
-//            }
-//
-//            if (args.length > argindex + 1) {
-//                if (mode > 0) {
-//                    ce.setMode(mode);
-//                }
-//                //ServeurHTTP sh =
-//                new ServeurHTTP(Integer.parseInt(args[argindex + 1]), ce, rootdir, debug);
-//            } else {
-//                System.err.println("*** Error: no port given");
-//                help();
-//                System.exit(3);
-//            }
-//        } catch (ConllException | IOException ex) {
-//            System.err.println("*** Error: " + ex.getMessage());
-//            System.exit(11);
-//        }
-//    }
 }

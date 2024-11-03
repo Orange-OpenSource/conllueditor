@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.29.0
+* new option to load UI configuration file added
+* new dependency to snakeyaml
+
 ## Version 2.28.1
 * java import error corrected
 
