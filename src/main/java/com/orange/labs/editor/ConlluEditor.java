@@ -420,64 +420,69 @@ public class ConlluEditor {
         Yaml yaml = new Yaml();
         Map<String, Object> cfg = yaml.load(inputStream);
         Map<String, Object> ui = (Map<String, Object>)cfg.get("ui");
-        for (String key : ui.keySet()) {
-            Object val = ui.get(key);
-            if (val.getClass() == String.class) {
-                uiconfig.put(key, (String)ui.get(key));
-            }
-            else if (val.getClass() == LinkedHashMap.class) {
-                LinkedHashMap<String, String>map = (LinkedHashMap<String, String>)val;
-                for (String what : map.keySet()) {
-                    uiconfig.put(key + "_" + what, map.get(what));
+        if (ui != null) {
+            for (String key : ui.keySet()) {
+                Object val = ui.get(key);
+                if (val.getClass() == String.class) {
+                    uiconfig.put(key, (String) ui.get(key));
+                } else if (val.getClass() == LinkedHashMap.class) {
+                    LinkedHashMap<String, String> map = (LinkedHashMap<String, String>) val;
+                    for (String what : map.keySet()) {
+                        uiconfig.put(key + "_" + what, map.get(what));
+                    }
+                } else {
+                    System.err.println("Bad value in " + configfile + " vor key " + key);
                 }
             }
-            else {
-                System.err.println("Bad value in " + configfile + " vor key " + key);
-            }
+        } else {
+            System.err.format("*** UIConfig '%s': key 'ui' missing\n", configfile);
         }
 
         String mydir = (new File(configfile)).getParent();
+        if (mydir == null) {
+            mydir = ".";
+        }
         Map<String, Object> validation = (Map<String, Object>)cfg.get("validation");
 
         if (validation != null) {
             String language = (String)validation.get("language");
 
             for (String key : validation.keySet()) {
-                //System.err.println("QQQQQ " + key + " " + validation.get(key).getClass());
+                // System.err.println("QQQQQ " + key + " " + validation.get(key).getClass());
                 Object val = validation.get(key);
-                if (key.equals("xpos")) {
-                    List<String>paths = new ArrayList<>();
-                    for (String fn : (ArrayList<String>)val) {
-                        paths.add(makePath(mydir, fn));
+                try {
+                    if (key.equals("xpos")) {
+                        List<String> paths = new ArrayList<>();
+                        for (String fn : (ArrayList<String>) val) {
+                            paths.add(makePath(mydir, fn));
+                        }
+                        setValidXPOS(paths);
+                    } else if (key.equals("upos")) {
+                        List<String> paths = new ArrayList<>();
+                        //System.err.println("QQQQQ " + key + " " + val.getClass());
+                        for (String fn : (ArrayList<String>) val) {
+                            paths.add(makePath(mydir, fn));
+                        }
+                        setValidUPOS(paths);
+                    } else if (key.equals("deprels")) {
+                        List<String> paths = new ArrayList<>();
+                        for (String fn : (ArrayList<String>) val) {
+                            paths.add(makePath(mydir, fn));
+                        }
+                        setValidDeprels(paths, language);
+                    } else if (key.equals("features")) {
+                        List<String> paths = new ArrayList<>();
+                        for (String fn : (ArrayList<String>) val) {
+                            paths.add(makePath(mydir, fn));
+                        }
+                        setValidFeatures(paths, language, false);
+                    } else if (key.equals("validator")) {
+                        setValidator(makePath(mydir, (String) val));
+                    } else if (key.equals("shortcuts")) {
+                        setShortcuts(makePath(mydir, (String) val));
                     }
-                    setValidXPOS(paths);
-                }
-                else if (key.equals("upos")) {
-                    List<String>paths = new ArrayList<>();
-                    for (String fn : (ArrayList<String>)val) {
-                        paths.add(makePath(mydir, fn));
-                    }
-                    setValidUPOS(paths);
-                }
-                else if (key.equals("deprels")) {
-                    List<String>paths = new ArrayList<>();
-                    for (String fn : (ArrayList<String>)val) {
-                        paths.add(makePath(mydir, fn));
-                    }
-                    setValidDeprels(paths, language);
-                }
-                else if (key.equals("features")) {
-                    List<String>paths = new ArrayList<>();
-                    for (String fn : (ArrayList<String>)val) {
-                        paths.add(makePath(mydir, fn));
-                    }
-                    setValidFeatures(paths, language, false);
-                }
-                else if (key.equals("validator")) {
-                    setValidator(makePath(mydir, (String)val));
-                }
-                else if (key.equals("shortcuts")) {
-                    setShortcuts(makePath(mydir, (String)val));
+                } catch (ClassCastException ex) {
+                    System.err.format("*** UIConfig '%s': Invalid format for key 'validation: %s'\n", configfile, key);
                 }
             }
         }
