@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.27.0 as of 28th September 2024
+ @version 2.29.1 as of 9th November 2024
  */
 package com.orange.labs.parserclient;
 
@@ -370,7 +370,7 @@ public class ParserClient {
 //            for (ConllSentence cs : css) {
 //                System.out.println(cs.toString());
 //            }
-            ServeurHTTP sh = new ServeurHTTP(Integer.parseInt(args[argindex + 1]), cl, rootdir, debug);
+            ServeurHTTP sh = new ServeurHTTP(Integer.parseInt(args[argindex + 1]), cl, rootdir, debug, false);
         } catch (IOException /*| ConllException */ ex) {
             System.err.println("ERROR: " + ex.getMessage());
         }

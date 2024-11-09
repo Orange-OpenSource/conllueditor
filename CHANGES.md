@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.29.1
+* Fatal error if gui/ does not contain necessary html, css, js files and jquery libraries
+* test modified
+
 ## Version 2.29.0
 * new option to load UI configuration file added
 * new dependency to snakeyaml

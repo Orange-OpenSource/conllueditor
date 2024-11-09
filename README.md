@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * configuring the UI on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.29.0 (see [change history](CHANGES.md))
+Current version: 2.29.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -135,6 +135,7 @@ To avoid compilation, you can download the latest release, unzip the conlluedito
 ./gui/lib/jquery-ui-1.12.1/external/jquery/jquery.js
 ./gui/lib/jquery-ui-1.12.1/jquery-ui.min.js
 ```
+The server cannot be started without these library, an error message will show which files are missing.
 
 ### Update ConlluEditor
 

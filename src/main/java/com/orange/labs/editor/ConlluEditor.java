@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.0 as of 2nd November 2024
+ @version 2.29.1 as of 9th November 2024
  */
 package com.orange.labs.editor;
 
@@ -2695,7 +2695,7 @@ public class ConlluEditor {
         Option rootdir = Option.builder("r").longOpt("rootdir")
                 .argName("dir")
                 .hasArg()
-                .desc("root of fileserver (must include index.html and edit.js etc. for ConlluEditor)")
+                .desc("root of fileserver (must include index.html and edit.js etc. for ConlluEditor). Default: gui/")
                 .build();
         options.addOption(rootdir);
 
@@ -2843,7 +2843,7 @@ public class ConlluEditor {
 
             int port = Integer.parseInt(line.getArgList().get(1));
             // ServeurHTTP sh =
-            new ServeurHTTP(port, ce, line.getOptionValue(rootdir), debug);
+            new ServeurHTTP(port, ce, line.getOptionValue(rootdir), debug, false);
         } catch (ParseException e) {
             // oops, something went wrong
             //System.err.println("Command line error: " + exp.getMessage());

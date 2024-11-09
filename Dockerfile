@@ -18,6 +18,7 @@ RUN apk update && apk add  --no-cache bash
 WORKDIR /usr/src/ConlluEditor
 COPY target/ConlluEditor-${VERSION}-jar-with-dependencies.jar ./ConlluEditor.jar
 
+# be sure that JQ libraries etc are in gui/lib
 COPY gui .
 COPY dockerstart.sh .
 

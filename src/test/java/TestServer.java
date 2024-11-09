@@ -81,7 +81,7 @@ public class TestServer {
         folder = new File("testoutput");
         folder.mkdir();
 
-        ces = new ServeurHTTP(port, ce, "./gui", 0);
+        ces = new ServeurHTTP(port, ce, "./gui", 0, true);
     }
 
     @AfterEach

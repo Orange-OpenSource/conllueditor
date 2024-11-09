@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2024, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.24.0 as of 14th November 2023
+ @version 2.29.1 as of 9th November 2024
  */
 package com.orange.labs.httpserver;
 
@@ -40,6 +40,7 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -50,12 +51,15 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -99,7 +103,7 @@ public class ServeurHTTP {
      * @param port port to use
      * @throws IOException
      */
-    public ServeurHTTP(int port, /*ConlluEditor */ Object e, String rootdir, int debug) throws IOException {
+    public ServeurHTTP(int port, /*ConlluEditor */ Object e, String rootdir, int debug, boolean test) throws IOException {
         this.port = port;
         //this.ce = ce;
         this.debug = debug;
@@ -130,21 +134,44 @@ public class ServeurHTTP {
             s = URLDecoder.decode(s, "UTF-8");
             rootdir = s;
             System.err.println("calculated rootdir from .jar: " + s);
-        } else {
-            Path rdir = new File(rootdir).toPath();
-            if (!Files.exists(rdir)) {
-                throw new IOException(rootdir + " does not exist");
+        } //else {
+        
+        Path rdir = new File(rootdir).toPath();
+        if (!Files.exists(rdir)) {
+            throw new IOException(rootdir + " does not exist");
+        }
+        if (!Files.isDirectory(rdir)) {
+            throw new IOException(rootdir + " is not a directory");
+        }
+        if (!Files.exists(new File(rootdir, "needed_files.txt").toPath())) {
+            throw new IOException(rootdir + " does not contain 'needed_files.txt'");
+        }
+
+        if (!test) {
+            // when compiling the jq stuff might not yet be installed. This boolean permits
+            // to compile and run unit tests even if the JQ stuff is not jet installed in gui/lib
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(rootdir, "needed_files.txt")), StandardCharsets.UTF_8));
+            String line;
+
+            List<String> missing = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                if (!line.isEmpty() && !line.startsWith("#")) {
+                    if (!Files.exists(new File(rootdir, line).toPath())) {
+                        missing.add(line);
+                    }
+                }
             }
-            if (!Files.isDirectory(rdir)) {
-                throw new IOException(rootdir + " is not a directory");
-            }
-            if (!Files.exists(new File(rootdir, indexhtml).toPath())) {
-                throw new IOException(rootdir + " does not contain '" + indexhtml + "'");
-            }
-            if (!Files.exists(new File(rootdir, indexjs).toPath())) {
-                throw new IOException(rootdir + " does not contain '" + indexjs + "'");
+            if (missing.size() > 0) {
+                throw new IOException("html/js/css files missing in '" + rootdir + "'\n   " + String.join("\n   ", missing) + "\nrun bin/installJQ.sh to install missing libraries.");
             }
         }
+        if (!Files.exists(new File(rootdir, indexhtml).toPath())) {
+            throw new IOException(rootdir + " does not contain '" + indexhtml + "'");
+        }
+        if (!Files.exists(new File(rootdir, indexjs).toPath())) {
+            throw new IOException(rootdir + " does not contain '" + indexjs + "'");
+        }
+        //}
 
         server.createContext("/", new FileHandler(rootdir, indexhtml));
         server.setExecutor(null);
