@@ -50,7 +50,6 @@ depgraph.css
 edit.js
 index.css
 index.html
-legacy.html
 parse.css
 parse.html
 parse.js
