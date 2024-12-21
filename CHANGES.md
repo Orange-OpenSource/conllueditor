@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.29.2
+* corrected bug: "<" and ">" in comments are now correctly displayed
+
 ## Version 2.29.1
 * Fatal error if gui/ does not contain necessary html, css, js files and jquery libraries
 * test modified

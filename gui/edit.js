@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.0 as of 3rd November 2024
+ @version 2.29.2 as of 21st December 2024
  */
 
 
@@ -152,7 +152,7 @@ function getRaw(what, title) {
             //$('#rawtext').empty();
             //$('#showRawModalLabel').html(what);
             //console.log("DD " + JSON.stringify(data));
-            $('#rawtext').append(data.raw);
+            $('#rawtext').append(data.raw.replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
         }
     });
 }
@@ -1913,7 +1913,8 @@ function formatPhrase(item) {
 
 
         // display comments
-        $("#commentfield").append(item.comments)
+        var cc = item.comments.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        $("#commentfield").append(cc);
 
         // install svg download button
         downloadSVG("a2");
