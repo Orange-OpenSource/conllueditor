@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2024, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,27 +28,26 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.27.0 as of 28th September 2024
+ @version 2.29.3 as of 21st February 2025
 */
+
 
 
 .conllutable  {
     border-collapse: collapse;
     table-layout:fixed;
-    oomargin: 0 auto;
     margin-top: 0px;
+    white-space: preserve nowrap;
 }
 
 
 
 table.conllutable td {
     border: 1px solid #8a8;
-    oocolor: black;
 }
 
 table.conllutable th {
     border: 1px solid #8a8;
-    oocolor: black;
 }
 
 
@@ -70,8 +69,8 @@ table.conllutable th {
     text-align: right;
 }
 
-.iform, .ilemma, .iupos, .ixpos, .ihead, .ideprel, .ideps, .imisc {
-    width: 100%;
+.icol {
+   width: 100%;
 }
 
 /* make radiobutton look like normal buttons */

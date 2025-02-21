@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.29.3
+* error with large columns in table view corrected
+
 ## Version 2.29.2
 * corrected bug: "<" and ">" in comments are now correctly displayed
 
