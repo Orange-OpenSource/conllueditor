@@ -25,7 +25,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * configuring the UI on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.29.3 (see [change history](CHANGES.md))
+Current version: 2.29.4 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge

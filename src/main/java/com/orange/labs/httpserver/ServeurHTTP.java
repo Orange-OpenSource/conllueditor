@@ -162,7 +162,7 @@ public class ServeurHTTP {
                 }
             }
             if (missing.size() > 0) {
-                throw new IOException("html/js/css files missing in '" + rootdir + "'\n   " + String.join("\n   ", missing) + "\nrun bin/installJQ.sh to install missing libraries.");
+                throw new IOException("html/js/css files missing in '" + rootdir + "':\n   " + String.join("\n   ", missing) + "\nrun bin/installJQ.sh to install missing libraries.");
             }
         }
         if (!Files.exists(new File(rootdir, indexhtml).toPath())) {

@@ -4,7 +4,7 @@
     <!--
     This library is under the 3-Clause BSD License
 
-    Copyright (c) 2018-2024, Orange S.A.
+    Copyright (c) 2018-2025, Orange S.A.
 
     Redistribution and use in source and binary forms, with or without modification,
     are permitted provided that the following conditions are met:
@@ -32,13 +32,13 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.29.3 as of 21st February 2025
+    version 2.29.4 as of 21st February 2025
     -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>2.29.3</version>
+    <version>2.29.4</version>
     <packaging>jar</packaging>
 
     <properties>

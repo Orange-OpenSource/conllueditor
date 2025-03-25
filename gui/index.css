@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2023, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.28.0 as of 6th October 2024
+ @version 2.29.4 as of 25th March 2025
 */
 
 body {
@@ -63,6 +63,18 @@ h3 {
     margin-left: 5px;
 }
 
+/** needed to allow a triple click select only the sentence and not
+   the "n/m" and "(sent_id: ....)" as well */
+#sentencetext {
+   display: flex;
+   flex-wrap: wrap;
+}
+
+/* repare side-effect of the flex just above */
+#titre {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
 
 #compare {
     margin-left: 5px;
