@@ -222,7 +222,7 @@ docker stop conllueditor
 * `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud) in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`
 Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/feats.json) together with the option `--language`. This will highlight features which are not used with a correct UPOS and enable afeature edit mode in table view mode (see below)
 * `--language <lg code>` use feature and/or deprel definitions in the json files given to the `--features` and `--deprels` options. Without `--language` only the universal features and deprels are used.
-* `--include_unused` some features defined for a given languages in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json) are marked as unused. They will only be included to the list of valid features if this option is given.
+* `--include_unused` some features defined for a given language in [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json) are marked as unused. They will only be included to the list of valid features if this option is given.
 * `--validator <file>` validator configuration file (see section [validation](#validation) below)
 * `--shortcuts <file>` list of shortcut definitions (see section [shortcuts](#shortcuts) below, format, cf. [gui/multi-shortcuts.json](gui/hortcuts.json))
 * `--shortcutTimeout <milliseconds>` maximal tile allowed between to keys of a shortcut sequence
@@ -247,8 +247,9 @@ If the server has been (re)started reload the page in your navigator.
 
 Load the first sentence by clicking on `read sentence`: clicking on a word and then clicking on the head-word creates a dependency relation. An edit window opens to enter the relation a name. Existing relations can be renamed by clicking on their name. Clicking twice on a word deletes its eventual dependency relation and makes it root.
 To edit form, lemma etc. CTRL-click or double click on the word. For more help use the `Help` button.
-To delete a word, click ont it and hit the `delete` key.
+To delete a word, click on it and hit the `delete` key.
 
+By the way, if you think there are two many options and buttons visible on the main edit interface, consider [customizing the UI](#ui-configuration).
 
 ## Display modes
 
@@ -349,7 +350,7 @@ Unless earlier versions, the `# text ...` is no longer updated automatically, bu
 * `sentsplit id` 	split current sentence at word id (id will be in the second sentence). Dependency and Enhanced Dependency relations between the words before and after the split will be deleted.
 * `sentjoin` 	merge current sentence with following
 * `compose id length` 	create a multiword token (MWT). The inserted `n-m` line will contain the form of the word with `id`. In order to edit or delete a multiword token, click on the multiword bar at the bottom of the dependency tree or graph. Setting an end value of 0 deletes the multiword token.
-* `tomwt id form1 form2 [form3 ...]` 	Transform an existing word into a MWT. The new MWT keeps the form of the word transformed. All other columns are copied to the first member word, except the form which is `form1` from the command line. `form2` etc are used to initialize the form (and lemma) column of the other members of the MWT. All members are initially attached to the first member using the fixed depedency relation.
+* `tomwt id form1 form2 [form3 ...]` 	Transform an existing word into a MWT. The new MWT keeps the form of the word transformed. All other columns are copied to the first member word, except the form which is `form1` from the command line. `form2` etc are used to initialize the form (and lemma) column of the other members of the MWT. All members are initially attached to the first member using the fixed dependency relation.
 * `emptyinsert id form [lemma [upos [xpos]]]` 	add a new empty word after word with `id`. The new empty word gets the id `id.1`, if it is the first empty word at thihs position. If there is already an empty word, the new one will have the id `id.2` etc.
 * `emptydelete id.subid` 	delete empty word with id `id.subid`.
 
@@ -358,7 +359,7 @@ Unless earlier versions, the `# text ...` is no longer updated automatically, bu
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. Enhanced dependencies, which are identical to basic dependencies are shown in the LaTeX output if the button `show basic in enhanced` is activated.
-The `download` downloads the current image as a svg-file.
+The `download` downloads the current image as a `svg`-file.
 A click on the filename on the top of the screens opens a windows with some file
 statistics:
 
@@ -369,9 +370,9 @@ statistics:
 The search fields at the top of the screen can be used to search for forms, lemmas, UPOS, XPOS, deprels (or sequences of these), comments and sentences ids.
 
 * The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).   For example
-  * `the` finds next occurrance of _the_, including _them_ or _weather_.
-  * `" the "` finds next occurrance of the definite article _the_.
-  * `some of` finds next occurrance of _some of_ (no quotes necessary, since the search string does not start with a blank).
+  * `the` finds next occurrence of _the_, including _them_ or _weather_.
+  * `" the "` finds next occurrence of the definite article _the_.
+  * `some of` finds next occurrence of _some of_ (no quotes necessary, since the search string does not start with a blank).
   * The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
         Upos: `AUX/.*/VERB` looks for a sequence of words with upos tags _AUX_, _any_, _VERB_
 * The any search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e` (form, lemma, upos, xpos, deprel, enhanced deps) a `%` can be used to search for a word on more than one criterium.
@@ -432,7 +433,7 @@ Some examples can be found in [grewtests.txt](grewtests.txt)
 
 **legacy, will be redrawn in a future version**
 This mode allows you to input a tree (using `_` as wildcards and regular expressions).
-Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid Conllu(plus) sentence with a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions (N.B. in this mode the `?`-key is no longer a hot-key to display shortcuts).
+Clicking the loop symbol searches for a sentence which match the subtree. The subtree must be a valid CoNLL-U(plus) sentence with a single root. The `_` character matches any value in the sentence. Columns are interpreted as regular expressions (N.B. in this mode the `?`-key is no longer a hot-key to display shortcuts).
 E.g.
 
 ```
@@ -442,7 +443,7 @@ E.g.
 3	_	NOUN	_	0	_
 ```
 
-matches any sentences wich contains a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
+matches sentences which contain a `NOUN` which as at least two dependants: A `AD.*` (i.e. `ADP` or `ADJ`) and a `DET` which has the feature `Gender=Fem`. Currently the word order is ignored.
 
 ![Subtree search](doc/subtreesearch.png)
 
@@ -492,7 +493,7 @@ If the first line in the subtree window is a valid CoNLL-U Plus column definitio
 
 # Mass Editing
 
-A simple languages to modify tokens if a (complex condition is met) see [Mass Editing](doc/mass_editing.md)
+A simple language to modify tokens if a (complex condition is met) see [Mass Editing](doc/mass_editing.md)
 
 ## Metadata editing
 
@@ -556,7 +557,7 @@ generates
 ...
 ```
 
-No semantic/plausibility check is performed. E.g. `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD` will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense anymore.
+No semantic/plausibility check is performed. E.g. `bin/conlluconvert.sh <inputfile>  FORM,DEPREL,HEAD` will happily delete the `ID` column from the output file, so the `HEAD` column does not make much sense any more.
 
 
 # Shortcuts
@@ -625,9 +626,9 @@ script: /path/to/UniversalDependencies/tools/validate.py --lang cy --max-err 0 -
 
 # Validation rules
 
-In order to check somme language dependend validity (like adjective - noun agreement) a set of conditions can be specified (using the syntax as in [Mass Editing](doc/mass_editing.md)) can be used.
+In order to check some language dependent validity (like adjective - noun agreement) a set of conditions can be specified (using the syntax as in [Mass Editing](doc/mass_editing.md)) can be used.
 
-E.g. if the current word has a nsubj Deprel, is a noun ou proper noun, has verb as head which is finite, than the verb must have the feature Person:3
+E.g. if the current word has a `nsubj` Deprel, is a noun or proper noun, has verb as head which is finite, than the verb must have the feature Person:3
 ```
 Deprel:nsubj and (Upos:NOUN or Upos:PROPN) and head(Upos:VERB) and head(Feat:VerbForm=Fin) == head(Feat:Person:3)
 ```
@@ -684,7 +685,7 @@ ui:
 ```
 Use it with the option `--uiconfig uiconfig.yml`
 
-The values in the `validation:` section are the same as for the options `--upos`. These option, if present too, override the values given in the `uiconfig.yml` file. Using this example just above, ConlluEditor opens loke this:
+The values in the `validation:` section are the same as for the options `--upos`. These option, if present too, override the values given in the `uiconfig.yml` file. Using this example just above, ConlluEditor opens like this:
 
 ![Custom UI](doc/custom-ui.png)
 
@@ -767,7 +768,7 @@ The `parser info` buttons provides information given by the parser server
 If the tokenizer segments the input in several sentences, all we be displayed.
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
-LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a svg-file.
+LaTeX output includes MWE units as well as enhanced dependencies. The `download` downloads the current image as a `svg`-file.
 
 
 # File Comparison
@@ -792,7 +793,7 @@ The comparison mode works in the flat view too.
 
 # Transliteration
 
-The MISC columns provides a key `Translit=` for a transliteration of the word form into tha roman alphabet (including diacritics). The python script [bin/transliterate.py](bin/transliterate.py) will read any CoNLL-U file and add a `Tranlist=<value>` field to the MISC column if not already present. The transliteration rules are specified in [bin/translit.json](bin/translit.json).
+The MISC columns provides a key `Translit=` for a transliteration of the word form into the Latin alphabet (including diacritics). The python script [bin/transliterate.py](bin/transliterate.py) will read any CoNLL-U file and add a `Tranlist=<value>` field to the MISC column if not already present. The transliteration rules are specified in [bin/translit.json](bin/translit.json).
 
 usage:
 
@@ -810,7 +811,7 @@ arguments:
  * `--noforms`             do not transliterate forms
  * `--raw`                 raw text, transliterate everything
  * `--overwrite`           overwrite existing transliteration in MISC:Translit and in # translit
- * `--sentence`            add sentence transliteration by concatening forms
+ * `--sentence`            add sentence transliteration by concatenating forms
 
 
 For the time being the following scripts/languages are covered
@@ -842,7 +843,7 @@ In some cases the transliteration can be erroneous, since this script does not t
 
 # Find similar Sentences
 
-When editing large treebanks it is likely that verys similar or even identical sentences are in the train/validation or test corpora
+When editing large treebanks it is likely that very similar or even identical sentences are in the train/validation or test corpora
 There is a tool which helps to identify these sentences.
 
 The following command shows all sentences which appear more than once in any of the given files
@@ -873,7 +874,7 @@ For Form the Levenshtein distance is calculated on characters, whereas for all o
 is calculate on a token basis.
 
 Since every sentence will be compared once with every other sentence,
-this will take some time for CoNLL-U files wich many sentences and only a single thread and maximal distances != 0
+this will take some time for CoNLL-U files with many sentences and only a single thread and maximal distances != 0
 
 # Known bugs
 * not all possible errors which users can make are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.

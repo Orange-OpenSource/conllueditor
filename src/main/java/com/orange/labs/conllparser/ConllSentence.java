@@ -741,7 +741,7 @@ public class ConllSentence {
         if (getText() != null) {
             sb.append("# text = ").append(getText().replaceAll("\n", " ").trim()).append('\n');
         } else {
-            // do not adde "# text = ..." if absent in file and not added by user
+            // do not add "# text = ..." if absent in file and not explicitely added by user
             //sb.append("# text = ").append(getSentence().replaceAll("\n", " ").trim()).append('\n');
         }
 
