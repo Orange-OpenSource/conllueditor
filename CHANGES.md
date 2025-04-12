@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.30.0
+* search sentences with line number
+* new tests
+
 ## Version 2.29.4
 * minor change in CSS (to allow triple click to copy the current sentence)
 

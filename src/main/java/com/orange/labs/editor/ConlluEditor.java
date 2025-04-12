@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2024, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.1 as of 9th November 2024
+ @version 2.30.0 as of 12th April 2025
  */
 package com.orange.labs.editor;
 
@@ -769,6 +769,10 @@ public class ConlluEditor {
 
     /**
      * get raw text; Latex, conllu, sdparse or the output of the validation
+     * @param raw output format
+     * @param currentSentenceId
+     * @param all_enhanced if true also enhanced dependencies which are merely a copy ob base dependencies is shown
+     * @return raw text as LaTeX, CoNLL-U or SD parse
      */
     public String getraw(Raw raw, int currentSentenceId, boolean all_enhanced) {
         JsonObject solution = new JsonObject();
@@ -923,6 +927,7 @@ public class ConlluEditor {
           nect                       next sentence
           prec                       preceeding sentence
           read <num>                 return sentence <num>
+          line <num>                 return sentence which contains line number <num>
           findsendid "true" <regex>  find sentence with sentid matching regex. if 2nd argument == "true", search backwards
           findcomment "true" <regex> find sentence with comment matching regex. if 2nd argument == "true", search backwards
           findword "true" <string>   find string in sentence (may include spaces). if 2nd argument == "true", search backwards
@@ -1590,11 +1595,32 @@ public class ConlluEditor {
                 }
                 return formatErrMsg("DepRel not found «" + f[2] + "»", currentSentenceId);
 
+            } else if (command.startsWith("line ")) {
+                // find sentence in function of linenumber in source file
+                String[] f = command.trim().split(" +");
+                if (f.length != 2) {
+                    return formatErrMsg("INVALID command «" + command + "»", currentSentenceId);
+                }
+                int ln = Integer.parseInt(f[1]);
+                int [] sn_offset = cfile.getSentence_with_line(ln);
+                if (sn_offset == null) {
+                    return formatErrMsg("linenumber beyond EOF «" + command + "»", currentSentenceId);
+                } else {
+                    csent = cfile.getSentences().get(sn_offset[0]);
+                    currentSentenceId = sn_offset[0];
+                    int highlighted_word = ln - sn_offset[1] - sn_offset[2] + 1; // given line number - first line number of sentence in file - comment-length
+                    if (highlighted_word > 0) {
+                        ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, highlighted_word);
+                        return returnTree(currentSentenceId, csent, hl);
+                    } else {
+                        return returnTree(currentSentenceId, csent);
+                    }
+                }
+
             } else if (command.startsWith("read ")) {
                 String[] f = command.trim().split(" +");
                 if (f.length != 2) {
                     return formatErrMsg("INVALID command «" + command + "»", currentSentenceId);
-
                 }
                 int sn;
                 if (f[1].equals("last")) {

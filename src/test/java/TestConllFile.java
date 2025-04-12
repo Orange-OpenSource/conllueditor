@@ -618,5 +618,4 @@ public class TestConllFile {
                     expected, e.getMessage());
         }
     }
-
 }

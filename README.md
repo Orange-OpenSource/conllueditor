@@ -9,8 +9,9 @@ The editor provides the following functionalities:
 * join/split/delete words (to correct tokenization errors)
 * join/split sentences (to correct segmentation errors)
 * undo/redo (partially)
-* search: forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these,
+* [search](#searching): forms, lemmas, UPOS, XPOS, deprels, sentences IDs and comments, sequences of any of these,
       searching for subtrees, importing subtrees from current sentence, sd-parse support
+* [searching by source file line numbers](#search-by-source-file-line-number)
 * edit non-CoNLL-U columns in a subset of [CoNLL-U plus files](http://universaldependencies.org/ext-format.html)
 * create multiword tokens from existing words or add a MWT to contract two ore more existing words
 * git support
@@ -18,14 +19,14 @@ The editor provides the following functionalities:
   the [doc/deptree.sty](doc/deptree.sty) class, see [documentation](doc/deptree-doc.pdf))
 * prohibits invalid (cyclic) trees
 * Three edit modes: dependency trees, dependency «hedges» and a table edit mode
-* mass editing: modify tokens if a (complex) condition is satisfied
+* [mass editing](#mass-editing): modify tokens if a (complex) condition is satisfied
 * validation (using implications: _if conditions1 true then conditions2 must be true_)
 * sentence metadata editing
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
-* configuring the UI on order to hide unneeded functionalities which otherwise clutter the UI
+* [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.29.4 (see [change history](CHANGES.md))
+Current version: 2.30.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -389,6 +390,16 @@ Other search modes can be chosen with the search select bar (top rop right)
 * complex search and search and replace
 * match like search (cf. [Grew Match](http://universal.grew.fr/?corpus=UD_English-ParTUT@2.11))
 * no search (to have less headers on top of the GUI)
+
+## Search by (source file) line number
+
+The search field on the top right permits to search a sentence by givening a line number of the edited `.conlu` file.
+The sentences in which this line number occurs is displayed. If the line number is not a comment line, the word which is on the line is highlighted.
+This can be useful to find lines output by the various UD validators. 
+If sentences are modified at change length (by splitting a word or joining two words, or by adding or deleting comment lines, the line numbers are adapted.
+Type in line number in field on the top right and click `line number`:
+
+![Search by line number](doc/search_line_number.png)
 
 ## Complex search and search and replace
 

@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2024, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.27.0 as of 28th September 2024
+ @version 2.30.0 as of 12th April 2025
 */
 package com.orange.labs.conllparser;
 
@@ -62,10 +62,7 @@ public class ConllSentence {
     protected Map<Integer, List<ConllWord>> emptywords = null; // main id (before "."): empty nodes
     protected Map<Integer, ConllWord> contracted = null; // contracted words (MWT) startid (before hyphen): word
 
-    //private final int shift; // il y a des fichiers conll qui ont des colonnes supplémentaires AVANT la colonne id il faut les ignorer; shift est le nombre des colonnes à gauche à ignorer
-    //private boolean hasAnnot = false; // au moins une annotation dans la phrase
     private boolean hasEnhancedDeps = false; // at least one word with enhanced deps (in this case we add basic deps to deps in conllu output)
-    //private Map<String, ConllWord> frames; // collect frame names of targets of this sentence
 
     protected ConllWord head = null; // rempli par makeTrees(): premiere ou seule tete
     protected List<ConllWord> headss = null; // rempli par makeTrees(): toutes les tetes
@@ -83,9 +80,11 @@ public class ConllSentence {
 
     // store preceding comments
     private List<String> comments = null;
-    // on lit des commentaires dans le fichier CONLL qui sont uniquement utiles pour Gift
-    //private boolean showgrana = true;
-    //private boolean showID = true;
+
+    // needed to find a sentences with line number. The empty line at the end of a CoNLL-U block is counted as well
+    private int number_of_conllu_lines = 0;
+    private int number_of_comments = 0; // includes newpar, newdoc etc
+    private boolean is_modified = true;
 
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
     Map<String, Integer> columndefs = null;
@@ -102,7 +101,6 @@ public class ConllSentence {
      */
     public ConllSentence(List<AbstractMap.SimpleEntry<Integer, String>> conlllines, Map<String, Integer> columndefs) throws ConllException {
         //17	la	le	DET	GN-D	NOMBRE=SINGULIER|GENRE=FEMININ	0	_	_	_
-        //this.shift = shift;
         this.columndefs = columndefs;
         parse(conlllines);
     }
@@ -120,7 +118,6 @@ public class ConllSentence {
 
     public ConllSentence(List<ConllWord> cw) {
         words = cw;
-        //frames = new HashMap<>();
         //hasEnhancedDeps = words.get(0).isBasicdeps_in_ed_column();
 
         comments = new ArrayList<>();
@@ -134,13 +131,12 @@ public class ConllSentence {
     }
 
     /**
-     * cloner une phrase (sans annotations et dépendances)
+     * cloner une phrase (sans dépendances)
      *
      * @param orig sentence to be cloned
      */
     public ConllSentence(ConllSentence orig) {
         words = new ArrayList<>();
-        //frames = new HashMap<>();
         comments = new ArrayList<>(orig.comments);
         hasEnhancedDeps = orig.hasEnhancedDeps;
         for (ConllWord word : orig.getWords()) {
@@ -186,10 +182,8 @@ public class ConllSentence {
 
     private void parse(List<AbstractMap.SimpleEntry<Integer, String>> conlllines) throws ConllException {
         words = new ArrayList<>();
-        //frames = new HashMap<>();
         comments = new ArrayList<>();
         hasEnhancedDeps = false;
-        //Set<Annotation> lastAnnots = null;
         List<String> lastnonstandardinfo = null;
         Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
 
@@ -236,7 +230,7 @@ public class ConllSentence {
                     continue;
                 }
 
-                ConllWord w = new ConllWord(line, lastnonstandardinfo /*lastAnnots*/, columndefs, cline.getKey());
+                ConllWord w = new ConllWord(line, lastnonstandardinfo, columndefs, cline.getKey());
                 w.setMysentence(this);
 
                 if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
@@ -293,6 +287,7 @@ public class ConllSentence {
         ew.add(emptyword);
         emptyword.setSubId(ew.size());
         emptyword.setMysentence(this);
+        is_modified = true;
     }
 
     public Map<String, Integer> getColumndefs() {
@@ -336,49 +331,20 @@ public class ConllSentence {
                     }
                 }
             }
+            is_modified = true;
         }
     }
 
     public void setComments(List<String> co) {
         if (co != null) {
             comments = co;
+            is_modified = true;
         }
     }
 
     public int size() {
         return words.size();
     }
-
-    /*
-    // informations utilisé par Gift pour savoir si on affiche ou pas les IDs et les span (grana)
-    public void setShowgrana(boolean showgrana) {
-        this.showgrana = showgrana;
-    }
-
-    public void setShowID(boolean showID) {
-        this.showID = showID;
-    }
-
-    public boolean isShowgrana() {
-        return showgrana;
-    }
-
-    public boolean isShowID() {
-        return showID;
-    }
-    */
-
-//    public boolean isAnnotated() {
-//        return hasAnnot;
-//    }
-
-//    public boolean hasTargets() {
-//        return !frames.isEmpty();
-//    }
-//
-//    public Map<String, ConllWord> getFrameNames() {
-//        return frames;
-//    }
 
     public ConllWord getHead() {
         return head;
@@ -455,8 +421,9 @@ public class ConllSentence {
     }
 
     /**
-     * split the sentence in two, truncate this, and return the rest as a new
-     * sentence
+     * split the sentence in two, truncate this, and return the rest as a new sentence
+     * @param id first word in split sentence
+     * @return the new sentence, split form the current one
      */
     public ConllSentence splitSentence(int id) {
         id--;
@@ -601,6 +568,7 @@ public class ConllSentence {
         text = getSentence();
         newsent.normalise();
         newsent.setText(newsent.getSentence());
+        is_modified = true;
         return newsent;
     }
 
@@ -624,6 +592,7 @@ public class ConllSentence {
             }
         }
         text = getSentence();
+        is_modified = true;
     }
 
     /**
@@ -687,6 +656,7 @@ public class ConllSentence {
 
         // supprimer les mots devenus inutiles
         deleteUnusedWords();
+        is_modified = true;
     }
 
     public void deleteUnusedWords() {
@@ -699,15 +669,9 @@ public class ConllSentence {
                 it.remove();
             }
         }
+        is_modified = true;
     }
 
-    /**
-     * next call to toString() prefixes columns cut off with shift parameter in
-     * Constructor
-     */
-//    public void nextToStringComplete() {
-//        nextToStringcomplete = true;
-//    }
     /**
      * format the sentence in CoNLL-U format
      */
@@ -1184,6 +1148,8 @@ public class ConllSentence {
     /**
      * return a word or null. This method returns normal word, a contracted word
      * or an empty word
+     * @param id id of the word
+     * @return the ConllWord instance
      */
     public ConllWord getWord(String id) {
         if (id.contains(".")) {
@@ -1202,6 +1168,8 @@ public class ConllSentence {
 
     /**
      * return word with ident i. No empty or contracted word
+     * @param i the position in the sentence
+     * @return ConllWord instance
      */
     public ConllWord getWord(int i) {
         return words.get(i - 1);
@@ -1218,6 +1186,7 @@ public class ConllSentence {
      */
     public void addWord(ConllWord cw, int id) throws ConllException {
         cw.setMysentence(this);
+        is_modified = true;
         if (cw.getTokentype() == ConllWord.Tokentype.CONTRACTED) {
             if (contracted == null) {
                 contracted = new HashMap<>();
@@ -1283,6 +1252,7 @@ public class ConllSentence {
     }
 
     public void deleteContracted(int id) throws ConllException {
+        is_modified = true;
         if (contracted != null) {
             ConllWord removed = contracted.remove(id);
             removed.setMysentence(null);
@@ -1325,11 +1295,14 @@ public class ConllSentence {
         }
         normalise(1);
         makeTrees(null);
+        is_modified = true;
         return true;
     }
 
     /**
      * returns true, if the word is part of a MWT
+     * @param id of words we want to cgeck whether it is part of a MWT
+     * @return true if this is the case
      */
     public boolean isPartOfMWT(int id) {
         if (contracted == null) {
@@ -1415,6 +1388,7 @@ public class ConllSentence {
             removed.setMysentence(null);
             normalise(1);
             makeTrees(null);
+            is_modified = true;
         }
     }
 
@@ -1471,6 +1445,7 @@ public class ConllSentence {
 
             normalise(1);
             makeTrees(null);
+            is_modified = true;
         }
     }
 
@@ -2039,18 +2014,22 @@ public class ConllSentence {
 
     public void setNewpar(String newpar) {
         this.newpar = newpar;
+        is_modified = true;
     }
 
     public void setNewdoc(String newdoc) {
         this.newdoc = newdoc;
+        is_modified = true;
     }
 
     public void setSentid(String sentid) {
         this.sentid = sentid;
+        is_modified = true;
     }
 
     public void setTranslit(String translit) {
         this.translit = translit;
+        is_modified = true;
     }
 
     public String getNewpar() {
@@ -2106,6 +2085,7 @@ public class ConllSentence {
                 errors++;
             }
         }
+        is_modified = true;
         if (errors > 0) {
             return false;
         }
@@ -2117,7 +2097,7 @@ public class ConllSentence {
      * Parts of contracted words copy the values form the MWT
      *
      * @param start offset of first word
-     * @param return the offset after the last word (including SpaceAfter)
+     * @return the offset after the last word (including SpaceAfter)
      */
     public int calculateOffsets(int start) {
         for (ConllWord cw : words) {
@@ -2163,8 +2143,7 @@ public class ConllSentence {
      * change all words of the sentence which match the condition
      *
      * @param condition a condition like (UPOS:NOUN and Lemma:de.*)
-     * @param newValues a list of new values FORM:"value" (as defined in
-     * Replacements.g4)
+     * @param newvalues a list of new values FORM:"value" (as defined in Replacements.g4)
      * @param wordlists here we for put contents of files in conditions like Lemma:#filename.txt
      */
     public Set<ConllWord> conditionalEdit(CheckCondition condition, List<GetReplacement> newvalues, Map<String, Set<String>> wordlists, StringBuilder warnings) throws ConllException {
@@ -2183,6 +2162,7 @@ public class ConllSentence {
                 applyEdits(cw, newvalues, warnings);
             }
         }
+        is_modified = true;
         if (contracted != null) {
             for (ConllWord cw : contracted.values()) {
                 if (cw.matchCondition(condition, wordlists)) {
@@ -2244,6 +2224,7 @@ public class ConllSentence {
      * @param warnings
      */
     void applyEdits(ConllWord cw, List<GetReplacement> newvalues, StringBuilder warnings) throws ConllException {
+        is_modified = true;
         for (GetReplacement val : newvalues) {
             //String[] elems = val.split(":", 2);
             //if (elems.length == 2) {
@@ -2464,5 +2445,31 @@ public class ConllSentence {
         } else {
             return false;
         }
+    }
+
+    /** count the length of this sentence in terms of CoNLL-U file lines. Will recount if the sentence has been modified
+     *
+     * @return number of lines in CoNLL-U file lines
+     */
+    public int get_source_length() {
+        if (is_modified) {
+            number_of_comments = comments.size();
+            if (newpar != null) number_of_comments++;
+            if (newdoc != null) number_of_comments++;
+            if (translit != null) number_of_comments++;
+            if (translations != null) {
+                number_of_comments += translations.size();
+            }
+            number_of_comments += 2; // add sent_id and text
+
+            number_of_conllu_lines = words.size();
+            if (emptywords != null) number_of_conllu_lines += emptywords.size();
+            if (contracted != null) number_of_conllu_lines += contracted.size();
+            is_modified = false;
+        }
+        return number_of_comments + number_of_conllu_lines + 1;
+    }
+    public int get_comment_length() {
+        return number_of_comments;
     }
 }

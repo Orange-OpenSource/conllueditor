@@ -441,14 +441,14 @@ function getServerInfo() {
             } else {
                 $('#save').hide();
             }
-            
+
             // deactivate buttons as defined in uiconfig.json
             console.log("UI", data.uiconfig);
             if (data.uiconfig) {
-                
+
                 if (data.uiconfig.right2left_show === "hidden") {
                     $("#r2l").hide();
-                } 
+                }
                 if (data.uiconfig.right2left_status === "active") {
                     showr2l = true;
                     $("#r2l").addClass('active');
@@ -456,10 +456,10 @@ function getServerInfo() {
                     showr2l = false;
                     $("#r2l").removeClass('active');
                 }
-                
+
                 if (data.uiconfig.features_show === "hidden") {
                     $("#feat2").hide();
-                } 
+                }
                 if (data.uiconfig.features_status === "active") {
                     showfeats = true;
                     $("#feat2").addClass('active');
@@ -477,7 +477,7 @@ function getServerInfo() {
                     showmisc = false;
                     $("#misc2").removeClass('active');
                 }
-                
+
                 if (data.uiconfig.display === "flat") {
                     graphtype = 2;
                     $("#flat3").val("flat");
@@ -488,7 +488,7 @@ function getServerInfo() {
                     graphtype = 1;
                     $("#flat3").val("tree");
                 }
-                
+
                 if (data.uiconfig.searchmode === "simple") {
                      $("#searchmode").val("simple");
                 }
@@ -503,12 +503,12 @@ function getServerInfo() {
                 }
                 $("#searchmode").click();
 
-                
+
                 if (data.uiconfig.shortcuts === "show") {
                     showshortcuthelp = false;
                     ToggleShortcutHelp();
                 }
-                
+
                 if (data.uiconfig.nodewidth_show === "hidden") {
                     $("#adaptwidth").removeClass('onlyWithTree');
                     $("#adaptwidth").hide();
@@ -521,8 +521,8 @@ function getServerInfo() {
                     $("#adaptwidth").click();
                     //$("#misc2").removeClass('active');
                 }
-                
-                
+
+
                 if (data.uiconfig.latex === "hidden") {
                     $("#latex").removeClass('onlyWithTree');
                     $("#latex").hide();
@@ -539,7 +539,7 @@ function getServerInfo() {
                     $("#json").removeClass('onlyWithTree');
                     $("#json").hide();
                 }
-                
+
             }
             // set version number to logo (shown if mouse hovers on the logo)
             //$('#logo').attr("title", data.version);
@@ -2547,6 +2547,8 @@ $(document).ready(function () {
             inputtext = "read last";
         } else if (this.id === "lire") {
             inputtext = "read " + ($("#sentid").val() - 1);
+        } else if (this.id === "lireln") {
+            inputtext = "line " + ($("#sentid_by_ln").val());
         } else if (this.id === "modifier") {
             var inputtext = "mod " + $("#mods").val();
         } else if (this.id === "valid") {

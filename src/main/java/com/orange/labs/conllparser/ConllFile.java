@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2024, Orange S.A.
+ Copyright (c) 2018-2025, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.27.0 as of 28th September 2024
+ @version 2.30.0 as of 12th April 2025
 */
 package com.orange.labs.conllparser;
 
@@ -82,36 +82,23 @@ public class ConllFile {
      * open CoNLL-U File and read its contents
      *
      * @param file CONLL file
-     * @param ignoreSentencesWithoutAnnot ignore sentences which do not have any
-     * information above columns 12
-     * @param ignoreSentencesWithoutTarget ignore sentences which do not have
-     * any target as annotation
      * @throws IOException
-     * @throws com.orange.labs.nlp.conllparser.ConllWord.ConllWordException
+     * @throws ConllException
      */
-    public ConllFile(File file/*, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget*/) throws IOException, ConllException {
+    public ConllFile(File file) throws IOException, ConllException {
         this.file = file;
         FileInputStream fis = new FileInputStream(file);
-        parse(fis /*, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget*/);
+        parse(fis);
         fis.close();
     }
 
     /**
-     *
-     * @param filecontents contenu du fichier COLL
-     * @param ignoreSentencesWithoutAnnot ignore sentences which do not have any
-     * information above columns 12
-     * @param ignoreSentencesWithoutTarget ignore sentences which do not have
-     * any target as annotation
+     * @param file
+     * @param cs class to use instead of ConllSentence (must be a subclass)
+
      * @throws ConllException
      * @throws IOException
      */
-//    public ConllFile(String filecontents/*, boolean ignoreSentencesWithoutAnnot, boolean ignoreSentencesWithoutTarget*/) throws ConllException, IOException {
-//        this.file = new File("__contents__");
-//        InputStream inputStream = new ByteArrayInputStream(filecontents.getBytes(StandardCharsets.UTF_8));
-//        parse(inputStream/*, ignoreSentencesWithoutAnnot, ignoreSentencesWithoutTarget*/);
-//    }
-
     public ConllFile(File file, Class<? extends ConllSentence> cs) throws IOException, ConllException {
         this.file = file;
         conllsentenceSubclass = cs;
@@ -314,6 +301,28 @@ public class ConllFile {
 
     public List<ConllSentence> getSentences() {
         return sentences;
+    }
+
+    /** get the sentence which contains the linenumber ln (in the conllu file).
+     * if any sentence is modified we recalculate. For long files this can take some time
+     * @param ln the line number for which we search the sentence
+     * @return an arry of sentence number, position of the given line in the sentence, comments length
+    */
+    public int[] getSentence_with_line(int ln) {
+        int ends_after = 0;
+        int first_line = 1;
+        int sn = 0;
+        for (ConllSentence csent : sentences) {
+            ends_after += csent.get_source_length();
+            if (ends_after >= ln) {
+                int[] sn_offset = {sn, first_line, csent.get_comment_length()};
+
+                return sn_offset;
+            }
+            first_line = ends_after + 1;
+            sn++;
+        }
+        return null;
     }
 
     public void addSentences(List<ConllSentence> s) {

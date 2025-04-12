@@ -1,0 +1,198 @@
+{
+  "sentenceid": 17,
+  "maxsentence": 19,
+  "text": "Dáselle nova redacción a o punto 2",
+  "sentence": "Dáselle nova redacción a o punto 2",
+  "previous_modification": 0,
+  "length": 9,
+  "sent_id": "gl_ctg-ud-dev.conllu 625",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 1,
+      "id": 1,
+      "form": "Dá",
+      "lemma": "dar",
+      "misc": [
+        {
+          "name": "Treeler",
+          "val": "sentence"
+        },
+        {
+          "name": "SpaceAfter",
+          "val": "No"
+        }
+      ],
+      "xpos": "VMIP3S0",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 2,
+          "archeight": 1,
+          "id": 2,
+          "form": "se",
+          "lemma": "se",
+          "misc": [
+            {
+              "name": "Treeler",
+              "val": "suj"
+            },
+            {
+              "name": "SpaceAfter",
+              "val": "No"
+            }
+          ],
+          "xpos": "PP3CN000",
+          "upos": "PRON",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 3,
+          "archeight": 2,
+          "id": 3,
+          "form": "lle",
+          "lemma": "lle",
+          "misc": [
+            {
+              "name": "Treeler",
+              "val": "suj"
+            }
+          ],
+          "xpos": "PP3CSD00",
+          "upos": "PRON",
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 5,
+          "archeight": 3,
+          "id": 5,
+          "form": "redacción",
+          "lemma": "redacción",
+          "misc": [
+            {
+              "name": "Treeler",
+              "val": "cd"
+            }
+          ],
+          "xpos": "NCFS000",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 1,
+              "id": 4,
+              "form": "nova",
+              "lemma": "novo",
+              "misc": [
+                {
+                  "name": "Treeler",
+                  "val": "s.a"
+                }
+              ],
+              "xpos": "AQ0FS0",
+              "upos": "ADJ",
+              "deprel": "amod",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        },
+        {
+          "position": 6,
+          "archeight": 4,
+          "id": 6,
+          "form": "a",
+          "lemma": "a",
+          "misc": [
+            {
+              "name": "Treeler",
+              "val": "ci"
+            }
+          ],
+          "xpos": "SPS00",
+          "upos": "ADP",
+          "deprel": "iobj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 8,
+              "archeight": 2,
+              "id": 8,
+              "form": "punto",
+              "lemma": "punto",
+              "misc": [
+                {
+                  "name": "ToDo",
+                  "val": "nmod"
+                },
+                {
+                  "name": "Treeler",
+                  "val": "sn"
+                }
+              ],
+              "xpos": "NCMS000",
+              "upos": "NOUN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 7,
+                  "archeight": 1,
+                  "id": 7,
+                  "form": "o",
+                  "lemma": "o",
+                  "misc": [
+                    {
+                      "name": "Treeler",
+                      "val": "spec"
+                    }
+                  ],
+                  "xpos": "DA0MS0",
+                  "upos": "DET",
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 9,
+                  "archeight": 1,
+                  "id": 9,
+                  "form": "2",
+                  "lemma": "2",
+                  "misc": [
+                    {
+                      "name": "Treeler",
+                      "val": "sn"
+                    }
+                  ],
+                  "xpos": "Z",
+                  "upos": "NUM",
+                  "deprel": "nmod",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "Treeler\u003dsentence|SpaceAfter\u003dNo",
+  "comments": "sentence 17\nused to test adding MWT 1-3 and 6-7\n",
+  "canUndo": false,
+  "canRedo": false
+}

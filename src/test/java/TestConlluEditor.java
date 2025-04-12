@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2024, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.26.0 as of 1st September 2024
+ @version 2.30.0 as of 12th April 2025
 */
 
 import com.google.gson.Gson;
@@ -221,7 +221,6 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("CoNLL-U output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
                 FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-
     }
 
 
@@ -732,7 +731,6 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("Invalid translation box\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
         FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
         FileUtils.readFileToString(out, StandardCharsets.UTF_8));
-
     }
 
 
@@ -775,6 +773,84 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("read return code incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+
+    @Test
+    public void test23findLN() throws IOException {
+        name("find by line number");
+        ce.setCallgitcommit(false);
+        ce.setSaveafter(1);
+        String rtc = ce.process("line 305", 1, "", 0);
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("read.json");
+        File out = new File(folder, "find_ln1.json");
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("find_ln1.json");
+
+        Assert.assertEquals(String.format("read return code incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+
+
+        // use a line number of a line after the comments (to check highlighting)
+        rtc = ce.process("line 313", 1, "", 0);
+         jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("read.json");
+        out = new File(folder, "find_ln2.json");
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        ref = this.getClass().getResource("find_ln2.json");
+
+        Assert.assertEquals(String.format("read return code incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+
+
+        // add a comment to an earlier sentence to check whether the same line returns the sentences before
+        rtc = ce.process("mod comments a first comment line\na second one\nand a third", 2, "", 0);
+        rtc = ce.process("line 305", 1, "", 0);
+        jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("read.json");
+        out = new File(folder, "find_ln3.json");
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        ref = this.getClass().getResource("find_ln3.json");
+
+        Assert.assertEquals(String.format("read return code incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test23findLN_badLN() throws IOException {
+        name("find by line number (bad line number)");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix(".202");
+        ce.setSaveafter(1);
+
+        String rtc = ce.process("line 4405", 1, "", 0);
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "invalidLineNumber.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("invalidLineNumber.json");
+
+        Assert.assertEquals(String.format("Invalid line number\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+        FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+        FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
 

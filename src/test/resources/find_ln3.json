@@ -1,0 +1,965 @@
+{
+  "sentenceid": 16,
+  "maxsentence": 19,
+  "text": "Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.",
+  "sentence": "Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.",
+  "previous_modification": 0,
+  "length": 28,
+  "sent_id": "sv-ud-train-767",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 11,
+      "id": "10.1",
+      "token": "empty",
+      "form": "köper",
+      "lemma": "köpa",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        },
+        {
+          "name": "Voice",
+          "val": "Act"
+        }
+      ],
+      "xpos": "VB|PRS|AKT",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "3",
+          "position": 3,
+          "deprel": "conj"
+        },
+        {
+          "id": "22",
+          "position": 24,
+          "deprel": "advcl:om"
+        }
+      ],
+      "deprel": "_",
+      "chunk": 0,
+      "type": "",
+      "indexshift": 0
+    },
+    {
+      "position": 17,
+      "id": "15.1",
+      "token": "empty",
+      "form": "köper",
+      "lemma": "köpa",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        },
+        {
+          "name": "Voice",
+          "val": "Act"
+        }
+      ],
+      "xpos": "VB|PRS|AKT",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "3",
+          "position": 3,
+          "deprel": "conj:och"
+        }
+      ],
+      "deprel": "_",
+      "chunk": 0,
+      "type": "",
+      "indexshift": 0
+    },
+    {
+      "position": 24,
+      "id": 22,
+      "form": "gör",
+      "lemma": "göra",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        },
+        {
+          "name": "Voice",
+          "val": "Act"
+        }
+      ],
+      "xpos": "VB|PRS|AKT",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        }
+      ],
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 3,
+          "archeight": 6,
+          "id": 3,
+          "form": "köper",
+          "lemma": "köpa",
+          "feats": [
+            {
+              "name": "Mood",
+              "val": "Ind"
+            },
+            {
+              "name": "Tense",
+              "val": "Pres"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Fin"
+            },
+            {
+              "name": "Voice",
+              "val": "Act"
+            }
+          ],
+          "xpos": "VB|PRS|AKT",
+          "upos": "VERB",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "advcl:om"
+            }
+          ],
+          "deprel": "advcl",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 1,
+              "archeight": 2,
+              "id": 1,
+              "form": "Om",
+              "lemma": "om",
+              "xpos": "SN",
+              "upos": "SCONJ",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "mark"
+                }
+              ],
+              "deprel": "mark",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 2,
+              "archeight": 1,
+              "id": 2,
+              "form": "du",
+              "lemma": "du",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Nom"
+                },
+                {
+                  "name": "Definite",
+                  "val": "Def"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Com"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Prs"
+                }
+              ],
+              "xpos": "PN|UTR|SIN|DEF|SUB",
+              "upos": "PRON",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "nsubj"
+                },
+                {
+                  "id": "10.1",
+                  "position": 11,
+                  "deprel": "nsubj"
+                },
+                {
+                  "id": "15.1",
+                  "position": 17,
+                  "deprel": "nsubj"
+                }
+              ],
+              "deprel": "nsubj",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
+              "archeight": 3,
+              "id": 7,
+              "form": "mjölk",
+              "lemma": "mjölk",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Nom"
+                },
+                {
+                  "name": "Definite",
+                  "val": "Ind"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Com"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "NN|UTR|SIN|IND|NOM",
+              "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "obj"
+                }
+              ],
+              "deprel": "obj",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 6,
+                  "archeight": 1,
+                  "id": 6,
+                  "form": "liter",
+                  "lemma": "liter",
+                  "feats": [
+                    {
+                      "name": "Case",
+                      "val": "Nom"
+                    },
+                    {
+                      "name": "Definite",
+                      "val": "Ind"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Com"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    }
+                  ],
+                  "xpos": "NN|UTR|SIN|IND|NOM",
+                  "upos": "NOUN",
+                  "enhancedheads": [
+                    {
+                      "id": "7",
+                      "position": 7,
+                      "deprel": "nmod"
+                    }
+                  ],
+                  "deprel": "nmod",
+                  "chunk": 0,
+                  "type": "",
+                  "children": [
+                    {
+                      "position": 4,
+                      "archeight": 2,
+                      "id": 4,
+                      "form": "en",
+                      "lemma": "en",
+                      "feats": [
+                        {
+                          "name": "Definite",
+                          "val": "Ind"
+                        },
+                        {
+                          "name": "Gender",
+                          "val": "Com"
+                        },
+                        {
+                          "name": "Number",
+                          "val": "Sing"
+                        },
+                        {
+                          "name": "PronType",
+                          "val": "Art"
+                        }
+                      ],
+                      "xpos": "DT|UTR|SIN|IND",
+                      "upos": "DET",
+                      "enhancedheads": [
+                        {
+                          "id": "6",
+                          "position": 6,
+                          "deprel": "det"
+                        }
+                      ],
+                      "deprel": "det",
+                      "chunk": 0,
+                      "type": "",
+                      "children": [
+                        {
+                          "position": 5,
+                          "archeight": 1,
+                          "id": 5,
+                          "form": "halv",
+                          "lemma": "halv",
+                          "feats": [
+                            {
+                              "name": "Case",
+                              "val": "Nom"
+                            },
+                            {
+                              "name": "Definite",
+                              "val": "Ind"
+                            },
+                            {
+                              "name": "Degree",
+                              "val": "Pos"
+                            },
+                            {
+                              "name": "Gender",
+                              "val": "Com"
+                            },
+                            {
+                              "name": "Number",
+                              "val": "Sing"
+                            }
+                          ],
+                          "xpos": "JJ|POS|UTR|SIN|IND|NOM",
+                          "upos": "ADJ",
+                          "enhancedheads": [
+                            {
+                              "id": "4",
+                              "position": 4,
+                              "deprel": "fixed"
+                            }
+                          ],
+                          "deprel": "fixed",
+                          "chunk": 0,
+                          "type": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "position": 9,
+              "archeight": 4,
+              "id": 9,
+              "form": "0:78",
+              "lemma": "0:78",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Nom"
+                },
+                {
+                  "name": "NumType",
+                  "val": "Card"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "SpaceAfter",
+                  "val": "No"
+                }
+              ],
+              "xpos": "RG|NOM",
+              "upos": "NUM",
+              "enhancedheads": [
+                {
+                  "id": "3",
+                  "position": 3,
+                  "deprel": "obl:för"
+                }
+              ],
+              "deprel": "obl",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 8,
+                  "archeight": 1,
+                  "id": 8,
+                  "form": "för",
+                  "lemma": "för",
+                  "xpos": "PP",
+                  "upos": "ADP",
+                  "enhancedheads": [
+                    {
+                      "id": "9",
+                      "position": 9,
+                      "deprel": "case"
+                    }
+                  ],
+                  "deprel": "case",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            },
+            {
+              "position": 13,
+              "archeight": 5,
+              "id": 12,
+              "form": "limpa",
+              "lemma": "limpa",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Nom"
+                },
+                {
+                  "name": "Definite",
+                  "val": "Ind"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Com"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "Enhanced",
+                  "val": "obj"
+                }
+              ],
+              "xpos": "NN|UTR|SIN|IND|NOM",
+              "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "10.1",
+                  "position": 11,
+                  "deprel": "obj"
+                }
+              ],
+              "deprel": "conj",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 10,
+                  "archeight": 2,
+                  "id": 10,
+                  "form": ",",
+                  "lemma": ",",
+                  "xpos": "MID",
+                  "upos": "PUNCT",
+                  "enhancedheads": [
+                    {
+                      "id": "12",
+                      "position": 13,
+                      "deprel": "punct"
+                    }
+                  ],
+                  "deprel": "punct",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 12,
+                  "archeight": 1,
+                  "id": 11,
+                  "form": "en",
+                  "lemma": "en",
+                  "feats": [
+                    {
+                      "name": "Definite",
+                      "val": "Ind"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Com"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Art"
+                    }
+                  ],
+                  "xpos": "DT|UTR|SIN|IND",
+                  "upos": "DET",
+                  "enhancedheads": [
+                    {
+                      "id": "12",
+                      "position": 13,
+                      "deprel": "det"
+                    }
+                  ],
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 15,
+                  "archeight": 2,
+                  "id": 14,
+                  "form": "2:57",
+                  "lemma": "2:57",
+                  "feats": [
+                    {
+                      "name": "Case",
+                      "val": "Nom"
+                    },
+                    {
+                      "name": "NumType",
+                      "val": "Card"
+                    }
+                  ],
+                  "misc": [
+                    {
+                      "name": "Enhanced",
+                      "val": "obl"
+                    }
+                  ],
+                  "xpos": "RG|NOM",
+                  "upos": "NUM",
+                  "enhancedheads": [
+                    {
+                      "id": "10.1",
+                      "position": 11,
+                      "deprel": "obl:för"
+                    }
+                  ],
+                  "deprel": "orphan",
+                  "chunk": 0,
+                  "type": "",
+                  "children": [
+                    {
+                      "position": 14,
+                      "archeight": 1,
+                      "id": 13,
+                      "form": "för",
+                      "lemma": "för",
+                      "xpos": "PP",
+                      "upos": "ADP",
+                      "enhancedheads": [
+                        {
+                          "id": "14",
+                          "position": 15,
+                          "deprel": "case"
+                        }
+                      ],
+                      "deprel": "case",
+                      "chunk": 0,
+                      "type": ""
+                    }
+                  ]
+                },
+                {
+                  "position": 21,
+                  "archeight": 4,
+                  "id": 19,
+                  "form": "margarin",
+                  "lemma": "margarin",
+                  "feats": [
+                    {
+                      "name": "Case",
+                      "val": "Nom"
+                    },
+                    {
+                      "name": "Definite",
+                      "val": "Ind"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Neut"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    }
+                  ],
+                  "misc": [
+                    {
+                      "name": "Enhanced",
+                      "val": "obj"
+                    }
+                  ],
+                  "xpos": "NN|NEU|SIN|IND|NOM",
+                  "upos": "NOUN",
+                  "enhancedheads": [
+                    {
+                      "id": "15.1",
+                      "position": 17,
+                      "deprel": "obj"
+                    }
+                  ],
+                  "deprel": "conj",
+                  "chunk": 0,
+                  "type": "",
+                  "children": [
+                    {
+                      "position": 16,
+                      "archeight": 3,
+                      "id": 15,
+                      "form": "och",
+                      "lemma": "och",
+                      "xpos": "KN",
+                      "upos": "CCONJ",
+                      "enhancedheads": [
+                        {
+                          "id": "15.1",
+                          "position": 17,
+                          "deprel": "cc"
+                        }
+                      ],
+                      "deprel": "cc",
+                      "chunk": 0,
+                      "type": ""
+                    },
+                    {
+                      "position": 20,
+                      "archeight": 1,
+                      "id": 18,
+                      "form": "kilo",
+                      "lemma": "kilo",
+                      "feats": [
+                        {
+                          "name": "Case",
+                          "val": "Nom"
+                        },
+                        {
+                          "name": "Definite",
+                          "val": "Ind"
+                        },
+                        {
+                          "name": "Gender",
+                          "val": "Neut"
+                        },
+                        {
+                          "name": "Number",
+                          "val": "Sing"
+                        }
+                      ],
+                      "xpos": "NN|NEU|SIN|IND|NOM",
+                      "upos": "NOUN",
+                      "enhancedheads": [
+                        {
+                          "id": "19",
+                          "position": 21,
+                          "deprel": "nmod"
+                        }
+                      ],
+                      "deprel": "nmod",
+                      "chunk": 0,
+                      "type": "",
+                      "children": [
+                        {
+                          "position": 18,
+                          "archeight": 2,
+                          "id": 16,
+                          "form": "ett",
+                          "lemma": "en",
+                          "feats": [
+                            {
+                              "name": "Definite",
+                              "val": "Ind"
+                            },
+                            {
+                              "name": "Gender",
+                              "val": "Neut"
+                            },
+                            {
+                              "name": "Number",
+                              "val": "Sing"
+                            },
+                            {
+                              "name": "PronType",
+                              "val": "Art"
+                            }
+                          ],
+                          "xpos": "DT|NEU|SIN|IND",
+                          "upos": "DET",
+                          "enhancedheads": [
+                            {
+                              "id": "18",
+                              "position": 20,
+                              "deprel": "det"
+                            }
+                          ],
+                          "deprel": "det",
+                          "chunk": 0,
+                          "type": "",
+                          "children": [
+                            {
+                              "position": 19,
+                              "archeight": 1,
+                              "id": 17,
+                              "form": "halvt",
+                              "lemma": "halv",
+                              "feats": [
+                                {
+                                  "name": "Case",
+                                  "val": "Nom"
+                                },
+                                {
+                                  "name": "Definite",
+                                  "val": "Ind"
+                                },
+                                {
+                                  "name": "Degree",
+                                  "val": "Pos"
+                                },
+                                {
+                                  "name": "Gender",
+                                  "val": "Neut"
+                                },
+                                {
+                                  "name": "Number",
+                                  "val": "Sing"
+                                }
+                              ],
+                              "xpos": "JJ|POS|NEU|SIN|IND|NOM",
+                              "upos": "ADJ",
+                              "enhancedheads": [
+                                {
+                                  "id": "16",
+                                  "position": 18,
+                                  "deprel": "fixed"
+                                }
+                              ],
+                              "deprel": "fixed",
+                              "chunk": 0,
+                              "type": ""
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "position": 23,
+                      "archeight": 2,
+                      "id": 21,
+                      "form": "2:87",
+                      "lemma": "2:87",
+                      "feats": [
+                        {
+                          "name": "Case",
+                          "val": "Nom"
+                        },
+                        {
+                          "name": "NumType",
+                          "val": "Card"
+                        }
+                      ],
+                      "misc": [
+                        {
+                          "name": "Enhanced",
+                          "val": "obl"
+                        }
+                      ],
+                      "xpos": "RG|NOM",
+                      "upos": "NUM",
+                      "enhancedheads": [
+                        {
+                          "id": "15.1",
+                          "position": 17,
+                          "deprel": "obl:för"
+                        }
+                      ],
+                      "deprel": "orphan",
+                      "chunk": 0,
+                      "type": "",
+                      "children": [
+                        {
+                          "position": 22,
+                          "archeight": 1,
+                          "id": 20,
+                          "form": "för",
+                          "lemma": "för",
+                          "xpos": "PP",
+                          "upos": "ADP",
+                          "enhancedheads": [
+                            {
+                              "id": "21",
+                              "position": 23,
+                              "deprel": "case"
+                            }
+                          ],
+                          "deprel": "case",
+                          "chunk": 0,
+                          "type": ""
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 25,
+          "archeight": 1,
+          "id": 23,
+          "form": "detta",
+          "lemma": "denna",
+          "feats": [
+            {
+              "name": "Definite",
+              "val": "Def"
+            },
+            {
+              "name": "Gender",
+              "val": "Neut"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "PronType",
+              "val": "Dem"
+            }
+          ],
+          "xpos": "PN|NEU|SIN|DEF|SUB/OBJ",
+          "upos": "PRON",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "nsubj"
+            }
+          ],
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 26,
+          "archeight": 2,
+          "id": 24,
+          "form": "sammanlagt",
+          "lemma": "sammanlagd",
+          "xpos": "AB",
+          "upos": "ADV",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "advmod"
+            }
+          ],
+          "deprel": "advmod",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 27,
+          "archeight": 3,
+          "id": 25,
+          "form": "6:22",
+          "lemma": "6:22",
+          "feats": [
+            {
+              "name": "Case",
+              "val": "Nom"
+            },
+            {
+              "name": "NumType",
+              "val": "Card"
+            }
+          ],
+          "misc": [
+            {
+              "name": "SpaceAfter",
+              "val": "No"
+            }
+          ],
+          "xpos": "RG|NOM",
+          "upos": "NUM",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "nummod"
+            }
+          ],
+          "deprel": "nummod",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 28,
+          "archeight": 4,
+          "id": 26,
+          "form": ".",
+          "lemma": ".",
+          "xpos": "MAD",
+          "upos": "PUNCT",
+          "enhancedheads": [
+            {
+              "id": "22",
+              "position": 24,
+              "deprel": "punct"
+            }
+          ],
+          "deprel": "punct",
+          "chunk": 0,
+          "type": ""
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 16\n",
+  "canUndo": false,
+  "canRedo": false
+}
