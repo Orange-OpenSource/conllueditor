@@ -29,7 +29,7 @@ else
 fi
 
 
-echo 1>&2 "jar: $NEWESTJAR"
+echo 1>&2 "using: $(readlink -f $NEWESTJAR)"
 
 
 if [[ "$1" =~ ^Xmx[0-9]g$ ]]; then
@@ -46,7 +46,5 @@ fi
 
 
 java -Xmx4g -cp $NEWESTJAR com.orange.labs.editor.ConlluEditor ${ROOTDIR} "$@"
-
-
 
 #

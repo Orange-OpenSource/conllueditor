@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2024, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.26.1 as of 17 September 2024
+ @version 2.30.1 as of 13th April 2025
  */
 package com.orange.labs.conllparser;
 
@@ -92,9 +92,7 @@ public class ConllWord {
     private int partOfChunk = 0; // 0 no chunk calculated
     // this word is a wh question pronoun
     private boolean whquestion = false;
-    // additional semantic annotation (non-conllu)
-    //private Set<Annotation> annot = null; // column 11 if B/I/O:....
-    // column 11 otherwise
+
     //private Map<Integer, LinkedHashSet<String>> namedColumns; // non standardcolums. the index is the column position (11, 12 ...)
     private Map<String, LinkedHashSet<String>> namedColumns; // non standardcolums: name: values
 
@@ -162,16 +160,6 @@ public class ConllWord {
         dependents = new ArrayList<>();
         depmap = new TreeMap<>();
 
-//        if (orig.annot != null) {
-//            annot = new TreeSet<>();
-//            for (Annotation a : orig.getAnnots()) {
-//                annot.add(new Annotation(a));
-//            }
-//        } else
-//        if (orig.nonstandardInfo != null) {
-//            nonstandardInfo = new ArrayList<>();
-//            nonstandardInfo.addAll(orig.nonstandardInfo);
-//        }
         if (orig.namedColumns != null) {
             namedColumns = new LinkedHashMap<>();
             for (String key : orig.namedColumns.keySet()) {
@@ -1122,12 +1110,7 @@ public class ConllWord {
         //jword.addProperty("type", word.getPartialDeplabel());
         jword.addProperty("type", "");
 
-//        if (annot != null) {
-//            for (Annotation a : annot) {
-//                jword.addProperty("type", a.getSemanticRole());
-//                break;
-//            }
-//        } else
+
 //        if (nonstandardInfo != null) {
 //            // TODO change when conllu plus support is OK
 //            // for the time being we just display anything in columns > 10 as is, without interpretation
@@ -1140,15 +1123,6 @@ public class ConllWord {
         if (namedColumns != null) {
             JsonObject extracols = new JsonObject();
             for (String key : namedColumns.keySet()) {
-//                if (key == 12) {
-//                    // temporary solution for RelationExtraction (project which (ab)uses ConlluEditor.jar)
-//                    LinkedHashSet<String> values = namedColumns.get(key);
-//                    String val = values.iterator().next();
-//                    String[] fields = val.split(":");
-//                    if (fields.length >= 4) {
-//                        jword.addProperty("type", fields[3]);
-//                    }
-//                } //else {
                 LinkedHashSet<String> values = namedColumns.get(key);
                 jword.addProperty("col_" + key, String.join("|", values));
                 extracols.addProperty(key, String.join("|", values));
@@ -1225,37 +1199,7 @@ public class ConllWord {
 //        }
 //    }
 //
-//    public Set<Annotation> getAnnots() {
-//        return annot;
-//    }
-//
-//    /**
-//     * retourner l'Annotation si elle est du frame frameName
-//     *
-//     * @param framename nom du frame qu'on cherche
-//     * @return l'annotation ou null
-//     */
-//    public Annotation getAnnot(String framename) {
-//        if (annot == null) {
-//            return null;
-//        }
-//        for (Annotation a : annot) {
-//            //if (!a.framenet) {
-//            //return null; // non-frame annotation (role semantique de base
-//            //}
-//            if (a.frame.equals(framename)) {
-//                return a;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public synchronized void addAnnot(Annotation a) {
-//        if (annot == null) {
-//            annot = new TreeSet<>();
-//        }
-//        annot.add(a);
-//    }
+
     /**
      * Add an extra column with a value. If the extra column does not yet exist,
      * it is added. if a is "_" it is deleted
@@ -1287,13 +1231,6 @@ public class ConllWord {
         }
     }
 
-//    public void addAnnots(Set<Annotation> a) {
-//        if (annot == null) {
-//            annot = a;
-//        } else {
-//            annot.addAll(a);
-//        }
-//    }
     public int getPosition() {
         return position;
     }

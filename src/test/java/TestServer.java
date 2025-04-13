@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2022, Orange S.A.
+Copyright (c) 2018-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.24.0 as of 14th November 2023
+ @version 2.30.1 as of 13th April 2025
  */
 
 import com.google.gson.Gson;
@@ -186,7 +186,7 @@ public class TestServer {
         JsonObject jobject = jelement.getAsJsonObject();
 
         Assert.assertEquals("shortcuttimeout", 700, jobject.get("shortcuttimeout").getAsInt());
-        String keys[] = {"filename", "version", "git.commit.id", "git.branche", "git.dirty", "reinit", "saveafter", "shortcuttimeout", "stats", "columns"};
+        String keys[] = {"filename", "version", "git_commit_id", "git_branch", "git_dirty", "reinit", "saveafter", "shortcuttimeout", "stats", "columns"};
         for (String key : keys) {
             jobject.has(key);
             //System.err.println("ZZZ " + key + " " + jobject.has(key));

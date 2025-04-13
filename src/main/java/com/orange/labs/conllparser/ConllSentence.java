@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.30.0 as of 12th April 2025
+ @version 2.30.1 as of 13th April 2025
 */
 package com.orange.labs.conllparser;
 
@@ -674,6 +674,7 @@ public class ConllSentence {
 
     /**
      * format the sentence in CoNLL-U format
+     * @return sentence in CoNLL-U format
      */
     @Override
     public String toString() {
@@ -762,6 +763,7 @@ public class ConllSentence {
 
     /**
      * format the sentence in SD-parse format
+     * @return sentence in SD-parse format
      */
     public String getSDparse() {
         StringBuilder sb = new StringBuilder();
@@ -792,6 +794,8 @@ public class ConllSentence {
 
     /**
      * format the sentence for use with xelatex (tikz-dependencie)
+     * @param all_enhanced if true, show all enhanced dependencies
+     * @return sentence in LaTeX format
      */
     public String getLaTeX(boolean all_enhanced) {
         StringBuilder sb = new StringBuilder();
@@ -940,7 +944,7 @@ public class ConllSentence {
 
             sb.append("\\end{deptext}\n\n%        head dependent deprel\n");
 
-            int maxdist = 0; // calculate here the most distant word in terms of deprels from root
+            maxdist = 0; // calculate here the most distant word in terms of deprels from root
             //System.err.println("ppppppppppp " + position);
             for (ConllWord word : words) {
                 maxdist = Math.max(getDistanceFromSentenceHead(word), maxdist);
@@ -1008,8 +1012,8 @@ public class ConllSentence {
             sb.append("%% \\usepackage{deptrees}\n");
             sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist + 1));
             sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
-            for (ConllWord head : getHeads()) {
-                sb.append(String.format("\\root{%d}{%s}{%s}\n", head.getId(), head.getForm(), head.getUpostag()));
+            for (ConllWord chead : getHeads()) {
+                sb.append(String.format("\\root{%d}{%s}{%s}\n", chead.getId(), chead.getForm(), chead.getUpostag()));
             }
 
             sb.append("% headpos, hor-pos, vert-pos, form, UPOS, deprel\n");
@@ -1271,6 +1275,7 @@ public class ConllSentence {
      * @param id (1 .. lastWord)
      * @param subid (1.. n)
      * @return true if deletion worked
+     * @throws com.orange.labs.conllparser.ConllException
      */
     public boolean deleteEmptyWord(int id, int subid) throws ConllException {
         List<ConllWord> ews = this.getEmptyWords(id);
@@ -1393,8 +1398,10 @@ public class ConllSentence {
     }
 
     /**
-     * join word with following. Use the attachment of the one closer to the
-     * head. if both are equally close, chose the left
+     * join word with following.Use the attachment of the one closer to the
+ head.if both are equally close, chose the left
+     * @param id id of work to be joint with following
+     * @throws ConllException
      */
     public void joinWords(int id) throws ConllException {
         if (id < words.size()) {
@@ -1453,10 +1460,10 @@ public class ConllSentence {
         if (cw.getHead() == 0) {
             return 0;
         }
-        ConllWord head = cw;
+        ConllWord chead = cw;
         int d = 1;
-        while (head.getHead() != 0) {
-            head = words.get(head.getHead() - 1);
+        while (chead.getHead() != 0) {
+            chead = words.get(chead.getHead() - 1);
             d++;
         }
         return d;
@@ -1594,8 +1601,12 @@ public class ConllSentence {
     }
 
     /**
-     * calculate the Labelled Attachment Score and other metrics. Does not take
-     * into accound empty words
+     * calculate the Labelled Attachment Score and other metrics.Does not take
+ into accound empty words
+     * @param gold gold sentence to be evaluated against
+     * @param scoretype Metric to use
+     * @return score
+     *
      */
     public double score(ConllSentence gold, Scoretype scoretype) {
         if (gold.size() != this.size()) {
@@ -1642,6 +1653,7 @@ public class ConllSentence {
      * calculate the height if each arc, by taking into account all short arcs
      * below. Does not take into account non-projective arcs, only arcs from n
      * to m
+     * @return hight of acrs for each word
      *
      */
     public Map<Integer, Integer> calculate_flat_arcs_height() {
@@ -1775,7 +1787,6 @@ public class ConllSentence {
             for (int id = wordid; id <= lastwordid; ++id, ++ct) {
                 idshl.put(id, fields.get(ct));
             }
-
         }
 
     }
@@ -1806,9 +1817,9 @@ public class ConllSentence {
             ValidFeatures validfeats,
             Highlight highlight, AnnotationErrors ae) {
         JsonArray jheads = new JsonArray();
-        for (ConllWord head : headss) {
+        for (ConllWord chead : headss) {
             //if (head.getTokentype() != ConllWord.Tokentype.WORD) continue;
-            JsonObject jhead = head.toJson(validupos, validxpos, validdeprels, validfeats, highlight, ae, contracted); //conllWord2json(head);
+            JsonObject jhead = chead.toJson(validupos, validxpos, validdeprels, validfeats, highlight, ae, contracted); //conllWord2json(head);
             jhead.addProperty("indexshift", words.get(0).getId() - 1); // nécessaire s'il y a plusieurs arbres dans la phrase
             jheads.add(jhead);
         }
@@ -1817,6 +1828,7 @@ public class ConllSentence {
 
     /**
      * json in spacy's format. @see https://spacy.io/api/annotation
+     * @return array with tree in spacy-like json
      */
     public JsonArray toSpacyJson() {
         JsonArray jdocs = new JsonArray();
@@ -1855,7 +1867,8 @@ public class ConllSentence {
         return text;
     }
 
-    /** change the text of the sentence, return true if really changed */
+    /** change the text of the sentence,
+     * @return true if the text really changed */
     public boolean setText(String t) {
         if (t == null || t.isEmpty()) return false;
 
@@ -1868,7 +1881,9 @@ public class ConllSentence {
         return changed;
     }
 
-    /** gets sentence by concatenating forms */
+    /** gets sentence by concatenating forms
+     * @return concatenated forms
+     */
     public String getSentence() {
         return getSentence(null);
     }
@@ -1979,15 +1994,15 @@ public class ConllSentence {
         this.makeTrees(null);
 
         Map<Integer, ConllWord> subtree = new TreeMap<>();
-        ConllWord head = getWord(id);
+        ConllWord chead = getWord(id);
 
-        subtree.put(head.getId(), head);
-        getSTdeps(head, subtree);
+        subtree.put(chead.getId(), chead);
+        getSTdeps(chead, subtree);
 
         List<ConllWord> subtreelist = new ArrayList<>();
         for (ConllWord cw : subtree.values()) {
             ConllWord clone = new ConllWord(cw);
-            if (cw == head) {
+            if (cw == chead) {
                 clone.setHead(0);
                 clone.setDeplabel("_");
             }
@@ -2242,7 +2257,9 @@ public class ConllSentence {
                         break;
                     case "headid":
                         if (newvalue.isEmpty()) {
-                            warnings.append("Warning: No value found for " + val.column + " in sentence " + sentid + ", word " + cw.getFullId()).append('\n');
+                            warnings.append("Warning: No value found for ")
+                                    .append(val.column).append(" in sentence ")
+                                    .append(sentid).append(", word ").append(cw.getFullId()).append('\n');
                             break;
                         }
                         boolean absid = true;
@@ -2255,15 +2272,19 @@ public class ConllSentence {
                             try {
                                 int numval = Integer.parseInt(newvalue);
                                 if (numval > words.size()) {
-                                    warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + numval + " > sentence length " + words.size()).append('\n');
+                                    warnings.append("Warning: Cannot set absolute head id in sentence ").append(sentid).append(", word ")
+                                            .append(cw.getFullId()).append(": ").append(numval)
+                                            .append(" > sentence length ").append(words.size()).append('\n');
                                     break;
                                 }
                                 if (numval == cw.getId()) {
-                                    warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + numval + " == word id").append('\n');
+                                    warnings.append("Warning: Cannot set absolute head id in sentence ").append(sentid).append(", word ")
+                                            .append(cw.getFullId()).append(": ").append(numval).append(" == word id").append('\n');
                                     break;
                                 }
                                 if (numval != 0 && cw.commands(getWord(numval))) {
-                                    warnings.append("Warning: Cannot set absolute head id in sentence " + sentid + ", word " + cw.getFullId() + ": " + numval + " depends from current word").append('\n');
+                                    warnings.append("Warning: Cannot set absolute head id in sentence ").append(sentid).append(", word ")
+                                            .append(cw.getFullId()).append(": ").append(numval).append(" depends from current word").append('\n');
                                     break;
                                 }
                                 cw.setHead(numval);
@@ -2280,19 +2301,27 @@ public class ConllSentence {
                                 int abshead = cw.getId() + numval;
                                 //System.err.println("qqqqqq " + cw.getId() + " " + relhead + " " + abshead);
                                 if (abshead < 1) {
-                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": negative or 0 absolute head " + abshead).append('\n');
+                                    warnings.append("Warning: Cannot set relative head id in sentence ").append(sentid)
+                                            .append(", word ").append(cw.getFullId()).append(": negative or 0 absolute head ")
+                                            .append(abshead).append('\n');
                                     break;
                                 }
                                 if (abshead > words.size()) {
-                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " > sentence length " + words.size()).append('\n');
+                                    warnings.append("Warning: Cannot set relative head id in sentence ").append(sentid)
+                                            .append(", word ").append(cw.getFullId()).append(": absolute head ").append(abshead)
+                                            .append(" > sentence length " + words.size()).append('\n');
                                     break;
                                 }
                                 if (abshead == cw.getId()) {
-                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " == word id").append('\n');
+                                    warnings.append("Warning: Cannot set relative head id in sentence ").append(sentid)
+                                            .append(", word ").append(cw.getFullId()).append(": absolute head ")
+                                            .append(abshead).append(" == word id").append('\n');
                                     break;
                                 }
                                 if (cw.commands(getWord(abshead))) {
-                                    warnings.append("Warning: Cannot set relative head id in sentence " + sentid + ", word " + cw.getFullId() + ": absolute head " + abshead + " depends from current word").append('\n');
+                                    warnings.append("Warning: Cannot set relative head id in sentence ").append(sentid)
+                                            .append(", word ").append(cw.getFullId()).append(": absolute head ")
+                                            .append(abshead).append(" depends from current word").append('\n');
                                     break;
                                 }
                                 cw.setHead(abshead);
@@ -2400,7 +2429,7 @@ public class ConllSentence {
 
 /** check whether current sentence is projective. Implies that makeTree() has been called.
  * for trees with more than one root this may return an invalid value
- * @return
+ * @return true if sentence is projective
  */
     public boolean isProjective(List<ConllWord> unproj) {
 

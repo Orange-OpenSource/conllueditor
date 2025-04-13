@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.30.0 as of 12th April 2025
+ @version 2.30.1 as of 13th April 2025
  */
 package com.orange.labs.editor;
 
@@ -100,7 +100,6 @@ import org.yaml.snakeyaml.Yaml;
  * @author Johannes Heinecke <johannes.heinecke@orange.com>
  */
 public class ConlluEditor {
-
     ConllFile cfile;
     File filename;
     File outfilename = null; // == filename, only in tests this has a different value
@@ -126,12 +125,15 @@ public class ConlluEditor {
     ConllFile comparisonFile = null;
 
     Map<String, String>uiconfig = null;
-    private String programmeversion;
+
+    // info on version and commit
+    static private String programmeversion;
     //private String gitcommitidfull;
-    private String gitcommitidabbrev = "?";
-    private String gitcommittime = "?";
-    private boolean gitdirty = false;
-    private String gitbranch = "?";
+    static private String gitcommitidabbrev = "?";
+    static private String gitcommittime = "?";
+    static private boolean gitdirty = false;
+    static private String gitbranch = "?";
+
     private String suffix = ".2"; // used to write the edited file to avoid overwriting the original file
 
     private int debug = 1;
@@ -144,12 +146,11 @@ public class ConlluEditor {
         this(conllfile, false);
     }
 
-    public ConlluEditor(String conllfile, boolean overwrite) throws ConllException, IOException {
+    static public String getVersion() throws IOException {
         // read properties file created by the maven plugin "properties-maven-plugin" (cf. pom.xml)
         java.util.Properties p = new Properties();
         p.load(ClassLoader.getSystemResourceAsStream("conllueditor.properties"));
         programmeversion = p.getProperty("version");
-
         InputStream gitprops = ClassLoader.getSystemResourceAsStream("git.properties");
         if (gitprops != null) {
             p.load(ClassLoader.getSystemResourceAsStream("git.properties"));
@@ -165,9 +166,13 @@ public class ConlluEditor {
             sb.append(", branche: ").append(gitbranch);
         }
         if (gitdirty) {
-            sb.append(", this branch contains uncommited modifications!");
+            sb.append(", this build contains uncommitted modifications!");
         }
-        System.err.format("ConlluEditor V %s (commit %s%s)\n", programmeversion, gitcommitidabbrev, sb.toString());
+        return String.format("ConlluEditor V %s (commit %s at %s%s)\n", programmeversion, gitcommitidabbrev, gitcommittime, sb.toString());
+    }
+
+    public ConlluEditor(String conllfile, boolean overwrite) throws ConllException, IOException {
+        System.err.println(getVersion());
         filename = new File(conllfile);
         filename = filename.getAbsoluteFile().toPath().normalize().toFile();
 
@@ -888,9 +893,10 @@ public class ConlluEditor {
 
         solution.addProperty("filename", filename.getAbsolutePath());
         solution.addProperty("version", programmeversion);
-        solution.addProperty("git.commit.id", gitcommitidabbrev);
-        solution.addProperty("git.branche", gitbranch);
-        solution.addProperty("git.dirty", gitdirty);
+        solution.addProperty("git_commit_id", gitcommitidabbrev);
+        solution.addProperty("git_commit_time", gitcommittime);
+        solution.addProperty("git_branch", gitbranch);
+        solution.addProperty("git_dirty", gitdirty);
         solution.addProperty("reinit", mode);
         solution.addProperty("saveafter", saveafter);
         solution.addProperty("shortcuttimeout", shortcuttimeout);
@@ -2601,7 +2607,7 @@ public class ConlluEditor {
             outfilename = filename;
         }
         File dir = outfilename.getParentFile().toPath().normalize().toFile();
-        if ((debug & 0x01) == 2) {
+        if ((debug & 0x01) == 1) {
             System.err.println("Saving file " + outfilename);
         }
 
@@ -2718,6 +2724,16 @@ public class ConlluEditor {
                 .build();
         options.addOption(validator);
 
+        Option version = Option.builder("V").longOpt("version")
+                .desc("show version and exit")
+                .build();
+        options.addOption(version);
+
+        Option help = Option.builder("h").longOpt("help")
+                .desc("show this help and exit")
+                .build();
+        options.addOption(help);
+
         Option rootdir = Option.builder("r").longOpt("rootdir")
                 .argName("dir")
                 .hasArg()
@@ -2746,7 +2762,7 @@ public class ConlluEditor {
                 .build();
         options.addOption(shortcuttimeout);
 
-        Option verbosity = Option.builder("v").longOpt("verb")
+        Option verbosity = Option.builder().longOpt("verb")
                 .argName("hex")
                 .hasArg()
                 .desc("specifiy verbosity (hexnumber, interpreted as bitmap)")
@@ -2797,6 +2813,14 @@ public class ConlluEditor {
         try {
             // parse the command line arguments
             CommandLine line = parser.parse(options, args);
+            if (line.hasOption(help)) {
+                throw new ParseException(""); // prints help
+            }
+            if (line.hasOption(version)) {
+                System.err.println(getVersion());
+                System.exit(0);
+            }
+
             if (line.getArgList().size() != 2) {
                 throw new ParseException("missing CoNLL-U-filename and/or port number");
             }

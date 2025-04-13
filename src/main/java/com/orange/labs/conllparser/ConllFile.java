@@ -213,7 +213,7 @@ public class ConllFile {
                         } else if (line.startsWith("#ID")) {
                             showID = true;
                         }*/
-                        sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
+                        sentenceLines.add(new AbstractMap.SimpleEntry<>(ctline, line)); // we add comments line to sentence to be able to reproduce them in output
                     } else {
                         // TODO deprecate usage of shift
                         // les lignes CONLL commencent toujours avec un nombre, SAUF si on utilise le
@@ -223,7 +223,7 @@ public class ConllFile {
                                 !elems[0].isEmpty() && Character.isDigit(elems[0].charAt(0))) {
                             // supprimer les lignes commentaires ou autres
                             //System.out.println("ADDING " + line);
-                            sentenceLines.add(new AbstractMap.SimpleEntry<Integer, String>(ctline, line));
+                            sentenceLines.add(new AbstractMap.SimpleEntry<>(ctline, line));
                             countWords++;
                         } else {
                             //System.err.println("WARNING: incorrect line ignored: (line " + ctline + "): " + line);
@@ -460,8 +460,7 @@ public class ConllFile {
      *   Upos:ADP and Lemma:d.* > Feat:Key="Val", Xpos:"prep"
      *   and apply rule + replacement on all words of all sentences
      * @param rulefile
-     * @return number of changes
-     * @throws FileNotFoundException
+     * @throws ConllException, IOException
      */
     public void conditionalEdit(File rulefile) throws ConllException, IOException {
         FileInputStream fis = new FileInputStream(rulefile);
@@ -550,6 +549,7 @@ public class ConllFile {
             thenstr = t;
         }
 
+        @Override
         public String toString() {
             return "" + linenumber + ": " + ifstr + " == " + thenstr;
         }
@@ -767,13 +767,13 @@ public class ConllFile {
      * process the contents of a CoNLL file
      *
      * @param out the output stream
-     * @param dep2chunk the Dep2Chunk object to generate chunks from dependency
-     * trees (or null if absent)
      * @param cf the ConllFile object containing at least one sentence
      * @param output the output format
      * @param filter if not null, output only sentences with a XPOS/UPOS
      * @param shuffle
      * @param strict if false, allow words with head 0 have a deprel different from "root"
+     * @param first start with this sentence number
+     * @param last stop after this sentence number
      * matching the filter
      * @throws ConllException
      */
@@ -913,7 +913,7 @@ public class ConllFile {
             boolean debug = false;
             boolean strict = true;
             boolean stats = false;
-            boolean quiet = false;
+            //boolean quiet = false;
 
             int first = 1;
             int last = -1; // = all
@@ -944,9 +944,9 @@ public class ConllFile {
                 } else if (args[a].equals("--stats")) {
                     stats = true;
                     argindex++;
-                } else if (args[a].equals("--quiet")) {
-                    quiet = true;
-                    argindex++;
+                //} else if (args[a].equals("--quiet")) {
+                //    quiet = true;
+                //    argindex++;
                 } else if (args[a].equals("--nostrict")) {
                     strict = false;
                     argindex++;

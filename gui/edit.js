@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2024, Orange S.A.
+ Copyright (c) 2018-2025, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.2 as of 21st December 2024
+ @version 2.30.1 as of 13th April 2025
  */
 
 
@@ -59,7 +59,7 @@ var isEdge = !isIE && !!window.StyleMedia;
 
 function choosePort() {
     // http port
-    if (window.location.port != "") {
+    if (window.location.port !== "") {
         $("#port").val(window.location.port);
         //$("#port").prop('disabled', true);
         $("#portinfo").hide();
@@ -77,7 +77,7 @@ function choosePort() {
         $("#logo").empty(); // badly scaled on Edge, just don't show it for the time being
     }
 
-    if (c != null) {
+    if (c !== null) {
         if (c == "6666") {
             alert("Port blocked by Firefox (also 6000, 6665, 6667, 6668, 6669)")
         }
@@ -176,7 +176,7 @@ var shortcuttimeout = 700; // msecs to wait before a shortcut is considered comp
 
 function filestats() {
     getServerInfo(); // get latest stats from server
-    $("#fileStats").modal()
+    $("#fileStats").modal();
 }
 
 function makeItemFreqPercent_table(appendto, data, total, what) {
@@ -222,7 +222,7 @@ function makeItemFreqPercent_table(appendto, data, total, what) {
 
         cell = document.createElement('td');
         stdrow.append(cell);
-        cell.innerHTML = data[p]
+        cell.innerHTML = data[p];
         cell.setAttribute('style', 'text-align: right;');
 
         cell = document.createElement('td');
@@ -271,7 +271,7 @@ function getServerInfo() {
             if (data.columns)
                 conllucolumns = data.columns;
             if (data.shortcuttimeout)
-                shortcuttimeout = data.shortcuttimeout
+                shortcuttimeout = data.shortcuttimeout;
             if (data.shortcuts) {
                 if ((data.shortcuts.version == 2)) {
                     //shortcutsMulti = data.shortcuts.shortcuts;
@@ -541,9 +541,15 @@ function getServerInfo() {
                 }
 
             }
-            // set version number to logo (shown if mouse hovers on the logo)
+            // set version number to help
             //$('#logo').attr("title", data.version);
+            console.log("ddd", data);
             $('#ce_version').text(data.version);
+            var dirty = "";
+            if (data.git_dirty) {
+                dirty = " (branch contains uncommitted sources)"
+            }
+            $('#ce_gitcommit').text(data.git_branch + " " + data.git_commit_id + " at " + data.git_commit_time + " " + dirty);
 
             $(function () {
                 $("#cupos").autocomplete({
@@ -854,17 +860,17 @@ function parseShortcuts() {
                 //parts += " F:"
                 for (const f of shortcutsMulti[p]["FEATS"]) {
                     parts += ' <span title="Feature-Value" class="featsc">' + f + "</span>";
-                    sc_featsString += " " + f
+                    sc_featsString += " " + f;
                 }
             }
             if ("MISC" in shortcutsMulti[p]) {
                 //parts += " M:"
                 for (const f of shortcutsMulti[p]["MISC"]) {
                     parts += ' <span title="Misc-value" class="miscsc">' + f + "</span>";
-                    sc_miscString += " " + f
+                    sc_miscString += " " + f;
                 }
             }
-            if (sc_String != "") sc_String += ", ";
+            if (sc_String !== "") sc_String += ", ";
             else {
                 sc_String += '<span class="sckey">shortcut</span>= <span class="upossc">UPOS</span>  <span class="xpossc">XPOS</span>  <span class="deprelsc">Deprel</span>  <span class="featsc">Feature=Value</span>  <span class="miscsc">MISC</span><br/>';
             }
@@ -994,7 +1000,7 @@ function getWordLength(cword) {
 
     ctx.font = "11px Lato";
     // take into accound Feature values width
-    if (showfeats && cword.feats != undefined) { // display misc column info if active
+    if (showfeats && cword.feats !== undefined) { // display misc column info if active
         for (var f in cword.feats) {
             //console.log("ggg", cword.feats[f].val, wlen, 2*ctx.measureText(cword.feats[f].val).width);
             wlen = Math.max(wlen, 2 * ctx.measureText(cword.feats[f].name).width);
@@ -1004,7 +1010,7 @@ function getWordLength(cword) {
     }
 
     // take into accound MISC values width
-    if (showmisc && cword.misc != undefined) { // display misc column info if active
+    if (showmisc && cword.misc !== undefined) { // display misc column info if active
         for (var f in cword.misc) {
             //console.log("ggg", cword.misc[f].val, wlen, 2*ctx.measureText(cword.misc[f].val).width);
             wlen = Math.max(wlen, 2 * ctx.measureText(cword.misc[f].name).width);
@@ -1077,13 +1083,13 @@ $(window).on('keydown', function (evt) {
         return;
     }
 
-    if (graphtype == 3) {
+    if (graphtype === 3) {
         // in table mode, we need all keys to edit the table cells
     }
 
     // a word is active
-    if (clickedNodes.length == 1) {
-        if (evt.which == 46) { // '.'
+    if (clickedNodes.length === 1) {
+        if (evt.which === 46) { // '.'
             //console.log("UPOS", newval);
             if (clickedNodes[0].indexOf(".") !== -1) {
                 // delete empty word
@@ -1099,7 +1105,7 @@ $(window).on('keydown', function (evt) {
         }
     }
 
-})
+});
 
 function unsetPShC() {
     //unprocessedkeystrokes = [];
@@ -1147,7 +1153,7 @@ $(window).on('keypress', function (evt) {
         return;
     }
     // hardwired key
-    else if (evt.which == 63) { // "?"
+    else if (evt.which === 63) { // "?"
         unsetPShC();
         ToggleShortcutHelp();
     }
@@ -1158,33 +1164,33 @@ $(window).on('keypress', function (evt) {
         return;
 
     // hardwired keys
-    } else if (evt.which == 63) { // "?"
+    } else if (evt.which === 63) { // "?"
         unsetPShC();
         ToggleShortcutHelp();
-    } else if (evt.which == 43) { // "+"
+    } else if (evt.which === 43) { // "+"
         unsetPShC();
         sendmodifs({"cmd": "next"});
-    } else if (evt.which == 45) { // "-"
+    } else if (evt.which === 45) { // "-"
         unsetPShC();
         sendmodifs({"cmd": "prec"});
-    } else if (evt.which == 33) { // '!' // 61 "=" validator
+    } else if (evt.which === 33) { // '!' // 61 "=" validator
         unsetPShC();
         $("#valid").click();
 
-    } else if (graphtype == 3 && currentwordid == 0) {
+    } else if (graphtype === 3 && currentwordid === 0) {
         // in table mode, we need all keys to edit the table cells
         unsetPShC();
         return;
 
-    } else  if (evt.which == 95) { // "_" delete all features
+    } else  if (evt.which === 95) { // "_" delete all features
         sendmodifs({"cmd": "mod feats " + clickedNodes[0] + " " + "_"});
         unsetPShC();
         return;
-    } else  if (evt.which == 47) { // "/" delete all misc key-values
+    } else  if (evt.which === 47) { // "/" delete all misc key-values
         sendmodifs({"cmd": "mod misc " + clickedNodes[0] + " " + "_"});
         unsetPShC();
         return;
-    } else if (clickedNodes.length == 0) {
+    } else if (clickedNodes.length === 0) {
         unsetPShC();
         return;
     } else {
@@ -1202,20 +1208,20 @@ $(window).on('keypress', function (evt) {
 
             var newvals = shortcutsMulti[shortcutseq];
 
-            if (newvals != undefined) {
+            if (newvals !== undefined) {
                 for (var what in newvals) {
-                    if (what == "UPOS") {
+                    if (what === "UPOS") {
                         sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newvals[what]});
                     }
-                    else if (what == "XPOS") {
+                    else if (what === "XPOS") {
                         sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newvals[what]});
                     }
-                    else if (what == "DEP") {
+                    else if (what === "DEP") {
                         sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newvals[what]});
                     }
-                    else if (what == "FEATS") {
+                    else if (what === "FEATS") {
                         for (var f of newvals[what]) {
-                            if ( f == "_") {
+                            if ( f === "_") {
                                 // delete all existing
                                 sendmodifs({"cmd": "mod feats " + clickedNodes[0] + " " + "_"});
                             } else {
@@ -1223,9 +1229,9 @@ $(window).on('keypress', function (evt) {
                             }
                         }
                     }
-                    else if (what == "MISC") {
+                    else if (what === "MISC") {
                         for (var f of newvals[what]) {
-                            if ( f == "_") {
+                            if ( f === "_") {
                                 // delete all existing
                                 sendmodifs({"cmd": "mod misc " + clickedNodes[0] + " " + "_"});
                             } else {
@@ -1235,7 +1241,7 @@ $(window).on('keypress', function (evt) {
                     }
                 }
                 shortcutseq = "";
-                if (keepmarked == -1) {
+                if (keepmarked === -1) {
                     clickedNodes = [];
                 }
                 unsetPShC();
@@ -1319,7 +1325,7 @@ $(window).on('keypress', function (evt) {
 //                    return;
 //                }
 //            }
-            if (shortcutseq[0] == "&" && shortcutseq.length > 1) {
+            if (shortcutseq[0] === "&" && shortcutseq.length > 1) {
                 var gotonode = parseInt(shortcutseq.substring(1), 10);
                 if (gotonode > 0) {
                     //console.log("EZEZE", gotonode);
@@ -1377,7 +1383,7 @@ function ModifyTree(evt) {
     //alert("rrSSr " + conllwords[id[1]].feats);
 
     if (target.id) {
-        if (id[0] == "rect") {
+        if (id[0] === "rect") {
             //alert("SHIFT: " + evt.shiftKey)
 
             // deal with a doubleclick: a quick double click opens the edit window
@@ -1418,7 +1424,7 @@ function ModifyTree(evt) {
                 while (ecs.length > 0) {
                     ecs[0].remove();
                 }
-                if (conllword.nonstandard != undefined) {
+                if (conllword.nonstandard !== undefined) {
                     var table = document.getElementById('wordedittable');
                     for (let [coltype, colval] of Object.entries(conllword.nonstandard)) {
                         var row = table.insertRow(-1);
@@ -1435,7 +1441,7 @@ function ModifyTree(evt) {
                 // get features from json and put them into a list for the edit window
                 // TODO improve edit window
                 var fs = "";
-                if (conllword.feats != undefined) {
+                if (conllword.feats !== undefined) {
                     for (e = 0; e < conllword.feats.length; ++e) {
                         var feat = conllword.feats[e];
                         if (e > 0)
@@ -1449,7 +1455,7 @@ function ModifyTree(evt) {
                 // get enhanced deps from json and put them into a list for the edit window
                 // TODO graphical edit
                 var eh = "";
-                if (conllword.enhancedheads != undefined) {
+                if (conllword.enhancedheads !== undefined) {
                     for (e = 0; e < conllword.enhancedheads.length; ++e) {
                         var edh = conllword.enhancedheads[e];
                         if (e > 0)
@@ -1463,7 +1469,7 @@ function ModifyTree(evt) {
                 // get misc from json and put them into a list for the edit window
                 // TODO improve edit window
                 var mc = "";
-                if (conllword.misc != undefined) {
+                if (conllword.misc !== undefined) {
                     for (e = 0; e < conllword.misc.length; ++e) {
                         var mch = conllword.misc[e];
                         if (e > 0)
@@ -1499,9 +1505,9 @@ function ModifyTree(evt) {
                 uposs.push(id[2]);
                 //alert("CCC: " + deprels);
                 //console.log("toto " + target.id+ " " + id + " deprel0 <" + deprels[0] + ">");
-                if (clickedNodes.length == 2) {
+                if (clickedNodes.length === 2) {
                     var makeRoot = false;
-                    if (clickedNodes[0] == clickedNodes[1]) {
+                    if (clickedNodes[0] === clickedNodes[1]) {
                         // clicked twice on same node: current nodes becomes a root node
                         clickedNodes[1] = "0 root";
                         makeRoot = true;
@@ -1518,25 +1524,25 @@ function ModifyTree(evt) {
 
                     //alert("BBBB: " + makeRoot + " " + JSON.stringify(deprels));
                     if (!makeRoot
-                            && (editing_enhanced || deprels[0] == "" || deprels[0] == "root" || deprels[0] == "undefined" || deprels[0] == undefined)) {
+                            && (editing_enhanced || deprels[0] === "" || deprels[0] === "root" || deprels[0] === "undefined" || deprels[0] === undefined)) {
                         var potential = "";
-                        if (uposs[0] == "DET")
+                        if (uposs[0] === "DET")
                             potential = "det";
-                        else if (uposs[0] == "AUX")
+                        else if (uposs[0] === "AUX")
                             potential = "cop";
-                        else if (uposs[0] == "ADP")
+                        else if (uposs[0] === "ADP")
                             potential = "case";
-                        else if (uposs[0] == "PUNCT")
+                        else if (uposs[0] === "PUNCT")
                             potential = "punct";
-                        else if (uposs[0] == "CCONJ")
+                        else if (uposs[0] === "CCONJ")
                             potential = "cc";
-                        else if (uposs[0] == "SCONJ")
+                        else if (uposs[0] === "SCONJ")
                             potential = "mark";
-                        else if (uposs[0] == "ADJ")
-                            potential = "amod";
-                        else if (uposs[0] == "ADV")
+                        else if (uposs[0] === "ADJ")
+                            potential = "am=od";
+                        else if (uposs[0] === "ADV")
                             potential = "advmod";
-                        else if (uposs[0] == "PART") // yn dda
+                        else if (uposs[0] === "PART") // yn dda
                             potential = "case:pred";
 
                         // open deprel edit (for basic or enhanced deps)
@@ -1544,12 +1550,12 @@ function ModifyTree(evt) {
                             $("#cheaden").text(clickedNodes[1]);
                             $("#cdepen").text(clickedNodes[0]);
                             $("#cdeprelen").val(potential);
-                            $("#enhdeprelEdit").modal()
+                            $("#enhdeprelEdit").modal();
                         } else {
                             $("#chead").text(clickedNodes[1]);
                             $("#cdep").text(clickedNodes[0]);
                             $("#cdeprel").val(potential);
-                            $("#deprelEdit").modal()
+                            $("#deprelEdit").modal();
                         }
 
 
@@ -1575,20 +1581,20 @@ function ModifyTree(evt) {
             $("#cdep").text(id[2]);
             $("#cdeprel").val(id[3]);
             //$("#depreledit").dialog("open");
-            $("#deprelEdit").modal()
+            $("#deprelEdit").modal();
 //            var deprel = prompt("enter new deprel", id[3]);
 //            if (deprel != "" && deprel != null && deprel != id[3]) {
 //                //alert(id[3] + " --> " + deprel);
 //                $("#mods").val(/*child*/ id[2] + " " + /* head */ id[1] + " " + deprel);
 //                $("#modifier").click();
 //            }
-        } else if (id[0] == "enhtextpath") { // TODO use classes ?
+        } else if (id[0] === "enhtextpath") { // TODO use classes ?
             // update deprel
             $("#cheaden").text(id[1]);
             $("#cdepen").text(id[2]);
             $("#cdeprelen").val(id[3]);
             $("#enhdeprelEdit").modal();
-        } else if (id[0] == "mwe") {
+        } else if (id[0] === "mwe") {
             //alert("MT MWE: " + id + " " + target);
             $("#currentMWTfrom").val(id[1]);
             $("#currentMWTto").val(id[2]);
@@ -1596,7 +1602,7 @@ function ModifyTree(evt) {
 
             var mc = "";
 
-            if (mwts[id[1]].misc != undefined) {
+            if (mwts[id[1]].misc !== undefined) {
                 for (e = 0; e < mwts[id[1]].misc.length; ++e) {
                     var mch = mwts[id[1]].misc[e];
                     if (e > 0)
@@ -1605,7 +1611,7 @@ function ModifyTree(evt) {
                 }
             } else
                 mc = "_";
-            $("#currentMWTmisc").val(mc)
+            $("#currentMWTmisc").val(mc);
 
 
             $("#editMWT").modal();
@@ -1653,7 +1659,7 @@ function unhighlight() {
         // get all word rectangles, and delete highlighting (boxhighlight) class but keep compareError class (in case of compare mode)
         var currentclasses = $(this).attr("class");
         currentclasses = currentclasses.replace("boxhighlight", "");
-        $(this).attr("class", currentclasses)
+        $(this).attr("class", currentclasses);
     });
 }
 
@@ -1701,7 +1707,7 @@ function formatPhrase(item) {
             $('#save').prop('disabled', false);
         else
             $('#save').prop('disabled', true);
-        $("#changespendingsave").html(item.changes)
+        $("#changespendingsave").html(item.changes);
         alert(item.message);
     } else {
         $('.onlyWithTree').show();
@@ -1801,7 +1807,7 @@ function formatPhrase(item) {
             $("#titre").append(item.sentence);
 
 
-        if (item.errors != undefined) {
+        if (item.errors !== undefined) {
             if (item.errors.heads)
                 $("#errors").append("|" + item.errors.heads + " roots");
             if (item.errors.badroots)
@@ -1836,7 +1842,7 @@ function formatPhrase(item) {
             var ct = 0;
             for (var k = 0; k < item.tree.length; ++k) {
                 var head = item.tree[k];
-                if (head.token != "empty") {
+                if (head.token !== "empty") {
                     ct++;
                 }
             }
@@ -1846,7 +1852,7 @@ function formatPhrase(item) {
                 document.getElementById("titre").style.color = "#101010";
         } else
             document.getElementById("titre").style.color = "#101010";
-        if (graphtype != 3)
+        if (graphtype !== 3)
             $("#arbre").append(svg);
         var use_deprel_as_type = true;
         var sentencelength = 0;
@@ -1857,7 +1863,7 @@ function formatPhrase(item) {
         //alert("SENT LENGTH: " + item.length);
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
-        if (graphtype == 2 /*flatgraph*/) {
+        if (graphtype === 2 /*flatgraph*/) {
             if (item.comparisontree) {
                 // we display the gold tree (given with --compare) in gray underneath the edited tree
                 $("#scores").empty();
@@ -1877,7 +1883,7 @@ function formatPhrase(item) {
                 }
             }
             drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
-        } else if (graphtype == 3) {
+        } else if (graphtype === 3) {
             drawTable($("#arbre"), item.tree, item.sentenceid);
         } else {
             //console.log(item.comparisontree);
@@ -1935,7 +1941,7 @@ function formatPhrase(item) {
         else
             $('#save').prop('disabled', true);
 
-        $("#changespendingsave").html(item.changes)
+        $("#changespendingsave").html(item.changes);
 
         // make a table wordid: word to access data easier for editing
         conllwords = {};
@@ -1949,7 +1955,7 @@ function formatPhrase(item) {
         mwts = {};
         for (wid in conllwords) {
             cw = conllwords[wid];
-            if (cw.mwe != undefined) {
+            if (cw.mwe !== undefined) {
                 mwts[wid] = cw.mwe;
             }
         }
@@ -1983,7 +1989,7 @@ function getSubtree(commands) {
         async: false, // wait for HTTP finished before returning
         data: commands, //{ "cmd" : inputtext },
         headers: {
-            'Content-type': 'text/plain',
+            'Content-type': 'text/plain'
             //'Content-length': inputtext.length
         },
         statusCode: {
@@ -1997,7 +2003,7 @@ function getSubtree(commands) {
         success: function (data) {
             //console.log("zzzz " + JSON.stringify(data));
 
-            if (data.error != undefined) {
+            if (data.error !== undefined) {
                 //alert(data.error);
                 /* show error message */
                 $("#errormessagefield").text(data.error);
@@ -2027,7 +2033,7 @@ function sendmodifs(commands) {
         async: false, // wait for HTTP finished before returning
         data: commands, //{ "cmd" : inputtext },
         headers: {
-            'Content-type': 'text/plain',
+            'Content-type': 'text/plain'
             //'Content-length': inputtext.length
         },
         statusCode: {
@@ -2041,20 +2047,20 @@ function sendmodifs(commands) {
         success: function (data) {
             //console.log("zzzz " + JSON.stringify(data));
 
-            if (data.error != undefined) {
+            if (data.error !== undefined) {
                 //alert(data.error);
                 /* show error message */
                 $("#errormessagefield").text(data.error);
                 $("#errorMessage").modal();
-                if (olddata != undefined) {
+                if (olddata !== undefined) {
                     formatPhrase(olddata);
                 }
-            } else if (data.ok != undefined) {
+            } else if (data.ok !== undefined) {
                 // save file on server OK
                 $("#errorMsgTitle").text("OK");
                 $("#errormessagefield").text(data.ok);
                 $("#errorMessage").modal();
-                if (olddata != undefined) {
+                if (olddata !== undefined) {
                     olddata.changes = 0;
                     formatPhrase(olddata);
                 }
@@ -2086,21 +2092,21 @@ $(document).ready(function () {
     $("#commentfield").click(function () {
         $("#commenttext").val($("#commentfield").text());
         //$("#commentedit").dialog("open");
-        $("#commentEdit").modal()
+        $("#commentEdit").modal();
     });
 
 
     $("#editcommentbutton").click(function () {
         $("#commenttext").val($("#commentfield").text());
         //$("#commentedit").dialog("open");
-        $("#commentEdit").modal()
+        $("#commentEdit").modal();
     });
 
 
     /* save edited comment */
     $('#savecomment').click(function () {
         var newcomment = $("#commenttext").val();
-        if (newcomment != $("#commentfield").text()) {
+        if (newcomment !== $("#commentfield").text()) {
             // send comments to server directly (not via #mods)
             sendmodifs({"cmd": "mod comments " + newcomment});
         }
@@ -2119,8 +2125,8 @@ $(document).ready(function () {
             "sent_id": $("#csent_id").val(),
             "translit": $("#ctranslit").val(),
             "translations": $("#ctranslations").val(),
-            "text": $("#ctext").val(),
-        }
+            "text": $("#ctext").val()
+        };
         sendmodifs({"cmd": "mod editmetadata " + JSON.stringify(object)});
         $("#metadataEdit").modal("hide");
     });
@@ -2152,19 +2158,19 @@ $(document).ready(function () {
     /* save edited word */
     $('#saveword').click(function () {
         conllword = conllwords[$("#cid").text()];
-        if (conllword.form != $("#cform").val()) {
+        if (conllword.form !== $("#cform").val()) {
             sendmodifs({"cmd": "mod form " + conllword.id + " " + $("#cform").val()});
         }
-        if (conllword.lemma != $("#clemma").val()) {
+        if (conllword.lemma !== $("#clemma").val()) {
             sendmodifs({"cmd": "mod lemma " + conllword.id + " " + $("#clemma").val()});
         }
-        if (conllword.upos != $("#cupos").val()) {
+        if (conllword.upos !== $("#cupos").val()) {
             sendmodifs({"cmd": "mod upos " + conllword.id + " " + $("#cupos").val()});
         }
-        if (conllword.xpos != $("#cxpos").val()) {
+        if (conllword.xpos !== $("#cxpos").val()) {
             sendmodifs({"cmd": "mod xpos " + conllword.id + " " + $("#cxpos").val()});
         }
-        if (conllword.deprel != $("#cdeprel2").val()) {
+        if (conllword.deprel !== $("#cdeprel2").val()) {
             sendmodifs({"cmd": "mod deprel " + conllword.id + " " + $("#cdeprel2").val()});
         }
         for (i = 0; i < extracols.length; i++) {
@@ -2173,7 +2179,7 @@ $(document).ready(function () {
             origval = conllword.nonstandard[extracols[i]];
             //console.log("DDDDD", curval, origval);
 
-            if (curval != origval) {
+            if (curval !== origval) {
                 sendmodifs({"cmd": "mod extracol " + conllword.id + " " + extracols[i] + " " + curval});
             }
         }
@@ -2186,7 +2192,7 @@ $(document).ready(function () {
 
         // TODO: well, can be improved too
         var fs = "";
-        if (conllword.feats != undefined) {
+        if (conllword.feats !== undefined) {
             for (e = 0; e < conllword.feats.length; ++e) {
                 var feat = conllword.feats[e];
                 if (e > 0)
@@ -2196,13 +2202,13 @@ $(document).ready(function () {
         } else
             fs = "_";
 
-        if (fs != $("#cfeats").val()) {
+        if (fs !== $("#cfeats").val()) {
             sendmodifs({"cmd": "mod feats " + conllword.id + " " + $("#cfeats").val()});
         }
 
         // TODO: well, can be improved too
         var ms = "";
-        if (conllword.misc != undefined) {
+        if (conllword.misc !== undefined) {
             for (e = 0; e < conllword.misc.length; ++e) {
                 var misc = conllword.misc[e];
                 if (e > 0)
@@ -2212,13 +2218,13 @@ $(document).ready(function () {
         } else
             ms = "_";
 
-        if (ms != $("#cmisc").val()) {
+        if (ms !== $("#cmisc").val()) {
             sendmodifs({"cmd": "mod misc " + conllword.id + " " + $("#cmisc").val()});
         }
 
         // TODO: well, can be improved too
         var eh = "";
-        if (conllword.enhancedheads != undefined) {
+        if (conllword.enhancedheads !== undefined) {
             for (e = 0; e < conllword.enhancedheads.length; ++e) {
                 var edh = conllword.enhancedheads[e];
                 if (e > 0)
@@ -2228,7 +2234,7 @@ $(document).ready(function () {
         } else
             eh = "_";
 
-        if (eh != $("#cenhdeps").val()) {
+        if (eh !== $("#cenhdeps").val()) {
             //console.log("<" + $("#cenhdeps").val() + ">\n(" + eh + ">");
             sendmodifs({"cmd": "mod enhdeps " + conllword.id + " " + $("#cenhdeps").val()});
         }
@@ -2239,7 +2245,7 @@ $(document).ready(function () {
     $('#savedeprel').click(function () {
         conllword = conllwords[$("#cdep").text()];
 
-        if (conllword.deprel != $("#cdeprel").val()) {
+        if (conllword.deprel !== $("#cdeprel").val()) {
             sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
         $('#deprelEdit').modal('hide');
@@ -2248,7 +2254,7 @@ $(document).ready(function () {
     // add/modify enhanced dep relation
     $('#savedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
-        if (/*flatgraph*/ graphtype == 2 && editing_enhanced) {
+        if (/*flatgraph*/ graphtype === 2 && editing_enhanced) {
             //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val())
             sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val()});
             // } else if (conllword.deprel != $("#cdeprel").val()) {
@@ -2261,7 +2267,7 @@ $(document).ready(function () {
     $('#deletedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
         //alert("AAA "+ flatgraph + " "+ editing_enhanced);
-        if (/*flatgraph*/ graphtype == 2 /* && editing_enhanced */) {
+        if (/*flatgraph*/ graphtype === 2 /* && editing_enhanced */) {
             sendmodifs({"cmd": "mod ed del " + $("#cdepen").text() + " " + $("#cheaden").text()});
         }
         $('#enhdeprelEdit').modal('hide');
@@ -2468,7 +2474,7 @@ $(document).ready(function () {
                 $(this).parent().removeClass('active');
                 //$("#flat2").text("show tree" + flatgraph);
             }
-        } else if (this.id == "clear") {
+        } else if (this.id === "clear") {
             $("#word").val("");
             $("#lemma").val("");
             $("#upos").val("");
@@ -2548,13 +2554,13 @@ $(document).ready(function () {
         } else if (this.id === "lire") {
             inputtext = "read " + ($("#sentid").val() - 1);
         } else if (this.id === "lireln") {
-            inputtext = "line " + ($("#sentid_by_ln").val());
+            inputtext = "line " + ($("#sent_by_ln").val());
         } else if (this.id === "modifier") {
             var inputtext = "mod " + $("#mods").val();
         } else if (this.id === "valid") {
             inputtext = "valid";
         } else {
-            alert("error in GUI" + this)
+            alert("error in GUI" + this);
         }
 
         datadico = {"cmd": inputtext};
@@ -2566,6 +2572,12 @@ $(document).ready(function () {
     $("#sentid").keyup(function (event) {
         if (event.keyCode === 13) {
             $("#lire").click();
+        }
+    });
+
+    $("#sent_by_ln").keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#lireln").click();
         }
     });
 
@@ -2654,7 +2666,7 @@ $(document).ready(function () {
         fvals = [];
         for (var k=0; k<$(".feedit").length; k++) {
             var val = $('input[name="fval_' + k + '"]:checked').val();
-            if (val != "None") {
+            if (val !== "None") {
                 fvals.push($('#fe_name_' + k).text() + "=" + val);
             }
         }
@@ -2662,7 +2674,7 @@ $(document).ready(function () {
         // get features invalid for the given UPOS
         for (var m=0; m<$(".feedit_unknown").length; m++) {
             mk = k + m;
-            if ($('#fe_value_' + mk).val() != "") {
+            if ($('#fe_value_' + mk).val() !== "") {
                 fvals.push($('#fe_name_' + mk).text() + "=" + $('#fe_value_' + mk).val());
             }
         }
@@ -2673,7 +2685,7 @@ $(document).ready(function () {
             //console.log("aaa", $("#FE_id").text(), feat);
         }
 
-        if (feat != $("#cfeats").val()) {
+        if (feat !== $("#cfeats").val()) {
             sendmodifs({"cmd": "mod feats " + $("#FE_id").text() + " " + feat});
         }
          $('#editFeats').modal('hide');

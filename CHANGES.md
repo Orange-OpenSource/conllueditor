@@ -1,5 +1,11 @@
 # Changes
 
+## Version 2.30.1
+* new option --help and --version
+* line number search added in help page
+* show commit in `help`
+* documentation continued (html and code)
+
 ## Version 2.30.0
 * search sentences with line number
 * new tests
@@ -11,7 +17,7 @@
 * error with large columns in table view corrected
 
 ## Version 2.29.2
-* corrected bug: "<" and ">" in comments are now correctly displayed
+* corrected bug: `<` and `>` in comments are now correctly displayed
 
 ## Version 2.29.1
 * Fatal error if gui/ does not contain necessary html, css, js files and jquery libraries
@@ -148,8 +154,8 @@
 * new option --shortcutTimeout to set the maximal time (milliseconds) between to keys of a shortcut sequence
 
 ## Version 2.17.4
-* shortcuts sequence must be taped with max 300ms between keys. This permits having short and long shortcuts (e.g. A, and AV)
-* bug correction in complex search: child(child(...))
+* shortcuts sequence must be taped with max 300ms between keys. This permits having short and long shortcuts (e.g. `A`, and `AV`)
+* bug correction in complex search: `child(child(...))`
 
 ## Version 2.17.3
 * more file statistics, doc updated
@@ -186,7 +192,7 @@
 * new tests
 
 ## Version 2.15.1
-* corrected confusion: ConlluEditor deals with **MWT** (multiword tokens) and not with _MTW_s...
+* corrected confusion: ConlluEditor deals with **MWT** (multiword tokens) and not with *MTW* 
 
 ## Version 2.15.0
 * added a script to find similar or identical sentences in a single or multiple CoNLL-U files
@@ -254,7 +260,7 @@
 * bug in maven tests corrected (using `--saveAfter 1` in tests to have output file written immediately)
 
 ## Version 2.10.1
-* shortcuts can have any length, shortcuts to set _Feature=Value_ pairs
+* shortcuts can have any length, shortcuts to set *Feature=Value* pairs
 * new tests
 
 ## Version 2.10.0
@@ -331,7 +337,7 @@
 * new tests, tests updates
 
 ## Version 2.4.2
-* option "auto-adapt" which sets the horizontal width of words to the size needed
+* option `auto-adapt` which sets the horizontal width of words to the size needed
 * added test whether we are on MacOS in start script
 
 ## Version 2.4.1
@@ -384,7 +390,7 @@
 * bug corrected: missing write
 
 ## Version 1.14.5
-* bug corrected: NullPointerException at multitokens created with "compose <start> <length>"
+* bug corrected: NullPointerException at multitokens created with `compose <start> <length>`
 
 ## Version 1.14.4
 * factorisation in ConllWord class
@@ -407,7 +413,7 @@
 * add xpos and extra columns to LaTeX output
 
 ## Version 1.13.0
-* can display columns > 10, if present (new button "extra cols")
+* can display columns > 10, if present (new button `extra cols`)
 * verbosity in test
 * tests updated for the extra columns
 * corrected bug for right2left display of sentences with empty words

@@ -31,7 +31,7 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.29.4 as of 25th March 2025
+    version 2.30.1 as of 13th April 2025
     -->
 
     <head>
@@ -101,7 +101,7 @@
                         <span class="contain"><button class="editbuttons mybutton" id="undo">&nbsp;</button> <!-- ↺ --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="redo">&nbsp;</button> <!-- ↻ --></span>
                         <button class="editbuttons mybutton" id="lire">read sentence</button>
-                        <input type="text" id="sentid" class="inputfield" pattern="[1-9][0-9]*" size="4" value="1" >
+                        <input type="text" id="sentid" title="load sentence with number" class="inputfield" pattern="[1-9][0-9]*" size="4" value="1" >
                         <span class="contain"><button class="editbuttons mybutton" id="first">&nbsp;</button> <!--  |&lt; --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="prec">&nbsp;</button> <!-- &lt;&lt; --></span>
                         <span class="contain"><button class="editbuttons mybutton" id="next">&nbsp;</button> <!--  &gt;&gt; --></span>
@@ -133,8 +133,8 @@
                         </select>
                         </span>
 
-                        <button class="editbuttons mybutton" id="lireln">line number</button>
-                        <input type="text" id="sentid_by_ln" class="inputfield" pattern="[1-9][0-9]*" size="5" value="1" >
+                        <button class="editbuttons mybutton" id="lireln">go to line</button>
+                        <input type="text" id="sent_by_ln" title="find sentence which is on line number" class="inputfield" pattern="[1-9][0-9]*" size="5" value="1" >
                     </td>
                 </tr>
 
@@ -498,7 +498,12 @@
                         The search starts with the sentence following the displayed one. Activating the
                         <img class="helptextbutton" style="width: 40px;" src="img/backwards.svg"> button
                         searches towards the beginning of the file. <img class="helptextbutton" style="width: 40px;" src="img/clear.svg"> clears all search fields.
-
+                        
+                        <h3>Line number search</h3>
+                        Find a sentence by a line number (of the edited file). 
+                        Specify the line number in the input field next to the <span class="buttondoc">go to line</span> button and click the button.
+                        The sentence of the conllu-file which contains the given line number is loaded.
+                        
                         <h3>Complex search</h3>
                         enter a search condition <span class="userinputdoc">expression</span> where <span class="userinputdoc">expression</span>
                         is a set of <span class="userinputdoc">key:values</span>, operators like <span class="userinputdoc">and</span>,
@@ -648,9 +653,9 @@
                        <a href="https://github.com/Orange-OpenSource/conllueditor/blob/master/CHANGES.md">CHANGES.md</a>
 
                        <h2>About</h2>
-                       ConlluEditor v<span id="ce_version"></span>, <a href="https://github.com/Orange-OpenSource/conllueditor">https://github.com/Orange-OpenSource/conllueditor</a> <br>
+                       ConlluEditor v<span id="ce_version"></span>, <a href="https://github.com/Orange-OpenSource/conllueditor">https://github.com/Orange-OpenSource/conllueditor</a> (commit: <span id="ce_gitcommit"></span>)<br>
                        Author: Johannes Heinecke.
-                       Copyright © 2018-2024 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
+                       Copyright © 2018-2025 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
                        <p>
                            Powered by <a target="_blank" href="https://jquery.com/">jquery</a>,
                            <a target="_blank" href="https://getbootstrap.com">bootstrap</a> and

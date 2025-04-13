@@ -26,7 +26,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.30.0 (see [change history](CHANGES.md))
+Current version: 2.30.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -397,7 +397,7 @@ The search field on the top right permits to search a sentence by givening a lin
 The sentences in which this line number occurs is displayed. If the line number is not a comment line, the word which is on the line is highlighted.
 This can be useful to find lines output by the various UD validators. 
 If sentences are modified at change length (by splitting a word or joining two words, or by adding or deleting comment lines, the line numbers are adapted.
-Type in line number in field on the top right and click `line number`:
+Type in line number in field on the top right and click `go to line`:
 
 ![Search by line number](doc/search_line_number.png)
 
