@@ -430,7 +430,7 @@ In order to undo this replacement, click the undo button (
 replacing, click `search & replace` again
 
 ## Grew Match search
-ConlluEditor implements a subset of search as defined in [Grew Match](http://universal.grew.fr/?corpus=UD_English-ParTUT@2.11">Gre Match). The subset includes
+ConlluEditor implements a subset of search as defined in [Grew Match](http://universal.grew.fr/?corpus=UD_English-ParTUT@2.15). The subset includes
 
 * node definitions: `pattern {N [upos=NOUN, lemma <> "thing"] }`
 * deprel definitions: `pattern { V -[nsubj]-> N}` (including combinations of node and deprel definitions)
@@ -438,7 +438,7 @@ ConlluEditor implements a subset of search as defined in [Grew Match](http://uni
 * `global`: `global { is_[not_]tree }`, `global { is_[not_]projective }`
 * (enhanced relations are still ignored however)
 
-Some examples can be found in [grewtests.txt](grewtests.txt)
+Some examples can be found in [grewtests.txt](grewtests.txt).
 
 ## Matching subtrees
 
@@ -504,7 +504,7 @@ If the first line in the subtree window is a valid CoNLL-U Plus column definitio
 
 # Mass Editing
 
-A simple language to modify tokens if a (complex condition is met) see [Mass Editing](doc/mass_editing.md)
+A simple language to modify tokens if a (complex condition is met) see [Mass Editing](doc/mass_editing.md).
 
 ## Metadata editing
 
