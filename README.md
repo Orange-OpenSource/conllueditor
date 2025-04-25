@@ -848,6 +848,7 @@ For the time being the following scripts/languages are covered
 * arc: Aramaic (unvocalized forms are transliterated without vowels)
 * ru: Russian (also processes cyrillic letters for Serbian, and Caucasian languages (like Chechen, Ingush, Avar)
 * bg: Bulgarian
+* kab: Tifinagh (Berber languages)
 
 Other alphabets with a straight forward transliteration can be added easily added (please send me you updated translit.json file!).
 In some cases the transliteration can be erroneous, since this script does not take into account complex context depending transliterations. It is thought as a help for an initial version to be manually validated

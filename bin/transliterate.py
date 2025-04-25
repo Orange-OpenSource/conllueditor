@@ -2,7 +2,7 @@
 
 # This software is under the 3-Clause BSD License
 #
-# Copyright (c) 2021, Orange S.A.
+# Copyright (c) 2021-2025, Orange S.A.
 # 
 # Redistribution and use in source and binary forms, with or without modification,
 # are permitted provided that the following conditions are met:
@@ -30,17 +30,18 @@
 #  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
 #  @author Johannes Heinecke
-#  @version 2.14.0 as of 12th December 2021
+#  @version 2.29.4 as of 25th April 2025
 
 
 
 # transliterate into the latin script
 
-import sys
-import os
-import json
-import re
 import collections
+import json
+import os
+import re
+import readline
+import sys
 
 class Transliterator:
     def __init__(self, datafile, language):
@@ -198,7 +199,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--outfile", "-o", default=None, type=str, help="output file")
-    parser.add_argument("--infile", "-i", default=None, required=True, type=str, help="input file")
+    parser.add_argument("--infile", "-i", default=None, type=str, help="input file (- reads from stdin)")
     parser.add_argument("--data", "-d", default=None, required=None, type=str, help="data file (default translit.json)")
     parser.add_argument("--language", "-l", default=None, required=True, type=str, help="script/language to transliterate")
     parser.add_argument("--lemmas", default=False, action="store_true", help="transliterate lemmas")
@@ -206,6 +207,7 @@ if __name__ == "__main__":
     parser.add_argument("--raw", default=False, action="store_true", help="raw text, transliterate everything")
     parser.add_argument("--overwrite", default=False, action="store_true", help="overwrite existing transliteration in MISC:Translit and in # translit")
     parser.add_argument("--sentence", default=False, action="store_true", help="add sentence transliteration by concatening forms")
+    parser.add_argument("--interactive", "-I", default=False, action="store_true", help="interactive use")
 
     if len(sys.argv) < 2:
         parser.print_help()
@@ -216,8 +218,18 @@ if __name__ == "__main__":
             tl = Transliterator(args.data,
                                 args.language)
 
-            if args.raw:
-                ifp = open(args.infile)
+            if args.interactive:
+                txt = input(">> ")
+                while txt:
+                    print(tl.transliterate(txt), end="")
+                    txt = input(">> ")
+
+            elif args.raw:
+                if args.infile == "-":
+                    ifp = sys.stdin
+                else:
+                    ifp = open(args.infile)
+
                 if args.outfile:
                     ofp = open(args.outfile, "w")
                 else:
