@@ -37,6 +37,7 @@ import com.google.gson.JsonObject;
 import com.orange.labs.conllparser.ConllWord.EnhancedDeps;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -89,6 +90,8 @@ public class ConllSentence {
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
     Map<String, Integer> columndefs = null;
     private int last_modified = 0; // last modification date in this session. To avoid to users edit the same sentence at the same time. When a modification is sent by the client, the modifcation date must still be the same
+    Set<String> highlighttokens = null;
+    Set<String> highlightdeprels = null;
 
     public enum Scoretype {
         /*FORM, */
@@ -186,7 +189,8 @@ public class ConllSentence {
         hasEnhancedDeps = false;
         List<String> lastnonstandardinfo = null;
         Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
-
+        int hlt = 0;
+        int hld = 0;
         List<ConllException> errors = new ArrayList<>();
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             try {
@@ -218,6 +222,19 @@ public class ConllSentence {
                         } else {
                             System.err.format("WARNING: ignoring invalid '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
                         }
+                    } else if (line.startsWith("# highlight tokens =")) {
+                        String tmp = line.substring(20).trim();
+                        highlighttokens = new HashSet<>(Arrays.asList(tmp.split("\\s+")));
+                        hlt = cline.getKey();
+                    } else if (line.startsWith("# highlight deprels =")) {
+                        String tmp = line.substring(21).trim();
+                        hld = cline.getKey();
+                        highlightdeprels = new HashSet<>(Arrays.asList(tmp.split("\\s+")));
+                        for (String t: highlightdeprels) {
+                            if (t.contains("-")) {
+                                System.err.format("WARNING: ignoring invalid token for highlighting deprels '%s'. line %d: \"%s\"\n", t, cline.getKey(), line);
+                            }
+                        }
                     } else {
                         comments.add(line.substring(1).trim());
                     }
@@ -232,7 +249,12 @@ public class ConllSentence {
 
                 ConllWord w = new ConllWord(line, lastnonstandardinfo, columndefs, cline.getKey());
                 w.setMysentence(this);
-
+                if (highlighttokens != null && highlighttokens.contains(w.getFullId())) {
+                    w.setCheckToken(true);
+                }
+                if (highlightdeprels != null && highlightdeprels.contains(w.getFullId())) {
+                    w.setCheckDeprel(true);
+                }
                 if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                     hasEnhancedDeps = true;
                 }
@@ -268,6 +290,20 @@ public class ConllSentence {
                 sb.append(ex.getMessage()).append('\n');
             }
             throw new ConllException(sb.toString());
+        }
+        if (highlighttokens != null) {
+            for (String t: highlighttokens) {
+                if (getWord(t) == null) {
+                    System.err.format("WARNING: ignoring invalid token for highlighting tokens '%s'. line %d\n", t, hlt);
+                }
+            }
+        }
+        if (highlightdeprels  != null) {
+            for (String t: highlightdeprels) {
+                if (getWord(t) == null) {
+                    System.err.format("WARNING: ignoring invalid token for highlighting deprels '%s'. line %d\n", t, hld);
+                }
+            }
         }
 
     }
@@ -1745,7 +1781,7 @@ public class ConllSentence {
 
         //public ConllWord.Fields field;
         //public Set<Integer> ids;
-        public Map<Integer, ConllWord.Fields> idshl;
+        public Map<Integer, ConllWord.Fields> idshl; // wordid: fields to highlight
 
         // highlight a single word on field
         public Highlight(ConllWord.Fields field, int wordid) {
@@ -1803,7 +1839,7 @@ public class ConllSentence {
     }
 
     /**
-     * produire un arbre en Json. Nécessite l'appel a makeTrees()
+     * produire un arbre en Json, returned to GUI. Nécessite l'appel a makeTrees()
      *
      * @param validupos
      * @param validxpos
@@ -2046,7 +2082,23 @@ public class ConllSentence {
         this.translit = translit;
         is_modified = true;
     }
+    
+    public void setHighlightTokens(String tokenlist) {
+       highlighttokens = new HashSet<>(Arrays.asList(tokenlist.trim().split("\\s+")));
+    }
 
+    public void setHighlightDeprels(String tokenlist) {
+       highlightdeprels = new HashSet<>(Arrays.asList(tokenlist.trim().split("\\s+")));
+    }
+    
+    public Set<String> getHightlighttokens() {
+        return highlighttokens;
+    }
+
+    public Set<String> getHightlightdeprels() {
+        return highlightdeprels;
+    }
+        
     public String getNewpar() {
         return newpar;
     }

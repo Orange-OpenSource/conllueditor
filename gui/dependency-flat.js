@@ -340,14 +340,14 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     } else {
         var headx = wordpositions[headpos];
     }
-    
+
     var headbeforedep = (headpos < item.position);
 
     if (sentencelength != 0) {
         // we write the tree from right to left
         headbeforedep = !headbeforedep;
         if (!autoadaptwidth) {
-            headx = ((sentencelength) * hor) - headx;   
+            headx = ((sentencelength) * hor) - headx;
         } else {
             headx = rightmostwordpos - headx;
         }
@@ -366,7 +366,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
 
     // display gold tree in comparison mode in gray
     var grayclass = ""; // text
-    var grayclass2 = ""; // lines 
+    var grayclass2 = ""; // lines
     var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
     if (isgold == 1) {
         grayclass = " goldtree";
@@ -444,17 +444,21 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
      else
      deprelpath.setAttribute("side", "right");
      */
-    if (item.deprelerror == 1) {
+    if (item.deprelerror === 1) {
         deprelpath.setAttribute("class", classname + grayclass + " worderror");
     }
 
 
-    if ((above && item.deprelhighlight == 1) || (!above && item.depshighlight)) {
+    if ((above && item.deprelhighlight === 1) || (!above && item.depshighlight)) {
         deprelpath.setAttribute("class", classname + grayclass + " highlight");
 	highlightX = headx;
 	highlightY = middley;
     }
 
+    if (item.checkdeprel === 2) {
+        deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
+        path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");
+    }
 
     if (headbeforedep)
         deprelpath.setAttribute('startOffset', "50%");

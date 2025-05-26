@@ -254,7 +254,7 @@ public class ConllFile {
             //throw new ConllException(e.getMessage() + " (sentence ending with line " + ctline + ")");
             throw new ConllException(e.getMessage());
         }
-        System.err.format("%d lines (%d sentences) read\n", ctline, sentences.size());
+        System.err.format("%d lines (%d sentences) read\n\n", ctline, sentences.size());
     }
 
     /**

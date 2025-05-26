@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2019, Orange S.A.
+ Copyright (c) 2018-2025, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -62,7 +62,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     var grayclass2 = ""; // background
     var rect_idprefix = ""; // give word boxes a different ID to avoid editing on them
     // the dep graph in the background is the gold graph in comparison mode,
-    if (gold == 1) {
+    if (gold === 1) {
         grayclass = " goldtree";
         grayclassf = " goldtreefeats";
         grayclass2 = " goldtree2";
@@ -219,6 +219,9 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         }
     }
 
+    if (item.checktoken === 2) {
+        rect.setAttribute("class", rect.getAttribute("class") + " wordcheck");
+    }
 
     nodes[item.id] = {"item": rect}
 

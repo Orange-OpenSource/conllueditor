@@ -95,7 +95,7 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     //svg.setAttribute('onmouseup', "MakeRoot(evt)");
 
     // insert words at the bottom of the tree (and MWEs if activated)
-    if (isgold == 0) {
+    if (isgold === 0) {
         for (i = 0; i < trees.length; ++i) {
             var tree = trees[i];
             insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
@@ -167,9 +167,9 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
     // display gold tree in comparison mode in gray
     var grayclass = ""; // text
-    var grayclass2 = ""; // lines 
+    var grayclass2 = ""; // lines
     var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
-    if (isgold == 1) {
+    if (isgold === 1) {
         grayclass = " goldtree";
         grayclass2 = " goldtree2";
         gold_idprefix = "g";
@@ -243,26 +243,31 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
          else
          deprelpath.setAttribute("side", "right");
          */
-        if (item.deprelerror == 1) {
+        if (item.deprelerror === 1) {
             //deprelpath.setAttribute("fill", "red");
             deprelpath.setAttribute("class", "words deprel worderror");
         }
         //else
         //    deprelpath.setAttribute("fill", "#008800");
 
-        if (item.deprelhighlight == 1) {
+        if (item.deprelhighlight === 1) {
             deprelpath.setAttribute("class", "words deprel highlight");
             highlightX = x - 40;
             highlightY = level - 20;
             //depreltext.setAttribute("font-weight", "bold");
             //deprelpath.setAttribute("fill", "orange");
         }
+        if (item.checkdeprel === 2) {
+            // the deprel is marked as "to check" in the conllu file, put into some shiny colour
+            deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
+            path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");
+        }
 
-
-        if (x < originx)
+        if (x < originx) {
             deprelpath.setAttribute('startOffset', "40%");
-        else
+        } else {
             deprelpath.setAttribute('startOffset', "60%");
+        }
         deprelpath.textContent = item.deprel;
         depreltext.appendChild(deprelpath);
         svg.appendChild(depreltext);
@@ -393,7 +398,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
 //            }
 //        } else {
 //            // width of the first and last word of the MWE
-//            var length = item.mwe.toid - item.mwe.fromid + 1;          
+//            var length = item.mwe.toid - item.mwe.fromid + 1;
 //            var bwidth = hor * length - 10;
 //
 //            if (sentencelength > 0) {
@@ -418,6 +423,11 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
         mwepath.setAttribute("fill", "#888888");
         mwepath.setAttribute('startOffset', "50%");
         mwepath.textContent = item.mwe.form;
+
+        if (item.mwe.checktoken === 2) {
+            mwe.setAttribute("class", "mwecheck");
+            mwetext.setAttribute("class", "mwecheck");
+        }
         mwetext.appendChild(mwepath);
         svg.appendChild(mwetext);
     }

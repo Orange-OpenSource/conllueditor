@@ -1,5 +1,9 @@
 # Changes
 
+## Version 2.31.0
+* highlight tokens and deprels marked in a special comment in the .conllu file
+* upgraded org.eclipse.jgit to 7.2.1.202505142326-r
+
 ## Version 2.30.1
 * new option --help and --version
 * line number search added in help page

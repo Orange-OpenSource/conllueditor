@@ -103,6 +103,9 @@ public class ConllWord {
 
     private ConllSentence mysentence = null; // pointer to the sentence of which this word is part
 
+    private boolean checktoken = false; // true if information in .conllu
+    private boolean checkdeprel = false; // true if information in .conllu
+
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
     };
@@ -170,6 +173,8 @@ public class ConllWord {
         }
 
         whquestion = orig.isWhquestion();
+        checkdeprel = orig.checkdeprel;
+        checktoken = orig.checktoken;
     }
 
     public ConllWord(String conllline, List<String> lastannots, Map<String, Integer> columndefs) throws ConllException {
@@ -266,6 +271,19 @@ public class ConllWord {
                 }
             }
         }
+    }
+
+    public void setCheckDeprel(boolean c) {
+        checkdeprel = c;
+    }
+    public void setCheckToken(boolean c) {
+        checktoken = c;
+    }
+    public boolean getcheckDeprel() {
+        return checkdeprel;
+    }
+    public boolean getCheckToken() {
+        return checktoken;
     }
 
     private int getColumn(String colname, Map<String, Integer> columndefs) {
@@ -970,6 +988,7 @@ public class ConllWord {
         jword.addProperty("lemma", lemma);
 
         if (contracted != null) {
+
             ConllWord contr = contracted.get(id);
             // attach an contracted word (n-m) to the word with id n
             if (contr != null) {
@@ -977,6 +996,8 @@ public class ConllWord {
                 jcontr.addProperty("fromid", contr.id);
                 jcontr.addProperty("toid", contr.subid);
                 jcontr.addProperty("form", contr.form);
+
+                if (contr.checktoken) jcontr.addProperty("checktoken", 2);
 
                 if (contr.misc != null && !contr.misc.isEmpty()) {
                     JsonArray jmiscs = new JsonArray();
@@ -1105,6 +1126,8 @@ public class ConllWord {
                     break;
             }
         }
+        if (checktoken) jword.addProperty("checktoken", 2);
+        if (checkdeprel) jword.addProperty("checkdeprel", 2);
 
         jword.addProperty("chunk", partOfChunk);
         //jword.addProperty("type", word.getPartialDeplabel());

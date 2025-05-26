@@ -595,6 +595,22 @@ public class ConlluEditor {
         solution.addProperty("previous_modification", csent.getLastModification());
         solution.addProperty("length", (csent.getWords().size() + csent.numOfEmptyWords()));
 
+        if (csent.getHightlightdeprels() != null) {
+            JsonArray tokens = new JsonArray();
+            for (String t : csent.getHightlightdeprels()) {
+                tokens.add(t);
+            }
+            solution.add("hightlightdeprels", tokens);
+        }
+
+        if (csent.getHightlighttokens() != null) {
+            JsonArray tokens = new JsonArray();
+            for (String t : csent.getHightlighttokens()) {
+                tokens.add(t);
+            }
+            solution.add("hightlighttokens", tokens);
+        }
+
         if (csent.getSentid() != null) {
             solution.addProperty("sent_id", csent.getSentid());
         }
