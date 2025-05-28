@@ -144,14 +144,15 @@
 130	.	.	PUNCT	_	_	30	punct	_	_
 
 # sent_id = conlueditor-test-6
-# text = ils ont visité le Musée du Louvre.
+# text = ils ont visité le Musée duu Louvre.
+# highlight tokens = 6-7
 # sentence 6
 1	ils	il	PRON	PERS_NOM	Gender=Masc|Number=Plur|Person=3|PronType=Prs	3	nsubj	_	_
 2	ont	avoir	AUX	AUXA	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	3	aux	_	_
 3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
 4	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	5	det	_	_
 5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_
-6-7	du	_	_	_	_	_	_	_	_
+6-7	duu	_	_	_	_	_	_	_	_
 6	de	de	ADP	ADP	_	8	case	_	_
 7	le	le	DET	ART	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	8	det	_	_
 8	Louvre	Louvre	PROPN	PROPN	_	5	nmod	_	SpaceAfter=No

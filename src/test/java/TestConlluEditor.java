@@ -292,7 +292,7 @@ public class TestConlluEditor {
     }
 
     @Test
-    public void test053Mod_check() throws IOException {
+    public void test053Mod_highlight() throws IOException {
         name("modifying checktoken/checkdeprel");
         Map <String, Integer>commands = new LinkedHashMap<>();
 
@@ -304,6 +304,7 @@ public class TestConlluEditor {
         commands.put("mod checkdeprel 5.1 true", 13);
 
         commands.put("mod checktoken 3 false", 1);
+        commands.put("mod editmwt 6 7 duu true", 6);
 
         runtest("test.highlightedit.conllu", commands, "CoNLL-U output incorrect");
     }
@@ -573,10 +574,10 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         processwrapper("mod compose 1 3", 17, "editinfo");
-        processwrapper("mod editmwt 1 3 Dáselle", 17, "editinfo");
+        processwrapper("mod editmwt 1 3 Dáselle true", 17, "editinfo");
 
         processwrapper("mod compose 6 2", 17, "editinfo");
-        processwrapper("mod editmwt 6 7 ao Gloss=to_him", 17, "editinfo");
+        processwrapper("mod editmwt 6 7 ao false Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
         //URL res = this.getClass().getResource("test.conllu.8"); // modified file

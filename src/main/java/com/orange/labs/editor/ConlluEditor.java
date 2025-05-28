@@ -987,7 +987,7 @@ public class ConlluEditor {
                                          5-6	don't	_	_	...
                                          5	do	VERB	...
                                          6	n't	PART	...
-          mod editmwt <starttokenid> <endtokenid> [<MISC data>]
+          mod editmwt <starttokenid> <endtokenid> <highlighttoken> [<MISC data>]
                                      modify the span of a current MWT (or delete it by setting <endtokenid> to 0
 
           mod split <tokenid> [<position>]]
@@ -1946,7 +1946,7 @@ public class ConlluEditor {
 
             } else if (command.startsWith("mod editmwt") || command.startsWith("mod editmwe")) { // mod editmwt current_start new_end form [MISC column data]
                 String[] f = command.trim().split(" +");
-                if (f.length < 5) {
+                if (f.length < 6) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
@@ -1954,8 +1954,9 @@ public class ConlluEditor {
                 int end;
                 String form = f[4];
                 String misc = "_";
-                if (f.length > 5) {
-                    misc = f[5];
+                String highlighttoken = f[5];
+                if (f.length > 6) {
+                    misc = f[6];
                 }
 
                 try {
@@ -1992,6 +1993,7 @@ public class ConlluEditor {
                     cw.setForm(form);
                     cw.setSubId(end);
                     cw.setId(start);
+                    cw.setCheckToken(highlighttoken.equalsIgnoreCase("true"));
                     if (misc != null) {
                         cw.setMisc(misc);
                     }

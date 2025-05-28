@@ -1627,6 +1627,10 @@ function ModifyTree(evt) {
                 mc = "_";
             $("#currentMWTmisc").val(mc);
 
+            // set here the checkbox for deprels and tokens (# highlight token/deprel = lines in .conllu file)
+            if (mwts[id[1]].checktoken === true) {
+                $("#mwtchecktoken").prop( "checked", true);
+            }
 
             $("#editMWT").modal();
 
@@ -2164,6 +2168,7 @@ $(document).ready(function () {
                     + $("#currentMWTfrom").val()
                     + " " + $("#currentMWTto").val()
                     + " " + $("#currentMWTform").val()
+                    + " " + $("#mwtchecktoken").is(":checked")
                     + " " + misc});
         $('#editMWT').modal('hide');
     });
