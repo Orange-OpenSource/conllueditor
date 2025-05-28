@@ -595,21 +595,21 @@ public class ConlluEditor {
         solution.addProperty("previous_modification", csent.getLastModification());
         solution.addProperty("length", (csent.getWords().size() + csent.numOfEmptyWords()));
 
-        if (csent.getHightlightdeprels() != null) {
-            JsonArray tokens = new JsonArray();
-            for (String t : csent.getHightlightdeprels()) {
-                tokens.add(t);
-            }
-            solution.add("hightlightdeprels", tokens);
-        }
-
-        if (csent.getHightlighttokens() != null) {
-            JsonArray tokens = new JsonArray();
-            for (String t : csent.getHightlighttokens()) {
-                tokens.add(t);
-            }
-            solution.add("hightlighttokens", tokens);
-        }
+//        if (csent.getHightlightdeprels() != null) {
+//            JsonArray tokens = new JsonArray();
+//            for (String t : csent.getHightlightdeprels()) {
+//                tokens.add(t);
+//            }
+//            solution.add("hightlightdeprels", tokens);
+//        }
+//
+//        if (csent.getHightlighttokens() != null) {
+//            JsonArray tokens = new JsonArray();
+//            for (String t : csent.getHightlighttokens()) {
+//                tokens.add(t);
+//            }
+//            solution.add("hightlighttokens", tokens);
+//        }
 
         if (csent.getSentid() != null) {
             solution.addProperty("sent_id", csent.getSentid());
@@ -2304,6 +2304,59 @@ public class ConlluEditor {
 
                 try {
                     writeBackup(currentSentenceId, modWord, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+                return returnTree(currentSentenceId, csent);
+
+            } else if (command.startsWith("mod checkdeprel ")) {
+                String[] f = command.trim().split(" +", 4);
+                if (f.length != 4) {
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
+                }
+                csent = cfile.getSentences().get(currentSentenceId);
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
+
+                ConllWord cword = csent.getWord(f[2]);
+                if (f[3].equals("false")) {
+                    //csent.removeHighlightDeprel(f[2]);
+                    cword.setCheckDeprel(false);
+                } else {
+                    //csent.addHighlightDeprel(f[2]);
+                    cword.setCheckDeprel(true);
+                }
+
+                try {
+                    writeBackup(currentSentenceId, cword, editinfo);
+                } catch (IOException ex) {
+                    return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
+                }
+                return returnTree(currentSentenceId, csent);
+            } else if (command.startsWith("mod checktoken ")) {
+                String[] f = command.trim().split(" +", 4);
+                if (f.length != 4) {
+                    return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
+                }
+                csent = cfile.getSentences().get(currentSentenceId);
+                if (history == null) {
+                    history = new History(200);
+                }
+                history.add(csent);
+
+                ConllWord cword = csent.getWord(f[2]);
+                if (f[3].equals("false")) {
+                    //csent.removeHighlightToken(f[2]);
+                    cword.setCheckToken(false);
+                } else {
+                    //csent.addHighlightToken(f[2]);
+                    cword.setCheckToken(true);
+                }
+
+                try {
+                    writeBackup(currentSentenceId, null, editinfo);
                 } catch (IOException ex) {
                     return formatErrMsg("Cannot save file: " + ex.getMessage(), currentSentenceId);
                 }

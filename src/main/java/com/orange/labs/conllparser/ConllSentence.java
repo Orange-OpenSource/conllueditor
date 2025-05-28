@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -90,8 +91,8 @@ public class ConllSentence {
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
     Map<String, Integer> columndefs = null;
     private int last_modified = 0; // last modification date in this session. To avoid to users edit the same sentence at the same time. When a modification is sent by the client, the modifcation date must still be the same
-    Set<String> highlighttokens = null;
-    Set<String> highlightdeprels = null;
+    //Set<String> highlighttokens = null;
+    //Set<String> highlightdeprels = null;
 
     public enum Scoretype {
         /*FORM, */
@@ -191,6 +192,9 @@ public class ConllSentence {
         Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
         int hlt = 0;
         int hld = 0;
+        Set<String> highlighttokens = null;
+        Set<String> highlightdeprels = null;
+
         List<ConllException> errors = new ArrayList<>();
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
             try {
@@ -224,12 +228,12 @@ public class ConllSentence {
                         }
                     } else if (line.startsWith("# highlight tokens =")) {
                         String tmp = line.substring(20).trim();
-                        highlighttokens = new HashSet<>(Arrays.asList(tmp.split("\\s+")));
+                        highlighttokens = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
                         hlt = cline.getKey();
                     } else if (line.startsWith("# highlight deprels =")) {
                         String tmp = line.substring(21).trim();
                         hld = cline.getKey();
-                        highlightdeprels = new HashSet<>(Arrays.asList(tmp.split("\\s+")));
+                        highlightdeprels = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
                         for (String t: highlightdeprels) {
                             if (t.contains("-")) {
                                 System.err.format("WARNING: ignoring invalid token for highlighting deprels '%s'. line %d: \"%s\"\n", t, cline.getKey(), line);
@@ -292,17 +296,27 @@ public class ConllSentence {
             throw new ConllException(sb.toString());
         }
         if (highlighttokens != null) {
+            Set<String>to_remove = new HashSet<>();
             for (String t: highlighttokens) {
                 if (getWord(t) == null) {
                     System.err.format("WARNING: ignoring invalid token for highlighting tokens '%s'. line %d\n", t, hlt);
+                    to_remove.add(t);
                 }
+            }
+            for (String t : to_remove) {
+                highlighttokens.remove(t);
             }
         }
         if (highlightdeprels  != null) {
+            Set<String>to_remove = new HashSet<>();
             for (String t: highlightdeprels) {
                 if (getWord(t) == null) {
                     System.err.format("WARNING: ignoring invalid token for highlighting deprels '%s'. line %d\n", t, hld);
+                    to_remove.add(t);
                 }
+            }
+            for (String t : to_remove) {
+                highlightdeprels.remove(t);
             }
         }
 
@@ -755,6 +769,71 @@ public class ConllSentence {
                 sb.append("# text_").append(lg).append(" = ").append(translations.get(lg)).append('\n');
             }
         }
+
+        /*
+        if (highlightdeprels != null) {
+            sb.append("# highlight deprels =");
+            for (String i : highlightdeprels) {
+                sb.append(" ").append(i);
+            }
+            sb.append('\n');
+        }
+        if (highlighttokens != null) {
+            sb.append("# highlight tokens =");
+            for (String i : highlighttokens) {
+                sb.append(" ").append(i);
+            }
+            sb.append('\n');
+        }
+        */
+        Set<String> highlighttokens = new LinkedHashSet<>();
+        Set<String> highlightdeprels = new LinkedHashSet<>();
+        for (ConllWord cw : words) {
+            if (cw.getCheckToken()) {
+                highlighttokens.add(cw.getFullId());
+            }
+            if (cw.getcheckDeprel()) {
+                highlightdeprels.add(cw.getFullId());
+            }
+        }
+        if (contracted != null) {
+            for (ConllWord cw : contracted.values()) {
+                if (cw.getCheckToken()) {
+                    highlighttokens.add(cw.getFullId());
+                }
+                if (cw.getcheckDeprel()) {
+                    highlightdeprels.add(cw.getFullId());
+                }
+            }
+        }
+        if (emptywords != null) {
+            for (List<ConllWord> cws : emptywords.values()) {
+                for (ConllWord cw : cws) {
+                    if (cw.getCheckToken()) {
+                        highlighttokens.add(cw.getFullId());
+                    }
+                    if (cw.getcheckDeprel()) {
+                        highlightdeprels.add(cw.getFullId());
+                    }
+                }
+            }
+        }
+        if (!highlightdeprels.isEmpty()) {
+            sb.append("# highlight deprels =");
+            for (String i : highlightdeprels) {
+                sb.append(" ").append(i);
+            }
+            sb.append('\n');
+        }
+
+        if (!highlighttokens.isEmpty()) {
+            sb.append("# highlight tokens =");
+            for (String i : highlighttokens) {
+                sb.append(" ").append(i);
+            }
+            sb.append('\n');
+        }
+
 
         for (String c : comments) {
             sb.append("# ").append(c).append('\n');
@@ -2082,7 +2161,7 @@ public class ConllSentence {
         this.translit = translit;
         is_modified = true;
     }
-    
+    /*
     public void setHighlightTokens(String tokenlist) {
        highlighttokens = new HashSet<>(Arrays.asList(tokenlist.trim().split("\\s+")));
     }
@@ -2090,7 +2169,43 @@ public class ConllSentence {
     public void setHighlightDeprels(String tokenlist) {
        highlightdeprels = new HashSet<>(Arrays.asList(tokenlist.trim().split("\\s+")));
     }
-    
+
+    public void addHighlightToken(String token) {
+        if (highlighttokens == null) {
+            highlighttokens = new HashSet<>();
+        }
+        highlighttokens.add(token);
+    }
+
+    public void addHighlightDeprel(String token) {
+        if (highlightdeprels == null) {
+            highlightdeprels = new HashSet<>();
+        }
+        highlightdeprels.add(token);
+    }
+
+    public Set<String> removeHighlightToken(String token) {
+        if (highlighttokens != null) {
+            //System.err.println("QQQQ " + highlighttokens + " remove:" + token);
+            highlighttokens.remove(token);
+            //System.err.println("qqqq " + highlighttokens);
+            if (highlighttokens.isEmpty()) {
+                highlighttokens = null;
+            }
+        }
+        return highlighttokens;
+    }
+
+    public Set<String> removeHighlightDeprel(String token) {
+        if (highlightdeprels != null) {
+            highlightdeprels.remove(token);
+            if (highlightdeprels.isEmpty()) {
+                highlightdeprels = null;
+            }
+        }
+        return highlightdeprels;
+    }
+
     public Set<String> getHightlighttokens() {
         return highlighttokens;
     }
@@ -2098,7 +2213,7 @@ public class ConllSentence {
     public Set<String> getHightlightdeprels() {
         return highlightdeprels;
     }
-        
+    */
     public String getNewpar() {
         return newpar;
     }

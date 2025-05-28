@@ -997,7 +997,7 @@ public class ConllWord {
                 jcontr.addProperty("toid", contr.subid);
                 jcontr.addProperty("form", contr.form);
 
-                if (contr.checktoken) jcontr.addProperty("checktoken", 2);
+                if (contr.checktoken) jcontr.addProperty("checktoken", true);
 
                 if (contr.misc != null && !contr.misc.isEmpty()) {
                     JsonArray jmiscs = new JsonArray();
@@ -1126,8 +1126,8 @@ public class ConllWord {
                     break;
             }
         }
-        if (checktoken) jword.addProperty("checktoken", 2);
-        if (checkdeprel) jword.addProperty("checkdeprel", 2);
+        if (checktoken) jword.addProperty("checktoken", true);
+        if (checkdeprel) jword.addProperty("checkdeprel", true);
 
         jword.addProperty("chunk", partOfChunk);
         //jword.addProperty("type", word.getPartialDeplabel());
