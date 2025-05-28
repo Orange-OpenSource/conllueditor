@@ -291,6 +291,22 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
+    @Test
+    public void test053Mod_check() throws IOException {
+        name("modifying checktoken/checkdeprel");
+        Map <String, Integer>commands = new LinkedHashMap<>();
+
+        commands.put("mod checktoken 2 true", 14);
+        commands.put("mod checkdeprel 2 true", 14);
+        commands.put("mod checktoken 5.1 true", 14);
+
+        commands.put("mod checktoken 5.1 false", 13);
+        commands.put("mod checkdeprel 5.1 true", 13);
+
+        commands.put("mod checktoken 3 false", 1);
+
+        runtest("test.highlightedit.conllu", commands, "CoNLL-U output incorrect");
+    }
 
     @Test
     public void test061InvalidHead() throws IOException {

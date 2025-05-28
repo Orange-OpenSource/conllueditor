@@ -2315,12 +2315,17 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
                 csent = cfile.getSentences().get(currentSentenceId);
+
+                ConllWord cword = csent.getWord(f[2]);
+                if (cword == null) {
+                     return formatErrMsg("INVALID word id «" + command + "»", currentSentenceId);
+                }
+
                 if (history == null) {
                     history = new History(200);
                 }
                 history.add(csent);
 
-                ConllWord cword = csent.getWord(f[2]);
                 if (f[3].equals("false")) {
                     //csent.removeHighlightDeprel(f[2]);
                     cword.setCheckDeprel(false);
@@ -2340,13 +2345,19 @@ public class ConlluEditor {
                 if (f.length != 4) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
+
                 csent = cfile.getSentences().get(currentSentenceId);
+                ConllWord cword = csent.getWord(f[2]);
+                if (cword == null) {
+                     return formatErrMsg("INVALID word id «" + command + "»", currentSentenceId);
+                }
+
                 if (history == null) {
                     history = new History(200);
                 }
                 history.add(csent);
 
-                ConllWord cword = csent.getWord(f[2]);
+
                 if (f[3].equals("false")) {
                     //csent.removeHighlightToken(f[2]);
                     cword.setCheckToken(false);

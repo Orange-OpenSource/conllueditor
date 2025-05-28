@@ -15,7 +15,7 @@
 
 # sent_id = fr-ud-dev_00002
 # text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
-# highlight tokens = 2 3 4
+# highlight tokens = 2 4
 # sentence 1
 1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
 2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
@@ -104,7 +104,7 @@
 
 # sent_id = fr-ud-train_00002
 # text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
-# highlight tokens = 8-9 9
+# highlight tokens = 9 8-9
 # sentence 4
 1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
 2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_
@@ -239,7 +239,7 @@
 
 # sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
-# highlight tokens = 5.1
+# highlight deprels = 5.1
 # sentence 13
 1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
 2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_
@@ -251,14 +251,16 @@
 
 # sent_id = ellipsis2
 # text = Mary organised bred and John beer
+# highlight deprels = 2
+# highlight tokens = 2 5.1
 # sentence 14
-10	Mary	Mary	PROPN	_	_	20	nsubj	20:nsubj	_
-20	organised	organise	VERB	_	_	0	root	0:root	_
-30	bred	bred	NOUN	_	_	20	obj	20:obj	_
-40	and	and	CCONJ	_	_	50	cc	50:cc|50.1:cc	_
-50	John	John	PROPN	_	_	20	conj	20:conj|50.1:nsubj	_
-50.1	organised	_	_	_	_	_	_	20:conj	_
-60	beer	beer	NOUN	_	_	50	orphan	50.1:obj	_
+1	Mary	Mary	PROPN	_	_	2	nsubj	2:nsubj	_
+2	organised	organise	VERB	_	_	0	root	0:root	_
+3	bred	bred	NOUN	_	_	2	obj	2:obj	_
+4	and	and	CCONJ	_	_	5	cc	5:cc|5.1:cc	_
+5	John	John	PROPN	_	_	2	conj	2:conj|5.1:nsubj	_
+5.1	organised	_	_	_	_	_	_	2:conj	_
+6	beer	beer	NOUN	_	_	5	orphan	5.1:obj	_
 
 # sent_id = unannotated
 # text = Une exposition au musée du Louvre
