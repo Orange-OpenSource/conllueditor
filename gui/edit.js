@@ -1487,9 +1487,12 @@ function ModifyTree(evt) {
 
 
 
-                // clean all nodes (delete clocked-status)
-                $(".wordnode").attr("class", "wordnode");
-
+                //".wordnode").removeClass("wordcheck");
+                //console.log("eeeeeeeeeeeyyyy", $(".wordnode").attr("class"));
+                // clean all nodes (delete clocked-status) TODO: not needed any more?
+                //$(".wordnode").attr("class", "wordnode");
+                //console.log("eeeeeeeeeeezzzzz", $(".wordnode").attr("class"));
+                
                 // add errorclass for words which are different from gold
                 if (incorrectwords.has("" + id[1])) {
                     errorclass = " compareError";

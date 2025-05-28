@@ -256,6 +256,11 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
         mwepath.textContent = item.mwe.form;
 
+        if (item.mwe.checktoken === 2) {
+            mwe.setAttribute("class", "mwecheck");
+            mwetext.setAttribute("class", "mwecheck");
+        }
+
         mwetext.appendChild(mwepath);
         svg.appendChild(mwetext);
     }
