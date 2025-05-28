@@ -22,11 +22,12 @@ The editor provides the following functionalities:
 * [mass editing](#mass-editing): modify tokens if a (complex) condition is satisfied
 * validation (using implications: _if conditions1 true then conditions2 must be true_)
 * sentence metadata editing
+* add highlight information on tokens and deprels which have yet to be validated (see [highlighting](highlighting)
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.30.1 (see [change history](CHANGES.md))
+Current version: 2.31.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -283,8 +284,8 @@ Click on tone of the `m`odify button opens a Feature-edit popup where the valid 
 
 Invalid features will be shown, the value can be changed via an input field. If its value is set to empty, the feature will be removed.
 
-For most languages (feats.json)[https://github.com/UniversalDependencies/tools/blob/master/data/feats.json] will be OK, but for some languages it still contains errors.
-ConllUEditor provides a script (bin/collectFeatVal.py)[bin/collectFeatVal.py] which allows to take the most frequent Features+Values from existing CoNLL-U files to create are correct version of `feats.json`.
+For most languages [feats.json](https://github.com/UniversalDependencies/tools/blob/master/data/feats.json) will be OK, but for some languages it still contains errors.
+ConllUEditor provides a script [bin/collectFeatVal.py](bin/collectFeatVal.py) which allows to take the most frequent Features+Values from existing CoNLL-U files to create are correct version of `feats.json`.
 
 Options:
   * `-h`, `--help`            show this help message and exit
@@ -354,6 +355,27 @@ Unless earlier versions, the `# text ...` is no longer updated automatically, bu
 * `tomwt id form1 form2 [form3 ...]` 	Transform an existing word into a MWT. The new MWT keeps the form of the word transformed. All other columns are copied to the first member word, except the form which is `form1` from the command line. `form2` etc are used to initialize the form (and lemma) column of the other members of the MWT. All members are initially attached to the first member using the fixed dependency relation.
 * `emptyinsert id form [lemma [upos [xpos]]]` 	add a new empty word after word with `id`. The new empty word gets the id `id.1`, if it is the first empty word at thihs position. If there is already an empty word, the new one will have the id `id.2` etc.
 * `emptydelete id.subid` 	delete empty word with id `id.subid`.
+
+
+## Highlighting
+
+Sometimes validation scripts detect potential problem on tokens and/or deprels. A non-standard comment line can be added in the `.conllu` file to hihglight these tokens in the editor
+
+```
+# sent_id = fr-ud-train_00002
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# highlight tokens = 1 4 8 8-9 
+# highlight deprels = 5 8 9 10
+1       L'      le      DET     _       Definite=Def|Gender=Fem|Number=Sing|PronType=Art        2       det     _       SpaceAfter=No
+...
+
+```
+
+Sentences having this meta-data display thelisted tokens and deprel so the annotator can check them (and remove the highlighting)
+
+![Highlighted tokens and deprel)](doc/highlight.png)
+
+The editor can highlight, standard tokens, MWTs and empty tokens in tree and flat mode. The word editing and MWT editing window allows setting and unsetting of highlighting.
 
 
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics

@@ -1,9 +1,10 @@
 # Changes
 
 ## Version 2.31.0
-* highlight tokens and deprels marked in a special comment in the .conllu file
+* highlight tokens and deprels marked in a special comment in the .conllu file and edit them
 * upgraded org.eclipse.jgit to 7.2.1.202505142326-r
 * test data and tests updated
+* new tests
 
 ## Version 2.30.1
 * new option --help and --version

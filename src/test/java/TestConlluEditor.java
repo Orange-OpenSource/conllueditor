@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.30.0 as of 12th April 2025
+ @version 2.31.0 as of 28th May 2025
 */
 
 import com.google.gson.Gson;
@@ -280,7 +280,7 @@ public class TestConlluEditor {
         String rtc = ce.process("mod form 9 Form", 0, "editinfo", 0); // we changed the sentence already once
         rtc = ce.process("mod form 10 Form", 0, "editinfo", 0); // we changed the sentence already once
         JsonElement jelement = JsonParser.parseString(rtc);
-        System.err.println("AAAAAAAA " + rtc);
+        //System.err.println("AAAAAAAA " + rtc);
         File out = new File(folder, "multiple_access.json");
 
         URL ref = this.getClass().getResource("multiple_access.json");
@@ -307,6 +307,50 @@ public class TestConlluEditor {
         commands.put("mod editmwt 6 7 duu true", 6);
 
         runtest("test.highlightedit.conllu", commands, "CoNLL-U output incorrect");
+    }
+
+     @Test
+    public void test054Mod_highlight_invalid() throws IOException {
+        name("modifying checktoken (invalid)");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix(".54");
+        ce.setSaveafter(1);
+
+        String rtc = ce.process("mod checktoken 22 true", 5, "editinfo", 0);
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "InvalidHLToken.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+        URL ref = this.getClass().getResource("InvalidHLToken.json");
+
+        Assert.assertEquals(String.format("Find invalid token to highlight, return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test055Mod_highlight_invalid() throws IOException {
+        name("modifying checkdeprel (invalid)");
+        ce.setCallgitcommit(false);
+        ce.setBacksuffix(".55");
+        ce.setSaveafter(1);
+
+        String rtc = ce.process("mod checkdeprel 23 true", 5, "editinfo", 0);
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        File out = new File(folder, "InvalidHLDeprel.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        // delete CR (\r) otherwise this tests fails on Windows...
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement).replaceAll("\\\\r", ""), StandardCharsets.UTF_8);
+        URL ref = this.getClass().getResource("InvalidHLDeprel.json");
+
+        Assert.assertEquals(String.format("Find invalid deprel to highlight, return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
 
     @Test
