@@ -199,12 +199,12 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         rect.setAttribute('class', "chunk" + item.chunk % 6);
     } else {
         // needed for ConlluEditor
-        if (item.token == "empty") {
+        if (item.token === "empty") {
             rect.setAttribute('class', rect_idprefix + "wordnode emptynode" + grayclass2);
             rect.setAttribute('stroke-dasharray', '10 5');
         } else {
             //console.log("aaa", item.id, gold,  incorrectwords.has("" + item.id))
-            if (incorrectwords != null && gold == 0 && incorrectwords[item.id]) {
+            if (incorrectwords != null && gold === 0 && incorrectwords[item.id]) {
                 rect.setAttribute('class', rect_idprefix + "wordnode compareError");
                 // needed to pass arguments to ShowCompareErrors()
                 function showce() {
@@ -219,7 +219,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         }
     }
 
-    if (item.checktoken === 2) {
+    if (item.checktoken === true) {
         rect.setAttribute("class", rect.getAttribute("class") + " wordcheck");
     }
 
@@ -232,7 +232,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     svg.appendChild(lemmatext);
     svg.appendChild(idtext);
     svg.appendChild(upostext);
-    if (item.xpos != "_") {
+    if (item.xpos !== "_") {
         svg.appendChild(xpostext);
     }
 

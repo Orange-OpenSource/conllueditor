@@ -257,7 +257,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
             //depreltext.setAttribute("font-weight", "bold");
             //deprelpath.setAttribute("fill", "orange");
         }
-        if (item.checkdeprel === 2) {
+        if (item.checkdeprel === true) {
             // the deprel is marked as "to check" in the conllu file, put into some shiny colour
             deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
             path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");
@@ -424,7 +424,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
         mwepath.setAttribute('startOffset', "50%");
         mwepath.textContent = item.mwe.form;
 
-        if (item.mwe.checktoken === 2) {
+        if (item.mwe.checktoken === true) {
             mwe.setAttribute("class", "mwecheck");
             mwetext.setAttribute("class", "mwecheck");
         }

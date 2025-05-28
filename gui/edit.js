@@ -1480,6 +1480,17 @@ function ModifyTree(evt) {
                     mc = "_";
                 $("#cmisc").val(mc);
 
+                // set here the checkbox for deprels and tokens (# highlight token/deprel = lines in .conllu file)
+                if (conllword.checktoken === true) {
+                    $("#checktoken").prop( "checked", true);
+                } else {
+                    $("#checktoken").prop( "checked", false);
+                }
+                if (conllword.checkdeprel === true) {
+                    $("#checkdeprel").prop( "checked", true);
+                } else {
+                    $("#checkdeprel").prop( "checked", false);
+                }
 
                 // open edit window
                 $("#wordEdit").modal();
@@ -2175,6 +2186,12 @@ $(document).ready(function () {
         }
         if (conllword.deprel !== $("#cdeprel2").val()) {
             sendmodifs({"cmd": "mod deprel " + conllword.id + " " + $("#cdeprel2").val()});
+        }
+        if (conllword.checkdeprel !== $("#checkdeprel").is(":checked")) {
+            sendmodifs({"cmd": "mod checkdeprel " + conllword.id + " " + $("#checkdeprel").is(":checked")});
+        }
+        if (conllword.checktoken !== $("#checktoken").is(":checked")) {
+            sendmodifs({"cmd": "mod checktoken " + conllword.id + " " + $("#checktoken").is(":checked")});
         }
         for (i = 0; i < extracols.length; i++) {
             //curval = document.getElementById("ct_" + extracols[i]).textContent.replace("[ \n]+", "\|");

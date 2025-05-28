@@ -256,7 +256,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
         mwepath.textContent = item.mwe.form;
 
-        if (item.mwe.checktoken === 2) {
+        if (item.mwe.checktoken === true) {
             mwe.setAttribute("class", "mwecheck");
             mwetext.setAttribute("class", "mwecheck");
         }
@@ -271,9 +271,9 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
         //var boxheight = 66; // TODO calculate
         for (var i = 0; i < item.enhancedheads.length; i++) {
             ed = item.enhancedheads[i];
-            if (ed.position == headpos && !show_basic_in_enhanced)
+            if (ed.position === headpos && !show_basic_in_enhanced)
                 continue;
-            if (ed.position == -1) {
+            if (ed.position === -1) {
                 // enhanced dep root deprel
                 makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, level, false);
             } else {
@@ -460,7 +460,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
 	highlightY = middley;
     }
 
-    if (item.checkdeprel === 2) {
+    if (item.checkdeprel === true) {
         deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
         path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");
     }
