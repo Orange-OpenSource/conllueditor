@@ -5,10 +5,6 @@
   "sentence": "L\u0027œuvre est située dans la galerie des batailles, dans le château de Versailles.",
   "previous_modification": 0,
   "length": 17,
-  "hightlighttokens": [
-    "8-9",
-    "9"
-  ],
   "sent_id": "fr-ud-train_00002",
   "changes": 0,
   "tree": [
@@ -249,7 +245,7 @@
                     "fromid": 8,
                     "toid": 9,
                     "form": "des",
-                    "checktoken": 2
+                    "checktoken": true
                   },
                   "xpos": "_",
                   "upos": "ADP",
@@ -285,7 +281,7 @@
                   "xpos": "_",
                   "upos": "DET",
                   "deprel": "det",
-                  "checktoken": 2,
+                  "checktoken": true,
                   "chunk": 0,
                   "type": ""
                 }

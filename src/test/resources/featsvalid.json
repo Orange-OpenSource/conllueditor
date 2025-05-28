@@ -5,11 +5,6 @@
   "sentence": "Les études durent six ans mais leur contenu diffère donc selon les Facultés.",
   "previous_modification": 0,
   "length": 14,
-  "hightlighttokens": [
-    "2",
-    "3",
-    "4"
-  ],
   "sent_id": "fr-ud-dev_00002",
   "changes": 0,
   "tree": [
@@ -48,7 +43,7 @@
       "xpos": "_",
       "upos": "VERB",
       "deprel": "root",
-      "checktoken": 2,
+      "checktoken": true,
       "chunk": 0,
       "type": "",
       "children": [
@@ -73,7 +68,7 @@
           "xpos": "_",
           "upos": "NOUN",
           "deprel": "nsubj",
-          "checktoken": 2,
+          "checktoken": true,
           "chunk": 0,
           "type": "",
           "children": [
@@ -145,7 +140,7 @@
               "xpos": "_",
               "upos": "NUM",
               "deprel": "nummod",
-              "checktoken": 2,
+              "checktoken": true,
               "chunk": 0,
               "type": ""
             }

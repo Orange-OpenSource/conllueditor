@@ -1,5 +1,6 @@
 # sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
+# highlight tokens = 5.1
 # sentence 13
 1	Sam	Sam	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
 2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_

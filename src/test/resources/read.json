@@ -5,9 +5,6 @@
   "sentence": "Sam fixed lunch and Kim dinner",
   "previous_modification": 0,
   "length": 7,
-  "hightlighttokens": [
-    "5.1"
-  ],
   "sent_id": "ellipsis1",
   "changes": 0,
   "tree": [
@@ -207,7 +204,7 @@
         }
       ],
       "deprel": "_",
-      "checktoken": 2,
+      "checktoken": true,
       "chunk": 0,
       "type": "",
       "indexshift": 0

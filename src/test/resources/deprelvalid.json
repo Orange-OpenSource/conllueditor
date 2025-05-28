@@ -5,10 +5,6 @@
   "sentence": "Mais comment faire dans un contexte structurellement raciste ?",
   "previous_modification": 0,
   "length": 9,
-  "hightlightdeprels": [
-    "5",
-    "6"
-  ],
   "sent_id": "fr-ud-dev_00003",
   "changes": 0,
   "tree": [
@@ -75,7 +71,7 @@
           "upos": "NOUN",
           "deprel": "obl",
           "deprelerror": 1,
-          "checkdeprel": 2,
+          "checkdeprel": true,
           "chunk": 0,
           "type": "",
           "children": [
@@ -120,7 +116,7 @@
               "upos": "DET",
               "deprel": "det",
               "deprelerror": 1,
-              "checkdeprel": 2,
+              "checkdeprel": true,
               "chunk": 0,
               "type": ""
             },

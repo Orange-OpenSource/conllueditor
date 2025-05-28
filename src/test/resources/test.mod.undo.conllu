@@ -15,6 +15,7 @@
 
 # sent_id = fr-ud-dev_00002
 # text = Les études durent six ans mais leur contenu diffère donc selon les Facultés.
+# highlight tokens = 2 3 4
 # sentence 1
 1	Les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	2	det	_	_
 2	études	étude	NOUN	_	Gender=Fem|Number=Plur	3	nsubj	_	_
@@ -33,6 +34,7 @@
 
 # sent_id = fr-ud-dev_00003
 # text = Mais comment faire dans un contexte structurellement raciste ?
+# highlight deprels = 5 6
 # sentence 2
 1	Mais	mais	CCONJ	_	_	3	cc	_	_
 2	comment	comment	ADV	_	_	3	advmod	_	_
@@ -102,6 +104,7 @@
 
 # sent_id = fr-ud-train_00002
 # text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# highlight tokens = 9 8-9
 # sentence 4
 1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
 2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_
@@ -236,6 +239,7 @@
 
 # sent_id = ellipsis1
 # text = Sam fixed lunch and Kim dinner
+# highlight tokens = 5.1
 # sentence 13
 1	Sam	Sammie	PROPN	NNP	Number=Sing	2	nsubj	2:nsubj	_
 2	fixed	fix	VERB	VBD	Mood=Ind|Tense=Past|VerbForm=Fin	0	root	0:root	_
