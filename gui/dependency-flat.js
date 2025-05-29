@@ -102,7 +102,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     //console.log(svg.getAttribute("viewBox"))
 
 
-    if (tree.nonstandard != undefined) {
+    if (tree.nonstandard !== undefined) {
         svgmaxy -= 40;
         // insert words at the bottom of the tree
         for (i = 0; i < trees.length; ++i) {
@@ -148,7 +148,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     var grayclass = ""; // text
     var grayclass2 = ""; // lines
     var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
-    if (isgold == 1) {
+    if (isgold === 1) {
         grayclass = " goldtree";
         grayclass2 = " goldtree2";
         gold_idprefix = "g";
@@ -171,7 +171,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     svgmaxy = Math.max(svgmaxy, level + 1);
     svgmaxx = Math.max(svgmaxx, depx) + 10; // + hor);
 
-    if (headpos == 0)
+    if (headpos === 0)
          mwey = svgmaxy + 20; // sgxmaxy may grow (with enhanded deps arcs, but mwe bars should be just under the words)
 
     if (item.children) {
@@ -182,7 +182,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     }
 
 
-    if (headpos == 0) {
+    if (headpos === 0) {
         // draw root deprels
         var pathvar = "path_" + headpos + "_" + item.id + "_" + item.deprel;
         makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, levelinit, true);
@@ -222,7 +222,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     }
 
     // make multi word expressions
-    if (item.mwe != undefined) {
+    if (item.mwe !== undefined) {
         var mwe = document.createElementNS(svgNS, "path");
 
         var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;
@@ -348,7 +348,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
 
     var headbeforedep = (headpos < item.position);
 
-    if (sentencelength != 0) {
+    if (sentencelength !== 0) {
         // we write the tree from right to left
         headbeforedep = !headbeforedep;
         if (!autoadaptwidth) {
@@ -373,7 +373,7 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     var grayclass = ""; // text
     var grayclass2 = ""; // lines
     var gold_idprefix = ""; // give word boxes a different ID to avoid editing on them
-    if (isgold == 1) {
+    if (isgold === 1) {
         grayclass = " goldtree";
         grayclass2 = " goldtreearc";
         gold_idprefix = "g";

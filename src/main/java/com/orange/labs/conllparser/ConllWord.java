@@ -103,6 +103,7 @@ public class ConllWord {
 
     private ConllSentence mysentence = null; // pointer to the sentence of which this word is part
 
+    // non standard comments in .conllu "# highlight tokens ....", "# hightlight deprels = ...."
     private boolean checktoken = false; // true if information in .conllu
     private boolean checkdeprel = false; // true if information in .conllu
 
@@ -231,7 +232,7 @@ public class ConllWord {
                     if (namedColumns == null) {
                         namedColumns = new LinkedHashMap<>();
                     }
-                    LinkedHashSet<String> lhs = new LinkedHashSet<String>();
+                    LinkedHashSet<String> lhs = new LinkedHashSet<>();
                     lhs.add(EmptyExtraColumn);
                     namedColumns.put(col, lhs);
                 }
@@ -265,7 +266,7 @@ public class ConllWord {
                     if (namedColumns == null) {
                         namedColumns = new LinkedHashMap<>();
                     }
-                    LinkedHashSet<String> lhs = new LinkedHashSet<String>();
+                    LinkedHashSet<String> lhs = new LinkedHashSet<>();
                     lhs.add(EmptyExtraColumn);
                     namedColumns.put(col, lhs);
                 }
@@ -1193,7 +1194,7 @@ public class ConllWord {
         if (namedColumns == null) {
             namedColumns = new LinkedHashMap<>();
         }
-        namedColumns.put(colname, new LinkedHashSet<String>(Arrays.asList(strecs.split("\\|"))));
+        namedColumns.put(colname, new LinkedHashSet<>(Arrays.asList(strecs.split("\\|"))));
     }
 
     public synchronized void setExtracolumns(Map<String, LinkedHashSet<String>> ecs) {
@@ -1507,7 +1508,7 @@ public class ConllWord {
     }
 
     /**
-     * return reafures as UD string
+     * return features as UD string
      */
     public String getFeaturesStr() {
         if (features.isEmpty()) {
@@ -1680,7 +1681,7 @@ public class ConllWord {
         return String.join("|", e);
     }
 
-    public void setMisc(String unparsed_miscstring) {
+    public final void setMisc(String unparsed_miscstring) {
         spacesAfter = " ";
         spacesBefore = "";
         misc.clear();
@@ -1850,21 +1851,21 @@ public class ConllWord {
                 toHighlight.add(head.getId());
                 return head.matchesTree(r + 1, rels, direction, toHighlight);
             } else {
-                List<ConllWord> deps;
+                List<ConllWord> ldeps;
                 if (direction[r].equals("=")) {
                     // check whether there is a sibling
                     head = this.getHeadWord();
-                    deps = head.getDWordsRE(rels[r], false);
+                    ldeps = head.getDWordsRE(rels[r], false);
                 } else {
                     // check whether child matches ("<")
-                    deps = this.getDWordsRE(rels[r], false);
+                    ldeps = this.getDWordsRE(rels[r], false);
                 }
-                if (deps == null || deps.isEmpty()) {
+                if (ldeps == null || ldeps.isEmpty()) {
                     //System.err.println("no deps");
                     return false;
                 }
                 boolean ok = false;
-                for (ConllWord dep : deps) {
+                for (ConllWord dep : ldeps) {
                     if (dep.equals(this)) {
                         continue;
                     }

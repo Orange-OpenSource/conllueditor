@@ -99,13 +99,13 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
         for (i = 0; i < trees.length; ++i) {
             var tree = trees[i];
             insertBottomWord(svg, "1", tree, 0, 0, sentencelength, useitalic);
-            if (tree.nonstandard != undefined)
+            if (tree.nonstandard !== undefined)
                 insertExtracolumns(svg, "1", tree, 0, 0, sentencelength);
         }
     }
 
     // add space for extracolumns
-    if (tree.nonstandard != undefined && Object.keys(tree.nonstandard).length > 0) {
+    if (tree.nonstandard !== undefined && Object.keys(tree.nonstandard).length > 0) {
         svgmaxy += 40 + Object.keys(tree.nonstandard).length * 20;
     }
 
@@ -188,7 +188,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
 
     // faire la ligne entre tete et dépendant
-    if (originx != 0 && originy != 0) {
+    if (originx !== 0 && originy !== 0) {
         // si ce n'est pas la tete de la phrase
 
         // creer le path pour le connecteur tete - fille (une ligne)
@@ -371,7 +371,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
 
 
     // multi word entites
-    if (item.mwe != undefined) {
+    if (item.mwe !== undefined) {
         var wordy = svgmaxy - 30;
         var mwe = document.createElementNS(svgNS, "path");
         var mwepathvar = "mwe_" + item.mwe.fromid + "_" + item.mwe.toid + "_" + item.mwe.form;

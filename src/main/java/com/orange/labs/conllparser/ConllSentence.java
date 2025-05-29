@@ -91,8 +91,6 @@ public class ConllSentence {
     //private boolean nextToStringcomplete = false; // le prochain toString() rajoute les colonnes prefixées
     Map<String, Integer> columndefs = null;
     private int last_modified = 0; // last modification date in this session. To avoid to users edit the same sentence at the same time. When a modification is sent by the client, the modifcation date must still be the same
-    //Set<String> highlighttokens = null;
-    //Set<String> highlightdeprels = null;
 
     public enum Scoretype {
         /*FORM, */
@@ -770,22 +768,6 @@ public class ConllSentence {
             }
         }
 
-        /*
-        if (highlightdeprels != null) {
-            sb.append("# highlight deprels =");
-            for (String i : highlightdeprels) {
-                sb.append(" ").append(i);
-            }
-            sb.append('\n');
-        }
-        if (highlighttokens != null) {
-            sb.append("# highlight tokens =");
-            for (String i : highlighttokens) {
-                sb.append(" ").append(i);
-            }
-            sb.append('\n');
-        }
-        */
         Set<String> highlighttokens = new LinkedHashSet<>();
         Set<String> highlightdeprels = new LinkedHashSet<>();
         for (ConllWord cw : words) {
@@ -1340,9 +1322,9 @@ public class ConllSentence {
         }
 
         // update ids of empty words
-        // updating ids of normal words (including ehnanced deps)
+        // updating ids of normal words (including enhanced deps)
         if (emptywords != null) {
-            Map<Integer, List<ConllWord>> ews2 = new HashMap<>();
+            //Map<Integer, List<ConllWord>> ews2 = new HashMap<>();
             for (Integer id2 : emptywords.keySet()) {
                 List<ConllWord> ewl = new ArrayList<>();
                 for (ConllWord ew : emptywords.get(id2)) {
@@ -1357,7 +1339,7 @@ public class ConllSentence {
                     }
                     ewl.add(ew);
                 }
-                ews2.put(id2 * factor, ewl);
+                //ews2.put(id2 * factor, ewl);
             }
         }
         // insert new sord
@@ -2161,59 +2143,7 @@ public class ConllSentence {
         this.translit = translit;
         is_modified = true;
     }
-    /*
-    public void setHighlightTokens(String tokenlist) {
-       highlighttokens = new HashSet<>(Arrays.asList(tokenlist.trim().split("\\s+")));
-    }
 
-    public void setHighlightDeprels(String tokenlist) {
-       highlightdeprels = new HashSet<>(Arrays.asList(tokenlist.trim().split("\\s+")));
-    }
-
-    public void addHighlightToken(String token) {
-        if (highlighttokens == null) {
-            highlighttokens = new HashSet<>();
-        }
-        highlighttokens.add(token);
-    }
-
-    public void addHighlightDeprel(String token) {
-        if (highlightdeprels == null) {
-            highlightdeprels = new HashSet<>();
-        }
-        highlightdeprels.add(token);
-    }
-
-    public Set<String> removeHighlightToken(String token) {
-        if (highlighttokens != null) {
-            //System.err.println("QQQQ " + highlighttokens + " remove:" + token);
-            highlighttokens.remove(token);
-            //System.err.println("qqqq " + highlighttokens);
-            if (highlighttokens.isEmpty()) {
-                highlighttokens = null;
-            }
-        }
-        return highlighttokens;
-    }
-
-    public Set<String> removeHighlightDeprel(String token) {
-        if (highlightdeprels != null) {
-            highlightdeprels.remove(token);
-            if (highlightdeprels.isEmpty()) {
-                highlightdeprels = null;
-            }
-        }
-        return highlightdeprels;
-    }
-
-    public Set<String> getHightlighttokens() {
-        return highlighttokens;
-    }
-
-    public Set<String> getHightlightdeprels() {
-        return highlightdeprels;
-    }
-    */
     public String getNewpar() {
         return newpar;
     }

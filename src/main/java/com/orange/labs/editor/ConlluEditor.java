@@ -279,11 +279,11 @@ public class ConlluEditor {
     private Set<String> readDeprelsJson(List<String> filenames, String lg) throws IOException {
         // read tools/data/deprels.json
         Set<String> valid = new HashSet<>();
-        for (String filename : filenames) {
-            if (!filename.endsWith(".json")) {
+        for (String lfilename : filenames) {
+            if (!lfilename.endsWith(".json")) {
                 continue;
             }
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filename), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(lfilename), StandardCharsets.UTF_8));
             JsonObject jfile = JsonParser.parseReader(br).getAsJsonObject();
             JsonObject deprels = jfile.getAsJsonObject("deprels");
             if (deprels == null) {

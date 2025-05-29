@@ -375,7 +375,7 @@ Sentences having this meta-data display thelisted tokens and deprel so the annot
 
 ![Highlighted tokens and deprel)](doc/highlight.png)
 
-The editor can highlight, standard tokens, MWTs and empty tokens in tree and flat mode. The word editing and MWT editing window allows setting and unsetting of highlighting.
+The editor can highlight, standard tokens, MWTs and empty tokens in tree, flat and table mode. The word editing and MWT editing window allows setting and unsetting of highlighting (not yet in table mode).
 
 
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics

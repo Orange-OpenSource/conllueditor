@@ -78,6 +78,7 @@ function choosePort() {
     }
 
     if (c !== null) {
+        //console.log("TYPEOF", typeof(c));
         if (c == "6666") {
             alert("Port blocked by Firefox (also 6000, 6665, 6667, 6668, 6669)")
         }
@@ -95,7 +96,7 @@ function enableTab(id) {
 
             // get caret position/selection
             var val = this.value,
-                    start = this.selectionStart,misc
+                    start = this.selectionStart;
                     end = this.selectionEnd;
 
             // set textarea value to: text before caret + tab + text after caret
@@ -273,7 +274,7 @@ function getServerInfo() {
             if (data.shortcuttimeout)
                 shortcuttimeout = data.shortcuttimeout;
             if (data.shortcuts) {
-                if ((data.shortcuts.version == 2)) {
+                if ((data.shortcuts.version === 2)) {
                     //shortcutsMulti = data.shortcuts.shortcuts;
                     shortcutsMulti = Object.keys(data.shortcuts.shortcuts).sort().reduce((obj, key) => {
                         obj[key] = data.shortcuts.shortcuts[key];
@@ -369,7 +370,7 @@ function getServerInfo() {
                     var uposfreq = data.stats.Deprels_UPOS[dr][upos];
                     var cell = document.createElement('td');
                     stdrow.append(cell);
-                    if (uposfreq != undefined) {
+                    if (uposfreq !== undefined) {
                         //featsline += '<td align="right">' + uposfreq + "</td>";
                          cell.innerHTML = uposfreq;
                          cell.setAttribute('style', 'text-align: right;');
@@ -417,7 +418,7 @@ function getServerInfo() {
                     var uposfreq = data.stats.Features[fv][upos];
                     var cell = document.createElement('td');
                     stdrow.append(cell);
-                    if (uposfreq != undefined) {
+                    if (uposfreq !== undefined) {
                         //featsline += '<td align="right">' + uposfreq + "</td>";
                         cell.innerHTML = uposfreq;
                         cell.setAttribute('style', 'text-align: right;');
@@ -436,7 +437,7 @@ function getServerInfo() {
                 $('.editmode').show();
             }
 
-            if (data.saveafter && (data.saveafter > 1 || data.saveafter == -1)) {
+            if (data.saveafter && (data.saveafter > 1 || data.saveafter === -1)) {
                 $('#save').show();
             } else {
                 $('#save').hide();
@@ -547,7 +548,7 @@ function getServerInfo() {
             $('#ce_version').text(data.version);
             var dirty = "";
             if (data.git_dirty) {
-                dirty = " (branch contains uncommitted sources)"
+                dirty = " (branch contains uncommitted sources)";
             }
             $('#ce_gitcommit').text(data.git_branch + " " + data.git_commit_id + " at " + data.git_commit_time + " " + dirty);
 
@@ -1806,7 +1807,7 @@ function formatPhrase(item) {
         }
         if (item.translations) {
             var text = "";
-            for (lg in item.translations) {
+            for (var lg in item.translations) {
                 text += lg + ": " + item.translations[lg] + "\n";
             }
             $("#ctranslations").val(text);
@@ -1971,7 +1972,7 @@ function formatPhrase(item) {
 
         // create similar table for MWE
         mwts = {};
-        for (wid in conllwords) {
+        for (var wid in conllwords) {
             cw = conllwords[wid];
             if (cw.mwe !== undefined) {
                 mwts[wid] = cw.mwe;

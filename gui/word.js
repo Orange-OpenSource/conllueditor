@@ -83,7 +83,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     formtext.setAttribute("text-anchor", "middle");
     formtext.textContent = item.form;
 
-    if (item.formhighlight == 1) {
+    if (item.formhighlight === 1) {
         formtext.setAttribute("class", "words wordform highlight");
         highlightX = x;
         highlightY = level;
@@ -105,7 +105,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     lemmatext.setAttribute("text-anchor", "middle");
     lemmatext.textContent = item.lemma;
 
-    if (item.lemmahighlight == 1) {
+    if (item.lemmahighlight === 1) {
         lemmatext.setAttribute("class", "words wordlemma highlight");
         highlightX = x;
         highlightY = level;
@@ -138,17 +138,17 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     upostext.setAttribute('y', level);
     upostext.setAttribute("text-anchor", "middle");
     upostext.setAttribute("fill", "blue"); // only for svg download
-    if (item.uposerror == 1)
+    if (item.uposerror === 1)
         upostext.setAttribute("class", "words wordupos worderror");
 
-    if (item.uposhighlight == 1) {
+    if (item.uposhighlight === 1) {
         upostext.setAttribute("class", "words wordupos highlight");
         highlightX = x;
         highlightY = level;
     }
     upostext.textContent = item.upos;
 
-    if (item.xpos != "_") {
+    if (item.xpos !== "_") {
         // add xpos if present
         var xpostext = document.createElementNS(svgNS, "text");
         xpostext.setAttribute("id", "pos" + curid + "_" + item.id);
@@ -166,10 +166,10 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         xpostext.setAttribute("fill", "blue"); // only for svg download
         xpostext.textContent = item.xpos;
 
-        if (item.xposerror == 1)
+        if (item.xposerror === 1)
             xpostext.setAttribute("class", "words wordxpos worderror");
 
-        if (item.xposhighlight == 1) {
+        if (item.xposhighlight === 1) {
             xpostext.setAttribute("class", "words wordxpos highlight");
             highlightX = x;
             highlightY = level;
@@ -193,9 +193,9 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     rect.setAttribute('fill', '#fffff4'); // only needed for svg download, since the download does not add depgraph.css
     rect.setAttribute("rx", "5");
     rect.setAttribute("ry", "25");
-    if (item.type && item.type != "_") {
+    if (item.type && item.type !== "_") {
         rect.setAttribute('class', item.type);
-    } else if (item.chunk && item.chunk != 0) {
+    } else if (item.chunk && item.chunk !== 0) {
         rect.setAttribute('class', "chunk" + item.chunk % 6);
     } else {
         // needed for ConlluEditor
@@ -204,7 +204,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             rect.setAttribute('stroke-dasharray', '10 5');
         } else {
             //console.log("aaa", item.id, gold,  incorrectwords.has("" + item.id))
-            if (incorrectwords != null && gold === 0 && incorrectwords[item.id]) {
+            if (incorrectwords !== null && gold === 0 && incorrectwords[item.id]) {
                 rect.setAttribute('class', rect_idprefix + "wordnode compareError");
                 // needed to pass arguments to ShowCompareErrors()
                 function showce() {
@@ -223,7 +223,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         rect.setAttribute("class", rect.getAttribute("class") + " wordcheck");
     }
 
-    nodes[item.id] = {"item": rect}
+    nodes[item.id] = {"item": rect};
 
     // add first the box and then all textual items
     svg.appendChild(rect);
@@ -239,7 +239,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
 
     bottomlevels[0] = level;
     bottomlevels[1] = level;
-    if (showfeats && item.feats != undefined) { // display morpho-syntactical features if active
+    if (showfeats && item.feats !== undefined) { // display morpho-syntactical features if active
         level += vertdiff * 2;
         for (var f in item.feats) {
 //            if (item.feats[f] == "_") {
@@ -297,17 +297,17 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
             valtext.textContent = val; //item.feats[f];
             svg.appendChild(valtext);
 
-            if (error == "name") {
+            if (error === "name") {
                 ftext.setAttribute("class", "words wordfeature worderror " + grayclass);
             }
-            if (error == "name" || error == "value") {
+            if (error === "name" || error === "value") {
                 valtext.setAttribute("class", "words wordfeature worderror " + grayclass);
             }
         }
         bottomlevels[1] = level;
     }
 
-    if (showmisc && item.misc != undefined) { // display misc column info if active
+    if (showmisc && item.misc !== undefined) { // display misc column info if active
         level += vertdiff * 2;
         for (var f in item.misc) {
 
@@ -432,7 +432,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
         //if (item[coltype] == undefined)
         //    continue;
         //if (item[coltype] == "_") {
-        if (colval == "_") {
+        if (colval === "_") {
             // nothing to show, but keep empty space
             ypos += 30;
             continue;
@@ -443,7 +443,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
         //    colvalue = item[coltype].substr(2);
         //else
         //    colvalue = item[coltype];
-        if (colval[1] == ':')
+        if (colval[1] === ':')
             colvalue = colval.substr(2);
         else
             colvalue = colval;

@@ -38,22 +38,22 @@ $(document).ready(function () {
     // "arbre" is the id of the table
     $("#arbre").focusout(function (e) {
         //console.log("FOCUSOUT", e.target.id, e.target.origvalue, e.target.origwordid, e.target, e.target.className, e.target.value);
-        if (e.target.origvalue != e.target.value) {
+        if (e.target.origvalue !== e.target.value) {
             var modcommand = e.target.conllucol; //className.split()[0].substr(1);
             //console.log("MODCOM", modcommand, e.target);
-            if (modcommand == "head") {
+            if (modcommand === "head") {
                 sendmodifs({ "cmd": "mod " + e.target.origwordid + " " + e.target.value });
-            } else if (modcommand == "deprel") {
+            } else if (modcommand === "deprel") {
                 sendmodifs({ "cmd": "mod " + e.target.origwordid + " " + e.target.word.head + " " + e.target.value });
-            } else if (modcommand == "deps") {
+            } else if (modcommand === "deps") {
                 sendmodifs({ "cmd": "mod enhdeps " + e.target.origwordid + " " + e.target.value });
                 //} else if (modcommand == "feats") {
                 //sendmodifs({"cmd": "mod feat " + e.target.origwordid + " " + e.target.value});
-            } else if (e.target.extracol != undefined) {
+            } else if (e.target.extracol !== undefined) {
                 sendmodifs({ "cmd": "mod extracol " + e.target.origwordid + " " + modcommand + " " + e.target.value });
-            } else if (modcommand == "editmwt") {
+            } else if (modcommand === "editmwt") {
                 sendmodifs({ "cmd": "mod editmwt " + e.target.fromid + " " + e.target.toid + " " + e.target.value });
-            } else if (modcommand != undefined) {
+            } else if (modcommand !== undefined) {
                 sendmodifs({ "cmd": "mod " + modcommand + " " + e.target.origwordid + " " + e.target.value });
             }
         }
@@ -71,7 +71,7 @@ function largertd(where) {
     $(".th" + where).width($(".th" + where).width() + 50);
     //console.log("      TTT", where, $(".th" + where).width());
     columnwidth[where] = $(".th" + where).width();
-    if (where == "feats") {
+    if (where === "feats") {
         $(".i" + where).width($(".i" + where).width() + 50);
     }
 }
@@ -81,7 +81,7 @@ function smallertd(where) {
         $(".th" + where).width($(".th" + where).width() - 50);
         //console.log("       ttt", where, $(".th" + where).width());
         columnwidth[where] = $(".th" + where).width();
-        if (where == "feats") {
+        if (where === "feats") {
             $(".i" + where).width($(".i" + where).width() - 50);
         }
     }
@@ -96,7 +96,7 @@ function drawTable(parent, trees, sentid) {
     tbl.className = "conllutable";
     //console.log("ZZZZZZss", keepmarked, sentid);
 
-    if (keepmarked == -1 || keepmarked != sentid) {
+    if (keepmarked === -1 || keepmarked !== sentid) {
         //console.log("NOT keepmarked");
         currentwordid = 0;
         clickedNodes = [];
@@ -118,7 +118,7 @@ function drawTable(parent, trees, sentid) {
             hdcellouter.append(hdcell);
             hdcell.innerHTML = conllucolumns[i]; // headers come from server
             //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
-            if (conllucolumns[i] != "ID" && conllucolumns[i] != "HEAD" && conllucolumns[i] != "DEPREL") {
+            if (conllucolumns[i] !== "ID" && conllucolumns[i] !== "HEAD" && conllucolumns[i] !== "DEPREL") {
                 hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="' + colname + 'sizeup'
                     + '" type="button" value="+" onclick=largertd("'
                     + colname + '") /> <input class="mybutton smallmybutton" id="' + colname + 'sizedown'
@@ -246,7 +246,7 @@ function drawTableWord(rows, word, head, sentid) {
     cell1.onclick = function (event) {
         //console.log("hit id", word.id);
         $("." + cell1.className).css("background", "white");
-        if (currentwordid == word.id) {
+        if (currentwordid === word.id) {
             currentwordid = 0;
             clickedNodes = [];
         } else {
@@ -262,7 +262,7 @@ function drawTableWord(rows, word, head, sentid) {
             currentwordid = word.id;
             clickedNodes.push(word.id);
         }
-    }
+    };
 
     /*
     if (keepmarked && word.id == currentwordid) {
@@ -285,7 +285,7 @@ function drawTableWord(rows, word, head, sentid) {
         var inner = '<select class="iupos" id="tupos_' + word.position + '" origvalue="' + word.upos + '" origwordid="' + word.id + '">';
         for (var i = 0; i < uposlist.length; ++i) {
             var sel = "";
-            if (uposlist[i] == word.upos)
+            if (uposlist[i] === word.upos)
                 sel = "selected";
             var inner = inner.concat('<option value="' + uposlist[i] + '" ' + sel + '>' + uposlist[i] + '</option>');
         }
@@ -300,7 +300,7 @@ function drawTableWord(rows, word, head, sentid) {
         var inner = '<select class="ixpos" id="txpos">';
         for (var i = 0; i < xposlist.length; ++i) {
             var sel = "";
-            if (xposlist[i] == word.upos)
+            if (xposlist[i] === word.upos)
                 sel = "selected";
             var inner = inner.concat('<option value="' + xposlist[i] + '" ' + sel + '>' + xposlist[i] + '</option>');
         }
@@ -311,7 +311,7 @@ function drawTableWord(rows, word, head, sentid) {
 
     var cell6 = row.insertCell(-1);
     var fstr = "";
-    if (word.feats == undefined)
+    if (word.feats === undefined)
         fstr = "_";
     var featuresAllOK = true;
     for (var f in word.feats) {
@@ -322,7 +322,7 @@ function drawTableWord(rows, word, head, sentid) {
         fstr = fstr.concat(key);
         fstr = fstr.concat('=');
         fstr = fstr.concat(val);
-        if (word.feats[f].error != undefined) {
+        if (word.feats[f].error !== undefined) {
             featuresAllOK = false;
         }
     }
@@ -380,7 +380,7 @@ function drawTableWord(rows, word, head, sentid) {
     var cell9 = row.insertCell(-1);
     fstr = "";
 
-    if (word.enhancedheads == undefined)
+    if (word.enhancedheads === undefined)
         fstr = "_";
     for (var f in word.enhancedheads) {
         var key = word.enhancedheads[f].id;
@@ -396,7 +396,7 @@ function drawTableWord(rows, word, head, sentid) {
 
     var cell10 = row.insertCell(-1);
     fstr = "";
-    if (word.misc == undefined)
+    if (word.misc === undefined)
         fstr = "_";
     for (var f in word.misc) {
         var key = word.misc[f].name;
@@ -417,7 +417,7 @@ function drawTableWord(rows, word, head, sentid) {
         }
     }
 
-    if (word.nonstandard != undefined) {
+    if (word.nonstandard !== undefined) {
         // extra columns
         for (var x in word.nonstandard) {
             var cellX = row.insertCell(-1);
@@ -425,7 +425,7 @@ function drawTableWord(rows, word, head, sentid) {
             ecell.extracol = true;
             cellX.append(ecell);
         }
-        if (numberofextracols == 0) numberofextracols = Object.keys(word.nonstandard).length;
+        if (numberofextracols === 0) numberofextracols = Object.keys(word.nonstandard).length;
     }
 }
 
@@ -448,7 +448,6 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
         for (var x in keyvaluelist) {
             currentkeyvalues[keyvaluelist[x].name] = keyvaluelist[x].val;
         }
-
 
         var feats_possible = null;
         if (feats_per_upos) {
@@ -473,7 +472,7 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
             for (var ii = 0; ii < featvalues[p].length; ii++) {
                 //$("#fe_radio_" + x).append(featvalues[p][ii] + ": ");
                 var checked = "";
-                if (featvalues[p][ii] == currentkeyvalues[p]) {
+                if (featvalues[p][ii] === currentkeyvalues[p]) {
                     checked = "checked";
                     found = true;
                 }
@@ -510,17 +509,17 @@ function makeInputfield(idsuffix, word, checkfct, value) {
     var icell = document.createElement('input');
     //icell.className = "tablecell i" + idsuffix;// + " worderror";
     icell.className = "tablecell icol";// + " worderror";
-    if (word[idsuffix + "highlight"] != undefined) {
+    if (word[idsuffix + "highlight"] !== undefined) {
         icell.className += " highlight";
     }
 
-    if (word[idsuffix + "error"] != undefined) {
+    if (word[idsuffix + "error"] !== undefined) {
         icell.className += " worderror";
     }
 
     icell.conllucol = idsuffix;
     icell.id = "t" + idsuffix + "_" + word.position;
-    if (value == undefined) {
+    if (value === undefined) {
         icell.value = word[idsuffix]; // form; lemma, ...
         icell.origvalue = word[idsuffix]; //keep the original value in order to avoid updating server if no change is detected
     } else {
@@ -541,7 +540,7 @@ function makeInputfield(idsuffix, word, checkfct, value) {
 
 function checkHead(evt, wid) {
     //console.log("AAA", evt, wid);
-    if (evt.value == wid || !(evt.value in wordpositions)) {
+    if (evt.value === wid || !(evt.value in wordpositions)) {
         //console.log("CCC", evt, wordpositions);
         //evt.color = "red";
         // TODO: make better ?
@@ -556,18 +555,18 @@ function checkHead(evt, wid) {
 
 function checkEUD(evt, wid) {
     var valid = 1;
-    if (evt.value != "_") {
+    if (evt.value !== "_") {
         var elems = evt.value.split("|");
         var valid = 1;
         for (fv in elems) {
             var sep = elems[fv].indexOf(":");
-            if (sep == -1) {
+            if (sep === -1) {
                 valid = 0;
                 break;
             }
             var eudhead = elems[fv].slice(0, sep);
             var deprel = elems[fv].slice(sep + 1);
-            if (eudhead == wid || !(eudhead in wordpositions)) {
+            if (eudhead === wid || !(eudhead in wordpositions)) {
                 valid = 0;
                 break;
             }
@@ -578,7 +577,7 @@ function checkEUD(evt, wid) {
         }
     }
 
-    if (valid == 0) {
+    if (valid === 0) {
         document.getElementById(evt.id).style.backgroundColor = "#ff5555";
         formalErrors++;
     } else {
@@ -621,7 +620,7 @@ function checkDeprel(elem, wid) {
 
 function checkFeat(evt, wid) {
     var valid = 1;
-    if (evt.value != "_") {
+    if (evt.value !== "_") {
         var elems = evt.value.split("|");
         var valid = 1;
         for (fv in elems) {
@@ -632,7 +631,7 @@ function checkFeat(evt, wid) {
         }
     }
 
-    if (valid == 0) {
+    if (valid === 0) {
         document.getElementById(evt.id).style.backgroundColor = "#ff5555";
         formalErrors++;
     } else {
@@ -649,7 +648,7 @@ function saveField(evt, wid) {
 function saveMWEField(evt, fromid, toid, form) {
     console.log("SAVING", evt, fromid, toid, form, $("#tmiscmwe_" + fromid).val());
 
-    if (form != evt.value) {
+    if (form !== evt.value) {
         sendmodifs({
             "cmd": "mod editmwe "
                 + fromid
