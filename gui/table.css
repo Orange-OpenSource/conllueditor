@@ -73,6 +73,10 @@ table.conllutable th {
    width: 100%;
 }
 
+.featsicol {
+   width: 94%;
+}
+
 /* make radiobutton look like normal buttons */
 label {
     display: inline-block;
@@ -155,4 +159,9 @@ table.conllutable select {
 .tdfeats {
    white-space: nowrap;
    display: block;
+}
+
+.tokencheck_table {
+   color: magenta;
+   background-color: #ffddff;
 }

@@ -161,6 +161,9 @@ function drawTableMWE(rows, mwe, position) {
     //var cell1 = row.insertCell(-1); // add at the end
     cell1.innerHTML = mwe.fromid + "-" + mwe.toid;
     cell1.className = "tdid";
+     if (mwe.checktoken === true) {
+        cell1.className = "tdid tokencheck_table";
+    }
     //console.log("mmmmm", mwe);
     var cell2 = row.insertCell(-1);
     cell2.append(makeInputfield("editmwt", mwe, checkForm, mwe.form));
@@ -195,7 +198,7 @@ function drawTableMWE(rows, mwe, position) {
 
     var cell10 = row.insertCell(-1);
     fstr = "";
-    if (mwe.misc == undefined)
+    if (mwe.misc === undefined)
         fstr = "_";
     for (var f in mwe.misc) {
         var key = mwe.misc[f].name;
@@ -221,19 +224,24 @@ function drawTableMWE(rows, mwe, position) {
 
 
 function drawTableWord(rows, word, head, sentid) {
-    if (word.mwe != undefined) {
+    if (word.mwe !== undefined) {
         drawTableMWE(rows, word.mwe, word.position);
     }
 
     var combo = false; // for the time being we do not allow a combo input field to allow invalid values
 
     var row = document.createElement("tr");
+
     var cell1 = document.createElement('td');
     row.append(cell1);
     //var cell1 = row.insertCell(-1); // add at the end
     cell1.innerHTML = word.id;
     cell1.className = "tdid";
     cell1.id = "td" + word.id;
+
+    if (word.checktoken === true) {
+        cell1.className = "tdid tokencheck_table";
+    }
 
     cell1.onclick = function (event) {
         //console.log("hit id", word.id);
@@ -321,6 +329,7 @@ function drawTableWord(rows, word, head, sentid) {
 
     fcell = makeInputfield("feats", word, checkFeat, fstr);
     //console.log("TTT", word, checkFeat, fstr);
+    fcell.className += " featsicol"; // "replace" icol
     if (!featuresAllOK) {
         fcell.className += " worderror";
     }
@@ -335,23 +344,38 @@ function drawTableWord(rows, word, head, sentid) {
 
     var cell7 = row.insertCell(-1);
     cell7.className = "tdhead";
-    cell7.append(makeInputfield("head", word, checkHead, head));
+    icell7 = makeInputfield("head", word, checkHead, head)
+    cell7.append(icell7);
+
+    if (word.checkdeprel === true) {
+        icell7.className += " tokencheck_table";
+    }
 
     var cell8 = row.insertCell(-1);
     cell8.className = "tddeprel";
+
     if (combo && deprellist.length > 0) {
         var inner = '<select class="ideprel" id="tdeprel"><option value="_">_</option>';
         for (var i = 0; i < deprellist.length; ++i) {
             var sel = "";
-            if (deprellist[i] == word.deprel)
+            if (deprellist[i] === word.deprel)
                 sel = "selected";
             var inner = inner.concat('<option value="' + xposlist[i] + '" ' + sel + '>' + deprellist[i] + '</option>');
         }
         cell8.innerHTML = inner + "</select>";
+        if (word.checkdeprel === true) {
+          $("#tdeprel").class += "tdid tokencheck_table";
+       }
     } else {
         word.head = head; // not in original json from server
-        cell8.append(makeInputfield("deprel", word, checkDeprel));
+        icell8 = makeInputfield("deprel", word, checkDeprel);
+        cell8.append(icell8);
+        if (word.checkdeprel === true) {
+           icell8.className += " tokencheck_table";
+       }
     }
+
+
 
     var cell9 = row.insertCell(-1);
     fstr = "";
