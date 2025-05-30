@@ -1,6 +1,6 @@
 [{
   "sentenceid": 3,
-  "maxsentence": 19,
+  "maxsentence": 20,
   "text": "L\u0027« oasis de vie », dans un milieu où règne l\u0027obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu\u0027alors désertiques.",
   "sentence": "L\u0027« oasis de vie », dans un milieu où règne l\u0027obscurité totale et une pression hydrostatique importante, est riche et varié : les chercheurs y découvrent de nouvelles espèces de bivalves, de poissons, de crustacés, de poulpes dans des zones pensées jusqu\u0027alors désertiques.",
   "previous_modification": 0,
@@ -1137,7 +1137,7 @@
   "canRedo": false
 },{
   "sentenceid": 16,
-  "maxsentence": 19,
+  "maxsentence": 20,
   "text": "Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.",
   "sentence": "Om du köper en halv liter mjölk för 0:78, en limpa för 2:57 och ett halvt kilo margarin för 2:87 gör detta sammanlagt 6:22.",
   "previous_modification": 0,

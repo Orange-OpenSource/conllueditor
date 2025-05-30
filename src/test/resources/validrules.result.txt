@@ -25,3 +25,8 @@ Dáselle nova redacción a o punto 2
   Applying rule 5: Upos:NUM  ==  Deprel:nummod
    ERROR 9	2	2	NUM	Z	_	8	nmod	_	Treeler=sn
 
+Sentence cairo01
+പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
+  Applying rule 2: Deprel:nsubj and (Upos:NOUN or Upos:PROPN) and head(Upos:VERB) and head(Feat:VerbForm=Fin)  ==  head(Feat:Person:3)
+   ERROR 1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	5	nsubj	_	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi
+

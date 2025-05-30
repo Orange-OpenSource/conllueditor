@@ -337,3 +337,17 @@
 11	lautaselle	lautanen	NOUN	N	Case=All|Number=Sing	8	obl	8:obl:all	SpaceAfter=No
 12	.	.	PUNCT	Punct	_	3	punct	0.1:punct|3:punct	HeadOfPreceding=Verbal
 
+# newdoc id = cairo
+# newpar id = cairo01
+# sent_id = cairo01
+# text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
+# text_en = The girl wrote a letter to her friend.
+# origtranslit = peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.
+1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	5	nsubj	_	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi
+2	തന്റെ	താൻ	PRON	_	Case=Gen|Number=Sing|Person=3|PronType=Prs	3	nmod:poss	_	Translit=tanṟe|LTranslit=tān̕|HeadOfPreceding=Verbal
+3	സുഹൃത്തിന്	സുഹൃത്ത്	NOUN	_	Animacy=Anim|Case=Dat|Number=Sing	5	obl	_	Translit=suhr̥ttin|LTranslit=suhr̥tt
+4-5	കത്തെഴുതി	_	_	_	_	_	_	_	SpaceAfter=No|Translit=katteḻuti|HeadOfPreceding=Verbal
+4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|HeadOfPreceding=Verbal
+5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|HeadOfPreceding=Verbal
+6	.	.	PUNCT	_	_	5	punct	_	Translit=.|LTranslit=.
+

@@ -337,6 +337,20 @@
 11	lautaselle	lautanen	NOUN	N	Case=All|Number=Sing	4	obl	8:obl:all	SpaceAfter=No|Head=4
 12	.	.	PUNCT	Punct	_	3	punct	0.1:punct|3:punct	_
 
+# newdoc id = cairo
+# newpar id = cairo01
+# sent_id = cairo01
+# text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
+# text_en = The girl wrote a letter to her friend.
+# origtranslit = peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.
+1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	4	nsubj	5:obj	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi|Head=4|EUD=Head_headid
+2	തന്റെ	താൻ	PRON	_	Case=Gen|Number=Sing|Person=3|PronType=Prs	3	nmod:poss	_	Translit=tanṟe|LTranslit=tān̕
+3	സുഹൃത്തിന്	സുഹൃത്ത്	NOUN	_	Animacy=Anim|Case=Dat|Number=Sing	4	obl	_	Translit=suhr̥ttin|LTranslit=suhr̥tt|Head=4
+4-5	കത്തെഴുതി	_	_	_	_	_	_	_	SpaceAfter=No|Translit=katteḻuti
+4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|Head=4
+5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka
+6	.	.	PUNCT	_	_	5	punct	_	Translit=.|LTranslit=.
+
 Warning: Cannot set relative head id in sentence fr-ud-dev_00002, word 1: negative or 0 absolute head -1
 Warning: Cannot set relative head id in sentence fr-ud-dev_00004, word 1: negative or 0 absolute head -1
 Warning: Cannot set relative head id in sentence fr-ud-train_00002, word 1: negative or 0 absolute head -1
@@ -350,6 +364,7 @@ Warning: Cannot set absolute head id in sentence fr-ud-dev_00004, word 5: 4 depe
 Warning: Cannot set absolute head id in sentence gl_ctg-ud-dev.conllu 625, word 5: 4 depends from current word
 Warning: Cannot set absolute head id in sentence fi_tdt-ud-train.conllu b712.11, word 3: 4 depends from current word
 Warning: Cannot set absolute head id in sentence fi_tdt-ud-train.conllu b712.11, word 4: 4 == word id
+Warning: Cannot set absolute head id in sentence cairo01, word 4: 4 == word id
 Warning: No value found for HeadId in sentence fr-ud-dev_00004, word 23
 Warning: Cannot set relative head id in sentence fr-ud-dev_00001, word 1: absolute head 3 depends from current word
 Warning: Cannot set relative head id in sentence fr-ud-dev_00001, word 10: absolute head 12 > sentence length 11

@@ -1,31 +1,44 @@
 {
-  "sentenceid": 18,
-  "maxsentence": 19,
-  "text": "Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.",
-  "sentence": "Sekaan 1 purkillinen kermaviiliä ja ja sitten jaoin perustahnan 4 lautaselle.",
+  "sentenceid": 19,
+  "maxsentence": 20,
+  "text": "പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.",
+  "sentence": "പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.",
   "previous_modification": 0,
-  "length": 13,
-  "sent_id": "fi_tdt-ud-train.conllu b712.11",
+  "length": 6,
+  "sent_id": "cairo01",
+  "newpar": "cairo01",
+  "newdoc": "cairo",
+  "translit_words": [
+    "peṇ̕kuṭṭi",
+    "tanṟe",
+    "suhr̥ttin",
+    "katt",
+    "eḻuti",
+    "."
+  ],
+  "translit_missing": false,
+  "translations": {
+    "en": "The girl wrote a letter to her friend."
+  },
   "changes": 0,
   "tree": [
     {
-      "position": 1,
-      "id": "0.1",
-      "token": "empty",
-      "form": "Laitoin",
-      "lemma": "laittaa",
+      "position": 5,
+      "id": 5,
+      "form": "എഴുതി",
+      "lemma": "എഴുതുക",
       "feats": [
+        {
+          "name": "Aspect",
+          "val": "Imp"
+        },
         {
           "name": "Mood",
           "val": "Ind"
         },
         {
-          "name": "Number",
-          "val": "Sing"
-        },
-        {
-          "name": "Person",
-          "val": "1"
+          "name": "Polarity",
+          "val": "Pos"
         },
         {
           "name": "Tense",
@@ -40,239 +53,100 @@
           "val": "Act"
         }
       ],
+      "misc": [
+        {
+          "name": "Translit",
+          "val": "eḻuti"
+        },
+        {
+          "name": "LTranslit",
+          "val": "eḻutuka"
+        }
+      ],
       "xpos": "_",
       "upos": "VERB",
-      "enhancedheads": [
-        {
-          "id": "0",
-          "position": -1,
-          "deprel": "root"
-        }
-      ],
-      "deprel": "_",
-      "chunk": 0,
-      "type": "",
-      "indexshift": 0
-    },
-    {
-      "position": 4,
-      "id": 3,
-      "form": "purkillinen",
-      "lemma": "purkillinen",
-      "feats": [
-        {
-          "name": "Case",
-          "val": "Nom"
-        },
-        {
-          "name": "Number",
-          "val": "Sing"
-        }
-      ],
-      "xpos": "N",
-      "upos": "NOUN",
-      "enhancedheads": [
-        {
-          "id": "0",
-          "position": -1,
-          "deprel": "root"
-        },
-        {
-          "id": "0.1",
-          "position": 1,
-          "deprel": "obj"
-        }
-      ],
       "deprel": "root",
       "chunk": 0,
       "type": "",
       "children": [
         {
-          "position": 2,
-          "archeight": 2,
+          "position": 1,
+          "archeight": 3,
           "id": 1,
-          "form": "Sekaan",
-          "lemma": "sekaan",
-          "xpos": "Adv",
-          "upos": "ADV",
-          "enhancedheads": [
+          "form": "പെൺകുട്ടി",
+          "lemma": "പെൺകുട്ടി",
+          "feats": [
             {
-              "id": "0.1",
-              "position": 1,
-              "deprel": "advmod"
+              "name": "Animacy",
+              "val": "Anim"
+            },
+            {
+              "name": "Case",
+              "val": "Nom"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
             }
           ],
-          "deprel": "orphan",
+          "misc": [
+            {
+              "name": "Translit",
+              "val": "peṇ̕kuṭṭi"
+            },
+            {
+              "name": "LTranslit",
+              "val": "peṇ̕kuṭṭi"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "nsubj",
           "chunk": 0,
           "type": ""
         },
         {
           "position": 3,
-          "archeight": 1,
-          "id": 2,
-          "form": "1",
-          "lemma": "1",
+          "archeight": 2,
+          "id": 3,
+          "form": "സുഹൃത്തിന്",
+          "lemma": "സുഹൃത്ത്",
           "feats": [
             {
-              "name": "NumType",
-              "val": "Card"
-            }
-          ],
-          "xpos": "Num",
-          "upos": "NUM",
-          "enhancedheads": [
-            {
-              "id": "3",
-              "position": 4,
-              "deprel": "nummod"
-            }
-          ],
-          "deprel": "nummod",
-          "chunk": 0,
-          "type": ""
-        },
-        {
-          "position": 5,
-          "archeight": 1,
-          "id": 4,
-          "form": "kermaviiliä",
-          "lemma": "kerma#viili",
-          "feats": [
+              "name": "Animacy",
+              "val": "Anim"
+            },
             {
               "name": "Case",
-              "val": "Par"
+              "val": "Dat"
             },
             {
               "name": "Number",
               "val": "Sing"
             }
           ],
-          "xpos": "N",
+          "misc": [
+            {
+              "name": "Translit",
+              "val": "suhr̥ttin"
+            },
+            {
+              "name": "LTranslit",
+              "val": "suhr̥tt"
+            }
+          ],
+          "xpos": "_",
           "upos": "NOUN",
-          "enhancedheads": [
-            {
-              "id": "3",
-              "position": 4,
-              "deprel": "nmod:par"
-            }
-          ],
-          "deprel": "nmod",
-          "chunk": 0,
-          "type": ""
-        },
-        {
-          "position": 9,
-          "archeight": 4,
-          "id": 8,
-          "form": "jaoin",
-          "lemma": "jakaa",
-          "feats": [
-            {
-              "name": "Mood",
-              "val": "Ind"
-            },
-            {
-              "name": "Number",
-              "val": "Sing"
-            },
-            {
-              "name": "Person",
-              "val": "1"
-            },
-            {
-              "name": "Tense",
-              "val": "Past"
-            },
-            {
-              "name": "VerbForm",
-              "val": "Fin"
-            },
-            {
-              "name": "Voice",
-              "val": "Act"
-            }
-          ],
-          "xpos": "V",
-          "upos": "VERB",
-          "enhancedheads": [
-            {
-              "id": "0.1",
-              "position": 1,
-              "deprel": "conj"
-            },
-            {
-              "id": "3",
-              "position": 4,
-              "deprel": "conj"
-            }
-          ],
-          "deprel": "conj",
+          "deprel": "obl",
           "chunk": 0,
           "type": "",
           "children": [
             {
-              "position": 6,
-              "archeight": 3,
-              "id": 5,
-              "form": "ja",
-              "lemma": "ja",
-              "xpos": "C",
-              "upos": "CCONJ",
-              "enhancedheads": [
-                {
-                  "id": "8",
-                  "position": 9,
-                  "deprel": "cc"
-                }
-              ],
-              "deprel": "cc",
-              "chunk": 0,
-              "type": ""
-            },
-            {
-              "position": 7,
-              "archeight": 2,
-              "id": 6,
-              "form": "ja",
-              "lemma": "ja",
-              "xpos": "C",
-              "upos": "CCONJ",
-              "enhancedheads": [
-                {
-                  "id": "8",
-                  "position": 9,
-                  "deprel": "cc"
-                }
-              ],
-              "deprel": "cc",
-              "chunk": 0,
-              "type": ""
-            },
-            {
-              "position": 8,
+              "position": 2,
               "archeight": 1,
-              "id": 7,
-              "form": "sitten",
-              "lemma": "sitten",
-              "xpos": "Adv",
-              "upos": "ADV",
-              "enhancedheads": [
-                {
-                  "id": "8",
-                  "position": 9,
-                  "deprel": "advmod"
-                }
-              ],
-              "deprel": "advmod",
-              "chunk": 0,
-              "type": ""
-            },
-            {
-              "position": 10,
-              "archeight": 1,
-              "id": 9,
-              "form": "perustahnan",
-              "lemma": "perus#tahna",
+              "id": 2,
+              "form": "തന്റെ",
+              "lemma": "താൻ",
               "feats": [
                 {
                   "name": "Case",
@@ -281,105 +155,103 @@
                 {
                   "name": "Number",
                   "val": "Sing"
-                }
-              ],
-              "xpos": "N",
-              "upos": "NOUN",
-              "enhancedheads": [
-                {
-                  "id": "8",
-                  "position": 9,
-                  "deprel": "obj"
-                }
-              ],
-              "deprel": "obj",
-              "chunk": 0,
-              "type": ""
-            },
-            {
-              "position": 12,
-              "archeight": 2,
-              "id": 11,
-              "form": "lautaselle",
-              "lemma": "lautanen",
-              "feats": [
-                {
-                  "name": "Case",
-                  "val": "All"
                 },
                 {
-                  "name": "Number",
-                  "val": "Sing"
+                  "name": "Person",
+                  "val": "3"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Prs"
                 }
               ],
               "misc": [
                 {
-                  "name": "SpaceAfter",
-                  "val": "No"
-                }
-              ],
-              "xpos": "N",
-              "upos": "NOUN",
-              "enhancedheads": [
+                  "name": "Translit",
+                  "val": "tanṟe"
+                },
                 {
-                  "id": "8",
-                  "position": 9,
-                  "deprel": "obl:all"
+                  "name": "LTranslit",
+                  "val": "tān̕"
                 }
               ],
-              "deprel": "obl",
+              "xpos": "_",
+              "upos": "PRON",
+              "deprel": "nmod:poss",
               "chunk": 0,
-              "type": "",
-              "children": [
-                {
-                  "position": 11,
-                  "archeight": 1,
-                  "id": 10,
-                  "form": "4",
-                  "lemma": "4",
-                  "feats": [
-                    {
-                      "name": "NumType",
-                      "val": "Card"
-                    }
-                  ],
-                  "xpos": "Num",
-                  "upos": "NUM",
-                  "enhancedheads": [
-                    {
-                      "id": "11",
-                      "position": 12,
-                      "deprel": "nummod"
-                    }
-                  ],
-                  "deprel": "nummod",
-                  "chunk": 0,
-                  "type": ""
-                }
-              ]
+              "type": ""
             }
           ]
         },
         {
-          "position": 13,
-          "archeight": 5,
-          "id": 12,
-          "form": ".",
-          "lemma": ".",
-          "xpos": "Punct",
-          "upos": "PUNCT",
-          "enhancedheads": [
+          "position": 4,
+          "archeight": 1,
+          "id": 4,
+          "form": "കത്ത്",
+          "lemma": "കത്ത്",
+          "mwe": {
+            "fromid": 4,
+            "toid": 5,
+            "form": "കത്തെഴുതി",
+            "misc": [
+              {
+                "name": "SpaceAfter",
+                "val": "No"
+              },
+              {
+                "name": "Translit",
+                "val": "katteḻuti"
+              }
+            ]
+          },
+          "feats": [
             {
-              "id": "0.1",
-              "position": 1,
-              "deprel": "punct"
+              "name": "Animacy",
+              "val": "Inan"
             },
             {
-              "id": "3",
-              "position": 4,
-              "deprel": "punct"
+              "name": "Case",
+              "val": "Acc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
             }
           ],
+          "misc": [
+            {
+              "name": "Translit",
+              "val": "katt"
+            },
+            {
+              "name": "LTranslit",
+              "val": "katt"
+            }
+          ],
+          "xpos": "_",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 6,
+          "archeight": 1,
+          "id": 6,
+          "form": ".",
+          "lemma": ".",
+          "misc": [
+            {
+              "name": "Translit",
+              "val": "."
+            },
+            {
+              "name": "LTranslit",
+              "val": "."
+            }
+          ],
+          "xpos": "_",
+          "upos": "PUNCT",
           "deprel": "punct",
           "chunk": 0,
           "type": ""
@@ -388,8 +260,8 @@
       "indexshift": 0
     }
   ],
-  "info": "_",
-  "comments": "sentence 18\n",
+  "info": "Translit\u003deḻuti|LTranslit\u003deḻutuka",
+  "comments": "origtranslit \u003d peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.\n",
   "canUndo": false,
   "canRedo": false
 }

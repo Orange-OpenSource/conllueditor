@@ -1438,13 +1438,13 @@ public class TestConlluEditor {
 
         String msg = ce.process("mod emptydelete 5.2", 13, "editinfo", 0);
 
-        String expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"Empty word noes not exist «mod emptydelete 5.2»\"}";
+        String expected = "{\"sentenceid\":13,\"maxsentence\":20,\"error\":\"Empty word noes not exist «mod emptydelete 5.2»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
         msg = ce.process("mod delete 5.1", 13, "editinfo", 0); // bad command
 
-        expected = "{\"sentenceid\":13,\"maxsentence\":19,\"error\":\"INVALID id (not an integer) «mod delete 5.1» For input string: \\\"5.1\\\"\"}";
+        expected = "{\"sentenceid\":13,\"maxsentence\":20,\"error\":\"INVALID id (not an integer) «mod delete 5.1» For input string: \\\"5.1\\\"\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
     }
@@ -1458,12 +1458,12 @@ public class TestConlluEditor {
 
         String msg = ce.process("mod delete 11", 9, "editinfo", 0);
 
-        String expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID id «mod delete 11»\"}";
+        String expected = "{\"sentenceid\":9,\"maxsentence\":20,\"error\":\"INVALID id «mod delete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
 
         msg = ce.process("mod emptydelete 11", 9, "editinfo", 0); // bad command
-        expected = "{\"sentenceid\":9,\"maxsentence\":19,\"error\":\"INVALID empty word id «mod emptydelete 11»\"}";
+        expected = "{\"sentenceid\":9,\"maxsentence\":20,\"error\":\"INVALID empty word id «mod emptydelete 11»\"}";
         Assert.assertEquals(String.format("delete invalid empty word message\n ref: <<%s>>\n res: <<%s>>\n", expected, msg),
                 expected, msg);
     }

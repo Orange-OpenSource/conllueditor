@@ -79,3 +79,9 @@ FOUND 1
 FINAL 1
 8	jaoin	jakaa	VERB	V	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	3	conj	0.1:conj|3:conj	_
 9	perustahnan	perus#tahna	NOUN	N	Case=Gen|Number=Sing	8	obj	8:obj	_
+# sent_id = cairo01
+# text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
+FOUND 1
+FINAL 1
+4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt
+5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka
