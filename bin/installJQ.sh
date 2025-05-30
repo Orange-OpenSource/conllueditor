@@ -34,8 +34,8 @@ pushd $DEST
 
 getfile https://code.jquery.com/jquery-3.3.1.min.js
 
-getfile https://jqueryui.com/resources/download/jquery-ui-1.12.1.zip
-unzip jquery-ui-1.12.1.zip
+getfile https://jqueryui.com/resources/download/jquery-ui-1.14.1.zip
+unzip jquery-ui-1.14.1.zip
 
 getfile https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip
 mkdir bootstrap-4.1.3

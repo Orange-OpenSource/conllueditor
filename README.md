@@ -51,7 +51,7 @@ For more information see section [File Comparison](#file-comparison)
   * Edge (tested with version 44.17763.1.0 on Windows 10),
   * Opera (tested with version 63 on Linux),
   * Safari (tested with version 11.1 on MacOS Sierra)
-* jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.12.1 (https://jqueryui.com)
+* jquery 3.3.1 (https://code.jquery.com/jquery-3.3.1.min.js) and jquery-ui 1.14.1 (https://jqueryui.com)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js and popper.min.js.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
 * sorttable.js (https://www.kryogenix.org/code/browser/sorttable/sorttable.js)
@@ -111,31 +111,30 @@ To avoid compilation, you can download the latest release, unzip the conlluedito
 ./gui/lib/bootstrap-4.1.3/css/bootstrap.css
 ./gui/lib/bootstrap-4.1.3/css/bootstrap-reboot.min.css.map
 ./gui/lib/jquery-3.3.1.min.js
+./gui/lib/jquery-ui-1.14.1/jquery-ui.structure.min.css
+./gui/lib/jquery-ui-1.14.1/external
+./gui/lib/jquery-ui-1.14.1/external/jquery
+./gui/lib/jquery-ui-1.14.1/external/jquery/jquery.js
+./gui/lib/jquery-ui-1.14.1/jquery-ui.structure.css
+./gui/lib/jquery-ui-1.14.1/package.json
+./gui/lib/jquery-ui-1.14.1/jquery-ui.min.css
+./gui/lib/jquery-ui-1.14.1/jquery-ui.js
+./gui/lib/jquery-ui-1.14.1/jquery-ui.theme.min.css
+./gui/lib/jquery-ui-1.14.1/jquery-ui.css
+./gui/lib/jquery-ui-1.14.1/AUTHORS.txt
+./gui/lib/jquery-ui-1.14.1/jquery-ui.theme.css
+./gui/lib/jquery-ui-1.14.1/jquery-ui.min.js
+./gui/lib/jquery-ui-1.14.1/index.html
+./gui/lib/jquery-ui-1.14.1/images
+./gui/lib/jquery-ui-1.14.1/images/ui-icons_cc0000_256x240.png
+./gui/lib/jquery-ui-1.14.1/images/ui-icons_ffffff_256x240.png
+./gui/lib/jquery-ui-1.14.1/images/ui-icons_777777_256x240.png
+./gui/lib/jquery-ui-1.14.1/images/ui-icons_777620_256x240.png
+./gui/lib/jquery-ui-1.14.1/images/ui-icons_444444_256x240.png
+./gui/lib/jquery-ui-1.14.1/images/ui-icons_555555_256x240.png
+./gui/lib/jquery-ui-1.14.1/LICENSE.txt
 ./gui/lib/popper.min.js
 ./gui/lib/popper.min.js.map
-./gui/lib/jquery-ui-1.12.1
-./gui/lib/jquery-ui-1.12.1/jquery-ui.min.css
-./gui/lib/jquery-ui-1.12.1/LICENSE.txt
-./gui/lib/jquery-ui-1.12.1/jquery-ui.theme.min.css
-./gui/lib/jquery-ui-1.12.1/jquery-ui.structure.css
-./gui/lib/jquery-ui-1.12.1/images
-./gui/lib/jquery-ui-1.12.1/images/ui-icons_cc0000_256x240.png
-./gui/lib/jquery-ui-1.12.1/images/ui-icons_444444_256x240.png
-./gui/lib/jquery-ui-1.12.1/images/ui-icons_555555_256x240.png
-./gui/lib/jquery-ui-1.12.1/images/ui-icons_777620_256x240.png
-./gui/lib/jquery-ui-1.12.1/images/ui-icons_777777_256x240.png
-./gui/lib/jquery-ui-1.12.1/images/ui-icons_ffffff_256x240.png
-./gui/lib/jquery-ui-1.12.1/jquery-ui.structure.min.css
-./gui/lib/jquery-ui-1.12.1/jquery-ui.css
-./gui/lib/jquery-ui-1.12.1/jquery-ui.theme.css
-./gui/lib/jquery-ui-1.12.1/AUTHORS.txt
-./gui/lib/jquery-ui-1.12.1/index.html
-./gui/lib/jquery-ui-1.12.1/jquery-ui.js
-./gui/lib/jquery-ui-1.12.1/package.json
-./gui/lib/jquery-ui-1.12.1/external
-./gui/lib/jquery-ui-1.12.1/external/jquery
-./gui/lib/jquery-ui-1.12.1/external/jquery/jquery.js
-./gui/lib/jquery-ui-1.12.1/jquery-ui.min.js
 ```
 The server cannot be started without these library, an error message will show which files are missing.
 
