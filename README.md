@@ -22,7 +22,7 @@ The editor provides the following functionalities:
 * [mass editing](#mass-editing): modify tokens if a (complex) condition is satisfied
 * validation (using implications: _if conditions1 true then conditions2 must be true_)
 * sentence metadata editing
-* add highlight information on tokens and deprels which have yet to be validated (see [highlighting](highlighting)
+* add highlight information on tokens and deprels which have yet to be validated (see [highlighting](#highlighting))
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
