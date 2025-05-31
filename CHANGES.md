@@ -1,5 +1,11 @@
 # Changes
 
+## Version 2.31.1
+* jquery-ui updated to 1.14.1
+* search for highlighted tokens/deprels
+* new test
+* UI test with python selenium added
+
 ## Version 2.31.0
 * highlight tokens and deprels marked in a special comment in the .conllu file and edit them
 * upgraded org.eclipse.jgit to 7.2.1.202505142326-r
@@ -198,7 +204,7 @@
 * new tests
 
 ## Version 2.15.1
-* corrected confusion: ConlluEditor deals with **MWT** (multiword tokens) and not with *MTW* 
+* corrected confusion: ConlluEditor deals with **MWT** (multiword tokens) and not with *MTW*
 
 ## Version 2.15.0
 * added a script to find similar or identical sentences in a single or multiple CoNLL-U files

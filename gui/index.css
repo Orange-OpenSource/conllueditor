@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.4 as of 25th March 2025
+ @version 2.31.1 as of 31st March 2025
 */
 
 body {
@@ -448,6 +448,14 @@ input {
     background-position: 5px center;
 }
 
+#findhighlight {
+     background: url('img/light-bulb.svg');
+    background-size: 20px 20px;
+    background-repeat:no-repeat;
+    height: 30px;
+    width: 30px;
+    background-position: 5px center;
+}
 /* inspired by https://designmodo.com/3d-css3-button/ */
 .mycheck {
     display: inline-block;

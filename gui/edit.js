@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.0 as of 28th May 2025
+ @version 2.31.1 as of 31st May 2025
  */
 
 
@@ -1504,7 +1504,7 @@ function ModifyTree(evt) {
                 // clean all nodes (delete clocked-status) TODO: not needed any more?
                 //$(".wordnode").attr("class", "wordnode");
                 //console.log("eeeeeeeeeeezzzzz", $(".wordnode").attr("class"));
-                
+
                 // add errorclass for words which are different from gold
                 if (incorrectwords.has("" + id[1])) {
                     errorclass = " compareError";
@@ -2541,6 +2541,8 @@ $(document).ready(function () {
             inputtext = "findmulti " + backwards + " " + $("#multifield").val();
         } else if (this.id === "findsentid") {
             inputtext = "findsentid " + backwards + " " + $("#sentenceid").val();
+        } else if (this.id === "findhighlight") {
+            inputtext = "findhighlight " + backwards;
         } else if (this.id === "grewmatchsearchgo") {
             inputtext = "findgrewmatch " + backwards + " " + $("#grewmatchsearchexpression").val();
         } else if (this.id === "searchgo") {
