@@ -1,0 +1,217 @@
+{
+  "sentenceid": 13,
+  "maxsentence": 20,
+  "text": "Sam fixed lunch and Kim dinner",
+  "sentence": "Sam fixed lunch and Kim dinner",
+  "previous_modification": 0,
+  "length": 7,
+  "sent_id": "ellipsis1",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 2,
+      "id": 2,
+      "form": "fixed",
+      "lemma": "fix",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        }
+      ],
+      "xpos": "VBD",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "0",
+          "position": -1,
+          "deprel": "root"
+        }
+      ],
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 1,
+          "id": 1,
+          "form": "Sam",
+          "lemma": "Sam",
+          "feats": [
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NNP",
+          "upos": "PROPN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "nsubj"
+            }
+          ],
+          "deprel": "nsubj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 3,
+          "archeight": 1,
+          "id": 3,
+          "form": "lunch",
+          "lemma": "lunch",
+          "feats": [
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NN",
+          "upos": "NOUN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "obj"
+            }
+          ],
+          "deprel": "obj",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 5,
+          "archeight": 2,
+          "id": 5,
+          "form": "Kim",
+          "lemma": "Kim",
+          "feats": [
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "xpos": "NNP",
+          "upos": "PROPN",
+          "enhancedheads": [
+            {
+              "id": "2",
+              "position": 2,
+              "deprel": "conj"
+            },
+            {
+              "id": "5.1",
+              "position": 6,
+              "deprel": "nsubj"
+            }
+          ],
+          "deprel": "conj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 4,
+              "archeight": 1,
+              "id": 4,
+              "form": "and",
+              "lemma": "and",
+              "xpos": "CC",
+              "upos": "CCONJ",
+              "enhancedheads": [
+                {
+                  "id": "5",
+                  "position": 5,
+                  "deprel": "cc"
+                },
+                {
+                  "id": "5.1",
+                  "position": 6,
+                  "deprel": "cc"
+                }
+              ],
+              "deprel": "cc",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
+              "archeight": 1,
+              "id": 6,
+              "form": "dinner",
+              "lemma": "dinner",
+              "feats": [
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "NN",
+              "upos": "NOUN",
+              "enhancedheads": [
+                {
+                  "id": "5.1",
+                  "position": 6,
+                  "deprel": "obj"
+                }
+              ],
+              "deprel": "orphan",
+              "chunk": 0,
+              "type": ""
+            }
+          ]
+        }
+      ],
+      "indexshift": 0
+    },
+    {
+      "position": 6,
+      "id": "5.1",
+      "token": "empty",
+      "form": "fixed",
+      "lemma": "fix",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Tense",
+          "val": "Past"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        }
+      ],
+      "xpos": "VBD",
+      "upos": "VERB",
+      "enhancedheads": [
+        {
+          "id": "2",
+          "position": 2,
+          "deprel": "conj"
+        }
+      ],
+      "deprel": "_",
+      "checktoken": true,
+      "chunk": 0,
+      "type": "",
+      "indexshift": 0
+    }
+  ],
+  "info": "_",
+  "comments": "sentence 13\n",
+  "canUndo": false,
+  "canRedo": false
+}

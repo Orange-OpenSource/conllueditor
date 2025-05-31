@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.0 as of 28th May 2025
+ @version 2.31.1 as of 31st May 2025
  */
 package com.orange.labs.editor;
 
@@ -950,7 +950,8 @@ public class ConlluEditor {
           prec                       preceeding sentence
           read <num>                 return sentence <num>
           line <num>                 return sentence which contains line number <num>
-          findsendid "true" <regex>  find sentence with sentid matching regex. if 2nd argument == "true", search backwards
+          findsentid "true" <regex>  find sentence with sentid matching regex. if 2nd argument == "true", search backwards
+          findhighlight "true"       find sentence with highlighted token or deprel
           findcomment "true" <regex> find sentence with comment matching regex. if 2nd argument == "true", search backwards
           findword "true" <string>   find string in sentence (may include spaces). if 2nd argument == "true", search backwards
           findmulti "true" <string>  find sequence of tokens: "l:the/u:NOUN" finds the lemma "the" followed by a token with upos "NOUN3
@@ -1082,7 +1083,25 @@ public class ConlluEditor {
                 }
                 csent = cfile.getSentences().get(currentSentenceId);
                 return returnTree(currentSentenceId, csent);
-
+            } else if (command.startsWith("findhighlight")) {
+                String[] f = command.trim().split(" +", 2);
+                if (f.length != 2) {
+                    return formatErrMsg("INVALID syntax «" + command + "»", currentSentenceId);
+                }
+                // si le deuxième mot est "true" on cherche en arrière
+                boolean backwards = f[1].equalsIgnoreCase("true");
+                for (int i = (backwards ? currentSentenceId - 1 : currentSentenceId + 1);
+                        (backwards ? i >= 0 : i < numberOfSentences);
+                        i = (backwards ? i - 1 : i + 1)) {
+                    ConllSentence cs = cfile.getSentences().get(i);
+                    for (ConllWord cw : cs.getAllWords()) {
+                        if (cw.getCheckToken() || cw.getcheckDeprel()) {
+                           currentSentenceId = i;
+                           return returnTree(currentSentenceId, cs, null /* highlight*/);
+                        }
+                    }
+                }
+                return formatErrMsg("No sentence with highlighted tokens/deprels found", currentSentenceId);
             } else if (command.startsWith("findsentid")) {
                 String[] f = command.trim().split(" +", 3);
                 if (f.length != 3) {

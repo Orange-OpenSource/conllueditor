@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.0 as of 28th May 2025
+ @version 2.31.1 as of 31st May 2025
 */
 
 import com.google.gson.Gson;
@@ -1161,6 +1161,27 @@ public class TestConlluEditor {
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void test361FindHighlighted() throws IOException {
+        name("findhighlight");
+        ce.setCallgitcommit(false);
+        String rtc = ce.process("findhighlight false", 6, "", 0);
+        JsonElement jelement = JsonParser.parseString(rtc);
+
+        //File out = folder.newFile("findform.json");
+        File out = new File(folder, "findhighlight.json");
+
+        //System.err.println(prettyprintJSON(jelement));
+        FileUtils.writeStringToFile(out, prettyprintJSON(jelement), StandardCharsets.UTF_8);
+
+        URL ref = this.getClass().getResource("findhighlight.json");
+
+        Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
+                FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
 
     @Test
     public void test37FindNothing() throws IOException {

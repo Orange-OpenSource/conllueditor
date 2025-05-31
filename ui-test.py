@@ -71,8 +71,9 @@ class UITest:
         else:
             print("KEY", bid, text)
             b = self.driver.find_element(By.ID, bid)
-        b.send_keys(text)
-        time.sleep(1)
+        for c in text:
+            b.send_keys(c)
+            time.sleep(1)
 
     def select(self, bid, choice):
         print("SELECT", bid, choice)
@@ -80,6 +81,7 @@ class UITest:
         s = Select(b)
         s.select_by_index(choice)
         time.sleep(1)
+
 
     def test_01(self):
         # read sentence
@@ -91,12 +93,22 @@ class UITest:
         # show features
         self.button(bid="feat2")
 
+        # shortcut
+        w = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="rect_3_VERB___faire_faire_root"]')))
+        ac = ActionChains(self.driver)
+        ac = ac.move_to_element_with_offset(w, 15, -5)
+        ac.click().perform()
+
+        #input("Hit Enter 1a")
+        # click is received by page
+        self.enter_key(bid=None, text=":ta", xpath="/html/body")
+
         # L2R
         self.button(bid="r2l")
         self.button(bid="r2l")
 
     def test_02(self):
-        # open CoNLL-U window
+        # open CoNLL-U window (any sentence)
         self.button("conllu")
         print(self.button("rawtext"))
 
@@ -104,6 +116,7 @@ class UITest:
         self.button(xpath='/html/body/div[11]/div/div/div[3]/button')
 
     def test_03(self):
+        # any sentence
         # show/hide shortcuts
         self.enter_key(bid=None, text="?", xpath="/html/body")
         self.enter_key(bid=None, text="?", xpath="/html/body")
@@ -114,9 +127,13 @@ class UITest:
 
     def test_04(self):
         # search
+        # get sentence 1
+        self.enter_text("sentid", "1")
         self.enter_text("lemma", text="situer")
 
     def test_05(self):
+        # get sentence 5
+        self.enter_text("sentid", "5")
         # change head in sentence 5
         # link 11 to new head 6
         w = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="rect_11_PUNCT___,_,_punct"]')))
@@ -145,13 +162,16 @@ class UITest:
         self.button("save")
 
     def test_06(self):
+        # get sentence 7
+        self.enter_text("sentid", "7")
         # edit deprel in sentence 7
         self.button(xpath='//*[@id="textqqpath_3_9_punct"]')
         self.enter_text("cdeprel", "amod")
         self.button("savedeprel")
 
     def test_07(self):
-        # does not work yet
+        # get sentence 6
+        self.enter_text("sentid", "6")
         # edit MWT in sentence 6
         self.enter_text("sentid", "6")
 
