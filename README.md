@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.31.0 (see [change history](CHANGES.md))
+Current version: 2.31.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -45,7 +45,7 @@ For more information see section [File Comparison](#file-comparison)
 
 ### Requirements
 
-* Java jre >= 11.0 (including 17)
+* Java jre >= 17.0
 * Firefox (tested with version 60.9 on Windows 10, >= 63 on Linux and 69.0.1 on MacOS Sierra),
   * Chromium or Chrome (both tested with version 70 on Linux),
   * Edge (tested with version 44.17763.1.0 on Windows 10),
@@ -58,7 +58,7 @@ For more information see section [File Comparison](#file-comparison)
 * on MacOS: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
-* Java jdk >= 11.0 (including 17)
+* Java jdk >= 17.0
 * maven (tested with >= 3.3.9)
 
 #### Docker
@@ -136,7 +136,7 @@ To avoid compilation, you can download the latest release, unzip the conlluedito
 ./gui/lib/popper.min.js
 ./gui/lib/popper.min.js.map
 ```
-The server cannot be started without these library, an error message will show which files are missing.
+The server cannot be started without these libraries, an error message will show which files are missing.
 
 ### Update ConlluEditor
 
@@ -374,7 +374,7 @@ Sentences having this meta-data display thelisted tokens and deprel so the annot
 
 ![Highlighted tokens and deprel)](doc/highlight.png)
 
-The editor can highlight, standard tokens, MWTs and empty tokens in tree, flat and table mode. The word editing and MWT editing window allows setting and unsetting of highlighting (not yet in table mode).
+The editor can highlight, standard tokens, MWTs and empty tokens in tree, flat and table mode. The word editing and MWT editing window allows setting and unsetting of highlighting (not yet in table mode). Use the <img src="gui/img/light-bulb.svg" alt="undo" width="15"/>-button to find sentences with highlighted tokens or deprels.
 
 
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics
