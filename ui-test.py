@@ -4,6 +4,8 @@
 #  cp src/test/resources/test.conllu ..
 #  rm -f ../test.conllu.2; ./bin/conlluedit.sh ../test.conllu 5555
 
+# unset all proxies or
+# export NO_PROXY=localhost
 # uv run ./ui-test.py 
 
 import time
@@ -27,7 +29,8 @@ HEADLESS=False
 class UITest:
     def __init__(self):
         if FF:
-            self.driverService = Service('/snap/bin/geckodriver')
+            #self.driverService = Service('/snap/bin/geckodriver')
+            self.driverService = Service('/usr/bin/geckodriver')
             self.driver = webdriver.Firefox(service=self.driverService)
         else:
             options = webdriver.ChromeOptions()
@@ -39,7 +42,7 @@ class UITest:
             self.driver = webdriver.Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 5)
         self.driver.get("http://localhost:5555/")
-
+        self.pause = .5 # used in time.sleep()
 
     def button(self, bid=None, xpath=None):
         
@@ -50,7 +53,7 @@ class UITest:
             print("BUTTON", bid)
             b = self.driver.find_element(By.ID, bid)
         b.click()
-        time.sleep(1)
+        time.sleep(self.pause)
         return b
 
     def enter_text(self, bid, text, xpath=None):
@@ -62,7 +65,7 @@ class UITest:
             b = self.driver.find_element(By.ID, bid)
         b.clear()
         b.send_keys(text + Keys.RETURN)
-        time.sleep(1)
+        time.sleep(self.pause)
 
     def enter_key(self, bid, text, xpath=None):
         if xpath:
@@ -73,14 +76,14 @@ class UITest:
             b = self.driver.find_element(By.ID, bid)
         for c in text:
             b.send_keys(c)
-            time.sleep(1)
+            time.sleep(0.5) # must be lower than maximal pause allowed in Editor
 
     def select(self, bid, choice):
         print("SELECT", bid, choice)
         b = self.driver.find_element(By.ID, bid)
         s = Select(b)
         s.select_by_index(choice)
-        time.sleep(1)
+        time.sleep(self.pause)
 
 
     def test_01(self):
@@ -140,18 +143,18 @@ class UITest:
         ac = ActionChains(self.driver)
         ac = ac.move_to_element_with_offset(w, 10, -5)
         ac.click().perform()
-        time.sleep(1)
+        time.sleep(self.pause)
 
         w = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="pos1_6"]')))
         ac = ActionChains(self.driver)
         ac.move_to_element_with_offset(w, 10, -10).click().perform()
-        time.sleep(1)
+        time.sleep(self.pause)
 
         # edit word 6
         w = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="pos1_6"]')))
         ac = ActionChains(self.driver)
         ac.move_to_element_with_offset(w, 10, -10).key_down(Keys.CONTROL).click().key_up(Keys.CONTROL).perform()
-        time.sleep(1)
+        time.sleep(self.pause)
         
         self.enter_text("cform", "LA")
         self.button("checktoken")
@@ -176,7 +179,7 @@ class UITest:
         self.enter_text("sentid", "6")
 
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(1)
+        time.sleep(self.pause)
         w = self.wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="mwe_9_10_du"]')))
         ac = ActionChains(self.driver)
         ac.move_to_element_with_offset(w, 0, 0).click().perform()

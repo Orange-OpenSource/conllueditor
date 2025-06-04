@@ -1,6 +1,6 @@
 *~
 #img
-lib
+lib*
 target
 nbactions.xml
 *.log
