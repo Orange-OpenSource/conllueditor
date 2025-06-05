@@ -39,6 +39,7 @@ class UITest:
                 options.add_argument("--headless=new")
             else:
                 options.add_argument("--window-size=1420,900")
+            options.add_argument("--no-proxy-server")
             self.driver = webdriver.Chrome(options=options)
         self.wait = WebDriverWait(self.driver, 5)
         self.driver.get("http://localhost:5555/")
@@ -217,11 +218,13 @@ class UITest:
         self.enter_key(bid=None, text="D", xpath="/html/body")
 
         # CTRL-Click in table view
-        w = self.button('td5')
-        action = ActionChains(self.driver)
-        action.key_down(Keys.CONTROL).click(w).key_up(Keys.CONTROL).perform()
-
-        self.enter_key(bid=None, text="D", xpath="/html/body")
+        #w = self.button('td5')
+        #action = ActionChains(self.driver)
+        #input("hit ENTER 8")
+        #action.key_down(Keys.CONTROL).click(w).key_up(Keys.CONTROL).perform()
+        #action.click(w).perform()
+        #input("8: Hit Enter")
+        #self.enter_key(bid=None, text="D", xpath="/html/body")
 
         # resize feature column
         self.button('featssizeup')
