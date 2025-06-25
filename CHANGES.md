@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.31.2
+* display error corrected for `parserclient.sh`
+
 ## Version 2.31.1
 * jquery-ui updated to 1.14.1
 * search for highlighted tokens/deprels

@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2022, Orange S.A.
+ Copyright (c) 2018-2025, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.4.2 as of 12th May 2020
+ @version 2.31.2 as of 25th June 2025
  */
 
 
@@ -78,6 +78,7 @@ var autoadaptwidth = false; // TODO factorise word width calculation and add her
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var parserinfo = null; // output from HTTP get to URL at "info" key in in configuration file
 var parseraddress = "?"
+var incorrectwords = {};
 
 function ModifyTree(evt) {
     // used when clicking in dependency tree/hedge (by editor) not needed here
@@ -114,7 +115,7 @@ function formatPhrase(item) {
     if (flatgraph) {
         drawDepFlat(svg, item.tree, sentencelength, use_deprel_as_type);
     } else {
-        drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0);
+        drawDepTree(svg, item.tree, sentencelength, use_deprel_as_type, 0, incorrectwords);
     }
 }
 
