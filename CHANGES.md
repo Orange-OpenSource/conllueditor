@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.31.3
+* make option `--UPOS` also read the more recent `upos.json` file
+
 ## Version 2.31.2
 * display error corrected for `parserclient.sh`
 

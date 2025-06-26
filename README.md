@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.31.2 (see [change history](CHANGES.md))
+Current version: 2.31.3 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -217,7 +217,7 @@ docker stop conllueditor
 
 ### Other options
 * `--uiconfig <file>` yaml file to specify activated buttosn, display etc (see below in section [UI configuration](#ui-configuration))
-* `--UPOS <file>` comma separated list of files containing valid UPOS tags (see https://github.com/UniversalDependencies/tools/tree/master/data/cpos.ud)
+* `--UPOS <file>` comma separated list of files containing valid UPOS tags (see https://github.com/UniversalDependencies/tools/tree/master/data/upos.json)
 * `--XPOS <file>` comma separated list of files containing valid XPOS tags
 * `--deprels <file>` comma separated list of files, containing valid dependency relation names (see https://github.com/UniversalDependencies/tools/tree/master/data/deprel.ud). Alternatively the new (json) format can be used (https://github.com/UniversalDependencies/tools/blob/master/data/deprels.json) together with the option `--language`
 * `--features <file>` comma separated list of files, containing valid feature=value pairs (see https://github.com/UniversalDependencies/tools/tree/master/data/feat_val.ud) in addition to feature=value pairs, a second type of lines is possible to define the list of features which are valid for a given UPOS: for instance `U:NOUN Gender Number Case`

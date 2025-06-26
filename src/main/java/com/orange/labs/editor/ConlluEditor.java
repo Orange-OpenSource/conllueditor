@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.1 as of 31st May 2025
+ @version 2.31.3 as of 26th June 2025
  */
 package com.orange.labs.editor;
 
@@ -276,6 +276,27 @@ public class ConlluEditor {
         return valid;
     }
 
+    private Set<String> readUposJson(List<String> filenames) throws IOException {
+        Set<String> valid = new HashSet<>();
+        for (String lfilename : filenames) {
+            if (!lfilename.endsWith(".json")) {
+                continue;
+            }
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(lfilename), StandardCharsets.UTF_8));
+            JsonObject jfile = JsonParser.parseReader(br).getAsJsonObject();
+            JsonArray upos = jfile.getAsJsonArray("upos");
+            if (upos == null) {
+                return null;
+            }
+
+            for (JsonElement u : upos.asList()) {
+                valid.add(u.getAsString());
+            }
+        }
+        return valid;
+    }
+
     private Set<String> readDeprelsJson(List<String> filenames, String lg) throws IOException {
         // read tools/data/deprels.json
         Set<String> valid = new HashSet<>();
@@ -323,7 +344,10 @@ public class ConlluEditor {
 
     public void setValidUPOS(List<String> filenames) throws IOException {
         // TODO take from --features if given
-        validUPOS = readList(filenames);
+        // read json files in list
+        validUPOS = readUposJson(filenames);
+        // rread other files in list
+        validUPOS.addAll(readList(filenames));
         System.err.format("%d valid UPOS read from %s\n", validUPOS.size(), filenames.toString());
     }
 
@@ -2786,10 +2810,10 @@ public class ConlluEditor {
 
     public static void main(String[] args) {
         Options options = new Options();
-        Option upos = Option.builder("u").longOpt("UPOS")
+        Option upos = Option.builder("U").longOpt("UPOS")
                 .argName("files")
                 .hasArg()
-                .desc("comma separated list of files with valid UPOS")
+                .desc("comma separated list of files with valid UPOS (if filenames ends in .json, a format as in data/upos.json is expected (https://github.com/UniversalDependencies/tools.git)")
                 .build();
         options.addOption(upos);
         Option xpos = Option.builder("x").longOpt("XPOS")
