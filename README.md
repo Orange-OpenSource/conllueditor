@@ -370,13 +370,15 @@ Sometimes validation scripts detect potential problem on tokens and/or deprels. 
 
 ```
 
-Sentences having this meta-data display thelisted tokens and deprel so the annotator can check them (and remove the highlighting)
+Sentences having this meta-data display the listed tokens and deprel so the annotator can check them (and remove the highlighting)
 
 ![Highlighted tokens and deprel)](doc/highlight.png)
 
 The editor can highlight, standard tokens, MWTs and empty tokens in tree, flat and table mode. The word editing and MWT editing window allows setting and unsetting of highlighting (not yet in table mode). Use the <img src="gui/img/light-bulb.svg" alt="undo" width="15"/>-button to find sentences with highlighted tokens or deprels.
 Marked tokens are also shown in the sentence (background for marked tokens, coloured border for deprels).
+Forms in the sentence is highlighted as well, if the `# text = ...` line is identical to the concatenated token forms. In this case the whole sentence is highlight to signal a highlighted token.
 
+![Highlighted tokens and deprel when sentence does not correspond to concatenated tokens)](doc/highlight-with-error.png)
 
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics
 

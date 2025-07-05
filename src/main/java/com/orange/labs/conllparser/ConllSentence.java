@@ -1993,34 +1993,47 @@ public class ConllSentence {
     /**
      * get the sentence with original spaces.
      *
-     * @param pos2id if not null a map where the position of each id is written
+     * @param id2pos if not null a map where the start and end character position of each id is written
      * @return the original sentence
      */
-    public String getSentence(Map<Integer, Integer> pos2id) {
+    public String getSentence(Map<Integer, List<Integer> > id2pos) {
         StringBuilder sb = new StringBuilder();
         //for (ConllWord word : words) {
         //    sb.append(word.getForm()).append(" ");
         //}
 
         int contracted_until = 0;
+        int start = 0;
         for (ConllWord word : words) {
-            if (pos2id != null) {
-                pos2id.put(sb.length(), word.getId());
-            }
+            //if (id2pos != null) {
+            //    id2pos.put(word.getId(), sb.length());
+            //}
             ConllWord mwt = null;
             if (contracted != null) {
                 mwt = contracted.get(word.getId());
             }
+
+//            if (id2pos != null) {
+//                System.err.println("bbbb " + word.getId() + " " + id2pos.get(word.getId()) + " " + mwt + " " + contracted_until);
+//            }
             if (mwt != null) {
+                // we are at an MWT, we add this (and have to ignore the words which are part of the MWT)
+                start = sb.length();
                 sb.append(mwt.getForm()).append(mwt.getSpacesAfter());
                 contracted_until = mwt.getSubid();
+
             } else if (contracted_until == 0 || word.getId() > contracted_until) {
+                start = sb.length();
                 sb.append(word.getForm()).append(word.getSpacesAfter());
             }
+            if (id2pos != null) {
+                ArrayList<Integer> start_end = new ArrayList<>(Arrays.asList(start, sb.length()));
+                id2pos.put(word.getId(), start_end);
+            }
         }
-        if (pos2id != null) {
-            pos2id.put(sb.length(), -1); // end of last token
-        }
+        //if (id2pos != null) {
+        //    id2pos.put(-1, sb.length()); // end of last token
+        //}
         return sb.toString().trim();
     }
 
@@ -2054,7 +2067,7 @@ public class ConllSentence {
         }
         return tl;
     }
-    
+
     /**
      * returns head if the words from first to last are a subtree (with a common
      * head). Else it returns null

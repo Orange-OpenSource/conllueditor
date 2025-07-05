@@ -1822,35 +1822,39 @@ function formatPhrase(item) {
         $("#total").append(item.maxsentence);
         if (item.text) {
             var stext = item.text;
-            if (item.textcheck !== undefined && item.errors === undefined) {
-                // TODO highlighting shift's if sum of tokens different to text
-                // so we do not show
-                console.log("III", item.errors);
-                //if (!item.errors.incoherenttext) {
-                for (const start_end of item.textcheck) {
-                    stext = stext.slice(0, start_end[1]) + "</span>" + stext.slice(start_end[1]);
-                    var classes = "";
-                    if ((start_end[2] & 1) !== 0) {
-                        classes = " textcheck";
+            if (item.textcheck !== undefined) {
+                if (item.errors === undefined) {
+                    // TODO highlighting shift's if sum of tokens different to text
+                    // so we do not show
+                    console.log("III", item.errors);
+                    //if (!item.errors.incoherenttext) {
+                    for (const start_end of item.textcheck) {
+                        stext = stext.slice(0, start_end[1]) + "</span>" + stext.slice(start_end[1]);
+                        var classes = "";
+                        if ((start_end[2] & 1) !== 0) {
+                            classes = " textcheck";
+                        }
+                        if ((start_end[2] & 2) !== 0) {
+                            classes += " textcheck_deprel";
+                        }
+                        stext = stext.slice(0, start_end[0]) + '<span class="' + classes + '">' + stext.slice(start_end[0]);
+                        /*if (start_end[2] === 0) {
+                         stext = stext.slice(0, start_end[0]) + '<span class="textcheck">' + stext.slice(start_end[0]);
+                         } else {
+                         stext = stext.slice(0, start_end[0]) + '<span class="textcheck_deprel">' + stext.slice(start_end[0]);
+                         }*/
+                        //console.log("AAA", start_end[2], classes, start_end[2] & 1, start_end[2] & 2 ,stext);
                     }
-                    if ((start_end[2] & 2) !== 0) {
-                        classes += " textcheck_deprel";
-                    }
-                    stext = stext.slice(0, start_end[0]) + '<span class="' + classes  + '">' + stext.slice(start_end[0]);
-                    /*if (start_end[2] === 0) {
-                        stext = stext.slice(0, start_end[0]) + '<span class="textcheck">' + stext.slice(start_end[0]);
-                    } else {
-                        stext = stext.slice(0, start_end[0]) + '<span class="textcheck_deprel">' + stext.slice(start_end[0]);
-                    }*/
-                    //console.log("AAA", start_end[2], classes, start_end[2] & 1, start_end[2] & 2 ,stext);
+                    //}
+                } else {
+                    // "# text = ...." does not correspond to concatenated tokens
+                    stext = '<span class="textcheck">' + stext + "</span>";
                 }
-            //}
             }
             $("#titre").append(stext);
         } else {
             $("#titre").append(item.sentence);
         }
-
 
         if (item.errors !== undefined) {
             if (item.errors.heads)

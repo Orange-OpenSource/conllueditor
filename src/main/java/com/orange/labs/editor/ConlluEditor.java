@@ -615,44 +615,54 @@ public class ConlluEditor {
         }
         JsonObject solution = prepare(sentid);
         solution.addProperty("text", csent.getText()); // contents of "# text = ..."
-        Map<Integer, Integer> pos2id = new LinkedHashMap<>();
-        solution.addProperty("sentence", csent.getSentence(pos2id)); // tokens concatenated
+        Map<Integer, List<Integer> > id2pos = new LinkedHashMap<>();
+        solution.addProperty("sentence", csent.getSentence(id2pos)); // tokens concatenated
 
+        //System.err.println("AAA " + id2pos);
         // map id:token to mark tokens with checkdeprel/checktoken
-        List<Integer>token_start = new ArrayList<>();
-        for (int pos : pos2id.keySet()) {
-            token_start.add(pos);
+        List<Integer>token_pos = new ArrayList<>();
+        for (int pos : id2pos.keySet()) {
+            token_pos.add(id2pos.get(pos).get(0));
         }
         JsonArray check = new JsonArray();
-        for (int x = token_start.size()-2; x>= 0; x--) {
-            int start = token_start.get(x);
-            int end = token_start.get(x+1);
+        Set<Integer>incheck = new HashSet<>(); // needed to avoid two annotations to a same token
+        for (int x = token_pos.size(); x> 0; x--) {
+            int start = id2pos.get(x).get(0);
+            if (incheck.contains(start)) {
+                continue;
+            }
+            //int end = id2pos.getOrDefault(x+1, -1);
+            int end = id2pos.get(x).get(1);
+            if (end == -1) {
+                // TODO improve !!!!
+                //end = id2pos.get(-1);
+            }
+//            System.err.println("eee " + start + " " + end);
 
-            int i = pos2id.get(start);
-
-            ConllWord mwt = csent.getContracted(i);
-            //if (mwt != null) {
-            //    System.err.println("eeee" + mwt.getCheckToken());
-            //}
-            if (csent.getWord(i).getCheckToken() == true
-                    || csent.getWord(i).getcheckDeprel()== true
+            ConllWord mwt = csent.getContracted(x);
+//            if (mwt != null) {
+//                System.err.println("eeee" + mwt.getCheckToken());
+//            }
+            if (csent.getWord(x).getCheckToken() == true
+                    || csent.getWord(x).getcheckDeprel()== true
                     || (mwt != null && mwt.getCheckToken() == true)
                     ) {
                 JsonArray from_to = new JsonArray();
                 from_to.add(start);
                 from_to.add(end);
                 int what = 0;
-                if (csent.getWord(i).getCheckToken()== true
+                if (csent.getWord(x).getCheckToken()== true
                 || (mwt != null && mwt.getCheckToken() == true)) {
                     //from_to.add(0); // token
                     what = 1;
                 } //else
-                if (csent.getWord(i).getcheckDeprel()== true) {
+                if (csent.getWord(x).getcheckDeprel()== true) {
                     //from_to.add(1); // deprel
                     what = what | 0x02;
                 }
                 from_to.add(what);
                 check.add(from_to);
+                incheck.add(start);
             }
         }
         //System.err.println("CCCCC " + check);
@@ -1275,7 +1285,12 @@ public class ConlluEditor {
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
                     Map<Integer, Integer> pos2id = new TreeMap<>();
-                    String text = cs.getSentence(pos2id);
+                    Map<Integer, List<Integer> > id2pos = new TreeMap<>();
+                    String text = cs.getSentence(id2pos);
+                    for (Integer id : id2pos.keySet()) {
+                        // here we need a map pos 2 id
+                        pos2id.put(id2pos.get(id).get(0), id);
+                    }
                     //System.err.println("zzzzz " + pos2id);
                     int wordoffset = text.indexOf(motAtrouver);
 
