@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.1 as of 31st May 2025
+ @version 2.32.0 as of 5th July 2025
  */
 
 
@@ -544,7 +544,7 @@ function getServerInfo() {
             }
             // set version number to help
             //$('#logo').attr("title", data.version);
-            console.log("ddd", data);
+            //console.log("ddd", data);
             $('#ce_version').text(data.version);
             var dirty = "";
             if (data.git_dirty) {
@@ -1820,10 +1820,36 @@ function formatPhrase(item) {
             $("#cursentid").append(" (sent_id: ").append(item.sent_id).append(") ");
         }
         $("#total").append(item.maxsentence);
-        if (item.text)
-            $("#titre").append(item.text);
-        else
+        if (item.text) {
+            var stext = item.text;
+            if (item.textcheck !== undefined && item.errors === undefined) {
+                // TODO highlighting shift's if sum of tokens different to text
+                // so we do not show
+                console.log("III", item.errors);
+                //if (!item.errors.incoherenttext) {
+                for (const start_end of item.textcheck) {
+                    stext = stext.slice(0, start_end[1]) + "</span>" + stext.slice(start_end[1]);
+                    var classes = "";
+                    if ((start_end[2] & 1) !== 0) {
+                        classes = " textcheck";
+                    }
+                    if ((start_end[2] & 2) !== 0) {
+                        classes += " textcheck_deprel";
+                    }
+                    stext = stext.slice(0, start_end[0]) + '<span class="' + classes  + '">' + stext.slice(start_end[0]);
+                    /*if (start_end[2] === 0) {
+                        stext = stext.slice(0, start_end[0]) + '<span class="textcheck">' + stext.slice(start_end[0]);
+                    } else {
+                        stext = stext.slice(0, start_end[0]) + '<span class="textcheck_deprel">' + stext.slice(start_end[0]);
+                    }*/
+                    //console.log("AAA", start_end[2], classes, start_end[2] & 1, start_end[2] & 2 ,stext);
+                }
+            //}
+            }
+            $("#titre").append(stext);
+        } else {
             $("#titre").append(item.sentence);
+        }
 
 
         if (item.errors !== undefined) {
@@ -1840,6 +1866,7 @@ function formatPhrase(item) {
             if (item.errors.invalidFeatures)
                 $("#errors").append("|" + item.errors.invalidFeatures + " invalid Features");
             if (item.errors.incoherenttext) {
+                // highlight first difference between text and sum of tokens
                 var text = item.errors.incoherenttext.text;
                 var concat = item.errors.incoherenttext.forms;
                 var pos = item.errors.incoherenttext.differs;

@@ -3,6 +3,18 @@
   "maxsentence": 20,
   "text": "Mais comment faire dans un contexte structurellement raciste ?",
   "sentence": "Mais comment faire dans un contexte structurellement raciste ?",
+  "textcheck": [
+    [
+      27,
+      36,
+      2
+    ],
+    [
+      24,
+      27,
+      2
+    ]
+  ],
   "previous_modification": 0,
   "length": 9,
   "sent_id": "fr-ud-dev_00003",

@@ -1,5 +1,9 @@
 # Changes
 
+## 2.32.0
+* highlight marked tokens and deprels also in sentence
+* tests updated
+
 ## Version 2.31.3
 * make option `--UPOS` also read the more recent `upos.json` file
 

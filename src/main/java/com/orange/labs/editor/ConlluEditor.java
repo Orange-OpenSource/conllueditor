@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.3 as of 26th June 2025
+ @version 2.32.0 as of 5th July 2025
  */
 package com.orange.labs.editor;
 
@@ -614,8 +614,51 @@ public class ConlluEditor {
             cw.setArc_height(heights.get(id));
         }
         JsonObject solution = prepare(sentid);
-        solution.addProperty("text", csent.getText());
-        solution.addProperty("sentence", csent.getSentence());
+        solution.addProperty("text", csent.getText()); // contents of "# text = ..."
+        Map<Integer, Integer> pos2id = new LinkedHashMap<>();
+        solution.addProperty("sentence", csent.getSentence(pos2id)); // tokens concatenated
+
+        // map id:token to mark tokens with checkdeprel/checktoken
+        List<Integer>token_start = new ArrayList<>();
+        for (int pos : pos2id.keySet()) {
+            token_start.add(pos);
+        }
+        JsonArray check = new JsonArray();
+        for (int x = token_start.size()-2; x>= 0; x--) {
+            int start = token_start.get(x);
+            int end = token_start.get(x+1);
+
+            int i = pos2id.get(start);
+
+            ConllWord mwt = csent.getContracted(i);
+            //if (mwt != null) {
+            //    System.err.println("eeee" + mwt.getCheckToken());
+            //}
+            if (csent.getWord(i).getCheckToken() == true
+                    || csent.getWord(i).getcheckDeprel()== true
+                    || (mwt != null && mwt.getCheckToken() == true)
+                    ) {
+                JsonArray from_to = new JsonArray();
+                from_to.add(start);
+                from_to.add(end);
+                int what = 0;
+                if (csent.getWord(i).getCheckToken()== true
+                || (mwt != null && mwt.getCheckToken() == true)) {
+                    //from_to.add(0); // token
+                    what = 1;
+                } //else
+                if (csent.getWord(i).getcheckDeprel()== true) {
+                    //from_to.add(1); // deprel
+                    what = what | 0x02;
+                }
+                from_to.add(what);
+                check.add(from_to);
+            }
+        }
+        //System.err.println("CCCCC " + check);
+        if (!check.isEmpty()) {
+            solution.add("textcheck", check);
+        }
         solution.addProperty("previous_modification", csent.getLastModification());
         solution.addProperty("length", (csent.getWords().size() + csent.numOfEmptyWords()));
 

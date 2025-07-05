@@ -3,6 +3,23 @@
   "maxsentence": 20,
   "text": "Les études durent six ans mais leur contenu diffère donc selon les Facultés.",
   "sentence": "Les études durent six ans mais leur contenu diffère donc selon les Facultés.",
+  "textcheck": [
+    [
+      18,
+      22,
+      1
+    ],
+    [
+      11,
+      18,
+      1
+    ],
+    [
+      4,
+      11,
+      1
+    ]
+  ],
   "previous_modification": 0,
   "length": 14,
   "sent_id": "fr-ud-dev_00002",

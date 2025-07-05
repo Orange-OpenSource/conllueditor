@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.0 as of 28th May 2025
+ @version 2.32.0 as of 5th July 2025
 */
 package com.orange.labs.conllparser;
 
@@ -1147,7 +1147,11 @@ public class ConllSentence {
     }
 
     public ConllWord getContracted(int id) {
-        return contracted.get(id);
+        if (contracted != null) {
+            return contracted.get(id);
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -1960,6 +1964,7 @@ public class ConllSentence {
         return toString().split("\n");
     }
 
+    /** @return the contents of the '# text = ...' comment line */
     public String getText() {
         return text;
     }
@@ -1979,7 +1984,7 @@ public class ConllSentence {
     }
 
     /** gets sentence by concatenating forms
-     * @return concatenated forms
+     * @return concatenated forms for all tokens
      */
     public String getSentence() {
         return getSentence(null);
@@ -2013,9 +2018,43 @@ public class ConllSentence {
                 sb.append(word.getForm()).append(word.getSpacesAfter());
             }
         }
+        if (pos2id != null) {
+            pos2id.put(sb.length(), -1); // end of last token
+        }
         return sb.toString().trim();
     }
 
+    /**
+     * get the sentence with original spaces as a list
+     *
+     * @return the original sentence
+     */
+    public Map<String, String> getSentenceAsList() {
+        Map<String, String> tl = new LinkedHashMap<>();
+        //StringBuilder sb = new StringBuilder();
+        //for (ConllWord word : words) {
+        //    sb.append(word.getForm()).append(" ");
+        //}
+
+        int contracted_until = 0;
+        for (ConllWord word : words) {
+
+            ConllWord mwt = null;
+            if (contracted != null) {
+                mwt = contracted.get(word.getId());
+            }
+            if (mwt != null) {
+                //sb.append(mwt.getForm()).append(mwt.getSpacesAfter());
+                tl.put(mwt.getFullId(), mwt.getForm() + mwt.getSpacesAfter());
+                contracted_until = mwt.getSubid();
+            } else if (contracted_until == 0 || word.getId() > contracted_until) {
+                //sb.append(word.getForm()).append(word.getSpacesAfter());
+                tl.put(word.getFullId(), word.getForm() + word.getSpacesAfter());
+            }
+        }
+        return tl;
+    }
+    
     /**
      * returns head if the words from first to last are a subtree (with a common
      * head). Else it returns null
