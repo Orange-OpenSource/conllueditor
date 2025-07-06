@@ -43,7 +43,7 @@ import subprocess
 import sys
 
 class HLConLLU:
-    def __init__(self, conllufile, lang="fr", maxerr=0, level=5, val_path=None):
+    def __init__(self, conllufile, lang="fr", maxerr=0, level=5, val_path=None, addmessages=False):
         if val_path:
             arglist = [val_path + "/validate.py"]
         else:
@@ -55,6 +55,8 @@ class HLConLLU:
         if level:
             arglist.extend(["--level", str(level)])
         arglist.append(conllufile)
+
+        self.addmessages = addmessages
 
         # [Line 19 Sent fr-ud-dev_00002 Node 1]: [L4 Morpho feature-value-upos-not-permitted] Value Fem of feature Gender is not permitted with UPOS DET in language [en].
         remessages = re.compile(r"\[Line (\d+) Sent (.+) Node (\d+)\]: \[(L\d) (.+)\] (.+)")
@@ -107,7 +109,7 @@ class HLConLLU:
                             print("# highlight tokens = %s" % " ".join([str(x) for x in sorted(tokens)]))
 
                 elif not line.startswith("#"):
-                    if addok and sentid in self.messages:
+                    if addok and sentid in self.messages and self.addmessages:
                         for node in self.messages[sentid]:
                             for mlevel, mtype, mess in self.messages[sentid][node]:
                                 print("# validator: %s %s %s %s" % (node, mlevel, mtype, mess))
@@ -125,6 +127,7 @@ if __name__ == "__main__":
     parser.add_argument("--max-err", default=0, type=int, help="How many errors to output before exiting? 0 for all.")
 
     parser.add_argument("--val_path", default=None, type=str, help="path to validator.py")
+    parser.add_argument("--add_messages", default=False, action="store_true", help="add validate.py messages as comments")
     parser.add_argument("input", type=str, help="CoNLL-U file")
 
     if len(sys.argv) < 2:
@@ -133,4 +136,4 @@ if __name__ == "__main__":
         args = parser.parse_args()
     #print(args)
 
-    hl = HLConLLU(args.input, lang=args.lang, maxerr=args.max_err, level=args.level, val_path=args.val_path)
+    hl = HLConLLU(args.input, lang=args.lang, maxerr=args.max_err, level=args.level, val_path=args.val_path, addmessages=args.add_messages)
