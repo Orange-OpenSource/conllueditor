@@ -380,6 +380,12 @@ Forms in the sentence is highlighted as well, if the `# text = ...` line is iden
 
 ![Highlighted tokens and deprel when sentence does not correspond to concatenated tokens)](doc/highlight-with-error.png)
 
+You can use the script `bin/highlight_validator_messages.py` to use the output of the official [UD validator programme](https://github.com/UniversalDependencies/tools/blob/master/validate.py) and add highlight information for tokens which get a warning
+
+```
+uv run ./bin/highlight_validator_messages.py --val_path <path/to/ud/tools> --lang en <yourfile.conllu>
+```
+
 ## Show CoNLL-U, LaTeX and SD-parse format and file statistics
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
