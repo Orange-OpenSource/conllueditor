@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.32.0 (see [change history](CHANGES.md))
+Current version: 2.32.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -157,13 +157,7 @@ On smaller machines, the memory management of the java VM (`-Xmx...` option) may
 ConlluEditor comes with a simple HTTP server:
 
 ```bash
-bin/conlluedit.sh --rootdir  /path/to/ConlluEditor/gui treebank.conllu 8888
-```
-
-or (the option `-r` calculates the rootdir from the position of `conlluedit.sh`)
-
-```bash
-bin/conlluedit.sh -r treebank.conllu 8888
+bin/conlluedit.sh treebank.conllu 8888
 ```
 
 Point your navigator  to `http://localhost:8888` .
@@ -235,6 +229,7 @@ especially if the file is on a network drive.
 * `--relax` accepts some formal errors in the CoNLL-U file and corrects them (empty column instead of `_`, invalid head id set to 0)
 * `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
+* `--rootdir` root of fileserver (directory which includes `index.html` and `edit.js` etc. for ConlluEditor). Default: `gui/` this option if only needed if the frontend is not in the default directory.
 
 If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of the sentence, warnings are writte to screen. Such errors may occur if an automatic pre-annotation tools do not work correctly. UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
 In this case please correct the errors using a text editor before loading the file into ConlluEditor.

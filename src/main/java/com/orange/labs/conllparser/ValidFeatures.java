@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2020-2024, Orange S.A.
+Copyright (c) 2020-2025, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.28.1 as of 17th October 2024
+ @version 2.32.1 as of 10th November 2025
  */
 package com.orange.labs.conllparser;
 
@@ -58,9 +58,10 @@ import java.util.Set;
  *
  * or
  *
- * loads the official data/feats.json file (from  https://github.com/UniversalDependencies/tools)
- * which defines for all UD languages valid features/values for each UPOS
- * if no language is given, it loads only universal feature/value pairs
+ * loads the official data/feats.json file (from
+ * https://github.com/UniversalDependencies/tools) which defines for all UD
+ * languages valid features/values for each UPOS if no language is given, it
+ * loads only universal feature/value pairs
  */
 public class ValidFeatures {
 
@@ -144,8 +145,9 @@ public class ValidFeatures {
             }
         }
 
-
-        if (uposok && xposok) return 0;
+        if (uposok && xposok) {
+            return 0;
+        }
         return 1;
     }
 
@@ -165,34 +167,34 @@ public class ValidFeatures {
                 validvalues.add(key, feat);
             }
             descriptors.add("featvalues", validvalues);
-        
-        if (uposFnames != null) {
-            JsonObject upos = new JsonObject();
-            for (String key : uposFnames.keySet()) {
-                JsonArray feat = new JsonArray();
-                for (String fname : uposFnames.get(key)) {
-                    if (validFeatures.containsKey(fname)) {
-                        feat.add(fname);
-                    }
-                }
-                upos.add(key, feat);
-            }
-            descriptors.add("uposfeats", upos);
-        }
 
-        if (xposFnames != null) {
-            JsonObject xpos = new JsonObject();
-            for (String key : xposFnames.keySet()) {
-                JsonArray feat = new JsonArray();
-                for (String fname : xposFnames.get(key)) {
-                     if (validFeatures.containsKey(fname)) {
-                    feat.add(fname);
-                     }
+            if (uposFnames != null) {
+                JsonObject upos = new JsonObject();
+                for (String key : uposFnames.keySet()) {
+                    JsonArray feat = new JsonArray();
+                    for (String fname : uposFnames.get(key)) {
+                        if (validFeatures.containsKey(fname)) {
+                            feat.add(fname);
+                        }
+                    }
+                    upos.add(key, feat);
                 }
-                xpos.add(key, feat);
+                descriptors.add("uposfeats", upos);
             }
-            descriptors.add("xposfeats", xpos);
-        }
+
+            if (xposFnames != null) {
+                JsonObject xpos = new JsonObject();
+                for (String key : xposFnames.keySet()) {
+                    JsonArray feat = new JsonArray();
+                    for (String fname : xposFnames.get(key)) {
+                        if (validFeatures.containsKey(fname)) {
+                            feat.add(fname);
+                        }
+                    }
+                    xpos.add(key, feat);
+                }
+                descriptors.add("xposfeats", xpos);
+            }
         }
         if (descriptors.isEmpty()) {
             return null;
@@ -231,9 +233,11 @@ public class ValidFeatures {
         JsonObject jfile = JsonParser.parseReader(br).getAsJsonObject();
 
         JsonObject features = jfile.getAsJsonObject("features");
-        if (features == null) return;
+        if (features == null) {
+            return;
+        }
         if (lg == null) {
-            // get all universal define features
+            // get all universally defined features
 
             for (String lgcode : features.keySet()) {
                 JsonObject jlang = features.getAsJsonObject(lgcode);
@@ -264,68 +268,68 @@ public class ValidFeatures {
             }
         } else {
             JsonObject jlang = features.getAsJsonObject(lg);
-            for (String featurename : jlang.keySet()) {
-                JsonObject feature = jlang.getAsJsonObject(featurename);
-                int permitted = feature.get("permitted").getAsInt();
-                if (permitted == 0) {
-                    continue;
-                }
+            if (jlang != null) {
+                for (String featurename : jlang.keySet()) {
+                    JsonObject feature = jlang.getAsJsonObject(featurename);
+                    int permitted = feature.get("permitted").getAsInt();
+                    if (permitted == 0) {
+                        continue;
+                    }
 
-                //String type = feature.get("type").getAsString();
-                //String doc = feature.get("doc").getAsString();
-
-                // read universal values
-                Iterator<JsonElement> it = feature.get("uvalues").getAsJsonArray().iterator();
-                while (it.hasNext()) {
-                    String val = it.next().getAsString();
-                    //System.err.format("%s=%s\n", featurename, val);
-                    addFvalue(featurename, val);
-
-                }
-
-                // read local (lang spec) values
-                it = feature.get("lvalues").getAsJsonArray().iterator();
-                while (it.hasNext()) {
-                    String val = it.next().getAsString();
-                    //System.err.format("%s=%s\n", featurename, val);
-                    addFvalue(featurename, val);
-                }
-
-                if (include_unused) {
-                    // read values delcared as unused
+                    //String type = feature.get("type").getAsString();
+                    //String doc = feature.get("doc").getAsString();
                     // read universal values
-                    it = feature.get("unused_uvalues").getAsJsonArray().iterator();
+                    Iterator<JsonElement> it = feature.get("uvalues").getAsJsonArray().iterator();
                     while (it.hasNext()) {
                         String val = it.next().getAsString();
-                        //System.err.format("%s=%s\n", featurename, val);
+                        //System.err.format("UVALUES %s=%s\n", featurename, val);
                         addFvalue(featurename, val);
 
                     }
 
                     // read local (lang spec) values
-                    it = feature.get("unused_lvalues").getAsJsonArray().iterator();
+                    it = feature.get("lvalues").getAsJsonArray().iterator();
                     while (it.hasNext()) {
                         String val = it.next().getAsString();
-                        //System.err.format("%s=%s\n", featurename, val);
+                        //System.err.format("LVALUES %s=%s\n", featurename, val);
                         addFvalue(featurename, val);
                     }
-                }
 
-                JsonObject byupos = feature.getAsJsonObject("byupos");
-                if (byupos.size() > 0) {
-                    if (uposFnames == null) {
-                        uposFnames = new HashMap<>();
-                    }
-                    for (String pos : byupos.keySet()) {
-                        // currently we allow all values of a feature if its in the bypos-list
-                        //JsonObject posfeatures = byupos.getAsJsonObject(pos);
+                    if (include_unused) {
+                        // read values delcared as unused
+                        // read universal values
+                        it = feature.get("unused_uvalues").getAsJsonArray().iterator();
+                        while (it.hasNext()) {
+                            String val = it.next().getAsString();
+                            //System.err.format("%s=%s\n", featurename, val);
+                            addFvalue(featurename, val);
 
-                        Set<String> feats = uposFnames.get(pos);
-                        if (feats == null) {
-                            feats = new HashSet<>();
-                            uposFnames.put(pos, feats);
                         }
-                        feats.add(featurename);
+
+                        // read local (lang spec) values
+                        it = feature.get("unused_lvalues").getAsJsonArray().iterator();
+                        while (it.hasNext()) {
+                            String val = it.next().getAsString();
+                            //System.err.format("%s=%s\n", featurename, val);
+                            addFvalue(featurename, val);
+                        }
+                    }
+
+                    JsonObject byupos = feature.getAsJsonObject("byupos");
+                    if (byupos.size() > 0) {
+                        if (uposFnames == null) {
+                            uposFnames = new HashMap<>();
+                        }
+                        for (String pos : byupos.keySet()) {
+                            // currently we allow all values of a feature if its in the bypos-list
+                            //JsonObject posfeatures = byupos.getAsJsonObject(pos);
+                            Set<String> feats = uposFnames.get(pos);
+                            if (feats == null) {
+                                feats = new HashSet<>();
+                                uposFnames.put(pos, feats);
+                            }
+                            feats.add(featurename);
+                        }
                     }
                 }
             }

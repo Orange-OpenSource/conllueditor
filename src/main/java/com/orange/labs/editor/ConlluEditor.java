@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.0 as of 5th July 2025
+ @version 2.32.1 as of 10th November 2025
  */
 package com.orange.labs.editor;
 
@@ -313,13 +313,15 @@ public class ConlluEditor {
 
             if (lg != null) {
                 JsonObject jlang = deprels.getAsJsonObject(lg);
-                for (String deprelname : jlang.keySet()) {
-                    JsonObject deprel = jlang.getAsJsonObject(deprelname);
-                    int permitted = deprel.get("permitted").getAsInt();
-                    if (permitted == 0) {
-                        continue;
+                if (jlang != null) {
+                    for (String deprelname : jlang.keySet()) {
+                        JsonObject deprel = jlang.getAsJsonObject(deprelname);
+                        int permitted = deprel.get("permitted").getAsInt();
+                        if (permitted == 0) {
+                            continue;
+                        }
+                        valid.add(deprelname);
                     }
-                    valid.add(deprelname);
                 }
             } else {
                 // read all universal/global deprels from all languages

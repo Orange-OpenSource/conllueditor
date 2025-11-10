@@ -45,6 +45,7 @@ if [ "$1" == "-r" ]; then
 fi
 
 
-java -Xmx4g -cp $NEWESTJAR com.orange.labs.editor.ConlluEditor ${ROOTDIR} "$@"
+#java -Xmx4g -cp $NEWESTJAR com.orange.labs.editor.ConlluEditor ${ROOTDIR} "$@"
+java -Xmx4g -cp $NEWESTJAR com.orange.labs.editor.ConlluEditor "$@"
 
 #

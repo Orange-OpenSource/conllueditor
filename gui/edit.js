@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.0 as of 5th July 2025
+ @version 2.32.1 as of 10th November 2025
  */
 
 
@@ -282,25 +282,6 @@ function getServerInfo() {
                     }, {});
 
                     parseShortcuts();
-//                } else {
-//                    //console.log("SHORTCUTS", data.shortcuts);
-//                    $("#scfilename").html(data.shortcuts.filename);
-//                    if (data.shortcuts.deplabel) {
-//                        shortcutsDEPL = data.shortcuts.deplabel;
-//                    }
-//                    if (data.shortcuts.upos) {
-//                        shortcutsUPOS = data.shortcuts.upos;
-//                    }
-//                    if (data.shortcuts.xpos) {
-//                        shortcutsXPOS = data.shortcuts.xpos;
-//                    }
-//                    if (data.shortcuts.feats) {
-//                        shortcutsFEATS = data.shortcuts.feats;
-//                    }
-//                    if (data.shortcuts.misc) {
-//                        shortcutsMISC = data.shortcuts.misc;
-//                    }
-//                    parseShortcutsLegacy();
                 }
 
             } else {
@@ -492,18 +473,25 @@ function getServerInfo() {
 
                 if (data.uiconfig.searchmode === "simple") {
                      $("#searchmode").val("simple");
+                     //$("#editcommentbutton").hide();
+                     //$("#editcommentbutton2").show();
+                } else {
+                     //$("#editcommentbutton2").hide();
+                     //$("#editcommentbutton").hide();
                 }
                 if (data.uiconfig.searchmode === "searchreplace") {
                      $("#searchmode").val("complex");
                 }
-                if (data.uiconfig.searchmode === "grew") {
+                else if (data.uiconfig.searchmode === "grew") {
                      $("#searchmode").val("grew");
                 }
-                if (data.uiconfig.searchmode === "none") {
+                else if (data.uiconfig.searchmode === "none") {
                      $("#searchmode").val("hide");
                 }
-                $("#searchmode").click();
 
+                $("#searchmode").click();
+                // redo initial states
+                $('.onlyWithTree').hide();
 
                 if (data.uiconfig.shortcuts === "show") {
                     showshortcuthelp = false;
@@ -1964,6 +1952,7 @@ function formatPhrase(item) {
         var cc = item.comments.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         $("#commentfield").append(cc);
 
+
         // install svg download button
         downloadSVG("a2");
 
@@ -2137,10 +2126,13 @@ $(document).ready(function () {
         $("#commentEdit").modal();
     });
 
-
+    /* two comment edit buttons */
     $("#editcommentbutton").click(function () {
         $("#commenttext").val($("#commentfield").text());
-        //$("#commentedit").dialog("open");
+        $("#commentEdit").modal();
+    });
+    $("#editcommentbutton2").click(function () {
+        $("#commenttext").val($("#commentfield").text());
         $("#commentEdit").modal();
     });
 
@@ -2376,6 +2368,8 @@ $(document).ready(function () {
                 if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
+                $("#editcommentbutton").hide();
+                $("#editcommentbutton2").show();
             }
             else if ($(this).val() === "subtrees") {
                 // in mode key '?' does not toogle shortcuts
@@ -2386,6 +2380,8 @@ $(document).ready(function () {
                 if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
+                $("#editcommentbutton").hide();
+                $("#editcommentbutton2").show();
             }
             else if ($(this).val() === "grew") {
                 // in mode key '?' does not toogle shortcuts
@@ -2397,6 +2393,8 @@ $(document).ready(function () {
                 if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
+                $("#editcommentbutton").hide();
+                $("#editcommentbutton2").show();
             }
             else if ($(this).val() === "simple") {
                 switchSearch(true);
@@ -2407,6 +2405,8 @@ $(document).ready(function () {
                 if (showshortcuthelp) {
                     switchSCHelp(false);
                 }
+                $("#editcommentbutton2").hide();
+                $("#editcommentbutton").show();
             }
             else {
                 // hide search panels
