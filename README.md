@@ -55,7 +55,7 @@ For more information see section [File Comparison](#file-comparison)
 * bootstrap 4.1.3 (https://github.com/twbs/bootstrap/releases/download/v4.1.3/bootstrap-4.1.3-dist.zip)
 * popper.min.js and popper.min.js.map 1.14.6 (https://unpkg.com/popper.js/dist/umd/popper.min.js{.map}), needed by bootstrap
 * sorttable.js (https://www.kryogenix.org/code/browser/sorttable/sorttable.js)
-* on MacOS: `greadlink` (`brew install coreutils`)
+* on MacOS install in addition also: `greadlink` (`brew install coreutils`)
 
 In order two compile the server, you also need
 * Java jdk >= 17.0
