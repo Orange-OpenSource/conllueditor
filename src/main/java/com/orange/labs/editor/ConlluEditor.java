@@ -72,6 +72,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -768,12 +769,14 @@ public class ConlluEditor {
             }
             //System.err.println("sssss" + diffs);
             solution.add("differs", diffmap);
-
-            solution.addProperty("Lemma", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LEMMA)));
-            solution.addProperty("Features", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.FEATS)));
-            solution.addProperty("UPOS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.UPOS)));
-            solution.addProperty("XPOS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.XPOS)));
-            solution.addProperty("LAS", String.format("%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LAS)));
+            solution.addProperty("Lemma", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LEMMA)));
+            solution.addProperty("Features", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.FEATS)));
+            solution.addProperty("UPOS", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.UPOS)));
+            solution.addProperty("XPOS", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.XPOS)));
+            solution.addProperty("LAS", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.LAS)));
+            solution.addProperty("UAS", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.UAS)));
+            solution.addProperty("DEPLAB", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.DEPLAB)));
+            solution.addProperty("MISC", String.format(Locale.US, "%.2f", 100 * csent.score(goldsent, ConllSentence.Scoretype.MISC)));
         }
         solution.addProperty("info", csent.getHead().getMiscStr()); // pour les fichiers de règles, il y a de l'info dans ce champs
 

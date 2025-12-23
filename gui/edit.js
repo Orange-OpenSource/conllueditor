@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.1 as of 10th November 2025
+ @version 2.32.2 as of 23rd December 2025
  */
 
 
@@ -1897,11 +1897,14 @@ function formatPhrase(item) {
             if (item.comparisontree) {
                 // we display the gold tree (given with --compare) in gray underneath the edited tree
                 $("#scores").empty();
-                $("#scores").append("(evaluation Lemma: " + item.Lemma);
+                $("#scores").append("(comparison: Lemma: " + item.Lemma);
                 $("#scores").append(", Features: " + item.Features);
                 $("#scores").append(", UPOS: " + item.UPOS);
                 $("#scores").append(", XPOS: " + item.XPOS);
-                $("#scores").append(", LAS: " + item.LAS + ")");
+                $("#scores").append(", LAS: " + item.LAS);
+                $("#scores").append(", UAS: " + item.UAS);
+                $("#scores").append(", DepLabels: " + item.DEPLAB);
+                $("#scores").append(", MISC: " + item.MISC + ")");
                 drawDepFlat(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
 
                 if (item.differs) {
@@ -1916,15 +1919,18 @@ function formatPhrase(item) {
         } else if (graphtype === 3) {
             drawTable($("#arbre"), item.tree, item.sentenceid);
         } else {
-            //console.log(item.comparisontree);
+            //console.log("ITEM", item);
             incorrectwords = new Set(); // put incorrect word in comparison mode
             if (item.comparisontree) {
                 $("#scores").empty();
-                $("#scores").append("(evaluation: Lemma: " + item.Lemma);
+                $("#scores").append("(comparison: Lemma: " + item.Lemma);
                 $("#scores").append(", Features: " + item.Features);
                 $("#scores").append(", UPOS: " + item.UPOS);
                 $("#scores").append(", XPOS: " + item.XPOS);
-                $("#scores").append(", LAS: " + item.LAS + ")");
+                $("#scores").append(", LAS: " + item.LAS);
+                $("#scores").append(", UAS: " + item.UAS);
+                $("#scores").append(", DepLabels: " + item.DEPLAB);
+                $("#scores").append(", MISC: " + item.MISC + ")");
                 drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
                 if (item.differs) {
                     //console.log("zz", item.differs);

@@ -1,5 +1,9 @@
 # Changes
 
+## 2.32.2
+* added USAS, Deplabels and MISC evaluation to `--compare` mode
+* new tests
+
 ## 2.32.1
 * button to edit comments moved to the right of edit metadata button (in simple search mode)
 * corrections when reading standard deprels.json/feats.json for a language not (yet) defined

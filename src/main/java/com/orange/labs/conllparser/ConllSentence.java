@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.0 as of 5th July 2025
+ @version 2.32.2 as of 23rd December 2025
 */
 package com.orange.labs.conllparser;
 
@@ -94,7 +94,8 @@ public class ConllSentence {
 
     public enum Scoretype {
         /*FORM, */
-        LEMMA, UPOS, XPOS, FEATS, LAS
+        LEMMA, UPOS, XPOS, FEATS, LAS, UAS, MISC,
+        DEPLAB, // like LAS but only labels
         /*, CLAS*/
     };
 
@@ -1738,13 +1739,31 @@ public class ConllSentence {
                         score++;
                     }
                     break;
-                //case CLAS:
+                case UAS:
+                    if (goldw.getDeplabel().equals(sysw.getDeplabel())) {
+                        score++;
+                    }
+                    break;
+                case DEPLAB:
+                    if (goldw.getHead() == sysw.getHead()) {
+                        score++;
+                    }
+                    break;
+                    //case CLAS:
                 //    if (goldw.getHead() == sysw.getHead()  &&  goldw.getDeplabel().equals(sysw.getDeplabel())) score ++;
                 //    break;
                 case FEATS:
+                    // if any of the features in the goldw is different from sysw, it's an error
                     if (goldw.getFeaturesStr().equals(sysw.getFeaturesStr())) {
                         score++;
                     }
+                    break;
+                case MISC:
+                    // if any of the features in the goldw is different from sysw, it's an error
+                    if (goldw.getMiscStr().equals(sysw.getMiscStr())) {
+                        score++;
+                    }
+                    break;
             }
         }
         return score / gold.size();
