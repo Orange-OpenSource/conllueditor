@@ -2,7 +2,7 @@
 
 # This software is under the 3-Clause BSD License
 #
-# Copyright (c) 2021-2025, Orange S.A.
+# Copyright (c) 2021-2026, Orange S.A.
 # 
 # Redistribution and use in source and binary forms, with or without modification,
 # are permitted provided that the following conditions are met:
@@ -30,7 +30,7 @@
 #  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # 
 #  @author Johannes Heinecke
-#  @version 2.29.4 as of 25th April 2025
+#  @version 2.32.3 as of 25th January 2026
 
 
 

@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.32.2 (see [change history](CHANGES.md))
+Current version: 2.32.3 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -879,6 +879,7 @@ For the time being the following scripts/languages are covered
 * th: Thai (ISO 11940 based)
 * my: Burmese script
 * ja: Japanese (Only Katakana and Hiragana)
+* ko: Korean (Only Hangul syllables)
 * ar: Arabic (Modern Standard Arabic, unvocalized forms are transliterated without vowels)
 * arc: Aramaic (unvocalized forms are transliterated without vowels)
 * ru: Russian (also processes cyrillic letters for Serbian, and Caucasian languages (like Chechen, Ingush, Avar)

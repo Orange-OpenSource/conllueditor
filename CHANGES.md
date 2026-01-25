@@ -1,5 +1,8 @@
 # Changes
 
+## 2.32.3
+* added Korean (Hangul syllables) to transliteration script
+
 ## 2.32.2
 * added USAS, Deplabels and MISC evaluation to `--compare` mode
 * new tests
