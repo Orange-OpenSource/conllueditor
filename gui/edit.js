@@ -1893,18 +1893,22 @@ function formatPhrase(item) {
         //alert("SENT LENGTH: " + item.length);
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
+        if (graphtype != 3) {
+            $("#scores").empty();
+            $("#scores").append("(comparison: ");
+            $("#scores").append(', <span class="' + (item.Lemma == 100 ? "compok" : "compko") + '"> Lemma: ' + item.Lemma + "</span>");
+            $("#scores").append(', <span class="' + (item.Features == 100 ? "compok" : "compko") + '"> Features: ' + item.Features + "</span>");
+            $("#scores").append(', <span class="' + (item.UPOS == 100 ? "compok" : "compko") + '"> UPOS: ' + item.UPOS + "</span>");
+            $("#scores").append(', <span class="' + (item.XPOS == 100 ? "compok" : "compko") + '"> XPOS: ' + item.XPOS + "</span>");
+            $("#scores").append(', <span class="' + (item.LAS == 100 ? "compok" : "compko") + '"> LAS: ' + item.LAS + "</span>");
+            $("#scores").append(', <span class="' + (item.UAS == 100 ? "compok" : "compko") + '"> UAS: ' + item.UAS + "</span>");
+            $("#scores").append(', <span class="' + (item.DEPLAB == 100 ? "compok" : "compko") + '"> DepLabels: ' + item.DEPLAB + "</span>");
+            $("#scores").append(', <span class="' + (item.MISC == 100 ? "compok" : "compko") + '"> MISC: ' + item.MISC + "</span>");        
+        }
+
         if (graphtype === 2 /*flatgraph*/) {
             if (item.comparisontree) {
                 // we display the gold tree (given with --compare) in gray underneath the edited tree
-                $("#scores").empty();
-                $("#scores").append("(comparison: Lemma: " + item.Lemma);
-                $("#scores").append(", Features: " + item.Features);
-                $("#scores").append(", UPOS: " + item.UPOS);
-                $("#scores").append(", XPOS: " + item.XPOS);
-                $("#scores").append(", LAS: " + item.LAS);
-                $("#scores").append(", UAS: " + item.UAS);
-                $("#scores").append(", DepLabels: " + item.DEPLAB);
-                $("#scores").append(", MISC: " + item.MISC + ")");
                 drawDepFlat(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
 
                 if (item.differs) {
@@ -1919,24 +1923,10 @@ function formatPhrase(item) {
         } else if (graphtype === 3) {
             drawTable($("#arbre"), item.tree, item.sentenceid);
         } else {
-            //console.log("ITEM", item);
             incorrectwords = new Set(); // put incorrect word in comparison mode
             if (item.comparisontree) {
-                $("#scores").empty();
-                $("#scores").append("(comparison: Lemma: " + item.Lemma);
-                $("#scores").append(", Features: " + item.Features);
-                $("#scores").append(", UPOS: " + item.UPOS);
-                $("#scores").append(", XPOS: " + item.XPOS);
-                $("#scores").append(", LAS: " + item.LAS);
-                $("#scores").append(", UAS: " + item.UAS);
-                $("#scores").append(", DepLabels: " + item.DEPLAB);
-                $("#scores").append(", MISC: " + item.MISC + ")");
                 drawDepTree(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
                 if (item.differs) {
-                    //console.log("zz", item.differs);
-                    //for (i = 0; i < item.differs.length; i++) {
-                    //    incorrectwords.add(item.differs[i]);
-                    //}
                     incorrectwords = item.differs;
                 }
             }

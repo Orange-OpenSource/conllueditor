@@ -1,7 +1,9 @@
 # Changes
 
 ## Version 2.32.4
-* correction of UAS/Deplabel-score calculation in comparison mode
+* comparison mode:
+  * correction of UAS/Deplabel-score calculation
+  * highlight scores which are < 100
 
 ## Version 2.32.3
 * added Korean (Hangul syllables) to transliteration script

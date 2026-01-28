@@ -729,3 +729,11 @@ text {
 .miscsc {
     color: #492191;
 }
+
+.compok {
+    color: black;
+}
+
+.compko {
+    color: red;
+}
