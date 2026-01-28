@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.2 as of 23rd December 2025
+ @version 2.32.4 as of 28th January 2026
 */
 package com.orange.labs.conllparser;
 
@@ -1740,12 +1740,12 @@ public class ConllSentence {
                     }
                     break;
                 case UAS:
-                    if (goldw.getDeplabel().equals(sysw.getDeplabel())) {
+                    if (goldw.getHead() == sysw.getHead()) {
                         score++;
                     }
                     break;
                 case DEPLAB:
-                    if (goldw.getHead() == sysw.getHead()) {
+                    if (goldw.getDeplabel().equals(sysw.getDeplabel())) {
                         score++;
                     }
                     break;

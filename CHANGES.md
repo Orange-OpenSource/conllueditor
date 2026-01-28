@@ -1,17 +1,20 @@
 # Changes
 
-## 2.32.3
+## Version 2.32.4
+* correction of UAS/Deplabel-score calculation in comparison mode
+
+## Version 2.32.3
 * added Korean (Hangul syllables) to transliteration script
 
-## 2.32.2
+## Version 2.32.2
 * added USAS, Deplabels and MISC evaluation to `--compare` mode
 * new tests
 
-## 2.32.1
+## Version 2.32.1
 * button to edit comments moved to the right of edit metadata button (in simple search mode)
 * corrections when reading standard deprels.json/feats.json for a language not (yet) defined
 
-## 2.32.0
+## Version 2.32.0
 * highlight marked tokens and deprels also in sentence
 * tests updated
 
