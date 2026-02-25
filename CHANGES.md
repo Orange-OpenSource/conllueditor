@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.32.5
+* correction: detect path traversal in HTTP server
+
 ## Version 2.32.4
 * comparison mode:
   * correction of UAS/Deplabel-score calculation

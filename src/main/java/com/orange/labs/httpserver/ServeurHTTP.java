@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2024, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.1 as of 9th November 2024
+ @version 2.32.5 as of 25th February 2026
  */
 package com.orange.labs.httpserver;
 
@@ -54,6 +54,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class ServeurHTTP {
             rootdir = s;
             System.err.println("calculated rootdir from .jar: " + s);
         } //else {
-        
+
         Path rdir = new File(rootdir).toPath();
         if (!Files.exists(rdir)) {
             throw new IOException(rootdir + " does not exist");
@@ -600,32 +601,41 @@ public class ServeurHTTP {
                     System.err.println("FileHandler <" + path + ">");
                 }
 
-                if (path.isEmpty() || "/".equals(path)) {
-                    path = rootdir + '/' + indexhtml;
-                    ctype = "text/html;charset=UTF-8";
-                } else {
-                    path = rootdir + path;
-                    if (path.endsWith(".js")) {
-                        ctype = "application/javascript;charset=UTF-8";
-                    } else if (path.endsWith(".css")) {
-                        ctype = "text/css;charset=UTF-8";
-                    } else if (path.endsWith(".ico")) {
-                        ctype = "image/vnd.microsoft.icon";
-                    } else if (path.endsWith(".jpg")) {
-                        ctype = "image/jpeg";
-                    } else if (path.endsWith(".jpeg")) {
-                        ctype = "image/jpeg";
-                    } else if (path.endsWith(".png")) {
-                        ctype = "image/png";
-                    } else if (path.endsWith(".svg")) {
-                        ctype = "image/svg+xml";
-                    } else if (path.endsWith(".md")) {
-                        ctype = "text/markdown";
-                    }
-                }
-
-                //System.err.println("QQQQ " + path);
                 try {
+                    if (path.isEmpty() || "/".equals(path)) {
+                        path = rootdir + '/' + indexhtml;
+                        ctype = "text/html;charset=UTF-8";
+                    } else {
+                        //path = rootdir + path;
+
+                        // avoid path traversal with requests like http://localhost:5556/%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2f%2e%2e%2fetc/passwd
+                        Path rootPath = Paths.get(rootdir).toRealPath();
+                        Path requestedPath = Paths.get(rootdir, path).toRealPath(); // throws IOExc if file does not exist
+                        if (!requestedPath.startsWith(rootPath)) {
+                            System.err.println("Path Traversal attempt detected " + path);
+                            throw new SecurityException("Path Traversal attempt detected");
+                        }
+                        path = requestedPath.toString();
+
+                        if (path.endsWith(".js")) {
+                            ctype = "application/javascript;charset=UTF-8";
+                        } else if (path.endsWith(".css")) {
+                            ctype = "text/css;charset=UTF-8";
+                        } else if (path.endsWith(".ico")) {
+                            ctype = "image/vnd.microsoft.icon";
+                        } else if (path.endsWith(".jpg")) {
+                            ctype = "image/jpeg";
+                        } else if (path.endsWith(".jpeg")) {
+                            ctype = "image/jpeg";
+                        } else if (path.endsWith(".png")) {
+                            ctype = "image/png";
+                        } else if (path.endsWith(".svg")) {
+                            ctype = "image/svg+xml";
+                        } else if (path.endsWith(".md")) {
+                            ctype = "text/markdown";
+                        }
+                    }
+
                     fileContent = Files.readAllBytes(new File(path).toPath());
                     http_rtc = HttpURLConnection.HTTP_OK;
                 } catch (Exception ex) {

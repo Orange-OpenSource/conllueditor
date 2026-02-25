@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.1 as of 10th November 2025
+ @version 2.32.5 as of 25th February 2026
  */
 package com.orange.labs.editor;
 
@@ -3089,7 +3089,7 @@ public class ConlluEditor {
             formatter.setWidth(90);
             formatter.printHelp("ConlluEditor [options] CoNLL-U-file port", e.getMessage(), options, null);
             System.exit(1);
-        } catch (ConllException | IOException ex) {
+        } catch (/*ConllException | IOException | */Exception ex) {
             System.err.println("*** Error: " + ex.getMessage());
             System.exit(11);
         }
