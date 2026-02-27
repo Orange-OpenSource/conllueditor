@@ -1,10 +1,10 @@
 FROM amazoncorretto:24-jdk
 
-ARG VERSION=2.32.4
-# docker build --build-arg VERSION=2.32.4 -t jheinecke/conllueditor:2.32.4 .
-# docker build --build-arg VERSION=2.32.4 -t jheinecke/conllueditor:latest .
+ARG VERSION=2.32.5
+# docker build --build-arg VERSION=2.32.5 -t jheinecke/conllueditor:2.32.5 .
+# docker build --build-arg VERSION=2.32.5 -t jheinecke/conllueditor:latest .
 # docker run -t --rm --name conllueditor -p 5555:5555 --user 1000:1000  -v </absolute/path/to/datadir>:/data  --env filename=tt.conllu jheinecke/conllueditor:latest
-# docker push jheinecke/conllueditor:2.32.4
+# docker push jheinecke/conllueditor:2.32.5
 # docker push jheinecke/conllueditor:latest
 
 # docker exec -it conllueditor /bin/sh
