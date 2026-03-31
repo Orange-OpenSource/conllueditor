@@ -817,7 +817,7 @@ public class ConllFile {
                                     out.print(cs.toString());
                                     break;
                                 case LATEX:
-                                    out.println(cs.getLaTeX(false));
+                                    out.println(cs.getLaTeX(false, false));
                                     break;
                                 default:
                                     out.println(cs.getSentence());
@@ -842,7 +842,7 @@ public class ConllFile {
                             out.print(cs.toString(strict));
                             break;
                         case LATEX:
-                            out.println(cs.getLaTeX(false));
+                            out.println(cs.getLaTeX(false, false));
                             break;
                         default:
                             out.println(cs.getSentence());

@@ -37,18 +37,18 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\
 
 
 
-%% for deptrees.sty
+%% for deptree.sty
 %% \usepackage{deptrees}
 \setbottom{4} % set to 0 to hide bottom line of forms
 \begin{tikzpicture}[x=15mm,y=20mm]
 \root{2}{fixed}{VERB}
-\root{5}{fixed}{VERB}
+\root{6}{fixed}{VERB}
 % headpos, hor-pos, vert-pos, form, UPOS, deprel
 \dep{2}{1}{1}{Sam}{PROPN}{nsubj}
 \dep{2}{3}{1}{lunch}{NOUN}{obj}
 \dep{2}{5}{1}{Kim}{PROPN}{conj}
 \dep{5}{4}{2}{and}{CCONJ}{cc}
-\dep{5}{6}{2}{dinner}{NOUN}{orphan}
+\dep{5}{7}{2}{dinner}{NOUN}{orphan}
 \end{tikzpicture}
 
 %% for tikz-dependency
@@ -98,18 +98,18 @@ Sam	\& fixed	\& lunch	\& and	\& Kim	\& fixed	\& dinner	\\
 
 
 
-%% for deptrees.sty
+%% for deptree.sty
 %% \usepackage{deptrees}
 \setbottom{4} % set to 0 to hide bottom line of forms
 \begin{tikzpicture}[x=15mm,y=20mm]
 \root{2}{fixed}{VERB}
-\root{5}{fixed}{VERB}
+\root{6}{fixed}{VERB}
 % headpos, hor-pos, vert-pos, form, UPOS, deprel
 \dep{2}{1}{1}{Sam}{PROPN}{nsubj}
 \dep{2}{3}{1}{lunch}{NOUN}{obj}
 \dep{2}{5}{1}{Kim}{PROPN}{conj}
 \dep{5}{4}{2}{and}{CCONJ}{cc}
-\dep{5}{6}{2}{dinner}{NOUN}{orphan}
+\dep{5}{7}{2}{dinner}{NOUN}{orphan}
 \end{tikzpicture}
 
 %% for tikz-dependency
@@ -156,23 +156,87 @@ Laitoin	\& Sekaan	\& 1	\& purkillinen	\& kermaviiliä	\& ja	\& ja	\& sitten	\& j
 
 
 
-%% for deptrees.sty
+%% for deptree.sty
 %% \usepackage{deptrees}
 \setbottom{5} % set to 0 to hide bottom line of forms
 \begin{tikzpicture}[x=15mm,y=20mm]
-\root{0}{Laitoin}{VERB}
-\root{3}{purkillinen}{NOUN}
+\root{1}{Laitoin}{VERB}
+\root{4}{purkillinen}{NOUN}
 % headpos, hor-pos, vert-pos, form, UPOS, deprel
-\dep{3}{1}{1}{Sekaan}{ADV}{orphan}
-\dep{3}{2}{1}{1}{NUM}{nummod}
-\dep{3}{4}{1}{kermaviiliä}{NOUN}{nmod}
-\dep{3}{8}{1}{jaoin}{VERB}{conj}
-\dep{3}{12}{1}{.}{PUNCT}{punct}
-\dep{8}{5}{2}{ja}{CCONJ}{cc}
-\dep{8}{6}{2}{ja}{CCONJ}{cc}
-\dep{8}{7}{2}{sitten}{ADV}{advmod}
-\dep{8}{9}{2}{perustahnan}{NOUN}{obj}
-\dep{8}{11}{2}{lautaselle}{NOUN}{obl}
-\dep{11}{10}{3}{4}{NUM}{nummod}
+\dep{4}{2}{1}{Sekaan}{ADV}{orphan}
+\dep{4}{3}{1}{1}{NUM}{nummod}
+\dep{4}{5}{1}{kermaviiliä}{NOUN}{nmod}
+\dep{4}{9}{1}{jaoin}{VERB}{conj}
+\dep{4}{13}{1}{.}{PUNCT}{punct}
+\dep{9}{6}{2}{ja}{CCONJ}{cc}
+\dep{9}{7}{2}{ja}{CCONJ}{cc}
+\dep{9}{8}{2}{sitten}{ADV}{advmod}
+\dep{9}{10}{2}{perustahnan}{NOUN}{obj}
+\dep{9}{12}{2}{lautaselle}{NOUN}{obl}
+\dep{12}{11}{3}{4}{NUM}{nummod}
+\end{tikzpicture}
+
+%% for tikz-dependency
+%% use following packages:
+%% \usepackage{tikz}
+%% \usepackage{tikz-dependency}
+% sent_id = fi_tdt-ud-train.conllu b712.11
+\begin{dependency}
+\begin{deptext}
+%% forms:
+.	\& lautaselle	\& 4	\& perustahnan	\& jaoin	\& sitten	\& ja	\& ja	\& kermaviiliä	\& purkillinen	\& 1	\& Sekaan	\& Laitoin	\\
+%% lemmas:
+% .	\& lautanen	\& 4	\& perus#tahna	\& jakaa	\& sitten	\& ja	\& ja	\& kerma#viili	\& purkillinen	\& 1	\& sekaan	\& laittaa	\\
+%% UPOS:
+% PUNCT	\& NOUN	\& NUM	\& NOUN	\& VERB	\& ADV	\& CCONJ	\& CCONJ	\& NOUN	\& NOUN	\& NUM	\& ADV	\& VERB	\\
+%% XPOS:
+% Punct	\& N	\& Num	\& N	\& V	\& Adv	\& C	\& C	\& N	\& N	\& Num	\& Adv	\& _	\\
+%% IDs:
+% 12	\& 11	\& 10	\& 9	\& 8	\& 7	\& 6	\& 5	\& 4	\& 3	\& 2	\& 1	\& 0.1	\\
+%% Position in sentence:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\& 8	\& 9	\& 10	\& 11	\& 12	\& 13	\\
+\end{deptext}
+
+%        head dependent deprel
+\depedge{10}{12}{orphan}
+
+\depedge[edge below]{13}{12}{advmod}
+\depedge{10}{11}{nummod}
+\deproot[edge unit distance=4ex]{10}{root}%%
+\depedge{10}{9}{nmod}
+\depedge{5}{8}{cc}
+\depedge{5}{7}{cc}
+\depedge{5}{6}{advmod}
+\depedge{10}{5}{conj}
+
+\depedge[edge below]{13}{5}{conj}
+\depedge{5}{4}{obj}
+\depedge{2}{3}{nummod}
+\depedge{5}{2}{obl}
+\depedge{10}{1}{punct}
+
+\depedge[edge below]{13}{1}{punct}
+\end{dependency}
+
+
+
+%% for deptree.sty
+%% \usepackage{deptrees}
+\setbottom{5} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{13}{Laitoin}{VERB}
+\root{10}{purkillinen}{NOUN}
+% headpos, hor-pos, vert-pos, form, UPOS, deprel
+\dep{10}{12}{1}{Sekaan}{ADV}{orphan}
+\dep{10}{11}{1}{1}{NUM}{nummod}
+\dep{10}{9}{1}{kermaviiliä}{NOUN}{nmod}
+\dep{10}{5}{1}{jaoin}{VERB}{conj}
+\dep{10}{1}{1}{.}{PUNCT}{punct}
+\dep{5}{8}{2}{ja}{CCONJ}{cc}
+\dep{5}{7}{2}{ja}{CCONJ}{cc}
+\dep{5}{6}{2}{sitten}{ADV}{advmod}
+\dep{5}{4}{2}{perustahnan}{NOUN}{obj}
+\dep{5}{2}{2}{lautaselle}{NOUN}{obl}
+\dep{2}{3}{3}{4}{NUM}{nummod}
 \end{tikzpicture}
 

@@ -158,20 +158,20 @@ public class TestConlluPlus {
 
         URL url = this.getClass().getResource("out1.conllup");
 
-        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0, false); // to have the global.columns line
+        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 0, false, false); // to have the global.columns line
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         processwrapper("read 1", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 1, false);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 1, false, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
 
         processwrapper("read 2", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 2, false);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 2, false, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);

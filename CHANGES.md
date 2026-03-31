@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.32.6
+* do not show comparison results in normal mode
+* R2L in latex format too
+* test updated
+
 ## Version 2.32.5
 * correction: detect path traversal in HTTP server
 

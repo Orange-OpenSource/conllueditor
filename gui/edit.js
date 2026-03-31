@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2025, Orange S.A.
+ Copyright (c) 2018-2026, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.2 as of 23rd December 2025
+ @version 2.32.6 as of 31st March 2026
  */
 
 
@@ -133,7 +133,7 @@ function downloadSVG(ident) {
 
 
 function getRaw(what, title) {
-    var urlbase = URL_BASE + "get" + what + "?all_enhanced=" + show_basic_in_enhanced + "&sentid=" + ($("#currentsent").text() - 1);
+    var urlbase = URL_BASE + "get" + what + "?all_enhanced=" + show_basic_in_enhanced + "&sentid=" + ($("#currentsent").text() - 1) + "&r2l=" + showr2l;
     //console.log("UU " + urlbase);
     $('#rawtext').empty(); // clean text
     $('#showRawModalLabel').html(title); //update modal title
@@ -1893,7 +1893,7 @@ function formatPhrase(item) {
         //alert("SENT LENGTH: " + item.length);
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
-        if (graphtype != 3) {
+        if (graphtype != 3 && item.Lemma != undefined) {
             $("#scores").empty();
             $("#scores").append("(comparison: ");
             $("#scores").append(', <span class="' + (item.Lemma == 100 ? "compok" : "compko") + '"> Lemma: ' + item.Lemma + "</span>");

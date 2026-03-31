@@ -929,15 +929,8 @@ public class ConllSentence {
             List<String>xposl = new ArrayList<>();
             List<String>idsl = new ArrayList<>();
             List<String>positionl = new ArrayList<>();
-            
-            
+
             //System.err.println("qqq " + words);
-           /* if (r2l) {
-                // reverse the words if necessary
-                wordsrev = words.subList(0, words.size());
-                Collections.reverse(wordsrev);
-            } */
-            //System.err.println("qqq " + wordsrev);
             // find the extracolumns used by any of the words
             Set<String> extracols = new LinkedHashSet<>();
             for (ConllWord word : words) {
@@ -945,7 +938,7 @@ public class ConllSentence {
                     extracols.addAll(word.getExtracolumns().keySet());
                 }
             }
-     
+
             // stringbuilders for all needed extra columns
             Map<String, StringBuilder> ecs = new LinkedHashMap<>();
             for (String ec : extracols) {
@@ -980,18 +973,17 @@ public class ConllSentence {
                         position.put(ew.getFullId(), position.size() + 1);
                         positions.append(position.size()).append("\t");
                         */
-                        
+
                         formsl.add(ew.getForm());
                         lemmasl.add(ew.getLemma());
                         uposl.add(ew.getUpostag());
                         xposl.add(ew.getXpostag());
                         idsl.add(ew.getFullId());
                         position.put(ew.getFullId(), position.size() + 1);
-                        //positions.append(position.size()).append("\t");
                         positionl.add(String.valueOf(position.size()));
                     }
-                    
-                    
+
+
                 }
             }
 
@@ -1012,7 +1004,7 @@ public class ConllSentence {
                         ecsb.append("\t\\&\n% ");
                     }
                 }
-                
+
                 forms.append(word.getForm()).append("\t");
                 lemmas.append(word.getLemma()).append("\t");
                 uposs.append(word.getUpostag()).append("\t");
@@ -1027,7 +1019,6 @@ public class ConllSentence {
                 xposl.add(word.getXpostag());
                 idsl.add(word.getFullId());
                 position.put(word.getFullId(), position.size() + 1);
-                //positions.append(position.size()).append("\t");
                 positionl.add(String.valueOf(position.size()));
 
                 for (String ec : extracols) {
@@ -1036,7 +1027,6 @@ public class ConllSentence {
                         tmp = word.getExtracolumns().get(ec);
                     }
                     StringBuilder ecsb = ecs.get(ec);
-                    //ecsb.append("\t\\&\n");
                     if (tmp != null && !tmp.isEmpty()) {
                         ecsb.append(String.join(",", word.getExtracolumns().get(ec)));
                     }
@@ -1052,15 +1042,14 @@ public class ConllSentence {
                             xposs.append("\\& ").append(ew.getXpostag()).append("\t");
                             ids.append("\\& ").append(ew.getFullId()).append("\t");
                             */
-                            
+
                             formsl.add(ew.getForm());
                             lemmasl.add(ew.getLemma());
                             uposl.add(ew.getUpostag());
                             xposl.add(ew.getXpostag());
                             idsl.add(ew.getFullId());
-                            
+
                             position.put(ew.getFullId(), position.size() + 1);
-                            //positions.append("\\& ").append(position.size()).append("\t");
                             positionl.add(String.valueOf(position.size()));
 
                             if (ew.getExtracolumns() != null) {
@@ -1078,7 +1067,6 @@ public class ConllSentence {
                 }
             }
 
-               //System.err.println("qqq " + words);
             if (r2l) {
                 // reverse the words if necessary
                 Collections.reverse(formsl);
@@ -1086,8 +1074,8 @@ public class ConllSentence {
                 Collections.reverse(uposl);
                 Collections.reverse(xposl);
                 Collections.reverse(idsl);
-            } 
-            
+            }
+
             // add lines to main StringBuilder
             forms.append(String.join("\t\\& ", formsl)).append("\t\\\\\n");
             lemmas.append(String.join("\t\\& ", lemmasl)).append("\t\\\\\n");
@@ -1095,13 +1083,13 @@ public class ConllSentence {
             xposs.append(String.join("\t\\& ", xposl)).append("\t\\\\\n");
             ids.append(String.join("\t\\& ", idsl)).append("\t\\\\\n");
             positions.append(String.join("\t\\& ", positionl)).append("\t\\\\\n");
-            
+
             sb.append(forms);
             sb.append(lemmas);
             sb.append(uposs);
             sb.append(xposs);
             sb.append(ids);
-            sb.append(positions); //.append("\\\\\n");
+            sb.append(positions);
             for (String ec : extracols) {
                 sb.append(ecs.get(ec)).append("\\\\\n");
             }
@@ -1109,6 +1097,14 @@ public class ConllSentence {
             sb.append("\\end{deptext}\n\n%        head dependent deprel\n");
             maxdist = 0; // calculate here the most distant word in terms of deprels from root
             //System.err.println("ppppppppppp " + position);
+            if (r2l) {
+                Map<String, Integer> revposition = new HashMap<>(); // position of each word, needed for latex-deprel
+                for (String key : position.keySet()) {
+                    revposition.put(key, position.size() - position.get(key) + 1);
+                }
+                position = revposition;
+            }
+
             for (ConllWord word : words) {
                 maxdist = Math.max(getDistanceFromSentenceHead(word), maxdist);
                 int mypos = position.get(word.getFullId());
@@ -1171,21 +1167,25 @@ public class ConllSentence {
 
             sb.append("\\end{dependency}\n");
 
-            sb.append("\n\n\n%% for deptrees.sty\n");
+            sb.append("\n\n\n%% for deptree.sty\n");
             sb.append("%% \\usepackage{deptrees}\n");
             sb.append(String.format("\\setbottom{%d} %% set to 0 to hide bottom line of forms\n", maxdist + 1));
             sb.append("\\begin{tikzpicture}[x=15mm,y=20mm]\n");
             for (ConllWord chead : getHeads()) {
-                sb.append(String.format("\\root{%d}{%s}{%s}\n", chead.getId(), chead.getForm(), chead.getUpostag()));
+                int root = position.get(chead.getFullId());
+                sb.append(String.format("\\root{%d}{%s}{%s}\n", root, chead.getForm(), chead.getUpostag()));
             }
 
             sb.append("% headpos, hor-pos, vert-pos, form, UPOS, deprel\n");
             List<ConllWord> words2 = new ArrayList<>();
             words2.addAll(words);
             Collections.sort(words2, new CWSortbyHead());
+
             for (ConllWord cw : words2) {
                 if (cw.getHead() != 0) {
-                    sb.append(String.format("\\dep{%d}{%s}{%d}{%s}{%s}{%s}\n", cw.getHead(), cw.getId(),
+                    int head = position.get(String.valueOf(cw.getHead()));
+                    int dep = position.get(cw.getFullId());
+                    sb.append(String.format("\\dep{%s}{%s}{%d}{%s}{%s}{%s}\n", head, dep, //cw.getHead(), cw.getId(),
                             getDistanceFromSentenceHead(cw) - 1,
                             cw.getForm(), cw.getUpostag(), cw.getDeplabel()));
                 }
@@ -1630,7 +1630,6 @@ public class ConllSentence {
         ConllWord chead = cw;
         int d = 1;
         while (chead.getHead() != 0) {
-            System.err.println("qqqq " + chead);
             chead = words.get(chead.getHead() - 1);
             d++;
         }

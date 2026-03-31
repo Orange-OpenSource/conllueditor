@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.1 as of 31st May 2025
+ @version 2.32.6 as of 31st March 2026
 */
 
 import com.google.gson.Gson;
@@ -136,7 +136,7 @@ public class TestConlluEditor {
         // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
         processwrapper("read 13", 1, "editinfo");
-        String res = ce.getraw(ConlluEditor.Raw.LATEX, 13, false);
+        String res = ce.getraw(ConlluEditor.Raw.LATEX, 13, false, false);
         // first sentence 13
         JsonElement jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
         JsonObject jobject = jelement.getAsJsonObject();
@@ -146,7 +146,7 @@ public class TestConlluEditor {
 
 
         // LatEx this time with enhanced relations
-        res = ce.getraw(ConlluEditor.Raw.LATEX, 13, true);
+        res = ce.getraw(ConlluEditor.Raw.LATEX, 13, true, false);
         // first sentence 13
         jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
         jobject = jelement.getAsJsonObject();
@@ -154,7 +154,14 @@ public class TestConlluEditor {
         sb.append(jobject.get("raw").getAsString()).append('\n');
 
         // add LateX for sentence 18
-        res = ce.getraw(ConlluEditor.Raw.LATEX, 18, false);
+        res = ce.getraw(ConlluEditor.Raw.LATEX, 18, false, false);
+        jelement = JsonParser.parseString(res);
+        jobject = jelement.getAsJsonObject();
+        sb.append(jobject.get("raw").getAsString()).append('\n');
+
+
+        // add LateX for sentence 18 but right-to-left
+        res = ce.getraw(ConlluEditor.Raw.LATEX, 18, false, true);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         sb.append(jobject.get("raw").getAsString()).append('\n');
@@ -179,7 +186,7 @@ public class TestConlluEditor {
         // call read to be sure makeTrees has been called on sentence 13
         //String rtc =
         processwrapper("read 13", 1, "editinfo");
-        String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13, false);
+        String res = ce.getraw(ConlluEditor.Raw.SPACY_JSON, 13, false, false);
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
 
@@ -199,21 +206,21 @@ public class TestConlluEditor {
 
         URL url = this.getClass().getResource("out1.conllu");
 
-        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13, false);
+        String res = ce.getraw(ConlluEditor.Raw.CONLLU, 13, false, false);
         JsonElement jelement = JsonParser.parseString(res);
         JsonObject jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8);
 
         //String rtc =
         processwrapper("read 14", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 14, false);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 14, false, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
 
         //rtc =
         processwrapper("read 15", 1, "editinfo");
-        res = ce.getraw(ConlluEditor.Raw.CONLLU, 15, false);
+        res = ce.getraw(ConlluEditor.Raw.CONLLU, 15, false, false);
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         FileUtils.writeStringToFile(out, jobject.get("raw").getAsString(), StandardCharsets.UTF_8, true);
