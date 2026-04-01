@@ -32,21 +32,21 @@
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     author Johannes Heinecke
-    version 2.32.6 as of 31st March 2026
+    version 2.33.0 as of 1st April2026
     -->
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.orange.labs</groupId>
     <artifactId>ConlluEditor</artifactId>
-    <version>2.32.6</version>
+    <version>2.33.0</version>
     <packaging>jar</packaging>
 
     <properties>
         <!-- mis dans un fichier properties avec le plugin properties-maven-plugin -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.11</maven.compiler.source>
-        <maven.compiler.target>1.11</maven.compiler.target>
+        <maven.compiler.source>1.17</maven.compiler.source>
+        <maven.compiler.target>1.17</maven.compiler.target>
         <mainClass>com.orange.labs.editor.ConlluEditor</mainClass>
         <version>${project.version}</version>
     </properties>
@@ -227,7 +227,7 @@
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>7.2.1.202505142326-r</version>
+            <version>7.6.0.202603022253-r</version>
         </dependency>
 
         <!-- Junit tests -->

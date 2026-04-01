@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.33.0
+* search highlighted nodes/deprels: center view
+* org.eclipse.jgit updated to 7.6.0
+* test updated
+
 ## Version 2.32.6
 * do not show comparison results in normal mode
 * R2L in latex format too

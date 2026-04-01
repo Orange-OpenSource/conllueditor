@@ -117,6 +117,7 @@
             }
           ],
           "deprel": "conj",
+          "formhighlight": 1,
           "chunk": 0,
           "type": "",
           "children": [
@@ -204,6 +205,7 @@
         }
       ],
       "deprel": "_",
+      "formhighlight": 1,
       "checktoken": true,
       "chunk": 0,
       "type": "",

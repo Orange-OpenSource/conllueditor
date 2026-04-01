@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.6 as of 31st March 2026
+ @version 2.33.0 as of 1st April 2026
  */
 package com.orange.labs.editor;
 
@@ -1179,7 +1179,8 @@ public class ConlluEditor {
                     for (ConllWord cw : cs.getAllWords()) {
                         if (cw.getCheckToken() || cw.getcheckDeprel()) {
                            currentSentenceId = i;
-                           return returnTree(currentSentenceId, cs, null /* highlight*/);
+                           ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, cw.getId(), cw.getId());
+                           return returnTree(currentSentenceId, cs, hl);
                         }
                     }
                 }
