@@ -1,4 +1,4 @@
-FROM amazoncorretto:24-jdk
+FROM amazoncorretto:26-jdk
 
 ARG VERSION=2.33.0
 # docker build --build-arg VERSION=2.33.0 -t jheinecke/conllueditor:2.33.0 .
