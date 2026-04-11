@@ -63,7 +63,7 @@ In order two compile the server, you also need
 
 #### Docker
 
-Alternatively, a recent version of Docker can be used to run the docker image (see section [docker](#docker) below)
+Alternatively, a recent version of Docker can be used to run the docker image (see section [docker](#using-docker) below)
 
 #### Github Release
 
