@@ -1,5 +1,10 @@
 # Changes
 
+## Version 2.33.1
+* add option `--sid` to ConllFile
+* add MISC:Translit, MISC:LTranslit and Misc:Gloss to LaTeX output (commented)
+* tests adapted
+
 ## Version 2.33.0
 * search highlighted nodes/deprels: center view
 * org.eclipse.jgit updated to 7.6.0

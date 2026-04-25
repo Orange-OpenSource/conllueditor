@@ -83,6 +83,6 @@ FINAL 2
 # text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
 FOUND 1
 FINAL 1
-1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	5	nsubj	_	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi
-4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt
-5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka
+1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	5	nsubj	_	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi|Gloss=girl
+4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|Gloss=letter
+5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|Gloss=wrote

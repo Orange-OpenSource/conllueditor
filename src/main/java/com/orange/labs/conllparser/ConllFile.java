@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2025, Orange S.A.
+ Copyright (c) 2018-2026, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.30.0 as of 12th April 2025
+ @version 2.33.1 as of 23th April 2026
 */
 package com.orange.labs.conllparser;
 
@@ -774,6 +774,7 @@ public class ConllFile {
      * @param strict if false, allow words with head 0 have a deprel different from "root"
      * @param first start with this sentence number
      * @param last stop after this sentence number
+     * @param sid sentence id
      * matching the filter
      * @throws ConllException
      */
@@ -783,7 +784,8 @@ public class ConllFile {
             String filter,
             boolean shuffle,
             boolean strict,
-            int first, int last) throws ConllException {
+            int first, int last,
+            String sid) throws ConllException {
 
         //if (output == Output.ANN) {
         //    out.print(cf.getAnn());
@@ -805,6 +807,9 @@ public class ConllFile {
                 }
                 if (last >= 0 && ct > last) {
                     break;
+                }
+                if (sid != null && !sid.equalsIgnoreCase(cs.getSentid())) {
+                    continue;
                 }
                 if (filter != null) {
                     String text = cs.getSentence();
@@ -917,6 +922,7 @@ public class ConllFile {
 
             int first = 1;
             int last = -1; // = all
+            String sid = null;
             int cvparts = 0;
             String outfileprefix = null;
             String conditionfile = null;
@@ -938,6 +944,9 @@ public class ConllFile {
                 } else if (args[a].equals("--tex")) {
                     output = Output.LATEX;
                     argindex++;
+                } else if (args[a].equals("--sid")) {
+                    sid = args[++a].replaceAll("\\+", " ");
+                    argindex += 2;
                 } else if (args[a].equals("--debug")) {
                     debug = true;
                     argindex++;
@@ -1016,14 +1025,14 @@ public class ConllFile {
                         } else {
                             cf = new ConllFile(sb.toString());
 
-                            processInput(out, cf, output, filter, shuffle, strict, first, last);
+                            processInput(out, cf, output, filter, shuffle, strict, first, last, sid);
                             out.flush();
                             sb = new StringBuilder();
                         }
                     }
                     if (sb.length() != 0) {
                         cf = new ConllFile(sb.toString());
-                        processInput(out, cf, output, filter, shuffle, strict, first, last);
+                        processInput(out, cf, output, filter, shuffle, strict, first, last, sid);
                     }
 
                 } else {
@@ -1050,7 +1059,7 @@ public class ConllFile {
                         }
 
                         if (validationfile == null) {
-                            processInput(out, cf, output, filter, shuffle, strict, first, last);
+                            processInput(out, cf, output, filter, shuffle, strict, first, last, sid);
                         }
                     }
                 }

@@ -11,5 +11,5 @@ FINAL 2
 # text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
 FOUND 1
 FINAL 1
-3	സുഹൃത്തിന്	സുഹൃത്ത്	NOUN	_	Animacy=Anim|Case=Dat|Number=Sing	5	obl	_	Translit=suhr̥ttin|LTranslit=suhr̥tt
-5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka
+3	സുഹൃത്തിന്	സുഹൃത്ത്	NOUN	_	Animacy=Anim|Case=Dat|Number=Sing	5	obl	_	Translit=suhr̥ttin|LTranslit=suhr̥tt|Gloss=to_a_friend
+5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|Gloss=wrote

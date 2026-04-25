@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.4 as of 28th January 2026
+ @version 2.33.1 as of 25th April 2026
 */
 package com.orange.labs.conllparser;
 
@@ -920,15 +920,25 @@ public class ConllSentence {
             StringBuilder lemmas = new StringBuilder("%% lemmas:\n% ");
             StringBuilder uposs = new StringBuilder("%% UPOS:\n% ");
             StringBuilder xposs = new StringBuilder("%% XPOS:\n% ");
+            StringBuilder translits = new StringBuilder("%% form transliterations:\n% ");
+            StringBuilder ltranslits = new StringBuilder("%% lemma transliterations:\n% ");
+            StringBuilder glosses = new StringBuilder("%% glosses:\n% ");
             StringBuilder ids = new StringBuilder("%% IDs:\n% ");
             StringBuilder positions = new StringBuilder("%% Position in sentence:\n% ");
 
             List<String>formsl = new ArrayList<>();
             List<String>lemmasl = new ArrayList<>();
+            List<String>translitl = new ArrayList<>();
+            List<String>ltranslitl = new ArrayList<>();
+            List<String>glossl = new ArrayList<>();
             List<String>uposl = new ArrayList<>();
             List<String>xposl = new ArrayList<>();
             List<String>idsl = new ArrayList<>();
             List<String>positionl = new ArrayList<>();
+
+            boolean hasTranslits = false;
+            boolean hasLTranslits = false;
+            boolean hasGlosses = false;
 
             //System.err.println("qqq " + words);
             // find the extracolumns used by any of the words
@@ -946,75 +956,71 @@ public class ConllSentence {
                 ecs.put(ec, extra);
             }
 
-            boolean first = true;
             if (emptywords != null) {
                 // sentence initial emptry words
                 List<ConllWord> ews = emptywords.get(0);
                 if (ews != null) {
-                    /*
-                    if (first) {
-                        first = false;
-                    } else {
-                        //forms.append("\\& ");
-                        //lemmas.append("\\& ");
-                        //uposs.append("\\& ");
-                        //xposs.append("\\& ");
-                        //ids.append("\\& ");
-                        positions.append("\\& ");
-                    }
-                    */
                     for (ConllWord ew : ews) {
-                        /*
-                        forms.append(ew.getForm()).append("\t");
-                        lemmas.append(ew.getLemma()).append("\t");
-                        uposs.append(ew.getUpostag()).append("\t");
-                        xposs.append(ew.getXpostag()).append("\t");
-                        ids.append(ew.getFullId()).append("\t");
-                        position.put(ew.getFullId(), position.size() + 1);
-                        positions.append(position.size()).append("\t");
-                        */
-
                         formsl.add(ew.getForm());
                         lemmasl.add(ew.getLemma());
+                        Object tmp = ew.getMisc().get("Translit");
+                        if (tmp != null) {
+                            translitl.add((String)tmp);
+                            hasTranslits = true;
+                        } else {
+                            translitl.add("");
+                        }
+                        tmp = ew.getMisc().get("LTranslit");
+                        if (tmp != null) {
+                            ltranslitl.add((String)tmp);
+                            hasLTranslits = true;
+                        } else {
+                            ltranslitl.add("");
+                        }
+                        tmp = ew.getMisc().get("Gloss");
+                        if (tmp != null) {
+                            String tmpstr = (String)tmp;
+                            glossl.add(tmpstr.replace("_", "\\_"));
+                            hasGlosses = true;
+                        } else {
+                            glossl.add("");
+                        }
+
                         uposl.add(ew.getUpostag());
                         xposl.add(ew.getXpostag());
                         idsl.add(ew.getFullId());
                         position.put(ew.getFullId(), position.size() + 1);
                         positionl.add(String.valueOf(position.size()));
                     }
-
-
                 }
             }
 
             // all words, including empty words following a regular word
             for (ConllWord word : words) {
-                /*
-                if (first) {
-                    first = false;
-                } else {
-                    //forms.append("\\& ");
-                    //lemmas.append("\\& ");
-                    //uposs.append("\\& ");
-                    //xposs.append("\\& ");
-                    //ids.append("\\& ");
-                    positions.append("\\& ");
-                    for (String ec : extracols) {
-                        StringBuilder ecsb = ecs.get(ec);
-                        ecsb.append("\t\\&\n% ");
-                    }
-                }
-
-                forms.append(word.getForm()).append("\t");
-                lemmas.append(word.getLemma()).append("\t");
-                uposs.append(word.getUpostag()).append("\t");
-                xposs.append(word.getXpostag()).append("\t");
-                ids.append(word.getFullId()).append("\t");
-                position.put(word.getFullId(), position.size() + 1);
-                positions.append(position.size()).append("\t");
-                */
                 formsl.add(word.getForm());
                 lemmasl.add(word.getLemma());
+                Object mi = word.getMisc().get("Translit");
+                if (mi != null) {
+                    translitl.add((String)mi);
+                    hasTranslits = true;
+                } else {
+                    translitl.add("");
+                }
+                mi = word.getMisc().get("LTranslit");
+                if (mi != null) {
+                    ltranslitl.add((String)mi);
+                    hasLTranslits = true;
+                } else {
+                    ltranslitl.add("");
+                }
+                mi = word.getMisc().get("Gloss");
+                if (mi != null) {
+                    String tmpstr = (String)mi;
+                    glossl.add(tmpstr.replace("_", "\\_"));
+                    hasGlosses = true;
+                } else {
+                    glossl.add("");
+                }
                 uposl.add(word.getUpostag());
                 xposl.add(word.getXpostag());
                 idsl.add(word.getFullId());
@@ -1036,19 +1042,33 @@ public class ConllSentence {
                     List<ConllWord> ews = emptywords.get(word.getId());
                     if (ews != null) {
                         for (ConllWord ew : ews) {
-                            /*forms.append("\\& ").append(ew.getForm()).append("\t");
-                            lemmas.append("\\& ").append(ew.getLemma()).append("\t");
-                            uposs.append("\\& ").append(ew.getUpostag()).append("\t");
-                            xposs.append("\\& ").append(ew.getXpostag()).append("\t");
-                            ids.append("\\& ").append(ew.getFullId()).append("\t");
-                            */
-
                             formsl.add(ew.getForm());
                             lemmasl.add(ew.getLemma());
                             uposl.add(ew.getUpostag());
                             xposl.add(ew.getXpostag());
                             idsl.add(ew.getFullId());
-
+                            Object tmp = ew.getMisc().get("Translit");
+                            if (tmp != null) {
+                                translitl.add((String)tmp);
+                                hasTranslits = true;
+                            } else {
+                                translitl.add("");
+                            }
+                            tmp = ew.getMisc().get("LTranslit");
+                            if (tmp != null) {
+                                ltranslitl.add((String)tmp);
+                                hasLTranslits = true;
+                            } else {
+                                ltranslitl.add("");
+                            }
+                            tmp = ew.getMisc().get("Gloss");
+                            if (tmp != null) {
+                                String tmpstr = (String)tmp;
+                                glossl.add(tmpstr.replace("_", "\\_"));
+                                hasGlosses = true;
+                            } else {
+                                glossl.add("");
+                            }
                             position.put(ew.getFullId(), position.size() + 1);
                             positionl.add(String.valueOf(position.size()));
 
@@ -1074,11 +1094,17 @@ public class ConllSentence {
                 Collections.reverse(uposl);
                 Collections.reverse(xposl);
                 Collections.reverse(idsl);
+                Collections.reverse(translitl);
+                Collections.reverse(ltranslitl);
+                Collections.reverse(glossl);
             }
 
             // add lines to main StringBuilder
             forms.append(String.join("\t\\& ", formsl)).append("\t\\\\\n");
             lemmas.append(String.join("\t\\& ", lemmasl)).append("\t\\\\\n");
+            translits.append(String.join("\t\\& ", translitl)).append("\t\\\\\n");
+            ltranslits.append(String.join("\t\\& ", ltranslitl)).append("\t\\\\\n");
+            glosses.append(String.join("\t\\& ", glossl)).append("\t\\\\\n");
             uposs.append(String.join("\t\\& ", uposl)).append("\t\\\\\n");
             xposs.append(String.join("\t\\& ", xposl)).append("\t\\\\\n");
             ids.append(String.join("\t\\& ", idsl)).append("\t\\\\\n");
@@ -1086,6 +1112,15 @@ public class ConllSentence {
 
             sb.append(forms);
             sb.append(lemmas);
+            if (hasTranslits) {
+                sb.append(translits);
+            }
+            if (hasLTranslits) {
+                sb.append(ltranslits);
+            }
+            if (hasGlosses) {
+                sb.append(glosses);
+            }
             sb.append(uposs);
             sb.append(xposs);
             sb.append(ids);

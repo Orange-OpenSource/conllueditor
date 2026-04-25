@@ -240,3 +240,58 @@ Laitoin	\& Sekaan	\& 1	\& purkillinen	\& kermaviiliä	\& ja	\& ja	\& sitten	\& j
 \dep{2}{3}{3}{4}{NUM}{nummod}
 \end{tikzpicture}
 
+%% for tikz-dependency
+%% use following packages:
+%% \usepackage{tikz}
+%% \usepackage{tikz-dependency}
+% newdoc cairo ml_ufal-ud-test.conllu
+% newpar cairo01
+% sent_id = cairo01
+\begin{dependency}
+\begin{deptext}
+%% forms:
+പെൺകുട്ടി	\& തന്റെ	\& സുഹൃത്തിന്	\& കത്ത്	\& എഴുതി	\& .	\\
+%% lemmas:
+% പെൺകുട്ടി	\& താൻ	\& സുഹൃത്ത്	\& കത്ത്	\& എഴുതുക	\& .	\\
+%% form transliterations:
+% peṇ̕kuṭṭi	\& tanṟe	\& suhr̥ttin	\& katt	\& eḻuti	\& .	\\
+%% lemma transliterations:
+% peṇ̕kuṭṭi	\& tān̕	\& suhr̥tt	\& katt	\& eḻutuka	\& .	\\
+%% glosses:
+% girl	\& her	\& to\_a\_friend	\& letter	\& wrote	\& 	\\
+%% UPOS:
+% NOUN	\& PRON	\& NOUN	\& NOUN	\& VERB	\& PUNCT	\\
+%% XPOS:
+% _	\& _	\& _	\& _	\& _	\& _	\\
+%% IDs:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\\
+%% Position in sentence:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\\
+\end{deptext}
+
+%        head dependent deprel
+\depedge{5}{1}{nsubj}
+\depedge{3}{2}{nmod:poss}
+\depedge{5}{3}{obl}
+\depedge{5}{4}{obj}
+\deproot[edge unit distance=4ex]{5}{root}%%
+\depedge{5}{6}{punct}
+\wordgroup{1}{4}{5}{mw4}
+\end{dependency}
+
+
+
+%% for deptree.sty
+%% \usepackage{deptrees}
+\setbottom{4} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{5}{എഴുതി}{VERB}
+% headpos, hor-pos, vert-pos, form, UPOS, deprel
+\dep{3}{2}{2}{തന്റെ}{PRON}{nmod:poss}
+\dep{5}{1}{1}{പെൺകുട്ടി}{NOUN}{nsubj}
+\dep{5}{3}{1}{സുഹൃത്തിന്}{NOUN}{obl}
+\dep{5}{4}{1}{കത്ത്}{NOUN}{obj}
+\dep{5}{6}{1}{.}{PUNCT}{punct}
+\mwt{4}{5}{കത്തെഴുതി}
+\end{tikzpicture}
+

@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.33.0 (see [change history](CHANGES.md))
+Current version: 2.33.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -395,6 +395,10 @@ This scripts accepts the same options as [validate.py](https://github.com/Univer
 
 The buttons `CoNLL-U`, `LaTeX` and `SD-parse` open a window which contains the current sentence in the corresponding format.
 LaTeX output includes MWE units as well as enhanced dependencies. Enhanced dependencies, which are identical to basic dependencies are shown in the LaTeX output if the button `show basic in enhanced` is activated.
+If the Tokens of the sentence have `Translit`, `LTranslit` or `Gloss` keys in their `MISC` column, these are added to the LaTeX output:
+
+![Empty nodes](doc/latex.png)
+
 The `download` downloads the current image as a `svg`-file.
 A click on the filename on the top of the screens opens a windows with some file
 statistics:

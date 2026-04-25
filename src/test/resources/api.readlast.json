@@ -7,7 +7,7 @@
   "length": 6,
   "sent_id": "cairo01",
   "newpar": "cairo01",
-  "newdoc": "cairo",
+  "newdoc": "cairo ml_ufal-ud-test.conllu",
   "translit_words": [
     "peṇ̕kuṭṭi",
     "tanṟe",
@@ -61,6 +61,10 @@
         {
           "name": "LTranslit",
           "val": "eḻutuka"
+        },
+        {
+          "name": "Gloss",
+          "val": "wrote"
         }
       ],
       "xpos": "_",
@@ -97,6 +101,10 @@
             {
               "name": "LTranslit",
               "val": "peṇ̕kuṭṭi"
+            },
+            {
+              "name": "Gloss",
+              "val": "girl"
             }
           ],
           "xpos": "_",
@@ -133,6 +141,10 @@
             {
               "name": "LTranslit",
               "val": "suhr̥tt"
+            },
+            {
+              "name": "Gloss",
+              "val": "to_a_friend"
             }
           ],
           "xpos": "_",
@@ -173,6 +185,10 @@
                 {
                   "name": "LTranslit",
                   "val": "tān̕"
+                },
+                {
+                  "name": "Gloss",
+                  "val": "her"
                 }
               ],
               "xpos": "_",
@@ -201,6 +217,10 @@
               {
                 "name": "Translit",
                 "val": "katteḻuti"
+              },
+              {
+                "name": "Gloss",
+                "val": "wrote_a_letter"
               }
             ]
           },
@@ -226,6 +246,10 @@
             {
               "name": "LTranslit",
               "val": "katt"
+            },
+            {
+              "name": "Gloss",
+              "val": "letter"
             }
           ],
           "xpos": "_",
@@ -260,7 +284,7 @@
       "indexshift": 0
     }
   ],
-  "info": "Translit\u003deḻuti|LTranslit\u003deḻutuka",
+  "info": "Translit\u003deḻuti|LTranslit\u003deḻutuka|Gloss\u003dwrote",
   "comments": "origtranslit \u003d peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.\n",
   "canUndo": false,
   "canRedo": false

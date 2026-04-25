@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.6 as of 31st March 2026
+ @version 2.33.1 as of 25th April 2026
 */
 
 import com.google.gson.Gson;
@@ -165,6 +165,14 @@ public class TestConlluEditor {
         jelement = JsonParser.parseString(res);
         jobject = jelement.getAsJsonObject();
         sb.append(jobject.get("raw").getAsString()).append('\n');
+
+
+       // add LateX for sentence 19 (with transliterations)
+       res = ce.getraw(ConlluEditor.Raw.LATEX, 19, false, false);
+       jelement = JsonParser.parseString(res);
+       jobject = jelement.getAsJsonObject();
+       sb.append(jobject.get("raw").getAsString()).append('\n');
+
 
         FileUtils.writeStringToFile(out, sb.toString(), //jobject.get("raw").getAsString(),
                                          StandardCharsets.UTF_8);
