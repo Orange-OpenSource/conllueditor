@@ -2,6 +2,7 @@
 
 ## Version 2.33.2
 * add missing `\&` in format of extra-columns in LaTeX output
+* new test
 
 ## Version 2.33.1
 * add option `--sid` to ConllFile

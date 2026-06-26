@@ -309,4 +309,33 @@ public class TestConlluPlus {
         FileUtils.readFileToString(new File(ref2.getFile()), StandardCharsets.UTF_8),
         FileUtils.readFileToString(out2, StandardCharsets.UTF_8));
     }
+
+    @Test
+    public void test50Latex() throws IOException {
+        name("LaTeX output");
+
+        //System.out.println("=================== " + folder.getRoot());
+        //File out = folder.newFile("test.tex");
+        File out = new File(folder,  "test_conllup.tex");
+
+        URL url = this.getClass().getResource("test_conllup.tex");
+
+        // call read to be sure makeTrees has been called on sentence 13
+        //String rtc =
+        processwrapper("read 1", 1, "editinfo");
+        String res = ce.getraw(ConlluEditor.Raw.LATEX, 0, false, false);
+        // first sentence 13
+        JsonElement jelement = JsonParser.parseString(res);  //new JsonParser().parse(res);
+        JsonObject jobject = jelement.getAsJsonObject();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(jobject.get("raw").getAsString()).append('\n');
+
+                FileUtils.writeStringToFile(out, sb.toString(), //jobject.get("raw").getAsString(),
+                                         StandardCharsets.UTF_8);
+
+        Assert.assertEquals(String.format("LaTeX output incorrect\n ref: %s\n res: %s\n", url.toString(), out.toString()),
+                FileUtils.readFileToString(new File(url.getFile()), StandardCharsets.UTF_8),
+                FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
 }

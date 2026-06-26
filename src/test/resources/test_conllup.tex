@@ -1,0 +1,59 @@
+%% for tikz-dependency
+%% use following packages:
+%% \usepackage{tikz}
+%% \usepackage{tikz-dependency}
+% sent_id = fr-ud-dev_00001
+\begin{dependency}
+\begin{deptext}
+%% forms:
+Aviator	\& ,	\& un	\& film	\& sur	\& la	\& vie	\& de	\& Howard	\& Hughes	\& .	\\
+%% lemmas:
+% Aviator	\& ,	\& un	\& film	\& sur	\& le	\& vie	\& de	\& Howard	\& Hughes	\& .	\\
+%% UPOS:
+% PROPN	\& PUNCT	\& DET	\& NOUN	\& ADP	\& DET	\& NOUN	\& ADP	\& PROPN	\& PROPN	\& PUNCT	\\
+%% XPOS:
+% _	\& _	\& _	\& _	\& _	\& _	\& _	\& _	\& _	\& _	\& _	\\
+%% IDs:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\& 8	\& 9	\& 10	\& 11	\\
+%% Position in sentence:
+% 1	\& 2	\& 3	\& 4	\& 5	\& 6	\& 7	\& 8	\& 9	\& 10	\& 11	\\
+%% extra column SEM:NE:
+% B:Work	\& \_	\& \_	\& \_	\& \_	\& \_	\& \_	\& \_	\& B:Person	\& I:Person	\& \_	\\
+%% extra column SEM:COREF:
+% B:Coref1	\& \_	\& B:Coref1	\& I:Coref1	\& \_	\& \_	\& \_	\& \_	\& \_	\& \_	\& \_	\\
+\end{deptext}
+
+%        head dependent deprel
+\deproot[edge unit distance=4ex]{1}{root}%%
+\depedge{1}{2}{punct}
+\depedge{4}{3}{det}
+\depedge{1}{4}{appos}
+\depedge{7}{5}{case}
+\depedge{7}{6}{det}
+\depedge{4}{7}{nmod}
+\depedge{9}{8}{case}
+\depedge{7}{9}{nmod}
+\depedge{9}{10}{flat:name}
+\depedge{1}{11}{punct}
+\end{dependency}
+
+
+
+%% for deptree.sty
+%% \usepackage{deptrees}
+\setbottom{6} % set to 0 to hide bottom line of forms
+\begin{tikzpicture}[x=15mm,y=20mm]
+\root{1}{Aviator}{PROPN}
+% headpos, hor-pos, vert-pos, form, UPOS, deprel
+\dep{1}{2}{1}{,}{PUNCT}{punct}
+\dep{1}{4}{1}{film}{NOUN}{appos}
+\dep{1}{11}{1}{.}{PUNCT}{punct}
+\dep{4}{3}{2}{un}{DET}{det}
+\dep{4}{7}{2}{vie}{NOUN}{nmod}
+\dep{7}{5}{3}{sur}{ADP}{case}
+\dep{7}{6}{3}{la}{DET}{det}
+\dep{7}{9}{3}{Howard}{PROPN}{nmod}
+\dep{9}{8}{4}{de}{ADP}{case}
+\dep{9}{10}{4}{Hughes}{PROPN}{flat:name}
+\end{tikzpicture}
+
