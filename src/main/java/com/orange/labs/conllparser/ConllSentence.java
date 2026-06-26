@@ -951,9 +951,12 @@ public class ConllSentence {
 
             // stringbuilders for all needed extra columns
             Map<String, StringBuilder> ecs = new LinkedHashMap<>();
+            Map<String, List<String> > ecsl = new LinkedHashMap<>();
             for (String ec : extracols) {
                 StringBuilder extra = new StringBuilder(String.format("%%%% extra column %s:\n%% ", ec));
                 ecs.put(ec, extra);
+                List<String>extral = new ArrayList<>();
+                ecsl.put(ec, extral);
             }
 
             if (emptywords != null) {
@@ -1032,9 +1035,11 @@ public class ConllSentence {
                     if (word.getExtracolumns() != null) {
                         tmp = word.getExtracolumns().get(ec);
                     }
-                    StringBuilder ecsb = ecs.get(ec);
+                    //StringBuilder ecsb = ecs.get(ec);
+                    List<String> ecsbl = ecsl.get(ec);
                     if (tmp != null && !tmp.isEmpty()) {
-                        ecsb.append(String.join(",", word.getExtracolumns().get(ec)));
+                        //ecsb.append(String.join(",", word.getExtracolumns().get(ec))).append("\t\\& ");
+                        ecsbl.add(String.join(",", word.getExtracolumns().get(ec)));
                     }
                 }
 
@@ -1075,10 +1080,12 @@ public class ConllSentence {
                             if (ew.getExtracolumns() != null) {
                                 for (String ec : extracols) {
                                     //LinkedHashSet<String> tmp = word.getExtracolumns().get(ec);
-                                    StringBuilder ecsb = ecs.get(ec);
-                                    ecsb.append("\\& ");
+                                    //StringBuilder ecsb = ecs.get(ec);
+                                    List<String> ecsbl = ecsl.get(ec);
+                                    //ecsb.append("\\& ");
                                     if (!word.getExtracolumns().get(ec).isEmpty()) {
-                                        sb.append(String.join(",", word.getExtracolumns().get(ec)));
+                                        //sb.append(String.join(",", word.getExtracolumns().get(ec)));
+                                        ecsbl.add(String.join(",", word.getExtracolumns().get(ec)));
                                     }
                                 }
                             }
@@ -1126,7 +1133,8 @@ public class ConllSentence {
             sb.append(ids);
             sb.append(positions);
             for (String ec : extracols) {
-                sb.append(ecs.get(ec)).append("\\\\\n");
+                sb.append(ecs.get(ec));
+                sb.append(String.join("\t\\& ", ecsl.get(ec)).replace("_", "\\_")).append("\t\\\\\n");
             }
 
             sb.append("\\end{deptext}\n\n%        head dependent deprel\n");

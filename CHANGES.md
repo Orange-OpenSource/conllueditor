@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.33.2
+* add missing `\&` in format of extra-columns in LaTeX output
+
 ## Version 2.33.1
 * add option `--sid` to ConllFile
 * add MISC:Translit, MISC:LTranslit and Misc:Gloss to LaTeX output (commented)
