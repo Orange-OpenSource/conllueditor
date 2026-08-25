@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,26 +28,35 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.3 as of 21st February 2025
+ @version 2.34.0 as of 24th August 2026
 */
 
 
 
 .conllutable  {
     border-collapse: collapse;
-    table-layout:fixed;
+    table-layout:fixed; /* important for column resizing */
     margin-top: 0px;
-    white-space: preserve nowrap;
+   /* white-space: preserve nowrap;*/
 }
 
 
 
 table.conllutable td {
     border: 1px solid #8a8;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
 }
 
 table.conllutable th {
     border: 1px solid #8a8;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
+    width: 100px;
 }
 
 
@@ -56,6 +65,16 @@ table.conllutable th {
     border: 0px; /* solid #aaffaa; */
     color: darkgreen;
     background-color: #edffed;
+}
+
+.resizer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6px;
+    height: 100%;
+    cursor: col-resize;
+    user-select: none;
 }
 
 .noedit {
@@ -69,13 +88,28 @@ table.conllutable th {
     text-align: right;
 }
 
+.thfeats {
+    width: 200px;
+   
+}
+
+.thmisc {
+    width: 200px;
+}
+
+
+/* width of edit field in table */
 .icol {
    width: 100%;
 }
 
+/* used when option -f is used */
 .featsicol {
-   width: 94%;
+   ppwidth: 90%;
+     flex: 1;
+  min-width: 0;
 }
+
 
 /* make radiobutton look like normal buttons */
 label {
@@ -103,7 +137,7 @@ label {
         );
 }
 input[type="radio"] {
-    display:none;   
+    display:none;
 }
 input[type="radio"]:checked + label {
         background-image: -webkit-gradient(
@@ -115,9 +149,11 @@ input[type="radio"]:checked + label {
         );
 }
 
+
+
+/*
 .ifeats {
-    /*width: 100%;*/
-       width: 230px; /* thfeats: 250- 18 (modify button)) */
+    width: 230px;
 }
 
 .thform, .thlemma {
@@ -126,11 +162,11 @@ input[type="radio"]:checked + label {
 
 .thupos {
     width: 100px;
-} 
+}
 
 .thxpos {
     width: 120px;
-} 
+}
 
 .thfeats {
     width: 250px;
@@ -151,15 +187,18 @@ input[type="radio"]:checked + label {
 .thmisc {
     width: 120px;
 }
+*/
 
 table.conllutable select {
     color: darkgreen;
 }
 
+
 .tdfeats {
    white-space: nowrap;
-   display: block;
+   display: flex;
 }
+
 
 .tokencheck_table {
    color: magenta;

@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.33.2 (see [change history](CHANGES.md))
+Current version: 2.34.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -264,7 +264,7 @@ The button `fixed width` displays the tree/hedge width a (configurable) fixed wo
 
 ![Edit screen (flat graph)](doc/graph.png)
 
-The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word. Columns can be made larger or narrower by using the buttons `+` and `-`.
+The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word. Columns can be made larger by clicking the at the right side of the column header and drag it.
 
 ![Edit screen (flat graph)](doc/table.png)
 
@@ -272,7 +272,7 @@ When the server is started with the option `--features feats.json` (feats.json)[
 
 ![Edit screen (flat graph with feature editing)](doc/table-with-featedit.png)
 
-Click on tone of the `m`odify button opens a Feature-edit popup where the valid feature values for the given UPOS can be chosen or unset:
+Clicking on one of the `m`odify button opens a Feature-edit popup where the valid feature values for the given UPOS can be chosen or unset:
 
 ![Edit screen (feature editing)](doc/feat-edit.png)
 

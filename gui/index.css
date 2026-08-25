@@ -245,8 +245,9 @@ img.helptextbutton {
 .smallmybutton {
   height: 25px;
   font-size: smaller;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 18px;
+  margin-right: 5px;
 }
 
 input {

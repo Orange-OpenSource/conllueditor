@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.34.0
+* change column width in tableview with click-and-drag on column header border
+
 ## Version 2.33.2
 * add missing `\&` in format of extra-columns in LaTeX output
 * new test

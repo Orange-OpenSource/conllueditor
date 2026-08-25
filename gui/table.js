@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2025, Orange S.A.
+ Copyright (c) 2018-2026, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.29.3 as of 21st February 2025
+ @version 2.34.0 as of 24th August 2026
  */
 
 $(document).ready(function () {
@@ -64,6 +64,7 @@ $(document).ready(function () {
     //    });
 });
 
+/*
 var columnwidth = {}; // if a column width is changed, we store it here
 
 function largertd(where) {
@@ -86,6 +87,7 @@ function smallertd(where) {
         }
     }
 }
+*/
 
 var currentwordid = 0; // if != 0, the word to apply edit shortcuts to
 var formalErrors = 0;
@@ -94,6 +96,7 @@ function drawTable(parent, trees, sentid) {
     formalErrors = 0;
     var tbl = document.createElement("table");
     tbl.className = "conllutable";
+    tbl.id = "myTable";
     //console.log("ZZZZZZss", keepmarked, sentid);
 
     if (keepmarked === -1 || keepmarked !== sentid) {
@@ -113,17 +116,23 @@ function drawTable(parent, trees, sentid) {
             colname = conllucolumns[i].toLowerCase();
             hdcellouter.className = "theader ooth" + colname;
             headerrow.append(hdcellouter);
+
             var hdcell = document.createElement('div');
             hdcell.className = "thdiv th" + colname;
             hdcellouter.append(hdcell);
+
+            var hdcellresizer = document.createElement('div');
+            hdcellresizer.className = "resizer";
+            hdcellouter.append(hdcellresizer);
+
             hdcell.innerHTML = conllucolumns[i]; // headers come from server
             //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
-            if (conllucolumns[i] !== "ID" && conllucolumns[i] !== "HEAD" && conllucolumns[i] !== "DEPREL") {
+            /*if (conllucolumns[i] !== "ID" && conllucolumns[i] !== "HEAD" && conllucolumns[i] !== "DEPREL") {
                 hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="' + colname + 'sizeup'
                     + '" type="button" value="+" onclick=largertd("'
                     + colname + '") /> <input class="mybutton smallmybutton" id="' + colname + 'sizedown'
                     + '" type="button" value="&ndash;" onclick=smallertd("' + colname + '") />';
-            }
+            }*/
         }
         tbl.append(headerrow);
     }
@@ -141,15 +150,21 @@ function drawTable(parent, trees, sentid) {
     for (var i = 0; i < conllucolumns.length; ++i) {
         colname = conllucolumns[i].toLowerCase();
         //console.log("COLN", colname, columnwidth[colname], $(".th" + colname).width());
-        if (colname in columnwidth) {
+        /*if (colname in columnwidth) {
             // reset column width since it was changed by user earlier
             $(".th" + colname).width(columnwidth[colname]);
-        }
+        }*/
     }
 
     if (keepmarked > -1) {
         $("#td" + currentwordid).css("background", "orange");
     }
+
+    // Reapply widths
+    applyColumnWidths($("#myTable"));
+
+      // Important: call this after the table is inserted
+    makeColumnsResizable($("#myTable"));
 }
 
 var numberofextracols = 0; // needed to complete the table in MWE rows
@@ -328,8 +343,7 @@ function drawTableWord(rows, word, head, sentid) {
     }
 
     fcell = makeInputfield("feats", word, checkFeat, fstr);
-    //console.log("TTT", word, checkFeat, fstr);
-    fcell.className += " featsicol"; // "replace" icol
+    //fcell.className += " featsicol"; // "replace" icol, needed to make place for the (m) button
     if (!featuresAllOK) {
         fcell.className += " worderror";
     }
@@ -338,6 +352,7 @@ function drawTableWord(rows, word, head, sentid) {
         // language specific feature list for each UPOS available
         eb = makeEditbutton("feats", word, word.feats);
         cell6.append(eb);
+        fcell.className += " featsicol"; // "replace" icol, needed to make place for the (m) button
     }
     cell6.append(fcell);
     cell6.className = "tdfeats";
@@ -376,8 +391,8 @@ function drawTableWord(rows, word, head, sentid) {
     }
 
 
-
     var cell9 = row.insertCell(-1);
+    cell9.className = "tddeps";
     fstr = "";
 
     if (word.enhancedheads === undefined)
@@ -394,7 +409,9 @@ function drawTableWord(rows, word, head, sentid) {
 
     cell9.append(makeInputfield("deps", word, checkEUD, fstr));
 
+
     var cell10 = row.insertCell(-1);
+    cell10.className = "tdmisc";
     fstr = "";
     if (word.misc === undefined)
         fstr = "_";
@@ -429,8 +446,8 @@ function drawTableWord(rows, word, head, sentid) {
     }
 }
 
+
 function makeEditbutton(idsuffix, word, keyvaluelist) {
-    // cell6.append('<input class="mybutton smallmybutton" id="edit" type="button" value="e" onclick="smallertd(&quot;feats&quot;)">');
     var icell = document.createElement('input');
     icell.className = "mybutton smallmybutton e" + idsuffix;
     icell.id = "et" + idsuffix + "_" + word.position;
@@ -544,7 +561,7 @@ function checkHead(evt, wid) {
         //console.log("CCC", evt, wordpositions);
         //evt.color = "red";
         // TODO: make better ?
-        document.getElementById(evt.id).style.backgroundColor = "#ff5555";
+        document.getElementById(evt.id).style.backgroundColor = "#dd4444";
         formalErrors++;
     } else {
         document.getElementById(evt.id).style.backgroundColor = "white";
@@ -578,7 +595,7 @@ function checkEUD(evt, wid) {
     }
 
     if (valid === 0) {
-        document.getElementById(evt.id).style.backgroundColor = "#ff5555";
+        document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
         formalErrors++;
     } else {
         document.getElementById(evt.id).style.backgroundColor = "white";
@@ -589,7 +606,7 @@ function checkEUD(evt, wid) {
 function checkForm(elem, wid) {
     //console.log("ELEM", elem);
     if (elem.value.match(/[ \t\n]/)) {
-        document.getElementById(elem.id).style.backgroundColor = "#ff5555";
+        document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
         formalErrors++;
     } else {
         document.getElementById(elem.id).style.backgroundColor = "white";
@@ -600,7 +617,7 @@ function checkForm(elem, wid) {
 function checkUpos(elem, wid) {
     //console.log("ELEM", elem.value);
     if (!elem.value.match(/^[A-Z]+$/)) {
-        document.getElementById(elem.id).style.backgroundColor = "#ff5555";
+        document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
         formalErrors++;
     } else {
         document.getElementById(elem.id).style.backgroundColor = "white";
@@ -610,7 +627,7 @@ function checkUpos(elem, wid) {
 
 function checkDeprel(elem, wid) {
     if (!elem.value.match(/^[a-z](:[a-z]+)?$/)) {
-        document.getElementById(elem.id).style.backgroundColor = "#ff5555";
+        document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
         formalErrors++;
     } else {
         document.getElementById(elem.id).style.backgroundColor = "white";
@@ -632,7 +649,7 @@ function checkFeat(evt, wid) {
     }
 
     if (valid === 0) {
-        document.getElementById(evt.id).style.backgroundColor = "#ff5555";
+        document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
         formalErrors++;
     } else {
         document.getElementById(evt.id).style.backgroundColor = "white";
@@ -657,4 +674,56 @@ function saveMWEField(evt, fromid, toid, form) {
                 + "  " + $("#tmiscmwe_" + fromid).val()
         });
     }
+}
+
+function makeColumnsResizable($table) {
+    $table.find("th").each(function (index) {
+        var $th = $(this);
+        var $resizer = $th.find(".resizer");
+
+        $resizer.on("mousedown", function (e) {
+            e.preventDefault();
+
+            var startX = e.pageX;
+            var startWidth = $th.outerWidth();
+
+            $(document).on("mousemove.resizer", function (e) {
+                var newWidth = startWidth + (e.pageX - startX);
+
+                $th.css("width", newWidth + "px");
+
+                $table.find("tr").each(function () {
+                    var $cell = $(this).children().eq(index);
+                    if ($cell.length) {
+                        $cell.css("width", newWidth + "px");
+                    }
+                });
+                savedWidths[index] = newWidth; // keep updated
+            });
+
+            $(document).on("mouseup.resizer", function () {
+                $(document).off("mousemove.resizer mouseup.resizer");
+            });
+        });
+    });
+}
+
+
+// do not forget changed column widths
+var savedWidths = [];
+
+function applyColumnWidths($table) {
+    //console.log("APPLY C W", $table, savedWidths);
+    $table.find("th").each(function (index) {
+        var width = savedWidths[index];
+        if (width) {
+            $(this).css("width", width + "px");
+            $table.find("tr").each(function () {
+                var $cell = $(this).children().eq(index);
+                if ($cell.length) {
+                    $cell.css("width", width + "px");
+                }
+            });
+        }
+    });
 }
