@@ -1,7 +1,11 @@
 # Changes
 
+## Version 2.35.0
+* `Typo=Yes` accepted as only feature for Multiword Tokens (as specified in CoNLL-U format)
+* tests adapted
+
 ## Version 2.34.0
-* change column width in tableview with click-and-drag on column header border
+* change column width in table view with click-and-drag on column header border
 
 ## Version 2.33.2
 * add missing `\&` in format of extra-columns in LaTeX output

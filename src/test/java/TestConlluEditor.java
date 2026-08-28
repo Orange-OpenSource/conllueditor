@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.33.1 as of 25th April 2026
+ @version 2.35.0 as of 28th August 2026
 */
 
 import com.google.gson.Gson;
@@ -319,7 +319,7 @@ public class TestConlluEditor {
         commands.put("mod checkdeprel 5.1 true", 13);
 
         commands.put("mod checktoken 3 false", 1);
-        commands.put("mod editmwt 6 7 duu true", 6);
+        commands.put("mod editmwt 6 7 duu true _", 6);
 
         runtest("test.highlightedit.conllu", commands, "CoNLL-U output incorrect");
     }
@@ -633,10 +633,10 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         processwrapper("mod compose 1 3", 17, "editinfo");
-        processwrapper("mod editmwt 1 3 Dáselle true", 17, "editinfo");
+        processwrapper("mod editmwt 1 3 Dáselle true _", 17, "editinfo");
 
         processwrapper("mod compose 6 2", 17, "editinfo");
-        processwrapper("mod editmwt 6 7 ao false Gloss=to_him", 17, "editinfo");
+        processwrapper("mod editmwt 6 7 ao false _ Gloss=to_him", 17, "editinfo");
 
         URL ref = this.getClass().getResource("test.create-mwt.conllu");
         //URL res = this.getClass().getResource("test.conllu.8"); // modified file

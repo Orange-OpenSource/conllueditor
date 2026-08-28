@@ -252,6 +252,7 @@
                     "fromid": 8,
                     "toid": 9,
                     "form": "des",
+                    "typoyes": false,
                     "checktoken": true
                   },
                   "xpos": "_",

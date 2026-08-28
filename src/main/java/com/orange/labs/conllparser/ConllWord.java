@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.0 as of 28th May 2025
+ @version 2.35.0 as of 28th August 2026
  */
 package com.orange.labs.conllparser;
 
@@ -256,6 +256,11 @@ public class ConllWord {
         upostag = EmptyColumn;
         xpostag = EmptyColumn;
         deplabel = EmptyColumn;
+        if (orderfeatures) {
+            features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER); //Arrays.asList(elems[shift + 5].split("\\|")));
+        } else {
+            features = new LinkedHashMap<>();
+        }
         misc = new LinkedHashMap<>();
         spacesAfter = " ";
         spacesBefore = "";
@@ -388,8 +393,14 @@ public class ConllWord {
                 columndefssize = columndefs.size();
             }
             for (int x = 2; x < /*9*/ columndefssize - 1; ++x) {
+
                 if (!elems[x].equals(EmptyColumn)) {
-                    throw new ConllException("Contracted word must not have columns filled after position 2");
+                    if (x == 5 && elems[x].equals("Typo=Yes")) {
+                        // the CoNLL-U format permits Typo=Yes as value for the feature coluumn
+                        continue;
+                    }
+
+                    throw new ConllException("Contracted word (line: " + linenumber + ") must not have columns filled (except ID, Form, Misc and Feats (Typo=Yes))");
                 }
                 // processing Misc column
             }
@@ -402,6 +413,13 @@ public class ConllWord {
             xpostag = EmptyColumn;
             deplabel = EmptyColumn;
             features = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+            int posFEAT = getColumn("FEATS", columndefs);
+
+            if (posFEAT != -1) {
+                setFeatures(elems[posFEAT]);
+            }
+
+
             deps = new ArrayList<>(); // TODO either keep this or add checks to getDeps() calls
         } else {
             int posLEMMA = getColumn("LEMMA", columndefs);
@@ -997,7 +1015,7 @@ public class ConllWord {
                 jcontr.addProperty("fromid", contr.id);
                 jcontr.addProperty("toid", contr.subid);
                 jcontr.addProperty("form", contr.form);
-
+                jcontr.addProperty("typoyes", "Typo=Yes".equals(contr.getFeaturesStr()));
                 if (contr.checktoken) jcontr.addProperty("checktoken", true);
 
                 if (contr.misc != null && !contr.misc.isEmpty()) {
@@ -2020,10 +2038,10 @@ public class ConllWord {
         sb.append(getFullId());
         sb.append("\t").append(form);
         if (toktype == Tokentype.CONTRACTED) {
-            sb.append('\t').append(EmptyColumn)
-                    .append('\t').append(EmptyColumn)
-                    .append('\t').append(EmptyColumn)
-                    .append('\t').append(EmptyColumn)
+            sb.append('\t').append(EmptyColumn) // lemma
+                    .append('\t').append(EmptyColumn) // upos
+                    .append('\t').append(EmptyColumn) // xpos
+                    .append('\t').append(getFeaturesStr()) // features
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn)
                     .append('\t').append(EmptyColumn);

@@ -1,3 +1,5 @@
-Contracted word must not have columns filled after position 2
+Contracted word (line: 8) must not have columns filled (except ID, Form, Misc and Feats (Typo=Yes))
+
+Contracted word (line: 43) must not have columns filled (except ID, Form, Misc and Feats (Typo=Yes))
 
 

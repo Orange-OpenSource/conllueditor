@@ -11,3 +11,42 @@
 8	Louvre	Louvre	PROPN	PROPN	_	5	nmod	_	SpaceAfter=No
 9	.	.	PUNCT	PUNCT	_	3	punct	_	_
 
+# sent_id = fr-ud-train_00002
+# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
+# highlight tokens = 8-9 9
+# sentence 4
+1	L'	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	2	det	_	SpaceAfter=No
+2	œuvre	œuvre	NOUN	_	Gender=Fem|Number=Sing	4	nsubj	_	_
+3	est	être	AUX	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	4	aux	_	_
+4	située	situer	VERB	_	Gender=Fem|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	SpaceAfter=\s\t\s
+5	dans	dans	ADP	_	_	7	case	_	_
+6	la	le	DET	_	Definite=Def|Gender=Fem|Number=Sing|PronType=Art	7	det	_	SpaceAfter= 
+7	galerie	galerie	NOUN	_	Gender=Fem|Number=Sing	4	obl	_	_
+8-9	dez	_	_	_	Typo=Yes	_	_	_	_
+8	de	de	ADP	_	_	10	case	_	_
+9	les	le	DET	_	Definite=Def|Gender=Fem|Number=Plur|PronType=Art	10	det	_	_
+10	batailles	bataille	NOUN	_	Gender=Fem|Number=Plur	7	nmod	_	SpaceAfter=No
+11	,	,	PUNCT	_	_	4	punct	_	_
+12	dans	dans	ADP	_	_	14	case	_	_
+13	le	le	DET	_	Definite=Def|Gender=Masc|Number=Sing|PronType=Art	14	det	_	_
+14	château	château	NOUN	_	Gender=Masc|Number=Sing	4	obl	_	_
+15	de	de	ADP	_	_	16	case	_	_
+16	Versailles	Versailles	PROPN	_	_	14	nmod	_	SpaceAfter=No
+17	.	.	PUNCT	_	_	4	punct	_	_
+
+# sent_id = cy_ccg_train:00058
+# text = Pob parch ond dyw pawb yng Nghymru ddim yn ffermwyr?
+# text_en = All due respect but aren't everyone in Wales not farmers?
+1	Pob	pob	ADJ	pos	Degree=Pos	2	amod	_	_
+2	parch	parch	NOUN	noun	Gender=Masc|Number=Sing	0	root	_	_
+3	ond	ond	CCONJ	cconj	_	11	cc	_	_
+4-5	dyw	_	_	_	Typo=No	_	_	_	_
+4	nid	ni	PART	neg	_	11	advmod	_	_
+5	yw	bod	AUX	aux	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	11	cop	_	_
+6	pawb	pawb	PRON	indef	PronType=Ind	11	nsubj	_	_
+7	yng	yn	ADP	prep	_	8	case	_	_
+8	Nghymru	Cymru	PROPN	place	Gender=Fem|Mutation=NM|Number=Sing	6	nmod	_	_
+9	ddim	dim	PART	neg	Mutation=SM	11	advmod	_	_
+10	yn	yn	ADP	prep	_	11	case	_	_
+11	ffermwyr	ffermwr	NOUN	noun	Gender=Masc|Number=Plur	2	conj	_	SpaceAfter=No
+12	?	?	PUNCT	punct	_	11	punct	_	SpacesAfter=\n

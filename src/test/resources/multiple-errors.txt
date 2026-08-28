@@ -1,4 +1,4 @@
-Contracted word must not have columns filled after position 2
+Contracted word (line: 8) must not have columns filled (except ID, Form, Misc and Feats (Typo=Yes))
 
 empty xpostag. Use '_' in line (23) "6	mais	mais	CCONJ		_	9	cc	_	_"
 invalid line: 26 '9	diffère	différer	VERB	_	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	3	conj	_	'.

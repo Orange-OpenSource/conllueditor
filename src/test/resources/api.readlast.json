@@ -209,6 +209,7 @@
             "fromid": 4,
             "toid": 5,
             "form": "കത്തെഴുതി",
+            "typoyes": false,
             "misc": [
               {
                 "name": "SpaceAfter",

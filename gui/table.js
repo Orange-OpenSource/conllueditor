@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.34.0 as of 24th August 2026
+ @version 2.35.0 as of 28th August 2026
  */
 
 $(document).ready(function () {
@@ -52,7 +52,11 @@ $(document).ready(function () {
             } else if (e.target.extracol !== undefined) {
                 sendmodifs({ "cmd": "mod extracol " + e.target.origwordid + " " + modcommand + " " + e.target.value });
             } else if (modcommand === "editmwt") {
-                sendmodifs({ "cmd": "mod editmwt " + e.target.fromid + " " + e.target.toid + " " + e.target.value });
+                var feat = "_";
+                if (e.target.typoyes) {
+                    feat = "Typo=Yes";
+                }
+                sendmodifs({ "cmd": "mod editmwt " + e.target.fromid + " " + e.target.toid + " " + e.target.value + " " + e.target.checktoken + " " + feat});
             } else if (modcommand !== undefined) {
                 sendmodifs({ "cmd": "mod " + modcommand + " " + e.target.origwordid + " " + e.target.value });
             }
@@ -197,7 +201,53 @@ function drawTableMWE(rows, mwe, position) {
 
     var cell6 = row.insertCell(-1);
     cell6.className = "tdfeat noedit";
-    cell6.innerHTML = "_";
+     if (mwe.typoyes) {
+        cell6.innerHTML = "Typo=Yes";
+    } else {
+        cell6.innerHTML = "_";
+    }
+
+
+    /*var cell6 = row.insertCell(-1);
+    var fstr = "";
+    var featuresAllOK = true;
+    if (word.feats === undefined)
+        fstr = "_";
+
+    for (var f in word.feats) {
+        var key = word.feats[f].name;
+        var val = word.feats[f].val;
+        if (f > 0)
+            fstr = fstr + "|";
+        fstr = fstr.concat(key);
+        fstr = fstr.concat('=');
+        fstr = fstr.concat(val);
+        if (word.feats[f].error !== undefined) {
+            featuresAllOK = false;
+        }
+    }
+    if (mwe.typoyes) {
+        fstr = "Typo=Yes";
+    } else {
+        fstr = "_";
+    }
+
+    //fcell = makeInputfield("feats", mwe, checkFeat, fstr); // todo Typo=Yes cannot yet be edited in tableview
+    //fcell.className += " featsicol"; // "replace" icol, needed to make place for the (m) button
+    if (!featuresAllOK) {
+        fcell.className += " worderror";
+    }
+*/
+    //console.log("ffff", word.feats);
+     // TODO: mwe does not contain data needed for makeInputfield()
+    /*if (Object.keys(feats_per_upos).length > 0) {
+        // language specific feature list for each UPOS available
+        eb = makeEditbutton("feats", word, [{"Typo": "Yes"}]); // only feature permettid for MWT
+        cell6.append(eb);
+        fcell.className += " featsicol"; // "replace" icol, needed to make place for the (m) button
+    }*/
+    //cell6.append(fcell);
+    //cell6.className = "tdfeats ";
 
     var cell7 = row.insertCell(-1);
     cell7.className = "tdhead noedit";
@@ -549,6 +599,8 @@ function makeInputfield(idsuffix, word, checkfct, value) {
         // MWEs
         icell.fromid = word.fromid;
         icell.toid = word.toid;
+        icell.checktoken = word.checktoken;
+        icell.typoyes = word.typoyes;
     }
     icell.onkeyup = function (event) { checkfct(icell, word.id) };
     return icell;

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.33.0 as of 1st April 2026
+ @version 2.35.0 as of 28th August 2026
  */
 package com.orange.labs.editor;
 
@@ -1070,7 +1070,7 @@ public class ConlluEditor {
                                          5-6	don't	_	_	...
                                          5	do	VERB	...
                                          6	n't	PART	...
-          mod editmwt <starttokenid> <endtokenid> <highlighttoken> [<MISC data>]
+          mod editmwt <starttokenid> <endtokenid> <highlighttoken> <Typo=Yes> [<MISC data>]
                                      modify the span of a current MWT (or delete it by setting <endtokenid> to 0
 
           mod split <tokenid> [<position>]]
@@ -2051,9 +2051,10 @@ public class ConlluEditor {
 
                 return returnTree(currentSentenceId, csent);
 
-            } else if (command.startsWith("mod editmwt") || command.startsWith("mod editmwe")) { // mod editmwt current_start new_end form [MISC column data]
+            } else if (command.startsWith("mod editmwt") || command.startsWith("mod editmwe")) {
+                 // mod editmwt current_start new_end form highlight typo_yes [MISC column data]
                 String[] f = command.trim().split(" +");
-                if (f.length < 6) {
+                if (f.length < 7) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
@@ -2062,8 +2063,9 @@ public class ConlluEditor {
                 String form = f[4];
                 String misc = "_";
                 String highlighttoken = f[5];
-                if (f.length > 6) {
-                    misc = f[6];
+                String feature_typo_yes = f[6];
+                if (f.length > 7) {
+                    misc = f[7];
                 }
 
                 try {
@@ -2100,6 +2102,7 @@ public class ConlluEditor {
                     cw.setForm(form);
                     cw.setSubId(end);
                     cw.setId(start);
+                    cw.setFeatures(feature_typo_yes);
                     cw.setCheckToken(highlighttoken.equalsIgnoreCase("true"));
                     if (misc != null) {
                         cw.setMisc(misc);

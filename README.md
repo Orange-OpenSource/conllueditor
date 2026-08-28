@@ -27,7 +27,7 @@ The editor provides the following functionalities:
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
 * [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
 
-Current version: 2.34.0 (see [change history](CHANGES.md))
+Current version: 2.35.0 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -264,7 +264,9 @@ The button `fixed width` displays the tree/hedge width a (configurable) fixed wo
 
 ![Edit screen (flat graph)](doc/graph.png)
 
-The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word. Columns can be made larger by clicking the at the right side of the column header and drag it.
+The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word. 
+Known Bug: Currently for multiword tokens the  only available feature `Typo=Yes` cannot yet be set or unset in table view.
+Columns can be made larger by clicking the at the right side of the column header and drag it.
 
 ![Edit screen (flat graph)](doc/table.png)
 
@@ -930,8 +932,8 @@ this will take some time for CoNLL-U files with many sentences and only a single
 
 # Known bugs
 * not all possible errors which users can make are checked 😃: e.g. adding weird or non-numerical ids in the CoNLL-U files may crash the server.
-The `feature`, and `misc` column fields must contain one or more `|`-separated `name=value` pairs per line (or `_`),
-the enhanced dependency field must contain one or more `|`-separated `head:deprel` pairs per line (or `_`).
+The `feature`, and `misc` column fields must contain one or more `|`-separated `name=value` pairs per line (or `_`), the enhanced dependency field must contain one or more `|`-separated `head:deprel` pairs per line (or `_`).
+* Currently for multiword tokens the only permitted feature `Typo=Yes` cannot yet be set or unset in table view.
 
 # Todo list
 * be able to read/write any CoNLL-U plus (`.conllp`) files [http://universaldependencies.org/ext-format.html]
@@ -941,6 +943,7 @@ the enhanced dependency field must contain one or more `|`-separated `head:depre
 * use list (made from UD annotation guidelines) to warn about invalid relations (e.g. _case_ or _aux_ relations with further dependants)
 
 # Reference
+Please cite this reference if you use ConlluEditor in your work:
 
 * Johannes Heinecke (2019): [ConlluEditor: a fully graphical editor for Universal dependencies treebank files](https://syntaxfest.github.io/syntaxfest19/proceedings/papers/paper_55.pdf). In: [Universal Dependencies Workshop 2019](http://universaldependencies.org/udw19/). Paris. ([Short demo video](https://syntaxfest.github.io/syntaxfest19/slides/conllueditor_demo_windows_subtitled.mp4))
 

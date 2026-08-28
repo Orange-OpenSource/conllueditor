@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.6 as of 31st March 2026
+ @version 2.35.0 as of 28th August 2026
  */
 
 
@@ -1621,6 +1621,12 @@ function ModifyTree(evt) {
                 $("#mwtchecktoken").prop( "checked", true);
             }
 
+            if (mwts[id[1]].typoyes === true) {
+                $("#currentMWTfe_typo_yes").prop( "checked", true);
+            } else {
+                 $("#currentMWTfe_None").prop( "checked", true);
+            }
+
             $("#editMWT").modal();
 
             $("#mods").val("");
@@ -1903,7 +1909,7 @@ function formatPhrase(item) {
             $("#scores").append(', <span class="' + (item.LAS == 100 ? "compok" : "compko") + '"> LAS: ' + item.LAS + "</span>");
             $("#scores").append(', <span class="' + (item.UAS == 100 ? "compok" : "compko") + '"> UAS: ' + item.UAS + "</span>");
             $("#scores").append(', <span class="' + (item.DEPLAB == 100 ? "compok" : "compko") + '"> DepLabels: ' + item.DEPLAB + "</span>");
-            $("#scores").append(', <span class="' + (item.MISC == 100 ? "compok" : "compko") + '"> MISC: ' + item.MISC + "</span>");        
+            $("#scores").append(', <span class="' + (item.MISC == 100 ? "compok" : "compko") + '"> MISC: ' + item.MISC + "</span>");
         }
 
         if (graphtype === 2 /*flatgraph*/) {
@@ -2176,11 +2182,13 @@ $(document).ready(function () {
     /* delete clicked MWT form */
     $('#editMWtoken').click(function () {
         misc = $("#currentMWTmisc").val(); //.replace(/\n+/, ",");
+
         sendmodifs({"cmd": "mod editmwt "
                     + $("#currentMWTfrom").val()
                     + " " + $("#currentMWTto").val()
                     + " " + $("#currentMWTform").val()
                     + " " + $("#mwtchecktoken").is(":checked")
+                    + " " + $('input[name="mwtfval"]:checked').val()
                     + " " + misc});
         $('#editMWT').modal('hide');
     });

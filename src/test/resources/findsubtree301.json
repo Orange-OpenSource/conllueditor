@@ -175,7 +175,8 @@
               "mwe": {
                 "fromid": 6,
                 "toid": 7,
-                "form": "aux"
+                "form": "aux",
+                "typoyes": false
               },
               "xpos": "ADP",
               "upos": "ADP",
