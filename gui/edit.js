@@ -1811,7 +1811,8 @@ function formatPhrase(item) {
         $("#sentid").val(item.sentenceid + 1);
         $("#currentsent").append(item.sentenceid + 1);
         if (item.sent_id) {
-            $("#cursentid").append(" (sent_id: ").append(item.sent_id).append(") ");
+            //$("#cursentid").append(" (sent_id: ").append(item.sent_id).append(") ");
+            $("#cursentid").append(item.sent_id);
         }
         $("#total").append(item.maxsentence);
         if (item.text) {

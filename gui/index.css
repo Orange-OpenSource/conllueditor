@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.1 as of 10th November 2025
+ @version 2.35.1 as of 29th August 2026
 */
 
 body {
@@ -61,6 +61,11 @@ h3 {
 #sentencetext,
 #arbre {
     margin-left: 5px;
+    margin-right: 5px;
+}
+
+#currentsent, #cursentid {
+    font-style: italic;
 }
 
 #arbre {
@@ -71,13 +76,18 @@ h3 {
    the "n/m" and "(sent_id: ....)" as well */
 #sentencetext {
    display: flex;
-   flex-wrap: wrap;
+   /*flex-wrap: wrap;*/ /* keep 3 spans in one line */
 }
 
 /* repare side-effect of the flex just above */
 #titre {
   margin-left: 0.5em;
   margin-right: 0.5em;
+  word-wrap: break-word; /* wrap sentence in its span if too long */
+}
+
+#cursentid {
+    text-wrap: nowrap;
 }
 
 #compare {

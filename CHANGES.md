@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.35.1
+* table view scroll improved, layout of header slightly improved
+
 ## Version 2.35.0
 * `Typo=Yes` accepted as only feature for Multiword Tokens (as specified in CoNLL-U format)
 * tests adapted
