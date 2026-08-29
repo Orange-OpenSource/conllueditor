@@ -63,6 +63,10 @@ h3 {
     margin-left: 5px;
 }
 
+#arbre {
+    /*white-space: nowrap; */
+}
+
 /** needed to allow a triple click select only the sentence and not
    the "n/m" and "(sent_id: ....)" as well */
 #sentencetext {
@@ -94,16 +98,12 @@ h3 {
     color: black;
 }
 
-#oooarbre {
-    /*white-space: nowrap; */
-    overflow-x: auto;
-}
-
 #header {
     position:fixed; /* make the header (navigation and search buttons) stick to the top */
     width:100%;
     top:0;
-    height: whatever;
+    z-index: 999;
+    /* height: whatever; */
     /*background: white; */
 
     /*background-image: -webkit-gradient(
