@@ -1,5 +1,8 @@
 # Changes
 
+## Version 2.35.2
+* Potentially time consuming RegEx changed
+
 ## Version 2.35.1
 * table view scroll improved, layout of header slightly improved
 

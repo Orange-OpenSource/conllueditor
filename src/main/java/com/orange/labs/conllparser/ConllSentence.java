@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.33.1 as of 25th April 2026
+ @version 2.35.2 as of 8th September 2026
 */
 package com.orange.labs.conllparser;
 
@@ -188,7 +188,9 @@ public class ConllSentence {
         comments = new ArrayList<>();
         hasEnhancedDeps = false;
         List<String> lastnonstandardinfo = null;
-        Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
+        // not using this RE any more, since it can be very slow on long inputs "Polynomial regular expression used on uncontrolled data"
+        //Pattern translationFields = Pattern.compile("^# text_([a-z]{2,}) *= *(.*)$");
+        Pattern translationLG = Pattern.compile("^# text_([a-z]{2,})");
         int hlt = 0;
         int hld = 0;
         Set<String> highlighttokens = null;
@@ -219,12 +221,26 @@ public class ConllSentence {
                         if (translations == null) {
                             translations = new HashMap<>();
                         }
-                        Matcher m = translationFields.matcher(line);
+                        String fields[] = line.split("=", 2);
+                        String keyfield = fields[0].strip();
+                        if (fields.length != 2 || fields[1].strip().length() == -1) {
+                            System.err.format("WARNING: ignoring empty translation '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
+                        } else {
+                            String translationfield = fields[1].strip();
+                            Matcher m = translationLG.matcher(keyfield.strip());
+                            if (m.matches()) {
+                                translations.put(m.group(1), translationfield);
+                            } else {
+                                System.err.format("WARNING: ignoring invalid '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
+                            }
+                        }
+                        // not using this RE any more, since it can be very slow on long inputs "Polynomial regular expression used on uncontrolled data"
+                        /*Matcher m = translationFields.matcher(line);
                         if (m.matches()) {
                             translations.put(m.group(1), m.group(2));
                         } else {
                             System.err.format("WARNING: ignoring invalid '# text_LG' line %d: \"%s\"\n", cline.getKey(), line);
-                        }
+                        }*/
                     } else if (line.startsWith("# highlight tokens =")) {
                         String tmp = line.substring(20).trim();
                         highlighttokens = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
