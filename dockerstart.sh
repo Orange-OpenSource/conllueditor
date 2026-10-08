@@ -77,7 +77,7 @@ echo "  saveafter      $isaveafter"
 echo "  compare        $icompare"
 echo "  filename       $filename"
 
-java -Xmx4g -cp /usr/src/ConlluEditor/ConlluEditor.jar \
+exec java -Xmx4g -cp /usr/src/ConlluEditor/ConlluEditor.jar \
 	com.orange.labs.editor.ConlluEditor \
 	--rootdir /usr/src/ConlluEditor \
         $iuiconfig $ivalidator $iupos $ixpos $ideprels $ifeats $ilang $iunused $ishortcuts $isaveafter $icompare \
