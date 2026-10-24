@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2025, Orange S.A.
+ Copyright (c) 2018-2026 Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.0 as of 28th May 2025
+ @version 2.36.0 as of 24th October 2026
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -90,7 +90,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     // insert words at the bottom of the tree
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
-        insertWord(svg, "1", tree, 0, 5, sentencelength, use_deprel_as_type, isgold, incorrectwords);
+        insertWord(svg, "1", tree, 0, 0, 5, sentencelength, use_deprel_as_type, isgold, incorrectwords);
     }
     svgmaxy += 30; // MWEs are shown a bit above the bottom line
 
@@ -121,7 +121,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
 }
 
 /** insert a word in the flat graph */
-function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
+function insertWord(svg, curid, item, head, headpos, level, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
     if (!autoadaptwidth) {
         var index = item.position;
         var depx = (index * hor) - (hor/2);
@@ -177,7 +177,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
     if (item.children) {
         for (var i = 0; i < item.children.length; i++) {
             //alert(item.children[i]);
-            insertWord(svg, curid, item.children[i], item.position, levelinit, sentencelength, use_deprel_as_type, isgold, incorrectwords);
+            insertWord(svg, curid, item.children[i], item.id, item.position, levelinit, sentencelength, use_deprel_as_type, isgold, incorrectwords);
         }
     }
 
@@ -218,7 +218,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
 
     } else {
         // non-root deprels
-        makeDep(svg, item, headpos, item.deprel, depx, sentencelength, levelinit, true, use_deprel_as_type, isgold);
+        makeDep(svg, item, head, headpos, item.deprel, depx, sentencelength, levelinit, true, use_deprel_as_type, isgold, undefined);
     }
 
     // make multi word expressions
@@ -278,7 +278,7 @@ function insertWord(svg, curid, item, headpos, level, sentencelength, use_deprel
                 makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, level, false);
             } else {
                 // enhanced deps nonroot deprels
-                makeDep(svg, item, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type, isgold);
+                makeDep(svg, item, ed.id, ed.position, ed.deprel, depx, sentencelength, level, false, use_deprel_as_type, isgold, ed.id);
             }
         }
     }
@@ -339,7 +339,7 @@ function makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass
  * @param {type} use_deprel_as_type
  * @return {undefined}
  */
-function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type, isgold) {
+function makeDep(svg, item, head, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type, isgold, enhanced_head_id) {
      if (!autoadaptwidth) {
         var headx = headpos * hor - hor/2;
     } else {
@@ -439,7 +439,8 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
     // associer le texte avec la ligne
     var deprelpath = document.createElementNS(svgNS, "textPath");
     deprelpath.setAttributeNS(xlink, "xlink:href", "#" + pathvar); // Id of the path
-    deprelpath.setAttribute("id", idprefix + "textpath_" + headpos + "_" + item.id + "_" + deprel);
+    // for enhanced deprels, the id is enhtextpath_...
+    deprelpath.setAttribute("id", idprefix + "textpath_" + head + "_" + item.id + "_" + deprel);
     deprelpath.setAttribute("class", classname + grayclass);
     deprelpath.setAttribute("fill", "#008800"); // only needed for svg download
     // textpath side only supported in Firefox >= 61
@@ -460,10 +461,20 @@ function makeDep(svg, item, headpos, deprel, depx, sentencelength, basey, above,
 	highlightY = middley;
     }
 
-    if (item.checkdeprel === true) {
+    /* check highlight basic debpresl */
+    if (above && item.checkdeprel === true) {
         deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
         path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");
     }
+    //console.log("START RRR", deprel, item.checkenhanceddeprel);
+    //console.log("item", item.id, headpos, enhanced_head_id);
+    //if (item.checkenhanceddeprel !== undefined) console.log("IIIINN", item.checkenhanceddeprel.includes(enhanced_head_id));
+    if (!above && item.checkenhanceddeprel !== undefined && item.checkenhanceddeprel.includes(enhanced_head_id)) {
+        //console.log("FFF", item.id, headpos);
+        deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
+        path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");        
+    }
+    
 
     if (headbeforedep)
         deprelpath.setAttribute('startOffset', "50%");

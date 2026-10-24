@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.0 as of 28th August 2026
+ @version 2.36.0 as of 24th October 2026
  */
 
 
@@ -534,6 +534,7 @@ function getServerInfo() {
             //$('#logo').attr("title", data.version);
             //console.log("ddd", data);
             $('#ce_version').text(data.version);
+            $('#version').text(data.version);
             var dirty = "";
             if (data.git_dirty) {
                 dirty = " (branch contains uncommitted sources)";
@@ -1358,10 +1359,10 @@ function HideCompareErrors() {
 
 var extracols = []; // ids of extra column fields
 
-// permet de modifier l'arbre en cliquant sur un mot et sa future tete (cf. edit.js)
-// il faut cliquer sur un mot et sur sa future tete pour changer l'arbre
-// si on click deux fois sur le meme mot, ce mot devient racine
-// si on click ailleurs, l'historique est vidée.
+// permet de modifier l'arbre en cliquant sur un mot et sa future tête (cf. edit.js)
+// il faut cliquer sur un mot et sur sa future tête pour changer l'arbre
+// si on clique deux fois sur le même mot, ce mot devient racine
+// si on clique ailleurs, l'historique est vidée.
 function ModifyTree(evt) {
     var target = evt.target;
     // id: "rect_" + item.id + "_" + item.upos + "_" +  item.xpos + "_" +  item.lemma + "_" +  item.form + "_" + item.deprel
@@ -1550,14 +1551,27 @@ function ModifyTree(evt) {
 
                         // open deprel edit (for basic or enhanced deps)
                         if (editing_enhanced) {
+                            // creating new enhanced
                             $("#cheaden").text(clickedNodes[1]);
                             $("#cdepen").text(clickedNodes[0]);
                             $("#cdeprelen").val(potential);
+                            
+                            console.log("OOOOOO", id, conllword_enhead);
+                            // new enhanced relation, checkenhdeprel stays unchecked
+                            /*if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
+                                $("#checkenhdeprel").prop( "checked", true);
+                            } else {
+                                $("#checkenhdeprel").prop( "checked", false);
+                            }*/
+
+          
+                            
                             $("#enhdeprelEdit").modal();
                         } else {
                             $("#chead").text(clickedNodes[1]);
                             $("#cdep").text(clickedNodes[0]);
                             $("#cdeprel").val(potential);
+                            console.log("oooooOOOOOO", id, conllword_enhead);
                             $("#deprelEdit").modal();
                         }
 
@@ -1584,6 +1598,8 @@ function ModifyTree(evt) {
             $("#cdep").text(id[2]);
             $("#cdeprel").val(id[3]);
             //$("#depreledit").dialog("open");
+            
+            console.log("DEPRELEDIT", id);
             $("#deprelEdit").modal();
 //            var deprel = prompt("enter new deprel", id[3]);
 //            if (deprel != "" && deprel != null && deprel != id[3]) {
@@ -1596,6 +1612,14 @@ function ModifyTree(evt) {
             $("#cheaden").text(id[1]);
             $("#cdepen").text(id[2]);
             $("#cdeprelen").val(id[3]);
+            var conllword_enhead = conllwords[id[2]];
+            console.log("kkk", id, conllword_enhead);
+            if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
+                $("#checkenhdeprel").prop( "checked", true);
+            } else {
+                $("#checkenhdeprel").prop( "checked", false);
+            }
+            
             $("#enhdeprelEdit").modal();
         } else if (id[0] === "mwe") {
             //alert("MT MWE: " + id + " " + target);
@@ -2301,8 +2325,8 @@ $(document).ready(function () {
     $('#savedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
         if (/*flatgraph*/ graphtype === 2 && editing_enhanced) {
-            //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val())
-            sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val()});
+            //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val() + " " + $("#checkendeprel").is(":checked"));
+            sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val() + " " + $("#checkenhdeprel").is(":checked")});
             // } else if (conllword.deprel != $("#cdeprel").val()) {
             //    sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
         }
