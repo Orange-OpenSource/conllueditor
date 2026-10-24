@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.0 as of 28th August 2026
+ @version 2.36.0 as of 24th October 2026
 */
 
 import com.google.gson.Gson;
@@ -94,6 +94,7 @@ public class TestConlluEditor {
         ce.setOutfilename(out);
 
         for (String cmd : commands.keySet()) {
+            System.err.println("AAAAAA "  +cmd + " " + commands.get(cmd));
             processwrapper(cmd, commands.get(cmd), "editinfo");
         }
 
@@ -366,6 +367,26 @@ public class TestConlluEditor {
         Assert.assertEquals(String.format("Find invalid deprel to highlight, return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void test056Mod_highlight_enhanced() throws IOException {
+        name("modifying checkenhanceddeprel");
+        Map <String, Integer>commands = new LinkedHashMap<>();
+
+        // highlight enhanced deprels
+        commands.put("mod ed add 12 10.1 objHL true", 16);
+        commands.put("mod ed add 15 15.1 ccHL true", 16);
+        commands.put("mod ed add 7 5 toto1 true", 16);
+
+        runtest("test.highlight_enh_edit.conllu", commands, "CoNLL-U output incorrect");
+
+        // remove check
+        commands.put("mod ed add 15 15.1 ccHL false", 16);
+        commands.put("mod ed add 7 5 toto1 false", 16);
+
+        runtest("test.highlight_enh_edit2.conllu", commands, "CoNLL-U output incorrect");
+
     }
 
     @Test

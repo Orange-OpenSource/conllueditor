@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.2 as of 8th September 2026
+ @version 2.36.0 as of 24th October 2026
 */
 package com.orange.labs.conllparser;
 
@@ -306,7 +306,7 @@ public class ConllSentence {
                     for (String [] dephead : highlightenhanceddeprels) {
                           if (w.getFullId().equals(dephead[0])) {
                                 w.setCheckEnhancedDeprel(dephead[1]);
-                          }                        
+                          }
                     }
                 }
                 if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {

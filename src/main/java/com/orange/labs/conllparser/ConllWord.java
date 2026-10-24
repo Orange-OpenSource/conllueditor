@@ -309,7 +309,7 @@ public class ConllWord {
             }
         }
     }
-    
+
     public void setCheckToken(boolean c) {
         checktoken = c;
     }

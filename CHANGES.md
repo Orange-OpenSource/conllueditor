@@ -3,9 +3,11 @@
 ## Version 2.36.0
 
 * corrected bug in flat view
- * deprel editing after empty noded failed
+  * deprel editing after empty noded failed
 * separate highlighted deprels and enhanced deprels
+* warning when clicking a enhanced deprel without being in enhnaced mode
 * tests adapted
+* new test
 
 ## Version 2.35.2
 * Potentially time consuming RegEx changed

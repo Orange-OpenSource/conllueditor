@@ -1556,25 +1556,20 @@ function ModifyTree(evt) {
                             $("#cdepen").text(clickedNodes[0]);
                             $("#cdeprelen").val(potential);
 
-                            console.log("OOOOOO", id, conllword_enhead);
-                            // new enhanced relation, checkenhdeprel stays unchecked
+                            // new enhanced relation, checkenhdeprel is always initialised as unchecked
                             /*if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
                                 $("#checkenhdeprel").prop( "checked", true);
                             } else {
                                 $("#checkenhdeprel").prop( "checked", false);
                             }*/
 
-
-
                             $("#enhdeprelEdit").modal();
                         } else {
                             $("#chead").text(clickedNodes[1]);
                             $("#cdep").text(clickedNodes[0]);
                             $("#cdeprel").val(potential);
-                            console.log("oooooOOOOOO", id, conllword_enhead);
                             $("#deprelEdit").modal();
                         }
-
 
 //                        var deprel = prompt("also enter deprel", potential);
 //                        if (deprel != "" && deprel != null) {
@@ -1599,7 +1594,7 @@ function ModifyTree(evt) {
             $("#cdeprel").val(id[3]);
             //$("#depreledit").dialog("open");
 
-            console.log("DEPRELEDIT", id);
+            //console.log("DEPRELEDIT", id);
             $("#deprelEdit").modal();
 //            var deprel = prompt("enter new deprel", id[3]);
 //            if (deprel != "" && deprel != null && deprel != id[3]) {
@@ -1609,6 +1604,7 @@ function ModifyTree(evt) {
 //            }
         } else if (id[0] === "enhtextpath") { // TODO use classes ?
             // update deprel
+            if (editing_enhanced) {
             $("#cheaden").text(id[1]);
             $("#cdepen").text(id[2]);
             $("#cdeprelen").val(id[3]);
@@ -1621,6 +1617,9 @@ function ModifyTree(evt) {
             }
 
             $("#enhdeprelEdit").modal();
+            } else {
+                alert("activate « edit enhanced deps » to modifiy enhanced dependency relations");
+            }
         } else if (id[0] === "mwe") {
             //alert("MT MWE: " + id + " " + target);
             $("#currentMWTfrom").val(id[1]);
