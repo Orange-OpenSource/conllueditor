@@ -117,7 +117,6 @@
             }
           ],
           "deprel": "conj",
-          "formhighlight": 1,
           "chunk": 0,
           "type": "",
           "children": [
@@ -142,6 +141,10 @@
                 }
               ],
               "deprel": "cc",
+              "formhighlight": 1,
+              "checkenhanceddeprel": [
+                "5.1"
+              ],
               "chunk": 0,
               "type": ""
             },
@@ -205,7 +208,6 @@
         }
       ],
       "deprel": "_",
-      "formhighlight": 1,
       "checktoken": true,
       "chunk": 0,
       "type": "",

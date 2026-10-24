@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.0 as of 28th August 2026
+ @version 2.36.0 as of 21st October 2026
  */
 package com.orange.labs.conllparser;
 
@@ -37,6 +37,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -103,9 +104,10 @@ public class ConllWord {
 
     private ConllSentence mysentence = null; // pointer to the sentence of which this word is part
 
-    // non standard comments in .conllu "# highlight tokens ....", "# hightlight deprels = ...."
+    // non standard comments in .conllu "# highlight tokens ....", "# hightlight basic|enhanced deprels = ...."
     private boolean checktoken = false; // true if information in .conllu
     private boolean checkdeprel = false; // true if information in .conllu
+    private Set<String> checkenhanceddeprel; // true if information in .conllu
 
     public enum Tokentype {
         WORD, CONTRACTED, EMPTY
@@ -175,6 +177,7 @@ public class ConllWord {
 
         whquestion = orig.isWhquestion();
         checkdeprel = orig.checkdeprel;
+        checkenhanceddeprel = orig.checkenhanceddeprel;
         checktoken = orig.checktoken;
     }
 
@@ -282,11 +285,39 @@ public class ConllWord {
     public void setCheckDeprel(boolean c) {
         checkdeprel = c;
     }
+
+    public void setCheckEnhancedDeprel(Set<String> c) {
+        if (checkenhanceddeprel == null) {
+            checkenhanceddeprel = new HashSet<>();
+        }
+        checkenhanceddeprel.addAll(c);
+    }
+    public void setCheckEnhancedDeprel(String c) {
+        if (checkenhanceddeprel == null) {
+            checkenhanceddeprel = new HashSet<>();
+        }
+        checkenhanceddeprel.add(c);
+    }
+
+     public void removeCheckEnhancedDeprel(String c) {
+        if (checkenhanceddeprel != null) {
+            if (checkenhanceddeprel.contains(c)) {
+                checkenhanceddeprel.remove(c);
+            }
+            if (checkenhanceddeprel.isEmpty()) {
+                checkenhanceddeprel = null;
+            }
+        }
+    }
+    
     public void setCheckToken(boolean c) {
         checktoken = c;
     }
     public boolean getcheckDeprel() {
         return checkdeprel;
+    }
+    public Set<String> getcheckEnhancedDeprel() {
+        return checkenhanceddeprel;
     }
     public boolean getCheckToken() {
         return checktoken;
@@ -1147,6 +1178,13 @@ public class ConllWord {
         }
         if (checktoken) jword.addProperty("checktoken", true);
         if (checkdeprel) jword.addProperty("checkdeprel", true);
+        if (checkenhanceddeprel != null && !checkenhanceddeprel.isEmpty()) {
+            JsonArray ced = new JsonArray();
+            for(String a : checkenhanceddeprel) {
+                ced.add(a);
+            }
+            jword.add("checkenhanceddeprel", ced);
+        }
 
         jword.addProperty("chunk", partOfChunk);
         //jword.addProperty("type", word.getPartialDeplabel());

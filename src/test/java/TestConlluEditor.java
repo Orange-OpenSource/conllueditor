@@ -1247,8 +1247,8 @@ public class TestConlluEditor {
         File out = new File(folder, "test.add_ed.conllu");
         ce.setOutfilename(out);
 
-        processwrapper("mod ed add 7 6 ref", 7, "editinfo");
-        processwrapper("mod ed add 8 6 nsubj", 7, "editinfo");
+        processwrapper("mod ed add 7 6 ref false", 7, "editinfo");
+        processwrapper("mod ed add 8 6 nsubj false", 7, "editinfo");
         processwrapper("mod ed del 1 4", 11, "editinfo");
 
         URL ref = this.getClass().getResource("test.add_ed.conllu");

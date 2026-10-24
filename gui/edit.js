@@ -1555,7 +1555,7 @@ function ModifyTree(evt) {
                             $("#cheaden").text(clickedNodes[1]);
                             $("#cdepen").text(clickedNodes[0]);
                             $("#cdeprelen").val(potential);
-                            
+
                             console.log("OOOOOO", id, conllword_enhead);
                             // new enhanced relation, checkenhdeprel stays unchecked
                             /*if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
@@ -1564,8 +1564,8 @@ function ModifyTree(evt) {
                                 $("#checkenhdeprel").prop( "checked", false);
                             }*/
 
-          
-                            
+
+
                             $("#enhdeprelEdit").modal();
                         } else {
                             $("#chead").text(clickedNodes[1]);
@@ -1598,7 +1598,7 @@ function ModifyTree(evt) {
             $("#cdep").text(id[2]);
             $("#cdeprel").val(id[3]);
             //$("#depreledit").dialog("open");
-            
+
             console.log("DEPRELEDIT", id);
             $("#deprelEdit").modal();
 //            var deprel = prompt("enter new deprel", id[3]);
@@ -1619,7 +1619,7 @@ function ModifyTree(evt) {
             } else {
                 $("#checkenhdeprel").prop( "checked", false);
             }
-            
+
             $("#enhdeprelEdit").modal();
         } else if (id[0] === "mwe") {
             //alert("MT MWE: " + id + " " + target);

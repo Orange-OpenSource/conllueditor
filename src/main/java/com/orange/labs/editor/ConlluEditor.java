@@ -859,7 +859,8 @@ public class ConlluEditor {
         //solution.add("arc_heights", arc);
 
         //Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        //System.out.println("SSSSSSSS " +solution);
+        //String json = gson.toJson(solution);
+        //System.out.println("SSSSSSSS " +json);
         return solution.toString();
     }
 
@@ -1177,7 +1178,8 @@ public class ConlluEditor {
                         i = (backwards ? i - 1 : i + 1)) {
                     ConllSentence cs = cfile.getSentences().get(i);
                     for (ConllWord cw : cs.getAllWords()) {
-                        if (cw.getCheckToken() || cw.getcheckDeprel()) {
+                        if (cw.getCheckToken() || cw.getcheckDeprel()
+                                || (cw.getcheckEnhancedDeprel() != null && !cw.getcheckEnhancedDeprel().isEmpty())) {
                            currentSentenceId = i;
                            ConllSentence.Highlight hl = new ConllSentence.Highlight(ConllWord.Fields.FORM, cw.getId(), cw.getId());
                            return returnTree(currentSentenceId, cs, hl);
@@ -2541,7 +2543,7 @@ public class ConlluEditor {
             } else if (command.startsWith("mod ed ")) {
                 // enhanced deps
                 // we expect
-                //        "mod ed add <dep> <head> nsubj"
+                //        "mod ed add <dep> <head> nsubj true/false"
                 //        "mod ed del <dep> <head>"
                 String[] f = command.trim().split(" +");
 
@@ -2549,7 +2551,7 @@ public class ConlluEditor {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
-                if (f[2].equals("add") && f.length < 6) {
+                if (f[2].equals("add") && f.length < 7) {
                     return formatErrMsg("INVALID command length «" + command + "»", currentSentenceId);
                 }
 
@@ -2574,6 +2576,11 @@ public class ConlluEditor {
                     /*boolean rtc = */
                     dep.delDeps(head.getFullId());
                     dep.addDeps(head.getFullId(), f[5]);
+                    if (f[6].equals("true")) {
+                        dep.setCheckEnhancedDeprel(head.getFullId());
+                    } else {
+                        dep.removeCheckEnhancedDeprel(head.getFullId());
+                    }
                     csent.setHasEnhancedDeps(true);
                 } else if ("del".equals(f[2])) {
                     boolean rtc = dep.delDeps(f[4]);

@@ -195,6 +195,7 @@ public class ConllSentence {
         int hld = 0;
         Set<String> highlighttokens = null;
         Set<String> highlightdeprels = null;
+        List<String []> highlightenhanceddeprels = null; // [ [dep head], ...]
 
         List<ConllException> errors = new ArrayList<>();
         for (AbstractMap.SimpleEntry<Integer, String> cline : conlllines) {
@@ -245,13 +246,40 @@ public class ConllSentence {
                         String tmp = line.substring(20).trim();
                         highlighttokens = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
                         hlt = cline.getKey();
-                    } else if (line.startsWith("# highlight deprels =")) {
-                        String tmp = line.substring(21).trim();
-                        hld = cline.getKey();
-                        highlightdeprels = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
-                        for (String t: highlightdeprels) {
-                            if (t.contains("-")) {
-                                System.err.format("WARNING: ignoring invalid token for highlighting deprels '%s'. line %d: \"%s\"\n", t, cline.getKey(), line);
+                    } else if (line.startsWith("# highlight basic deprels =")
+                               || line.startsWith("# highlight deprels =")) {
+                        String [] tmp1 = line.split("=");
+                        if (tmp1.length != 2) {
+                            System.err.format("WARNING: ignoring invalid token for highlighting basic deprels. line %d: \"%s\"\n", cline.getKey(), line);
+                        } else {
+                            String tmp = tmp1[1].trim();
+                            hld = cline.getKey();
+                            if (line.startsWith("# highlight deprels =")) {
+                                System.err.format("WARNING: '# hightlight deprels' is deprecated, use '# highlight basic deprels' insteadn. line %d: \"%s\"\n", cline.getKey(), line);
+                            }
+                            highlightdeprels = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
+                            for (String t: highlightdeprels) {
+                                if (t.contains("-")) {
+                                    System.err.format("WARNING: ignoring invalid token for highlighting basic deprels '%s'. line %d: \"%s\"\n", t, cline.getKey(), line);
+                                }
+                            }
+                        }
+                    } else if (line.startsWith("# highlight enhanced deprels =")) {
+                         String [] tmp1 = line.split("=");
+                        if (tmp1.length != 2) {
+                            System.err.format("WARNING: ignoring invalid token for highlighting basic deprels. line %d: \"%s\"\n", cline.getKey(), line);
+                        } else {
+                            String tmp = tmp1[1].trim();
+
+                            hld = cline.getKey();
+                            highlightenhanceddeprels = new ArrayList<>();
+                            for (String dh : tmp.split("\\s+")) {
+                                String[] dep_head = dh.split(">");
+                                if (dep_head.length != 2) {
+                                    System.err.format("WARNING: ignoring invalid token for highlighting enhanced deprels. line %d: \"%s\"\n", cline.getKey(), line);
+                                    continue;
+                                }
+                                highlightenhanceddeprels.add(dep_head);
                             }
                         }
                     } else {
@@ -273,6 +301,13 @@ public class ConllSentence {
                 }
                 if (highlightdeprels != null && highlightdeprels.contains(w.getFullId())) {
                     w.setCheckDeprel(true);
+                }
+                if (highlightenhanceddeprels != null) { // && highlightenhanceddeprels.contains(w.getFullId())) {
+                    for (String [] dephead : highlightenhanceddeprels) {
+                          if (w.getFullId().equals(dephead[0])) {
+                                w.setCheckEnhancedDeprel(dephead[1]);
+                          }                        
+                    }
                 }
                 if (!w.getDeps().isEmpty() /* || w.isBasicdeps_in_ed_column() */) {
                     hasEnhancedDeps = true;
@@ -787,12 +822,18 @@ public class ConllSentence {
 
         Set<String> highlighttokens = new LinkedHashSet<>();
         Set<String> highlightdeprels = new LinkedHashSet<>();
+        Set<String> highlightenhanceddeprels = new LinkedHashSet<>();
         for (ConllWord cw : words) {
             if (cw.getCheckToken()) {
                 highlighttokens.add(cw.getFullId());
             }
             if (cw.getcheckDeprel()) {
                 highlightdeprels.add(cw.getFullId());
+            }
+            if (cw.getcheckEnhancedDeprel() != null) {
+                for (String head : cw.getcheckEnhancedDeprel()) {
+                    highlightenhanceddeprels.add(cw.getFullId() + ">" + head);
+                }
             }
         }
         if (contracted != null) {
@@ -802,6 +843,12 @@ public class ConllSentence {
                 }
                 if (cw.getcheckDeprel()) {
                     highlightdeprels.add(cw.getFullId());
+                }
+
+                if (cw.getcheckEnhancedDeprel() != null) {
+                    for (String head : cw.getcheckEnhancedDeprel()) {
+                       highlightenhanceddeprels.add(cw.getFullId() + ">" + head);
+                    }
                 }
             }
         }
@@ -814,11 +861,16 @@ public class ConllSentence {
                     if (cw.getcheckDeprel()) {
                         highlightdeprels.add(cw.getFullId());
                     }
+                    if (cw.getcheckEnhancedDeprel() != null) {
+                        for (String head : cw.getcheckEnhancedDeprel()) {
+                            highlightenhanceddeprels.add(cw.getFullId() + ">" + head);
+                        }
+                    }
                 }
             }
         }
         if (!highlightdeprels.isEmpty()) {
-            sb.append("# highlight deprels =");
+            sb.append("# highlight basic deprels =");
             for (String i : highlightdeprels) {
                 sb.append(" ").append(i);
             }
@@ -833,6 +885,13 @@ public class ConllSentence {
             sb.append('\n');
         }
 
+        if (!highlightenhanceddeprels.isEmpty()) {
+            sb.append("# highlight enhanced deprels =");
+            for (String i : highlightenhanceddeprels) {
+                sb.append(" ").append(i);
+            }
+            sb.append('\n');
+        }
 
         for (String c : comments) {
             sb.append("# ").append(c).append('\n');

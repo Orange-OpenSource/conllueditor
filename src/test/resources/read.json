@@ -141,6 +141,9 @@
                 }
               ],
               "deprel": "cc",
+              "checkenhanceddeprel": [
+                "5.1"
+              ],
               "chunk": 0,
               "type": ""
             },

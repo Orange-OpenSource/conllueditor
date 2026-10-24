@@ -472,9 +472,9 @@ function makeDep(svg, item, head, headpos, deprel, depx, sentencelength, basey, 
     if (!above && item.checkenhanceddeprel !== undefined && item.checkenhanceddeprel.includes(enhanced_head_id)) {
         //console.log("FFF", item.id, headpos);
         deprelpath.setAttribute("class", deprelpath.getAttribute("class") + " deprellabelcheck");
-        path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");        
+        path.setAttribute("class", path.getAttribute("class") + " deprelarrowcheck");
     }
-    
+
 
     if (headbeforedep)
         deprelpath.setAttribute('startOffset', "50%");
