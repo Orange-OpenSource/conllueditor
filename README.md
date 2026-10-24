@@ -361,15 +361,27 @@ Sometimes validation scripts detect potential problem on tokens and/or deprels. 
 # sent_id = fr-ud-train_00002
 # text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
 # highlight tokens = 1 4 8 8-9 
-# highlight deprels = 5 8 9 10
+# highlight basic deprels = 5 8 9 10
 1       L'      le      DET     _       Definite=Def|Gender=Fem|Number=Sing|PronType=Art        2       det     _       SpaceAfter=No
 ...
 
 ```
 
-Sentences having this meta-data display the listed tokens and deprel so the annotator can check them (and remove the highlighting)
+Sentences having this meta-data display the listed tokens and basic deprel so the annotator can check them, and remove the highlighting using the word edit mode.
+For enhanced deprels a flag can be set/unset in enhanced deprel edit
 
-![Highlighted tokens and deprel)](doc/highlight.png)
+![Highlighted tokens and basic deprel)](doc/highlight.png)
+
+```
+# sent_id = newsgroup-groups.google.com_GuildWars_086f0f64ab633ab3_ENG_20041111_173500-0051
+# text = I wish all happy holidays, and moreso, peace on earth.
+# highlight tokens = 4 9.1
+# highlight enhanced deprels = 9.1>2
+1	I	I	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	2	nsubj	2:nsubj|9.1:nsubj|10:nsubj	_
+...
+```
+
+![Highlighted tokens and enhanced deprel)](doc/highlight-enhanced.png)
 
 The editor can highlight, standard tokens, MWTs and empty tokens in tree, flat and table mode. The word editing and MWT editing window allows setting and unsetting of highlighting (not yet in table mode). Use the <img src="gui/img/light-bulb.svg" alt="undo" width="15"/>-button to find sentences with highlighted tokens or deprels.
 Marked tokens are also shown in the sentence (background for marked tokens, coloured border for deprels).
