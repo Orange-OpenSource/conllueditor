@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.0 as of 24th October 2026
+ @version 2.36.1 as of 25th October 2026
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -55,31 +55,37 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
     svg.appendChild(defs);
     var marker = document.createElementNS(svgNS, "marker");
     marker.setAttribute("id", "markerArrow");
-    marker.setAttribute("markerWidth", "13");
-    marker.setAttribute("markerHeight", "13");
-    marker.setAttribute("refX", "11");
-    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "20");
+    marker.setAttribute("markerHeight", "17");
+    marker.setAttribute("refX", "14");
+    marker.setAttribute("refY", "7.5");
     marker.setAttribute("orient", "auto");
+    marker.setAttribute("markerUnits", "userSpaceOnUse"); // needed to avoid scaling of arrow heads when stroke-width increases */
     defs.appendChild(marker);
     var path = document.createElementNS(svgNS, "path");
-    path.setAttribute("d", "M2,2 L4,5 2,8 L12,5 L2,2");
+    //path.setAttribute("d", "M2,2 L4,5 2,8 L12,5 L2,2");
+    path.setAttribute("d", "M3,3 L6,7.5 3,12 L18,7.5 L3,3");
     path.setAttribute("fill", "black");
-    path.setAttribute("stroke-width", "1"); // overridden by depgraph.css ?
+    path.setAttribute("class", "pfeilspitze");
+    //path.setAttribute("stroke-width", "1"); // overridden by depgraph.css ?
     marker.appendChild(path);
 
     var marker = document.createElementNS(svgNS, "marker");
     marker.setAttribute("id", "markerArrowInv");
-    marker.setAttribute("markerWidth", "13");
-    marker.setAttribute("markerHeight", "13");
-    marker.setAttribute("refX", "3");
-    marker.setAttribute("refY", "5");
+    marker.setAttribute("markerWidth", "20");
+    marker.setAttribute("markerHeight", "17");
+    marker.setAttribute("refX", "7");
+    marker.setAttribute("refY", "7.5");
     marker.setAttribute("orient", "auto");
+    marker.setAttribute("markerUnits", "userSpaceOnUse"); // needed to avoid scaling of arrow heads when stroke-width increases */
 
     defs.appendChild(marker);
     var path = document.createElementNS(svgNS, "path");
-    path.setAttribute("d", "M2,5 L12,2 10,5 L12,8 L2,5");
+    //path.setAttribute("d", "M2,5 L12,2 10,5 L12,8 L2,5");
+    path.setAttribute("d", "M3,7.5 L18,4 15,7.5 L18,12 L3,7.5");
     path.setAttribute("fill", "black");
-    path.setAttribute("stroke-width", "1");
+    //path.setAttribute("stroke-width", "1");
+    path.setAttribute("class", "pfeilspitzeInv");
     marker.appendChild(path);
 
     svg.setAttribute("xmlns:xlink", xlink);

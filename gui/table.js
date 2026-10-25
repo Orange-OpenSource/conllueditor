@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.0 as of 28th August 2026
+ @version 2.36.1 as of 25th October 2026
  */
 
 $(document).ready(function () {
@@ -647,10 +647,14 @@ function checkEUD(evt, wid) {
     }
 
     if (valid === 0) {
-        document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
+        //document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
+        element = document.getElementById(evt.id);
+        element.classList.add("tableerrors");
         formalErrors++;
     } else {
-        document.getElementById(evt.id).style.backgroundColor = "white";
+        //document.getElementById(evt.id).style.backgroundColor = "white";
+        element = document.getElementById(evt.id);
+        element.classList.remove("tableerrors");
         formalErrors--;
     }
 }
@@ -658,10 +662,14 @@ function checkEUD(evt, wid) {
 function checkForm(elem, wid) {
     //console.log("ELEM", elem);
     if (elem.value.match(/[ \t\n]/)) {
-        document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
+        //document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
+        element = document.getElementById(elem.id);
+        element.classList.add("tableerrors");
         formalErrors++;
     } else {
-        document.getElementById(elem.id).style.backgroundColor = "white";
+        //document.getElementById(elem.id).style.backgroundColor = "white";
+        element = document.getElementById(elem.id);
+        element.classList.remove("tableerrors");
         formalErrors--;
     }
 }
@@ -669,20 +677,28 @@ function checkForm(elem, wid) {
 function checkUpos(elem, wid) {
     //console.log("ELEM", elem.value);
     if (!elem.value.match(/^[A-Z]+$/)) {
-        document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
+        //document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
+        element = document.getElementById(elem.id);
+        element.classList.add("tableerrors");
         formalErrors++;
     } else {
-        document.getElementById(elem.id).style.backgroundColor = "white";
+        //document.getElementById(elem.id).style.backgroundColor = "white";
+        element = document.getElementById(elem.id);
+        element.classList.remove("tableerrors");
         formalErrors--;
     }
 }
 
 function checkDeprel(elem, wid) {
     if (!elem.value.match(/^[a-z](:[a-z]+)?$/)) {
-        document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
+        //document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
+        element = document.getElementById(elem.id);
+        element.classList.add("tableerrors");
         formalErrors++;
     } else {
-        document.getElementById(elem.id).style.backgroundColor = "white";
+        //document.getElementById(elem.id).style.backgroundColor = "white";
+        element = document.getElementById(elem.id);
+        element.classList.remove("tableerrors");
         formalErrors--;
     }
 }
@@ -701,10 +717,14 @@ function checkFeat(evt, wid) {
     }
 
     if (valid === 0) {
-        document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
+        //document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
+        element = document.getElementById(elem.id);
+        element.classList.add("tableerrors");
         formalErrors++;
     } else {
-        document.getElementById(evt.id).style.backgroundColor = "white";
+        //document.getElementById(evt.id).style.backgroundColor = "white";
+        element = document.getElementById(elem.id);
+        element.classList.remove("tableerrors");
         formalErrors--;
     }
 }

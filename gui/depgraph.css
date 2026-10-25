@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.0 as of 5th July 2025
+ @version 2.36.1 as of 25th October 2026
 */
 
 .dia {
@@ -58,18 +58,26 @@ ul.ui-autocomplete {
 /** styles for dependency graphs */
 .deprel_precedinghead {
     stroke: blue;
-    stroke-width: 1;
+    stroke-width: 1.5;
 }
 
 
 .deprel_followinghead {
     stroke: #880088;
-    stroke-width: 1;
+    stroke-width: 1.5;
 }
 
 .deprel_root {
     stroke: #cc0000;
-    stroke-width: 1;
+    stroke-width: 1.5;
+}
+
+.pfeilspitze {
+    fill: blue;
+}
+
+.pfeilspitzeInv {
+    fill: #880088;
 }
 
 /* box around word */
@@ -160,7 +168,6 @@ ul.ui-autocomplete {
 /* a token to check (# highlight word 10) */
 .wordcheck {
     stroke: magenta;
-    stroke-width: 5;
 }
 
 .mwecheck {
@@ -175,7 +182,7 @@ ul.ui-autocomplete {
 
 .deprelarrowcheck {
     stroke: magenta;
-    stroke-width: 2;
+    stroke-width: 3;
 }
 
 .textcheck {

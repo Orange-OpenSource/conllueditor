@@ -52,13 +52,44 @@ h2 {
     margin-top: 20px;
 }
 
+h3 {
+    margin-top: 18px;
+}
+
 #comm,
 #sentencetext,
 #arbre {
     margin-left: 5px;
+    margin-right: 5px;
 }
 
-.comparediff {
+#currentsent, #cursentid {
+    font-style: italic;
+}
+
+#arbre {
+    /*white-space: nowrap; */
+}
+
+/** needed to allow a triple click select only the sentence and not
+   the "n/m" and "(sent_id: ....)" as well */
+#sentencetext {
+   display: flex;
+   /*flex-wrap: wrap;*/ /* keep 3 spans in one line */
+}
+
+/* repare side-effect of the flex just above */
+#titre {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  word-wrap: break-word; /* wrap sentence in its span if too long */
+}
+
+#cursentid {
+    text-wrap: nowrap;
+}
+
+#compare {
     margin-left: 5px;
 }
 
@@ -73,10 +104,11 @@ h2 {
 }
 
 #header {
-    position:fixed;
+    position:fixed; /* make the header (navigation and search buttons) stick to the top */
     width:100%;
     top:0;
-    height: whatever;
+    z-index: 999;
+    /* height: whatever; */
     /*background: white; */
 
     /*background-image: -webkit-gradient(
@@ -97,11 +129,13 @@ h2 {
 textArea {
     text-align:justify;
     font-family: /*Pecita, */ Sans, Arial, Helvetica;
+    /*font-size: 125%;*/
 }
 
 td, th {
-    padding-right: 0px;
-    padding-left: 0px;
+    padding-right: 5px;
+    padding-left: 5px;
+    vertical-align: top;
 }
 
 table {
@@ -187,6 +221,44 @@ input {
 .searchfield {
     width: 8em;
 }
+
+.resizable-input {
+    /* make resizable */
+    overflow-x: hidden;
+    resize: horizontal;
+    /* was inline-block*/
+    display: inline-flex;
+
+    /* no extra spaces */
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+
+    /* default widths */
+    width: 10em;
+    min-width: 2em;
+    max-width: 30em;
+}
+
+/* let <input> assume the size of the wrapper */
+.resizable-input > input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* add a visible handle */
+
+.resizable-input > span {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: -16px;
+    width: 10px;
+    height: 10px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAJUlEQVR4AcXJRwEAIBAAIPuXxgiOW3xZYzi1Q3Nqh+bUDk1yD9sQaUG/4ehuEAAAAABJRU5ErkJggg==");
+    cursor: ew-resize;
+}
+
 
 /* reset sice for multifield and comment search, since the value given in searchfield is too small */
 #multifield, #comment {
@@ -301,7 +373,8 @@ input {
     background-position: 5px center;
 }
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment, #findmulti, #findsentid, #findfeature {
+#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment,
+#findmulti, #findsentid, #findfeature, #findsubtree {
     background: url('img/search.svg');
     background-size: 20px 20px;
     background-repeat:no-repeat;
@@ -430,9 +503,29 @@ text {
 
 #shortcuthelp {
     display: none;
+}
+
+#shortcuttable {
     font-size: 80%;
     border: 1px solid;
+    text-align: left;
+    /*font-family: monospace;*/
 } 
+
+
+
+#subtreesearch {
+    display: none;
+}
+
+#searchandreplace {
+    display: none;
+}
+
+#grewmatchsearchandreplace {
+    display: none;
+}
+
 
 /* table of shortcut help (invoked with "?" key) */
 .sc {
@@ -444,3 +537,114 @@ text {
 } */
 
 
+#editsubtree {
+    aaaresize: vertical;
+    width: 80%;
+    vertical-align: top;
+}
+
+#subtree {
+    vertical-align: top;
+}
+
+
+
+#compare table  {
+  border-collapse: collapse;
+}
+
+#compare table tr td {
+  border: 1px solid black;
+}
+
+.dewis  {
+	font-family: inherit;
+    /* top right bottom left */
+    qqpadding: 5px 5px 5px 5px;
+    border: 1px solid #959595;
+    height: 30px;
+    vertical-align: middle;
+
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+    display: inline-block;
+    oooverflow:hidden;
+
+
+}
+/* http://jsfiddle.net/fbnw9g5x/4/ */
+.dewis select {
+    width: 110px;
+    padding: 5px;
+    height:30px;
+    line-height: 1;
+    border: none;
+
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+
+    background: transparent url('img/select.svg');
+    background-size: auto .8em;
+    background-position: right .3em top 50%;
+    background-repeat:no-repeat;
+}
+
+.dewis:hover {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(227,227,227)),
+        color-stop(1, rgb(255,255,255))
+        );
+}
+
+.dewisl select {
+    width: 150px
+}
+
+.FEtitle {
+    /*background-color: #ff8000;*/
+    font-style: italic;
+    margin-right: 15px;
+}
+
+#multishortcutlist {
+    font-size: 80%;
+    border: 1px solid black;
+}
+
+.upossc {
+    color: #9164cd;
+}
+.xpossc {
+    color: #50be87;
+}
+.featsc {
+    color: #4bb4e6;
+}
+
+.deprelsc {
+    color: #0a6e31;
+}
+
+.miscsc {
+    color: #492191;
+}
+
+.compok {
+    color: black;
+}
+
+.compko {
+    color: red;
+}

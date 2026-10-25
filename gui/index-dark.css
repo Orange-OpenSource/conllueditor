@@ -1,0 +1,441 @@
+/** This library is under the 3-Clause BSD License
+
+Copyright (c) 2026, Orange S.A.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
+     and/or other materials provided with the distribution.
+
+  3. Neither the name of the copyright holder nor the names of its contributors
+     may be used to endorse or promote products derived from this software without
+     specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+ @author Johannes Heinecke
+ @version 2.36.1 as of 25th October 2026
+*/
+
+/* definitions for dark mode. DOES NOT copy other css key-values ! */
+
+body {
+    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans;
+    background-color: #111;
+}
+
+tt {
+    font-family: Courier, FreeMono, Mono;
+}
+
+h1  {
+    color:#ff6600;
+}
+
+
+
+#comm,
+#sentencetext,
+#arbre {
+
+    background-color: #111;
+}
+
+#currentsent, #cursentid {
+    font-style: italic;
+}
+
+.textcheck {
+    background-color: #aa77aa;
+}
+
+
+#goldword {
+    color:#00bb00;
+    background-color: white;
+}
+
+#editedword {
+    color:#bb4400;
+    background-color: white;
+}
+
+.compfilename {
+    color: black;
+}
+
+#header {
+    background-image: linear-gradient(rgba(047,020,050, 1),
+        rgba(51,35,12, 1),
+        rgba(54,46,33, 1),
+        rgba(55,55,55, 0));
+}
+
+textArea {
+    text-align:justify;
+    font-family: /*Pecita, */ Sans, Arial, Helvetica;
+    /*font-size: 125%;*/
+}
+
+tr.everyotherrow:nth-child(odd) {
+    background-color:#0f050c;
+}
+tr.everyotherrow:nth-child(even) {
+    background-color: #222;
+}
+
+.tableheader {
+    background-color:#bb5700;
+}
+
+.chunk0 {background-color:#ff780080; /*opacity: 0.5; */
+         fill:#ff780080 }
+.chunk1 {background-color:#4ab4e6; fill:#4ab4e6 }
+.chunk2 {background-color:#ffb4e680; fill:#ffb4e680 }
+.chunk3 {background-color:#ffd200; fill:#ffd200 }
+.chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
+.chunk5 {background-color:#a885d880; fill:#a885d880 }
+
+img.helptextbutton {
+    background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(47,47,47)),
+    color-stop(1, rgb(82,82,82))
+    );
+}
+
+/* format of application buttons in the help text */
+.buttondoc {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(47,47,47)),
+        color-stop(1, rgb(82,82,82))
+        );
+}
+
+/* format of keys to press in the help text */
+.keydoc {
+    border: 1px solid #222;
+}
+
+/* format of user commands in the help text */
+.userinputdoc {
+    font-family: Courier, FreeMono, Mono;
+    background-color: #222;
+}
+
+/* format of command line commands in the help text */
+.commandline {
+    font-family: Courier, FreeMono, Mono;
+    padding-left: 6em;
+}
+
+/* make normal buttons look like mycheckbuttons */
+.mybutton, btn-primary {
+    border: 1px solid #959595;
+    color: white;
+    background: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(17,17,17)),
+        color-stop(1, rgb(52,52,52))
+        );
+}
+
+.mybutton:hover {
+    border-radius: 5px;
+    background: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(37,37,37)),
+        color-stop(1, rgb(65,65,65))
+        );
+}
+
+/* input field design */
+.inputfield {
+    border: solid 1px #959595;
+    background-color: #111;
+    color: white;
+}
+
+
+/* add a visible handle */
+
+.resizable-input > span {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: -16px;
+    width: 10px;
+    height: 10px;
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAJUlEQVR4AcXJRwEAIBAAIPuXxgiOW3xZYzi1Q3Nqh+bUDk1yD9sQaUG/4ehuEAAAAABJRU5ErkJggg==");
+    cursor: ew-resize;
+}
+
+
+/* background for buttons with icons */
+.contain {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(17,17,17)),
+        color-stop(1, rgb(52,52,52))
+        );
+}
+
+.contain:hover {
+    overflow: hidden;
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(37,37,37)),
+        color-stop(1, rgb(65,65,65))
+        );
+}
+
+.contain.active {
+    border-radius: 5px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(224, 116, 13)),
+        color-stop(1, rgb(252, 145, 14))
+        );
+}
+
+/* inspired by https://designmodo.com/3d-css3-button/ */
+.mycheck {
+    border: 1px solid #959595;
+    color: white;
+
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(17,17,17)),
+        color-stop(1, rgb(52,52,52))
+        );
+}
+
+.mycheck.active {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(24, 16, 3)),
+        color-stop(1, rgb(52, 45, 4))
+        );
+
+}
+
+.mycheck:hover {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgba(244, 146, 13)),
+        color-stop(1, rgba(245, 187, 15))
+        );
+    color: #222;
+}
+
+.errorhl {
+    color: white;
+    background-color: #AA0000;
+}
+
+#psc, #pendingshortcuts {
+    display: none;
+    color: rgb(136, 0, 0);
+}
+
+.afficher, .editmode {
+    color: white;
+}
+
+.sentinfo, #changespendingsaveQQ {
+    font-family: "Lato"; /* Light" */
+    font-weight: 300;
+    color: white;
+}
+
+/** redefine font for thie <pre></pre> */
+#commentfield {
+    /*font-family: inherit;*/
+    font-family: mono;
+    color: white; /* svg object */
+}
+
+
+
+
+.modal-header {
+    background-image: linear-gradient(rgba(55,53,51, 1),
+        rgba(5,5,5, 1));
+}
+
+.modal-title, #rawtext {
+    color: white;
+}
+
+.modal-body, .modal-footer {
+    background-color: #111;
+    color: white;
+}
+
+.ui-autocomplete.ui-widget {
+    /*font-family: sans; */
+    color: blue;
+    font-size: 90%;
+    font-weight: bold;
+    margin-left: 1em;
+}
+
+text {
+    font-family: "Lato", "Amiri", "KacstOne", sans-serif;
+}
+
+
+
+.sckey {
+    font-weight: bold;
+    font-family: monospace;
+    color: white;
+}
+
+.dewis  {
+    color: white;
+
+    background: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(17,17,17)),
+        color-stop(1, rgb(52,52,52))
+        );
+}
+
+/* http://jsfiddle.net/fbnw9g5x/4/ */
+.dewis select {
+    color: white;
+}
+
+.dewis:hover {
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(37,37,37)),
+        color-stop(1, rgb(65,65,65))
+        );
+}
+
+.upossc {
+    color: #9164cd;
+}
+.xpossc {
+    color: #50be87;
+}
+.featsc {
+    color: #4bb4e6;
+}
+
+.deprelsc {
+    color: #0a9e61;
+}
+
+.miscsc {
+    color: #9951a1;
+}
+
+.compok {
+    color: white;
+}
+
+.compko {
+    color: red;
+}
+
+.words {
+    fill: white; /* svg object */
+}
+
+.wordupos {
+    fill: #8888ff; /* svg object */
+}
+
+.deprel {
+    fill: green;
+}
+input, textarea {
+    color: white;
+    background-color: #111;
+}
+
+/* box around word */
+.wordnode {
+     fill: #303020;
+     stroke: #888;
+}
+
+.wordcheck {
+    stroke: #d0d;
+}
+
+.boxhighlight {
+    fill: #770;
+}
+
+.tablecell {
+    background-color: #003200;
+    color: #edffed;
+}
+
+.tableerrors {
+    background-color: #866;
+}
+
+.pfeilspitze {
+    fill: #7777ff;
+}
+
+.pfeilspitzeInv {
+    fill: #ff77ff;
+}
+
+.deprel_precedinghead {
+    stroke: #7777ff;
+}
+
+
+.deprel_followinghead {
+    stroke: #ff77ff;
+}
+
+.deprel_root {
+    stroke: #cc0000;
+}

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.32.6 as of 31st March 2026
+ @version 2.36.1 as of 25th October 2026
  */
 package com.orange.labs.httpserver;
 
@@ -162,7 +162,7 @@ public class ServeurHTTP {
                     }
                 }
             }
-            if (missing.size() > 0) {
+            if (!missing.isEmpty()) {
                 throw new IOException("html/js/css files missing in '" + rootdir + "':\n   " + String.join("\n   ", missing) + "\nrun bin/installJQ.sh to install missing libraries.");
             }
         }

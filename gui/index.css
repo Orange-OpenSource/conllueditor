@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.1 as of 29th August 2026
+ @version 2.36.1 as of 25th October 2026
 */
 
 body {
@@ -747,4 +747,8 @@ text {
 
 .compko {
     color: red;
+}
+
+.tableerrors {
+    background-color: #ffbbbb;
 }

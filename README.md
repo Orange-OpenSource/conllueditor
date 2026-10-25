@@ -1,3 +1,5 @@
+<img src="gui/img/celogo.png" alt="ConllEditor" width="200">
+
 # Editor for Treebanks in CoNLL-U format and Front-End for dependency parser servers
 
 This Software is a tool which facilitates the editing of syntactic relations and morphological features of files in CoNLL-U format (http://universaldependencies.org/format.html). It uses a Java-based server and a HTML/CSS/Javascript based front-end. The editor loads the CoNLL-U file and saves changes to disk (and performs a `git commit` if the file is under git version control).
@@ -25,9 +27,9 @@ The editor provides the following functionalities:
 * add highlight information on tokens and deprels which have yet to be validated (see [highlighting](#highlighting))
 * adding Translit= values to the MISC column (transliterating the FORM column) see section [Transliteration](#transliteration)
 * finding similar or identical sentence in a list of CoNLL-U files, see section [Find Similar Sentences](#find-similar-sentences)
-* [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI
+* [configuring the UI](#ui-configuration) on order to hide unneeded functionalities which otherwise clutter the UI or choose a different theme (a dark-mode is avaibale)
 
-Current version: 2.36.0 (see [change history](CHANGES.md))
+Current version: 2.36.1 (see [change history](CHANGES.md))
 
 ConlluEditor can also be used as front-end to display the results of dependency parsing in the same way as the editor.
 * dependency tree/dependency hedge
@@ -712,6 +714,7 @@ Adapt [uiconfig.yml](uiconfig.yml) to your needs:
 ```
 # UI configuration
 ui:
+  theme: index-dark.css  # any css-file residing in gui/ can be chosen
   right2left:
     status: inactive   # inactive, active
     show: hidden       #
@@ -753,7 +756,9 @@ The values in the `validation:` section are the same as for the options `--upos`
 
 ![Custom UI](doc/custom-ui.png)
 
+Dark mode gives the following:
 
+![Custom UI Dark mode](doc/custom-ui-dark.png)
 
 
 # Server API (used by the GUI)

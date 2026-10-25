@@ -1,7 +1,11 @@
 # Changes
 
-## Version 2.36.0
+## Version 2.36.1
+* set deprel check flag in edit deprel modal too
+* added dark theme
+* graphs slightly redesigned
 
+## Version 2.36.0
 * corrected bug in flat view
   * deprel editing after empty noded failed
 * separate highlighted deprels and enhanced deprels

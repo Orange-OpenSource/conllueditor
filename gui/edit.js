@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.0 as of 24th October 2026
+ @version 2.36.1 as of 24th October 2026
  */
 
 
@@ -309,6 +309,8 @@ function getServerInfo() {
             $("#stats_mwts").append(data.stats.mwts);
             $("#stats_emptywords").append(data.stats.emptywords);
 
+
+
             // stats for UPOS
             makeItemFreqPercent_table($("#stats_upos"), data.stats.UPOSs, data.stats.syntactic_words, "UPOS");
             // stats for Deprels
@@ -427,7 +429,12 @@ function getServerInfo() {
             // deactivate buttons as defined in uiconfig.json
             console.log("UI", data.uiconfig);
             if (data.uiconfig) {
-
+                if (data.uiconfig.theme) {
+                    $('<link>')
+                    .appendTo($('head'))
+                    .attr({type : 'text/css', rel : 'stylesheet'})
+                    .attr('href', data.uiconfig.theme);
+                }
                 if (data.uiconfig.right2left_show === "hidden") {
                     $("#r2l").hide();
                 }
@@ -1470,6 +1477,9 @@ function ModifyTree(evt) {
                     mc = "_";
                 $("#cmisc").val(mc);
 
+                /* conllword.checktoken and conllword.checkdeprel are only present in data from server if they are set.
+                  (we could change that in ConllWord:toJon(...)
+                */
                 // set here the checkbox for deprels and tokens (# highlight token/deprel = lines in .conllu file)
                 if (conllword.checktoken === true) {
                     $("#checktoken").prop( "checked", true);
@@ -1477,9 +1487,11 @@ function ModifyTree(evt) {
                     $("#checktoken").prop( "checked", false);
                 }
                 if (conllword.checkdeprel === true) {
-                    $("#checkdeprel").prop( "checked", true);
+                    $("#checkdeprel").prop( "checked", true); // in Edit Word modal
+                    $("#checkdeprel2").prop( "checked", true); // in edit deprel modal
                 } else {
                     $("#checkdeprel").prop( "checked", false);
+                    $("#checkdeprel2").prop( "checked", false);
                 }
 
                 // open edit window
@@ -1605,18 +1617,18 @@ function ModifyTree(evt) {
         } else if (id[0] === "enhtextpath") { // TODO use classes ?
             // update deprel
             if (editing_enhanced) {
-            $("#cheaden").text(id[1]);
-            $("#cdepen").text(id[2]);
-            $("#cdeprelen").val(id[3]);
-            var conllword_enhead = conllwords[id[2]];
-            console.log("kkk", id, conllword_enhead);
-            if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
-                $("#checkenhdeprel").prop( "checked", true);
-            } else {
-                $("#checkenhdeprel").prop( "checked", false);
-            }
+                $("#cheaden").text(id[1]);
+                $("#cdepen").text(id[2]);
+                $("#cdeprelen").val(id[3]);
+                var conllword_enhead = conllwords[id[2]];
 
-            $("#enhdeprelEdit").modal();
+                if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
+                    $("#checkenhdeprel").prop("checked", true);
+                } else {
+                    $("#checkenhdeprel").prop("checked", false);
+                }
+
+                $("#enhdeprelEdit").modal();
             } else {
                 alert("activate « edit enhanced deps » to modifiy enhanced dependency relations");
             }
@@ -1906,12 +1918,18 @@ function formatPhrase(item) {
                     ct++;
                 }
             }
-            if (ct > 1)
-                document.getElementById("titre").style.color = "#880000";
-            else
-                document.getElementById("titre").style.color = "#101010";
-        } else
-            document.getElementById("titre").style.color = "#101010";
+            if (ct > 1) {
+                //document.getElementById("titre").style.color = "#880000";
+                element = document.getElementById("titre");
+                element.classList.add("errors");
+            } else {
+                //document.getElementById("titre").style.color = "#101010";
+                element = document.getElementById("titre");
+                element.classList.remove("errors");
+            }
+        } else {
+            //document.getElementById("titre").style.color = "#101010";
+        }
         if (graphtype !== 3)
             $("#arbre").append(svg);
         var use_deprel_as_type = true;
@@ -2236,6 +2254,9 @@ $(document).ready(function () {
         if (conllword.deprel !== $("#cdeprel2").val()) {
             sendmodifs({"cmd": "mod deprel " + conllword.id + " " + $("#cdeprel2").val()});
         }
+        /* conllword.checktoken and conllword.checkdeprel are only present in data from server if they are set.
+            (we could change that in ConllWord:toJon(...)
+        */
         if (conllword.checkdeprel !== $("#checkdeprel").is(":checked")) {
             sendmodifs({"cmd": "mod checkdeprel " + conllword.id + " " + $("#checkdeprel").is(":checked")});
         }
@@ -2313,9 +2334,14 @@ $(document).ready(function () {
     // add/modify basic dep relation
     $('#savedeprel').click(function () {
         conllword = conllwords[$("#cdep").text()];
-
+        /* conllword.checktoken and conllword.checkdeprel are only present in data from server if they are set.
+            (we could change that in ConllWord:toJon(...)
+        */
         if (conllword.deprel !== $("#cdeprel").val()) {
             sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
+        }
+        if (conllword.checktoken !== $("#checkdeprel2").is(":checked")) {
+            sendmodifs({"cmd": "mod checkdeprel " + conllword.id + " " + $("#checkdeprel2").is(":checked")});
         }
         $('#deprelEdit').modal('hide');
     });
@@ -2324,7 +2350,6 @@ $(document).ready(function () {
     $('#savedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
         if (/*flatgraph*/ graphtype === 2 && editing_enhanced) {
-            //alert("hhhhhhhh " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val() + " " + $("#checkendeprel").is(":checked"));
             sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val() + " " + $("#checkenhdeprel").is(":checked")});
             // } else if (conllword.deprel != $("#cdeprel").val()) {
             //    sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
