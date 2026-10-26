@@ -134,6 +134,15 @@ ul.ui-autocomplete {
     font-size: 10;
 }
 
+.fname {
+    fill: #004400;
+}
+
+.mname {
+    fill: #440000;
+}
+
+
 /* dependency relation */
 .enhdeprel,
 .deprel {
@@ -168,6 +177,7 @@ ul.ui-autocomplete {
 /* a token to check (# highlight word 10) */
 .wordcheck {
     stroke: magenta;
+    stroke-width: 5;
 }
 
 .mwecheck {

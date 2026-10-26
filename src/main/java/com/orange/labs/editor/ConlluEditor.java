@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.35.0 as of 28th August 2026
+ @version 2.36.1 as of 26th October 2026
  */
 package com.orange.labs.editor;
 
@@ -126,6 +126,7 @@ public class ConlluEditor {
     ConllFile comparisonFile = null;
 
     Map<String, String>uiconfig = null;
+    String css = null;
 
     // info on version and commit
     static private String programmeversion;
@@ -439,6 +440,11 @@ public class ConlluEditor {
 
         shortcuts.addProperty("filename", filename);
         System.err.format("Shortcut file '%s' read\n", filename);
+    }
+
+    // short cut to load css file to avoid having a uiconfigile
+    public void setCSS(String relative_path_name) {
+        css = relative_path_name;
     }
 
     /** read the User Interface configuration file. The information in the "ui" part
@@ -1011,6 +1017,17 @@ public class ConlluEditor {
                 jo.addProperty(key, uiconfig.get(key));
             }
             solution.add("uiconfig", jo);
+        }
+
+        if (css != null) {
+            // update uiconfig
+            if (solution.has("uiconfig")) {
+                solution.getAsJsonObject("uiconfig").addProperty("theme", css);
+            } else {
+                JsonObject jo = new JsonObject();
+                jo.addProperty("theme", css);
+                solution.add("uiconfig", jo);
+            }
         }
 
         //System.err.println("qqqqqqqqq " + solution);
@@ -3003,9 +3020,16 @@ public class ConlluEditor {
         Option uiconfig = Option.builder("u").longOpt("uiconfig")
                 .argName("file")
                 .hasArg()
-                .desc("UI configuration file (to choose default views and hide unneeded buttons")
+                .desc("UI configuration file (to choose default views and hide unneeded buttons and choose a theme")
                 .build();
         options.addOption(uiconfig);
+
+        Option css = Option.builder().longOpt("css")
+                .argName("file")
+                .hasArg()
+                .desc("A css file to change theme (must sit in gui/), overrides value 'theme' in uiconfig")
+                .build();
+        options.addOption(css);
 
         CommandLineParser parser = new DefaultParser();
 
@@ -3028,6 +3052,9 @@ public class ConlluEditor {
 
             if (line.hasOption(uiconfig)) {
                 ce.setUIConfig(line.getOptionValue(uiconfig));
+            }
+            if (line.hasOption(css)) {
+                ce.setCSS(line.getOptionValue(css));
             }
             if (line.hasOption(upos)) {
                 ce.setValidUPOS(Arrays.asList(line.getOptionValue(upos).split(",")));

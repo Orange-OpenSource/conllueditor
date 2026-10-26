@@ -255,7 +255,7 @@ public class ConllSentence {
                             String tmp = tmp1[1].trim();
                             hld = cline.getKey();
                             if (line.startsWith("# highlight deprels =")) {
-                                System.err.format("WARNING: '# hightlight deprels' is deprecated, use '# highlight basic deprels' insteadn. line %d: \"%s\"\n", cline.getKey(), line);
+                                System.err.format("WARNING: '# hightlight deprels' is deprecated, use '# highlight basic deprels' instead. line %d: \"%s\"\n", cline.getKey(), line);
                             }
                             highlightdeprels = new TreeSet<>(Arrays.asList(tmp.split("\\s+")));
                             for (String t: highlightdeprels) {

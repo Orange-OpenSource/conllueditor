@@ -1,6 +1,6 @@
 /** This library is under the 3-Clause BSD License
 
- Copyright (c) 2018-2025, Orange S.A.
+ Copyright (c) 2018-2026, Orange S.A.
 
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.5.0 as of 23rd May 2020
+ @version 2.36.1 as of 26th October 2026
  */
 
 var svgNS = "http://www.w3.org/2000/svg";
@@ -261,7 +261,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
 
             var ftext = document.createElementNS(svgNS, "text");
             ftext.setAttribute("id", "ftext" + curid + "_" + item.id);
-            ftext.setAttribute("class", "wordfeature" + grayclassf);
+            ftext.setAttribute("class", "wordfeature fname" + grayclassf);
             ftext.setAttribute("font-size", "10");
             ftext.setAttribute('x', x - 5);
             svg.appendChild(ftext); // can only calculat wordsize if it is attached to the document
@@ -272,7 +272,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
                 level += fs * 1.2;
             ftext.setAttribute('y', level);
             ftext.setAttribute("text-anchor", "end");
-            ftext.setAttribute("fill", "#004400");
+            //ftext.setAttribute("fill", "#004400"); //done in CSS .fname
             ftext.textContent = key; // + " :"; //item.feats[f];
 
             var septext = document.createElementNS(svgNS, "text");
@@ -323,7 +323,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
 
             var ftext = document.createElementNS(svgNS, "text");
             ftext.setAttribute("id", "mtext" + curid + "_" + item.id);
-            ftext.setAttribute("class", "wordfeature" + grayclassf);
+            ftext.setAttribute("class", "wordfeature mname" + grayclassf);
             ftext.setAttribute("font-size", "10");
             ftext.setAttribute('x', x - 5);
             svg.appendChild(ftext);
@@ -335,7 +335,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
                 level += fs * 1.2;
             ftext.setAttribute('y', level);
             ftext.setAttribute("text-anchor", "end");
-            ftext.setAttribute("fill", "#440000");
+            //ftext.setAttribute("fill", "#440000"); // CSS .mname
             ftext.textContent = key;
 
 

@@ -131,6 +131,43 @@ function downloadSVG(ident) {
     a2.download = "arbre_" + $("#sentid").val() + ".svg";
 }
 
+/** does work only partially, so currently we use the basic one */
+function TODOdownloadSVG(ident) {
+    const container = document.getElementById("arbre");
+
+    const doc = new DOMParser().parseFromString(
+        container.innerHTML,
+        "image/svg+xml"
+    );
+    const svg = doc.documentElement;
+
+    if (svg.localName !== "svg" || doc.querySelector("parsererror")) {
+        console.error("Could not parse an SVG from #arbre");
+        return;
+    }
+
+    // Add the CSS rules needed by the SVG.
+    const style = doc.createElementNS("http://www.w3.org/2000/svg", "style");
+    style.textContent = [...document.styleSheets]
+        .flatMap(sheet => {
+            try {
+                return [...sheet.cssRules].map(rule => rule.cssText);
+            } catch {
+                // A stylesheet from another origin may not be readable.
+                return [];
+            }
+        })
+        .join("\n");
+    svg.insertBefore(style, svg.firstChild);
+
+    const text = new XMLSerializer().serializeToString(svg);
+    const blob = new Blob([text], { type: "image/svg+xml;charset=utf-8" });
+
+    const link = document.getElementById(ident);
+    link.href = URL.createObjectURL(blob);
+    link.download = "arbre_" + $("#sentid").val() + ".svg";
+}
+
 
 function getRaw(what, title) {
     var urlbase = URL_BASE + "get" + what + "?all_enhanced=" + show_basic_in_enhanced + "&sentid=" + ($("#currentsent").text() - 1) + "&r2l=" + showr2l;
@@ -300,7 +337,7 @@ function getServerInfo() {
                 }
             }
 
-            data.stats;
+            //data.stats;
             $(".stats").empty();
             $("#stats_filename").append(data.stats.filename);
             $("#stats_sent").append(data.stats.sentences);

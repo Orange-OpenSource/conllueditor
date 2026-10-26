@@ -241,16 +241,6 @@ img.helptextbutton {
         );
 }
 
-.mycheck.active {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(24, 16, 3)),
-        color-stop(1, rgb(52, 45, 4))
-        );
-
-}
 
 .mycheck:hover {
     background-image: -webkit-gradient(
@@ -260,7 +250,6 @@ img.helptextbutton {
         color-stop(0, rgba(244, 146, 13)),
         color-stop(1, rgba(245, 187, 15))
         );
-    color: #222;
 }
 
 .errorhl {
@@ -388,8 +377,17 @@ text {
     fill: #8888ff; /* svg object */
 }
 
+.fname {
+    fill: #80ff80;
+}
+
+.mname {
+    fill: #d80010;
+}
+
+
 .deprel {
-    fill: green;
+    fill: #a0d0d0;
 }
 input, textarea {
     color: white;
@@ -424,7 +422,7 @@ input, textarea {
 }
 
 .pfeilspitzeInv {
-    fill: #ff77ff;
+    fill: #9a47ff;
 }
 
 .deprel_precedinghead {
@@ -433,9 +431,21 @@ input, textarea {
 
 
 .deprel_followinghead {
-    stroke: #ff77ff;
+    stroke: #9a47ff;
 }
 
 .deprel_root {
     stroke: #cc0000;
+}
+
+/* repeat here, it must follo deprel_preceding/following head */
+.deprelarrowcheck {
+    stroke: magenta;
+}
+.deprellabelcheck {
+    fill: magenta;
+}
+.tokencheck_table {
+   background-color: #909;
+   color: #ffddff;
 }

@@ -232,6 +232,7 @@ especially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 * `--rootdir` root of fileserver (directory which includes `index.html` and `edit.js` etc. for ConlluEditor). Default: `gui/` this option if only needed if the frontend is not in the default directory.
+* `--css <name>` specify name of a theme-css file (must be in `gui/`; currently available: `index-dark.css` and `index-grey-bright.css`)
 
 If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of the sentence, warnings are writte to screen. Such errors may occur if an automatic pre-annotation tools do not work correctly. UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
 In this case please correct the errors using a text editor before loading the file into ConlluEditor.
@@ -266,7 +267,7 @@ The button `fixed width` displays the tree/hedge width a (configurable) fixed wo
 
 ![Edit screen (flat graph)](doc/graph.png)
 
-The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word. 
+The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word.
 Known Bug: Currently for multiword tokens the  only available feature `Typo=Yes` cannot yet be set or unset in table view.
 Columns can be made larger by clicking the at the right side of the column header and drag it.
 
@@ -362,7 +363,7 @@ Sometimes validation scripts detect potential problem on tokens and/or deprels. 
 ```
 # sent_id = fr-ud-train_00002
 # text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.
-# highlight tokens = 1 4 8 8-9 
+# highlight tokens = 1 4 8 8-9
 # highlight basic deprels = 5 8 9 10
 1       L'      le      DET     _       Definite=Def|Gender=Fem|Number=Sing|PronType=Art        2       det     _       SpaceAfter=No
 ...
@@ -378,7 +379,7 @@ For enhanced deprels a flag can be set/unset in enhanced deprel edit
 # sent_id = newsgroup-groups.google.com_GuildWars_086f0f64ab633ab3_ENG_20041111_173500-0051
 # text = I wish all happy holidays, and moreso, peace on earth.
 # highlight tokens = 4 9.1
-# highlight enhanced deprels = 9.1>2
+# highlight enhanced deprels = 9.1>2  # head > dependent
 1	I	I	PRON	PRP	Case=Nom|Number=Sing|Person=1|PronType=Prs	2	nsubj	2:nsubj|9.1:nsubj|10:nsubj	_
 ...
 ```
@@ -450,7 +451,7 @@ Other search modes can be chosen with the search select bar (top rop right)
 
 The search field on the top right permits to search a sentence by givening a line number of the edited `.conlu` file.
 The sentences in which this line number occurs is displayed. If the line number is not a comment line, the word which is on the line is highlighted.
-This can be useful to find lines output by the various UD validators. 
+This can be useful to find lines output by the various UD validators.
 If sentences are modified at change length (by splitting a word or joining two words, or by adding or deleting comment lines, the line numbers are adapted.
 Type in line number in field on the top right and click `go to line`:
 
@@ -714,7 +715,9 @@ Adapt [uiconfig.yml](uiconfig.yml) to your needs:
 ```
 # UI configuration
 ui:
-  theme: index-dark.css  # any css-file residing in gui/ can be chosen
+  theme: index-dark.css  # any css-file residing in gui/ can be chosen,
+                         # currently we provide index-dark.css and index-grey-bright.css
+                         # if empty, default theme is used
   right2left:
     status: inactive   # inactive, active
     show: hidden       #
@@ -760,6 +763,7 @@ Dark mode gives the following:
 
 ![Custom UI Dark mode](doc/custom-ui-dark.png)
 
+You can also specify the `css` file using the option `--css index-dark.css`
 
 # Server API (used by the GUI)
 * `curl -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentence of a file is `read 0`, `sentid` is only used only for editing commands but must be present)
