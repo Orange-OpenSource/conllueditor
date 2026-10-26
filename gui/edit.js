@@ -1980,7 +1980,7 @@ function formatPhrase(item) {
         //if ($("#flat").is(":checked")) {
         if (graphtype != 3 && item.Lemma != undefined) {
             $("#scores").empty();
-            $("#scores").append("(comparison: ");
+            $("#scores").append(" (comparison: ");
             $("#scores").append(', <span class="' + (item.Lemma == 100 ? "compok" : "compko") + '"> Lemma: ' + item.Lemma + "</span>");
             $("#scores").append(', <span class="' + (item.Features == 100 ? "compok" : "compko") + '"> Features: ' + item.Features + "</span>");
             $("#scores").append(', <span class="' + (item.UPOS == 100 ? "compok" : "compko") + '"> UPOS: ' + item.UPOS + "</span>");
@@ -1988,7 +1988,7 @@ function formatPhrase(item) {
             $("#scores").append(', <span class="' + (item.LAS == 100 ? "compok" : "compko") + '"> LAS: ' + item.LAS + "</span>");
             $("#scores").append(', <span class="' + (item.UAS == 100 ? "compok" : "compko") + '"> UAS: ' + item.UAS + "</span>");
             $("#scores").append(', <span class="' + (item.DEPLAB == 100 ? "compok" : "compko") + '"> DepLabels: ' + item.DEPLAB + "</span>");
-            $("#scores").append(', <span class="' + (item.MISC == 100 ? "compok" : "compko") + '"> MISC: ' + item.MISC + "</span>");
+            $("#scores").append(', <span class="' + (item.MISC == 100 ? "compok" : "compko") + '"> MISC: ' + item.MISC + "</span>)");
         }
 
         if (graphtype === 2 /*flatgraph*/) {

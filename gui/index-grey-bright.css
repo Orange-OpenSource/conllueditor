@@ -360,7 +360,7 @@ text {
 }
 
 .compok {
-    color: white;
+    color: black;
 }
 
 .compko {
@@ -434,6 +434,24 @@ input, textarea {
 
 .deprel_root {
     stroke: #cc0000;
+}
+
+#goldword {
+    color:#3e3e3e;
+    background-color: #f9f9f9;
+}
+
+#editedword {
+    color:#555555;
+    background-color: #f9f9f9;
+}
+
+.compfilename {
+    color: white;
+}
+
+#compare table tr td {
+  border: 1px solid #111;
 }
 
 /* repeat here, it must follo deprel_preceding/following head */

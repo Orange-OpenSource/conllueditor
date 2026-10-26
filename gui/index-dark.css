@@ -438,6 +438,24 @@ input, textarea {
     stroke: #cc0000;
 }
 
+#goldword {
+    color:#bcffbc;
+    background-color: #151;
+}
+
+#editedword {
+    color:#fda978;
+    background-color: #521;
+}
+
+.compfilename {
+    color: white;
+}
+
+#compare table tr td {
+  border: 1px solid white;
+}
+
 /* repeat here, it must follo deprel_preceding/following head */
 .deprelarrowcheck {
     stroke: magenta;
@@ -448,4 +466,11 @@ input, textarea {
 .tokencheck_table {
    background-color: #909;
    color: #ffddff;
+}
+
+.goldtree2 {
+    fill: #666;
+}
+.compareError {
+   stroke: #bb0000;
 }
