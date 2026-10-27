@@ -25,7 +25,7 @@ from selenium.webdriver.support.select import Select
 
 class CE_UItest:
     def __init__(self, args):
-
+        #print("args", args)
         if args.browser == "firefox":
             options = webdriver.FirefoxOptions()
             if args.headless:
@@ -87,11 +87,11 @@ class CE_UItest:
                         print("\tgot     ", hyp, json.dumps(hyp))
             except Exception as e:
                 print("\tKO", e)
-
+                input(">>")
 
     def __del__(self):
         input(">>")
-        self.driver.close()
+        #self.driver.close()
 
 
     def getconllu(self):
@@ -229,9 +229,9 @@ class CE_UItest:
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument("--browser", "-b", default="firefox", type=str, help="browser to use: firefox/chrome")
+    parser = argparse.ArgumentParser("ConlluEditor UItest",
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("--browser", "-b", default="chrome", type=str, help="browser to use: firefox/chrome")
     parser.add_argument("--headless", "-H", default=False, action="store_true", help="do not show browser window")
     parser.add_argument("--gecko", "-g", default="/snap/bin/geckodriver", type=str, help="path to geckodreiver (needed with firefox)")
     parser.add_argument("--url", "-u", default="http://localhost:5556", type=str, help="URL of ConlluEditor")
