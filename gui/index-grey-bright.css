@@ -83,7 +83,6 @@ h1  {
         rgba(232,232,232, 1),
         rgba(244,244,244, 1),
         rgba(255,255,255, 0));
-
 }
 
 textArea {
@@ -118,7 +117,7 @@ img.helptextbutton {
     left top,
     color-stop(0, rgb(217,217,217)),
     color-stop(1, rgb(252,252,252))
-);
+    );
 }
 
 /* format of application buttons in the help text */
@@ -160,6 +159,10 @@ img.helptextbutton {
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
         );
+}
+
+.go, #undo, #redo, #clear, #backwards {
+    filter: saturate(30%); /* make icons (and text) grey(er) */
 }
 
 .mybutton:hover {
@@ -204,6 +207,7 @@ img.helptextbutton {
         );
 }
 
+/* keep original color
 .contain:hover {
     overflow: hidden;
 
@@ -214,7 +218,7 @@ img.helptextbutton {
         color-stop(0, rgb(227,227,227)),
         color-stop(1, rgb(255,255,255))
         );
-}
+} 
 
 .contain.active {
     border-radius: 5px;
@@ -225,7 +229,7 @@ img.helptextbutton {
         color-stop(0, rgb(250,250,250)),
         color-stop(1, rgb(245, 245,245))
         );
-}
+}*/
 
 /* inspired by https://designmodo.com/3d-css3-button/ */
 .mycheck {
@@ -281,10 +285,8 @@ img.helptextbutton {
 
 
 .modal-header {
-      background-image: linear-gradient(rgba(153,153,153, 1),
+    background-image: linear-gradient(rgba(153,153,153, 1),
         rgba(240,240,240, 0));
-
-
 }
 
 /*.modal-title, #rawtext {
@@ -329,6 +331,7 @@ text {
 /* http://jsfiddle.net/fbnw9g5x/4/ */
 .dewis select {
     color: black;
+    filter: saturate(30%); /* make icons (and text) grey(er) */
 }
 
 .dewis:hover {
@@ -433,7 +436,7 @@ input, textarea {
 }
 
 .deprel_root {
-    stroke: #cc0000;
+    stroke: #444444;
 }
 
 #goldword {

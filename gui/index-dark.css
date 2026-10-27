@@ -157,8 +157,13 @@ img.helptextbutton {
         left bottom,
         left top,
         color-stop(0, rgb(17,17,17)),
-        color-stop(1, rgb(52,52,52))
+        color-stop(1, rgb(102,102,102))
         );
+}
+
+.go, #undo, #redo, #clear, #backwards {
+    filter: brightness(150%); /* make icons (and text) brighter */
+    border: 1px solid #626262; /* make border darker, to compensate the filter thing */
 }
 
 .mybutton:hover {
@@ -181,7 +186,6 @@ img.helptextbutton {
 
 
 /* add a visible handle */
-
 .resizable-input > span {
     display: inline-block;
     vertical-align: bottom;
@@ -200,7 +204,7 @@ img.helptextbutton {
         left bottom,
         left top,
         color-stop(0, rgb(17,17,17)),
-        color-stop(1, rgb(52,52,52))
+        color-stop(1, rgb(102,102,102))
         );
 }
 
@@ -237,7 +241,7 @@ img.helptextbutton {
         left bottom,
         left top,
         color-stop(0, rgb(17,17,17)),
-        color-stop(1, rgb(52,52,52))
+        color-stop(1, rgb(102,102,102))
         );
 }
 
@@ -280,8 +284,6 @@ img.helptextbutton {
 }
 
 
-
-
 .modal-header {
     background-image: linear-gradient(rgba(55,53,51, 1),
         rgba(5,5,5, 1));
@@ -308,8 +310,6 @@ text {
     font-family: "Lato", "Amiri", "KacstOne", sans-serif;
 }
 
-
-
 .sckey {
     font-weight: bold;
     font-family: monospace;
@@ -324,13 +324,14 @@ text {
         left bottom,
         left top,
         color-stop(0, rgb(17,17,17)),
-        color-stop(1, rgb(52,52,52))
+        color-stop(1, rgb(102,102,102))
         );
 }
 
 /* http://jsfiddle.net/fbnw9g5x/4/ */
 .dewis select {
     color: white;
+    filter: brightness(150%); /* make icons (and text) brighter */
 }
 
 .dewis:hover {
@@ -396,8 +397,8 @@ input, textarea {
 
 /* box around word */
 .wordnode {
-     fill: #303020;
-     stroke: #888;
+     fill: #403020;
+     stroke: #aaa;
 }
 
 .wordcheck {
@@ -474,3 +475,8 @@ input, textarea {
 .compareError {
    stroke: #bb0000;
 }
+
+.close {
+    color: white;
+}
+

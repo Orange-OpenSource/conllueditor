@@ -9,7 +9,7 @@ ui:
     #show: hidden
   misc:
     status: active
-    show: hidden
+    show: show
   searchmode: none # simple, searchreplace, grew, none
   display: graph # graph, flat, table
   shortcuts: hidden # show, hidden
@@ -22,19 +22,17 @@ ui:
   spacy: hidden # show, hidden
 
 validation:
-  language: cy
-#  xpos:
+  shortcuts: sc.json
+#  language: cy
+#  xpos: 
 #    - xpos.cy
 
   upos:
-#    - ${UDTOOLS}/cpos.ud
-    - /home/johannes/GitHub/UniversalDependencies/tools/data/upos.json
-  deprels:
-    - /home/johannes/GitHub/UniversalDependencies/tools/data/deprels.json
+     cpos.ud
+#  deprels:
 #    - ${UDTOOLS}/deprels.json
 #    - deprel.cy
-  features:
-     - /home/johannes/GitHub/UniversalDependencies/tools/data/feats.json
+#  features: 
 #    - ${UDTOOLS}/feats.json
 #    - upos-feat_val.cy
 #  validator: valid.conf

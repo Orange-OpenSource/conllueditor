@@ -860,6 +860,7 @@ Individual words of the edited file, which differ from the gold file are shown w
 hovers over such a word, the corresponding lines from the edited file and the gold file are shown
 underneath the evaluation scores.
 The comparison mode works in the flat view too.
+The file can still be edited while in comparison mode.
 
 ![CoNLL-U File Comparison](doc/comparemode.png)
 
