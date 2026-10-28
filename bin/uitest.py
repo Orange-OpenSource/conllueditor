@@ -6,8 +6,10 @@
 #   cp sr/test/resources/test.conllu /tmp
 #   ./bin/conlluedit.sh /tmp/test.conllu 5556
 
+import difflib
 import json
 import re
+import readline
 import sys
 import time
 
@@ -21,6 +23,7 @@ from selenium.webdriver.firefox.options import Options
 #from selenium.webdriver.common.actions import Actions
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
+
 
 
 class CE_UItest:
@@ -85,9 +88,12 @@ class CE_UItest:
                         print("\tKO")
                         print("\texpected", test["expected"])
                         print("\tgot     ", hyp, json.dumps(hyp))
+                        for x in difflib.context_diff(test["expected"].split("\n"), hyp.split("\n")):
+                            print(x)
+                        input("KO>>")
             except Exception as e:
                 print("\tKO", e)
-                input(">>")
+                input("EXCEPTION>>")
 
     def __del__(self):
         input(">>")
