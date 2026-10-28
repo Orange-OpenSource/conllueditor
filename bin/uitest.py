@@ -61,8 +61,8 @@ class CE_UItest:
         if self.args.filter:
             tfilter = re.compile(self.args.filter)
 
-        for test in tests:
-            print("Test", test["name"])
+        for num, test in enumerate(tests, 1):
+            print(f"{num} Test {test['name']}")
             if "ignore" in test and test["ignore"]:
                 print("\tignored")
                 continue
@@ -92,6 +92,9 @@ class CE_UItest:
                     hyp = self.shortcuts(test["function"][1], test["function"][2])
                 elif test["function"][0] == "changeEnhancedDeprel":
                     hyp = self.changeEnhancedDeprel(test["function"][1], test["function"][2])
+                elif test["function"][0] == "changeEnhancedHead":
+                    hyp = self.changeEnhancedHead(test["function"][1], test["function"][2], test["function"][3])
+
                 else:
                     print("\tKO: Bad test function", test["function"][0])
                 if hyp:
@@ -223,6 +226,7 @@ class CE_UItest:
         return self.getconllu(5)
 
     def search(self, lemma):
+        self.getpage(1)
         self.entertext("lemma", lemma + Keys.RETURN, True)
         return self.getconllu()
 
@@ -238,6 +242,26 @@ class CE_UItest:
         ac.move_to_element(wt).move_by_offset(5,5).click().perform()
 
         return self.getconllu()
+
+    def changeEnhancedHead(self, pn=13, elem1=None, elem2=None):
+        self.getpage(pn)
+
+        self.choose("flat3", 1)
+        self.clickbutton("edit_ed")
+        wf = self.driver.find_element(By.CSS_SELECTOR, elem1)
+        # we need to click on the background of the wordnode, not on the words
+        ac = ActionChains(self.driver)
+        ac.move_to_element(wf).move_by_offset(5,5).click().perform() ## chrome
+
+        wt = self.driver.find_element(By.CSS_SELECTOR, elem2)
+        ac = ActionChains(self.driver)
+        ac.move_to_element(wt).move_by_offset(5,5).click().perform()
+
+        self.entertext("cdeprelen", "neu")
+        self.clickbutton("savedeprelen")
+
+        return self.getconllu()
+
 
     def shortcuts(self, pn=18, elem=None):
         self.getpage(pn)
