@@ -79,6 +79,8 @@ class CE_UItest:
                     hyp = self.tablemode(test["function"][1])
                 elif test["function"][0] == "edittable":
                     hyp = self.edittable(test["function"][1], test["function"][2])
+                elif test["function"][0] == "changehead":
+                    hyp = self.changeHead(test["function"][1], test["function"][2], test["function"][3])
                 else:
                     print("\tKO: Bad test function", test["function"][0])
                 if hyp:
@@ -88,7 +90,9 @@ class CE_UItest:
                         print("\tKO")
                         print("\texpected", test["expected"])
                         print("\tgot     ", hyp, json.dumps(hyp))
-                        for x in difflib.context_diff(test["expected"].split("\n"), hyp.split("\n")):
+                        for x in difflib.context_diff(test["expected"].split("\n"),
+                                                      hyp.split("\n"),
+                                                      fromfile="expected", tofile="got"):
                             print(x)
                         input("KO>>")
             except Exception as e:
@@ -101,6 +105,9 @@ class CE_UItest:
 
 
     def getconllu(self):
+        # gets results (via CoNLL-U window) and undoes test
+        if self.args.pause:
+            input("hit ENTER to undo and continue >>")
         print("** get CoNLL-U window")
         w = self.driver.find_element(By.ID, "conllu")
         w.click()
@@ -116,7 +123,7 @@ class CE_UItest:
         w6 = self.driver.find_element(By.ID, "undo")
         w6.click()
         time.sleep(0.5)
-        
+
         return text
 
     def getpage(self, pn=5):
@@ -139,12 +146,19 @@ class CE_UItest:
         ac.move_to_element(w).move_by_offset(0,0).click().perform() ## chrome
 
         w2 = self.driver.find_element(By.ID, 'currentMWTform')
+        #input("www1")
         w2.send_keys("desbat"+ Keys.RETURN)
+        #input("www2")
         w3 = self.driver.find_element(By.ID, 'currentMWTto')
+        #input("www3")
         w3.clear()
+        #input("www4")
         w3.send_keys("10"+ Keys.RETURN)
+        #input("www5")
         w4 = self.driver.find_element(By.ID, 'editMWtoken') # save
+        #input("www6")
         w4.click()
+        #input("www7")
         time.sleep(1)
         return self.getconllu()
 
@@ -157,6 +171,19 @@ class CE_UItest:
         w2.send_keys("amod"+ Keys.RETURN)
         w3 = self.driver.find_element(By.ID, 'savedeprel')
         w3.click()
+        return self.getconllu()
+
+    def changeHead(self, pn=5, elem1=None, elem2=None):
+        self.getpage(pn)
+        wf = self.driver.find_element(By.CSS_SELECTOR, elem1)
+        # we need to click on the background of the wordnode, not on the words
+        ac=ActionChains(self.driver)
+        ac.move_to_element(wf).move_by_offset(5,5).click().perform() ## chrome
+        #wf.click()
+        wt = self.driver.find_element(By.CSS_SELECTOR, elem2)
+        ac=ActionChains(self.driver)
+        ac.move_to_element(wt).move_by_offset(5,5).click().perform() ## chrome
+        #wt.click()
         return self.getconllu()
 
     def search(self, lemma):
@@ -239,6 +266,7 @@ if __name__ == "__main__":
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--browser", "-b", default="chrome", type=str, help="browser to use: firefox/chrome")
     parser.add_argument("--headless", "-H", default=False, action="store_true", help="do not show browser window")
+    parser.add_argument("--pause", "-p", default=False, action="store_true", help="wait for ENTER after each test")
     parser.add_argument("--gecko", "-g", default="/snap/bin/geckodriver", type=str, help="path to geckodreiver (needed with firefox)")
     parser.add_argument("--url", "-u", default="http://localhost:5556", type=str, help="URL of ConlluEditor")
     parser.add_argument("--filter", "-f", default=None, type=str, help="regex to filter tests")
@@ -250,4 +278,4 @@ if __name__ == "__main__":
 
     uit = CE_UItest(args)
     uit.runtests()
-        
+
