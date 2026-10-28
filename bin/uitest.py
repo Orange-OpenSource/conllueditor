@@ -90,6 +90,8 @@ class CE_UItest:
                     hyp = self.modifyWord(test["function"][1], test["function"][2])
                 elif test["function"][0] == "shortcuts":
                     hyp = self.shortcuts(test["function"][1], test["function"][2])
+                elif test["function"][0] == "changeEnhancedDeprel":
+                    hyp = self.changeEnhancedDeprel(test["function"][1], test["function"][2])
                 else:
                     print("\tKO: Bad test function", test["function"][0])
                 if hyp:
@@ -180,13 +182,29 @@ class CE_UItest:
         w = self.driver.find_element(By.XPATH, elem)
         w.click()
 
-        #w2 = self.driver.find_element(By.ID, 'cdeprel')
-        #w2.clear()
-        #w2.send_keys("amod"+ Keys.RETURN)
+
         self.entertext("cdeprel", "amod", True)
 
         self.clickbutton('savedeprel')
         return self.getconllu(2)
+
+    def changeEnhancedDeprel(self, pn=5, elem=None):
+        self.getpage(pn)
+        self.choose("flat3", 1)
+        self.clickbutton("edit_ed")
+
+        w = self.driver.find_element(By.XPATH, elem)
+        w.click()
+
+
+        self.entertext("cdeprelen", "amodnsubj", True)
+
+        self.clickbutton('savedeprelen')
+        self.clickbutton("edit_ed")
+        res = self.getconllu()
+
+        self.choose("flat3", 0)
+        return res
 
     def modifyWord(self, pn=6, elem=None):
         self.getpage(pn)
