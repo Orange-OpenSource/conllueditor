@@ -222,15 +222,10 @@ class CE_UItest:
 
     def tablemode(self, pn=9):
         self.getpage(pn)
-
         self.clickbutton("next")
 
         # choose tree/hedge/table
         self.choose("flat3", 2) # table
-        #w = self.driver.find_element(By.ID, 'flat3')
-        #s = Select(w)
-        #s.select_by_index(2) # table
-
 
         # Click
         w = self.driver.find_element(By.ID, 'td3')
@@ -242,7 +237,7 @@ class CE_UItest:
 
         # CTRL-Click in table view
         w = self.driver.find_element(By.ID, 'td5')
-        #action = ActionChains(driver)
+
         action.key_down(Keys.CONTROL).click(w).key_up(Keys.CONTROL).perform()
         b = self.driver.find_element(By.XPATH, '/html/body')
         b.send_keys("V")
@@ -265,15 +260,11 @@ class CE_UItest:
     def edittable(self, pn=2, edits=[]):
         self.getpage(pn)
         self.choose("flat3", 2) # tree
-        #w = self.driver.find_element(By.ID, 'flat3')
-        #s = Select(w)
-        #s.select_by_index(2) # table
+
         time.sleep(0.5)
         #print("ZZZZ", edits)
         for edit in edits:
-            #if ix < 1:
-            #    continue
-            #print("zzzz", edit)
+
             w1 = self.driver.find_element(By.ID, edit[0])
             #w1 = self.driver.find_element(By.XPATH, edit[0])
             #w1.clear()
@@ -284,14 +275,11 @@ class CE_UItest:
             time.sleep(1)
             #input("QQQ ")
 
+        # save the current version before going back to tree-view (since this removes the undo states)
         res = self.getconllu(3)
-
 
         # choose tree/hedge/table
         self.choose("flat3", 0)
-        #w = self.driver.find_element(By.ID, 'flat3')
-        #s = Select(w)
-        #s.select_by_index(0) # tree
 
         return res #self.getconllu()
 
