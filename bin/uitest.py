@@ -27,7 +27,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import *
 
-# TODO: test shortcuts
+# TODO: 
+# # test shortcuts
+# test enhanced deprels
 
 class CE_UItest:
     def __init__(self, args):
@@ -115,8 +117,7 @@ class CE_UItest:
         if self.args.pause:
             input("hit ENTER to undo and continue >>")
         print("** get CoNLL-U window")
-        #w = self.driver.find_element(By.ID, "conllu")
-        #w.click()
+
         self.clickbutton("conllu")
         # get text of Conll-U window
         w2 = self.driver.find_element(By.ID, "rawtext")
@@ -157,12 +158,14 @@ class CE_UItest:
         ac=ActionChains(self.driver)
         ac.move_to_element(w).move_by_offset(0,0).click().perform() ## chrome
 
-        w2 = self.driver.find_element(By.ID, 'currentMWTform')
-        w2.send_keys("desbat"+ Keys.RETURN)
+        #w2 = self.driver.find_element(By.ID, 'currentMWTform')
+        #w2.send_keys("desbat"+ Keys.RETURN)
+        self.entertext("currentMWTform", "desbat")
 
-        w3 = self.driver.find_element(By.ID, 'currentMWTto')
-        w3.clear()
-        w3.send_keys("10"+ Keys.RETURN)
+        #w3 = self.driver.find_element(By.ID, 'currentMWTto')
+        #w3.clear()
+        #w3.send_keys("10"+ Keys.RETURN)
+        self.entertext("currentMWTto", "10", True)
 
         #w4 = self.driver.find_element(By.ID, 'editMWtoken') # save
         #w4.click()
@@ -175,13 +178,14 @@ class CE_UItest:
         self.getpage(pn)
         w = self.driver.find_element(By.XPATH, elem)
         w.click()
-        w2 = self.driver.find_element(By.ID, 'cdeprel')
-        w2.clear()
-        w2.send_keys("amod"+ Keys.RETURN)
-        #w3 = self.driver.find_element(By.ID, 'savedeprel')
-        #w3.click()
+
+        #w2 = self.driver.find_element(By.ID, 'cdeprel')
+        #w2.clear()
+        #w2.send_keys("amod"+ Keys.RETURN)
+        self.entertext("cdeprel", "amod", True)
+
         self.clickbutton('savedeprel')
-        return self.getconllu()
+        return self.getconllu(2)
 
     def modifyWord(self, pn=6, elem=None):
         self.getpage(pn)
@@ -190,20 +194,14 @@ class CE_UItest:
         ac=ActionChains(self.driver)
         ac.move_to_element(wf).move_by_offset(5,5).key_down(Keys.CONTROL).click().key_up(Keys.CONTROL).perform() ## chrome
 
-        #w2 = self.driver.find_element(By.ID, 'clemma')
-        #w2.send_keys("QQQQQQQQQQQQQQQQQQQPOUR")
         self.entertext("clemma", "Pöùř", True)
         self.entertext("cform", "für", True)
         self.entertext("cupos", "PREP", True)
 
-        #w3 = self.driver.find_element(By.ID, 'checktoken')
-        #w3.click()
-        #w4 = self.driver.find_element(By.ID, 'saveword')
-        #w4.click()
         self.clickbutton('checktoken')
         self.clickbutton('saveword')
 
-        return self.getconllu()
+        return self.getconllu(5)
 
     def changeHead(self, pn=6, elem1=None, elem2=None):
         self.getpage(pn)
@@ -211,29 +209,27 @@ class CE_UItest:
         # we need to click on the background of the wordnode, not on the words
         ac=ActionChains(self.driver)
         ac.move_to_element(wf).move_by_offset(5,5).click().perform() ## chrome
-        #wf.click()
+
         wt = self.driver.find_element(By.CSS_SELECTOR, elem2)
         ac=ActionChains(self.driver)
         ac.move_to_element(wt).move_by_offset(5,5).click().perform() ## chrome
-        #wt.click()
+
         return self.getconllu()
 
     def search(self, lemma):
-        #b = self.driver.find_element(By.ID, "lemma")
-        #b.clear()
-        #b.send_keys(lemma + Keys.RETURN)
         self.entertext("lemma", lemma + Keys.RETURN, True)
         return self.getconllu()
 
     def tablemode(self, pn=9):
         self.getpage(pn)
-        w = self.driver.find_element(By.ID, 'next')
-        w.click()
+
+        self.clickbutton("next")
 
         # choose tree/hedge/table
-        w = self.driver.find_element(By.ID, 'flat3')
-        s = Select(w)
-        s.select_by_index(2) # table
+        self.choose("flat3", 2) # table
+        #w = self.driver.find_element(By.ID, 'flat3')
+        #s = Select(w)
+        #s.select_by_index(2) # table
 
 
         # Click
@@ -259,18 +255,19 @@ class CE_UItest:
         action.click(w).perform()
         time.sleep(1)
 
+        res = self.getconllu(4)
+
         # choose tree/hedge/table
-        w = self.driver.find_element(By.ID, 'flat3')
-        s = Select(w)
-        s.select_by_index(0) # tree
-        return self.getconllu()
+        self.choose("flat3", 0) # tree
+        return res
 
 
     def edittable(self, pn=2, edits=[]):
         self.getpage(pn)
-        w = self.driver.find_element(By.ID, 'flat3')
-        s = Select(w)
-        s.select_by_index(2) # table
+        self.choose("flat3", 2) # tree
+        #w = self.driver.find_element(By.ID, 'flat3')
+        #s = Select(w)
+        #s.select_by_index(2) # table
         time.sleep(0.5)
         #print("ZZZZ", edits)
         for edit in edits:
@@ -287,12 +284,16 @@ class CE_UItest:
             time.sleep(1)
             #input("QQQ ")
 
-        # choose tree/hedge/table
-        w = self.driver.find_element(By.ID, 'flat3')
-        s = Select(w)
-        s.select_by_index(0) # tree
+        res = self.getconllu(3)
 
-        return self.getconllu()
+
+        # choose tree/hedge/table
+        self.choose("flat3", 0)
+        #w = self.driver.find_element(By.ID, 'flat3')
+        #s = Select(w)
+        #s.select_by_index(0) # tree
+
+        return res #self.getconllu()
 
     def clickbutton(self, ident):
         w = self.driver.find_element(By.ID, ident)
@@ -306,6 +307,10 @@ class CE_UItest:
 
         we.send_keys(text)
 
+    def choose(self, name, number):
+        w = self.driver.find_element(By.ID, name)
+        s = Select(w)
+        s.select_by_index(number)
 
 
 #w = driver.find_element(By.ID, 'tupos_3')
