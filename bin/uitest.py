@@ -18,13 +18,16 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
+#from webdriver_manager.chrome import ChromeDriverManager
+
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 #from selenium.webdriver.common.actions import Actions
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
+from selenium.common.exceptions import *
 
-
+# TODO: test shortcuts
 
 class CE_UItest:
     def __init__(self, args):
@@ -43,6 +46,7 @@ class CE_UItest:
             options = webdriver.ChromeOptions()
             if args.headless:
                 options.add_argument('--headless')
+            #self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
             self.driver = webdriver.Chrome(options=options)
         self.driver.get(args.url)
         self.args = args
@@ -91,14 +95,14 @@ class CE_UItest:
                     else:
                         print("\tKO")
                         print("\texpected", test["expected"])
-                        print("\tgot     ", hyp, json.dumps(hyp))
+                        print("\tgot     ", hyp, json.dumps(hyp, ensure_ascii=False))
                         for x in difflib.context_diff(test["expected"].split("\n"),
                                                       hyp.split("\n"),
                                                       fromfile="expected", tofile="got"):
                             print(x)
                         input("KO>>")
-            except Exception as e:
-                print("\tKO", e)
+            except NoSuchElementException as e:
+                print("\tKO", type(e), e)
                 input("EXCEPTION>>")
 
     def __del__(self):
@@ -106,13 +110,14 @@ class CE_UItest:
         #self.driver.close()
 
 
-    def getconllu(self):
+    def getconllu(self, undos=1):
         # gets results (via CoNLL-U window) and undoes test
         if self.args.pause:
             input("hit ENTER to undo and continue >>")
         print("** get CoNLL-U window")
-        w = self.driver.find_element(By.ID, "conllu")
-        w.click()
+        #w = self.driver.find_element(By.ID, "conllu")
+        #w.click()
+        self.clickbutton("conllu")
         # get text of Conll-U window
         w2 = self.driver.find_element(By.ID, "rawtext")
         text = w2.get_attribute('innerHTML')
@@ -124,17 +129,20 @@ class CE_UItest:
         time.sleep(0.5)
         # run undo after test
         print("** undo")
-        w6 = self.driver.find_element(By.ID, "undo")
-        w6.click()
-        time.sleep(0.5)
+        #w6 = self.driver.find_element(By.ID, "undo")
+        #w6.click()
+        for x in range(undos):
+            self.clickbutton("undo")
+            time.sleep(0.5)
 
         return text
 
     def getpage(self, pn=5):
         print("** read sentence %s" % pn)
-        sentid = self.driver.find_element(By.ID, "sentid")
-        sentid.clear()
-        sentid.send_keys(str(pn) + Keys.RETURN)
+        #sentid = self.driver.find_element(By.ID, "sentid")
+        #sentid.clear()
+        #sentid.send_keys(str(pn) + Keys.RETURN)
+        self.entertext("sentid", str(pn) + Keys.RETURN, True)
         time.sleep(0.5)
 
     def readpage(self, pn=5):
@@ -150,19 +158,16 @@ class CE_UItest:
         ac.move_to_element(w).move_by_offset(0,0).click().perform() ## chrome
 
         w2 = self.driver.find_element(By.ID, 'currentMWTform')
-        #input("www1")
         w2.send_keys("desbat"+ Keys.RETURN)
-        #input("www2")
+
         w3 = self.driver.find_element(By.ID, 'currentMWTto')
-        #input("www3")
         w3.clear()
-        #input("www4")
         w3.send_keys("10"+ Keys.RETURN)
-        #input("www5")
-        w4 = self.driver.find_element(By.ID, 'editMWtoken') # save
-        #input("www6")
-        w4.click()
-        #input("www7")
+
+        #w4 = self.driver.find_element(By.ID, 'editMWtoken') # save
+        #w4.click()
+        self.clickbutton('editMWtoken') # save
+
         time.sleep(1)
         return self.getconllu()
 
@@ -173,8 +178,9 @@ class CE_UItest:
         w2 = self.driver.find_element(By.ID, 'cdeprel')
         w2.clear()
         w2.send_keys("amod"+ Keys.RETURN)
-        w3 = self.driver.find_element(By.ID, 'savedeprel')
-        w3.click()
+        #w3 = self.driver.find_element(By.ID, 'savedeprel')
+        #w3.click()
+        self.clickbutton('savedeprel')
         return self.getconllu()
 
     def modifyWord(self, pn=6, elem=None):
@@ -182,13 +188,20 @@ class CE_UItest:
         wf = self.driver.find_element(By.CSS_SELECTOR, elem)
         # we need to click on the background of the wordnode, not on the words
         ac=ActionChains(self.driver)
-        ac.move_to_element(wf).move_by_offset(5,5).key_down(Keys.CONTROL).click().perform() ## chrome
-        w2 = self.driver.find_element(By.ID, 'clemma')
-        w2.send_keys("POUR")
-        w3 = self.driver.find_element(By.ID, 'checktoken')
-        w3.click()
-        w4 = self.driver.find_element(By.ID, 'saveword')
-        w4.click()
+        ac.move_to_element(wf).move_by_offset(5,5).key_down(Keys.CONTROL).click().key_up(Keys.CONTROL).perform() ## chrome
+
+        #w2 = self.driver.find_element(By.ID, 'clemma')
+        #w2.send_keys("QQQQQQQQQQQQQQQQQQQPOUR")
+        self.entertext("clemma", "Pöùř", True)
+        self.entertext("cform", "für", True)
+        self.entertext("cupos", "PREP", True)
+
+        #w3 = self.driver.find_element(By.ID, 'checktoken')
+        #w3.click()
+        #w4 = self.driver.find_element(By.ID, 'saveword')
+        #w4.click()
+        self.clickbutton('checktoken')
+        self.clickbutton('saveword')
 
         return self.getconllu()
 
@@ -206,9 +219,10 @@ class CE_UItest:
         return self.getconllu()
 
     def search(self, lemma):
-        b = self.driver.find_element(By.ID, "lemma")
-        b.clear()
-        b.send_keys(lemma + Keys.RETURN)
+        #b = self.driver.find_element(By.ID, "lemma")
+        #b.clear()
+        #b.send_keys(lemma + Keys.RETURN)
+        self.entertext("lemma", lemma + Keys.RETURN, True)
         return self.getconllu()
 
     def tablemode(self, pn=9):
@@ -279,6 +293,20 @@ class CE_UItest:
         s.select_by_index(0) # tree
 
         return self.getconllu()
+
+    def clickbutton(self, ident):
+        w = self.driver.find_element(By.ID, ident)
+        w.click()
+
+    def entertext(self, name, text, clear=False):
+        we = self.driver.find_element(By.ID, name)
+        time.sleep(0.5)
+        if clear:
+            we.clear()
+
+        we.send_keys(text)
+
+
 
 #w = driver.find_element(By.ID, 'tupos_3')
 #w.clear()
