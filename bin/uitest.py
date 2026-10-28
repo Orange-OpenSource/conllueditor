@@ -28,7 +28,6 @@ from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import *
 
 # TODO: 
-# # test shortcuts
 # test enhanced deprels
 
 class CE_UItest:
@@ -89,6 +88,8 @@ class CE_UItest:
                     hyp = self.changeHead(test["function"][1], test["function"][2], test["function"][3])
                 elif test["function"][0] == "modifyword":
                     hyp = self.modifyWord(test["function"][1], test["function"][2])
+                elif test["function"][0] == "shortcuts":
+                    hyp = self.shortcuts(test["function"][1], test["function"][2])
                 else:
                     print("\tKO: Bad test function", test["function"][0])
                 if hyp:
@@ -203,22 +204,49 @@ class CE_UItest:
 
         return self.getconllu(5)
 
+    def search(self, lemma):
+        self.entertext("lemma", lemma + Keys.RETURN, True)
+        return self.getconllu()
+
     def changeHead(self, pn=6, elem1=None, elem2=None):
         self.getpage(pn)
         wf = self.driver.find_element(By.CSS_SELECTOR, elem1)
         # we need to click on the background of the wordnode, not on the words
-        ac=ActionChains(self.driver)
+        ac = ActionChains(self.driver)
         ac.move_to_element(wf).move_by_offset(5,5).click().perform() ## chrome
 
         wt = self.driver.find_element(By.CSS_SELECTOR, elem2)
-        ac=ActionChains(self.driver)
-        ac.move_to_element(wt).move_by_offset(5,5).click().perform() ## chrome
+        ac = ActionChains(self.driver)
+        ac.move_to_element(wt).move_by_offset(5,5).click().perform()
 
         return self.getconllu()
 
-    def search(self, lemma):
-        self.entertext("lemma", lemma + Keys.RETURN, True)
-        return self.getconllu()
+    def shortcuts(self, pn=18, elem=None):
+        self.getpage(pn)
+        self.clickbutton("feat2")
+        self.clickbutton("misc2")
+        wf = self.driver.find_element(By.CSS_SELECTOR, elem)
+        # we need to click on the background of the wordnode, not on the words
+        ac = ActionChains(self.driver)
+        #print(wf.tag_name, wf.location, wf.size, dir(wf))
+        ac.move_to_element(wf).move_by_offset(20,0).click().perform()
+        time.sleep(1)
+
+        b = self.driver.find_element(By.XPATH, '/html/body')
+        b.send_keys(":p1")
+        time.sleep(.5)
+
+        wf = self.driver.find_element(By.CSS_SELECTOR, elem)
+        ac.move_to_element(wf).move_by_offset(20,0).click().perform()
+        b.send_keys(":san")
+        time.sleep(.5)
+
+        wf = self.driver.find_element(By.CSS_SELECTOR, elem)
+        ac.move_to_element(wf).move_by_offset(20,0).click().perform()
+        b.send_keys("AV")
+        time.sleep(.5)
+
+        return self.getconllu(3)
 
     def tablemode(self, pn=9):
         self.getpage(pn)
@@ -255,7 +283,6 @@ class CE_UItest:
         # choose tree/hedge/table
         self.choose("flat3", 0) # tree
         return res
-
 
     def edittable(self, pn=2, edits=[]):
         self.getpage(pn)

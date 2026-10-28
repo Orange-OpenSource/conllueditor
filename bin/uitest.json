@@ -43,6 +43,12 @@
 	"name": "modify word",
 	"function": ["modifyword", "6", "#rect_5_ADP___pour_pour_mark"],
 	"expected": "# sent_id = fr-ud-train_00024\n# text = Les experts sont unanimes pour dater ce manuscrit du VIe siècle.\n# highlight tokens = 5\n# sentence 5\n1\tLes\tle\tDET\t_\tDefinite=Def|Gender=Masc|Number=Plur|PronType=Art\t2\tdet\t_\t_\n2\texperts\texpert\tNOUN\t_\tGender=Masc|Number=Plur\t3\tnsubj\t_\t_\n3\tsont\têtre\tVERB\t_\tMood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n4\tunanimes\tunanime\tADJ\t_\tGender=Masc|Number=Plur\t3\tamod\t_\t_\n5\tfür\tPöùř\tPREP\t_\t_\t6\tmark\t_\t_\n6\tdater\tdater\tVERB\t_\tVerbForm=Inf\t3\tadvcl\t_\t_\n7\tce\tce\tDET\t_\tGender=Masc|Number=Sing|PronType=Dem\t8\tdet\t_\t_\n8\tmanuscrit\tmanuscrit\tNOUN\t_\tGender=Masc|Number=Sing\t6\tobj\t_\t_\n9-10\tdu\t_\t_\t_\t_\t_\t_\t_\t_\n9\tde\tde\tADP\t_\t_\t12\tcase\t_\t_\n10\tle\tle\tDET\t_\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t12\tdet\t_\t_\n11\tVIe\tVIe\tADJ\t_\tGender=Masc|Number=Sing|NumType=Ord\t12\tamod\t_\t_\n12\tsiècle\tsiècle\tNOUN\t_\tGender=Masc|Number=Sing\t8\tnmod\t_\tSpaceAfter=No\n13\t.\t.\tPUNCT\t_\t_\t3\tpunct\t_\t_\n\n"
+  },
+  {
+	"name": "shortcuts",
+	"function": ["shortcuts", "3", "#rect_5_DET___un_un_det", "#rect_8_NOUN_NCMS000_punto_punto_nmod", "#rect_2_PRON_PP3CN000_se_se_nsubj", "#rect_3_PRON_PP3CSD00_lle_lle_nsubj"],
+	"ddfunction": ["shortcuts", "6", "#rect_5_ADP___pour_pour_mark", "#rect_8_NOUN___manuscrit_manuscrit_obj"],
+	"expected":  "# sent_id = fr-ud-dev_00003\n# text = Mais comment faire dans un contexte structurellement raciste ?\n# highlight basic deprels = 5 6\n# sentence 2\n1\tMais\tmais\tCCONJ\t_\t_\t3\tcc\t_\t_\n2\tcomment\tcomment\tADV\t_\t_\t3\tadvmod\t_\t_\n3\tfaire\tfaire\tVERB\t_\tVerbForm=Inf\t0\troot\t_\t_\n4\tdans\tdans\tADP\t_\t_\t6\tcase\t_\t_\n5\tun\tun\tDET\t_\tDefinite=Ind|Gender=Masc|Number=Sing|Person=1|PronType=Art\t6\tdet\t_\tSpaceAfter=No\n6\tcontexte\tcontexte\tNOUN\t_\tGender=Masc|Number=Sing\t3\tobl\t_\t_\n7\tstructurellement\tstructurellement\tADV\t_\t_\t8\tadvmod\t_\t_\n8\traciste\traciste\tADJ\t_\tGender=Masc|Number=Sing\t6\tamod\t_\t_\n9\t?\t?\tPUNCT\t_\t_\t3\tpunct\t_\t_\n\n"
   }
 
 ]
