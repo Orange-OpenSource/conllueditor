@@ -81,6 +81,8 @@ class CE_UItest:
                     hyp = self.edittable(test["function"][1], test["function"][2])
                 elif test["function"][0] == "changehead":
                     hyp = self.changeHead(test["function"][1], test["function"][2], test["function"][3])
+                elif test["function"][0] == "modifyword":
+                    hyp = self.modifyWord(test["function"][1], test["function"][2])
                 else:
                     print("\tKO: Bad test function", test["function"][0])
                 if hyp:
@@ -114,10 +116,12 @@ class CE_UItest:
         # get text of Conll-U window
         w2 = self.driver.find_element(By.ID, "rawtext")
         text = w2.get_attribute('innerHTML')
+
         time.sleep(1)
         w5 = self.driver.find_element(By.XPATH, '/html/body/div[11]/div/div/div[3]/button') # close
         w5.click()
 
+        time.sleep(0.5)
         # run undo after test
         print("** undo")
         w6 = self.driver.find_element(By.ID, "undo")
@@ -173,7 +177,22 @@ class CE_UItest:
         w3.click()
         return self.getconllu()
 
-    def changeHead(self, pn=5, elem1=None, elem2=None):
+    def modifyWord(self, pn=6, elem=None):
+        self.getpage(pn)
+        wf = self.driver.find_element(By.CSS_SELECTOR, elem)
+        # we need to click on the background of the wordnode, not on the words
+        ac=ActionChains(self.driver)
+        ac.move_to_element(wf).move_by_offset(5,5).key_down(Keys.CONTROL).click().perform() ## chrome
+        w2 = self.driver.find_element(By.ID, 'clemma')
+        w2.send_keys("POUR")
+        w3 = self.driver.find_element(By.ID, 'checktoken')
+        w3.click()
+        w4 = self.driver.find_element(By.ID, 'saveword')
+        w4.click()
+
+        return self.getconllu()
+
+    def changeHead(self, pn=6, elem1=None, elem2=None):
         self.getpage(pn)
         wf = self.driver.find_element(By.CSS_SELECTOR, elem1)
         # we need to click on the background of the wordnode, not on the words
@@ -225,6 +244,11 @@ class CE_UItest:
         w = self.driver.find_element(By.ID, 'td5')
         action.click(w).perform()
         time.sleep(1)
+
+        # choose tree/hedge/table
+        w = self.driver.find_element(By.ID, 'flat3')
+        s = Select(w)
+        s.select_by_index(0) # tree
         return self.getconllu()
 
 
@@ -248,6 +272,12 @@ class CE_UItest:
             w1.click()
             time.sleep(1)
             #input("QQQ ")
+
+        # choose tree/hedge/table
+        w = self.driver.find_element(By.ID, 'flat3')
+        s = Select(w)
+        s.select_by_index(0) # tree
+
         return self.getconllu()
 
 #w = driver.find_element(By.ID, 'tupos_3')
