@@ -31,19 +31,19 @@ FOUND 1
 FINAL 1
 2	experts	expert	NOUN	_	Gender=Masc|Number=Plur	3	nsubj	_	_
 3	sont	être	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
-# sent_id = conlueditor-test-7
+# sent_id = conllueditor-test-7
 # text = la souris a mangé le fromage qui pue.
 FOUND 1
 FINAL 1
 2	souris	souris	NOUN	NOUN	Gender=Fem|Number=Sing	4	nsubj	_	_
 4	mangé	manger	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
-# sent_id = conlueditor-test-8
+# sent_id = conllueditor-test-8
 # text = il habite à Los Angeles.
 FOUND 1
 FINAL 1
 1	il	il	PRON	PERS_NOM	Gender=Masc|Number=Sing|Person=3|PronType=Prs	2	nsubj	_	_
 2	habite	habiter	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
-# sent_id = conlueditor-test-9
+# sent_id = conllueditor-test-9
 # text = Il aime bien le Miroir aux Alouettes.
 FOUND 1
 FINAL 1

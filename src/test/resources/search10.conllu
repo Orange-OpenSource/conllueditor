@@ -17,12 +17,12 @@ FINAL 2
 FOUND 1
 FINAL 1
 3	sont	être	VERB	_	Mood=Ind|Number=Plur|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
-# sent_id = conlueditor-test-8
+# sent_id = conllueditor-test-8
 # text = il habite à Los Angeles.
 FOUND 1
 FINAL 1
 2	habite	habiter	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
-# sent_id = conlueditor-test-9
+# sent_id = conllueditor-test-9
 # text = Il aime bien le Miroir aux Alouettes.
 FOUND 1
 FINAL 1

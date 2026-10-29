@@ -4,7 +4,7 @@ FOUND 1
 FINAL 1
 6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
 8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
-# sent_id = conlueditor-test-12-eud-bad-ids
+# sent_id = conllueditor-test-12-eud-bad-ids
 # text = Sam persuaded Kim to fix dinner
 FOUND 1
 FINAL 1

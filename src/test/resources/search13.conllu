@@ -13,12 +13,12 @@ FINAL 1
 FOUND 1
 FINAL 1
 6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
-# sent_id = conlueditor-test-11-eud
+# sent_id = conllueditor-test-11-eud
 # text = Sam bought and prepared dinner
 FOUND 1
 FINAL 1
 4	prepared	prepare	VERB	_	_	2	conj	_	_
-# sent_id = conlueditor-test-12-eud-bad-ids
+# sent_id = conllueditor-test-12-eud-bad-ids
 # text = Sam persuaded Kim to fix dinner
 FOUND 1
 FINAL 1

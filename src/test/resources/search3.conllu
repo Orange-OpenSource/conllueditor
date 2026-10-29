@@ -16,31 +16,31 @@ FOUND 1
 FINAL 1
 6	dater	dater	VERB	_	VerbForm=Inf	3	advcl	_	_
 8	manuscrit	manuscrit	NOUN	_	Gender=Masc|Number=Sing	6	obj	_	_
-# sent_id = conlueditor-test-6
+# sent_id = conllueditor-test-6
 # text = ils ont visité le Musée du Louvre.
 FOUND 1
 FINAL 1
 3	visité	visiter	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
 5	Musée	musée	NOUN	NOUN	Gender=Masc|Number=Sing	3	obj	_	_
-# sent_id = conlueditor-test-7
+# sent_id = conllueditor-test-7
 # text = la souris a mangé le fromage qui pue.
 FOUND 1
 FINAL 1
 4	mangé	manger	VERB	PARTP	Gender=Masc|Number=Sing|Tense=Past|VerbForm=Part	0	root	_	_
 6	fromage	fromage	NOUN	NOUN	Gender=Masc|Number=Sing	4	obj	_	_
-# sent_id = conlueditor-test-9
+# sent_id = conllueditor-test-9
 # text = Il aime bien le Miroir aux Alouettes.
 FOUND 1
 FINAL 1
 2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
 5	Miroir	miroir	NOUN	NOUN	Gender=Masc|Number=Sing	2	obj	_	_
-# sent_id = conlueditor-test-11-eud
+# sent_id = conllueditor-test-11-eud
 # text = Sam bought and prepared dinner
 FOUND 1
 FINAL 1
 2	bought	buy	VERB	_	_	0	root	_	_
 5	dinner	dinner	NOUN	_	_	2	obj	2:obj|4:obj	_
-# sent_id = conlueditor-test-12-eud-bad-ids
+# sent_id = conllueditor-test-12-eud-bad-ids
 # text = Sam persuaded Kim to fix dinner
 FOUND 2
 FINAL 1
