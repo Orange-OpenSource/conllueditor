@@ -63,6 +63,8 @@ In order two compile the server, you also need
 * Java jdk >= 17.0
 * maven (tested with >= 3.3.9)
 
+See [`testing.md`](testing.md) for unitary and UI tests
+
 #### Docker
 
 Alternatively, a recent version of Docker can be used to run the docker image (see section [docker](#docker) below)
@@ -232,7 +234,7 @@ especially if the file is on a network drive.
 * `--noedit` deactivates editing, useful to browse an existing treebank and to avoid accidental errors.
 * `--reinit` (implies `--noedit`) reloads the file at each navigation (in order to browse a file which is being modified by someone else)
 * `--rootdir` root of fileserver (directory which includes `index.html` and `edit.js` etc. for ConlluEditor). Default: `gui/` this option if only needed if the frontend is not in the default directory.
-* `--css <name>` specify name of a theme-css file (must be in `gui/`; currently available: `index-dark.css` and `index-grey-bright.css`)
+* `--css <name>` specify name of a theme-css file. the css-file must be located in `gui/`; currently available: `index-dark.css`, `index-grey-bright.css` and `uifilters.css`. The last file only contains a `filter: ...`, feel free to change to your needs.
 
 If the `.conllu` file contains major tree errors (like cycles, no token with head `0` or head ids beyond the end of the sentence, warnings are writte to screen. Such errors may occur if an automatic pre-annotation tools do not work correctly. UD parsers like [Udpipe](https://ufal.mff.cuni.cz/udpipe) do not produce invalid files.
 In this case please correct the errors using a text editor before loading the file into ConlluEditor.

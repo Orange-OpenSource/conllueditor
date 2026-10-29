@@ -18,8 +18,6 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
-#from webdriver_manager.chrome import ChromeDriverManager
-
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 #from selenium.webdriver.common.actions import Actions
@@ -27,8 +25,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import *
 
-# TODO: 
-# test enhanced deprels
+# TODO:
+# put all test steps/data into uitest.json
 
 class CE_UItest:
     def __init__(self, args):
@@ -47,7 +45,7 @@ class CE_UItest:
             options = webdriver.ChromeOptions()
             if args.headless:
                 options.add_argument('--headless')
-            #self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
             self.driver = webdriver.Chrome(options=options)
         self.driver.get(args.url)
         self.args = args
@@ -102,8 +100,10 @@ class CE_UItest:
                         print("\tOK")
                     else:
                         print("\tKO")
-                        print("\texpected", test["expected"])
-                        print("\tgot     ", hyp, json.dumps(hyp, ensure_ascii=False))
+                        #print("\texpected", test["expected"])
+                        #print("\tgot     ", hyp)
+                        #print(json.dumps(hyp, ensure_ascii=False))
+
                         for x in difflib.context_diff(test["expected"].split("\n"),
                                                       hyp.split("\n"),
                                                       fromfile="expected", tofile="got"):
@@ -114,7 +114,7 @@ class CE_UItest:
                 input("EXCEPTION>>")
 
     def __del__(self):
-        input(">>")
+        input("Hit ENTER to close >>")
         #self.driver.close()
 
 
@@ -164,17 +164,10 @@ class CE_UItest:
         ac=ActionChains(self.driver)
         ac.move_to_element(w).move_by_offset(0,0).click().perform() ## chrome
 
-        #w2 = self.driver.find_element(By.ID, 'currentMWTform')
-        #w2.send_keys("desbat"+ Keys.RETURN)
         self.entertext("currentMWTform", "desbat")
 
-        #w3 = self.driver.find_element(By.ID, 'currentMWTto')
-        #w3.clear()
-        #w3.send_keys("10"+ Keys.RETURN)
         self.entertext("currentMWTto", "10", True)
 
-        #w4 = self.driver.find_element(By.ID, 'editMWtoken') # save
-        #w4.click()
         self.clickbutton('editMWtoken') # save
 
         time.sleep(1)
@@ -184,7 +177,6 @@ class CE_UItest:
         self.getpage(pn)
         w = self.driver.find_element(By.XPATH, elem)
         w.click()
-
 
         self.entertext("cdeprel", "amod", True)
 
@@ -198,7 +190,6 @@ class CE_UItest:
 
         w = self.driver.find_element(By.XPATH, elem)
         w.click()
-
 
         self.entertext("cdeprelen", "amodnsubj", True)
 
@@ -251,7 +242,7 @@ class CE_UItest:
         wf = self.driver.find_element(By.CSS_SELECTOR, elem1)
         # we need to click on the background of the wordnode, not on the words
         ac = ActionChains(self.driver)
-        ac.move_to_element(wf).move_by_offset(5,5).click().perform() ## chrome
+        ac.move_to_element(wf).move_by_offset(5,5).click().perform()
 
         wt = self.driver.find_element(By.CSS_SELECTOR, elem2)
         ac = ActionChains(self.driver)
@@ -270,7 +261,6 @@ class CE_UItest:
         wf = self.driver.find_element(By.CSS_SELECTOR, elem)
         # we need to click on the background of the wordnode, not on the words
         ac = ActionChains(self.driver)
-        #print(wf.tag_name, wf.location, wf.size, dir(wf))
         ac.move_to_element(wf).move_by_offset(20,0).click().perform()
         time.sleep(1)
 
@@ -335,14 +325,11 @@ class CE_UItest:
         for edit in edits:
 
             w1 = self.driver.find_element(By.ID, edit[0])
-            #w1 = self.driver.find_element(By.XPATH, edit[0])
-            #w1.clear()
             w1.send_keys(Keys.BACKSPACE*10 + edit[1] + Keys.RETURN)
             time.sleep(1)
             w1 = self.driver.find_element(By.ID, "tlemma_1")
             w1.click()
-            time.sleep(1)
-            #input("QQQ ")
+            time.sleep(0.5)
 
         # save the current version before going back to tree-view (since this removes the undo states)
         res = self.getconllu(3)
@@ -368,15 +355,6 @@ class CE_UItest:
         w = self.driver.find_element(By.ID, name)
         s = Select(w)
         s.select_by_index(number)
-
-
-#w = driver.find_element(By.ID, 'tupos_3')
-#w.clear()
-#w.send_keys("TOTO"+ Keys.RETURN)
-
-
-#w = driver.find_element(By.ID, 'next')
-#w.click()
 
 
 

@@ -1,0 +1,9 @@
+/* use CSS filters to alter the entire appearance
+  useful filter: invert, hue-rotate, saturate
+  */
+html {
+    filter: hue-rotate(180deg)
+    /*invert(100%) */
+    saturate(150%) 
+    ;
+}

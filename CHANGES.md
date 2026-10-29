@@ -4,7 +4,9 @@
 * set deprel check flag in edit deprel modal too
 * added dark theme
   * loaded via `uiconfig.yml` or option `-css`
-* graphs slightly redesigned
+* graphs slightly redesigned (i.e. made prettier)
+* added UI tests (selenium based)
+* test data updated
 
 ## Version 2.36.0
 * corrected bug in flat view

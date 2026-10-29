@@ -18,18 +18,18 @@
   {
 	"name": "edit enhanced deprel",
 	"function": ["changeEnhancedDeprel", "13", "//*[@id=\"enhtextpath_5_3_nsubj\"]"],
-	"expected": "# sent_id = conlueditor-test-12-eud-bad-ids\n# text = Sam persuaded Kim to fix dinner\n# sentence 12\n1\tSam\tSam\tPROPN\t_\t_\t2\tnsubj\t_\t_\n2\tpersuaded\tpersuade\tVERB\t_\t_\t0\troot\t_\t_\n3\tKim\tKim\tPROPN\t_\t_\t2\tobj\t2:obj|5:amodnsubj\t_\n4\tto\tto\tADP\t_\t_\t5\tmark\t_\t_\n5\tfix\tfix\tVERB\t_\t_\t2\txcomp\t_\t_\n6\tdinner\tdinner\tNOUN\t_\t_\t5\tobj\t_\t_\n\n"
+	"expected": "# sent_id = conllueditor-test-12-eud-bad-ids\n# text = Sam persuaded Kim to fix dinner\n# sentence 12\n1\tSam\tSam\tPROPN\t_\t_\t2\tnsubj\t_\t_\n2\tpersuaded\tpersuade\tVERB\t_\t_\t0\troot\t_\t_\n3\tKim\tKim\tPROPN\t_\t_\t2\tobj\t2:obj|5:amodnsubj\t_\n4\tto\tto\tADP\t_\t_\t5\tmark\t_\t_\n5\tfix\tfix\tVERB\t_\t_\t2\txcomp\t_\t_\n6\tdinner\tdinner\tNOUN\t_\t_\t5\tobj\t_\t_\n\n"
   },
   {
 	"name": "search",
 	"function": ["search", "habiter"],
-	"expected": "# sent_id = conlueditor-test-8\n# text = il habite \u00e0 Los Angeles.\n# sentence 8\n1\til\til\tPRON\tPERS_NOM\tGender=Masc|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t_\t_\n2\thabite\thabiter\tVERB\tVERB\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n3\t\u00e0\t\u00e0\tADP\tADP\t_\t4\tcase\t_\t_\n4\tLos\tLos\tPROPN\tPROPN\t_\t2\tobl\t_\t_\n5\tAngeles\tAngeles\tPROPN\tPROPN\t_\t4\tflat:name\t_\tSpaceAfter=No\n6\t.\t.\tPUNCT\tPUNCT\t_\t2\tpunct\t_\t_\n\n"
+	"expected": "# sent_id = conllueditor-test-8\n# text = il habite \u00e0 Los Angeles.\n# sentence 8\n1\til\til\tPRON\tPERS_NOM\tGender=Masc|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t_\t_\n2\thabite\thabiter\tVERB\tVERB\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n3\t\u00e0\t\u00e0\tADP\tADP\t_\t4\tcase\t_\t_\n4\tLos\tLos\tPROPN\tPROPN\t_\t2\tobl\t_\t_\n5\tAngeles\tAngeles\tPROPN\tPROPN\t_\t4\tflat:name\t_\tSpaceAfter=No\n6\t.\t.\tPUNCT\tPUNCT\t_\t2\tpunct\t_\t_\n\n"
   },
   {
 	"comment": "other clicks currently hard coded in uitest.py",
 	"name": "tablemode",
 	"function": ["tablemode", "9"],
-	"expected": "# sent_id = conlueditor-test-9\n# text = Il aime bien le Miroir aux Alouettes.\n# sentence 9\n1\tIl\til\tPRON\tPERS_NOM\tGender=Masc|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t_\t_\n2\taime\taimer\tVERB\tVERB\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n3\tbien\tbien\tDET\tADV\t_\t2\tadvmod\t_\t_\n4\tle\tle\tDET\tART\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t5\tdet\t_\t_\n5\tMiroir\tmiroir\tVERB\tNOUN\tPerson=2\t2\tobj\t_\t_\n6-7\taux\t_\t_\t_\t_\t_\t_\t_\t_\n6\t\u00e0\t\u00e0\tADP\tADP\t_\t8\tcase\t_\t_\n7\tles\tle\tDET\tART\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t8\tdet\t_\t_\n8\tAlouettes\talouette\tNOUN\tNOUN\tGender=Fem|Number=Plur\t2\tobl\t_\tSpaceAfter=No\n9\t.\t.\tPUNCT\tPUNCT\t_\t2\tpunct\t_\t_\n\n"
+	"expected": "# sent_id = conllueditor-test-9\n# text = Il aime bien le Miroir aux Alouettes.\n# sentence 9\n1\tIl\til\tPRON\tPERS_NOM\tGender=Masc|Number=Sing|Person=3|PronType=Prs\t2\tnsubj\t_\t_\n2\taime\taimer\tVERB\tVERB\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t0\troot\t_\t_\n3\tbien\tbien\tDET\tADV\t_\t2\tadvmod\t_\t_\n4\tle\tle\tDET\tART\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t5\tdet\t_\t_\n5\tMiroir\tmiroir\tVERB\tNOUN\tPerson=2\t2\tobj\t_\t_\n6-7\taux\t_\t_\t_\t_\t_\t_\t_\t_\n6\t\u00e0\t\u00e0\tADP\tADP\t_\t8\tcase\t_\t_\n7\tles\tle\tDET\tART\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t8\tdet\t_\t_\n8\tAlouettes\talouette\tNOUN\tNOUN\tGender=Fem|Number=Plur\t2\tobl\t_\tSpaceAfter=No\n9\t.\t.\tPUNCT\tPUNCT\t_\t2\tpunct\t_\t_\n\n"
   },
   {
 	"name": "edit table",
@@ -47,7 +47,7 @@
   {
 	"name": "edit enhanced head",
 	"function": ["changeEnhancedHead", "13", "#rect_6_NOUN___dinner_dinner_obj", "#rect_2_VERB___persuade_persuaded_root"],
-	"expected": "# sent_id = conlueditor-test-12-eud-bad-ids\n# text = Sam persuaded Kim to fix dinner\n# sentence 12\n1\tSam\tSam\tPROPN\t_\t_\t2\tnsubj\t_\t_\n2\tpersuaded\tpersuade\tVERB\t_\t_\t0\troot\t_\t_\n3\tKim\tKim\tPROPN\t_\t_\t2\tobj\t2:obj|5:amodnsubj\t_\n4\tto\tto\tADP\t_\t_\t5\tmark\t_\t_\n5\tfix\tfix\tVERB\t_\t_\t2\txcomp\t_\t_\n6\tdinner\tdinner\tNOUN\t_\t_\t5\tobj\t2:neu\t_\n\n"
+	"expected": "# sent_id = conllueditor-test-12-eud-bad-ids\n# text = Sam persuaded Kim to fix dinner\n# sentence 12\n1\tSam\tSam\tPROPN\t_\t_\t2\tnsubj\t_\t_\n2\tpersuaded\tpersuade\tVERB\t_\t_\t0\troot\t_\t_\n3\tKim\tKim\tPROPN\t_\t_\t2\tobj\t2:obj|5:amodnsubj\t_\n4\tto\tto\tADP\t_\t_\t5\tmark\t_\t_\n5\tfix\tfix\tVERB\t_\t_\t2\txcomp\t_\t_\n6\tdinner\tdinner\tNOUN\t_\t_\t5\tobj\t2:neu\t_\n\n"
   },
   {
 	"name": "modify word",
