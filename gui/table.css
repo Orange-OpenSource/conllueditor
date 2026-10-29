@@ -112,7 +112,7 @@ table.conllutable th {
 
 
 /* make radiobutton look like normal buttons */
-label {
+.flabel {
     display: inline-block;
    /* width: 100px;
     height: 50px;

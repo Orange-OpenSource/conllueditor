@@ -544,7 +544,7 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
                     found = true;
                 }
                 $("#fe_radio_" + x).append('<input type="radio" id="fe_radiob_' + x + '_' + ii + '" name="fval_' + x + '" value="'
-                    + featvalues[p][ii] + '" ' + checked + '/> <label for="fe_radiob_' + x + '_' + ii + '">'
+                    + featvalues[p][ii] + '" ' + checked + '/> <label class="flabel" for="fe_radiob_' + x + '_' + ii + '">'
                     + featvalues[p][ii] + '</label>');
             }
             //$("#fe_radio_" + x).append("None: ");
@@ -553,7 +553,7 @@ function makeEditbutton(idsuffix, word, keyvaluelist) {
                 checked = "checked";
             }
             $("#fe_radio_" + x).append('<input type="radio" id="fe_radiobn_' + x + '" name="fval_' + x + '" value="'
-                + "None" + '" ' + checked + '/> <label for="fe_radiobn_' + x + '">None</label>');
+                + "None" + '" ' + checked + '/> <label class="flabel" for="fe_radiobn_' + x + '">None</label>');
             x++;
         }
         for (f in currentkeyvalues) {
