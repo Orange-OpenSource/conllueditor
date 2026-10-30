@@ -50,6 +50,7 @@
         <link rel="stylesheet" type="text/css" href="table.css" />
         <link rel="stylesheet" type="text/css" href="depgraph.css" />
         <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" type="text/css" href="checkbuttons.css" />
 
         <link rel="shortcut icon"  type="image/x-icon" href="img/celogo.png">
 
@@ -110,9 +111,23 @@
                         <span class="contain"><button class="editbuttons mybutton go" id="next">&nbsp;</button> <!--  &gt;&gt; --></span>
                         <span class="contain"><button class="editbuttons mybutton go" id="last">&nbsp;</button> <!--  &gt;| --></span>
 
-                        <button class="mycheck mybutton" id="feat2" title="show morpho-syntactic features">features</button>
-                        <button class="mycheck mybutton" id="misc2" title="show contents of MISC column">misc</button>
-                        <!--button class="mycheck mybutton" id="flat2">flat graph</button-->
+                        <!--button class="mycheck mybutton" id="feat2" title="show morpho-syntactic features">features</button-->
+                        <!--label class="mycheck2">Features <input class="mycheck" type="checkbox" id="feat3"><span class="checkmarkqq"></span> </label-->
+                        <!--span class="mybutton"><label for="feat3">Features </label><input class="mycheck" type="checkbox" id="feat3"></span-->
+                        <label id="featb" class="notwithtable cbcontainer checkbox-wrapper-6" title="show morpho-syntactic features">
+                            <span class="cblabel">Features</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="feat3">
+                            <span class="tgl-btn"></span>
+                        </label>
+
+
+                        <!--button class="mycheck mybutton" id="misc2" title="show contents of MISC column">misc</button-->
+
+                        <label id="miscb"  class="notwithtable cbcontainer checkbox-wrapper-6" title="show contents of MISC column">
+                            <span class="cblabel">Misc</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="misc3">
+                            <span class="tgl-btn"></span>
+                        </label>
                         <span class="oomybutton dewis">
                         <select id="flat3">
                             <option value="tree" selected>tree graph</option>
@@ -120,8 +135,14 @@
                             <option value="table">table view</option>
                         </select>
                         </span>
-                        <button class="mycheck mybutton" id="r2l" title="activate for sentences in Arabic or Hebrew script">right to left</button>
+                        <!--button class="mycheck mybutton" id="r2l" title="activate for sentences in Arabic or Hebrew script">right to left</button-->
+                        <label class="notwithtable cbcontainer checkbox-wrapper-6" title="activate for sentences in Arabic or Hebrew script">
+                            <span class="cblabel">right-to-left</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="r2l2">
+                            <span class="tgl-btn"></span>
+                        </label>
                         <!--button class="mycheck mybutton" id="extracols" title="show contents of columns > 10">extra cols</button-->
+
 
                         <button class ="editbuttons mybutton editmode" title="save file before min edits are reached (option --saveAfter)" id="save">save changes</button>
                         <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button>
@@ -180,8 +201,19 @@
                         <span class="contain"><button class="editbuttons mybutton go" id="findhighlight" title="find sentence highlighted token or deprel">&nbsp;</button></span>
                         <span class="contain"><button class="mybutton mycheck" title="clear all search fields" id="clear">&nbsp;</button></span>
 
-                        <button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button>
-                        <button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced deps</button>
+                        <!--button class="mycheck mybutton onlywithenhanced" id="bie">show basic in enhanced</button-->
+                        <label class="onlywithenhanced cbcontainer checkbox-wrapper-6" id="biecontainer" title="Show basic deprels in enhanced">
+                            <span class="cblabel">show basic in enhanced</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="bie">
+                            <span class="tgl-btn"></span>
+                        </label>
+
+                        <!--button class="mycheck mybutton onlywithenhanced" id="edit_ed">edit enhanced deps</button-->
+                        <label class="onlywithenhanced cbcontainer checkbox-wrapper-6" id="edit_ed_container" title="Show basic deprels in enhanced">
+                            <span class="cblabel">edit enhanced deprels</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="edit_ed">
+                            <span class="tgl-btn"></span>
+                        </label>
                     </td>
                 </tr>
                 <tr class="search">

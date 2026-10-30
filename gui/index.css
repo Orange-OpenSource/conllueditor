@@ -236,9 +236,9 @@ img.helptextbutton {
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
         );
-    oobackground: -webkit-linear-gradient(bottom, #d9d9d9, #fcfcfc);
-    oobackground:    -moz-linear-gradient(bottom, #d9d9d9, #fcfcfc);
-    oobackground:        -linear-gradient(bottom, #d9d9d9, #fcfcfc);
+  /* undo some stuff from bootstrap on label{} */
+  margin-bottom: 0;
+  display: initial; /* is inline-block */
 }
 
 .mybutton:hover {
@@ -468,6 +468,28 @@ input {
     background-position: 5px center;
 }
 /* inspired by https://designmodo.com/3d-css3-button/ */
+.mycheck2 {
+    oodisplay: inline-block;
+    ootext-decoration: none;
+
+    /* top right bottom left
+    padding: 5px 5px 5px 5px; */
+    border: 1px solid #959595;
+
+
+    border-radius: 5px;
+    height: 30px;
+    vertical-align: middle;
+    padding-right: 4px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(217,217,217)),
+        color-stop(1, rgb(252,252,252))
+        );
+}
+
 .mycheck {
     display: inline-block;
     text-decoration: none;

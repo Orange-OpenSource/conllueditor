@@ -7,6 +7,7 @@
 * graphs slightly redesigned (i.e. made prettier)
 * added UI tests (selenium based)
 * test data updated
+* checkbuttons redesigned
 
 ## Version 2.36.0
 * corrected bug in flat view

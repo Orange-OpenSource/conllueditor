@@ -239,7 +239,8 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
 
     bottomlevels[0] = level;
     bottomlevels[1] = level;
-    if (showfeats && item.feats !== undefined) { // display morpho-syntactical features if active
+    if ( $("#feat3").is(":checked") //showfeats
+        && item.feats !== undefined) { // display morpho-syntactical features if active
         level += vertdiff * 2;
         for (var f in item.feats) {
 //            if (item.feats[f] == "_") {
@@ -307,7 +308,9 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
         bottomlevels[1] = level;
     }
 
-    if (showmisc && item.misc !== undefined) { // display misc column info if active
+    if (//showmisc
+        $("#misc3").is(":checked")
+        && item.misc !== undefined) { // display misc column info if active
         level += vertdiff * 2;
         for (var f in item.misc) {
 

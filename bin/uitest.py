@@ -186,7 +186,7 @@ class CE_UItest:
     def changeEnhancedDeprel(self, pn=5, elem=None):
         self.getpage(pn)
         self.choose("flat3", 1)
-        self.clickbutton("edit_ed")
+        self.clickbutton("edit_ed_container")
 
         w = self.driver.find_element(By.XPATH, elem)
         w.click()
@@ -194,7 +194,7 @@ class CE_UItest:
         self.entertext("cdeprelen", "amodnsubj", True)
 
         self.clickbutton('savedeprelen')
-        self.clickbutton("edit_ed")
+        self.clickbutton("edit_ed_container")
         res = self.getconllu()
 
         self.choose("flat3", 0)
@@ -238,7 +238,7 @@ class CE_UItest:
         self.getpage(pn)
 
         self.choose("flat3", 1)
-        self.clickbutton("edit_ed")
+        self.clickbutton("edit_ed_container")
         wf = self.driver.find_element(By.CSS_SELECTOR, elem1)
         # we need to click on the background of the wordnode, not on the words
         ac = ActionChains(self.driver)
@@ -251,13 +251,14 @@ class CE_UItest:
         self.entertext("cdeprelen", "neu")
         self.clickbutton("savedeprelen")
 
+        self.choose("flat3", 0)
         return self.getconllu()
 
 
     def shortcuts(self, pn=18, elem=None):
         self.getpage(pn)
-        self.clickbutton("feat2")
-        self.clickbutton("misc2")
+        self.clickbutton("featb")
+        self.clickbutton("miscb")
         wf = self.driver.find_element(By.CSS_SELECTOR, elem)
         # we need to click on the background of the wordnode, not on the words
         ac = ActionChains(self.driver)

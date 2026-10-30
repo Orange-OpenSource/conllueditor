@@ -165,7 +165,8 @@ function insertWord(svg, curid, item, head, headpos, level, sentencelength, use_
     bottomlevels = drawWord(item, depx, hor, levelinit, curid, svg, isgold, incorrectwords);
     level = bottomlevels[0]; // x-level at bottom of word (with features, if present)
 
-    if (showfeats || showmisc) {
+    //if (showfeats || showmisc) {
+    if ($("#feat3").is(":checked") ||  $("#misc3").is(":checked")) {
         // if features are displayed we add some space. to avoid the enhanced dependencies cross
         // the feature/values
         //level += 70;
@@ -277,9 +278,9 @@ function insertWord(svg, curid, item, head, headpos, level, sentencelength, use_
         //var boxheight = 66; // TODO calculate
         for (var i = 0; i < item.enhancedheads.length; i++) {
             ed = item.enhancedheads[i];
-            if (ed.position === headpos && !show_basic_in_enhanced)
+            if (ed.position === headpos && !$("#bie").is(":checked")) {//!show_basic_in_enhanced)
                 continue;
-            if (ed.position === -1) {
+            } if (ed.position === -1) {
                 // enhanced dep root deprel
                 makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, level, false);
             } else {

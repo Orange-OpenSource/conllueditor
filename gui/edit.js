@@ -45,9 +45,9 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 
 
 var graphtype = 1; // 1: tree, 2: hedge, 3: table
-var showfeats = false;
-var showmisc = false;
-var showr2l = false;
+//var showfeats = false;
+//var showmisc = false;
+//var showr2l = false;
 var autoadaptwidth = true;
 var showshortcuthelp = false;
 
@@ -170,7 +170,7 @@ function TODOdownloadSVG(ident) {
 
 
 function getRaw(what, title) {
-    var urlbase = URL_BASE + "get" + what + "?all_enhanced=" + show_basic_in_enhanced + "&sentid=" + ($("#currentsent").text() - 1) + "&r2l=" + showr2l;
+    var urlbase = URL_BASE + "get" + what + "?all_enhanced=" + $("#bie").is(":checked") + "&sentid=" + ($("#currentsent").text() - 1) + "&r2l=" + $("#r2l2").is(":checked");//showr2l;
     //console.log("UU " + urlbase);
     $('#rawtext').empty(); // clean text
     $('#showRawModalLabel').html(title); //update modal title
@@ -473,35 +473,41 @@ function getServerInfo() {
                     .attr('href', data.uiconfig.theme);
                 }
                 if (data.uiconfig.right2left_show === "hidden") {
-                    $("#r2l").hide();
+                    $("#r2l2").hide();
                 }
                 if (data.uiconfig.right2left_status === "active") {
-                    showr2l = true;
-                    $("#r2l").addClass('active');
+                    //showr2l = true;
+                    $("#r2l2").prop("checked", true)
+                    //$("#r2l").addClass('active');
                 } else {
-                    showr2l = false;
-                    $("#r2l").removeClass('active');
+                    //showr2l = false;
+                    //$("#r2l").removeClass('active');
+                    $("#r2l2").prop("checked", false)
                 }
 
                 if (data.uiconfig.features_show === "hidden") {
-                    $("#feat2").hide();
+                    $("#feat3").hide();
                 }
                 if (data.uiconfig.features_status === "active") {
-                    showfeats = true;
-                    $("#feat2").addClass('active');
+                    //showfeats = true;
+                    //$("#feat3").addClass('active');
+                    $("#feat3").prop("checked", true)
                 } else {
-                    showfeats = false;
-                    $("#feat2").removeClass('active');
+                    //showfeats = false;
+                    //$("#feat3").removeClass('active');
+                    $("#feat3").prop("checked", false)
                 }
 
                 if (data.uiconfig.misc_show === "hidden") {
-                    $("#misc2").hide();
+                    $("#misc3").hide();
                 } else if (data.uiconfig.misc_status === "active") {
-                    showmisc= true;
-                    $("#misc2").addClass('active');
+                    //showmisc= true;
+                    //$("#misc3").addClass('active');
+                    $("#misc3").prop("checked", true)
                 } else {
-                    showmisc = false;
-                    $("#misc2").removeClass('active');
+                    //showmisc = false;
+                    //$("#misc3").removeClass('active');
+                    $("#misc3").prop("checked", false)
                 }
 
                 if (data.uiconfig.display === "flat") {
@@ -707,8 +713,8 @@ function getServerInfo() {
 
     // initial states
     $('.onlyWithTree').hide();
-    $('#bie').hide();
-    $('#edit_ed').hide();
+    $('#biecontainer').hide();
+    $('#edit_ed_container').hide();
     $('#widthinfo').hide();
     $('#undo').prop('disabled', true);
     $('#redo').prop('disabled', true);
@@ -1034,7 +1040,9 @@ function getWordLength(cword) {
 
     ctx.font = "11px Lato";
     // take into accound Feature values width
-    if (showfeats && cword.feats !== undefined) { // display misc column info if active
+    if (//showfeats
+        $("#feat3").is(":checked")
+         && cword.feats !== undefined) { // display misc column info if active
         for (var f in cword.feats) {
             //console.log("ggg", cword.feats[f].val, wlen, 2*ctx.measureText(cword.feats[f].val).width);
             wlen = Math.max(wlen, 2 * ctx.measureText(cword.feats[f].name).width);
@@ -1044,7 +1052,9 @@ function getWordLength(cword) {
     }
 
     // take into accound MISC values width
-    if (showmisc && cword.misc !== undefined) { // display misc column info if active
+    if (//showmisc 
+        $("#misc3").is(":checked")
+        && cword.misc !== undefined) { // display misc column info if active
         for (var f in cword.misc) {
             //console.log("ggg", cword.misc[f].val, wlen, 2*ctx.measureText(cword.misc[f].val).width);
             wlen = Math.max(wlen, 2 * ctx.measureText(cword.misc[f].name).width);
@@ -1566,7 +1576,8 @@ function ModifyTree(evt) {
                         makeRoot = true;
                     }
 
-                    if (editing_enhanced) {
+                    //if (editing_enhanced) {
+                    if ($("#edit_ed").is(":checked")) {
                         //$("#mods").val("ed add " + clickedNodes[0] + " " + clickedNodes[1]);
                     } else {
                         $("#mods").val(clickedNodes[0] + " " + clickedNodes[1] + " ");
@@ -1577,7 +1588,8 @@ function ModifyTree(evt) {
 
                     //alert("BBBB: " + makeRoot + " " + JSON.stringify(deprels));
                     if (!makeRoot
-                            && (editing_enhanced || deprels[0] === "" || deprels[0] === "root" || deprels[0] === "undefined" || deprels[0] === undefined)) {
+                            && ($("#edit_ed").is(":checked")//editing_enhanced 
+                                || deprels[0] === "" || deprels[0] === "root" || deprels[0] === "undefined" || deprels[0] === undefined)) {
                         var potential = "";
                         if (uposs[0] === "DET")
                             potential = "det";
@@ -1599,7 +1611,9 @@ function ModifyTree(evt) {
                             potential = "case:pred";
 
                         // open deprel edit (for basic or enhanced deps)
-                        if (editing_enhanced) {
+                        if (//editing_enhanced
+                            $("#edit_ed").is(":checked") 
+                        ) {
                             // creating new enhanced
                             $("#cheaden").text(clickedNodes[1]);
                             $("#cdepen").text(clickedNodes[0]);
@@ -1653,7 +1667,9 @@ function ModifyTree(evt) {
 //            }
         } else if (id[0] === "enhtextpath") { // TODO use classes ?
             // update deprel
-            if (editing_enhanced) {
+            if (//editing_enhanced
+                $("#edit_ed").is(":checked")
+            ) {
                 $("#cheaden").text(id[1]);
                 $("#cdepen").text(id[2]);
                 $("#cdeprelen").val(id[3]);
@@ -1752,8 +1768,8 @@ function unhighlight() {
 //var flatgraph = false;
 
 var backwards = false;
-var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
-var editing_enhanced = false;
+//var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
+//var editing_enhanced = false;
 
 // transliterations from words
 var translit_words = [];
@@ -1971,11 +1987,10 @@ function formatPhrase(item) {
             $("#arbre").append(svg);
         var use_deprel_as_type = true;
         var sentencelength = 0;
-        //if ($("#right2left").is(":checked")) {
-        if (showr2l) {
+        if ($("#r2l2").is(":checked")) {           //if (showr2l) {
             sentencelength = item.length;
         }
-        //alert("SENT LENGTH: " + item.length);
+        //alert("SENT LENGTH: " + sentencelength, $("#r2l2").is(":checked"));
         //alert("CCC: " + item.tree.length);
         //if ($("#flat").is(":checked")) {
         if (graphtype != 3 && item.Lemma != undefined) {
@@ -2023,7 +2038,9 @@ function formatPhrase(item) {
             //alert("hlt " + highlightX + " " +highlightY);
             $('body, html').scrollTop(highlightY - 100);
             $('body, html').scrollLeft(highlightX - 120);
-        } else if (showr2l) {
+        } else if ($("#r2l2").is(":checked")
+            //showr2l
+        ) {
             // scroll to right for languages like Hebrew or Arabic
             $('body, html').scrollLeft($(document).outerWidth());
         }
@@ -2386,7 +2403,9 @@ $(document).ready(function () {
     // add/modify enhanced dep relation
     $('#savedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
-        if (/*flatgraph*/ graphtype === 2 && editing_enhanced) {
+        if (graphtype === 2 && //editing_enhanced
+            $("#edit_ed").is(":checked")
+        ) {
             sendmodifs({"cmd": "mod ed add " + $("#cdepen").text() + " " + $("#cheaden").text() + " " + $("#cdeprelen").val() + " " + $("#checkenhdeprel").is(":checked")});
             // } else if (conllword.deprel != $("#cdeprel").val()) {
             //    sendmodifs({"cmd": "mod " + $("#cdep").text() + " " + $("#chead").text() + " " + $("#cdeprel").val()});
@@ -2398,7 +2417,7 @@ $(document).ready(function () {
     $('#deletedeprelen').click(function () {
         conllword = conllwords[$("#cdepen").text()];
         //alert("AAA "+ flatgraph + " "+ editing_enhanced);
-        if (/*flatgraph*/ graphtype === 2 /* && editing_enhanced */) {
+        if (graphtype === 2 /* && editing_enhanced */) {
             sendmodifs({"cmd": "mod ed del " + $("#cdepen").text() + " " + $("#cheaden").text()});
         }
         $('#enhdeprelEdit').modal('hide');
@@ -2516,20 +2535,25 @@ $(document).ready(function () {
 
             if ($(this).val() === "tree") {
                 //$(this).addClass('active');
-                $("#bie").hide();
-                $("#edit_ed").hide();
+                $("#biecontainer").hide();
+                $("#edit_ed_container").hide();
+                $(".notwithtable").show();
                 //flatgraph = false;
                 graphtype = 1;
             } else if ($(this).val() === "table") {
+                $("#biecontainer").hide();
+                $("#edit_ed_container").hide();
+                $(".notwithtable").hide();
                 graphtype = 3;
             } else {
                 //$(this).removeClass('active');
                 //$("#flat2").text("show tree" + flatgraph);
                 //flatgraph = true;
                 graphtype = 2;
-                $("#bie").show();
-                $("#edit_ed").show();
-                editing_enhanced = false;
+                $("#biecontainer").show();
+                $("#edit_ed_container").show();
+                $(".notwithtable").show();
+                //editing_enhanced = false;
                 //$("#edit_ed").removeClass('active');
             }
 
@@ -2539,50 +2563,53 @@ $(document).ready(function () {
     });
 
     $(".mycheck").click(function () {
-        if (this.id === "feat2") {
-            if (!showfeats) {
-                $(this).addClass('active');
+        if (this.id === "feat3") {
+            //if (!showfeats) {
+           /* if ($("#feat3").is(":checked")) {
+                //$(this).addClass('active');
             } else {
-                $(this).removeClass('active');
-            }
-            showfeats = !showfeats;
+                //$(this).removeClass('active');
+            }*/
+            //showfeats = !showfeats;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id === "misc2") {
-            if (!showmisc) {
-                $(this).addClass('active');
+        } else if (this.id === "misc3") {
+            //if (!showmisc) {
+            /*if ($("#misc3").is(":checked")) {
+                //$(this).addClass('active');
             } else {
-                $(this).removeClass('active');
-            }
-            showmisc = !showmisc;
+                //$(this).removeClass('active');
+            }*/
+            //showmisc = !showmisc;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
 
         } else if (this.id === "bie") {
-            if (!show_basic_in_enhanced) {
-                $(this).addClass('active');
-            } else {
-                $(this).removeClass('active');
-            }
-            show_basic_in_enhanced = !show_basic_in_enhanced;
+            //if (!show_basic_in_enhanced) {
+            //    $(this).addClass('active');
+            //} else {
+            //    $(this).removeClass('active');
+            //}
+            //show_basic_in_enhanced = !show_basic_in_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "edit_ed") {
-            if (!editing_enhanced) {
+            /*if (!editing_enhanced) {
                 $(this).addClass('active');
             } else {
                 $(this).removeClass('active');
-            }
-            editing_enhanced = !editing_enhanced;
+            }*/
+            //editing_enhanced = !editing_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
-        } else if (this.id === "r2l") {
-            if (!showr2l) {
-                $(this).addClass('active');
+        } else if (this.id === "r2l2") {
+           /* if (//!showr2l
+                $("#r2l2").is(":checked")) {
+                //$(this).addClass('active');
             } else {
-                $(this).removeClass('active');
-            }
-            showr2l = !showr2l;
+               // $(this).removeClass('active');
+            }*/
+           // showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "adaptwidth") {
