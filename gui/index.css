@@ -32,21 +32,24 @@ are permitted provided that the following conditions are met:
 */
 
 body {
-    margin-top: 280px; /* header height + top offset */
+    margin-top: 280px;
+    /* header height + top offset */
     height: 100%;
     text-align: justify;
-    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans;
+    font-family: Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans;
     overflow: scroll;
 
 }
 
 tt {
-    font-family: Courier, FreeMono, Mono;
+    font-family: Courier, FreeM font-size: 80%;
+    ono,
+    Mono;
 }
 
-h1  {
-    color:#ff6600;
-}
+/*h1  {
+    color:#ff6600; 
+}*/
 
 
 h2 {
@@ -64,7 +67,8 @@ h3 {
     margin-right: 5px;
 }
 
-#currentsent, #cursentid {
+#currentsent,
+#cursentid {
     font-style: italic;
 }
 
@@ -75,15 +79,17 @@ h3 {
 /** needed to allow a triple click select only the sentence and not
    the "n/m" and "(sent_id: ....)" as well */
 #sentencetext {
-   display: flex;
-   /*flex-wrap: wrap;*/ /* keep 3 spans in one line */
+    display: flex;
+    /*flex-wrap: wrap;*/
+    /* keep 3 spans in one line */
 }
 
 /* repare side-effect of the flex just above */
 #titre {
-  margin-left: 0.5em;
-  margin-right: 0.5em;
-  word-wrap: break-word; /* wrap sentence in its span if too long */
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    word-wrap: break-word;
+    /* wrap sentence in its span if too long */
 }
 
 #cursentid {
@@ -94,6 +100,7 @@ h3 {
     margin-left: 5px;
 }
 
+/*
 #goldword {
     color:#00bb00;
     background-color: white;
@@ -107,36 +114,31 @@ h3 {
 .compfilename {
     color: black;
 }
-
+*/
 #header {
-    position:fixed; /* make the header (navigation and search buttons) stick to the top */
-    width:100%;
-    top:0;
+    position: fixed;
+    /* make the header (navigation and search buttons) stick to the top */
+    width: 100%;
+    top: 0;
     z-index: 999;
     /* height: whatever; */
-    /*background: white; */
-
-    /*background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgba(247,220,180, 1)),
-        color-stop(1, rgba(255,255,255, 0))
-        );
-    */
-    background-image: linear-gradient(rgba(247,220,180, 1),
-        rgba(251,235,212, 1),
-        rgba(254,246,233, 1),
+    /*
+    background-image: linear-gradient(
+        rgba(247, 220, 180, 1),
         rgba(255,255,255, 0));
+        */
 }
 
 textArea {
-    text-align:justify;
-    font-family: /*Pecita, */ Sans, Arial, Helvetica;
+    text-align: justify;
+    font-family:
+        /*Pecita, */
+        Sans, Arial, Helvetica;
     /*font-size: 125%;*/
 }
 
-td, th {
+td,
+th {
     padding-right: 5px;
     padding-left: 5px;
     vertical-align: top;
@@ -146,6 +148,7 @@ table {
     border-collapse: inherit;
 }
 
+/*
 tr.everyotherrow:nth-child(odd) {
     background-color:#ffe5cc;
 }
@@ -157,26 +160,27 @@ tr.everyotherrow:nth-child(even) {
     background-color:#ff7900;
 }
 
-.chunk0 {background-color:#ff780080; /*opacity: 0.5; */
-         fill:#ff780080 }
+.chunk0 {background-color:#ff780080; fill:#ff780080 }
 .chunk1 {background-color:#4ab4e6; fill:#4ab4e6 }
 .chunk2 {background-color:#ffb4e680; fill:#ffb4e680 }
 .chunk3 {background-color:#ffd200; fill:#ffd200 }
 .chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
 .chunk5 {background-color:#a885d880; fill:#a885d880 }
+*/
 
 img.helptextbutton {
     border-radius: 5px;
     border: 1px solid #222;
     padding: 5px;
     width: 25px;
+    /*
         background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
-        );
+        );*/
 }
 
 /* format of application buttons in the help text */
@@ -185,13 +189,14 @@ img.helptextbutton {
     border-radius: 5px;
     border: 1px solid #222;
     padding: 5px;
+    /*
         background-image: -webkit-gradient(
         linear,
         left bottom,
         left top,
         color-stop(0, rgb(217,217,217)),
         color-stop(1, rgb(252,252,252))
-        );
+        );*/
 }
 
 /* format of keys to press in the help text */
@@ -199,14 +204,14 @@ img.helptextbutton {
     font-weight: bold;
     font-family: Courier, FreeMono, Mono;
     border-radius: 3px;
-    border: 1px solid #222;
+    /*border: 1px solid #222;*/
     padding: 1px;
 }
 
 /* format of user commands in the help text */
 .userinputdoc {
     font-family: Courier, FreeMono, Mono;
-    background-color: #f8f8f8;
+    /*background-color: #f8f8f8;*/
     padding-left: .1em;
     padding-right: .3em;
 }
@@ -218,57 +223,55 @@ img.helptextbutton {
 }
 
 /* make normal buttons look like mycheckbuttons */
-.mybutton, btn-primary {
+.mybutton,
+btn-primary {
     font-family: inherit;
     /* top right bottom left */
     qqpadding: 5px 5px 5px 5px;
-    border: 1px solid #959595;
+    /*border: 1px solid #959595;*/
     height: 30px;
     vertical-align: middle;
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
-  /* undo some stuff from bootstrap on label{} */
-  margin-bottom: 0;
-  display: initial; /* is inline-block */
+    /*background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));*/
+    /* undo some stuff from bootstrap on label{} */
+    margin-bottom: 0;
+    display: initial;
+    /* is inline-block */
 }
 
 .mybutton:hover {
     border-radius: 5px;
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+   /* background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));*/
 }
 
 .smallmybutton {
-  height: 25px;
-  font-size: smaller;
-  border-radius: 6px;
-  width: 18px;
-  margin-right: 5px;
+    height: 25px;
+    font-size: smaller;
+    border-radius: 6px;
+    width: 18px;
+    margin-right: 5px;
 }
 
 input {
-   font-family: inherit;
+    font-family: inherit;
 }
 
 /* input field design */
 .inputfield {
     vertical-align: middle;
     border-radius: 5px;
-    border: solid 1px #959595;
+    /*border: solid 1px #959595;*/
     padding-left: 3px;
 }
 
@@ -296,7 +299,7 @@ input {
 }
 
 /* let <input> assume the size of the wrapper */
-.resizable-input > input {
+.resizable-input>input {
     width: 100%;
     box-sizing: border-box;
     margin: 0;
@@ -304,7 +307,7 @@ input {
 
 /* add a visible handle */
 
-.resizable-input > span {
+.resizable-input>span {
     display: inline-block;
     vertical-align: bottom;
     margin-left: -16px;
@@ -316,7 +319,8 @@ input {
 
 
 /* reset sice for multifield and comment search, since the value given in searchfield is too small */
-#multifield, #comment {
+#multifield,
+#comment {
     width: 14em;
 }
 
@@ -326,42 +330,32 @@ input {
     overflow: hidden;
     display: inline-block;
     vertical-align: middle;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    /*background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));*/
     position: relative;
-    sstop: 6px; /** position of the button from top */
-    sspadding: 0px 0px 0px 0px;
 }
 
 .contain:hover {
     overflow: hidden;
-    ssdisplay: inline-block;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+   /*
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));*/
     position: relative;
-    sstop: 6px;
-    sspadding: 0px 0px 0px 0px;
 }
 
 .contain.active {
     border-radius: 5px;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(224, 116, 13)),
-        color-stop(1, rgb(252, 145, 14))
-        );
+    /*background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(224, 116, 13)),
+            color-stop(1, rgb(252, 145, 14)));*/
 }
 
 .undoredo {
@@ -372,20 +366,20 @@ input {
 #undo {
     background: url('img/undo.svg');
     background-size: 20px 20px !important;
-    background-repeat:no-repeat !important;
+    background-repeat: no-repeat !important;
     height: 30px;
     width: 30px;
     background-position: 5px center !important;
 }
 
 #undo:disabled {
-    background: url( 'img/undo_disabled.svg' ) ;
+    background: url('img/undo_disabled.svg');
 }
 
 #redo {
     background: url('img/redo.svg');
     background-size: 20px 20px !important;
-    background-repeat:no-repeat !important;
+    background-repeat: no-repeat !important;
     height: 30px;
     width: 30px;
     background-position: 5px center !important;
@@ -398,7 +392,7 @@ input {
 #first {
     background: url('img/Start.svg');
     background-size: 16px 16px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
     background-position: 7px center;
@@ -407,7 +401,7 @@ input {
 #last {
     background: url('img/End.svg');
     background-size: 16px 16px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
     background-position: 7px center;
@@ -416,7 +410,7 @@ input {
 #prec {
     background: url('img/preceding.svg');
     background-size: auto 16px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
     background-position: 8px center;
@@ -425,7 +419,7 @@ input {
 #next {
     background: url('img/following.svg');
     background-size: auto 16px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
     background-position: 10px center;
@@ -434,7 +428,7 @@ input {
 #backwards {
     background: url('img/backwards.svg');
     background-size: auto 16px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 45px;
     background-position: 5px center;
@@ -443,17 +437,25 @@ input {
 #clear {
     background: url('img/clear.svg');
     background-size: auto 16px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 37px;
     background-position: 5px center;
 }
 
-#findword, #findlemma, #findupos, #findxpos, #finddeprel, #findcomment,
-#findmulti, #findsentid, #findfeature, #findsubtree {
+#findword,
+#findlemma,
+#findupos,
+#findxpos,
+#finddeprel,
+#findcomment,
+#findmulti,
+#findsentid,
+#findfeature,
+#findsubtree {
     background: url('img/search.svg');
     background-size: 20px 20px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
     background-position: 5px center;
@@ -462,32 +464,28 @@ input {
 #findhighlight {
     background: url('img/light-bulb.svg');
     background-size: 20px 20px;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     height: 30px;
     width: 30px;
     background-position: 5px center;
 }
+
 /* inspired by https://designmodo.com/3d-css3-button/ */
 .mycheck2 {
-    oodisplay: inline-block;
-    ootext-decoration: none;
-
     /* top right bottom left
     padding: 5px 5px 5px 5px; */
-    border: 1px solid #959595;
+    /*border: 1px solid #959595;*/
 
 
     border-radius: 5px;
     height: 30px;
     vertical-align: middle;
     padding-right: 4px;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    /*background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));*/
 }
 
 .mycheck {
@@ -495,44 +493,40 @@ input {
     text-decoration: none;
 
     /* top right bottom left */
-    qqpadding: 5px 5px 5px 5px;
-    border: 1px solid #959595;
+    /*border: 1px solid #959595;*/
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+/*
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));*/
 }
 
+/*
 .mycheck.active {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(224, 116, 13)),
-        color-stop(1, rgb(252, 145, 14))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(224, 116, 13)),
+            color-stop(1, rgb(252, 145, 14)));
 
-}
+}*/
 
+/*
 .mycheck:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgba(244, 146, 13)),
-        color-stop(1, rgba(245, 187, 15))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgba(244, 146, 13)),
+            color-stop(1, rgba(245, 187, 15)));
     color: #222;
-}
+}*/
 
+/*
 #errors {
     color: red;
 
@@ -542,14 +536,18 @@ input {
     color: white;
     background-color: #AA0000;
 }
+*/
 
-#psc, #pendingshortcuts {
+#psc,
+#pendingshortcuts {
     display: none;
-    color: rgb(136, 0, 0);
+    /*color: rgb(136, 0, 0);*/
 }
 
-.sentinfo, #changespendingsaveQQ {
-    font-family: "Lato"; /* Light" */
+.sentinfo,
+#changespendingsaveQQ {
+    font-family: "Lato";
+    /* Light" */
     font-weight: 300;
 }
 
@@ -590,24 +588,21 @@ input {
     font-size: 0.79em;
     vertical-align: -0.1em;
     margin-left: -0.16em;
-    qqmargin-right: -0.15em;
 }
 
+/*
 .modal-header {
-    background-image: linear-gradient(rgba(255,153,51, 1),
-      /*  rgba(251,235,212, 1),
-        rgba(254,246,233, 1),*/
-        rgba(255,255,255, 0));
+    background-image: linear-gradient(rgba(255, 153, 51, 1),
+            rgba(255, 255, 255, 0));
 }
+*/
 
 .modal-xl {
-    sswidth: 90%;
-    max-width:1300px;
+    max-width: 1300px;
 }
 
 .ui-autocomplete.ui-widget {
-    /*font-family: sans; */
-    color: blue;
+    /*color: blue;*/
     font-size: 90%;
     font-weight: bold;
     margin-left: 1em;
@@ -649,7 +644,7 @@ text {
 }
 
 .sc_help_td {
-	word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 
@@ -671,42 +666,38 @@ text {
 
 
 
-#compare table  {
-  border-collapse: collapse;
+#compare table {
+    border-collapse: collapse;
 }
 
 #compare table tr td {
-  border: 1px solid black;
+    border: 1px solid black;
 }
 
-.dewis  {
-	font-family: inherit;
+.dewis {
+    font-family: inherit;
     /* top right bottom left */
     qqpadding: 5px 5px 5px 5px;
-    border: 1px solid #959595;
+    /*border: 1px solid #959595;*/
     height: 30px;
     vertical-align: middle;
 
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    /*background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));*/
     display: inline-block;
-    oooverflow:hidden;
-
-
 }
+
 /* http://jsfiddle.net/fbnw9g5x/4/ */
 .dewis select {
     width: 110px;
     padding: 5px;
-    height:30px;
+    height: 30px;
     line-height: 1;
     border: none;
 
@@ -717,18 +708,17 @@ text {
     background: transparent url('img/select.svg');
     background-size: auto .8em;
     background-position: right .3em top 50%;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
 }
 
+/*
 .dewis:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
-}
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));
+}*/
 
 .dewisl select {
     width: 150px
@@ -744,13 +734,15 @@ text {
     font-size: 80%;
     border: 1px solid black;
 }
-
+/*
 .upossc {
     color: #9164cd;
 }
+
 .xpossc {
     color: #50be87;
 }
+
 .featsc {
     color: #4bb4e6;
 }
@@ -774,4 +766,4 @@ text {
 .tableerrors {
     background-color: #ffbbbb;
 }
-
+    */

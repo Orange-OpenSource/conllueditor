@@ -420,7 +420,12 @@ input, textarea {
 
 .pfeilspitze {
     fill: #7777ff;
-}
+}  display: inline-block;
+/* padding: 0px 5px 3px 5px; */
+/* V1*/
+padding: 0px 5px 3px 5px;
+
+border-radius: 5px;
 
 .pfeilspitzeInv {
     fill: #9a47ff;
@@ -480,3 +485,18 @@ input, textarea {
     color: white;
 }
 
+.checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
+    background: #ff7900;
+}
+
+.cbcontainer {
+    border: 1px solid #959595;
+  
+
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+        color-stop(0, rgb(37,37,37)),
+        color-stop(1, rgb(65,65,65)));
+    color: white;
+}

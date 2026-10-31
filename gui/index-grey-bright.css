@@ -468,3 +468,7 @@ input, textarea {
    background-color: #909;
    color: #ffddff;
 }
+
+.checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {
+    background: #6e503e;
+}
