@@ -48,7 +48,7 @@ var graphtype = 1; // 1: tree, 2: hedge, 3: table
 //var showfeats = false;
 //var showmisc = false;
 //var showr2l = false;
-var autoadaptwidth = true;
+//var autoadaptwidth = true;
 var showshortcuthelp = false;
 
 
@@ -473,7 +473,7 @@ function getServerInfo() {
                     .attr('href', data.uiconfig.theme);
                 }
                 if (data.uiconfig.right2left_show === "hidden") {
-                    $("#r2l2").hide();
+                    $("#r2l2_container").hide();
                 }
                 if (data.uiconfig.right2left_status === "active") {
                     //showr2l = true;
@@ -486,7 +486,7 @@ function getServerInfo() {
                 }
 
                 if (data.uiconfig.features_show === "hidden") {
-                    $("#feat3").hide();
+                    $("#featb").hide();
                 }
                 if (data.uiconfig.features_status === "active") {
                     //showfeats = true;
@@ -499,7 +499,7 @@ function getServerInfo() {
                 }
 
                 if (data.uiconfig.misc_show === "hidden") {
-                    $("#misc3").hide();
+                    $("#miscb").hide();
                 } else if (data.uiconfig.misc_status === "active") {
                     //showmisc= true;
                     //$("#misc3").addClass('active');
@@ -549,16 +549,16 @@ function getServerInfo() {
                 }
 
                 if (data.uiconfig.nodewidth_show === "hidden") {
-                    $("#adaptwidth").removeClass('onlyWithTree');
-                    $("#adaptwidth").hide();
+                    $("#adaptwidth_container").removeClass('onlyWithTree');
+                    $("#adaptwidth_container").hide();
                 } else if (data.uiconfig.nodewidth_status === "variable") {
-                    autoadaptwidth= false;
-                    $("#adaptwidth").click();
-                    //$("#misc2").addClass('active');
+                    //autoadaptwidth= false;
+                    $("#adaptwidth_container").click();
+                    $("#adaptwidth").prop("checked", false)
                 } else {
-                    autoadaptwidth = true;
-                    $("#adaptwidth").click();
-                    //$("#misc2").removeClass('active');
+                    //autoadaptwidth = true;
+                    $("#adaptwidth_container").click();
+                    $("#adaptwidth").prop("checked", true)
                 }
 
 
@@ -916,12 +916,12 @@ function parseShortcuts() {
             }
             sc_String += '<span class="sckey">' + p + '</span>=<span class="scval">' + parts + "</span>";
             // help page
-            $("#shortcuttableMulti").append("<tr><td>" + p + "</td> <td>"
-                    + sc_uposString + "</td> <td>"
-                    + sc_xposString + "</td> <td>"
-                    + sc_deplString + "</td> <td>"
-                    + sc_featsString + "</td> <td>"
-                    + sc_miscString + "</td></tr>");
+            $("#shortcuttableMulti").append('<tr><td class="sctable">' + p + '</td> <td class="sctable">'
+                    + sc_uposString  + '</td> <td class="sctable">'
+                    + sc_xposString  + '</td> <td class="sctable">'
+                    + sc_deplString  + '</td> <td class="sctable">'
+                    + sc_featsString + '</td> <td class="sctable">'
+                    + sc_miscString  + "</td></tr>");
 
         }
     }
@@ -1789,7 +1789,8 @@ var previous_modified = 0;
  */
 function formatPhrase(item) {
     //console.log("Item:", item);
-    if (autoadaptwidth) {
+    if ($("#adaptwidth").is(":checked") //autoadaptwidth
+    ) {
         var maxlen = getAllWordLengths(item, 0);
         //console.log("MAXLEN " + maxlen);
     }
@@ -2571,6 +2572,7 @@ $(document).ready(function () {
                 //$(this).removeClass('active');
             }*/
             //showfeats = !showfeats;
+
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "misc3") {
@@ -2612,12 +2614,14 @@ $(document).ready(function () {
            // showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
+
         } else if (this.id === "adaptwidth") {
-            if (!autoadaptwidth) {
+            if (!$("#adaptwidth").is(":checked") //!autoadaptwidth
+            ) {
                 // was disabled, enable
                 //$(this).addClass('active');
                 $("#widthinfo").hide();
-                $("#adaptwidth").text("fixed width");
+                //$("#adaptwidth").text("fixed width");
             } else {
                 // was endabled, disable
                 //$(this).removeClass('active');
@@ -2625,9 +2629,10 @@ $(document).ready(function () {
                 wordlengths = {};
                 wordpositions = {};
                 $("#widthinfo").show();
-                $("#adaptwidth").text("var. width");
+                //$("#adaptwidth").text("var. width");
             }
-            autoadaptwidth = !autoadaptwidth;
+
+            //autoadaptwidth = !autoadaptwidth;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "backwards") {

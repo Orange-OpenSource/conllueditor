@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.1 as of 25th October 2026
+ @version 2.36.0 as of 21st October 2026
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -55,37 +55,27 @@ function drawDepTree(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
 
     var marker = document.createElementNS(svgNS, "marker");
     marker.setAttribute("id", "markerArrow");
-    marker.setAttribute("markerWidth", "20"); // if marker is wider, it is clipped
-    marker.setAttribute("markerHeight", "17");
-    marker.setAttribute("refX", "14"); // on the line
-    marker.setAttribute("refY", "7.5"); // orthogonally from line (must be Y value of second pont in path
+    marker.setAttribute("markerWidth", "13");
+    marker.setAttribute("markerHeight", "13");
+    marker.setAttribute("refX", "11");
+    marker.setAttribute("refY", "5");
     marker.setAttribute("orient", "auto");
-    marker.setAttribute("markerUnits", "userSpaceOnUse"); // needed to avoid scaling of arrow heads when stroke-width increases */
-
     defs.appendChild(marker);
     var path = document.createElementNS(svgNS, "path");
-
-    //path.setAttribute("d", "M2,2 L4,5 2,8 L12,5 L2,2");
-    path.setAttribute("d", "M3,3 L6,7.5 3,12 L18,7.5 L3,3");
-
+    path.setAttribute("d", "M2,2 L4,5 2,8 L12,5 L2,2");
     path.setAttribute("fill", "black");
-    path.setAttribute("class", "pfeilspitze");
     marker.appendChild(path);
-
     var marker = document.createElementNS(svgNS, "marker");
     marker.setAttribute("id", "markerArrowInv");
-    marker.setAttribute("markerWidth", "20");
-    marker.setAttribute("markerHeight", "17");
-    marker.setAttribute("refX", "7");
-    marker.setAttribute("refY", "7.5");
+    marker.setAttribute("markerWidth", "13");
+    marker.setAttribute("markerHeight", "13");
+    marker.setAttribute("refX", "4");
+    marker.setAttribute("refY", "5");
     marker.setAttribute("orient", "auto");
-    marker.setAttribute("markerUnits", "userSpaceOnUse");
     defs.appendChild(marker);
     var path = document.createElementNS(svgNS, "path");
-
-    path.setAttribute("d", "M3,7.5 L18,4 15,7.5 L18,12 L3,7.5");
+    path.setAttribute("d", "M2,5 L12,2 10,5 L12,8 L2,5");
     path.setAttribute("fill", "black");
-    path.setAttribute("class", "pfeilspitzeInv");
     marker.appendChild(path);
     svg.setAttribute("xmlns:xlink", xlink);
     //extracolumnstypes.clear();
@@ -153,7 +143,8 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     //console.log("cc " + curid)
     //console.log("insNode hor:", hor, " v:", vertspace);
 
-    if (!autoadaptwidth) {
+    if (!$("#adaptwidth").is(":checked")//!autoadaptwidth
+    ) {
         var index = item.position - indexshift;
         var x = index * hor - hor / 2;
     } else {
@@ -163,7 +154,8 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (!autoadaptwidth) {
+        if (!$("#adaptwidth").is(":checked") //!autoadaptwidth
+        ) {
             x = ((sentencelength) * hor) - x;
         } else {
             x = rightmostwordpos - x;
@@ -215,7 +207,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
         }
         path.setAttribute("opacity", 1);
         path.setAttribute("fill", "none");
-        // le texte associé va toujours du départ (fille) de la ligne vers sa fin (tête).
+        // le texte est associé va toujours du départ (fille) de la ligne vers sa fin (tête).
         // mais si la fille est à droite de la tête, le texte est donc renversé
         // Il faut donc que la ligne va toujours de gauche à droite
         // textpath side could do it, but is not supported in Firefox < 61
@@ -324,7 +316,9 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     //var index = item.position - indexshift;
     //var x = index * hor - hor / 2;
 
-    if (!autoadaptwidth) {
+    if (//!autoadaptwidth
+        !$("#adaptwidth").is(":checked")
+    ) {
         var index = item.position - indexshift;
         var x = index * hor - hor / 2;
     } else {
@@ -333,7 +327,9 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (!autoadaptwidth) {
+        if (//!autoadaptwidth
+         !$("#adaptwidth").is(":checked")
+        ) {
             x = ((sentencelength) * hor) - x;
         } else {
             x = rightmostwordpos - x;

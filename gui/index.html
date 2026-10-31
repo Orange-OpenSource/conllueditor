@@ -50,6 +50,7 @@
         <link rel="stylesheet" type="text/css" href="table.css" />
         <link rel="stylesheet" type="text/css" href="depgraph.css" />
         <link rel="stylesheet" type="text/css" href="index.css" />
+        <link rel="stylesheet" type="text/css" href="colors.css" />
         <link rel="stylesheet" type="text/css" href="checkbuttons.css" />
 
         <link rel="shortcut icon"  type="image/x-icon" href="img/celogo.png">
@@ -136,7 +137,7 @@
                         </select>
                         </span>
                         <!--button class="mycheck mybutton" id="r2l" title="activate for sentences in Arabic or Hebrew script">right to left</button-->
-                        <label class="notwithtable cbcontainer checkbox-wrapper-6" title="activate for sentences in Arabic or Hebrew script">
+                        <label id="r2l2_container" class="notwithtable cbcontainer checkbox-wrapper-6" title="activate for sentences in Arabic or Hebrew script">
                             <span class="cblabel">right-to-left</span>
                             <input class="mycheck tgl tgl-light" type="checkbox" id="r2l2">
                             <span class="tgl-btn"></span>
@@ -157,7 +158,7 @@
                         </select>
                         </span>
 
-                        <button class="editbuttons mybutton" id="lireln">go to line</button>
+                        <button class="editbuttons mybutton" id="lireln" title="show sentence which includes this line number">go to line</button>
                         <input type="text" id="sent_by_ln" title="find sentence which is on line number" class="inputfield" pattern="[1-9][0-9]*" size="5" value="1" >
                     </td>
                 </tr>
@@ -219,14 +220,19 @@
                 <tr class="search">
                     <td colspan="1">
                         <span id="portinfo">Port  <input type="text" id="port" size="2" value="12345"></span>
-                        <button class="mybutton mycheck onlyWithTree" id="adaptwidth" title="variable word widths in function of word length">fixed width</button>
+                        <!--button class="mybutton mycheck onlyWithTree" id="adaptwidth" title="variable word widths in function of word length">fixed width</button-->
+                        <label class="onlyWithTree cbcontainer checkbox-wrapper-6" id="adaptwidth_container" title="fixed word widths">
+                            <span class="cblabel">fixed width</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="adaptwidth">
+                            <span class="tgl-btn"></span>
+                        </label>
                         <span id="widthinfo">
                             Width  <input class="inputfield" type="text" id="bwidth" size="2" value="90">
                             Height <input class="inputfield" type="text" id="bheight" size="2" value="50">
                         </span>
 
 
-                        <span class="editmode"><button class="mybutton editbuttons onlyWithTree" id="modifier">modify</button>
+                        <span class="editmode"><button class="mybutton editbuttons onlyWithTree" id="modifier" title="run API command directly">modify</button>
                             <input placeholder="modify commands (see help)"  class="onlyWithTree inputfield" type="text" id="mods" size="15" value="">
                         </span>
                     <!--/td>
@@ -433,36 +439,42 @@
                           </tr>
                         </table>
                         <table id="shortcuttableMulti">
-                            <tr><th>key sequence</th>  <th>set UPOS to</th> <th>set XPOS to</th> <th>set DEPREL to</th> <th>set FEATS to</th><th>set MISC to</th></tr>
+                            <tr>
+                                <th class="sctable">key sequence</th>
+                                <th class="sctable">set UPOS to</th>
+                                <th class="sctable">set XPOS to</th>
+                                <th class="sctable">set DEPREL to</th>
+                                <th class="sctable">set FEATS to</th>
+                                <th class="sctable">set MISC to</th>
+                            </tr>
                         </table>
 
 			<p>There is a list of predefined shortcuts which cannot be altered:
 			<ul>
-			  <li><span class="keydoc">+</span> go to next sentence
-			  <li><span class="keydoc">-</span> go to preceding sentence
-			  <li><span class="keydoc">!</span> run validator on current sentence
-			  <li><span class="keydoc">_</span> delete all features of active word
-			  <li><span class="keydoc">delete</span> deletes active word
-			  <li><span class="keydoc">?</span> shows/hides list of shortcuts
-			  <li><span class="keydoc">&amp;</span> followed by two digits: Shift the syntax tree so that the token with the given ID is centered in the visible part of the tree.
+			  <li class="keylist"><span class="keydoc">+</span> go to next sentence
+			  <li class="keylist"><span class="keydoc">-</span> go to preceding sentence
+			  <li class="keylist"><span class="keydoc">!</span> run validator on current sentence
+			  <li class="keylist"><span class="keydoc">_</span> delete all features of active word
+			  <li class="keylist"><span class="keydoc">delete</span> deletes active word
+			  <li class="keylist"><span class="keydoc">?</span> shows/hides list of shortcuts
+			  <li class="keylist"><span class="keydoc">&amp;</span> followed by two digits: Shift the syntax tree so that the token with the given ID is centered in the visible part of the tree.
 			</ul>
 
 
-                        <p>More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
-                        load it with the server option <tt>--shortcuts</tt>. Hitting <span class="keydoc">?</span> displays the current
-                        shortcuts on the top of the screen (and hiding the search fields atthe same time). Hitting
-                        <span class="keydoc">?</span> a second time, hides the shortcut list again.
-                        If this file is not valid JSON,
-                        default shortcuts will be used. Check validity with e.g. <br>
-                        <span class="commandline">$ cat gui/shortcuts.json | jq .</span>
+            <p>More definitions can be added to <tt>gui/shortcuts.json</tt> or by creating a personal file in the same format and
+            load it with the server option <tt>--shortcuts</tt>. Hitting <span class="keydoc">?</span> displays the current
+            shortcuts on the top of the screen (and hiding the search fields atthe same time). Hitting
+            <span class="keydoc">?</span> a second time, hides the shortcut list again.
+            If this file is not valid JSON,
+            default shortcuts will be used. Check validity with e.g. <br>
+            <span class="commandline">$ cat gui/shortcuts.json | jq .</span>
 
-
-                        <p><b>Modify comment</b> (shown underneath the sentence): click the comment.</p>
-                        <p>The <span class="buttondoc">download image</span> button downloads the current dependency tree as an <tt>.svg</tt> file. Use the following commands
-                        to transform it into <tt>.pdf</tt> or <tt>.png</tt>:<br>
-                        <span class="commandline">$ inkscape -A arbre.pdf arbre.svg</span><br>
-                        <span class="commandline">$ inkscape -e arbre.png arbre.svg</span>
-                        </p>
+            <p><b>Modify comment</b> (shown underneath the sentence): click the comment.</p>
+            <p>The <span class="buttondoc">download image</span> button downloads the current dependency tree as an <tt>.svg</tt> file. Use the following commands
+            to transform it into <tt>.pdf</tt> or <tt>.png</tt>:<br>
+            <span class="commandline">$ inkscape -A arbre.pdf arbre.svg</span><br>
+            <span class="commandline">$ inkscape -e arbre.png arbre.svg</span>
+            </p>
                         <p>In order to downlad the entire sentence in CoNLL-U, SD-Parser or
                             <span class="latex">L<sup>a</sup>T<sub>e</sub>X</span> (for tikz-dependencies),
                             click the corresponding buttons)</p>

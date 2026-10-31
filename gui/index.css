@@ -205,7 +205,16 @@ img.helptextbutton {
     font-family: Courier, FreeMono, Mono;
     border-radius: 3px;
     /*border: 1px solid #222;*/
-    padding: 1px;
+    padding: 0px 3px 0px 3px;
+}
+
+.keylist {
+    margin-bottom: 2px;;
+}
+
+#shortcuttableMulti, .sctable {
+    border: 1px solid;
+    border-collapse: collapse;
 }
 
 /* format of user commands in the help text */

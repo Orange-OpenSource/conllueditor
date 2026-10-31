@@ -179,7 +179,9 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     // finally calculate surrounding box
     var rect = document.createElementNS(svgNS, "rect");
     rect.setAttribute("id", rect_idprefix + "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
-    if (!autoadaptwidth) {
+    if (//!autoadaptwidth
+        !$("#adaptwidth").is(":checked")
+    ) {
         rect.setAttribute('x', x - ((hor - 6) / 2));
         rect.setAttribute('width', hor - 6);
     } else {
@@ -192,7 +194,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     rect.setAttribute('stroke', 'black');
     rect.setAttribute('fill', '#fffff4'); // only needed for svg download, since the download does not add depgraph.css
     rect.setAttribute("rx", "5");
-    rect.setAttribute("ry", "25");
+    rect.setAttribute("ry", "5"); // was 25
     if (item.type && item.type !== "_") {
         rect.setAttribute('class', item.type);
     } else if (item.chunk && item.chunk !== 0) {
@@ -411,7 +413,9 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
     //    x = ((sentencelength) * hor) - x;
     //}
 
-    if (!autoadaptwidth) {
+    if (//!autoadaptwidth
+        !$("#adaptwidth").is(":checked")
+        ) {
         var index = item.position - indexshift;
         var x = index * hor - hor / 2;
     } else {
@@ -421,7 +425,9 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (!autoadaptwidth) {
+        if (//!autoadaptwidth
+            !$("#adaptwidth").is(":checked")
+        ) {
             x = ((sentencelength) * hor) - x;
         } else {
             x = rightmostwordpos - x;
@@ -495,7 +501,9 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
 
 
 function MWEbar(mwe, item, x, wordy, sentencelength) {
-    if (autoadaptwidth) {
+    if (//autoadaptwidth
+        $("#adaptwidth").is(":checked")
+    ) {
         if (sentencelength > 0) {
             // right-to-left
             // xposition are always for left-to-right, we haveto inverse them
