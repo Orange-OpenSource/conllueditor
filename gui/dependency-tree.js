@@ -143,8 +143,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
     //console.log("cc " + curid)
     //console.log("insNode hor:", hor, " v:", vertspace);
 
-    if (!$("#adaptwidth").is(":checked")//!autoadaptwidth
-    ) {
+    if (!$("#adaptwidth").is(":checked")) {
         var index = item.position - indexshift;
         var x = index * hor - hor / 2;
     } else {
@@ -154,8 +153,7 @@ function insertNode(svg, curid, item, head, level, indexshift, originx, originy,
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (!$("#adaptwidth").is(":checked") //!autoadaptwidth
-        ) {
+        if (!$("#adaptwidth").is(":checked")) {
             x = ((sentencelength) * hor) - x;
         } else {
             x = rightmostwordpos - x;
@@ -316,9 +314,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     //var index = item.position - indexshift;
     //var x = index * hor - hor / 2;
 
-    if (//!autoadaptwidth
-        !$("#adaptwidth").is(":checked")
-    ) {
+    if (!$("#adaptwidth").is(":checked")) {
         var index = item.position - indexshift;
         var x = index * hor - hor / 2;
     } else {
@@ -327,9 +323,7 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (//!autoadaptwidth
-         !$("#adaptwidth").is(":checked")
-        ) {
+        if (!$("#adaptwidth").is(":checked")) {
             x = ((sentencelength) * hor) - x;
         } else {
             x = rightmostwordpos - x;

@@ -179,9 +179,7 @@ function drawWord(item, x, hor, levelinit, curid, svg, gold, incorrectwords) {
     // finally calculate surrounding box
     var rect = document.createElementNS(svgNS, "rect");
     rect.setAttribute("id", rect_idprefix + "rect_" + item.id + "_" + item.upos + "_" + item.xpos + "_" + item.lemma + "_" + item.form + "_" + item.deprel);
-    if (//!autoadaptwidth
-        !$("#adaptwidth").is(":checked")
-    ) {
+    if (!$("#adaptwidth").is(":checked")) {
         rect.setAttribute('x', x - ((hor - 6) / 2));
         rect.setAttribute('width', hor - 6);
     } else {
@@ -413,9 +411,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
     //    x = ((sentencelength) * hor) - x;
     //}
 
-    if (//!autoadaptwidth
-        !$("#adaptwidth").is(":checked")
-        ) {
+    if (!$("#adaptwidth").is(":checked")) {
         var index = item.position - indexshift;
         var x = index * hor - hor / 2;
     } else {
@@ -425,9 +421,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (//!autoadaptwidth
-            !$("#adaptwidth").is(":checked")
-        ) {
+        if (!$("#adaptwidth").is(":checked")) {
             x = ((sentencelength) * hor) - x;
         } else {
             x = rightmostwordpos - x;
@@ -501,9 +495,7 @@ function insertExtracolumns(svg, curid, item, level, indexshift, sentencelength)
 
 
 function MWEbar(mwe, item, x, wordy, sentencelength) {
-    if (//autoadaptwidth
-        $("#adaptwidth").is(":checked")
-    ) {
+    if ($("#adaptwidth").is(":checked")) {
         if (sentencelength > 0) {
             // right-to-left
             // xposition are always for left-to-right, we haveto inverse them

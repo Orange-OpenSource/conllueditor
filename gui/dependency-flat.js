@@ -128,9 +128,7 @@ function drawDepFlat(svg, trees, sentencelength, use_deprel_as_type, isgold, inc
 
 /** insert a word in the flat graph */
 function insertWord(svg, curid, item, head, headpos, level, sentencelength, use_deprel_as_type, isgold, incorrectwords) {
-    if (//!autoadaptwidth
-        !$("#adaptwidth").is(":checked")
-    ) {
+    if (!$("#adaptwidth").is(":checked")) {
         var index = item.position;
         var depx = (index * hor) - (hor/2);
     } else {
@@ -141,9 +139,7 @@ function insertWord(svg, curid, item, head, headpos, level, sentencelength, use_
 
     if (sentencelength > 0) {
         // we write the tree from right to left
-        if (//!autoadaptwidth
-            !$("#adaptwidth").is(":checked")
-        ) {
+        if (!$("#adaptwidth").is(":checked")) {
             depx = ((sentencelength ) * hor) - depx;
         } else {
             depx = rightmostwordpos - depx;
@@ -351,9 +347,7 @@ function makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass
  * @return {undefined}
  */
 function makeDep(svg, item, head, headpos, deprel, depx, sentencelength, basey, above, use_deprel_as_type, isgold, enhanced_head_id) {
-     if (//!autoadaptwidth
-        !$("#adaptwidth").is(":checked")
-     ) {
+     if (!$("#adaptwidth").is(":checked")) {
         var headx = headpos * hor - hor/2;
     } else {
         var headx = wordpositions[headpos];
@@ -364,9 +358,7 @@ function makeDep(svg, item, head, headpos, deprel, depx, sentencelength, basey, 
     if (sentencelength !== 0) {
         // we write the tree from right to left
         headbeforedep = !headbeforedep;
-        if (//!autoadaptwidth
-            !$("#adaptwidth").is(":checked")
-        ) {
+        if (!$("#adaptwidth").is(":checked")) {
             headx = ((sentencelength) * hor) - headx;
         } else {
             headx = rightmostwordpos - headx;

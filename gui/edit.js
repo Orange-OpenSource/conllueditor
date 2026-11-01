@@ -45,10 +45,6 @@ var URL_BASE = 'http://' + window.location.hostname + ':12347/edit';
 
 
 var graphtype = 1; // 1: tree, 2: hedge, 3: table
-//var showfeats = false;
-//var showmisc = false;
-//var showr2l = false;
-//var autoadaptwidth = true;
 var showshortcuthelp = false;
 
 
@@ -187,9 +183,6 @@ function getRaw(what, title) {
             }
         },
         success: function (data) {
-            //$('#rawtext').empty();
-            //$('#showRawModalLabel').html(what);
-            //console.log("DD " + JSON.stringify(data));
             $('#rawtext').append(data.raw.replaceAll("<", "&lt;").replaceAll(">", "&gt;"));
         }
     });
@@ -226,8 +219,7 @@ function makeItemFreqPercent_table(appendto, data, total, what) {
     var thead = document.createElement("thead");
     upostbl.append(thead);
     var headerrow = document.createElement("tr");
-    //$("#stats_upos").append(headerrow);
-    //upostbl.append(headerrow);
+
     thead.append(headerrow);
     headerrow.className = "tableheader";
 
@@ -312,7 +304,6 @@ function getServerInfo() {
                 shortcuttimeout = data.shortcuttimeout;
             if (data.shortcuts) {
                 if ((data.shortcuts.version === 2)) {
-                    //shortcutsMulti = data.shortcuts.shortcuts;
                     shortcutsMulti = Object.keys(data.shortcuts.shortcuts).sort().reduce((obj, key) => {
                         obj[key] = data.shortcuts.shortcuts[key];
                         return obj;
@@ -397,8 +388,6 @@ function getServerInfo() {
                     }
                 }
             }
-            //sorttable.makeSortable(drustbl);
-
 
             // stats for features per UPOS
             var fvustbl = document.createElement("table");
@@ -445,7 +434,6 @@ function getServerInfo() {
                     }
                 }
             }
-            //sorttable.makeSortable(fvustbl);
 
             $('#filename').empty();
             $('#filename').append(data.filename);
@@ -476,12 +464,8 @@ function getServerInfo() {
                     $("#r2l2_container").hide();
                 }
                 if (data.uiconfig.right2left_status === "active") {
-                    //showr2l = true;
                     $("#r2l2").prop("checked", true)
-                    //$("#r2l").addClass('active');
                 } else {
-                    //showr2l = false;
-                    //$("#r2l").removeClass('active');
                     $("#r2l2").prop("checked", false)
                 }
 
@@ -501,12 +485,8 @@ function getServerInfo() {
                 if (data.uiconfig.misc_show === "hidden") {
                     $("#miscb").hide();
                 } else if (data.uiconfig.misc_status === "active") {
-                    //showmisc= true;
-                    //$("#misc3").addClass('active');
                     $("#misc3").prop("checked", true)
                 } else {
-                    //showmisc = false;
-                    //$("#misc3").removeClass('active');
                     $("#misc3").prop("checked", false)
                 }
 
@@ -552,12 +532,10 @@ function getServerInfo() {
                     $("#adaptwidth_container").removeClass('onlyWithTree');
                     $("#adaptwidth_container").hide();
                 } else if (data.uiconfig.nodewidth_status === "variable") {
-                    //autoadaptwidth= false;
-                    $("#adaptwidth_container").click();
+                    //$("#adaptwidth_container").click();
                     $("#adaptwidth").prop("checked", false)
                 } else {
-                    //autoadaptwidth = true;
-                    $("#adaptwidth_container").click();
+                    //$("#adaptwidth_container").click();
                     $("#adaptwidth").prop("checked", true)
                 }
 
@@ -581,8 +559,6 @@ function getServerInfo() {
 
             }
             // set version number to help
-            //$('#logo').attr("title", data.version);
-            //console.log("ddd", data);
             $('#ce_version').text(data.version);
             $('#version').text(data.version);
             var dirty = "";
@@ -647,7 +623,6 @@ function getServerInfo() {
                                 return false;
                             },
                             select: function (event, ui) {
-                                //console.log("bbb", this.value);
                                 var terms = split(this.value);
                                 // remove the current input
                                 terms.pop();
@@ -689,7 +664,6 @@ function getServerInfo() {
                                 return false;
                             },
                             select: function (event, ui) {
-                                //console.log("bbb", this.value);
                                 var terms = split(this.value);
                                 // remove the current input
                                 terms.pop();
@@ -1186,10 +1160,7 @@ let timeout = null;
 var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
-		 //console.log("yyyy", $(window), evt, shortcutseq, shortcuttimeout);
-    //console.log("current table word", currentwordid);
-
-    //console.log("clickedNodes", clickedNodes);
+	//console.log("yyyy", $(window), evt, shortcutseq, shortcuttimeout);
 
     if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
@@ -1422,9 +1393,6 @@ function ModifyTree(evt) {
     // id: "rect_" + item.id + "_" + item.upos + "_" +  item.xpos + "_" +  item.lemma + "_" +  item.form + "_" + item.deprel
     //        0        1                 2                   3                4                  5                 6
     var id = target.id.split("_");
-    //alert("MTT " + target.id + " == " + target);
-    //alert("IDDD " + id );
-    //alert("rrSSr " + conllwords[id[1]].feats);
 
     if (target.id) {
         if (id[0] === "rect") {
@@ -1446,11 +1414,6 @@ function ModifyTree(evt) {
                 }
             }
 
-//            if (evt.altKey) {
-//                // editing columns > 10
-//                var conllword = conllwords[id[1]];
-//                console.log("zzzz", conllword.col11);
-//            } else
             if (evt.ctrlKey || wordedit) {
                 // editing a word (form, lemma, UPOS, XPOS, features, MISC)
                 wordedit = false;
@@ -1545,14 +1508,6 @@ function ModifyTree(evt) {
                 $("#wordEdit").modal();
                 clickedNodes = [];
 
-
-
-                //".wordnode").removeClass("wordcheck");
-                //console.log("eeeeeeeeeeeyyyy", $(".wordnode").attr("class"));
-                // clean all nodes (delete clocked-status) TODO: not needed any more?
-                //$(".wordnode").attr("class", "wordnode");
-                //console.log("eeeeeeeeeeezzzzz", $(".wordnode").attr("class"));
-
                 // add errorclass for words which are different from gold
                 if (incorrectwords.has("" + id[1])) {
                     errorclass = " compareError";
@@ -1583,10 +1538,7 @@ function ModifyTree(evt) {
                         $("#mods").val(clickedNodes[0] + " " + clickedNodes[1] + " ");
                         $("#modifier").click();
                     }
-                    //alert("AAAAA: " + $("#mods").val());
 
-
-                    //alert("BBBB: " + makeRoot + " " + JSON.stringify(deprels));
                     if (!makeRoot
                             && ($("#edit_ed").is(":checked")//editing_enhanced 
                                 || deprels[0] === "" || deprels[0] === "root" || deprels[0] === "undefined" || deprels[0] === undefined)) {
@@ -1620,12 +1572,6 @@ function ModifyTree(evt) {
                             $("#cdeprelen").val(potential);
 
                             // new enhanced relation, checkenhdeprel is always initialised as unchecked
-                            /*if (conllword_enhead.checkenhanceddeprel && conllword_enhead.checkenhanceddeprel.includes(id[1])) {
-                                $("#checkenhdeprel").prop( "checked", true);
-                            } else {
-                                $("#checkenhdeprel").prop( "checked", false);
-                            }*/
-
                             $("#enhdeprelEdit").modal();
                         } else {
                             $("#chead").text(clickedNodes[1]);
@@ -1633,13 +1579,6 @@ function ModifyTree(evt) {
                             $("#cdeprel").val(potential);
                             $("#deprelEdit").modal();
                         }
-
-//                        var deprel = prompt("also enter deprel", potential);
-//                        if (deprel != "" && deprel != null) {
-//                            //alert(id[3] + " --> " + deprel);
-//                            $("#mods").val(clickedNodes[0] + " " + clickedNodes[1] + " " + deprel);
-//                            $("#modifier").click();
-//                        }
                     }
 
                     clickedNodes = [];
@@ -1659,12 +1598,7 @@ function ModifyTree(evt) {
 
             //console.log("DEPRELEDIT", id);
             $("#deprelEdit").modal();
-//            var deprel = prompt("enter new deprel", id[3]);
-//            if (deprel != "" && deprel != null && deprel != id[3]) {
-//                //alert(id[3] + " --> " + deprel);
-//                $("#mods").val(/*child*/ id[2] + " " + /* head */ id[1] + " " + deprel);
-//                $("#modifier").click();
-//            }
+
         } else if (id[0] === "enhtextpath") { // TODO use classes ?
             // update deprel
             if (//editing_enhanced
@@ -1789,10 +1723,8 @@ var previous_modified = 0;
  */
 function formatPhrase(item) {
     //console.log("Item:", item);
-    if ($("#adaptwidth").is(":checked") //autoadaptwidth
-    ) {
+    if ($("#adaptwidth").is(":checked")) {
         var maxlen = getAllWordLengths(item, 0);
-        //console.log("MAXLEN " + maxlen);
     }
 
     highlightX = 0;
@@ -1988,12 +1920,12 @@ function formatPhrase(item) {
             $("#arbre").append(svg);
         var use_deprel_as_type = true;
         var sentencelength = 0;
-        if ($("#r2l2").is(":checked")) {           //if (showr2l) {
+        if ($("#r2l2").is(":checked")) {
             sentencelength = item.length;
         }
         //alert("SENT LENGTH: " + sentencelength, $("#r2l2").is(":checked"));
         //alert("CCC: " + item.tree.length);
-        //if ($("#flat").is(":checked")) {
+
         if (graphtype != 3 && item.Lemma != undefined) {
             $("#scores").empty();
             $("#scores").append(" (comparison: ");
@@ -2013,10 +1945,6 @@ function formatPhrase(item) {
                 drawDepFlat(svg, item.comparisontree, sentencelength, use_deprel_as_type, 1, null);
 
                 if (item.differs) {
-                    //console.log("zz", item.differs);
-                    //for (i = 0; i < item.differs.length; i++) {
-                    //    incorrectwords.add(item.differs[i]);
-                    //}
                     incorrectwords = item.differs;
                 }
             }
@@ -2039,9 +1967,7 @@ function formatPhrase(item) {
             //alert("hlt " + highlightX + " " +highlightY);
             $('body, html').scrollTop(highlightY - 100);
             $('body, html').scrollLeft(highlightX - 120);
-        } else if ($("#r2l2").is(":checked")
-            //showr2l
-        ) {
+        } else if ($("#r2l2").is(":checked")) {
             // scroll to right for languages like Hebrew or Arabic
             $('body, html').scrollLeft($(document).outerWidth());
         }
@@ -2051,12 +1977,9 @@ function formatPhrase(item) {
         var cc = item.comments.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
         $("#commentfield").append(cc);
 
-
         // install svg download button
         downloadSVG("a2");
 
-
-        //alert("rr" + item.canUndo);
         if (item.canUndo)
             $('#undo').prop('disabled', false);
         else
@@ -2100,7 +2023,6 @@ function formatPhrase(item) {
 // recursively produce table id:word
 function getConllWords(table, head) {
     table[head.id] = head;
-    //alert("QQQ " + head);
     if (head.children) {
         for (var i = 0; i < head.children.length; i++) {
             //alert("zzz " + i)
@@ -2539,7 +2461,6 @@ $(document).ready(function () {
                 $("#biecontainer").hide();
                 $("#edit_ed_container").hide();
                 $(".notwithtable").show();
-                //flatgraph = false;
                 graphtype = 1;
             } else if ($(this).val() === "table") {
                 $("#biecontainer").hide();
@@ -2547,15 +2468,10 @@ $(document).ready(function () {
                 $(".notwithtable").hide();
                 graphtype = 3;
             } else {
-                //$(this).removeClass('active');
-                //$("#flat2").text("show tree" + flatgraph);
-                //flatgraph = true;
                 graphtype = 2;
                 $("#biecontainer").show();
                 $("#edit_ed_container").show();
                 $(".notwithtable").show();
-                //editing_enhanced = false;
-                //$("#edit_ed").removeClass('active');
             }
 
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
@@ -2565,59 +2481,24 @@ $(document).ready(function () {
 
     $(".mycheck").click(function () {
         if (this.id === "feat3") {
-            //if (!showfeats) {
-           /* if ($("#feat3").is(":checked")) {
-                //$(this).addClass('active');
-            } else {
-                //$(this).removeClass('active');
-            }*/
-            //showfeats = !showfeats;
-
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "misc3") {
-            //if (!showmisc) {
-            /*if ($("#misc3").is(":checked")) {
-                //$(this).addClass('active');
-            } else {
-                //$(this).removeClass('active');
-            }*/
-            //showmisc = !showmisc;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
 
         } else if (this.id === "bie") {
-            //if (!show_basic_in_enhanced) {
-            //    $(this).addClass('active');
-            //} else {
-            //    $(this).removeClass('active');
-            //}
-            //show_basic_in_enhanced = !show_basic_in_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "edit_ed") {
-            /*if (!editing_enhanced) {
-                $(this).addClass('active');
-            } else {
-                $(this).removeClass('active');
-            }*/
-            //editing_enhanced = !editing_enhanced;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "r2l2") {
-           /* if (//!showr2l
-                $("#r2l2").is(":checked")) {
-                //$(this).addClass('active');
-            } else {
-               // $(this).removeClass('active');
-            }*/
-           // showr2l = !showr2l;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
 
         } else if (this.id === "adaptwidth") {
-            if (!$("#adaptwidth").is(":checked") //!autoadaptwidth
-            ) {
+            if (!$("#adaptwidth").is(":checked")) {
                 // was disabled, enable
                 //$(this).addClass('active');
                 $("#widthinfo").hide();
@@ -2638,12 +2519,9 @@ $(document).ready(function () {
         } else if (this.id === "backwards") {
             backwards = !backwards;
             if (backwards) {
-                //$(this).addClass('active');
                 $(this).parent().addClass('active');
             } else {
-                //$(this).removeClass('active');
                 $(this).parent().removeClass('active');
-                //$("#flat2").text("show tree" + flatgraph);
             }
         } else if (this.id === "clear") {
             $("#word").val("");
@@ -2805,30 +2683,12 @@ $(document).ready(function () {
             $("#findsentid").click();
         }
     });
-    /*$('#depreledit').live('keyup', function(e){
-     if (e.keyCode == 13) {
-     $(':button:contains("Ok")').click();
-     }
-     });*/
-    /*
-     $("#cdeprel").keyup(function (event) {
-     if (event.keyCode == 13) {
-     //alert("cccc");
-     //event.target
-     //alert(JSON.stringify($(event)));
-     //$("#finddeprel").click();
-     //	$("cdeprelOK").click();
-     }
-     });
-     */
 
     // displays differences between word from goldfile (--compare) and editied file
     // when hovering on the word rectangle
     $(".wordnode").hover(function () {
         $("#comparediff").append("eeeee");
-
-    },
-            function () {
+    }, function () {
                 $("#comparediff").empty();
             });
 

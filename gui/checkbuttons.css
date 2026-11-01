@@ -13,12 +13,10 @@
             left top,
             color-stop(0, rgb(217, 217, 217)),
             color-stop(1, rgb(252, 252, 252)));
-    ooovertical-align: middle;
 }
 
 .cblabel {
     display: inline-block;
-    ppheight: 30px;
     vertical-align: middle;
 }
 
