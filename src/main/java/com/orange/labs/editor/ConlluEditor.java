@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.1 as of 26th October 2026
+ @version 3.0.0 as of 2nd November 2026
  */
 package com.orange.labs.editor;
 

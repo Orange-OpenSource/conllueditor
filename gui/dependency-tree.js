@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.0 as of 21st October 2026
+ @version 3.0.0 as of 2nd November 2026
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -310,9 +310,6 @@ function insertBottomWord(svg, curid, item, level, indexshift, sentencelength = 
     //var hor = 90;
     //console.log("item " + item);
     //console.log("cc " + curid)
-
-    //var index = item.position - indexshift;
-    //var x = index * hor - hor / 2;
 
     if ($("#fixedwidth").is(":checked")) {
         var index = item.position - indexshift;

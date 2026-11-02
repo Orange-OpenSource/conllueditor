@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.1 as of 25th October 2026
+ @version 3.0.0 as of 2nd November 2026
 */
 
 .dia {
@@ -48,12 +48,9 @@ are permitted provided that the following conditions are met:
   border: 0; /* don't want to add to container size */
 }
 
-
-
 ul.ui-autocomplete {
     z-index: 2100;
 }
-
 
 /** styles for dependency graphs */
 .deprel_precedinghead {
@@ -196,9 +193,7 @@ ul.ui-autocomplete {
 }
 
 .textcheck {
-    oocolor: magenta;
     background-color: #ffbbff;
-    oocolor: white;
 }
 
 .textcheck_deprel {

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.0 as of 21st October 2026
+ @version 3.0.0 as of 2nd November 2026
  */
 package com.orange.labs.conllparser;
 
@@ -1717,7 +1717,6 @@ public class ConllWord {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -2066,12 +2065,6 @@ public class ConllWord {
 
     public String toString(boolean withEnhancedDeps, boolean strict) {
         StringBuilder sb = new StringBuilder();
-//        if (nextToStringcomplete && prefixed != null) {
-//            for (String c : prefixed) {
-//                sb.append(c).append("\t");
-//            }
-//            nextToStringcomplete = false;
-//        }
 
         sb.append(getFullId());
         sb.append("\t").append(form);
@@ -2091,15 +2084,6 @@ public class ConllWord {
             sb.append("\t").append(xpostag);
 
             sb.append('\t').append(getFeaturesStr());
-//            if (!features.isEmpty()) {
-//                //Collections.sort(features, new SortIgnoreCase());
-//                sb.append("\t").append(features.get(0));
-//                for (int i = 1; i < features.size(); ++i) {
-//                    sb.append("|").append(features.get(i));
-//                }
-//            } else {
-//                sb.append('\t').append(EmptyColumn);
-//            }
 
             if (toktype != Tokentype.WORD) {
                 sb.append('\t').append(EmptyColumn).append('\t').append(EmptyColumn);
@@ -2144,7 +2128,7 @@ public class ConllWord {
                 sb.append('\t').append(value);
             }
 
-            // TODO, do not sopt at column 20, but stop at highest
+            // TODO, do not stop at column 20, but stop at highest
 //                Integer last = (Integer) ((TreeMap) namedColumns).lastKey();
 //                //System.err.println("zzzzzzzzzzzzzzzzz " + last);
 //                for (int i = 11; i <= last; ++i) {

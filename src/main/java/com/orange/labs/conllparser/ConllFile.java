@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.33.1 as of 23th April 2026
+ @version 3.0.0 as of 2nd November 2026
 */
 package com.orange.labs.conllparser;
 
@@ -371,71 +371,6 @@ public class ConllFile {
         }
         return sb.toString();
     }
-
-    /*public String getAnn() {
-        StringBuilder sb = new StringBuilder();
-        int offset = 0;
-        int count = 1;
-        for (ConllSentence sentence : sentences) {
-
-            for (ConllWord word : sentence.getWords()) {
-                sb.append(String.format("T%d\tConllWord %d %d\t%s\n", count, offset, offset + word.getForm().length(), word.getForm()));
-                sb.append(String.format("#%d\tAnnotatorNotes T%d\t%s\n", count, count, word.toString()));
-                //sb.append(String.format("#%d\tAnnotatorNotes T%d\t%s\n", count, count, "toto"));
-                count++;
-                offset += word.getForm().length() + 1;
-            }
-            offset++; // pour le LF
-        }
-
-        return sb.toString();
-    }*/
-
-    /** read rules file
-     *   condition > newvals
-     *   Upos:ADP and Lemma:d.* > Feat:Key="Val", Xpos:"prep"
-     *   and apply rule + replacement on all words of all sentences
-     * @param rulefile
-     * @return number of changes
-     * @throws FileNotFoundException
-     */
-//    public void oooconditionalEdit(File rulefile) throws ConllException, IOException {
-//        FileInputStream fis = new FileInputStream(rulefile);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
-//        String line;
-//
-//        // TODO: store here the wordlists found in Lemma:#... and Form:#.... in order to avoir rereading them
-//        Map<String, Set<String>> wordlists = new HashMap<>(); // stores lists for Form and Lemma: "filename": (words)
-//        int changes = 0;
-//        int ct = 0;
-//        StringBuilder warnings = new StringBuilder();
-//        while ((line = br.readLine()) != null) {
-//            ct++;
-//            line = line.trim();
-//            //System.err.format("<%s>\n", line);
-//            if (line.isEmpty() || line.charAt(0) == '#') continue;
-//            String [] elems = line.split(">", 2);
-//            //List<String>newvals = Arrays.asList(elems[1].trim().split("[ \\t]+"));
-//            try {
-//                List<GetReplacement>newvals = new ArrayList<>();
-//                for (String repl : elems[1].trim().split("[ \\t]+")) {
-//                    newvals.add(new GetReplacement(repl));
-//                }
-//                CheckCondition conditionpt = new CheckCondition(elems[0], false);
-//                Set<ConllWord>matching_cw = conditionalEdit(conditionpt, newvals, wordlists, warnings);
-//                System.err.println(matching_cw.size() + " changes for condition: " + elems[0] + " values: " + elems[1]);
-//                changes += matching_cw.size();
-//            } catch (ConllException e) {
-//                //e.printStackTrace();
-//                throw new ConllException("Line " + ct + ": " + e.getMessage());
-//            }
-//        }
-//        if (warnings.length() > 0) {
-//            System.err.println(warnings.toString());
-//        }
-//        System.err.println(changes + " changes");
-//        br.close();
-//    }
 
 
     class CondAndRepl {

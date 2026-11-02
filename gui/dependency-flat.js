@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.1 as of 25th October 2026
+ @version 3.0.0 as of 2nd November 2026
  */
 
 var xlink = "http://www.w3.org/1999/xlink";
@@ -193,36 +193,6 @@ function insertWord(svg, curid, item, head, headpos, level, sentencelength, use_
         // draw root deprels
         var pathvar = "path_" + headpos + "_" + item.id + "_" + item.deprel;
         makeRoot(svg, item, curid, pathvar, headpos, depx, grayclass, grayclass2, levelinit, true);
-//        //var depx = x; //item.id * hor;
-//        svgminy = Math.min(svgminy, -140);
-//        var path = document.createElementNS(svgNS, "path");
-//        var pathvar = "path_" + headpos + "_" + item.id + "_" + item.deprel;
-//        path.setAttribute("id", pathvar);
-//        path.setAttribute("stroke", "black");
-//        //path.setAttribute("stroke-width", "1");
-//        path.setAttribute("opacity", 1);
-//        path.setAttribute("fill", "none");
-//        path.setAttribute("d", "M " + depx + " " + -140 + " L " + depx + " " + (levelinit - 1));
-//        path.setAttribute("style", "marker-end: url(#markerArrow);");
-//        path.setAttribute("class", "deprel_root" + grayclass2);
-//	path.setAttribute("stroke", "red"); // only needed for svg download
-//        svg.appendChild(path);
-//
-//
-//	//console.log("BAAA " + headpos + " " + item.form + " " + item.deprel + " " + depx);
-//
-//        var depreltext = document.createElementNS(svgNS, "text");
-//        depreltext.setAttribute("id", "deprel" + curid + "_" + item.id);
-//        depreltext.setAttribute("class", "words deprel" + grayclass);
-//        depreltext.setAttribute("fill", "green");
-//        //depreltext.setAttribute("font-size", "14");
-//
-//        depreltext.setAttribute('x', depx);
-//        depreltext.setAttribute('y', -120);
-//        depreltext.setAttribute("text-anchor", "middle");
-//        depreltext.textContent = item.deprel;
-//        svg.appendChild(depreltext);
-
     } else {
         // non-root deprels
         makeDep(svg, item, head, headpos, item.deprel, depx, sentencelength, levelinit, true, use_deprel_as_type, isgold, undefined);

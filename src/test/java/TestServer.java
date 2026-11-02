@@ -1,6 +1,6 @@
 /* This library is under the 3-Clause BSD License
 
-Copyright (c) 2018-2025, Orange S.A.
+Copyright (c) 2018-2026, Orange S.A.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.30.1 as of 13th April 2025
+ @version 3.0.0 as of 2nd November 2026
  */
 
 import com.google.gson.Gson;
@@ -354,8 +354,7 @@ public class TestServer {
         name("get file");
 
         String res = httpget("index.css", 200);
-        //System.err.println("BBAAAA " + res);
-        Assert.assertTrue("File does contain correct string", res.contains("body {\n    margin-top: 280px; /* header height + top offset */"));
+        Assert.assertTrue("File does contain correct string", res.contains("body {\n    margin-top: 280px;\n    /* header height + top offset */"));
     }
 
     @Test

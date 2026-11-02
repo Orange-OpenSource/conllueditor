@@ -1,13 +1,12 @@
 # Changes
 
-## Version 2.36.1
+## Version 3.0.0
+* new layout, checkbuttons redesigned
+* dark, grey and blue theme added (loaded via `uiconfig.yml` or option `--css`)
 * set deprel check flag in edit deprel modal too
-* added dark theme
-  * loaded via `uiconfig.yml` or option `-css`
 * graphs slightly redesigned (i.e. made prettier)
 * added UI tests (selenium based)
 * test data updated
-* checkbuttons redesigned
 
 ## Version 2.36.0
 * corrected bug in flat view
