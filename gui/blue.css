@@ -30,19 +30,19 @@ are permitted provided that the following conditions are met:
  @author Johannes Heinecke
  @version 2.36.1 as of 25th October 2026
 */
-h1  {
-    color:#aed5ff;
+h1 {
+    color: #aed5ff;
 }
 
 
 
 #goldword {
-    color:#00bb00;
+    color: #00bb00;
     background-color: white;
 }
 
 #editedword {
-    color:#bb4400;
+    color: #bb4400;
     background-color: white;
 }
 
@@ -61,30 +61,55 @@ h1  {
 
 
 tr.everyotherrow:nth-child(odd) {
-    background-color:#729FCF;
+    background-color: #729FCF;
 }
+
 tr.everyotherrow:nth-child(even) {
-    background-color:white;
+    background-color: white;
 }
 
 .tableheader {
-    background-color:#47b5f5;
+    background-color: #47b5f5;
 }
 
 
 .tablecell {
-    border: 0px; /* solid #aaffaa; */
+    border: 0px;
+    /* solid #aaffaa; */
     color: darkblue;
     background-color: #ededff;
 }
 
-.chunk0 {background-color:#ff780080; /*opacity: 0.5; */
-         fill:#ff780080 }
-.chunk1 {background-color:#4ab4e6; fill:#4ab4e6 }
-.chunk2 {background-color:#ffb4e680; fill:#ffb4e680 }
-.chunk3 {background-color:#ffd200; fill:#ffd200 }
-.chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
-.chunk5 {background-color:#a885d880; fill:#a885d880 }
+.chunk0 {
+    background-color: #ff780080;
+    /*opacity: 0.5; */
+    fill: #ff780080
+}
+
+.chunk1 {
+    background-color: #4ab4e6;
+    fill: #4ab4e6
+}
+
+.chunk2 {
+    background-color: #ffb4e680;
+    fill: #ffb4e680
+}
+
+.chunk3 {
+    background-color: #ffd200;
+    fill: #ffd200
+}
+
+.chunk4 {
+    background-color: #4fbd8780;
+    fill: #4fbd8780
+}
+
+.chunk5 {
+    background-color: #a885d880;
+    fill: #a885d880
+}
 
 img.helptextbutton {
     border: 1px solid #222;
@@ -93,6 +118,7 @@ img.helptextbutton {
     border-radius: 0%;
     background: linear-gradient(#a6d1ff 0%, #eee 50%, #a6d1ff 100%);
 }
+
 /*img.helptextbutton {
     filter: hue-rotate(180deg);
 }*/
@@ -126,7 +152,8 @@ img.helptextbutton {
 }
 
 /* make normal buttons look like mycheckbuttons */
-.mybutton, btn-primary {
+.mybutton,
+btn-primary {
     border-radius: 0px;
     border-top: 0px;
     border-bottom: 0px;
@@ -136,18 +163,45 @@ img.helptextbutton {
     color: black;
 }
 
+.invertedcolors,
+.efeats {
+    background: linear-gradient(white 0%, #a6d1ff 50%, white 100%);
+}
+
 .mybutton:hover {
     border-radius: 0px;
     background: linear-gradient(#a6d1ff 0%, white 50%, #a6d1ff 100%);
 }
 
+.flabel {
+    border-radius: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+    border-left: 1px solid #959595;
+    border-right: 1px solid #959595;
+    background: linear-gradient(white 0%, #a6d1ff 50%, white 100%);
+}
+
+input[type="radio"]:checked+label {
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(13, 104, 224)),
+            color-stop(1, rgb(11, 59, 219)));
+    color: white;
+}
+
+
 .cbcontainer {
     border-top: 0px;
     border-bottom: 0px;
     border-radius: 0px;
-    background: linear-gradient(#a6d1ff 0%, white 50%, #a6d1ff 100%);
+    background: linear-gradient(#a6d1ff 0%, #eee 50%, #a6d1ff 100%);
 }
 
+.cbcontainer:hover {
+    background: linear-gradient(#a6d1ff 0%, white 50%, #a6d1ff 100%);
+}
 
 /* input field design */
 .inputfield {
@@ -165,7 +219,14 @@ img.helptextbutton {
     color: black;
 }
 
-#first, #last, #next, #prec, #clear, #backwards, #undo, #redo,
+#first,
+#last,
+#next,
+#prec,
+#clear,
+#backwards,
+#undo,
+#redo,
 #findword,
 #findlemma,
 #findupos,
@@ -175,7 +236,7 @@ img.helptextbutton {
 #findmulti,
 #findsentid,
 #findfeature,
-#findsubtree  {
+#findsubtree {
     filter: hue-rotate(180deg)
 }
 
@@ -184,13 +245,11 @@ img.helptextbutton {
 }
 
 .contain.active {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(224, 116, 13)),
-        color-stop(1, rgb(252, 145, 14))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(224, 116, 13)),
+            color-stop(1, rgb(252, 145, 14)));
 }
 
 .undoredo {
@@ -216,34 +275,28 @@ img.helptextbutton {
 
 .mycheck {
     border: 1px solid #959595;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 .mycheck.active {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(224, 116, 13)),
-        color-stop(1, rgb(252, 145, 14))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(224, 116, 13)),
+            color-stop(1, rgb(252, 145, 14)));
 
 }
 
 .mycheck:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgba(244, 146, 13)),
-        color-stop(1, rgba(245, 187, 15))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgba(244, 146, 13)),
+            color-stop(1, rgba(245, 187, 15)));
     color: #222;
 }
 
@@ -257,7 +310,8 @@ img.helptextbutton {
     background-color: #AA0000;
 }
 
-#psc, #pendingshortcuts {
+#psc,
+#pendingshortcuts {
     color: rgb(136, 0, 0);
 }
 
@@ -286,10 +340,10 @@ text {
 
 
 #compare table tr td {
-  border: 1px solid black;
+    border: 1px solid black;
 }
 
-.dewis  {
+.dewis {
     border: 1px solid #959595;
     border-radius: 0px;
     border-top: 0px;
@@ -309,9 +363,11 @@ text {
 .upossc {
     color: #9164cd;
 }
+
 .xpossc {
     color: #50be87;
 }
+
 .featsc {
     color: #4bb4e6;
 }
@@ -340,6 +396,8 @@ text {
     background: #0066aa;
 }
 
-#checkdeprel2, #checkdeprel, #checktoken {
+#checkdeprel2,
+#checkdeprel,
+#checktoken {
     filter: hue-rotate(180deg);
 }

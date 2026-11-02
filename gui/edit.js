@@ -528,15 +528,16 @@ function getServerInfo() {
                     ToggleShortcutHelp();
                 }
 
+
                 if (data.uiconfig.nodewidth_show === "hidden") {
-                    $("#adaptwidth_container").removeClass('onlyWithTree');
-                    $("#adaptwidth_container").hide();
+                    $("#fixedwidth_container").removeClass('onlyWithTree');
+                    $("#fixedwidth_container").hide();
                 } else if (data.uiconfig.nodewidth_status === "variable") {
-                    //$("#adaptwidth_container").click();
-                    $("#adaptwidth").prop("checked", false)
+                    $("#fixedwidth_container").click();
+                    $("#fixedwidth").prop("checked", true)
                 } else {
-                    //$("#adaptwidth_container").click();
-                    $("#adaptwidth").prop("checked", true)
+                    $("#fixedwidth_container").click();
+                    $("#fixedwidth").prop("checked", false)
                 }
 
 
@@ -1026,7 +1027,7 @@ function getWordLength(cword) {
     }
 
     // take into accound MISC values width
-    if (//showmisc 
+    if (//showmisc
         $("#misc3").is(":checked")
         && cword.misc !== undefined) { // display misc column info if active
         for (var f in cword.misc) {
@@ -1540,7 +1541,7 @@ function ModifyTree(evt) {
                     }
 
                     if (!makeRoot
-                            && ($("#edit_ed").is(":checked")//editing_enhanced 
+                            && ($("#edit_ed").is(":checked")//editing_enhanced
                                 || deprels[0] === "" || deprels[0] === "root" || deprels[0] === "undefined" || deprels[0] === undefined)) {
                         var potential = "";
                         if (uposs[0] === "DET")
@@ -1564,7 +1565,7 @@ function ModifyTree(evt) {
 
                         // open deprel edit (for basic or enhanced deps)
                         if (//editing_enhanced
-                            $("#edit_ed").is(":checked") 
+                            $("#edit_ed").is(":checked")
                         ) {
                             // creating new enhanced
                             $("#cheaden").text(clickedNodes[1]);
@@ -1723,7 +1724,7 @@ var previous_modified = 0;
  */
 function formatPhrase(item) {
     //console.log("Item:", item);
-    if ($("#adaptwidth").is(":checked")) {
+    if (!$("#fixedwidth").is(":checked")) {
         var maxlen = getAllWordLengths(item, 0);
     }
 
@@ -2497,12 +2498,12 @@ $(document).ready(function () {
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
 
-        } else if (this.id === "adaptwidth") {
-            if (!$("#adaptwidth").is(":checked")) {
+        } else if (this.id === "fixedwidth") {
+            if (!$("#fixedwidth").is(":checked")) {
                 // was disabled, enable
                 //$(this).addClass('active');
                 $("#widthinfo").hide();
-                //$("#adaptwidth").text("fixed width");
+                //$("#fixedwidth").text("fixed width");
             } else {
                 // was endabled, disable
                 //$(this).removeClass('active');
@@ -2510,10 +2511,10 @@ $(document).ready(function () {
                 wordlengths = {};
                 wordpositions = {};
                 $("#widthinfo").show();
-                //$("#adaptwidth").text("var. width");
+                //$("#fixedwidth").text("var. width");
             }
 
-            //autoadaptwidth = !autoadaptwidth;
+            //autofixedwidth = !autofixedwidth;
             var datadico = {"cmd": "read " + ($("#sentid").val() - 1)};
             sendmodifs(datadico);
         } else if (this.id === "backwards") {

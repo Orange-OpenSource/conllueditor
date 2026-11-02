@@ -34,7 +34,7 @@ are permitted provided that the following conditions are met:
 /* definitions for dark mode. DOES NOT copy other css key-values ! */
 
 body {
-    font-family:  Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans;
+    font-family: Lato, Ubuntu, KacstOne, DejaVu Sans, Arial, Helvetica, Sans;
     background-color: white;
 }
 
@@ -42,20 +42,17 @@ tt {
     font-family: Courier, FreeMono, Mono;
 }
 
-h1  {
-    color:#777777;
+h1 {
+    color: #777777;
 }
 
-
-
 #comm,
-#sentencetext,
 #arbre {
-
     background-color: white;
 }
 
-#currentsent, #cursentid {
+#currentsent,
+#cursentid {
     font-style: italic;
 }
 
@@ -65,12 +62,12 @@ h1  {
 
 
 #goldword {
-    color:#00bb00;
+    color: #00bb00;
     background-color: white;
 }
 
 #editedword {
-    color:#bb4400;
+    color: #bb4400;
     background-color: white;
 }
 
@@ -79,56 +76,78 @@ h1  {
 }
 
 #header {
-        background-image: linear-gradient(rgba(215,215,215, 1),
-        rgba(232,232,232, 1),
-        rgba(244,244,244, 1),
-        rgba(255,255,255, 0));
+    background-image: linear-gradient(rgba(215, 215, 215, 1),
+            rgba(232, 232, 232, 1),
+            rgba(244, 244, 244, 1),
+            rgba(255, 255, 255, 0));
 }
 
 textArea {
-    text-align:justify;
-    font-family: /*Pecita, */ Sans, Arial, Helvetica;
+    text-align: justify;
+    font-family:
+        /*Pecita, */
+        Sans, Arial, Helvetica;
     /*font-size: 125%;*/
 }
 
 tr.everyotherrow:nth-child(odd) {
-    background-color:#e5e5e5;
+    background-color: #e5e5e5;
 }
+
 tr.everyotherrow:nth-child(even) {
     background-color: white;
 }
 
 .tableheader {
-    background-color:#7d7d7d;
+    background-color: #7d7d7d;
 }
 
-.chunk0 {background-color:#ff780080; /*opacity: 0.5; */
-         fill:#ff780080 }
-.chunk1 {background-color:#4ab4e6; fill:#4ab4e6 }
-.chunk2 {background-color:#ffb4e680; fill:#ffb4e680 }
-.chunk3 {background-color:#ffd200; fill:#ffd200 }
-.chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
-.chunk5 {background-color:#a885d880; fill:#a885d880 }
+.chunk0 {
+    background-color: #ff780080;
+    /*opacity: 0.5; */
+    fill: #ff780080
+}
+
+.chunk1 {
+    background-color: #4ab4e6;
+    fill: #4ab4e6
+}
+
+.chunk2 {
+    background-color: #ffb4e680;
+    fill: #ffb4e680
+}
+
+.chunk3 {
+    background-color: #ffd200;
+    fill: #ffd200
+}
+
+.chunk4 {
+    background-color: #4fbd8780;
+    fill: #4fbd8780
+}
+
+.chunk5 {
+    background-color: #a885d880;
+    fill: #a885d880
+}
 
 img.helptextbutton {
-    background-image: -webkit-gradient(
-    linear,
-    left bottom,
-    left top,
-    color-stop(0, rgb(217,217,217)),
-    color-stop(1, rgb(252,252,252))
-    );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 /* format of application buttons in the help text */
 .buttondoc {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 /* format of keys to press in the help text */
@@ -149,31 +168,33 @@ img.helptextbutton {
 }
 
 /* make normal buttons look like mycheckbuttons */
-.mybutton, btn-primary {
+.mybutton,
+btn-primary {
     border: 1px solid #959595;
     color: black;
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
-.go, #undo, #redo, #clear, #backwards {
-    filter: saturate(30%); /* make icons (and text) grey(er) */
+.go,
+#undo,
+#redo,
+#clear,
+#backwards {
+    filter: saturate(30%);
+    /* make icons (and text) grey(er) */
 }
 
 .mybutton:hover {
     border-radius: 5px;
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+    background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));
 }
 
 /* input field design */
@@ -185,7 +206,7 @@ img.helptextbutton {
 
 
 /* add a visible handle */
-.resizable-input > span {
+.resizable-input>span {
     display: inline-block;
     vertical-align: bottom;
     margin-left: -16px;
@@ -198,13 +219,11 @@ img.helptextbutton {
 
 /* background for buttons with icons */
 .contain {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 /* keep original color
@@ -236,24 +255,20 @@ img.helptextbutton {
     border: 1px solid #959595;
     color: black;
 
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 
 .mycheck:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgba(244, 146, 13)),
-        color-stop(1, rgba(245, 187, 15))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgba(244, 146, 13)),
+            color-stop(1, rgba(245, 187, 15)));
 }
 
 .errorhl {
@@ -261,17 +276,21 @@ img.helptextbutton {
     background-color: #AA0000;
 }
 
-#psc, #pendingshortcuts {
+#psc,
+#pendingshortcuts {
     display: none;
-    color: rgb(45,45,45);
+    color: rgb(45, 45, 45);
 }
 
-.afficher, .editmode {
+.afficher,
+.editmode {
     color: black;
 }
 
-.sentinfo, #changespendingsaveQQ {
-    font-family: "Lato"; /* Light" */
+.sentinfo,
+#changespendingsaveQQ {
+    font-family: "Lato";
+    /* Light" */
     font-weight: 300;
     color: black;
 }
@@ -285,15 +304,16 @@ img.helptextbutton {
 
 
 .modal-header {
-    background-image: linear-gradient(rgba(153,153,153, 1),
-        rgba(240,240,240, 0));
+    background-image: linear-gradient(rgba(153, 153, 153, 1),
+            rgba(240, 240, 240, 0));
 }
 
 /*.modal-title, #rawtext {
     color: white;
 }*/
 
-.modal-body, .modal-footer {
+.modal-body,
+.modal-footer {
     background-color: white;
     color: black;
 }
@@ -316,40 +336,39 @@ text {
     color: black;
 }
 
-.dewis  {
+.dewis {
     color: black;
 
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 /* http://jsfiddle.net/fbnw9g5x/4/ */
 .dewis select {
     color: black;
-    filter: saturate(30%); /* make icons (and text) grey(er) */
+    filter: saturate(30%);
+    /* make icons (and text) grey(er) */
 }
 
 .dewis:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));
 }
 
 .upossc {
     color: #969696;
 }
+
 .xpossc {
     color: #878787;
 }
+
 .featsc {
     color: #a1a1a1;
 }
@@ -371,11 +390,13 @@ text {
 }
 
 .words {
-    fill: black; /* svg object */
+    fill: black;
+    /* svg object */
 }
 
 .wordupos {
-    fill: #555555; /* svg object */
+    fill: #555555;
+    /* svg object */
 }
 
 .fname {
@@ -390,15 +411,17 @@ text {
 .deprel {
     fill: #555555;
 }
-input, textarea {
+
+input,
+textarea {
     color: black;
     background-color: #f0f0f0;
 }
 
 /* box around word */
 .wordnode {
-     fill: #fbfbfb;
-     stroke: #888;
+    fill: #fbfbfb;
+    stroke: #888;
 }
 
 .wordcheck {
@@ -440,12 +463,12 @@ input, textarea {
 }
 
 #goldword {
-    color:#3e3e3e;
+    color: #3e3e3e;
     background-color: #f9f9f9;
 }
 
 #editedword {
-    color:#555555;
+    color: #555555;
     background-color: #f9f9f9;
 }
 
@@ -454,19 +477,21 @@ input, textarea {
 }
 
 #compare table tr td {
-  border: 1px solid #111;
+    border: 1px solid #111;
 }
 
 /* repeat here, it must follo deprel_preceding/following head */
 .deprelarrowcheck {
     stroke: magenta;
 }
+
 .deprellabelcheck {
     fill: magenta;
 }
+
 .tokencheck_table {
-   background-color: #909;
-   color: #ffddff;
+    background-color: #909;
+    color: #ffddff;
 }
 
 .checkbox-wrapper-6 .tgl-light:checked+.tgl-btn {

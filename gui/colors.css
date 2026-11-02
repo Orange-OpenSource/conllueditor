@@ -32,20 +32,18 @@ are permitted provided that the following conditions are met:
 */
 
 
-
-h1  {
-    color:#ff6600;
+h1 {
+    color: #ff6600;
 }
 
 
-
 #goldword {
-    color:#00bb00;
+    color: #00bb00;
     background-color: white;
 }
 
 #editedword {
-    color:#bb4400;
+    color: #bb4400;
     background-color: white;
 }
 
@@ -54,56 +52,76 @@ h1  {
 }
 
 #header {
- 
-    background-image: linear-gradient(
-        rgba(247, 220, 180, 1),
-    /*rgba(247,220,180, 1),
+
+    background-image: linear-gradient(rgba(247, 220, 180, 1),
+            /*rgba(247,220,180, 1),
         rgba(251,235,212, 1),
         rgba(254,246,233, 1), */
-        rgba(255,255,255, 0));
+            rgba(251, 235, 212, 1),
+            rgba(255, 255, 255, 0));
 }
 
 
 
 tr.everyotherrow:nth-child(odd) {
-    background-color:#ffe5cc;
+    background-color: #ffe5cc;
 }
+
 tr.everyotherrow:nth-child(even) {
-    background-color:white;
+    background-color: white;
 }
 
 .tableheader {
-    background-color:#ff7900;
+    background-color: #ff7900;
 }
 
-.chunk0 {background-color:#ff780080; /*opacity: 0.5; */
-         fill:#ff780080 }
-.chunk1 {background-color:#4ab4e6; fill:#4ab4e6 }
-.chunk2 {background-color:#ffb4e680; fill:#ffb4e680 }
-.chunk3 {background-color:#ffd200; fill:#ffd200 }
-.chunk4 {background-color:#4fbd8780; fill:#4fbd8780 }
-.chunk5 {background-color:#a885d880; fill:#a885d880 }
+.chunk0 {
+    background-color: #ff780080;
+    /*opacity: 0.5; */
+    fill: #ff780080
+}
+
+.chunk1 {
+    background-color: #4ab4e6;
+    fill: #4ab4e6
+}
+
+.chunk2 {
+    background-color: #ffb4e680;
+    fill: #ffb4e680
+}
+
+.chunk3 {
+    background-color: #ffd200;
+    fill: #ffd200
+}
+
+.chunk4 {
+    background-color: #4fbd8780;
+    fill: #4fbd8780
+}
+
+.chunk5 {
+    background-color: #a885d880;
+    fill: #a885d880
+}
 
 img.helptextbutton {
-        background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 /* format of application buttons in the help text */
 .buttondoc {
     border: 1px solid #222;
-        background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 /* format of keys to press in the help text */
@@ -126,25 +144,22 @@ img.helptextbutton {
 }
 
 /* make normal buttons look like mycheckbuttons */
-.mybutton, btn-primary {
+.mybutton,
+btn-primary {
     border: 1px solid #959595;
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 .mybutton:hover {
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+    background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));
 }
 
 
@@ -159,33 +174,27 @@ img.helptextbutton {
 
 /* background for buttons with icons */
 .contain {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 .contain:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));
 }
 
 .contain.active {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(224, 116, 13)),
-        color-stop(1, rgb(252, 145, 14))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(224, 116, 13)),
+            color-stop(1, rgb(252, 145, 14)));
 }
 
 .undoredo {
@@ -199,45 +208,37 @@ img.helptextbutton {
 /* inspired by https://designmodo.com/3d-css3-button/ */
 .mycheck2 {
     border: 1px solid #959595;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 .mycheck {
     border: 1px solid #959595;
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 .mycheck.active {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(224, 116, 13)),
-        color-stop(1, rgb(252, 145, 14))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(224, 116, 13)),
+            color-stop(1, rgb(252, 145, 14)));
 
 }
 
 .mycheck:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgba(244, 146, 13)),
-        color-stop(1, rgba(245, 187, 15))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgba(244, 146, 13)),
+            color-stop(1, rgba(245, 187, 15)));
     color: #222;
 }
 
@@ -251,7 +252,8 @@ img.helptextbutton {
     background-color: #AA0000;
 }
 
-#psc, #pendingshortcuts {
+#psc,
+#pendingshortcuts {
     color: rgb(136, 0, 0);
 }
 
@@ -266,10 +268,10 @@ img.helptextbutton {
 
 
 .modal-header {
-    background-image: linear-gradient(rgba(255,153,51, 1),
-      /*  rgba(251,235,212, 1),
+    background-image: linear-gradient(rgba(255, 153, 51, 1),
+            /*  rgba(251,235,212, 1),
         rgba(254,246,233, 1),*/
-        rgba(255,255,255, 0));
+            rgba(255, 255, 255, 0));
 }
 
 
@@ -283,31 +285,27 @@ text {
 
 
 #compare table tr td {
-  border: 1px solid black;
+    border: 1px solid black;
 }
 
-.dewis  {
+.dewis {
     qqpadding: 5px 5px 5px 5px;
     border: 1px solid #959595;
 
-    background: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(217,217,217)),
-        color-stop(1, rgb(252,252,252))
-        );
+    background: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(217, 217, 217)),
+            color-stop(1, rgb(252, 252, 252)));
 }
 
 
 .dewis:hover {
-    background-image: -webkit-gradient(
-        linear,
-        left bottom,
-        left top,
-        color-stop(0, rgb(227,227,227)),
-        color-stop(1, rgb(255,255,255))
-        );
+    background-image: -webkit-gradient(linear,
+            left bottom,
+            left top,
+            color-stop(0, rgb(227, 227, 227)),
+            color-stop(1, rgb(255, 255, 255)));
 }
 
 
@@ -318,9 +316,11 @@ text {
 .upossc {
     color: #9164cd;
 }
+
 .xpossc {
     color: #50be87;
 }
+
 .featsc {
     color: #4bb4e6;
 }
@@ -344,4 +344,3 @@ text {
 .tableerrors {
     background-color: #ffbbbb;
 }
-
