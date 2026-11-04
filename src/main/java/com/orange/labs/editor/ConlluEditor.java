@@ -1383,6 +1383,11 @@ public class ConlluEditor {
                                 fields.add(ConllWord.Fields.XPOS);
                             } else if (tmp[0].startsWith("d")) {
                                 fields.add(ConllWord.Fields.DEPREL);
+                            } else if (tmp[0].startsWith("M")) {
+                                fields.add(ConllWord.Fields.MISC);
+                            } else if (tmp[0].startsWith("F")) {
+                                fields.add(ConllWord.Fields.FEATURE);
+
                             } else if (tmp[0].startsWith("e")) {
                                 // enhanced deps
                                 fields.add(ConllWord.Fields.DEPS);

@@ -434,9 +434,12 @@ The search fields at the top of the screen can be used to search for forms, lemm
   * `some of` finds next occurrence of _some of_ (no quotes necessary, since the search string does not start with a blank).
   * The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
         Upos: `AUX/.*/VERB` looks for a sequence of words with upos tags _AUX_, _any_, _VERB_
-* The any search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e` (form, lemma, upos, xpos, deprel, enhanced deps) a `%` can be used to search for a word on more than one criterium.
+* The any search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e`, `F`, `R` (form, lemma, upos, xpos, deprel, enhanced deps, features, misc) a `%` can be used to search for a word on more than one criterium.
   * `l:the/u:ADJ/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective and the last is _mouse_
   * `l:the/u:ADJ%x:JJR/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective which has the XPOS JJR and the last word is _mouse_
+  * for `F` and `R`, you can either specify the key or search just for a value
+     * `F:Case:N.*` (looks for words with the feature `Case` and a value matching `N.*`)
+     * `F:N.*` (looks for words with a feature whose value matches `N.*`)
 * The deprel search field accepts a single or a list of regex, separated by `<`, `=` or `>` to search for branches in the dependency tree, for example
   * `cc<nsubj` finds a word with _cc_ deprel whose head has also a _nsubj_ child.
   * `case>mark` finds a word with _case_ deprel which has a child with a _mark_ deprel.

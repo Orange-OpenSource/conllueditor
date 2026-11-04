@@ -1,6 +1,7 @@
 # Changes
 
 ## Version 3.0.0
+* search for MISC and FEAT in `find any`
 * new layout, checkbuttons redesigned
 * dark, grey and blue theme added (loaded via `uiconfig.yml` or option `--css`)
 * set deprel check flag in edit deprel modal too

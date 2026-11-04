@@ -114,7 +114,7 @@ public class ConllWord {
     };
 
     public enum Fields {
-        FORM, LEMMA, UPOS, XPOS, DEPREL, FEATURE, DEPS
+        FORM, LEMMA, UPOS, XPOS, DEPREL, FEATURE, DEPS, MISC
     };
 
     /**
@@ -1499,7 +1499,17 @@ public class ConllWord {
                 if (elems.length == 2) {
                     return matchesFeatureValue(elems[0], elems[1]);
                 } else {
-                    return false;
+                    return matchesFeatureValue(regex);
+                    //return false;
+                }
+            case MISC:
+                // split regex in two: feature name: regex of value
+                String[] elems2 = regex.split(":", 2);
+                if (elems2.length == 2) {
+                    return matchesMiscValue(elems2[0], elems2[1]);
+                } else {
+                    return matchesMiscValue(regex);
+                    //return false;
                 }
             case DEPS:
                 if (deps == null) {
@@ -1654,6 +1664,19 @@ public class ConllWord {
         }
         return (v.matches(valregex));
     }
+    // check values with any feature name
+    public boolean matchesFeatureValue(String valregex) {
+        if (features == null || features.isEmpty()) {
+            return false;
+        }
+        for (String key : features.keySet()) {
+            String val = features.get(key);
+            if (val.matches(valregex)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public boolean matchesMiscValue(String name, String valregex) {
         if (misc == null || misc.isEmpty()) {
@@ -1670,6 +1693,26 @@ public class ConllWord {
             val = String.valueOf((Long) v);
         }
         return (val.matches(valregex));
+    }
+
+    // check values with any feature name
+    public boolean matchesMiscValue(String valregex) {
+        if (misc == null || misc.isEmpty()) {
+            return false;
+        }
+        for (String key : misc.keySet()) {
+            Object v = misc.get(key);
+            String val;
+            if (v instanceof String) {
+                val = (String) v;
+            } else {
+                val = String.valueOf((Long) v);
+            }
+            if (val. matches(valregex)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getHead() {
