@@ -1149,9 +1149,20 @@ public class TestConlluEditor {
         jelement = JsonParser.parseString(rtc);
         FileUtils.writeStringToFile(out, "," + prettyprintJSON(jelement) + "]", StandardCharsets.UTF_8, true);
 
+        rtc = ce.process("findmulti false F:Number:Pl.*", 1, "", 0);
+        jelement = JsonParser.parseString(rtc);
+        FileUtils.writeStringToFile(out, "," + prettyprintJSON(jelement) + "]", StandardCharsets.UTF_8, true);
+
+        rtc = ce.process("findmulti false F:Pres", 1, "", 0);
+        jelement = JsonParser.parseString(rtc);
+        FileUtils.writeStringToFile(out, "," + prettyprintJSON(jelement) + "]", StandardCharsets.UTF_8, true);
+
+        rtc = ce.process("findmulti false M:N.", 1, "", 0);
+        jelement = JsonParser.parseString(rtc);
+        FileUtils.writeStringToFile(out, "," + prettyprintJSON(jelement) + "]", StandardCharsets.UTF_8, true);
+
 
         URL ref = this.getClass().getResource("findsequence.json");
-
         Assert.assertEquals(String.format("Find form return incorrect\n ref: %s\n res: %s\n", ref.toString(), out.toString()),
                 FileUtils.readFileToString(new File(ref.getFile()), StandardCharsets.UTF_8),
                 FileUtils.readFileToString(out, StandardCharsets.UTF_8));
