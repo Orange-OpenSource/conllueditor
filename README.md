@@ -819,7 +819,8 @@ info: http://lindat.mff.cuni.cz/services/udpipe/api/models
 txt: data
 
 # other fields which need to be present in the call to the parser
-other: model=english-ewt-ud-2.5-191206,tokenizer=,tagger=,parser=
+# adapt the model in function of what is available
+other: model=english-ewt-ud-2.17-152225,tokenizer=,tagger=,parser=
 
 # if the parser response is in json, give the path to the CoNLL-U result
 jsonpath: result

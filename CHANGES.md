@@ -8,6 +8,7 @@
 * graphs slightly redesigned (i.e. made prettier)
 * added UI tests (selenium based)
 * test data updated
+* parser front-end adapt to changes in the display
 
 ## Version 2.36.0
 * corrected bug in flat view

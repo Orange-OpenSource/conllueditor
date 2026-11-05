@@ -39,6 +39,13 @@ var isIE = /*@cc_on!@*/false || !!document.documentMode;
 var isEdge = !isIE && !!window.StyleMedia;
 var sentenceId = 0;
 
+var wordlengths = {}; // position (not ID !!): width in px
+var wordpositions = {}; // position: x-position in graph
+var wordpos = {}; // id: position
+var rightmostwordpos = 0; // position of the last word (needed to draw R2L trees)
+var hordist = 6; // horizontal distance beween words (if auto-adpat is active)
+
+
 function choosePort() {
     // http port
     if (window.location.port != "") {
@@ -70,15 +77,91 @@ function choosePort() {
 
 
 var flatgraph = false;
-var showfeats = false;
-var showmisc = false;
-var showr2l = false;
+//var showfeats = false;
+//var showmisc = false;
+//var showr2l = false;
 var showextra = false;
-var autoadaptwidth = false; // TODO factorise word width calculation and add here
+//var autoadaptwidth = false; // TODO factorise word width calculation and add here
 var show_basic_in_enhanced = false; // if true we display enhanced deps which are identical two basic deps
 var parserinfo = null; // output from HTTP get to URL at "info" key in in configuration file
 var parseraddress = "?"
 var incorrectwords = {};
+
+/* get width needed by a word box (form, xpos, features, misc*/
+function getWordLength(cword) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    //ctx.fontSize = "12px"; //document.getElementsByClassName("wordnode").style.fontSize;
+    //ctx.fontFamily = "Lato"; //document.getElementsByClassName("wordnode").style.fontFamily;
+    ctx.font = "17px Lato"; // TODO get from current Font !!
+    wlen = ctx.measureText(cword.form).width;
+    wlen = Math.max(wlen, ctx.measureText(cword.xpos).width); // sometimes XPOS are long
+
+    ctx.font = "11px Lato";
+    // take into accound Feature values width
+    if (//showfeats
+        $("#feat3").is(":checked")
+         && cword.feats !== undefined) { // display misc column info if active
+        for (var f in cword.feats) {
+            //console.log("ggg", cword.feats[f].val, wlen, 2*ctx.measureText(cword.feats[f].val).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.feats[f].name).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.feats[f].val).width);
+            //console.log("hhh", wlen);
+        }
+    }
+
+    // take into accound MISC values width
+    if (//showmisc
+        $("#misc3").is(":checked")
+        && cword.misc !== undefined) { // display misc column info if active
+        for (var f in cword.misc) {
+            //console.log("ggg", cword.misc[f].val, wlen, 2*ctx.measureText(cword.misc[f].val).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.misc[f].name).width);
+            wlen = Math.max(wlen, 2 * ctx.measureText(cword.misc[f].val).width);
+            //console.log("hhh", wlen);
+        }
+    }
+    wordlengths[cword.position] = Math.max(50, wlen); // get 50px minimal size
+    //console.log("iii", wlen);
+    wordpos[cword.id] = cword.position;
+    return wlen;
+}
+
+/* get word of all words of all trees of the sentence (all trees in case of multiple trees) */
+function getAllWordLengths(trees, maxlen) {
+    wordlengths = {};
+    for (var k = 0; k < trees.tree.length; ++k) {
+        var item = trees.tree[k];
+        maxlen = Math.max(maxlen, getWordLengthsOfTree(item, maxlen));
+    }
+
+    // calculate x-positions
+    //console.log("aaa", wordlengths);
+    wordpositions = {};
+    rightmostwordpos = 0;
+    var pos = Object.keys(wordlengths); //.sort();
+    var last = 0;
+    for (var i = 0; i < pos.length; ++i) {
+        wordpositions[pos[i]] = last + wordlengths[pos[i]] / 2;
+        last += wordlengths[pos[i]] + hordist;
+        rightmostwordpos = Math.max(last, rightmostwordpos);
+        //console.log("aa2", i, ids[i], last);
+    }
+    //console.log("bbb", wordpositions);
+    return maxlen;
+}
+
+/* get word length for all words of a tree */
+function getWordLengthsOfTree(item, maxlen) {
+    maxlen = Math.max(maxlen, getWordLength(item, maxlen));
+    if (item.children) {
+        for (var i = 0; i < item.children.length; i++) {
+            maxlen = Math.max(maxlen, getWordLengthsOfTree(item.children[i], maxlen));
+        }
+    }
+
+    return Math.round(maxlen);
+}
 
 function ModifyTree(evt) {
     // used when clicking in dependency tree/hedge (by editor) not needed here
@@ -99,6 +182,10 @@ function formatToutesPhrases() {
 
 /** format the given sentence as syntax tree in svg */
 function formatPhrase(item) {
+    if (!$("#fixedwidth").is(":checked")) {
+        var maxlen = getAllWordLengths(item, 0);
+    }
+
     //$("#arbre").append('<li id="li' + sentenceId + '">');
     var svg = document.createElementNS(svgNS, "svg");
     //$("#det" + curid).append('<h3>Syntax</h3>');
@@ -108,7 +195,11 @@ function formatPhrase(item) {
     var use_deprel_as_type = true;
     var sentencelength = 0;
 
-    if (showr2l) {
+    /*if (showr2l) {
+        sentencelength = item.length;
+    }*/
+
+    if ($("#r2l2").is(":checked")) {
         sentencelength = item.length;
     }
 

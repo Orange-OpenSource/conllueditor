@@ -48,8 +48,9 @@
 
         <link rel="stylesheet" type="text/css" href="parse.css" />
         <link rel="stylesheet" type="text/css" href="depgraph.css" />
-        <link rel="shortcut icon"  type="image/x-icon" href="img/orange.ico">
-
+        <link rel="shortcut icon"  type="image/x-icon" href="img/celogo.png">
+        <link rel="stylesheet" type="text/css" href="colors.css" />
+        <link rel="stylesheet" type="text/css" href="checkbuttons.css" />
 
         <script type="text/javascript" src="./lib/jquery-3.3.1.min.js" ></script>
         <!--script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" -->
@@ -79,10 +80,26 @@
                     <td >  
                         <button class="mycheck mybutton" id="analyser" title="analyse given sentences">analyse</button>
                         <button class="mycheck mybutton" id="vider">clean</button>&nbsp;
-                        <button class="mycheck mybutton" id="feat2" title="show morpho-syntactic features">features</button>
-                        <button class="mycheck mybutton" id="misc2" title="show contents of MISC column">misc</button>
+                        <!--button class="mycheck mybutton" id="feat2" title="show morpho-syntactic features">features</button-->
+                        <label id="featb" class="notwithtable cbcontainer checkbox-wrapper-6" title="show morpho-syntactic features">
+                            <span class="cblabel">Features</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="feat3">
+                            <span class="tgl-btn"></span>
+                        </label>
+
+                        <!--button class="mycheck mybutton" id="misc2" title="show contents of MISC column">misc</button-->
+                        <label id="miscb"  class="notwithtable cbcontainer checkbox-wrapper-6" title="show contents of MISC column">
+                            <span class="cblabel">Misc</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="misc3">
+                            <span class="tgl-btn"></span>
+                        </label>
                         <button class="mycheck mybutton" id="flat2">flat graph</button>
-                        <button class="mycheck mybutton" id="r2l" title="activate for sentennces in Arabic or Hebrew script">right to left</button>
+                        <!--button class="mycheck mybutton" id="r2l" title="activate for sentennces in Arabic or Hebrew script">right to left</button-->
+                        <label id="r2l2_container" class="notwithtable cbcontainer checkbox-wrapper-6" title="activate for sentences in Arabic or Hebrew script">
+                            <span class="cblabel">right-to-left</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="r2l2">
+                            <span class="tgl-btn"></span>
+                        </label>
                         <!--button class="mycheck mybutton" id="extracols" title="show contents of columns > 10">extra cols</button-->
 
                         <!-- <button type="button" class="help mybutton" data-toggle="modal" data-target="#helpModal">help</button> -->
@@ -95,6 +112,11 @@
                 </tr>
                 <tr>
                     <td>
+                        <label class="onlyWithTree cbcontainer checkbox-wrapper-6" id="fixedwidth_container" title="fixed word widths">
+                            <span class="cblabel">fixed width</span>
+                            <input class="mycheck tgl tgl-light" type="checkbox" id="fixedwidth">
+                            <span class="tgl-btn"></span>
+                        </label>
                         <a class="onlyWithTree" id="a2" download="arbre.svg" type="image/svg+xml"><button class="mybutton">download image</button></a>
                         <button class ="onlyWithTree mybutton" id="latex"><span class="latex">L<sup>a</sup>T<sub>e</sub>X</span></button>
                         <button class ="onlyWithTree mybutton" id="conllu">CoNLL-U</button>
