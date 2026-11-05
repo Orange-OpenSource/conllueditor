@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.36.1 as of 26th October 2026
+ @version 3.0.0 as of 2nd November 2026
  */
 
 var svgNS = "http://www.w3.org/2000/svg";

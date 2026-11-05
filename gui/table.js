@@ -96,6 +96,56 @@ function smallertd(where) {
 var currentwordid = 0; // if != 0, the word to apply edit shortcuts to
 var formalErrors = 0;
 
+
+// use up and down keys to navigate vertically in the tableview (tab/shift tab do so already horizontally)
+$(window).on('keydown', function (event) {
+    console.log("yyyytable", $(window), event.which);
+
+    const currentCell = event.target.closest('td');
+    if (!currentCell) return;
+
+    // Track the Down Arrow (ArrowDown) or Enter key
+    if (event.key === 'ArrowDown') {
+      // Prevent Enter from inserting newlines or submitting forms
+      event.preventDefault();
+
+      const cellIndex = currentCell.cellIndex;
+      const currentRow = currentCell.parentElement;
+      const nextRow = currentRow.nextElementSibling;
+
+      if (nextRow) {
+        // Find the focusable element in the next row at the same column index
+        const nextTarget = nextRow.cells[cellIndex].querySelector('input, [contenteditable]');
+
+        // Fall back to the cell itself if it's the contenteditable element
+        const focusElement = nextTarget || nextRow.cells[cellIndex];
+
+        if (focusElement) {
+          focusElement.focus();
+        }
+      }
+    } else if (event.key === 'ArrowUp') {
+        // Prevent Enter from inserting newlines or submitting forms
+        event.preventDefault();
+
+        const cellIndex = currentCell.cellIndex;
+        const currentRow = currentCell.parentElement;
+        const nextRow = currentRow.previousElementSibling;
+
+        if (nextRow) {
+          // Find the focusable element in the next row at the same column index
+          const nextTarget = nextRow.cells[cellIndex].querySelector('input, [contenteditable]');
+
+          // Fall back to the cell itself if it's the contenteditable element
+          const focusElement = nextTarget || nextRow.cells[cellIndex];
+
+          if (focusElement) {
+            focusElement.focus();
+          }
+        }
+      }
+  });
+
 function drawTable(parent, trees, sentid) {
     formalErrors = 0;
     var tbl = document.createElement("table");

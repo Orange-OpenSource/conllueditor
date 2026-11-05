@@ -272,6 +272,7 @@ The button `fixed width` displays the tree/hedge width a (configurable) fixed wo
 The table view is still *experimental*, all green fields can be edited: The shortcuts also work in table view, click on the ID of the word to modify via shortcuts (UPOS, XPOS, deprel, features) and type the short cut sequence. Ctrl-click on an ID does not unmark the token after applying a shortcut. This allows to apply several shortcuts on the same word.
 Known Bug: Currently for multiword tokens the  only available feature `Typo=Yes` cannot yet be set or unset in table view.
 Columns can be made larger by clicking the at the right side of the column header and drag it.
+the `tab` key and `shift`-`tab` allow to navigate horizontally in the table, `up-arrow` and `down-arrow` move the focus vertically.
 
 ![Edit screen (flat graph)](doc/table.png)
 
@@ -769,6 +770,14 @@ Dark mode gives the following:
 ![Custom UI Dark mode](doc/custom-ui-dark.png)
 
 You can also specify the `css` file using the option `--css index-dark.css`
+
+* Black and White (`--css index-grey-bright.css`)
+
+![Custom UI B/W mode](doc/custom-ui-grey.png)
+
+* Blueish (`--css blue.css`)
+
+![Custom UI B/W mode](doc/custom-ui-blue.png)
 
 # Server API (used by the GUI)
 * `curl -F "sentid=1" -F "cmd=read 1"  http://host:port/edit/` get a sentence (first sentence of a file is `read 0`, `sentid` is only used only for editing commands but must be present)

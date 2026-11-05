@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 2.31.2 as of 25th June 2025
+ @version 3.0.0 as of 5th November 2026
  */
 
 

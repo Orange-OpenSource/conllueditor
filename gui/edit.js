@@ -1161,8 +1161,7 @@ let timeout = null;
 var  shortcutseq = "";
 // Listen for keystroke events
 $(window).on('keypress', function (evt) {
-	//console.log("yyyy", $(window), evt, shortcutseq, shortcuttimeout);
-
+    //console.log("yyyytree", $(window), evt.which);
     if ($(".modal").is(":visible")) {
         // if a model is open, we do not want to catch keypress events, since we are editing text
         unsetPShC();
@@ -1265,82 +1264,6 @@ $(window).on('keypress', function (evt) {
             }
 
 
-//            if (false) {
-//                var newval = shortcutsUPOS[shortcutseq];
-//                if (newval != undefined) {
-//                    //console.log("UPOS", newval);
-//                    sendmodifs({"cmd": "mod upos " + clickedNodes[0] + " " + newval});
-//                    shortcutseq = "";
-//                    deprels = [];
-//                    uposs = [];
-//                    if (keepmarked == -1) {
-//                        clickedNodes = [];
-//                    }
-//                    unsetPShC();
-//                    return;
-//                }
-//
-//                newval = shortcutsDEPL[shortcutseq];
-//                if (newval != undefined) {
-//                    //console.log("DEPL", newval);
-//                    sendmodifs({"cmd": "mod deprel " + clickedNodes[0] + " " + newval});
-//                    shortcutseq = "";
-//                    deprels = [];
-//                    uposs = [];
-//                    if (keepmarked == -1) {
-//                        clickedNodes = [];
-//                    }
-//                    unsetPShC();
-//                    return;
-//                }
-//
-//                newval = shortcutsFEATS[shortcutseq];
-//                if (newval != undefined) {
-//                    sendmodifs({"cmd": "mod addfeat " + clickedNodes[0] + " " + newval});
-//                    shortcutseq = "";
-//                    deprels = [];
-//                    uposs = [];
-//                    if (keepmarked == -1) {
-//                        clickedNodes = [];
-//                    }
-//                    unsetPShC();
-//                    return;
-//                }
-//
-//                newval = shortcutsMISC[shortcutseq];
-//                if (newval != undefined) {
-//                    sendmodifs({"cmd": "mod addmisc " + clickedNodes[0] + " " + newval});
-//                    shortcutseq = "";
-//                    deprels = [];
-//                    uposs = [];
-//                    if (keepmarked == -1) {
-//                        clickedNodes = [];
-//                    }
-//                    unsetPShC();
-//                    return;
-//                }
-//
-//                newval = shortcutsXPOS[shortcutseq];
-//                if (newval != undefined) {
-//                    //console.log("XPOS", newval, newval[0]);
-//                    if (newval.length > 1) {
-//                        // change UPOS and XPOS
-//                        sendmodifs({"cmd": "mod pos " + clickedNodes[0] + " " + newval[1] + " " + newval[0]});
-//                    } else {
-//                        // change only XPOS
-//                        sendmodifs({"cmd": "mod xpos " + clickedNodes[0] + " " + newval[0]});
-//                    }
-//
-//                    shortcutseq = "";
-//                    deprels = [];
-//                    uposs = [];
-//                    if (keepmarked == -1) {
-//                        clickedNodes = [];
-//                    }
-//                    unsetPShC();
-//                    return;
-//                }
-//            }
             if (shortcutseq[0] === "&" && shortcutseq.length > 1) {
                 var gotonode = parseInt(shortcutseq.substring(1), 10);
                 if (gotonode > 0) {
