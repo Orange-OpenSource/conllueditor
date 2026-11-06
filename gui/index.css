@@ -718,7 +718,7 @@ text {
     background-size: auto .8em;
     background-position: right .3em top 50%;
     background-repeat: no-repeat;
-    filter: hue-rotate(180deg);
+    oofilter: hue-rotate(180deg);
 }
 
 /*
