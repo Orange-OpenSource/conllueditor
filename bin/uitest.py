@@ -141,7 +141,7 @@ class CE_UItest:
                                                       fromfile="expected", tofile="got"):
                             print(x)
                         input("KO>>")
-            except NoSuchElementException as e:
+            except WebDriverException as e:
                 print("\tKO", type(e), e)
                 input("EXCEPTION>>")
 
