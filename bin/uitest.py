@@ -77,7 +77,7 @@ class CE_UItest:
             options = webdriver.ChromeOptions()
             if args.headless:
                 options.add_argument('--headless')
-
+            options.add_argument('--window-size=1420,1180')
             self.driver = webdriver.Chrome(options=options)
         self.driver.get(args.url)
         self.args = args
@@ -354,14 +354,51 @@ class CE_UItest:
         self.choose("flat3", 2) # tree
 
         time.sleep(0.5)
-        #print("ZZZZ", edits)
-        for edit in edits:
 
-            w1 = self.driver.find_element(By.ID, edit[0])
-            w1.send_keys(Keys.BACKSPACE*10 + edit[1] + Keys.RETURN)
-            time.sleep(1)
-            w1 = self.driver.find_element(By.ID, "tlemma_1")
-            w1.click()
+        for edit in edits:
+            #print("EDIT", edit)
+            #input("go! ")
+            if edit[0] == "CLICK":
+                w1 = self.driver.find_element(By.ID, edit[1])
+                w1.send_keys(Keys.BACKSPACE*10 + edit[2] + Keys.RETURN)
+                time.sleep(1)
+                w1 = self.driver.find_element(By.ID, "tlemma_1")
+                w1.click()
+            elif edit[0] == "DOWN":
+                w1 = self.driver.find_element(By.ID, edit[1])
+                w1.send_keys(Keys.DOWN)
+                w2 = self.driver.switch_to.active_element
+                w2.send_keys(Keys.BACKSPACE*10 + edit[2] + Keys.RETURN)
+                time.sleep(1)
+                w3 = self.driver.find_element(By.ID, "tlemma_1")
+                w3.click()
+            elif edit[0] == "UP":
+                w1 = self.driver.find_element(By.ID, edit[1])
+                w1.send_keys(Keys.UP)
+                w2 = self.driver.switch_to.active_element
+                w2.send_keys(Keys.BACKSPACE*10 + edit[2] + Keys.RETURN)
+                time.sleep(1)
+                w3 = self.driver.find_element(By.ID, "tlemma_1")
+                w3.click()
+            elif edit[0] == "TAB":
+                continue # not working yet
+                w1 = self.driver.find_element(By.ID, edit[1])
+                w1.send_keys(Keys.TAB)
+                w2 = self.driver.switch_to.active_element
+                w2.send_keys(Keys.BACKSPACE*10 + edit[2] + Keys.RETURN)
+                time.sleep(1)
+                w3 = self.driver.find_element(By.ID, "tlemma_1")
+                w3.click()
+            elif edit[0] == "SHIFTTAB":
+                continue # not working yet
+                w1 = self.driver.find_element(By.ID, edit[1])
+                action = ActionChains(self.driver)
+                action.key_down(Keys.SHIFT).send_keys(Keys.TAB).key_up(Keys.SHIFT).perform()
+                w2 = self.driver.switch_to.active_element
+                w2.send_keys(Keys.BACKSPACE*10 + edit[2] + Keys.RETURN)
+                time.sleep(1)
+                w3 = self.driver.find_element(By.ID, "tlemma_1")
+                w3.click()
             time.sleep(0.5)
 
         # save the current version before going back to tree-view (since this removes the undo states)
