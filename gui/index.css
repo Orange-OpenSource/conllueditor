@@ -188,7 +188,7 @@ img.helptextbutton {
     font-style: italic;
     border-radius: 5px;
     border: 1px solid #222;
-    padding: 5px;
+    padding: 1px 2px 1px 2px;
     /*
         background-image: -webkit-gradient(
         linear,
@@ -718,7 +718,6 @@ text {
     background-size: auto .8em;
     background-position: right .3em top 50%;
     background-repeat: no-repeat;
-    oofilter: hue-rotate(180deg);
 }
 
 /*

@@ -491,8 +491,7 @@
                         Since a node can have multiple heads in enhanced dependencies, in order to delete an enhanced dep relations
                         either use the word edit on the dependant, or use click on the dependency label and then click on
                         <span class="buttondoc">delete</span>.
-                        <p>
-                        Basic dependencies, which are also enhanced dependencies are only deplaced if
+                        Basic dependencies, which are also enhanced dependencies are only modified if
                         <span class="buttondoc">show basic in enhanced</span> is activated.
                         or use a command and hit the <span class="buttondoc">modify</span> button:
                         <table border ="0" class="bhelpstyle">
@@ -526,14 +525,21 @@
                                 <span class="userinputdoc">u</span>,
                                 <span class="userinputdoc">x</span>,
                                 <span class="userinputdoc">d</span>,
-                                <span class="userinputdoc">e</span> (form, lemma, upos, xpos, deprel, enhanced deps)
+                                <span class="userinputdoc">e</span>,
+                                <span class="userinputdoc">F</span>,
+                                <span class="userinputdoc">M</span> (form, lemma, upos, xpos, deprel, enhanced deps, features, misc)
                                 a <span class="userinputdoc">%</span> can be used to search for a word on more than one criterium.
                                 <ul>
                                     <li><span class="userinputdoc">l:the/u:ADJ/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
                                         any adjective and the last is <i>mouse</i>
                                     <li><span class="userinputdoc">l:the/u:ADJ%x:JJR/l:mouse</span> looks for a sequence of words, where the first word is <i>the</i>, the following
                                         any adjective which has the XPOS <i>JJR</i> and the last word is <i>mouse</i>
-                                </ul>
+                                    <li>for <span class="userinputdoc">F</span> and <span class="userinputdoc">R</span>, you can either specify the key or search just for a value
+                                        <ul>
+                                        <li><span class="userinputdoc">F:Case:N.*</span> looks for words with the feature Case and a value matching <span class="userinputdoc">N.*</span></li>
+                                        <li><span class="userinputdoc">F:N.*</span> looks for words with a feature whose value matches <span class="userinputdoc">N.*</span></li>
+                                        </ul>
+                                    </ul>
                             <li>
                                 The deprel search field accepts a single or a list of regex,
                                 separated by <span class="userinputdoc">&lt;</span>, <span class="userinputdoc">=</span> or <span class="userinputdoc">&gt;</span> to search for branches in the dependency tree, for example
@@ -564,12 +570,12 @@
                         Available keys are:
                         <ul>
                             <li> <span class="userinputdoc">Upos</span> (Values: <span class="userinputdoc">[A-Z]+</span>)</li>
-                            <li> <span class="userinputdoc">Xpos</span> (Values: string of any character except whitespaces, ')' and '&amp;')</li>
-                            <li> <span class="userinputdoc">Lemma</span> (Values: string of any character except whitespaces, ')' and '&amp;')</li>
-                            <li> <span class="userinputdoc">Form</span> (Values: string of any character except whitespaces, ')' and '&amp;')</li>
-                            <li> <span class="userinputdoc">Deprel</span> (Values: <span class="userinputdoc">[a-z]+</span>, optionally followed by ':' and  a string of  any character except whitespaces, ')' and '&amp;')</li>
-                            <li> <span class="userinputdoc">Feat</span> (Values: FeatureName=Value or FeatureName:Value. The Featurename must match <span class="userinputdoc">[A-Za-z_\[\]]+</span>, the Value must match <span class="userinputdoc">[A-Za-z0-9]+</span>)</li>
-                            <li> <span class="userinputdoc">Misc</span> (Values: MiscName=Value or MiscName:Value. MiscName must match <span class="userinputdoc">[A-Za-z_]+</span>, the Value can be any string without  whitespaces, ')' and '&amp;')</li>
+                            <li> <span class="userinputdoc">Xpos</span> (Values: string of any character except whitespaces, <span class="userinputdoc">)</span> and <span class="userinputdoc">&amp;</span>)</li>
+                            <li> <span class="userinputdoc">Lemma</span> (Values: string of any character except whitespaces, <span class="userinputdoc">)</span> and <span class="userinputdoc">&amp;</span>)</li>
+                            <li> <span class="userinputdoc">Form</span> (Values: string of any character except whitespaces, <span class="userinputdoc">)</span> and <span class="userinputdoc">&amp;</span>)</li>
+                            <li> <span class="userinputdoc">Deprel</span> (Values: <span class="userinputdoc">[a-z]+</span>, optionally followed by ':' and  a string of  any character except whitespaces, <span class="userinputdoc">)</span> and <span class="userinputdoc">&amp;</span>)</li>
+                            <li> <span class="userinputdoc">Feat</span> (Values: <span class="userinputdoc">FeatureName=Value</span> or <span class="userinputdoc">FeatureName:Value</span>. Featurename must match <span class="userinputdoc">[A-Za-z_\[\]]+</span>, Value must match <span class="userinputdoc">[A-Za-z0-9]+</span>)</li>
+                            <li> <span class="userinputdoc">Misc</span> (Values: <span class="userinputdoc">MiscName=Value</span> or <span class="userinputdoc">MiscName:Value</span>. MiscName must match <span class="userinputdoc">[A-Za-z_]+</span>, Value can be any string without  whitespaces, ')' and '&amp;')</li>
                             <li> <span class="userinputdoc">Id</span> (Values: integer)</li>
                             <li> <span class="userinputdoc">MWT</span> (Values: length of the mult-token word <span class="userinputdoc">[2-9]</span>)</li>
                             <li> <span class="userinputdoc">IsEmpty</span> (no value, true if the current node is empty)</li>
@@ -704,7 +710,10 @@
 
                        <h2>About</h2>
                        <img src="img/celogo.svg" width="150px"><br>
-                       ConlluEditor v<span id="ce_version"></span>, <a href="https://github.com/Orange-OpenSource/conllueditor">https://github.com/Orange-OpenSource/conllueditor</a> (commit: <span id="ce_gitcommit"></span>)<br>
+                       ConlluEditor v<span id="ce_version"></span>, <a href="https://github.com/Orange-OpenSource/conllueditor">https://github.com/Orange-OpenSource/conllueditor</a> 
+                       (commit: <span class="userinputdoc" id="ce_gitcommit_id"></span>
+                                (<span class="userinputdoc" id="ce_gitcommit_branch"></span><tt id="ce_gitcommit_state"></tt>),
+                                at <span class="userinputdoc" id="ce_gitcommit_date"></span>)<br>
                        Author: Johannes Heinecke.
                        Copyright © 2018-2026 by Orange. This software is published under the <a target="_blank" href="https://opensource.org/licenses/BSD-3-Clause">3-Clause BSD License</a>.
                        <p>

@@ -565,8 +565,11 @@ function getServerInfo() {
             var dirty = "";
             if (data.git_dirty) {
                 dirty = " (branch contains uncommitted sources)";
+                $('#ce_gitcommit_state').text(dirty);
             }
-            $('#ce_gitcommit').text(data.git_branch + " " + data.git_commit_id + " at " + data.git_commit_time + " " + dirty);
+            $('#ce_gitcommit_branch').text(data.git_branch);
+            $('#ce_gitcommit_id').text(data.git_commit_id);
+            $('#ce_gitcommit_date').text(data.git_commit_time);
 
             $(function () {
                 $("#cupos").autocomplete({
