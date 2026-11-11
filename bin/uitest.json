@@ -14,6 +14,7 @@
 	"name": "edit Deprel",
 	"function": ["changeDeprel", "5", "//*[@id=\"textpath_7_6_det\"]"],
 	"expected": "# sent_id = fr-ud-train_00002\n# text = L'œuvre est située dans la galerie des batailles, dans le château de Versailles.\n# highlight tokens = 9 8-9\n# sentence 4\n1\tL'\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t2\tdet\t_\tSpaceAfter=No\n2\tœuvre\tœuvre\tNOUN\t_\tGender=Fem|Number=Sing\t4\tnsubj\t_\t_\n3\test\têtre\tAUX\t_\tMood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin\t4\taux\t_\t_\n4\tsituée\tsituer\tVERB\t_\tGender=Fem|Number=Sing|Tense=Past|VerbForm=Part\t0\troot\t_\tSpaceAfter=\\s\\t\\s\n5\tdans\tdans\tADP\t_\t_\t7\tcase\t_\t_\n6\tla\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Sing|PronType=Art\t7\tamod\t_\tSpaceAfter=&nbsp;\n7\tgalerie\tgalerie\tNOUN\t_\tGender=Fem|Number=Sing\t4\tobl\t_\t_\n8-9\tdes\t_\t_\t_\t_\t_\t_\t_\t_\n8\tde\tde\tADP\t_\t_\t10\tcase\t_\t_\n9\tles\tle\tDET\t_\tDefinite=Def|Gender=Fem|Number=Plur|PronType=Art\t10\tdet\t_\t_\n10\tbatailles\tbataille\tNOUN\t_\tGender=Fem|Number=Plur\t7\tnmod\t_\tSpaceAfter=No\n11\t,\t,\tPUNCT\t_\t_\t4\tpunct\t_\t_\n12\tdans\tdans\tADP\t_\t_\t14\tcase\t_\t_\n13\tle\tle\tDET\t_\tDefinite=Def|Gender=Masc|Number=Sing|PronType=Art\t14\tdet\t_\t_\n14\tchâteau\tchâteau\tNOUN\t_\tGender=Masc|Number=Sing\t4\tobl\t_\t_\n15\tde\tde\tADP\t_\t_\t16\tcase\t_\t_\n16\tVersailles\tVersailles\tPROPN\t_\t_\t14\tnmod\t_\tSpaceAfter=No\n17\t.\t.\tPUNCT\t_\t_\t4\tpunct\t_\t_\n\n"
+
   },
   {
 	"name": "edit enhanced deprel",
