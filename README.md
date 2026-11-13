@@ -429,17 +429,22 @@ statistics:
 
 The search fields at the top of the screen can be used to search for forms, lemmas, UPOS, XPOS, deprels (or sequences of these), comments and sentences ids.
 
+Search always starts at the next sentence
+
 * The form and comment search fields accept any string (use double quotes if the search string starts/ends with a blank).   For example
   * `the` finds next occurrence of _the_, including _them_ or _weather_.
   * `" the "` finds next occurrence of the definite article _the_.
   * `some of` finds next occurrence of _some of_ (no quotes necessary, since the search string does not start with a blank).
   * The lemma/upos/xpos search fields accept a /-separated list of regex to find a corresponding sequence, for example
         Upos: `AUX/.*/VERB` looks for a sequence of words with upos tags _AUX_, _any_, _VERB_
-* The any search fields accepts a /-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e`, `F`, `R` (form, lemma, upos, xpos, deprel, enhanced deps, features, misc) a `%` can be used to search for a word on more than one criterium.
+* The Feature search field can contain the following
+    * a feature value (regex) (of any feature name), this finds the first sentence having a word with any feature with this value
+    * a Name:Value (regex). This matches the given Feature/Value pair. If a Feature has a value list (like `Gender=Fem,Masc`), searching for `Gender=Masc` matches. To search for the entire list, add a comma (`,`) in the search expression: `Gender=Fem,.*` matches only Words with the Feature list starting with `Fem`
+* The any search fields accepts a `/`-separated list of searchfield:regex to find a sequence on different criteria. searchfield can be any of `f`, `l`, `u`, `x`, `d`, `e`, `F`, `R` (form, lemma, upos, xpos, deprel, enhanced deps, features, misc) a `%` can be used to search for a word on more than one criterium.
   * `l:the/u:ADJ/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective and the last is _mouse_
   * `l:the/u:ADJ%x:JJR/l:mouse` looks for a sequence of words, where the first word is _the_, the following any adjective which has the XPOS JJR and the last word is _mouse_
   * for `F` and `R`, you can either specify the key or search just for a value
-     * `F:Case:N.*` (looks for words with the feature `Case` and a value matching `N.*`)
+     * `F:Case:N.*` (looks for words with the feature `Case` and a value matching `N.*`). As mentioned above, this also matches if the word has a feature value list.
      * `F:N.*` (looks for words with a feature whose value matches `N.*`)
 * The deprel search field accepts a single or a list of regex, separated by `<`, `=` or `>` to search for branches in the dependency tree, for example
   * `cc<nsubj` finds a word with _cc_ deprel whose head has also a _nsubj_ child.
@@ -463,7 +468,7 @@ Type in line number in field on the top right and click `go to line`:
 
 ![Search by line number](doc/search_line_number.png)
 
-## Complex search and search and replace
+## Search and search and replace
 
 This opens a search and search-and-display field. The search fields provides a simple language to find sentences with one or several nodes (see [Mass Editing](doc/mass_editing.md))
 

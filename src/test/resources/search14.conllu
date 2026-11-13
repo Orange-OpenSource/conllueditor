@@ -64,3 +64,9 @@ FINAL 1
 FINAL 2
 1	Dá	dar	VERB	VMIP3S0	_	0	root	_	Treeler=sentence|SpaceAfter=No
 3	lle	lle	PRON	PP3CSD00	_	1	nsubj	_	Treeler=suj
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+FOUND 1
+FINAL 1
+8	με	ἐγώ	PRON	Pp	Case=Acc|Gender=Masc|Number=Sing|Person=1|PronType=Prs	12	nsubj	_	Ref=1.8.3
+12	θεήσασθαι	θεάομαι	VERB	V-	Aspect=Perf|Tense=Past|VerbForm=Inf|Voice=Mid	7	ccomp	_	Ref=1.8.3

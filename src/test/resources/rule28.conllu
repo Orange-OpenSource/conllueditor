@@ -343,6 +343,7 @@
 # sent_id = cairo01
 # text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
 # text_en = The girl wrote a letter to her friend.
+# sentence 19
 # origtranslit = peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.
 1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	5	nsubj	_	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi|Gloss=girl
 2	തന്റെ	താൻ	PRON	_	Case=Gen|Number=Sing|Person=3|PronType=Prs	3	nmod:poss	_	Translit=tanṟe|LTranslit=tān̕|Gloss=her
@@ -351,4 +352,41 @@
 4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|Gloss=letter
 5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|Gloss=wrote|VF=ANY
 6	.	.	PUNCT	_	_	5	punct	_	Translit=.|LTranslit=.
+
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+# source = grc_proiel-ud-dev.conllu: Histories, Book 1, chapter 8
+# sentence 20
+1	δέσποτα	δεσπότης	NOUN	Nb	Case=Voc|Gender=Masc|Number=Sing	3	vocative	_	Ref=1.8.3
+2	τίνα	τίς	PRON	Pi	Case=Acc|Gender=Fem,Masc|Number=Sing|PronType=Int	4	det	_	Ref=1.8.3
+3	λέγεις	λέγω	VERB	V-	Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Ref=1.8.3|VF=ANY
+4	λόγον	λόγος	NOUN	Nb	Case=Acc|Gender=Masc|Number=Sing	3	obj	_	Ref=1.8.3
+5	οὐκ	οὐ	ADV	Df	Polarity=Neg	6	advmod	_	Ref=1.8.3
+6	ὑγιέα	ὑγιής	ADJ	A-	Case=Acc|Degree=Pos|Gender=Fem,Masc|Number=Sing	4	amod	_	Ref=1.8.3
+7	κελεύων	κελεύω	VERB	V-	Case=Nom|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part|Voice=Act	3	advcl	_	Ref=1.8.3|VF=ANY
+8	με	ἐγώ	PRON	Pp	Case=Acc|Gender=Masc|Number=Sing|Person=1|PronType=Prs	12	nsubj	_	Ref=1.8.3
+9	δέσποιναν	δέσποινα	NOUN	Nb	Case=Acc|Gender=Fem|Number=Sing	12	obj	_	Ref=1.8.3
+10	τὴν	ὁ	DET	S-	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Dem	9	det	_	Ref=1.8.3
+11	ἐμὴν	ἐμός	DET	Ps	Case=Acc|Gender=Fem|Number=Sing|Person=1|Poss=Yes	9	det	_	Ref=1.8.3
+12	θεήσασθαι	θεάομαι	VERB	V-	Aspect=Perf|Tense=Past|VerbForm=Inf|Voice=Mid	7	ccomp	_	Ref=1.8.3|VF=ANY
+13	γυμνήν	γυμνός	ADJ	A-	Case=Acc|Degree=Pos|Gender=Fem|Number=Sing	12	advmod	_	Ref=1.8.3
+
+# sent_id = cy_ccg_train:00001
+# text = Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.
+# text_en = The school summer concert was held in Muni on Wednesday June 21st.
+# sentence 21
+1	Cynhaliwyd	cynnal	VERB	verb	Mood=Ind|Person=0|Tense=Past|VerbForm=Fin	0	root	_	VF=ANY
+2	cyngerdd	cyngerdd	NOUN	noun	Gender=Masc|Number=Sing	1	obj	_	_
+3	haf	haf	NOUN	noun	Gender=Masc|Number=Sing	2	nmod	_	_
+4	yr	y	DET	art	PronType=Art	5	det	_	_
+5	ysgol	ysgol	NOUN	noun	Gender=Fem|Number=Sing	2	nmod	_	_
+6	yn	yn	ADP	prep	_	8	case	_	_
+7	y	y	DET	art	PronType=Art	8	det	_	_
+8	Miwni	Miwni	PROPN	place	Gender=Masc|Number=Sing	1	obl	_	SpaceAfter=No
+9	,	,	PUNCT	punct	_	10	punct	_	_
+10	nos	nos	NOUN	noun	Gender=Fem|Number=Sing	1	obl	_	_
+11	Fercher	Mercher	NOUN	noun	Gender=Fem|Mutation=SM|Number=Sing	10	nmod	_	_
+12	Mehefin	Mehefin	NOUN	noun	Gender=Masc|Number=Sing	11	nmod	_	_
+13	21ain	21ain	ADJ	ord	Degree=Pos|NumType=Ord	12	amod	_	SpaceAfter=No
+14	.	.	PUNCT	punct	_	1	punct	_	SpacesAfter=\n
 

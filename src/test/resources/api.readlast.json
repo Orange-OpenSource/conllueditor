@@ -1,44 +1,29 @@
 {
-  "sentenceid": 19,
-  "maxsentence": 20,
-  "text": "പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.",
-  "sentence": "പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.",
+  "sentenceid": 21,
+  "maxsentence": 22,
+  "text": "Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.",
+  "sentence": "Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.",
   "previous_modification": 0,
-  "length": 6,
-  "sent_id": "cairo01",
-  "newpar": "cairo01",
-  "newdoc": "cairo ml_ufal-ud-test.conllu",
-  "translit_words": [
-    "peṇ̕kuṭṭi",
-    "tanṟe",
-    "suhr̥ttin",
-    "katt",
-    "eḻuti",
-    "."
-  ],
-  "translit_missing": false,
+  "length": 14,
+  "sent_id": "cy_ccg_train:00001",
   "translations": {
-    "en": "The girl wrote a letter to her friend."
+    "en": "The school summer concert was held in Muni on Wednesday June 21st."
   },
   "changes": 0,
   "tree": [
     {
-      "position": 5,
-      "id": 5,
-      "form": "എഴുതി",
-      "lemma": "എഴുതുക",
+      "position": 1,
+      "id": 1,
+      "form": "Cynhaliwyd",
+      "lemma": "cynnal",
       "feats": [
-        {
-          "name": "Aspect",
-          "val": "Imp"
-        },
         {
           "name": "Mood",
           "val": "Ind"
         },
         {
-          "name": "Polarity",
-          "val": "Pos"
+          "name": "Person",
+          "val": "0"
         },
         {
           "name": "Tense",
@@ -47,86 +32,112 @@
         {
           "name": "VerbForm",
           "val": "Fin"
-        },
-        {
-          "name": "Voice",
-          "val": "Act"
         }
       ],
-      "misc": [
-        {
-          "name": "Translit",
-          "val": "eḻuti"
-        },
-        {
-          "name": "LTranslit",
-          "val": "eḻutuka"
-        },
-        {
-          "name": "Gloss",
-          "val": "wrote"
-        }
-      ],
-      "xpos": "_",
+      "xpos": "verb",
       "upos": "VERB",
       "deprel": "root",
       "chunk": 0,
       "type": "",
       "children": [
         {
-          "position": 1,
-          "archeight": 3,
-          "id": 1,
-          "form": "പെൺകുട്ടി",
-          "lemma": "പെൺകുട്ടി",
+          "position": 2,
+          "archeight": 1,
+          "id": 2,
+          "form": "cyngerdd",
+          "lemma": "cyngerdd",
           "feats": [
             {
-              "name": "Animacy",
-              "val": "Anim"
-            },
-            {
-              "name": "Case",
-              "val": "Nom"
+              "name": "Gender",
+              "val": "Masc"
             },
             {
               "name": "Number",
               "val": "Sing"
             }
           ],
-          "misc": [
-            {
-              "name": "Translit",
-              "val": "peṇ̕kuṭṭi"
-            },
-            {
-              "name": "LTranslit",
-              "val": "peṇ̕kuṭṭi"
-            },
-            {
-              "name": "Gloss",
-              "val": "girl"
-            }
-          ],
-          "xpos": "_",
+          "xpos": "noun",
           "upos": "NOUN",
-          "deprel": "nsubj",
+          "deprel": "obj",
           "chunk": 0,
-          "type": ""
+          "type": "",
+          "children": [
+            {
+              "position": 3,
+              "archeight": 1,
+              "id": 3,
+              "form": "haf",
+              "lemma": "haf",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "noun",
+              "upos": "NOUN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 5,
+              "archeight": 2,
+              "id": 5,
+              "form": "ysgol",
+              "lemma": "ysgol",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "noun",
+              "upos": "NOUN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 4,
+                  "archeight": 1,
+                  "id": 4,
+                  "form": "yr",
+                  "lemma": "y",
+                  "feats": [
+                    {
+                      "name": "PronType",
+                      "val": "Art"
+                    }
+                  ],
+                  "xpos": "art",
+                  "upos": "DET",
+                  "deprel": "det",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
         },
         {
-          "position": 3,
-          "archeight": 2,
-          "id": 3,
-          "form": "സുഹൃത്തിന്",
-          "lemma": "സുഹൃത്ത്",
+          "position": 8,
+          "archeight": 3,
+          "id": 8,
+          "form": "Miwni",
+          "lemma": "Miwni",
           "feats": [
             {
-              "name": "Animacy",
-              "val": "Anim"
-            },
-            {
-              "name": "Case",
-              "val": "Dat"
+              "name": "Gender",
+              "val": "Masc"
             },
             {
               "name": "Number",
@@ -135,147 +146,177 @@
           ],
           "misc": [
             {
-              "name": "Translit",
-              "val": "suhr̥ttin"
-            },
-            {
-              "name": "LTranslit",
-              "val": "suhr̥tt"
-            },
-            {
-              "name": "Gloss",
-              "val": "to_a_friend"
+              "name": "SpaceAfter",
+              "val": "No"
             }
           ],
-          "xpos": "_",
-          "upos": "NOUN",
+          "xpos": "place",
+          "upos": "PROPN",
           "deprel": "obl",
           "chunk": 0,
           "type": "",
           "children": [
             {
-              "position": 2,
+              "position": 6,
+              "archeight": 2,
+              "id": 6,
+              "form": "yn",
+              "lemma": "yn",
+              "xpos": "prep",
+              "upos": "ADP",
+              "deprel": "case",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 7,
               "archeight": 1,
-              "id": 2,
-              "form": "തന്റെ",
-              "lemma": "താൻ",
+              "id": 7,
+              "form": "y",
+              "lemma": "y",
               "feats": [
                 {
-                  "name": "Case",
-                  "val": "Gen"
-                },
-                {
-                  "name": "Number",
-                  "val": "Sing"
-                },
-                {
-                  "name": "Person",
-                  "val": "3"
-                },
-                {
                   "name": "PronType",
-                  "val": "Prs"
+                  "val": "Art"
                 }
               ],
-              "misc": [
-                {
-                  "name": "Translit",
-                  "val": "tanṟe"
-                },
-                {
-                  "name": "LTranslit",
-                  "val": "tān̕"
-                },
-                {
-                  "name": "Gloss",
-                  "val": "her"
-                }
-              ],
-              "xpos": "_",
-              "upos": "PRON",
-              "deprel": "nmod:poss",
+              "xpos": "art",
+              "upos": "DET",
+              "deprel": "det",
               "chunk": 0,
               "type": ""
             }
           ]
         },
         {
-          "position": 4,
-          "archeight": 1,
-          "id": 4,
-          "form": "കത്ത്",
-          "lemma": "കത്ത്",
-          "mwe": {
-            "fromid": 4,
-            "toid": 5,
-            "form": "കത്തെഴുതി",
-            "typoyes": false,
-            "misc": [
-              {
-                "name": "SpaceAfter",
-                "val": "No"
-              },
-              {
-                "name": "Translit",
-                "val": "katteḻuti"
-              },
-              {
-                "name": "Gloss",
-                "val": "wrote_a_letter"
-              }
-            ]
-          },
+          "position": 10,
+          "archeight": 4,
+          "id": 10,
+          "form": "nos",
+          "lemma": "nos",
           "feats": [
             {
-              "name": "Animacy",
-              "val": "Inan"
-            },
-            {
-              "name": "Case",
-              "val": "Acc"
+              "name": "Gender",
+              "val": "Fem"
             },
             {
               "name": "Number",
               "val": "Sing"
             }
           ],
-          "misc": [
-            {
-              "name": "Translit",
-              "val": "katt"
-            },
-            {
-              "name": "LTranslit",
-              "val": "katt"
-            },
-            {
-              "name": "Gloss",
-              "val": "letter"
-            }
-          ],
-          "xpos": "_",
+          "xpos": "noun",
           "upos": "NOUN",
-          "deprel": "obj",
+          "deprel": "obl",
           "chunk": 0,
-          "type": ""
+          "type": "",
+          "children": [
+            {
+              "position": 9,
+              "archeight": 1,
+              "id": 9,
+              "form": ",",
+              "lemma": ",",
+              "xpos": "punct",
+              "upos": "PUNCT",
+              "deprel": "punct",
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 11,
+              "archeight": 1,
+              "id": 11,
+              "form": "Fercher",
+              "lemma": "Mercher",
+              "feats": [
+                {
+                  "name": "Gender",
+                  "val": "Fem"
+                },
+                {
+                  "name": "Mutation",
+                  "val": "SM"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "xpos": "noun",
+              "upos": "NOUN",
+              "deprel": "nmod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 12,
+                  "archeight": 1,
+                  "id": 12,
+                  "form": "Mehefin",
+                  "lemma": "Mehefin",
+                  "feats": [
+                    {
+                      "name": "Gender",
+                      "val": "Masc"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    }
+                  ],
+                  "xpos": "noun",
+                  "upos": "NOUN",
+                  "deprel": "nmod",
+                  "chunk": 0,
+                  "type": "",
+                  "children": [
+                    {
+                      "position": 13,
+                      "archeight": 1,
+                      "id": 13,
+                      "form": "21ain",
+                      "lemma": "21ain",
+                      "feats": [
+                        {
+                          "name": "Degree",
+                          "val": "Pos"
+                        },
+                        {
+                          "name": "NumType",
+                          "val": "Ord"
+                        }
+                      ],
+                      "misc": [
+                        {
+                          "name": "SpaceAfter",
+                          "val": "No"
+                        }
+                      ],
+                      "xpos": "ord",
+                      "upos": "ADJ",
+                      "deprel": "amod",
+                      "chunk": 0,
+                      "type": ""
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
-          "position": 6,
-          "archeight": 1,
-          "id": 6,
+          "position": 14,
+          "archeight": 5,
+          "id": 14,
           "form": ".",
           "lemma": ".",
           "misc": [
             {
-              "name": "Translit",
-              "val": "."
-            },
-            {
-              "name": "LTranslit",
-              "val": "."
+              "name": "SpacesAfter",
+              "val": "\\n"
             }
           ],
-          "xpos": "_",
+          "xpos": "punct",
           "upos": "PUNCT",
           "deprel": "punct",
           "chunk": 0,
@@ -285,8 +326,8 @@
       "indexshift": 0
     }
   ],
-  "info": "Translit\u003deḻuti|LTranslit\u003deḻutuka|Gloss\u003dwrote",
-  "comments": "origtranslit \u003d peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.\n",
+  "info": "_",
+  "comments": "sentence 21\n",
   "canUndo": false,
   "canRedo": false
 }

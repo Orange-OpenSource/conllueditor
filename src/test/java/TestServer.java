@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 3.0.0 as of 2nd November 2026
+ @version 3.1.0 as of 13th November 2026
  */
 
 import com.google.gson.Gson;
@@ -193,7 +193,7 @@ public class TestServer {
             Assert.assertEquals("server info", true, jobject.has(key));
         }
         JsonObject stats = jobject.getAsJsonObject("stats");
-        Assert.assertEquals("syntactic_words", 250, stats.get("syntactic_words").getAsInt());
+        Assert.assertEquals("syntactic_words", 277, stats.get("syntactic_words").getAsInt());
     }
 
     @Test
@@ -285,7 +285,7 @@ public class TestServer {
 
         String res = httppost("/edit/", "badcommand", 3, 200);
         //System.err.println("BBAAAA " + res);
-        String expected = "{\"sentenceid\":3,\"maxsentence\":20,\"error\":\"invalid command «badcommand»\"}";
+        String expected = "{\"sentenceid\":3,\"maxsentence\":22,\"error\":\"invalid command «badcommand»\"}";
         Assert.assertEquals(String.format("BAD command message\n ref: <<%s>>\n res: <<%s>>\n", expected, res), expected, res);
     }
 

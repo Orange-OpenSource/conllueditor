@@ -27,3 +27,13 @@ FINAL 1
 FOUND 1
 FINAL 1
 2	aime	aimer	VERB	VERB	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+FOUND 1
+FINAL 1
+3	λέγεις	λέγω	VERB	V-	Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Ref=1.8.3
+# sent_id = cy_ccg_train:00001
+# text = Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.
+FOUND 1
+FINAL 1
+1	Cynhaliwyd	cynnal	VERB	verb	Mood=Ind|Person=0|Tense=Past|VerbForm=Fin	0	root	_	_

@@ -1,0 +1,501 @@
+{
+  "sentenceid": 20,
+  "maxsentence": 22,
+  "text": "δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν",
+  "sentence": "δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν",
+  "previous_modification": 0,
+  "length": 13,
+  "sent_id": "75002",
+  "changes": 0,
+  "tree": [
+    {
+      "position": 3,
+      "id": 3,
+      "form": "λέγεις",
+      "lemma": "λέγω",
+      "feats": [
+        {
+          "name": "Mood",
+          "val": "Ind"
+        },
+        {
+          "name": "Number",
+          "val": "Sing"
+        },
+        {
+          "name": "Person",
+          "val": "2"
+        },
+        {
+          "name": "Tense",
+          "val": "Pres"
+        },
+        {
+          "name": "VerbForm",
+          "val": "Fin"
+        },
+        {
+          "name": "Voice",
+          "val": "Act"
+        }
+      ],
+      "misc": [
+        {
+          "name": "Ref",
+          "val": "1.8.3"
+        }
+      ],
+      "xpos": "V-",
+      "upos": "VERB",
+      "deprel": "root",
+      "chunk": 0,
+      "type": "",
+      "children": [
+        {
+          "position": 1,
+          "archeight": 1,
+          "id": 1,
+          "form": "δέσποτα",
+          "lemma": "δεσπότης",
+          "feats": [
+            {
+              "name": "Case",
+              "val": "Voc"
+            },
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "misc": [
+            {
+              "name": "Ref",
+              "val": "1.8.3"
+            }
+          ],
+          "xpos": "Nb",
+          "upos": "NOUN",
+          "deprel": "vocative",
+          "chunk": 0,
+          "type": ""
+        },
+        {
+          "position": 4,
+          "archeight": 1,
+          "id": 4,
+          "form": "λόγον",
+          "lemma": "λόγος",
+          "feats": [
+            {
+              "name": "Case",
+              "val": "Acc"
+            },
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            }
+          ],
+          "misc": [
+            {
+              "name": "Ref",
+              "val": "1.8.3"
+            }
+          ],
+          "xpos": "Nb",
+          "upos": "NOUN",
+          "deprel": "obj",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 2,
+              "archeight": 1,
+              "id": 2,
+              "form": "τίνα",
+              "lemma": "τίς",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Acc"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem,Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                },
+                {
+                  "name": "PronType",
+                  "val": "Int"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "Ref",
+                  "val": "1.8.3"
+                }
+              ],
+              "xpos": "Pi",
+              "upos": "PRON",
+              "deprel": "det",
+              "formhighlight": 1,
+              "chunk": 0,
+              "type": ""
+            },
+            {
+              "position": 6,
+              "archeight": 2,
+              "id": 6,
+              "form": "ὑγιέα",
+              "lemma": "ὑγιής",
+              "feats": [
+                {
+                  "name": "Case",
+                  "val": "Acc"
+                },
+                {
+                  "name": "Degree",
+                  "val": "Pos"
+                },
+                {
+                  "name": "Gender",
+                  "val": "Fem,Masc"
+                },
+                {
+                  "name": "Number",
+                  "val": "Sing"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "Ref",
+                  "val": "1.8.3"
+                }
+              ],
+              "xpos": "A-",
+              "upos": "ADJ",
+              "deprel": "amod",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 5,
+                  "archeight": 1,
+                  "id": 5,
+                  "form": "οὐκ",
+                  "lemma": "οὐ",
+                  "feats": [
+                    {
+                      "name": "Polarity",
+                      "val": "Neg"
+                    }
+                  ],
+                  "misc": [
+                    {
+                      "name": "Ref",
+                      "val": "1.8.3"
+                    }
+                  ],
+                  "xpos": "Df",
+                  "upos": "ADV",
+                  "deprel": "advmod",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "position": 7,
+          "archeight": 3,
+          "id": 7,
+          "form": "κελεύων",
+          "lemma": "κελεύω",
+          "feats": [
+            {
+              "name": "Case",
+              "val": "Nom"
+            },
+            {
+              "name": "Gender",
+              "val": "Masc"
+            },
+            {
+              "name": "Number",
+              "val": "Sing"
+            },
+            {
+              "name": "Tense",
+              "val": "Pres"
+            },
+            {
+              "name": "VerbForm",
+              "val": "Part"
+            },
+            {
+              "name": "Voice",
+              "val": "Act"
+            }
+          ],
+          "misc": [
+            {
+              "name": "Ref",
+              "val": "1.8.3"
+            }
+          ],
+          "xpos": "V-",
+          "upos": "VERB",
+          "deprel": "advcl",
+          "chunk": 0,
+          "type": "",
+          "children": [
+            {
+              "position": 12,
+              "archeight": 5,
+              "id": 12,
+              "form": "θεήσασθαι",
+              "lemma": "θεάομαι",
+              "feats": [
+                {
+                  "name": "Aspect",
+                  "val": "Perf"
+                },
+                {
+                  "name": "Tense",
+                  "val": "Past"
+                },
+                {
+                  "name": "VerbForm",
+                  "val": "Inf"
+                },
+                {
+                  "name": "Voice",
+                  "val": "Mid"
+                }
+              ],
+              "misc": [
+                {
+                  "name": "Ref",
+                  "val": "1.8.3"
+                }
+              ],
+              "xpos": "V-",
+              "upos": "VERB",
+              "deprel": "ccomp",
+              "chunk": 0,
+              "type": "",
+              "children": [
+                {
+                  "position": 8,
+                  "archeight": 4,
+                  "id": 8,
+                  "form": "με",
+                  "lemma": "ἐγώ",
+                  "feats": [
+                    {
+                      "name": "Case",
+                      "val": "Acc"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Masc"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    },
+                    {
+                      "name": "Person",
+                      "val": "1"
+                    },
+                    {
+                      "name": "PronType",
+                      "val": "Prs"
+                    }
+                  ],
+                  "misc": [
+                    {
+                      "name": "Ref",
+                      "val": "1.8.3"
+                    }
+                  ],
+                  "xpos": "Pp",
+                  "upos": "PRON",
+                  "deprel": "nsubj",
+                  "chunk": 0,
+                  "type": ""
+                },
+                {
+                  "position": 9,
+                  "archeight": 3,
+                  "id": 9,
+                  "form": "δέσποιναν",
+                  "lemma": "δέσποινα",
+                  "feats": [
+                    {
+                      "name": "Case",
+                      "val": "Acc"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Fem"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    }
+                  ],
+                  "misc": [
+                    {
+                      "name": "Ref",
+                      "val": "1.8.3"
+                    }
+                  ],
+                  "xpos": "Nb",
+                  "upos": "NOUN",
+                  "deprel": "obj",
+                  "chunk": 0,
+                  "type": "",
+                  "children": [
+                    {
+                      "position": 10,
+                      "archeight": 1,
+                      "id": 10,
+                      "form": "τὴν",
+                      "lemma": "ὁ",
+                      "feats": [
+                        {
+                          "name": "Case",
+                          "val": "Acc"
+                        },
+                        {
+                          "name": "Definite",
+                          "val": "Def"
+                        },
+                        {
+                          "name": "Gender",
+                          "val": "Fem"
+                        },
+                        {
+                          "name": "Number",
+                          "val": "Sing"
+                        },
+                        {
+                          "name": "PronType",
+                          "val": "Dem"
+                        }
+                      ],
+                      "misc": [
+                        {
+                          "name": "Ref",
+                          "val": "1.8.3"
+                        }
+                      ],
+                      "xpos": "S-",
+                      "upos": "DET",
+                      "deprel": "det",
+                      "chunk": 0,
+                      "type": ""
+                    },
+                    {
+                      "position": 11,
+                      "archeight": 2,
+                      "id": 11,
+                      "form": "ἐμὴν",
+                      "lemma": "ἐμός",
+                      "feats": [
+                        {
+                          "name": "Case",
+                          "val": "Acc"
+                        },
+                        {
+                          "name": "Gender",
+                          "val": "Fem"
+                        },
+                        {
+                          "name": "Number",
+                          "val": "Sing"
+                        },
+                        {
+                          "name": "Person",
+                          "val": "1"
+                        },
+                        {
+                          "name": "Poss",
+                          "val": "Yes"
+                        }
+                      ],
+                      "misc": [
+                        {
+                          "name": "Ref",
+                          "val": "1.8.3"
+                        }
+                      ],
+                      "xpos": "Ps",
+                      "upos": "DET",
+                      "deprel": "det",
+                      "chunk": 0,
+                      "type": ""
+                    }
+                  ]
+                },
+                {
+                  "position": 13,
+                  "archeight": 1,
+                  "id": 13,
+                  "form": "γυμνήν",
+                  "lemma": "γυμνός",
+                  "feats": [
+                    {
+                      "name": "Case",
+                      "val": "Acc"
+                    },
+                    {
+                      "name": "Degree",
+                      "val": "Pos"
+                    },
+                    {
+                      "name": "Gender",
+                      "val": "Fem"
+                    },
+                    {
+                      "name": "Number",
+                      "val": "Sing"
+                    }
+                  ],
+                  "misc": [
+                    {
+                      "name": "Ref",
+                      "val": "1.8.3"
+                    }
+                  ],
+                  "xpos": "A-",
+                  "upos": "ADJ",
+                  "deprel": "advmod",
+                  "chunk": 0,
+                  "type": ""
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "indexshift": 0
+    }
+  ],
+  "info": "Ref\u003d1.8.3",
+  "comments": "source \u003d grc_proiel-ud-dev.conllu: Histories, Book 1, chapter 8\nsentence 20\n",
+  "canUndo": false,
+  "canRedo": false
+}

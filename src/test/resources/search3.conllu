@@ -85,3 +85,18 @@ FOUND 1
 FINAL 1
 4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|Gloss=letter
 5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|Gloss=wrote
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+FOUND 2
+FINAL 1
+3	λέγεις	λέγω	VERB	V-	Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Ref=1.8.3
+4	λόγον	λόγος	NOUN	Nb	Case=Acc|Gender=Masc|Number=Sing	3	obj	_	Ref=1.8.3
+FINAL 2
+9	δέσποιναν	δέσποινα	NOUN	Nb	Case=Acc|Gender=Fem|Number=Sing	12	obj	_	Ref=1.8.3
+12	θεήσασθαι	θεάομαι	VERB	V-	Aspect=Perf|Tense=Past|VerbForm=Inf|Voice=Mid	7	ccomp	_	Ref=1.8.3
+# sent_id = cy_ccg_train:00001
+# text = Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.
+FOUND 1
+FINAL 1
+1	Cynhaliwyd	cynnal	VERB	verb	Mood=Ind|Person=0|Tense=Past|VerbForm=Fin	0	root	_	_
+2	cyngerdd	cyngerdd	NOUN	noun	Gender=Masc|Number=Sing	1	obj	_	_

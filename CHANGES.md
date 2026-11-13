@@ -1,5 +1,9 @@
 # Changes
 
+## Version 3.1.0
+* Feature values are a sorted list. Search matches if one value matches (unless `,` is in search string)
+* new tests added, some tests adapted
+
 ## Version 3.0.0
 * search for MISC and FEAT in `find any`
 * new layout, checkbuttons redesigned
@@ -8,7 +12,7 @@
 * graphs slightly redesigned (i.e. made prettier)
 * added UI tests (selenium based)
 * test data updated
-* parser front-end adapt to changes in the display
+* parser front-end adapted to changes in the display
 
 ## Version 2.36.0
 * corrected bug in flat view

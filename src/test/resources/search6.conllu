@@ -57,3 +57,14 @@ FINAL 14
 18	pression	pression	NOUN	_	Gender=Fem|Number=Sing	14	conj	_	_
 19	hydrostatique	hydrostatique	ADJ	_	Gender=Fem|Number=Sing	18	amod	_	_
 46	des	un	DET	_	Definite=Ind|Gender=Fem|Number=Plur|PronType=Art	47	det	_	_
+# sent_id = cy_ccg_train:00001
+# text = Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.
+FOUND 2
+FINAL 1
+4	yr	y	DET	art	PronType=Art	5	det	_	_
+12	Mehefin	Mehefin	NOUN	noun	Gender=Masc|Number=Sing	11	nmod	_	_
+13	21ain	21ain	ADJ	ord	Degree=Pos|NumType=Ord	12	amod	_	SpaceAfter=No
+FINAL 2
+7	y	y	DET	art	PronType=Art	8	det	_	_
+12	Mehefin	Mehefin	NOUN	noun	Gender=Masc|Number=Sing	11	nmod	_	_
+13	21ain	21ain	ADJ	ord	Degree=Pos|NumType=Ord	12	amod	_	SpaceAfter=No

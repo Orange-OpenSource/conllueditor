@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 3.0.0 as of 2nd November 2026
+ @version 3.1.0 as of 13th November 2026
  */
 package com.orange.labs.editor;
 
@@ -1876,7 +1876,6 @@ public class ConlluEditor {
                     case "deprel": // change only dep label, not head
                         modWord.setDeplabel(f[3]);
                         break;
-		    //case "feat": // TODO delete "mod feat", it is legacy
                     case "feats": {
                         if (f.length < 4) {
                             modWord.setFeatures(ConllWord.EmptyColumn);

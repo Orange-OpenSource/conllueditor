@@ -343,6 +343,7 @@
 # sent_id = cairo01
 # text = പെൺകുട്ടി തന്റെ സുഹൃത്തിന് കത്തെഴുതി.
 # text_en = The girl wrote a letter to her friend.
+# sentence 19
 # origtranslit = peṇ̕kuṭṭi tanṟe suhr̥ttin katteḻuti.
 1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	4	nsubj	5:obj	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi|Gloss=girl|Head=4|EUD=Head_headid
 2	തന്റെ	താൻ	PRON	_	Case=Gen|Number=Sing|Person=3|PronType=Prs	3	nmod:poss	_	Translit=tanṟe|LTranslit=tān̕|Gloss=her
@@ -351,6 +352,43 @@
 4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|Gloss=letter|Head=4
 5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|Gloss=wrote
 6	.	.	PUNCT	_	_	5	punct	_	Translit=.|LTranslit=.
+
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+# source = grc_proiel-ud-dev.conllu: Histories, Book 1, chapter 8
+# sentence 20
+1	δέσποτα	δεσπότης	NOUN	Nb	Case=Voc|Gender=Masc|Number=Sing	4	vocative	_	Ref=1.8.3|Head=4
+2	τίνα	τίς	PRON	Pi	Case=Acc|Gender=Fem,Masc|Number=Sing|PronType=Int	4	det	_	Ref=1.8.3
+3	λέγεις	λέγω	VERB	V-	Mood=Ind|Number=Sing|Person=2|Tense=Pres|VerbForm=Fin|Voice=Act	0	root	_	Ref=1.8.3
+4	λόγον	λόγος	NOUN	Nb	Case=Acc|Gender=Masc|Number=Sing	3	obj	_	Ref=1.8.3|Head=4
+5	οὐκ	οὐ	ADV	Df	Polarity=Neg	6	advmod	4:before	Ref=1.8.3|EUD=Head-1
+6	ὑγιέα	ὑγιής	ADJ	A-	Case=Acc|Degree=Pos|Gender=Fem,Masc|Number=Sing	3	amod	_	Ref=1.8.3|Head=Head_HeadId
+7	κελεύων	κελεύω	VERB	V-	Case=Nom|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part|Voice=Act	3	advcl	_	Ref=1.8.3
+8	με	ἐγώ	PRON	Pp	Case=Acc|Gender=Masc|Number=Sing|Person=1|PronType=Prs	12	nsubj	7:ccomp	Ref=1.8.3|EUD=Head_headid
+9	δέσποιναν	δέσποινα	NOUN	Nb	Case=Acc|Gender=Fem|Number=Sing	4	obj	_	Ref=1.8.3|Head=4
+10	τὴν	ὁ	DET	S-	Case=Acc|Definite=Def|Gender=Fem|Number=Sing|PronType=Dem	8	det	_	Ref=1.8.3|Head=-2
+11	ἐμὴν	ἐμός	DET	Ps	Case=Acc|Gender=Fem|Number=Sing|Person=1|Poss=Yes	9	det	_	Ref=1.8.3|Head=-2
+12	θεήσασθαι	θεάομαι	VERB	V-	Aspect=Perf|Tense=Past|VerbForm=Inf|Voice=Mid	7	ccomp	_	Ref=1.8.3
+13	γυμνήν	γυμνός	ADJ	A-	Case=Acc|Degree=Pos|Gender=Fem|Number=Sing	7	advmod	_	Ref=1.8.3|Head=Head_HeadId
+
+# sent_id = cy_ccg_train:00001
+# text = Cynhaliwyd cyngerdd haf yr ysgol yn y Miwni, nos Fercher Mehefin 21ain.
+# text_en = The school summer concert was held in Muni on Wednesday June 21st.
+# sentence 21
+1	Cynhaliwyd	cynnal	VERB	verb	Mood=Ind|Person=0|Tense=Past|VerbForm=Fin	0	root	_	_
+2	cyngerdd	cyngerdd	NOUN	noun	Gender=Masc|Number=Sing	1	obj	_	Head=4
+3	haf	haf	NOUN	noun	Gender=Masc|Number=Sing	4	nmod	_	Head=4
+4	yr	y	DET	art	PronType=Art	2	det	_	Head=-2
+5	ysgol	ysgol	NOUN	noun	Gender=Fem|Number=Sing	4	nmod	_	Head=4
+6	yn	yn	ADP	prep	_	8	case	_	_
+7	y	y	DET	art	PronType=Art	5	det	_	Head=-2
+8	Miwni	Miwni	PROPN	place	Gender=Masc|Number=Sing	10	obl	_	SpaceAfter=No|Head=+2
+9	,	,	PUNCT	punct	_	10	punct	_	_
+10	nos	nos	NOUN	noun	Gender=Fem|Number=Sing	4	obl	_	Head=4
+11	Fercher	Mercher	NOUN	noun	Gender=Fem|Mutation=SM|Number=Sing	4	nmod	_	Head=4
+12	Mehefin	Mehefin	NOUN	noun	Gender=Masc|Number=Sing	4	nmod	_	Head=4
+13	21ain	21ain	ADJ	ord	Degree=Pos|NumType=Ord	4	amod	_	SpaceAfter=No|Head=Head_HeadId
+14	.	.	PUNCT	punct	_	1	punct	_	SpacesAfter=\n
 
 Warning: Cannot set relative head id in sentence fr-ud-dev_00002, word 1: negative or 0 absolute head -1
 Warning: Cannot set relative head id in sentence fr-ud-dev_00004, word 1: negative or 0 absolute head -1
@@ -366,6 +404,8 @@ Warning: Cannot set absolute head id in sentence gl_ctg-ud-dev.conllu 625, word 
 Warning: Cannot set absolute head id in sentence fi_tdt-ud-train.conllu b712.11, word 3: 4 depends from current word
 Warning: Cannot set absolute head id in sentence fi_tdt-ud-train.conllu b712.11, word 4: 4 == word id
 Warning: Cannot set absolute head id in sentence cairo01, word 4: 4 == word id
+Warning: Cannot set absolute head id in sentence 75002, word 4: 4 == word id
+Warning: Cannot set absolute head id in sentence cy_ccg_train:00001, word 2: 4 depends from current word
 Warning: No value found for HeadId in sentence fr-ud-dev_00004, word 23
 Warning: Cannot set relative head id in sentence fr-ud-dev_00001, word 1: absolute head 3 depends from current word
 Warning: Cannot set relative head id in sentence fr-ud-dev_00001, word 10: absolute head 12 > sentence length 11

@@ -28,7 +28,7 @@ are permitted provided that the following conditions are met:
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 3.0.0 as of 2nd November 2026
+ @version 3.1.0 as of 13th November 2026
  */
 package com.orange.labs.conllparser;
 
@@ -1555,7 +1555,14 @@ public class ConllWord {
             jfeat.addProperty("name", f);
             String val = features.get(f);
             if (val != null) {
-                jfeat.addProperty("val", val);
+
+                if (val.contains(",")) {
+                    String [] felements = val.split(",");
+                    Arrays.sort(felements);
+                    jfeat.addProperty("val", String.join(",", felements));
+                } else {
+                    jfeat.addProperty("val", val);
+                }
             }
             jfeats.add(jfeat);
             // check whether feat/val is valid
@@ -1587,7 +1594,15 @@ public class ConllWord {
             if (sb.length() > 0) {
                 sb.append('|');
             }
-            sb.append(f).append('=').append(features.get(f));
+            String fs = features.get(f);
+            if (fs.contains(",")) {
+                String [] felements = fs.split(",");
+                Arrays.sort(felements);
+                sb.append(f).append('=').append(String.join(",", felements));
+                //String.join()
+            } else {
+                sb.append(f).append('=').append(features.get(f));
+            }
         }
         return sb.toString();
     }
@@ -1650,7 +1665,15 @@ public class ConllWord {
         if (v == null) {
             return false;
         }
-        return v.equals(val);
+        // value can be in fact a comma separated (sorted) list of Values
+        String [] values = v.split(",");
+        for (String av : values) {
+            if (av.equals(val)) {
+                return true;
+            }
+        }
+        //return v.equals(val);
+        return false;
     }
 
     // check whether features with regex value is present
@@ -1662,8 +1685,20 @@ public class ConllWord {
         if (v == null) {
             return false;
         }
-        return (v.matches(valregex));
+        if (valregex.contains(",")) {
+            // comma in search string, we do not split value list but process it as a whole
+            return (v.matches(valregex));
+        } else {
+           String [] values = v.split(",");
+            for (String av : values) {
+                if (av.matches(valregex)) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
+
     // check values with any feature name
     public boolean matchesFeatureValue(String valregex) {
         if (features == null || features.isEmpty()) {
@@ -1671,8 +1706,18 @@ public class ConllWord {
         }
         for (String key : features.keySet()) {
             String val = features.get(key);
-            if (val.matches(valregex)) {
-                return true;
+            if (valregex.contains(",")) {
+                if (val.matches(valregex)) {
+                    return true;
+                }
+            }
+            else {
+                String [] values = val.split(",");
+                for (String av : values) {
+                    if (av.matches(valregex)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;

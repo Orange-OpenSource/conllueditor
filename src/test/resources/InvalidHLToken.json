@@ -1,5 +1,5 @@
 {
   "sentenceid": 5,
-  "maxsentence": 20,
+  "maxsentence": 22,
   "error": "INVALID word id «mod checktoken 22 true»"
 }

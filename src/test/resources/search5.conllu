@@ -86,3 +86,10 @@ FINAL 1
 1	പെൺകുട്ടി	പെൺകുട്ടി	NOUN	_	Animacy=Anim|Case=Nom|Number=Sing	5	nsubj	_	Translit=peṇ̕kuṭṭi|LTranslit=peṇ̕kuṭṭi|Gloss=girl
 4	കത്ത്	കത്ത്	NOUN	_	Animacy=Inan|Case=Acc|Number=Sing	5	obj	_	Translit=katt|LTranslit=katt|Gloss=letter
 5	എഴുതി	എഴുതുക	VERB	_	Aspect=Imp|Mood=Ind|Polarity=Pos|Tense=Past|VerbForm=Fin|Voice=Act	0	root	_	Translit=eḻuti|LTranslit=eḻutuka|Gloss=wrote
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+FOUND 1
+FINAL 1
+8	με	ἐγώ	PRON	Pp	Case=Acc|Gender=Masc|Number=Sing|Person=1|PronType=Prs	12	nsubj	_	Ref=1.8.3
+9	δέσποιναν	δέσποινα	NOUN	Nb	Case=Acc|Gender=Fem|Number=Sing	12	obj	_	Ref=1.8.3
+12	θεήσασθαι	θεάομαι	VERB	V-	Aspect=Perf|Tense=Past|VerbForm=Inf|Voice=Mid	7	ccomp	_	Ref=1.8.3

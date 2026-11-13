@@ -30,3 +30,8 @@ FINAL 2
 FOUND 1
 FINAL 1
 0.1	Laitoin	laittaa	VERB	_	Mood=Ind|Number=Sing|Person=1|Tense=Past|VerbForm=Fin|Voice=Act	_	_	0:root	_
+# sent_id = 75002
+# text = δέσποτα τίνα λέγεις λόγον οὐκ ὑγιέα κελεύων με δέσποιναν τὴν ἐμὴν θεήσασθαι γυμνήν
+FOUND 1
+FINAL 1
+7	κελεύων	κελεύω	VERB	V-	Case=Nom|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part|Voice=Act	3	advcl	_	Ref=1.8.3
