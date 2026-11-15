@@ -1,5 +1,8 @@
 # Changes
 
+## Version 3.1.1
+* improved up/down/tab/shift-tab navigation in table view
+
 ## Version 3.1.0
 * Feature values are a sorted list. Search matches if one value matches (unless `,` is in search string)
 * new tests added, some tests adapted

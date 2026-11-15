@@ -28,7 +28,7 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
  @author Johannes Heinecke
- @version 3.0.0 as of 2nd November 2026
+ @version 3.1.1 as of 15th November 2026
  */
 
 $(document).ready(function () {
@@ -97,53 +97,46 @@ var currentwordid = 0; // if != 0, the word to apply edit shortcuts to
 var formalErrors = 0;
 
 
-// use up and down keys to navigate vertically in the tableview (tab/shift tab do so already horizontally)
+// Use up/down and tab/shift-tab to navigate in the table view.
 $(window).on('keydown', function (event) {
-    console.log("yyyytable", $(window), event.which);
-
     const currentCell = event.target.closest('td');
-    if (!currentCell) return;
+    if (!currentCell || !currentCell.closest('.conllutable') ||
+            !event.target.matches('input, [contenteditable]')) return;
 
-    // Track the Down Arrow (ArrowDown) or Enter key
-    if (event.key === 'ArrowDown') {
-      // Prevent Enter from inserting newlines or submitting forms
-      event.preventDefault();
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp' && event.key !== 'Tab') return;
 
-      const cellIndex = currentCell.cellIndex;
-      const currentRow = currentCell.parentElement;
-      const nextRow = currentRow.nextElementSibling;
-
-      if (nextRow) {
-        // Find the focusable element in the next row at the same column index
-        const nextTarget = nextRow.cells[cellIndex].querySelector('input, [contenteditable]');
-
-        // Fall back to the cell itself if it's the contenteditable element
-        const focusElement = nextTarget || nextRow.cells[cellIndex];
-
-        if (focusElement) {
-          focusElement.focus();
-        }
-      }
-    } else if (event.key === 'ArrowUp') {
-        // Prevent Enter from inserting newlines or submitting forms
+    const table = currentCell.closest('table');
+    let nextRowIndex;
+    let cellIndex;
+    let nextInputIndex;
+    if (event.key === 'Tab') {
+        const inputs = Array.from(table.querySelectorAll('td input, td [contenteditable]'));
+        const inputIndex = inputs.indexOf(event.target);
+        if (inputIndex === -1 || inputs.length < 2) return;
         event.preventDefault();
+        nextInputIndex = (inputIndex + (event.shiftKey ? -1 : 1) + inputs.length) % inputs.length;
+    } else {
+        event.preventDefault();
+        const rowIndex = currentCell.parentElement.rowIndex;
+        cellIndex = currentCell.cellIndex;
+        nextRowIndex = rowIndex + (event.key === 'ArrowDown' ? 1 : -1);
+    }
 
-        const cellIndex = currentCell.cellIndex;
-        const currentRow = currentCell.parentElement;
-        const nextRow = currentRow.previousElementSibling;
-
-        if (nextRow) {
-          // Find the focusable element in the next row at the same column index
-          const nextTarget = nextRow.cells[cellIndex].querySelector('input, [contenteditable]');
-
-          // Fall back to the cell itself if it's the contenteditable element
-          const focusElement = nextTarget || nextRow.cells[cellIndex];
-
-          if (focusElement) {
-            focusElement.focus();
-          }
+    // Leaving an edited input saves it synchronously and rebuilds the table.
+    // Blur first, then find the destination in the rebuilt table.
+    event.target.blur();
+    setTimeout(function () {
+        const updatedTable = document.getElementById(table.id);
+        if (nextInputIndex !== undefined) {
+            const inputs = updatedTable && updatedTable.querySelectorAll('td input, td [contenteditable]');
+            if (inputs && inputs[nextInputIndex]) inputs[nextInputIndex].focus();
+            return;
         }
-      }
+        const nextRow = updatedTable && updatedTable.rows[nextRowIndex];
+        const nextCell = nextRow && nextRow.cells[cellIndex];
+        const focusElement = nextCell && (nextCell.querySelector('input, [contenteditable]') || nextCell);
+        if (focusElement) focusElement.focus();
+    }, 0);
   });
 
 function drawTable(parent, trees, sentid) {
@@ -151,7 +144,6 @@ function drawTable(parent, trees, sentid) {
     var tbl = document.createElement("table");
     tbl.className = "conllutable";
     tbl.id = "myTable";
-    //console.log("ZZZZZZss", keepmarked, sentid);
 
     if (keepmarked === -1 || keepmarked !== sentid) {
         //console.log("NOT keepmarked");
@@ -180,13 +172,6 @@ function drawTable(parent, trees, sentid) {
             hdcellouter.append(hdcellresizer);
 
             hdcell.innerHTML = conllucolumns[i]; // headers come from server
-            //if (conllucolumns[i] == "FEATS" || conllucolumns[i] == "MISC" || conllucolumns[i] == "DEPS") {
-            /*if (conllucolumns[i] !== "ID" && conllucolumns[i] !== "HEAD" && conllucolumns[i] !== "DEPREL") {
-                hdcell.innerHTML += '  <input class="mybutton smallmybutton" id="' + colname + 'sizeup'
-                    + '" type="button" value="+" onclick=largertd("'
-                    + colname + '") /> <input class="mybutton smallmybutton" id="' + colname + 'sizedown'
-                    + '" type="button" value="&ndash;" onclick=smallertd("' + colname + '") />';
-            }*/
         }
         tbl.append(headerrow);
     }
@@ -194,7 +179,6 @@ function drawTable(parent, trees, sentid) {
     for (i = 0; i < trees.length; ++i) {
         var tree = trees[i];
         drawTableWord(rows, tree, 0, sentid);
-        //row.className = "extracoltr";
     }
 
     for (const pos in rows) {
@@ -203,11 +187,6 @@ function drawTable(parent, trees, sentid) {
     parent.append(tbl);
     for (var i = 0; i < conllucolumns.length; ++i) {
         colname = conllucolumns[i].toLowerCase();
-        //console.log("COLN", colname, columnwidth[colname], $(".th" + colname).width());
-        /*if (colname in columnwidth) {
-            // reset column width since it was changed by user earlier
-            $(".th" + colname).width(columnwidth[colname]);
-        }*/
     }
 
     if (keepmarked > -1) {
@@ -217,7 +196,7 @@ function drawTable(parent, trees, sentid) {
     // Reapply widths
     applyColumnWidths($("#myTable"));
 
-      // Important: call this after the table is inserted
+    // Important: call this after the table is inserted
     makeColumnsResizable($("#myTable"));
 }
 
@@ -378,13 +357,6 @@ function drawTableWord(rows, word, head, sentid) {
             clickedNodes.push(word.id);
         }
     };
-
-    /*
-    if (keepmarked && word.id == currentwordid) {
-        console.log("RECOLOR", cell1.id, word.id, currentwordid, $("#" + cell1.id));
-        $("#" + cell1.id).css("background", "orange"); // DOES NOT WORK HERE
-    }
-    */
 
     var cell2 = row.insertCell(-1);
     cell2.className = "tdform";
@@ -652,7 +624,9 @@ function makeInputfield(idsuffix, word, checkfct, value) {
         icell.checktoken = word.checktoken;
         icell.typoyes = word.typoyes;
     }
-    icell.onkeyup = function (event) { checkfct(icell, word.id) };
+
+    icell.onkeyup = function (event) { checkfct(icell, word.id) }; // call checkfunction after editing
+    checkfct(icell, word.id); // check whether current content is OK
     return icell;
 }
 
@@ -661,12 +635,12 @@ function checkHead(evt, wid) {
     //console.log("AAA", evt, wid);
     if (evt.value === wid || !(evt.value in wordpositions)) {
         //console.log("CCC", evt, wordpositions);
-        //evt.color = "red";
-        // TODO: make better ?
-        document.getElementById(evt.id).style.backgroundColor = "#dd4444";
+        //document.getElementById(evt.id).style.backgroundColor = "#dd4444";
+        //evt.classList.add("tableerrors");
         formalErrors++;
     } else {
-        document.getElementById(evt.id).style.backgroundColor = "white";
+        //document.getElementById(evt.id).style.backgroundColor = "white";
+        //evt.classList.remove("tableerrors");
         formalErrors--;
     }
 }
@@ -698,13 +672,15 @@ function checkEUD(evt, wid) {
 
     if (valid === 0) {
         //document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
-        element = document.getElementById(evt.id);
-        element.classList.add("tableerrors");
+        //element = document.getElementById(evt.id);
+        //element.classList.add("tableerrors");
+        evt.classList.add("tableerrors");
         formalErrors++;
     } else {
         //document.getElementById(evt.id).style.backgroundColor = "white";
-        element = document.getElementById(evt.id);
-        element.classList.remove("tableerrors");
+        //element = document.getElementById(evt.id);
+        //element.classList.remove("tableerrors");
+        evt.classList.remove("tableerrors");
         formalErrors--;
     }
 }
@@ -713,13 +689,15 @@ function checkForm(elem, wid) {
     //console.log("ELEM", elem);
     if (elem.value.match(/[ \t\n]/)) {
         //document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
-        element = document.getElementById(elem.id);
-        element.classList.add("tableerrors");
+        //element = document.getElementById(elem.id);
+        //element.classList.add("tableerrors");
+        elem.classList.add("tableerrors");
         formalErrors++;
     } else {
         //document.getElementById(elem.id).style.backgroundColor = "white";
-        element = document.getElementById(elem.id);
-        element.classList.remove("tableerrors");
+        //element = document.getElementById(elem.id);
+        //element.classList.remove("tableerrors");
+        elem.classList.remove("tableerrors");
         formalErrors--;
     }
 }
@@ -728,28 +706,35 @@ function checkUpos(elem, wid) {
     //console.log("ELEM", elem.value);
     if (!elem.value.match(/^[A-Z]+$/)) {
         //document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
-        element = document.getElementById(elem.id);
-        element.classList.add("tableerrors");
+        //element = document.getElementById(elem.id);
+        //element.classList.add("tableerrors");
+        elem.classList.add("tableerrors");
         formalErrors++;
     } else {
         //document.getElementById(elem.id).style.backgroundColor = "white";
-        element = document.getElementById(elem.id);
-        element.classList.remove("tableerrors");
+        //element = document.getElementById(elem.id);
+        //element.classList.remove("tableerrors");
+        elem.classList.remove("tableerrors");
         formalErrors--;
     }
 }
 
 function checkDeprel(elem, wid) {
-    if (!elem.value.match(/^[a-z](:[a-z]+)?$/)) {
+    //console.log("DEP", elem.value, wid );
+    if (!elem.value.match(/^[a-z]+(:[a-z]+)?$/)) {
         //document.getElementById(elem.id).style.backgroundColor = "#ffbbbb";
-        element = document.getElementById(elem.id);
-        element.classList.add("tableerrors");
+        //element = document.getElementById(elem.id);
+        //element.classList.add("tableerrors");
+        elem.classList.add("tableerrors");
         formalErrors++;
+        //console.log("ADDED to", elem.value);
     } else {
         //document.getElementById(elem.id).style.backgroundColor = "white";
-        element = document.getElementById(elem.id);
-        element.classList.remove("tableerrors");
+        //element = document.getElementById(elem.id);
+        //element.classList.remove("tableerrors");
+        elem.classList.remove("tableerrors");
         formalErrors--;
+        //console.log("TAKEN FROM ", elem.value);
     }
 }
 
@@ -768,13 +753,15 @@ function checkFeat(evt, wid) {
 
     if (valid === 0) {
         //document.getElementById(evt.id).style.backgroundColor = "#ffbbbb";
-        element = document.getElementById(elem.id);
-        element.classList.add("tableerrors");
+        //element = document.getElementById(evt.id);
+        //element.classList.add("tableerrors");
+        evt.classList.add("tableerrors");
         formalErrors++;
     } else {
         //document.getElementById(evt.id).style.backgroundColor = "white";
-        element = document.getElementById(elem.id);
-        element.classList.remove("tableerrors");
+        //element = document.getElementById(evt.id);
+        //element.classList.remove("tableerrors");
+        evt.classList.remove("tableerrors");
         formalErrors--;
     }
 }
